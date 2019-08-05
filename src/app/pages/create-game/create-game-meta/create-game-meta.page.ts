@@ -5,7 +5,7 @@ import { PopoverController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 
 
-import { TrackingPopoverComponent } from '../tracking-popover/tracking-popover.component';
+import { TrackingPopoverComponent } from '../../../tracking-popover/tracking-popover.component';
 
 @Component({
   selector: 'app-create-game-meta',
@@ -30,7 +30,7 @@ export class CreateGameMetaPage implements OnInit {
   }
 
   goToCreateGameMap() {
-    this.navCtrl.navigateForward('create-game-map')
+    this.navCtrl.navigateForward('create-game/create-game-map')
   }
 
 }

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { TranslateService } from '@ngx-translate/core';
+
+
 @Component({
   selector: 'app-tracking-popover',
   templateUrl: './tracking-popover.component.html',
@@ -7,8 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TrackingPopoverComponent implements OnInit {
 
-  constructor() { }
+  gameTrackingDescription: String
 
-  ngOnInit() {}
+  constructor(private _translate: TranslateService) { }
+
+  ngOnInit() {
+    this._translate.get('gameTrackingDescription').subscribe((res: string) => {
+      this.gameTrackingDescription = res;
+    });
+  }
 
 }

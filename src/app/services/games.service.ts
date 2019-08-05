@@ -15,6 +15,6 @@ export class GamesService {
   constructor(private http: HttpClient) { }
 
   getGames(): Promise<any> {
-    return this.http.get(`${environment.apiURL}/games`).toPromise()
+    return this.http.get(`${environment.apiURL}/game`).toPromise()
   }
 }

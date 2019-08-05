@@ -5,5 +5,6 @@
     "developerModeDescription": "Erstelle ein neues Kartenlese Spiel",
     "evaluateMode": "Auswerungs Modus",
     "evaluateModeDescription": "Sieh dir die Spielergebnisse an",
-    "selectGame": "Wähle ein Spiel"
+    "selectGame": "Wähle ein Spiel",
+    "gameTrackingDescription": "Bei der Auswahl „on“ werden alle Zwischenziele, Objekte und Tracks, die im Spielverlauf entstehen, während des gesamten Spielverlaufs angezeigt. Bei der Auswahl „off“ werden nur die aktuellen Ziele, Objekte und Tracks angezeigt"
 }

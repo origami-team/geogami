@@ -5,5 +5,6 @@
     "developerModeDescription": "Create a map reading game",
     "evaluateMode": "Evaluate Ori-Gami",
     "evaluateModeDescription": "Have a look on the results of your Ori-Gami",
-    "selectGame": "Select a game"
+    "selectGame": "Select a game",
+    "gameTrackingDescription": "If \"on\" is selected, all waypoints, objects and tracks created during the course of the game will be displayed during the entire course of the game. If \"off\" is selected, only the current waypoint, objects and tracks are displayed."
 }
