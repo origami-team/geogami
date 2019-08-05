@@ -1,0 +1,44 @@
+<ion-content fullscreen>
+  <h1 class="ion-text-center">OriGami Paper Map</h1>
+  <ion-card id="start_card_play" (click)=handleCardClick($event)>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="logo-game-controller-a"></ion-icon> Spieler Modus
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Spiele ein Kartenlese Spiel
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card id="start_card_create" (click)=navigateCreatePage()>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="construct"></ion-icon> Entwickler Modus
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Erstelle ein neues Kartenlese Spiel
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card id="start_card_analyze" (click)=handleCardClick($event)>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="search"></ion-icon> Auswertungs Modus
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Sieh dir die Spielergebnisse an
+    </ion-card-content>
+  </ion-card>
+
+  <ion-row>
+    <ion-col>
+      <h1 class="ion-text-center" data-value="de" (click)=setLanguage($event)>🇩🇪</h1>
+    </ion-col>
+    <ion-col>
+      <h1 class="ion-text-center" data-value="en" (click)=setLanguage($event)>🇬🇧</h1>
+    </ion-col>
+  </ion-row>
+</ion-content>

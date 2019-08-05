@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gestalte dein Spiel</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card id="create_card_create" (click)=navigateCreateGamePage()>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="construct"></ion-icon> Neues Spiel Erstellen
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Erstelle ein neues Kartenlese Spiel
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card id="create_card_edit">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="create"></ion-icon> Spiel Bearbeiten
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Bearbeite ein Kartenlese Spiel
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

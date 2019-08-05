@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Game</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button>
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Title</ion-label>
+    <ion-input required type="text" oninput=""></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Description</ion-label>
+    <ion-textarea autoGrow></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Activity Type</ion-label>
+    <ion-select placeholder="Select One">
+      <ion-select-option value="find-destination">Find Destination</ion-select-option>
+      <ion-select-option value="follow-route">Follow Route</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-card>
+    <div id="addPointsMap" class="map"></div>
+    <ion-card-header>
+      <ion-card-title>Points</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

@@ -1,9 +1,45 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Two
+      Games
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-toolbar>
+  <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
+</ion-toolbar>
+
+<ion-content>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="goToAddGame()">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-list-header>
+      Recent Games
+    </ion-list-header>
+
+    <ion-list-header>
+      All Games
+    </ion-list-header>
+
+    <ion-item *ngFor="let game of results" (click)="itemClick(game._id)" detail>
+      <ion-avatar slot="start">
+        <img src="https://www.greatcirclemap.com/logo.svg">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ game.name }}</h2>
+        <p>{{ game.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

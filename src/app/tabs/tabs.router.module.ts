@@ -8,6 +8,15 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: 'start',
+        children: [
+          {
+            path: '',
+            loadChildren: '../start/start.module#StartPageModule'
+          }
+        ]
+      },
+      {
         path: 'tab1',
         children: [
           {
@@ -35,15 +44,33 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'map-scale',
+        children: [
+          {
+            path: '',
+            loadChildren: '../map-scale/map-scale.module#MapScalePageModule'
+          }
+        ]
+      },
+      {
+        path: 'map-swipe',
+        children: [
+          {
+            path: '',
+            loadChildren: '../map-swipe/map-swipe.module#MapSwipePageModule'
+          }
+        ]
+      },
+      {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/start',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/start',
     pathMatch: 'full'
   }
 ];
@@ -54,4 +81,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }
