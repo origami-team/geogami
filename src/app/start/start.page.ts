@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 
+import { TranslateService } from '@ngx-translate/core';
+
+
 
 
 @Component({
@@ -11,13 +14,47 @@ import { NavController } from '@ionic/angular';
 })
 export class StartPage implements OnInit {
 
-  constructor(public navCtrl: NavController, public toastController: ToastController) { }
+  playerMode: String
+  playerModeDescription: String
+  developerMode: String
+  developerModeDescription: String
+  evaluateMode: String
+  evaluateModeDescription: String
+
+  constructor(public navCtrl: NavController, public toastController: ToastController, private _translate: TranslateService) { }
 
   ngOnInit() {
+    this._translate.setDefaultLang('en');
+    this._initialiseTranslation()
+  }
+
+  _initialiseTranslation(): void {
+    this._translate.get('playerMode').subscribe((res: string) => {
+      this.playerMode = res;
+    });
+    this._translate.get('playerModeDescription').subscribe((res: string) => {
+      this.playerModeDescription = res;
+    });
+    this._translate.get('developerMode').subscribe((res: string) => {
+      this.developerMode = res;
+    });
+    this._translate.get('developerModeDescription').subscribe((res: string) => {
+      this.developerModeDescription = res;
+    });
+    this._translate.get('evaluateMode').subscribe((res: string) => {
+      this.evaluateMode = res;
+    });
+    this._translate.get('evaluateModeDescription').subscribe((res: string) => {
+      this.evaluateModeDescription = res;
+    });
   }
 
   handleCardClick(e) {
     console.log(e)
+  }
+
+  navigateGamesOverviewPage() {
+    this.navCtrl.navigateForward('pages/play-game/games-overview');
   }
 
   navigateCreatePage() {
@@ -25,11 +62,8 @@ export class StartPage implements OnInit {
   }
 
   async setLanguage(e) {
-    const toast = await this.toastController.create({
-      message: e.target.dataset.value == "de" ? "Hallo, mein Freund!" : "Hello, my Friend!",
-      duration: 2000
-    });
-    toast.present();
+    this._translate.use(e.target.dataset.value);
+    this._initialiseTranslation()
   }
 
 }

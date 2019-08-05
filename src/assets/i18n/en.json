@@ -1,0 +1,9 @@
+{
+    "playerMode": "Play Ori-Gami",
+    "playerModeDescription": "Play a map reading game",
+    "developerMode": "Create Ori-Gami",
+    "developerModeDescription": "Create a map reading game",
+    "evaluateMode": "Evaluate Ori-Gami",
+    "evaluateModeDescription": "Have a look on the results of your Ori-Gami",
+    "selectGame": "Select a game"
+}
