@@ -1,4 +1,5 @@
 <ion-content fullscreen>
+  <img src="assets/icons/icon-192x192.png" class="center" />
   <h1 class="ion-text-center ion-padding">OriGami Paper Map</h1>
   <ion-card id="start_card_play" (click)=navigateGamesOverviewPage($event)>
     <ion-card-header>
@@ -33,6 +34,9 @@
     </ion-card-content>
   </ion-card>
 
+</ion-content>
+
+<ion-footer>
   <ion-row>
     <ion-col>
       <h1 class="ion-text-center" data-value="de" (click)=setLanguage($event)>🇩🇪</h1>
@@ -41,4 +45,5 @@
       <h1 class="ion-text-center" data-value="en" (click)=setLanguage($event)>🇬🇧</h1>
     </ion-col>
   </ion-row>
-</ion-content>
+
+</ion-footer>
