@@ -4,6 +4,10 @@ import { PopoverController } from '@ionic/angular';
 
 import { NavController } from '@ionic/angular';
 
+import { Game } from './../../../models/game'
+
+import { GameFactoryService } from '../../../services/game-factory.service'
+
 
 import { TrackingPopoverComponent } from '../../../tracking-popover/tracking-popover.component';
 
@@ -14,7 +18,9 @@ import { TrackingPopoverComponent } from '../../../tracking-popover/tracking-pop
 })
 export class CreateGameMetaPage implements OnInit {
 
-  constructor(public popoverController: PopoverController, public navCtrl: NavController) { }
+  private model = new Game(0, '', '', '', true, undefined);
+
+  constructor(public popoverController: PopoverController, public navCtrl: NavController, public gameFactory: GameFactoryService) { }
 
   ngOnInit() {
   }
@@ -30,6 +36,7 @@ export class CreateGameMetaPage implements OnInit {
   }
 
   goToCreateGameMap() {
+    this.gameFactory.addGameInformation(this.model)
     this.navCtrl.navigateForward('create-game/create-game-map')
   }
 

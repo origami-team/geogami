@@ -18,6 +18,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { TrackingPopoverComponent } from './tracking-popover/tracking-popover.component';
+import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page'
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
@@ -28,8 +29,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [AppComponent, TrackingPopoverComponent],
-  entryComponents: [TrackingPopoverComponent],
+  declarations: [AppComponent, TrackingPopoverComponent, CreateTaskModalPage],
+  entryComponents: [TrackingPopoverComponent, CreateTaskModalPage],
   imports: [BrowserModule,
     HttpClientModule,
     TranslateModule.forRoot({

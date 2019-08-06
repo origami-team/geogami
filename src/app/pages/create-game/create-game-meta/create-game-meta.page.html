@@ -13,29 +13,29 @@
       <ion-item>
         <ion-label position="stacked">Name <ion-text color="danger">*</ion-text>
         </ion-label>
-        <ion-input required type="text" oninput="handleGameNameValue(event)"></ion-input>
+        <ion-input required type="text" [(ngModel)]="model.name" name="name"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Autor</ion-label>
-        <ion-input type="text" oninput="handleAuthorValue(event)"></ion-input>
+        <ion-input type="text" [(ngModel)]="model.author" name="author"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Beschreibung <ion-text color="danger">*</ion-text>
         </ion-label>
-        <ion-textarea required></ion-textarea>
+        <ion-textarea required [(ngModel)]="model.description" name="description"></ion-textarea>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Zeitbegrenzung in Minuten</ion-label>
-        <ion-input type="number"></ion-input>
+        <ion-input type="number" [(ngModel)]="model.duration" name="duration"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label>Tracking <ion-icon name="information-circle" (click)=showTrackingInfo($event)></ion-icon>
         </ion-label>
-        <ion-toggle checked></ion-toggle>
+        <ion-toggle checked [(ngModel)]="model.tracking" name="tracking"></ion-toggle>
       </ion-item>
 
     </ion-list>

@@ -4,6 +4,11 @@ import mapboxgl from 'mapbox-gl';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
+import { ModalController } from '@ionic/angular';
+
+import { GameFactoryService } from '../../../services/game-factory.service'
+
+import { CreateTaskModalPage } from './../create-task-modal/create-task-modal.page'
 
 
 @Component({
@@ -13,13 +18,16 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 })
 export class CreateGameMapPage implements OnInit {
 
-  constructor(private geolocation: Geolocation) { }
+  name: String
+  waypoints: any[]
 
-  ngOnInit() {
-
+  constructor(private geolocation: Geolocation, private gameFactory: GameFactoryService, public modalController: ModalController) {
+    this.waypoints = []
   }
 
-
+  ngOnInit() {
+    this.name = this.gameFactory.game ? this.gameFactory.game.name : ''
+  }
 
   ionViewWillEnter() {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
@@ -37,41 +45,49 @@ export class CreateGameMapPage implements OnInit {
       },
       trackUserLocation: true
     })
-
-    this.geolocation.getCurrentPosition().then((resp) => {
-      // resp.coords.latitude
-      // resp.coords.longitude
-
-      console.log(resp)
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-    let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      // data can be a set of coordinates, or an error (if an error occurred).
-      // data.coords.latitude
-      // data.coords.longitude
-      console.log(data)
-    });
-
-    // Add geolocate control to the map.
     map.addControl(geolocate);
 
-    geolocate.trigger();
+    // let watch = this.geolocation.watchPosition();
+    // watch.subscribe((data) => {
+    //   console.log(data)
+    // });
 
-    let newMarker = null;
+    // Add geolocate control to the map.
 
-    map.on('click', function (e) {
-      console.log(e)
-      console.log(map)
-      if (newMarker == null) {
-        newMarker = new mapboxgl.Marker().setLngLat(e.lngLat).addTo(map)
-      } else {
-        newMarker.setLngLat(e.lngLat)
-      }
+    map.on('load', () => {
+      geolocate.trigger();
+    })
+
+
+    map.on('click', e => {
+      const newMarker = new mapboxgl.Marker({
+        draggable: true
+      }).setLngLat(e.lngLat).addTo(map)
+      this.waypoints.push({
+        marker: newMarker,
+        tasks: []
+      })
+      console.log(this.waypoints)
     });
 
+  }
+
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: CreateTaskModalPage,
+      componentProps: {
+        gameName: this.name
+      }
+    });
+    return await modal.present();
+  }
+
+  dismissModal() {
+    // using the injected ModalController this page
+    // can "dismiss" itself and optionally pass back data
+    this.modalController.dismiss({
+      'dismissed': true
+    });
   }
 
 }

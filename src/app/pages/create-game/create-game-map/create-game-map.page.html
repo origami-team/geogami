@@ -3,10 +3,35 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Spielname</ion-title>
+    <ion-title>{{ name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div id="create-game-map" class="map"></div>
+  <div class="overlay ion-padding">
+    <p *ngIf="waypoints.length == 0" class="center">Wähle einen Startpunkt</p>
+    <ion-list *ngIf="waypoints.length != 0">
+      <div *ngFor="let waypoint of waypoints; let i = index" [attr.data-index]="i">
+        <ion-list-header>
+          Waypoint {{ i + 1 }}
+        </ion-list-header>
+
+        <ion-chip color="primary" (click)=presentModal()>
+          <ion-icon name="add"></ion-icon>
+          <ion-label>Aufgabe</ion-label>
+        </ion-chip>
+
+
+        <!-- disabled false für reorder -->
+        <!-- <ion-reorder-group id="reorder" disabled="true"> -->
+        <ion-item *ngIf="waypoint.tasks.length != 0">
+          <ion-label>Task 1</ion-label>
+          <ion-icon name="close" slot="end"></ion-icon>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+        <!-- </ion-reorder-group> -->
+      </div>
+    </ion-list>
+  </div>
 </ion-content>

@@ -5,8 +5,6 @@ import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 
-
-
 @Component({
   selector: 'app-start',
   templateUrl: './start.page.html',
@@ -24,7 +22,7 @@ export class StartPage implements OnInit {
   constructor(public navCtrl: NavController, public toastController: ToastController, private _translate: TranslateService) { }
 
   ngOnInit() {
-    this._translate.setDefaultLang('en');
+    this._translate.setDefaultLang('de');
     this._initialiseTranslation()
   }
 
