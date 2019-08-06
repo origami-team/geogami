@@ -13,8 +13,6 @@ const routes: Routes = [
   { path: 'map-scale', loadChildren: './map-scale/map-scale.module#MapScalePageModule' },
   { path: 'map-swipe', loadChildren: './map-swipe/map-swipe.module#MapSwipePageModule' },
   { path: 'start', loadChildren: './start/start.module#StartPageModule' },
-  { path: 'create-task-modal', loadChildren: './create-task-modal/create-task-modal.module#CreateTaskModalPageModule' },
-  { path: 'create-task-modal', loadChildren: './create-task-modal/create-task-modal.module#CreateTaskModalPageModule' },
 ];
 @NgModule({
   imports: [

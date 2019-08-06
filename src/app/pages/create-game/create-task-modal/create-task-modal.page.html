@@ -9,6 +9,104 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+  <h1>Aufgabeneinstellungen</h1>
 
+  <ion-item>
+    <ion-label>Aufgabe</ion-label>
+    <ion-select>
+      <ion-select-option value="photo_mark">Fotoaufgabe (markieren)</ion-select-option>
+      <ion-select-option value="photo_find">Fotoaufgabe (finden)</ion-select-option>
+      <ion-select-option value="find_target">Ziel finden</ion-select-option>
+      <ion-select-option value="localize">Sich auf der Karte lokalisieren</ion-select-option>
+      <ion-select-option value="direction">Blickrichtung einzeichnen</ion-select-option>
+      <ion-select-option value="direction_photo">Fotoaufgabe (Blickrichtung einzeichnen)</ion-select-option>
+      <ion-select-option value="direction_map">Blickrichtung der Kartendarstellung einnehmen</ion-select-option>
+      <ion-select-option value="direction_map_photo">Fotoaufgabe (Blickrichtung der Kartendarstellung einnehmen)
+      </ion-select-option>
+      <ion-select-option value="route">Route laufen</ion-select-option>
+      <ion-select-option value="quiz">Quizaufgabe</ion-select-option>
+      <ion-select-option value="info">Information</ion-select-option>
+
+    </ion-select>
+
+  </ion-item>
+
+  <h3>Karten-Features</h3>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Kartenmanipulation</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Zoom</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Manuelles Verschieben der Karte</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Automatische Kartenzentrierung</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Manuelle Kartenrotation</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Position</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Ausgangsblickrichtung</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Track</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Satellit</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>3D</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Landmarken</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Straßenmarkierungen</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reduzierte Informationen</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <ion-label>Anzahl der Erlaubten Lösungversuche</ion-label>
+    <ion-select>
+      <ion-select-option>1</ion-select-option>
+      <ion-select-option>2</ion-select-option>
+      <ion-select-option>3</ion-select-option>
+      <ion-select-option>4</ion-select-option>
+      <ion-select-option>5</ion-select-option>
+      <ion-select-option>6</ion-select-option>
+      <ion-select-option>7</ion-select-option>
+      <ion-select-option>8</ion-select-option>
+      <ion-select-option>9</ion-select-option>
+      <ion-select-option>10</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-label>Hinweise und Lösungen</ion-label>
+  <ion-item>
+    <ion-checkbox></ion-checkbox>
+    <ion-label>Nach Fehlversuchen wird dem Spieler folgender Hinweis angezeigt</ion-label>
+  </ion-item>
 </ion-content>

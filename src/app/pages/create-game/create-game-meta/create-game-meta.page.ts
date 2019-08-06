@@ -18,7 +18,7 @@ import { TrackingPopoverComponent } from '../../../tracking-popover/tracking-pop
 })
 export class CreateGameMetaPage implements OnInit {
 
-  private model = new Game(0, '', '', '', true, undefined);
+  public model = new Game(0, '', '', '', true, undefined);
 
   constructor(public popoverController: PopoverController, public navCtrl: NavController, public gameFactory: GameFactoryService) { }
 

@@ -43,6 +43,9 @@ export class CreateGameMapPage implements OnInit {
       positionOptions: {
         enableHighAccuracy: true
       },
+      fitBoundsOptions: {
+        offset: [0, -100]
+      },
       trackUserLocation: true
     })
     map.addControl(geolocate);
