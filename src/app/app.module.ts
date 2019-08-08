@@ -20,6 +20,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TrackingPopoverComponent } from './tracking-popover/tracking-popover.component';
 import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page'
 
+import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page'
+
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 // AoT requires an exported function for factories
@@ -29,8 +31,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [AppComponent, TrackingPopoverComponent, CreateTaskModalPage],
-  entryComponents: [TrackingPopoverComponent, CreateTaskModalPage],
+  declarations: [AppComponent, TrackingPopoverComponent, CreateTaskModalPage, CreateModuleModalPage],
+  entryComponents: [TrackingPopoverComponent, CreateTaskModalPage, CreateModuleModalPage],
   imports: [BrowserModule,
     HttpClientModule,
     TranslateModule.forRoot({

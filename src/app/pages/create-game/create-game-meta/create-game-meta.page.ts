@@ -37,7 +37,7 @@ export class CreateGameMetaPage implements OnInit {
 
   goToCreateGameMap() {
     this.gameFactory.addGameInformation(this.model)
-    this.navCtrl.navigateForward('create-game/create-game-map')
+    this.navCtrl.navigateForward('create-game/create-game-list')
   }
 
 }

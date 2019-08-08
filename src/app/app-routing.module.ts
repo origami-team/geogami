@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: 'play-game/games-overview', loadChildren: './pages/play-game/games-overview/games-overview.module#GamesOverviewPageModule' },
   { path: 'create-game', loadChildren: './pages/create-game/create-game/create-game.module#CreateGamePageModule' },
   { path: 'create-game/create-game-meta', loadChildren: './pages/create-game/create-game-meta/create-game-meta.module#CreateGameMetaPageModule' },
+  { path: 'create-game/create-game-list', loadChildren: './pages/create-game/create-game-list/create-game-list.module#CreateGameListPageModule' },
   { path: 'create-game/create-game-map', loadChildren: './pages/create-game/create-game-map/create-game-map.module#CreateGameMapPageModule' },
   // older stuff
   { path: 'add-game', loadChildren: './add-game/add-game.module#AddGamePageModule' },

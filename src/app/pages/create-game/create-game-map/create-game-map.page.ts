@@ -10,6 +10,8 @@ import { GameFactoryService } from '../../../services/game-factory.service'
 
 import { CreateTaskModalPage } from './../create-task-modal/create-task-modal.page'
 
+import { CreateModuleModalPage } from './../create-module-modal/create-module-modal.page'
+
 
 @Component({
   selector: 'app-create-game-map',
@@ -20,6 +22,7 @@ export class CreateGameMapPage implements OnInit {
 
   name: String
   waypoints: any[]
+  addMarker: boolean
 
   constructor(private geolocation: Geolocation, private gameFactory: GameFactoryService, public modalController: ModalController) {
     this.waypoints = []
@@ -27,6 +30,7 @@ export class CreateGameMapPage implements OnInit {
 
   ngOnInit() {
     this.name = this.gameFactory.game ? this.gameFactory.game.name : ''
+    this.addMarker = true
   }
 
   ionViewWillEnter() {
@@ -44,7 +48,8 @@ export class CreateGameMapPage implements OnInit {
         enableHighAccuracy: true
       },
       fitBoundsOptions: {
-        offset: [0, -100]
+        offset: [0, -100],
+        maxZoom: 14
       },
       trackUserLocation: true
     })
@@ -61,21 +66,31 @@ export class CreateGameMapPage implements OnInit {
       geolocate.trigger();
     })
 
-
     map.on('click', e => {
-      const newMarker = new mapboxgl.Marker({
-        draggable: true
-      }).setLngLat(e.lngLat).addTo(map)
-      this.waypoints.push({
-        marker: newMarker,
-        tasks: []
-      })
-      console.log(this.waypoints)
+      if (this.addMarker) {
+        // create a HTML element for each feature
+        const el = document.createElement('div');
+        el.className = 'mymarker';
+        el.innerHTML = `<p>${this.waypoints.length + 1}</p>`
+        const newMarker = new mapboxgl.Marker({
+          element: el,
+          offset: [0, -16],
+          draggable: true,
+        }).setLngLat(e.lngLat).addTo(map)
+        this.waypoints.push({
+          marker: newMarker,
+          tasks: []
+        })
+        console.log(this.waypoints)
+        this.toggleAddMarker()
+        this.presentTaskModal(this.waypoints.length - 1)
+      }
     });
 
   }
 
-  async presentModal() {
+  async presentTaskModal(index: Number) {
+    console.log(index)
     const modal = await this.modalController.create({
       component: CreateTaskModalPage,
       componentProps: {
@@ -85,12 +100,19 @@ export class CreateGameMapPage implements OnInit {
     return await modal.present();
   }
 
-  dismissModal() {
-    // using the injected ModalController this page
-    // can "dismiss" itself and optionally pass back data
-    this.modalController.dismiss({
-      'dismissed': true
+  async presentModuleModal() {
+    const modal = await this.modalController.create({
+      component: CreateModuleModalPage,
+      componentProps: {
+        gameName: this.name
+      }
     });
+    return await modal.present();
   }
+
+  toggleAddMarker() {
+    this.addMarker = !this.addMarker
+  }
+
 
 }

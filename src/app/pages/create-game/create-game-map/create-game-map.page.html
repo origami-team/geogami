@@ -1,47 +1,89 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="create-game/create-game-meta" text="Zurück"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div id="create-game-map" class="map"></div>
   <div class="overlay ion-padding">
-    <p *ngIf="waypoints.length == 0" class="center">Wähle einen Startpunkt</p>
+    <p *ngIf="addMarker" class="center">Wähle einen Punkt</p>
 
-    <div class="list-wrapper">
+    <div *ngIf="!addMarker" class="list-wrapper">
       <ion-list *ngIf="waypoints.length != 0">
         <div *ngFor="let waypoint of waypoints; let i = index" [attr.data-index]="i">
-          <ion-list-header>
+          <ion-ripple-effect></ion-ripple-effect>
+          <!-- <ion-list-header>
             Waypoint {{ i + 1 }}
-          </ion-list-header>
-          <ion-chip color="primary" (click)=presentModal()>
-            <ion-icon name="add"></ion-icon>
-            <ion-label>Aufgabe</ion-label>
-          </ion-chip>
+          </ion-list-header> -->
+          <ion-item class="item-text-wrap">
+            <ion-avatar slot="start">
+              <div class="mymarker">
+                <p class="list">{{ i + 1 }}</p>
+              </div>
+            </ion-avatar>
+            <ion-label text-wrap class="ion-text-wrap">
+              <ion-list>
+                <ion-item>
+                  <ion-chip color="medium" (click)=presentTaskModal(i)>
+                    <ion-label>Navigationsaufgabe</ion-label>
+                  </ion-chip>
+                </ion-item>
+              </ion-list>
+
+              <!-- <ion-fab-button size="small">
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-list side="start">
+                <ion-fab-button color="light">
+                  <ion-icon name="logo-facebook"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="light">
+                  <ion-icon name="logo-twitter"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="light">
+                  <ion-icon name="logo-vimeo"></ion-icon>
+                </ion-fab-button>
+              </ion-fab-list> -->
+              <ion-chip color="medium" (click)=presentTaskModal(i)>
+                <ion-icon name="add"></ion-icon>
+                <ion-icon name="information-circle"></ion-icon>
+              </ion-chip>
+              <ion-chip color="primary" (click)=presentTaskModal(i)>
+                <ion-icon name="add"></ion-icon>
+                <ion-icon name="ios-list"></ion-icon>
+              </ion-chip>
+              <ion-chip color="tertiary" (click)=presentModuleModal(i)>
+                <ion-icon name="add"></ion-icon>
+                <ion-label>Modul</ion-label>
+              </ion-chip>
+            </ion-label>
+          </ion-item>
           <!-- disabled false für reorder -->
           <!-- <ion-reorder-group id="reorder" disabled="true"> -->
-          <ion-item *ngIf="waypoint.tasks.length != 0">
+
+          <!-- <ion-item *ngIf="waypoint.tasks.length != 0">
             <ion-label>Task 1</ion-label>
             <ion-icon name="close" slot="end"></ion-icon>
             <ion-reorder slot="end"></ion-reorder>
-          </ion-item>
+          </ion-item> -->
           <!-- </ion-reorder-group> -->
         </div>
       </ion-list>
     </div>
 
-    <div *ngIf="waypoints.length != 0" class="footer">
-      <ion-chip color="secondary">
+    <div *ngIf="!addMarker" class="footer">
+      <ion-chip color="secondary" (click)=toggleAddMarker()>
         <ion-icon name="add"></ion-icon>
-        <ion-label>Ort</ion-label>
-      </ion-chip>
-      <ion-chip color="tertiary">
-        <ion-icon name="add"></ion-icon>
-        <ion-label>Lernmodul</ion-label>
+        <ion-label>Navigationsaufgabe</ion-label>
       </ion-chip>
     </div>
   </div>

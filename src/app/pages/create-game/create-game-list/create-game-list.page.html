@@ -1,0 +1,214 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="create-game/create-game-meta"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="create-game-map" class="map"></div>
+
+  <div class="ion-padding scroll">
+
+
+    <ion-card class="my-card">
+      <ion-card-content>
+        <ion-item class="item-text-wrap" lines="none">
+          <ion-avatar slot="start">
+            <div class="mymarker">
+              <p class="list">1</p>
+            </div>
+          </ion-avatar>
+          <ion-label text-wrap class="ion-text-wrap">
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="primary" (click)=presentTaskModal(i)>
+                  <ion-label>Route laufen</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="secondary" (click)=presentTaskModal(i)>
+                  <ion-label>QA</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="secondary" (click)=presentTaskModal(i)>
+                  <ion-label>Blickrichtung</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="center">
+      <ion-chip color="primary" (click)=presentTaskModal(i)>
+        <ion-icon name="navigate"></ion-icon>
+      </ion-chip>
+      <ion-chip color="secondary" (click)=presentTaskModal(i)>
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-chip>
+      <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+        <ion-icon name="list"></ion-icon>
+      </ion-chip>
+      <ion-chip color="medium" (click)=presentTaskModal(i)>
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </ion-chip>
+    </div>
+
+    <!-- <ion-fab-button class="center" size="small">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="end">
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list> -->
+
+
+    <ion-card class="my-card">
+      <ion-card-content>
+        <ion-item class="item-text-wrap" lines="none">
+          <ion-avatar slot="start">
+            <div class="mymarker">
+              <p class="list">2</p>
+            </div>
+          </ion-avatar>
+          <ion-label text-wrap class="ion-text-wrap">
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="primary" (click)=presentTaskModal(i)>
+                  <ion-label>Ziel erreichen</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+                  <ion-label>Mein Lernmodul</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="center">
+      <ion-chip color="primary" (click)=presentTaskModal(i)>
+        <ion-icon name="navigate"></ion-icon>
+      </ion-chip>
+      <ion-chip color="secondary" (click)=presentTaskModal(i)>
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-chip>
+      <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+        <ion-icon name="list"></ion-icon>
+      </ion-chip>
+      <ion-chip color="medium" (click)=presentTaskModal(i)>
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </ion-chip>
+    </div>
+
+
+    <!-- <ion-fab-button class="center" size="small">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="end">
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list> -->
+
+    <ion-card class="my-card">
+      <ion-card-content>
+        <ion-item class="item-text-wrap" lines="none">
+          <ion-avatar slot="start">
+            <div class="mymarker">
+              <p class="list">3</p>
+            </div>
+          </ion-avatar>
+          <ion-label text-wrap class="ion-text-wrap">
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="primary" (click)=presentTaskModal(i)>
+                  <ion-label>Ziel erreichen</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="medium" (click)=presentTaskModal(i)>
+                  <ion-label>Information</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="secondary" (click)=presentTaskModal(i)>
+                  <ion-label>Blickrichtung</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="center">
+      <ion-chip color="primary" (click)=presentTaskModal(i)>
+        <ion-icon name="navigate"></ion-icon>
+      </ion-chip>
+      <ion-chip color="secondary" (click)=presentTaskModal(i)>
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-chip>
+      <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+        <ion-icon name="list"></ion-icon>
+      </ion-chip>
+      <ion-chip color="medium" (click)=presentTaskModal(i)>
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </ion-chip>
+    </div>
+
+
+    <!-- <ion-fab-button class="center" size="small">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="end">
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="logo-vimeo"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list> -->
+  </div>
+
+
+
+
+</ion-content>
