@@ -34,7 +34,16 @@ export class GamesOverviewPage implements OnInit {
 
     this.gamesService.getGames().then(games => {
       games.forEach(game => {
-        new mapboxgl.Marker().setLngLat([game.waypoints[0].lng, game.waypoints[0].lat]).addTo(map)
+        const popup = new mapboxgl.Popup({ offset: 25 })
+          .setHTML(`
+            <h3>${game.name}</h3>
+            <p>${game.description}</p>
+            <ion-button (click)="playGame()">Play</ion-button>`)
+
+        new mapboxgl.Marker()
+          .setLngLat([game.waypoints[0].lng, game.waypoints[0].lat])
+          .setPopup(popup)
+          .addTo(map)
       });
 
       const coordinates = games.map(game => [game.waypoints[0].lng, game.waypoints[0].lat])
@@ -45,11 +54,16 @@ export class GamesOverviewPage implements OnInit {
 
       map.fitBounds(bounds, {
         padding: 50,
-        duration: 1000
+        duration: 1000,
+        zoom: 15
       });
     })
-
   }
+
+  playGame(game) {
+    console.log("Playing ", game)
+  }
+
 
   _initialiseTranslation(): void {
     this._translate.get('selectGame').subscribe((res: string) => {

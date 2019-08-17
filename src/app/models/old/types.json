@@ -1,0 +1,26 @@
+{
+    "question": [
+        {
+            "type": "text",
+            "developer": "textarea",
+            "game": "paragraph"
+        },
+        {
+            "type": "nav-text",
+            "developer": "text+map",
+            "game": "paragraph"
+        },
+        {
+            "type": "marker",
+            "developer": "map",
+            "game": "paragraph"
+        }
+    ],
+    "answer": [
+        {
+            "type": "position-ok",
+            "developer": "map",
+            "game": "paragraph"
+        }
+    ]
+}

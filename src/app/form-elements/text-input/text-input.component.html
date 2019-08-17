@@ -1,0 +1,5 @@
+<ion-item lines=" none">
+  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-input *ngIf="type == 'input'">{{ text }}</ion-input>
+  <ion-textarea *ngIf="type == 'area'" value="{{ text }}"></ion-textarea>
+</ion-item>

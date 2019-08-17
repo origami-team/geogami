@@ -22,7 +22,20 @@ import { CreateTaskModalPage } from './pages/create-game/create-task-modal/creat
 
 import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page'
 
+import { InfoComponent } from './form-elements/info/info.component'
+import { TextInputComponent } from './form-elements/text-input/text-input.component'
+import { MapComponent } from './form-elements/map/map.component'
+
+
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+// import { Geofence } from '@ionic-native/geofence/ngx';
+
+
+import { Camera } from '@ionic-native/camera/ngx';
+
+import { FormsModule } from '@angular/forms';
+
+
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -31,10 +44,21 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-  declarations: [AppComponent, TrackingPopoverComponent, CreateTaskModalPage, CreateModuleModalPage],
+  declarations: [
+    AppComponent,
+    TrackingPopoverComponent,
+    CreateTaskModalPage,
+    CreateModuleModalPage,
+    // form components ⬇️
+    InfoComponent,
+    TextInputComponent,
+    MapComponent,
+    // form components ⬆️
+  ],
   entryComponents: [TrackingPopoverComponent, CreateTaskModalPage, CreateModuleModalPage],
   imports: [BrowserModule,
     HttpClientModule,
+    FormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -47,7 +71,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Geolocation
+    Geolocation,
+    // Geofence,
+    Camera
   ],
   bootstrap: [AppComponent]
 })

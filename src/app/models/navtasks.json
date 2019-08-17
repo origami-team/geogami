@@ -1,0 +1,69 @@
+[
+    {
+        "type": "nav-text",
+        "name": "Textnavigation",
+        "questionTypes": [
+            {
+                "type": "nav-text",
+                "developer": [
+                    {
+                        "type": "textarea",
+                        "info": "Notiere hier deine Navigationsanweisung an den Spieler:",
+                        "placeholder": ""
+                    },
+                    {
+                        "type": "map",
+                        "info": "Wähle den korrekten Zielort:"
+                    }
+                ]
+            }
+        ],
+        "answerTypes": [
+            {
+                "type": "position-ok"
+            }
+        ]
+    },
+    {
+        "type": "nav-target",
+        "name": "Zielnavigation",
+        "questionTypes": [
+            {
+                "type": "nav-text",
+                "developer": [
+                    {
+                        "type": "map",
+                        "info": "Wähle den korrekten Zielort:"
+                    },
+                    {
+                        "type": "textarea",
+                        "info": "Notiere hier deine Navigationsanweisung an den Spieler:",
+                        "placeholder": "Laufe bis zum nächsten Ziel.Bestätige mit OK, wenn du angekommen bist."
+                    }
+                ]
+            }
+        ],
+        "answerTypes": [
+            {
+                "type": "position-ok"
+            }
+        ]
+    },
+    {
+        "type": "nav-arrow",
+        "name": "Pfeilnavigation",
+        "questionTypes": [
+            {
+                "type": "text"
+            },
+            {
+                "type": "arrow"
+            }
+        ],
+        "answerTypes": [
+            {
+                "type": "position-ok"
+            }
+        ]
+    }
+]

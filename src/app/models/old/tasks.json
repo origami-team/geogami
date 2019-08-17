@@ -1,0 +1,42 @@
+[
+    {
+        "type": "nav-text",
+        "question": {
+            "type": "text",
+            "info": "Notiere hier deine Navigationsanweisung an den Spieler"
+        },
+        "answer": {
+            "type": "position-ok",
+            "info": "Wähle den korrekten Zielort:"
+        }
+    },
+    {
+        "type": "nav-target",
+        "question": [
+            {
+                "type": "position",
+                "info": "Wähle den Zielort:"
+            },
+            {
+                "type": "text",
+                "info": "Aufgabenstellung an den Spieler:",
+                "placeholder": "Laufe bis zum nächsten Ziel. Bestätige mit OK, wenn du angekommen bist."
+            }
+        ],
+        "answer": {
+            "type": "position-ok",
+            "info": "Wähle den korrekten Zielort:"
+        }
+    },
+    {
+        "type": "nav-arrow",
+        "settings": {
+            "type": "text",
+            "info": "Aufgabenstellung an den Spieler:",
+            "placeholder": "Folge dem Pfeil bis zum nächsten Ziel."
+        },
+        "answer": {
+            "type": "position"
+        }
+    },
+]

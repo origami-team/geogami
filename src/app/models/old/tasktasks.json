@@ -1,0 +1,14 @@
+[
+    {
+        "type": "self-localization",
+        "question": {
+            "type": "text",
+            "info": "Aufgabenstellung an den Spieler:",
+            "placeholder": "Wo befindest du dich gerade? Markiere deine Position mit einem Klick auf der Karte. Bestätige mit OK."
+        },
+        "answer": {
+            "type": "position-ok",
+            "info": "Wähle den korrekten Zielort:"
+        }
+    },
+]

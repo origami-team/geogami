@@ -61,4 +61,19 @@ export class CreateGameListPage implements OnInit {
 
   }
 
+  async presentTaskModal(type: string = "nav") {
+    console.log(type)
+    const modal = await this.modalController.create({
+      component: CreateTaskModalPage,
+      componentProps: {
+        gameName: this.name,
+
+      }
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    console.log(data)
+    return
+  }
+
 }

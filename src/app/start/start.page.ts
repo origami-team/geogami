@@ -52,7 +52,7 @@ export class StartPage implements OnInit {
   }
 
   navigateGamesOverviewPage() {
-    this.navCtrl.navigateForward('play-game/games-overview');
+    this.navCtrl.navigateForward('play-game/play-game-list');
   }
 
   navigateCreatePage() {

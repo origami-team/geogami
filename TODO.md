@@ -1,0 +1,3 @@
+- iOS
+    - geofence plugin
+    - geolocation plugin

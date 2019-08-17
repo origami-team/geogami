@@ -15,10 +15,25 @@
 <ion-content>
   <div id="create-game-map" class="map"></div>
 
-  <div class="ion-padding scroll">
+  <div class="ion-padding">
+
+    <div class="center">
+      <ion-chip color="primary" (click)=presentTaskModal(nav)>
+        <ion-icon name="navigate"></ion-icon>
+      </ion-chip>
+      <ion-chip color="secondary" (click)=presentTaskModal(task)>
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-chip>
+      <ion-chip color="tertiary" (click)=presentTaskModal()>
+        <ion-icon name="list"></ion-icon>
+      </ion-chip>
+      <ion-chip color="medium" (click)=presentTaskModal()>
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </ion-chip>
+    </div>
 
 
-    <ion-card class="my-card">
+    <!-- <ion-card class="my-card">
       <ion-card-content>
         <ion-item class="item-text-wrap" lines="none">
           <ion-avatar slot="start">
@@ -30,19 +45,19 @@
             <ion-list>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="primary" (click)=presentTaskModal(i)>
+                <ion-chip color="primary" (click)=presentTaskModal()>
                   <ion-label>Route laufen</ion-label>
                 </ion-chip>
               </ion-item>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal(i)>
+                <ion-chip color="secondary" (click)=presentTaskModal()>
                   <ion-label>QA</ion-label>
                 </ion-chip>
               </ion-item>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal(i)>
+                <ion-chip color="secondary" (click)=presentTaskModal()>
                   <ion-label>Blickrichtung</ion-label>
                 </ion-chip>
               </ion-item>
@@ -53,19 +68,19 @@
     </ion-card>
 
     <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal(i)>
+      <ion-chip color="primary" (click)=presentTaskModal()>
         <ion-icon name="navigate"></ion-icon>
       </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal(i)>
+      <ion-chip color="secondary" (click)=presentTaskModal()>
         <ion-icon name="clipboard"></ion-icon>
       </ion-chip>
-      <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+      <ion-chip color="tertiary" (click)=presentTaskModal()>
         <ion-icon name="list"></ion-icon>
       </ion-chip>
-      <ion-chip color="medium" (click)=presentTaskModal(i)>
+      <ion-chip color="medium" (click)=presentTaskModal()>
         <ion-icon name="information-circle-outline"></ion-icon>
       </ion-chip>
-    </div>
+    </div> -->
 
     <!-- <ion-fab-button class="center" size="small">
       <ion-icon name="add"></ion-icon>
@@ -83,7 +98,7 @@
     </ion-fab-list> -->
 
 
-    <ion-card class="my-card">
+    <!-- <ion-card class="my-card">
       <ion-card-content>
         <ion-item class="item-text-wrap" lines="none">
           <ion-avatar slot="start">
@@ -95,13 +110,13 @@
             <ion-list>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="primary" (click)=presentTaskModal(i)>
+                <ion-chip color="primary" (click)=presentTaskModal()>
                   <ion-label>Ziel erreichen</ion-label>
                 </ion-chip>
               </ion-item>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+                <ion-chip color="tertiary" (click)=presentTaskModal()>
                   <ion-label>Mein Lernmodul</ion-label>
                 </ion-chip>
               </ion-item>
@@ -112,19 +127,19 @@
     </ion-card>
 
     <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal(i)>
+      <ion-chip color="primary" (click)=presentTaskModal()>
         <ion-icon name="navigate"></ion-icon>
       </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal(i)>
+      <ion-chip color="secondary" (click)=presentTaskModal()>
         <ion-icon name="clipboard"></ion-icon>
       </ion-chip>
-      <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+      <ion-chip color="tertiary" (click)=presentTaskModal()>
         <ion-icon name="list"></ion-icon>
       </ion-chip>
-      <ion-chip color="medium" (click)=presentTaskModal(i)>
+      <ion-chip color="medium" (click)=presentTaskModal()>
         <ion-icon name="information-circle-outline"></ion-icon>
       </ion-chip>
-    </div>
+    </div> -->
 
 
     <!-- <ion-fab-button class="center" size="small">
@@ -142,7 +157,7 @@
       </ion-fab-button>
     </ion-fab-list> -->
 
-    <ion-card class="my-card">
+    <!-- <ion-card class="my-card">
       <ion-card-content>
         <ion-item class="item-text-wrap" lines="none">
           <ion-avatar slot="start">
@@ -154,19 +169,23 @@
             <ion-list>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="primary" (click)=presentTaskModal(i)>
+                <ion-chip color="primary" (click)=presentTaskModal()>
                   <ion-label>Ziel erreichen</ion-label>
                 </ion-chip>
               </ion-item>
+              <ion-list-header>
+                <ion-card-title>Card Title</ion-card-title>
+                <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+              </ion-list-header>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="medium" (click)=presentTaskModal(i)>
+                <ion-chip color="medium" (click)=presentTaskModal()>
                   <ion-label>Information</ion-label>
                 </ion-chip>
               </ion-item>
               <ion-item lines="none">
                 <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal(i)>
+                <ion-chip color="secondary" (click)=presentTaskModal()>
                   <ion-label>Blickrichtung</ion-label>
                 </ion-chip>
               </ion-item>
@@ -177,19 +196,19 @@
     </ion-card>
 
     <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal(i)>
+      <ion-chip color="primary" (click)=presentTaskModal()>
         <ion-icon name="navigate"></ion-icon>
       </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal(i)>
+      <ion-chip color="secondary" (click)=presentTaskModal()>
         <ion-icon name="clipboard"></ion-icon>
       </ion-chip>
-      <ion-chip color="tertiary" (click)=presentTaskModal(i)>
+      <ion-chip color="tertiary" (click)=presentTaskModal()>
         <ion-icon name="list"></ion-icon>
       </ion-chip>
-      <ion-chip color="medium" (click)=presentTaskModal(i)>
+      <ion-chip color="medium" (click)=presentTaskModal()>
         <ion-icon name="information-circle-outline"></ion-icon>
       </ion-chip>
-    </div>
+    </div> -->
 
 
     <!-- <ion-fab-button class="center" size="small">
@@ -206,6 +225,92 @@
         <ion-icon name="logo-vimeo"></ion-icon>
       </ion-fab-button>
     </ion-fab-list> -->
+
+
+
+
+
+
+
+    <!-- <ion-card class="my-card">
+      <ion-card-header>
+        <ion-card-title>Card Title</ion-card-title>
+        <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+        <ion-icon slot="end" name="close"></ion-icon>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="item-text-wrap" lines="none">
+          <ion-avatar slot="start">
+            <div class="mymarker">
+              <p class="list">3</p>
+            </div>
+          </ion-avatar>
+          <ion-label text-wrap class="ion-text-wrap">
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="primary" (click)=presentTaskModal()>
+                  <ion-label>Ziel erreichen</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="medium" (click)=presentTaskModal()>
+                  <ion-label>Information</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="secondary" (click)=presentTaskModal()>
+                  <ion-label>Blickrichtung</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+      <ion-card-content>
+        <ion-item class="item-text-wrap" lines="none">
+          <ion-avatar slot="start">
+            <div class="mymarker">
+              <p class="list">2</p>
+            </div>
+          </ion-avatar>
+          <ion-label text-wrap class="ion-text-wrap">
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="primary" (click)=presentTaskModal()>
+                  <ion-label>Ziel erreichen</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-chip color="tertiary" (click)=presentTaskModal()>
+                  <ion-label>Mein Lernmodul</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="center">
+      <ion-chip color="primary" (click)=presentTaskModal()>
+        <ion-icon name="navigate"></ion-icon>
+      </ion-chip>
+      <ion-chip color="secondary" (click)=presentTaskModal()>
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-chip>
+      <ion-chip color="tertiary" (click)=presentTaskModal()>
+        <ion-icon name="list"></ion-icon>
+      </ion-chip>
+      <ion-chip color="medium" (click)=presentTaskModal()>
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </ion-chip>
+    </div> -->
+
   </div>
 
 

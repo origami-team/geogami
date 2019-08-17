@@ -3,4 +3,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain>localhost</domain>
     </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain>192.168.0.87</domain>
+    </domain-config>
 </network-security-config>

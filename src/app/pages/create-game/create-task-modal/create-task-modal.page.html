@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ gameName }}</ion-title>
+    <ion-title>Navigationsaufgabe</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)=dismissModal()>
         <ion-icon name="save"></ion-icon>
@@ -10,6 +10,146 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-label>Aufgabentyp</ion-label>
+    <select placeholder="Auswählen" [ngModel]="selectedTask" (ngModelChange)=onTaskSelected($event)>
+      <option [ngValue]="navtask" *ngFor="let navtask of navtasks">{{ navtask.name }}</option>
+    </select>
+  </ion-item>
+
+  <ion-item lines=" none">
+    <ion-label position="floating">Aufgabenname</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+
+  <h2>Einstellungen</h2>
+  <!-- <ion-item lines="none">
+    <ion-label>Fragetyp</ion-label>
+    <select placeholder="Auswählen" disabled>
+      <option value="f">Text</option>
+      <option value="m">Punkt</option>
+      <option value="a">...</option>
+      <option value="b">Routennavigation</option>
+      <option value="c">Routenplanung und -navigation</option>
+      <option value="nla">Navigation mit Teilaufgaben</option>
+    </select>
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label>Antworttyp</ion-label>
+    <select placeholder="Auswählen" disabled>
+      <option value="f">Position einnehmen und OK drücken</option>
+      <option value="m">Position einnehmen</option>
+      <option value="a">Pfeilnavigation</option>
+      <option value="b">Routennavigation</option>
+      <option value="c">Routenplanung und -navigation</option>
+      <option value="nla">Navigation mit Teilaufgaben</option>
+    </select>
+  </ion-item> -->
+
+
+  <div *ngIf="selectedTask">
+
+    <div *ngFor="let element of elements; let i = index;" [ngSwitch]="element.type">
+      <app-info *ngSwitchCase="'info'" [text]="element.text"></app-info>
+      <app-text-input *ngSwitchCase="'text-input'" [label]="element.label" [text]="element.text"
+        [type]="element.inputType"></app-text-input>
+      <app-map *ngSwitchCase="'map'" [featureType]="element.featureType" [index]="i"></app-map>
+
+    </div>
+
+    <!-- <div *ngFor="let questionType of selectedTask.questionTypes;" [ngSwitch]="questionType.type">
+
+      <div *ngSwitchCase="'nav-text'">
+        <ion-item lines="none">
+          <ion-text color="primary" class="info">
+            <p>Notiere hier deine Navigationsanweisung an den Spieler:</p>
+          </ion-text>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-textarea placeholder="Navigationsanweisung..."></ion-textarea>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-text color="primary" class="info">
+            <p>Wähle den korrekten Zielort:</p>
+          </ion-text>
+        </ion-item>
+        <div id="create-task-modal-map" class="map"></div> -->
+
+    <!-- <div [(ngModel)]="fragetypen" *ngFor="let element of fragetypen.filter(f => f.type == 'nav-text')[0].developer;"
+          [ngSwitch]="element.element">
+          <div *ngSwitchCase="'textarea'">
+            <ion-item lines="none">
+              <ion-text color="secondary">
+                <p>Notiere hier deine Navigationsanweisung an den Spieler:</p>
+              </ion-text>
+              <ion-item lines="none">
+                <ion-textarea placeholder="Navigationsanweisung..."></ion-textarea>
+              </ion-item>
+            </ion-item>
+          </div>
+        </div> -->
+    <!-- </div>
+
+      <div *ngSwitchCase="'text'">
+        <ion-item lines="none">
+          <ion-text color="primary" class="info">
+            <p>Notiere hier deine Navigationsanweisung an den Spieler:</p>
+          </ion-text>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-textarea placeholder="Navigationsanweisung..."></ion-textarea>
+        </ion-item>
+      </div>
+
+      <div *ngSwitchCase="'arrow'">
+        <ion-item lines="none">
+          <ion-text color="primary" class="info">
+            <p>Hier ist ein Arrow</p>
+          </ion-text>
+        </ion-item>
+      </div>
+
+    </div> -->
+  </div>
+
+
+  <!-- <ion-item lines="none">
+    <ion-textarea placeholder="Navigationsanweisung..."></ion-textarea>
+  </ion-item> -->
+
+
+  <ion-item lines="none">
+    <ion-label>Punkte</ion-label>
+    <ion-range min="0" max="5" step="1" snaps="true" ticks="true" color="primary" pin></ion-range>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label>Lösungversuche</ion-label>
+    <ion-range min="1" max="5" step="1" snaps="true" ticks="true" color="primary" pin></ion-range>
+  </ion-item>
+
+  <ion-list>
+    <ion-item detail>
+      <ion-label>
+        Kartenfeatures
+      </ion-label>
+    </ion-item>
+    <ion-item detail>
+      <ion-label>
+        Feedback und Hinweise
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+  <!--
+  <ion-button (click)=takePhoto()>
+    <ion-icon slot="start" name="camera"></ion-icon>
+    Foto hinzufügen
+  </ion-button>
+
   <h1>Aufgabeneinstellungen</h1>
 
   <ion-item>
@@ -108,4 +248,6 @@
     <ion-checkbox></ion-checkbox>
     <ion-label>Nach Fehlversuchen wird dem Spieler folgender Hinweis angezeigt</ion-label>
   </ion-item>
+
+  -->
 </ion-content>

@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="game">{{ game.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="playing-game-map" class="map"></div>
+
+  <div class="overlay ion-padding" *ngIf="!currentWaypoint && !currentTask">
+    <p>Herzlichen Glückwunsch!</p>
+  </div>
+
+  <div class="overlay ion-padding" *ngIf="currentWaypoint && !currentTask">
+    <p>Gehe zu {{ currentWaypoint.name }}</p>
+  </div>
+
+  <div class="overlay ion-padding" *ngIf="currentTask">
+    <ion-img [src]="currentTask.question.img" *ngIf="currentTask.question.img"></ion-img>
+    <h2>{{ currentTask.question.txt }}</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let answer of currentTask.answers">
+          <ion-button (click)=nextTask()>
+            {{ answer.txt }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+</ion-content>
