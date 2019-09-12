@@ -59,6 +59,10 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('create-game');
   }
 
+  navigateShowroomPage() {
+    this.navCtrl.navigateForward('map-showroom');
+  }
+
   async setLanguage(e) {
     this._translate.use(e.target.dataset.value);
     this._initialiseTranslation()

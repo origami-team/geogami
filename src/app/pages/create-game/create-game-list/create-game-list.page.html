@@ -18,10 +18,10 @@
   <div class="ion-padding">
 
     <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal(nav)>
+      <ion-chip color="primary" (click)='presentTaskModal("nav")'>
         <ion-icon name="navigate"></ion-icon>
       </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal(task)>
+      <ion-chip color="secondary" (click)='presentTaskModal("theme")'>
         <ion-icon name="clipboard"></ion-icon>
       </ion-chip>
       <ion-chip color="tertiary" (click)=presentTaskModal()>
@@ -232,10 +232,10 @@
 
 
 
-    <!-- <ion-card class="my-card">
+    <ion-card class="my-card">
       <ion-card-header>
-        <ion-card-title>Card Title</ion-card-title>
-        <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+        <ion-card-title>Lernmodul „Selbstlokalisation und Kartenausrichtung"</ion-card-title>
+        <ion-card-subtitle>Landmarken und 3D</ion-card-subtitle>
         <ion-icon slot="end" name="close"></ion-icon>
       </ion-card-header>
       <ion-card-content>
@@ -296,6 +296,7 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- 
     <div class="center">
       <ion-chip color="primary" (click)=presentTaskModal()>
         <ion-icon name="navigate"></ion-icon>

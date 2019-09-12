@@ -6,6 +6,7 @@ export class Game {
         public author: String,
         public description: string,
         public tracking: boolean,
+        public tasks: any[],
         public duration?: Number,
     ) { }
 

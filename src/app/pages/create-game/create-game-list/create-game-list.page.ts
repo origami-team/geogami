@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import mapboxgl from 'mapbox-gl';
 
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-
 import { ModalController } from '@ionic/angular';
 
 import { GameFactoryService } from '../../../services/game-factory.service'
@@ -20,11 +18,14 @@ import { CreateModuleModalPage } from './../create-module-modal/create-module-mo
 export class CreateGameListPage implements OnInit {
 
   name: String
+  tasks: any[]
 
-  constructor(private geolocation: Geolocation, private gameFactory: GameFactoryService, public modalController: ModalController) { }
+  constructor(private gameFactory: GameFactoryService, public modalController: ModalController) { }
 
   ngOnInit() {
     this.name = this.gameFactory.game ? this.gameFactory.game.name : ''
+
+    console.log(this.gameFactory.game)
   }
 
   ionViewWillEnter() {
@@ -67,13 +68,21 @@ export class CreateGameListPage implements OnInit {
       component: CreateTaskModalPage,
       componentProps: {
         gameName: this.name,
-
+        type: type
       }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data)
+    // this.addTaskToGame(data.data.task)
     return
   }
 
+  addTaskToGame(task) {
+    this.gameFactory.addTask(task)
+
+    this.tasks = this.gameFactory.game.tasks
+
+    console.log(this.tasks)
+  }
 }

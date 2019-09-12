@@ -2,67 +2,104 @@
     {
         "type": "nav-text",
         "name": "Textnavigation",
-        "questionTypes": [
+        "developer": [
             {
-                "type": "nav-text",
-                "developer": [
-                    {
-                        "type": "textarea",
-                        "info": "Notiere hier deine Navigationsanweisung an den Spieler:",
-                        "placeholder": ""
-                    },
-                    {
-                        "type": "map",
-                        "info": "Wähle den korrekten Zielort:"
-                    }
-                ]
-            }
-        ],
-        "answerTypes": [
+                "type": "info",
+                "text": "Notiere hier deine Navigationsanweisung an den Spieler:"
+            },
             {
-                "type": "position-ok"
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Navigationsanweisung",
+                "text": ""
+            },
+            {
+                "type": "info",
+                "text": "Wähle den korrekten Zielort"
+            },
+            {
+                "type": "map",
+                "featureType": "point"
             }
         ]
     },
     {
         "type": "nav-target",
         "name": "Zielnavigation",
-        "questionTypes": [
+        "developer": [
             {
-                "type": "nav-text",
-                "developer": [
-                    {
-                        "type": "map",
-                        "info": "Wähle den korrekten Zielort:"
-                    },
-                    {
-                        "type": "textarea",
-                        "info": "Notiere hier deine Navigationsanweisung an den Spieler:",
-                        "placeholder": "Laufe bis zum nächsten Ziel.Bestätige mit OK, wenn du angekommen bist."
-                    }
-                ]
-            }
-        ],
-        "answerTypes": [
+                "type": "info",
+                "text": "Wähle den Zielort"
+            },
             {
-                "type": "position-ok"
+                "type": "map",
+                "featureType": "point"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung an den Spieler"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Navigationsanweisung",
+                "text": "Laufe bis zum nächsten Ziel. Bestätige mit OK, wenn du angekommen bist."
             }
         ]
     },
     {
         "type": "nav-arrow",
         "name": "Pfeilnavigation",
-        "questionTypes": [
+        "developer": [
             {
-                "type": "text"
+                "type": "info",
+                "text": "Wähle den Zielort"
             },
             {
-                "type": "arrow"
-            }
-        ],
-        "answerTypes": [
+                "type": "map",
+                "featureType": "point"
+            },
             {
-                "type": "position-ok"
+                "type": "info",
+                "text": "Aufgabenstellung an den Spieler"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Navigationsanweisung",
+                "text": "Folge dem Pfeil bis zum nächsten Ziel."
+            }
+        ]
+    },
+    {
+        "type": "nav-route",
+        "name": "Routennavigation",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Wähle den Zielort"
+            },
+            {
+                "type": "map",
+                "featureType": "point"
+            },
+            {
+                "type": "info",
+                "text": "Markiere möglichst genau eine Route, die der Spieler gehen soll"
+            },
+            {
+                "type": "map",
+                "featureType": "route"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung an den Spieler"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Navigationsanweisung",
+                "text": " Folge der vorgegebenen Route bis zum nächsten Ziel."
             }
         ]
     }

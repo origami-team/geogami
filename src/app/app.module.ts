@@ -25,15 +25,16 @@ import { CreateModuleModalPage } from './pages/create-game/create-module-modal/c
 import { InfoComponent } from './form-elements/info/info.component'
 import { TextInputComponent } from './form-elements/text-input/text-input.component'
 import { MapComponent } from './form-elements/map/map.component'
-
+import { CameraComponent } from './form-elements/camera/camera.component'
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-// import { Geofence } from '@ionic-native/geofence/ngx';
-
 
 import { Camera } from '@ionic-native/camera/ngx';
 
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
+import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+
 
 
 
@@ -53,12 +54,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     InfoComponent,
     TextInputComponent,
     MapComponent,
+    CameraComponent
     // form components ⬆️
   ],
   entryComponents: [TrackingPopoverComponent, CreateTaskModalPage, CreateModuleModalPage],
   imports: [BrowserModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -73,7 +76,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Geolocation,
     // Geofence,
-    Camera
+    Camera,
+    DeviceOrientation
   ],
   bootstrap: [AppComponent]
 })

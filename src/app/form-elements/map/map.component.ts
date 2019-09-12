@@ -1,8 +1,8 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, AfterViewInit, Input } from '@angular/core';
 
 import mapboxgl from 'mapbox-gl';
 
-import MapboxDraw from '@mapbox/mapbox-gl-draw'
+// import MapboxDraw from '@mapbox/mapbox-gl-draw'
 // import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 
 
@@ -25,12 +25,6 @@ export class MapComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.initMap();
   }
-
-  
-
-  // ionViewDidEnter() {
-  //   this.initMap()
-  // }
 
   initMap() {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';

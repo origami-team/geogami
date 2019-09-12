@@ -1,13 +1,10 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import navtasks from './../../../models/navtasks.json'
+import themetasks from './../../../models/themetasks.json'
 
-import mapboxgl from 'mapbox-gl';
-
-import navtasks from './../../../models/navtasks-new.json'
-// import fragetypen from './../../../models/fragetypen.json'
-// import antworttypen from './../../../models/antworttypen.json'
+import { FormGroup, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -17,21 +14,23 @@ import navtasks from './../../../models/navtasks-new.json'
 })
 export class CreateTaskModalPage implements OnInit {
 
-  @Input() gameName: string;
+  @Input() gameName: string = '';
+  @Input() type: string = 'nav'
 
-  // marker: any;
-
+  tasks: any
   selectedTask: any;
   elements: any[];
 
-  navtasks: any = navtasks
-  // fragetypen: any = fragetypen
-  // antworttypen: any = antworttypen
+  taskForm: FormGroup;
 
+  constructor(public modalController: ModalController) {
 
-  constructor(public modalController: ModalController, private camera: Camera) { }
+  }
 
   ngOnInit() {
+    this.tasks = this.type == 'nav' ? navtasks : themetasks
+
+    this.onTaskSelected(this.tasks[0])
   }
 
   onTaskSelected(newValue) {
@@ -39,28 +38,19 @@ export class CreateTaskModalPage implements OnInit {
     console.log(this.selectedTask)
 
     this.elements = this.selectedTask.developer
-    // const elements = this.selectedTask.questionTypes.map(qt => qt)
-    // console.log(elements)
-    // setTimeout(() => this.initMap(), 100)
-  }
 
-
-
-  takePhoto() {
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+    this.taskForm = new FormGroup({
+      taskType: new FormControl(''),
+      taskName: new FormControl(''),
+      ...this.elements.filter(e => e.type != "info").reduce((obj, item) => {
+        obj[item.type] = new FormControl('')
+        return obj
+      }, {})
     }
+    )
 
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-    }, (err) => {
-      // Handle error
-    });
+    console.log(this.taskForm)
+
   }
 
   dismissModal() {
@@ -69,7 +59,8 @@ export class CreateTaskModalPage implements OnInit {
     this.modalController.dismiss({
       'dismissed': true,
       data: {
-
+        task: this.selectedTask,
+        information: this.taskForm.value
       }
     });
   }
