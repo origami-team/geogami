@@ -1,1 +1,8 @@
-<div id="form-element-map-{{index}}" class="map"></div>
+<div [formGroup]="group">
+    <label>{{ config.label }}</label>
+    <!-- <div #map class="map" [formControlName]="config.name"></div> -->
+    <input #hiddenInput [value]="geometry" type="text" [formControlName]="config.name">
+
+    <div #map class="map"></div>
+
+</div>

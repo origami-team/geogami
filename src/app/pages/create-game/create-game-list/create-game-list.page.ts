@@ -1,4 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import { IonReorderGroup } from '@ionic/angular';
+
 
 import mapboxgl from "mapbox-gl";
 
@@ -18,13 +20,22 @@ import { Game } from "src/app/models/game";
 })
 export class CreateGameListPage implements OnInit {
   name: String;
-  tasks: any[];
+  tasks: any[] = [];
   game: Game;
+
+  @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
+
+  // dismiss modal on hardware back button
+  @HostListener('document:ionBackButton', ['$event'])
+  private async overrideHardwareBackAction($event: any) {
+    await this.modalController.dismiss();
+  }
 
   constructor(
     private gameFactory: GameFactoryService,
     public modalController: ModalController
-  ) {}
+  ) { }
+
 
   ngOnInit() {
     this.game = this.gameFactory.getGame();
@@ -67,8 +78,7 @@ export class CreateGameListPage implements OnInit {
     });
   }
 
-  async presentTaskModal(type: string = "nav") {
-    console.log(type);
+  async presentTaskModal(type: string = "nav", index: number) {
     const modal = await this.modalController.create({
       component: CreateTaskModalPage,
       componentProps: {
@@ -80,22 +90,91 @@ export class CreateGameListPage implements OnInit {
     const { data } = await modal.onWillDismiss();
     console.log(data);
     if (data != undefined) {
-      this.addTaskToGame(data.data.task);
+      this.addTaskToGame(data.data.task, index);
     }
     return;
   }
 
-  addTaskToGame(task) {
-    this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
+  addTaskToGame(task, index) {
+    this.gameFactory.addTask(
+      { ...task, id: Math.floor(Date.now() / 1000) },
+      index
+    );
     this.game = this.gameFactory.getGame();
-    console.log(this.game);
-    // this.tasks = this.gameFactory.game.tasks;
 
-    // console.log(this.tasks);
+    this._generateTaskArray();
+
+    console.log(this.tasks);
   }
 
   deleteTask(taskID) {
     console.log("deleting", taskID);
     this.game = this.gameFactory.removeTask(taskID);
+
+    this._generateTaskArray();
+  }
+
+  _generateTaskArray() {
+    let tempTasksArr = [];
+    let lastNavTask = null;
+    this.tasks = [];
+
+    this.game.tasks.forEach((task, key, arr) => {
+      if (task.type.includes("nav")) {
+        // first element
+        if (Object.is(0, key)) {
+          lastNavTask = task;
+        } else {
+          this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
+          lastNavTask = task;
+          tempTasksArr = [];
+        }
+      }
+
+      if (task.type.includes("theme")) {
+        tempTasksArr.push(task);
+      }
+      // last element
+      if (Object.is(this.game.tasks.length - 1, key)) {
+        this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
+        return;
+      }
+    });
+
+    // for (let i = 0; i <= this.game.tasks.length; i++) {
+    //   const task = this.game.tasks[i];
+    //   if (task.type.includes("nav")) {
+    //     this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
+    //     lastNavTask = task;
+    //     tempTasksArr = [];
+    //     // if last element is nav task without theme tasks
+    //     if (i == this.game.tasks.length) {
+    //       this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
+    //     }
+    //   }
+    //   if (task.type.includes("theme")) {
+    //     tempTasksArr.push(task);
+    //   }
+    // }
+  }
+
+  doReorder(ev: any) {
+    // The `from` and `to` properties contain the index of the item
+    // when the drag started and ended, respectively
+    console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
+
+    // Before complete is called with the items they will remain in the
+    // order before the drag
+    console.log('Before complete', this.game.tasks);
+
+    // Finish the reorder and position the item in the DOM based on
+    // where the gesture ended. Update the items variable to the
+    // new order of items
+    // this.game.tasks = ev.detail.complete(this.game.tasks);
+
+    ev.detail.complete(true);
+
+    // After complete is called the items will be in the new order
+    console.log('After complete', this.game.tasks);
   }
 }

@@ -1,9 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title *ngIf='type == "nav"'>Navigationsaufgabe</ion-title>
-    <ion-title *ngIf='type == "theme"'>Thematische Aufgabe</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal('close')">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title *ngIf="type == 'nav'">Navigationsaufgabe</ion-title>
+    <ion-title *ngIf="type == 'theme'">Thematische Aufgabe</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)=dismissModal()>
+      <ion-button (click)="dismissModal(null)">
         <ion-icon name="save"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -11,57 +16,8 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- <form [formGroup]="taskForm"> -->
-
-  <ion-item lines="none">
-    <ion-label>Aufgabentyp</ion-label>
-    <select placeholder="Auswählen" [ngModel]="selectedTask" (ngModelChange)=onTaskSelected($event)>
-      <option [ngValue]="task" *ngFor="let task of tasks">{{ task.name }}</option>
-    </select>
-  </ion-item>
-
-  <ion-item lines=" none">
-    <ion-label position="floating">Aufgabenname</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-
-  <h2>Einstellungen</h2>
-
-  <div *ngIf="selectedTask">
-
-    <div *ngFor="let element of elements; let i = index;" [ngSwitch]="element.type">
-      <app-info *ngSwitchCase="'info'" [text]="element.text"></app-info>
-      <app-text-input *ngSwitchCase="'text-input'" [label]="element.label" [text]="element.text"
-        [type]="element.inputType"></app-text-input>
-      <app-map *ngSwitchCase="'map'" [featureType]="element.featureType" [index]="i">
-      </app-map>
-      <app-camera *ngSwitchCase="'camera'" formControlName="{{element.type}}"></app-camera>
-    </div>
-
-  </div>
-
-
-  <ion-item lines="none">
-    <ion-label>Punkte</ion-label>
-    <ion-range min="0" max="5" step="1" snaps="true" ticks="true" color="primary" pin></ion-range>
-  </ion-item>
-
-  <ion-item lines="none">
-    <ion-label>Lösungversuche</ion-label>
-    <ion-range min="1" max="5" step="1" snaps="true" ticks="true" color="primary" pin></ion-range>
-  </ion-item>
-
-  <ion-list>
-    <ion-item detail>
-      <ion-label>
-        Kartenfeatures
-      </ion-label>
-    </ion-item>
-    <ion-item detail>
-      <ion-label>
-        Feedback und Hinweise
-      </ion-label>
-    </ion-item>
-  </ion-list>
-  <!-- </form> -->
+  <dynamic-form [config]="config" #form="dynamicForm" (submit)="submit($event)">
+  </dynamic-form>
+  {{ form.valid }}
+  {{ form.value | json }}
 </ion-content>

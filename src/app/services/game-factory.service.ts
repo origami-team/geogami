@@ -18,11 +18,15 @@ export class GameFactoryService {
     console.log("New Game: ", this.game);
   }
 
-  addTask(task: any) {
+  addTask(task: any, index) {
+    // console.log(task, index);
     if (this.game.hasOwnProperty("tasks")) {
+      const newTaskArr = this.game.tasks;
+      newTaskArr.splice(index, 0, task);
+      console.log(newTaskArr);
       this.game = {
         ...this.game,
-        tasks: [...this.game.tasks, task]
+        tasks: newTaskArr
       };
     } else {
       this.game = {

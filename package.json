@@ -39,6 +39,7 @@
     "cordova-plugin-device-orientation": "^2.0.1",
     "cordova-plugin-geolocation": "^4.0.2",
     "core-js": "^2.5.4",
+    "leaflet.offline": "^1.0.4",
     "mapbox-gl": "^1.1.0",
     "mapbox-gl-compare": "^0.2.1",
     "mapbox-gl-style-switcher": "^1.0.3",

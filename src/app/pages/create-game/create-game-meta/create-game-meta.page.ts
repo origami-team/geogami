@@ -1,32 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { PopoverController } from '@ionic/angular';
+import { PopoverController } from "@ionic/angular";
 
-import { NavController } from '@ionic/angular';
+import { NavController } from "@ionic/angular";
 
-import { Game } from './../../../models/game'
+import { Game } from "./../../../models/game";
 
-import { GameFactoryService } from '../../../services/game-factory.service'
+import { GameFactoryService } from "../../../services/game-factory.service";
 
-
-import { TrackingPopoverComponent } from '../../../tracking-popover/tracking-popover.component';
+import { TrackingPopoverComponent } from "../../../tracking-popover/tracking-popover.component";
 
 @Component({
-  selector: 'app-create-game-meta',
-  templateUrl: './create-game-meta.page.html',
-  styleUrls: ['./create-game-meta.page.scss'],
+  selector: "app-create-game-meta",
+  templateUrl: "./create-game-meta.page.html",
+  styleUrls: ["./create-game-meta.page.scss"]
 })
 export class CreateGameMetaPage implements OnInit {
+  public model = new Game(0, "", "", "", true, []);
 
-  public model = new Game(0, '', '', '', true, undefined);
+  constructor(
+    public popoverController: PopoverController,
+    public navCtrl: NavController,
+    public gameFactory: GameFactoryService
+  ) {}
 
-  constructor(public popoverController: PopoverController, public navCtrl: NavController, public gameFactory: GameFactoryService) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   async showTrackingInfo(ev: any) {
-    console.log(ev)
+    console.log(ev);
     const popover = await this.popoverController.create({
       component: TrackingPopoverComponent,
       event: ev,
@@ -36,8 +37,7 @@ export class CreateGameMetaPage implements OnInit {
   }
 
   goToCreateGameMap() {
-    this.gameFactory.addGameInformation(this.model)
-    this.navCtrl.navigateForward('create-game/create-game-list')
+    this.gameFactory.addGameInformation(this.model);
+    this.navCtrl.navigateForward("create-game/create-game-list");
   }
-
 }

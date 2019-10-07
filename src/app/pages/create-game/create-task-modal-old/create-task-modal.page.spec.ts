@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MapSwipePage } from './map-swipe.page';
+import { CreateTaskModalPage } from './create-task-modal.page';
 
-describe('MapSwipePage', () => {
-  let component: MapSwipePage;
-  let fixture: ComponentFixture<MapSwipePage>;
+describe('CreateTaskModalPage', () => {
+  let component: CreateTaskModalPage;
+  let fixture: ComponentFixture<CreateTaskModalPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapSwipePage ],
+      declarations: [ CreateTaskModalPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MapSwipePage);
+    fixture = TestBed.createComponent(CreateTaskModalPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

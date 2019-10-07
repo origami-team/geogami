@@ -45,6 +45,9 @@
     <ion-chip [color]='enabledFeatures.includes("streetSection") ? "primary" : "medium"' (click)=toggleStreetSection()>
       <ion-label>Straßenabschnitt</ion-label>
     </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("offline") ? "primary" : "medium"' (click)=toggleOffline()>
+      <ion-label>Offline</ion-label>
+    </ion-chip>
   </div>
 
 </ion-content>

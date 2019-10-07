@@ -34,6 +34,9 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+import { DynamicFieldDirective } from './form-elements/dynamic-field.directive';
+
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module'
 
 
 
@@ -52,13 +55,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateModuleModalPage,
     // form components ⬇️
     InfoComponent,
-    TextInputComponent,
-    MapComponent,
-    CameraComponent
+    // TextInputComponent,
+    // MapComponent,
+    CameraComponent,
     // form components ⬆️
   ],
   entryComponents: [TrackingPopoverComponent, CreateTaskModalPage, CreateModuleModalPage],
-  imports: [BrowserModule,
+  imports: [
+    DynamicFormModule,
+    BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

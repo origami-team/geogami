@@ -408,4 +408,33 @@ export class MapShowroomPage implements OnInit {
 
     }
   }
+
+  toggleOffline() {
+    if (this.enabledFeatures.includes('offline')) {
+      this.enabledFeatures = this.enabledFeatures.filter(e => e != 'offline')
+    } else {
+      this.enabledFeatures.push('offline')
+
+      this.map.addLayer({
+        "id": "mapillary",
+        "type": "line",
+        "source": {
+          "type": "vector",
+          "tiles": ["https://d25uarhxywzl1j.cloudfront.net/v0.1/14/8539/5412.mvt"],
+          "minzoom": 6,
+          "maxzoom": 14
+        },
+        "source-layer": "mapillary-sequences",
+        "layout": {
+          "line-cap": "round",
+          "line-join": "round"
+        },
+        "paint": {
+          "line-opacity": 0.6,
+          "line-color": "rgb(53, 175, 109)",
+          "line-width": 2
+        }
+      }, 'waterway-label');
+    }
+  }
 }

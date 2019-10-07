@@ -1,9 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="create-game/create-game-meta"
-      ></ion-back-button>
+      <ion-back-button defaultHref="create-game/create-game-meta"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ name }}</ion-title>
     <ion-buttons slot="end">
@@ -17,256 +15,121 @@
 <ion-content>
   <div id="create-game-map" class="map"></div>
 
+  <!-- Upper Add Button Row -->
+  <!-- <div class="ion-padding">
+    <div class="center">
+      <ion-chip color="primary" (click)="presentTaskModal('nav', 0)">
+        <ion-icon name="navigate"></ion-icon>
+      </ion-chip>
+      <ion-chip color="secondary" (click)="presentTaskModal('theme', 0)">
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-chip>
+      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
+        <ion-icon name="list"></ion-icon>
+      </ion-chip>
+      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </ion-chip>
+    </div> -->
+
+
+  <!-- Old card style -->
+  <!-- <div *ngFor="let task of game.tasks; index as i">
+    <ion-card class="my-card" *ngIf="task.type.includes('nav')">
+      <ion-card-content>
+        <ion-item class="item-text-wrap" lines="none">
+          <ion-avatar slot="start">
+            <div class="mymarker">
+              <p class="list">{{ i + 1 }}</p>
+            </div>
+          </ion-avatar>
+          <ion-label text-wrap class="ion-text-wrap">
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
+                <ion-chip color="primary" (click)="presentTaskModal('theme', 0)">
+                  <ion-label>{{ task.name }}</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="my-card" *ngIf="task.type.includes('theme')">
+      <ion-card-content>
+        <ion-item class="item-text-wrap" lines="none">
+          <ion-label text-wrap class="ion-text-wrap">
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
+                <ion-chip color="secondary" (click)="presentTaskModal('theme')">
+                  <ion-label>{{ task.name }}</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="center">
+      <ion-chip color="primary" (click)="presentTaskModal('nav', i + 1)">
+        <ion-icon name="navigate"></ion-icon>
+      </ion-chip>
+      <ion-chip color="secondary" (click)="presentTaskModal('theme', i + 1)">
+        <ion-icon name="clipboard"></ion-icon>
+      </ion-chip>
+      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
+        <ion-icon name="list"></ion-icon>
+      </ion-chip>
+      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
+        <ion-icon name="information-circle-outline"></ion-icon>
+      </ion-chip>
+    </div>
+  </div> -->
+
+  <!-- New reorder list style -->
+  <ion-list>
+    <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+      <ion-item class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
+        <ion-avatar slot="start" *ngIf="task.type.includes('nav')">
+          <div class="mymarker">
+            <p class="list">{{ i + 1 }}</p>
+          </div>
+        </ion-avatar>
+        <ion-chip *ngIf="task.type.includes('nav')" color="primary" (click)="presentTaskModal('nav', 0)">
+          <ion-label>{{ task.name }}</ion-label>
+        </ion-chip>
+        <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', 0)">
+          <ion-label>{{ task.name }}</ion-label>
+        </ion-chip>
+        <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
+    </ion-reorder-group>
+  </ion-list>
+
   <div class="ion-padding">
     <div class="center">
-      <ion-chip color="primary" (click)="presentTaskModal('nav')">
+      <ion-chip color="primary" (click)="presentTaskModal('nav', 0)">
         <ion-icon name="navigate"></ion-icon>
       </ion-chip>
-      <ion-chip color="secondary" (click)="presentTaskModal('theme')">
+      <ion-chip color="secondary" (click)="presentTaskModal('theme', 0)">
         <ion-icon name="clipboard"></ion-icon>
       </ion-chip>
-      <ion-chip color="tertiary" (click)="presentTaskModal()">
+      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
         <ion-icon name="list"></ion-icon>
       </ion-chip>
-      <ion-chip color="medium" (click)="presentTaskModal()">
+      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
         <ion-icon name="information-circle-outline"></ion-icon>
       </ion-chip>
     </div>
+  </div>
 
-    <!-- <ion-card class="my-card">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-avatar slot="start">
-            <div class="mymarker">
-              <p class="list">1</p>
-            </div>
-          </ion-avatar>
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="primary" (click)=presentTaskModal()>
-                  <ion-label>Route laufen</ion-label>
-                </ion-chip>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal()>
-                  <ion-label>QA</ion-label>
-                </ion-chip>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal()>
-                  <ion-label>Blickrichtung</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
 
-    <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal()>
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal()>
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)=presentTaskModal()>
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)=presentTaskModal()>
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div> -->
-
-    <!-- <ion-fab-button class="center" size="small">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="end">
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list> -->
-
-    <!-- <ion-card class="my-card">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-avatar slot="start">
-            <div class="mymarker">
-              <p class="list">2</p>
-            </div>
-          </ion-avatar>
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="primary" (click)=presentTaskModal()>
-                  <ion-label>Ziel erreichen</ion-label>
-                </ion-chip>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="tertiary" (click)=presentTaskModal()>
-                  <ion-label>Mein Lernmodul</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal()>
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal()>
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)=presentTaskModal()>
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)=presentTaskModal()>
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div> -->
-
-    <!-- <ion-fab-button class="center" size="small">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="end">
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list> -->
-
-    <!-- <ion-card class="my-card">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-avatar slot="start">
-            <div class="mymarker">
-              <p class="list">3</p>
-            </div>
-          </ion-avatar>
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="primary" (click)=presentTaskModal()>
-                  <ion-label>Ziel erreichen</ion-label>
-                </ion-chip>
-              </ion-item>
-              <ion-list-header>
-                <ion-card-title>Card Title</ion-card-title>
-                <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-              </ion-list-header>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="medium" (click)=presentTaskModal()>
-                  <ion-label>Information</ion-label>
-                </ion-chip>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal()>
-                  <ion-label>Blickrichtung</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal()>
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal()>
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)=presentTaskModal()>
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)=presentTaskModal()>
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div> -->
-
-    <!-- <ion-fab-button class="center" size="small">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="end">
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button>
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list> -->
-
-    <div *ngFor="let task of game.tasks">
-      <ion-card class="my-card" *ngIf="task.type.includes('nav')">
-        <ion-card-content>
-          <ion-item class="item-text-wrap" lines="none">
-            <ion-avatar slot="start">
-              <div class="mymarker">
-                <!-- add index here -->
-                <p class="list"></p>
-              </div>
-            </ion-avatar>
-            <ion-label text-wrap class="ion-text-wrap">
-              <ion-list>
-                <ion-item lines="none" *ngIf="task.type.includes('nav')">
-                  <ion-icon
-                    slot="end"
-                    name="close"
-                    (click)="deleteTask(task.id)"
-                  ></ion-icon>
-                  <ion-chip color="primary" (click)="presentTaskModal()">
-                    <ion-label>{{ task.name }}</ion-label>
-                  </ion-chip>
-                </ion-item>
-              </ion-list>
-            </ion-label>
-          </ion-item>
-        </ion-card-content>
-      </ion-card>
-      <div class="center">
-        <ion-chip color="primary" (click)="presentTaskModal('nav')">
-          <ion-icon name="navigate"></ion-icon>
-        </ion-chip>
-        <ion-chip color="secondary" (click)="presentTaskModal('theme')">
-          <ion-icon name="clipboard"></ion-icon>
-        </ion-chip>
-        <ion-chip color="tertiary" (click)="presentTaskModal()">
-          <ion-icon name="list"></ion-icon>
-        </ion-chip>
-        <ion-chip color="medium" (click)="presentTaskModal()">
-          <ion-icon name="information-circle-outline"></ion-icon>
-        </ion-chip>
-      </div>
-    </div>
-
-    <!-- <ion-card class="my-card">
+  <!-- <ion-card class="my-card">
       <ion-card-header>
         <ion-card-title
           >Lernmodul „Selbstlokalisation und Kartenausrichtung"</ion-card-title
@@ -332,20 +195,4 @@
       </ion-card-content>
     </ion-card> -->
 
-    <!-- 
-    <div class="center">
-      <ion-chip color="primary" (click)=presentTaskModal()>
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)=presentTaskModal()>
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)=presentTaskModal()>
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)=presentTaskModal()>
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div> -->
-  </div>
 </ion-content>
