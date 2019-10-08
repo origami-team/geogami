@@ -17,15 +17,18 @@ import { CreateModuleModalPage } from './../create-module-modal/create-module-mo
 })
 export class CreateGameListPage implements OnInit {
 
-  name: String
-  tasks: any[]
+  name: String = ''
+  tasks: any[] = []
+
+  game: any
 
   constructor(private gameFactory: GameFactoryService, public modalController: ModalController) { }
 
   ngOnInit() {
-    this.name = this.gameFactory.game ? this.gameFactory.game.name : ''
-
-    console.log(this.gameFactory.game)
+    if (this.gameFactory.game != null) {
+      this.game = this.gameFactory.game
+      this.name = this.game.name
+    }
   }
 
   ionViewWillEnter() {
@@ -62,6 +65,20 @@ export class CreateGameListPage implements OnInit {
 
   }
 
+  doReorder(ev: any) {
+    // Before complete is called with the items they will remain in the
+    // order before the drag
+    console.log('Before complete', this.game.tasks);
+
+    // Finish the reorder and position the item in the DOM based on
+    // where the gesture ended. Update the items variable to the
+    // new order of items
+    this.game.tasks = ev.detail.complete(this.game.tasks);
+
+    // After complete is called the items will be in the new order
+    console.log('After complete', this.game.tasks);
+  }
+
   async presentTaskModal(type: string = "nav") {
     console.log(type)
     const modal = await this.modalController.create({
@@ -74,7 +91,7 @@ export class CreateGameListPage implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data)
-    // this.addTaskToGame(data.data.task)
+    this.game.tasks.push(data.data.task)
     return
   }
 

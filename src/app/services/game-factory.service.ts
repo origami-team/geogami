@@ -8,10 +8,9 @@ import { Game } from './../models/game'
 })
 export class GameFactoryService {
 
-  public game: Game
+  public game: Game = new Game(~~(Date.now() / 1000), 'Test Game', '', '', true, [])
 
   constructor() { }
-
 
   addGameInformation(data: any) {
     this.game = {
@@ -22,12 +21,6 @@ export class GameFactoryService {
   }
 
   addTask(task: any) {
-    this.game = {
-      ...this.game,
-      tasks: [
-        ...this.game.tasks,
-        task
-      ]
-    }
+    this.game.tasks.push(task)
   }
 }

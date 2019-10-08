@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input } from '@angular/core';
+import { Component, AfterViewInit, Input, ViewChild } from '@angular/core';
 
 import mapboxgl from 'mapbox-gl';
 
@@ -18,6 +18,8 @@ export class MapComponent implements AfterViewInit {
 
   @Input() index: number = 0
 
+  @ViewChild('map') mapElement;
+
   marker: any;
 
   constructor() { }
@@ -30,7 +32,7 @@ export class MapComponent implements AfterViewInit {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
 
     const map = new mapboxgl.Map({
-      container: `form-element-map-${this.index}`,
+      container: this.mapElement.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v9',
       center: [8, 51.8],
       zoom: 2

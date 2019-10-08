@@ -33,41 +33,34 @@
     </div>
 
 
-    <!-- <ion-card class="my-card">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-avatar slot="start">
-            <div class="mymarker">
-              <p class="list">1</p>
-            </div>
-          </ion-avatar>
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="primary" (click)=presentTaskModal()>
-                  <ion-label>Route laufen</ion-label>
-                </ion-chip>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal()>
-                  <ion-label>QA</ion-label>
-                </ion-chip>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close"></ion-icon>
-                <ion-chip color="secondary" (click)=presentTaskModal()>
-                  <ion-label>Blickrichtung</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
+    <ion-list *ngIf="game">
+      <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
 
-    <div class="center">
+        <ion-card class="my-card" *ngFor="let task of game.tasks">
+          <ion-card-content>
+            <ion-item class="item-text-wrap" lines="none">
+              <!-- <ion-avatar slot="start">
+                <div class="mymarker">
+                  <p class="list">1</p>
+                </div>
+              </ion-avatar> -->
+              <ion-item lines="none">
+                <ion-chip color="primary" *ngIf="task.type.includes('nav')" (click)=presentTaskModal()>
+                  <ion-label>{{ task.name }}</ion-label>
+                </ion-chip>
+                <ion-chip color="secondary" *ngIf="task.type.includes('theme')" (click)=presentTaskModal()>
+                  <ion-label>{{ task.name }}</ion-label>
+                </ion-chip>
+              </ion-item>
+              <ion-icon slot="end" name="close"></ion-icon>
+              <ion-reorder slot="end"></ion-reorder>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-reorder-group>
+    </ion-list>
+
+    <!-- <div class="center">
       <ion-chip color="primary" (click)=presentTaskModal()>
         <ion-icon name="navigate"></ion-icon>
       </ion-chip>
@@ -232,7 +225,7 @@
 
 
 
-    <ion-card class="my-card">
+    <!-- <ion-card class="my-card">
       <ion-card-header>
         <ion-card-title>Lernmodul „Selbstlokalisation und Kartenausrichtung"</ion-card-title>
         <ion-card-subtitle>Landmarken und 3D</ion-card-subtitle>
@@ -294,7 +287,7 @@
           </ion-label>
         </ion-item>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
     <!-- 
     <div class="center">
