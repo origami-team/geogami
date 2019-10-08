@@ -1,0 +1,226 @@
+[
+    {
+        "type": "theme-self-localization",
+        "name": "Selbstlokalisation",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Aufgabenstellung an den Spieler?"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Aufgabenstellung",
+                "text": "Wo befindest du dich gerade? Markiere deine Position mit einem Klick auf der Karte. Bestätige mit OK"
+            }
+        ]
+    },
+    {
+        "type": "theme-find-object-map",
+        "name": "Objekt finden (Karte)",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Mache ein Foto von dem Objekt, das der Spieler auf der Karte finden soll. Fotografiere von dem gewählten Ort aus:"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "info",
+                "text": "Umrande auf der Karte das passende Objekt zum Bild:"
+            },
+            {
+                "type": "map",
+                "featureType": "polygon"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung an den Spieler:"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Aufgabenstellung",
+                "text": "Suche in deiner Umgebung das Objekt, das du hier auf dem Foto siehst. Klicke das Objekt auf der Karte an. Bestätige mit OK."
+            }
+        ]
+    },
+    {
+        "type": "theme-find-object-location",
+        "name": "Objekt finden (Umgebung)",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Umrande auf der Karte ein Objekt, das der Spieler in seiner Umgebung suchen soll"
+            },
+            {
+                "type": "map",
+                "featureType": "polygon"
+            },
+            {
+                "type": "info",
+                "text": "Mache ein Foto vom dem zu suchenden Objekt und drei weitere Fotos von anderen Objekten in der näheren Umgebung. Fotografiere von dem gewählten Ort aus. Korrektes Bild:"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "info",
+                "text": "Weitere Bilder:"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung an den Spieler:"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Aufgabenstellung",
+                "text": "Auf der Karte siehst du ein markiertes Objekt. Wähle aus den vier Fotos das passende Bild zu diesem Objekt aus."
+            }
+        ]
+    },
+    {
+        "type": "theme-draw-direction",
+        "name": "Blickrichtung markieren",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Markiere die Richtung, in die der Spieler blicken soll, mit einem Klick auf der Karte. Die App wird den Spieler in diese Blickrichtung leiten:"
+            },
+            {
+                "type": "map",
+                "inputType": "direction"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung an den Spieler:"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Aufgabenstellung",
+                "text": "Markiere deine Blickrichtung mit einem Klick auf der Karte. Bestätige mit OK."
+            }
+        ]
+    },
+    {
+        "type": "theme-draw-direction-photo",
+        "name": "Blickrichtung markieren (Foto)",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Mache ein Foto von der Blickrichtung, in die der Spieler schauen soll. Fotografiere von dem gewählten Ort aus:"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "info",
+                "text": "Markiere diese Blickrichtung mit einem Klick auf der Karte:"
+            },
+            {
+                "type": "map",
+                "inputType": "direction"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung anden Spieler:"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Aufgabenstellung",
+                "text": "Markiere die Blickrichtung, die du auf dem Bild siehst, mit einem Klick auf der Karte.Bestätige mit OK."
+            }
+        ]
+    },
+    {
+        "type": "theme-direction-position",
+        "name": "Blickrichtung einnehmen",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Markiere mit einem Klick die Richtung, in die der Spieler blicken soll:"
+            },
+            {
+                "type": "map",
+                "inputType": "direction"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung anden Spieler:"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Aufgabenstellung",
+                "text": "Drehe dich in die Blickrichtung, die auf der Karte eingezeichnet ist. Bestätige mit OK."
+            }
+        ]
+    },
+    {
+        "type": "theme-direction-position-photo",
+        "name": "Blickrichtung einnehmen",
+        "developer": [
+            {
+                "type": "info",
+                "text": "Markiere mit einem Klick die Richtung, in die der Spieler blicken soll:"
+            },
+            {
+                "type": "map",
+                "inputType": "direction"
+            },
+            {
+                "type": "info",
+                "text": "Mache ein Foto von der gewählten Blickrichtung und drei weitere Fotos in weitere Blickrichtungen (im Idealfall in 90° Winkel zueinander). Fotografiere von dem gewählten Ort aus. Korrektes Bild:"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "info",
+                "text": "Weitere Bilder:"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "camera",
+                "label": "Bildupload"
+            },
+            {
+                "type": "info",
+                "text": "Aufgabenstellung anden Spieler:"
+            },
+            {
+                "type": "text-input",
+                "inputType": "area",
+                "label": "Aufgabenstellung",
+                "text": "Auf der Karte siehst du eine Blickrichtung eingezeichnet. Wähle aus den vier Fotos das passende Bild zu dieser Blickrichtung aus."
+            }
+        ]
+    }
+]

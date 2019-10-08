@@ -36,8 +36,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
 
-
-
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
