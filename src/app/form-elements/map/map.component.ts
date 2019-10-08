@@ -64,6 +64,7 @@ export class MapComponent implements AfterViewInit, Field {
     }
     console.log(geometry.lngLat)
     this.geometry = geometry.lngLat
+    this.group.patchValue({ [this.config.name]: this.geometry });
   }
 
   initMap() {

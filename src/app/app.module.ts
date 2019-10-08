@@ -54,7 +54,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateTaskModalPage,
     CreateModuleModalPage,
     // form components ⬇️
-    InfoComponent,
+    // InfoComponent,
     // TextInputComponent,
     // MapComponent,
     CameraComponent,

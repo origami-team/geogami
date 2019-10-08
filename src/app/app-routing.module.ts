@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'create-game/create-game-list', loadChildren: './pages/create-game/create-game-list/create-game-list.module#CreateGameListPageModule' },
   { path: 'create-game/create-game-map', loadChildren: './pages/create-game/create-game-map/create-game-map.module#CreateGameMapPageModule' },
   // older stuff
-  { path: 'map-swipe', loadChildren: './map-swipe/map-swipe.module#MapSwipePageModule' },
+  // { path: 'map-swipe', loadChildren: './map-swipe/map-swipe.module#MapSwipePageModule' },
   { path: 'start', loadChildren: './start/start.module#StartPageModule' },
   { path: 'map-showroom', loadChildren: './map-showroom/map-showroom.module#MapShowroomPageModule' }
 ];

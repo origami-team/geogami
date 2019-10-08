@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges, ViewChild, AfterViewInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
-import navtasks from "./../../../models/navtasks.json";
+import navtasks from "../../../models/navtasks.js";
 import themetasks from "./../../../models/themetasks.json";
 
 import { FormGroup, FormControl } from "@angular/forms";
@@ -22,53 +22,59 @@ export class CreateTaskModalPage implements AfterViewInit {
 
   @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
 
-  config: FieldConfig[] = [
-    {
-      type: 'map',
-      label: 'Map one',
-      name: 'map-one',
-    },
-    {
-      type: 'input',
-      label: 'input one',
-      name: 'input-one',
-      placeholder: 'Enter your name',
-      validation: [Validators.required, Validators.minLength(4)]
-    },
-    {
-      type: 'map',
-      label: 'Map two',
-      name: 'map-two',
-    },
-  ];
+  config: FieldConfig[]
+
+  // = [
+  //   {
+  //     type: 'map',
+  //     label: 'Map one',
+  //     name: 'map-one',
+  //   },
+  //   {
+  //     type: 'input',
+  //     label: 'input one',
+  //     name: 'input-one',
+  //     placeholder: 'Enter your name',
+  //     validation: [Validators.required, Validators.minLength(4)]
+  //   },
+  //   {
+  //     type: 'map',
+  //     label: 'Map two',
+  //     name: 'map-two',
+  //   },
+  // ];
+
+  tasks: any[]
+  selectedTask: any
 
   constructor(public modalController: ModalController) { }
 
-  // ngOnInit() {
-  //   this.tasks = this.type == "nav" ? navtasks : themetasks;
+  ngOnInit() {
+    this.tasks = this.type == "nav" ? navtasks : themetasks;
 
-  //   this.onTaskSelected(this.tasks[0]);
-  // }
+    this.onTaskSelected(this.tasks[0]);
+  }
 
-  // onTaskSelected(newValue) {
-  //   this.selectedTask = newValue;
-  //   console.log(this.selectedTask);
+  onTaskSelected(newValue) {
+    this.selectedTask = newValue;
+    console.log(this.selectedTask);
+    this.config = this.selectedTask.developer
 
-  //   this.elements = this.selectedTask.developer;
+    // this.elements = this.selectedTask.developer;
 
-  //   this.taskForm = new FormGroup({
-  //     taskType: new FormControl(""),
-  //     taskName: new FormControl(""),
-  //     ...this.elements
-  //       .filter(e => e.type != "info")
-  //       .reduce((obj, item) => {
-  //         obj[item.type] = new FormControl("");
-  //         return obj;
-  //       }, {})
-  //   });
+    // this.taskForm = new FormGroup({
+    //   taskType: new FormControl(""),
+    //   taskName: new FormControl(""),
+    //   ...this.elements
+    //     .filter(e => e.type != "info")
+    //     .reduce((obj, item) => {
+    //       obj[item.type] = new FormControl("");
+    //       return obj;
+    //     }, {})
+    // });
 
-  //   console.log(this.taskForm);
-  // }
+    // console.log(this.taskForm);
+  }
 
   ngAfterViewInit() {
     let previousValid = this.form.valid;
