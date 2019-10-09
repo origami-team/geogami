@@ -4,3 +4,26 @@
 // styles are for the entire app and not just one component. Additionally, this 
 // file can hold Sass mixins, functions, and placeholder classes to be imported 
 // and used throughout the application.
+
+@import '~@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+
+.mymarker {
+    background-image: url('/assets/icons/marker-editor.svg');
+    background-size: cover;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    > p {
+        margin: 0;
+        padding-top: 3px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    > p.list {
+        padding-top: 5px;
+    }
+  }

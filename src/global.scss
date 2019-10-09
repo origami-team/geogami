@@ -9,24 +9,3 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
-
-.mymarker {
-    background-image: url('/assets/icons/marker-editor.svg');
-    background-size: cover;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-
-    > p {
-        margin: 0;
-        padding-top: 3px;
-        text-align: center;
-        color: white;
-        font-weight: bold;
-        font-size: 12px;
-    }
-
-    > p.list {
-        padding-top: 5px;
-    }
-  }

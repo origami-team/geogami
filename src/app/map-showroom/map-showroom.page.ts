@@ -5,8 +5,7 @@ import MapboxCompare from 'mapbox-gl-compare';
 
 import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 
-import 'mapbox-gl-compare/dist/mapbox-gl-compare.css'
-import 'mapbox-gl-style-switcher/styles.css'
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
 import { OsmService } from './../services/osm.service'
 
@@ -17,7 +16,7 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
 @Component({
   selector: 'app-map-showroom',
   templateUrl: './map-showroom.page.html',
-  styleUrls: ['./map-showroom.page.scss'],
+  styleUrls: ['./map-showroom.page.scss', './../../../node_modules/@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'],
 })
 export class MapShowroomPage implements OnInit {
 
@@ -33,6 +32,7 @@ export class MapShowroomPage implements OnInit {
     trackUserLocation: true
   })
   styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
+  drawControl: MapboxDraw = new MapboxDraw()
 
   _rotateTo: EventListener;
   _orientTo: EventListener;
@@ -435,6 +435,17 @@ export class MapShowroomPage implements OnInit {
           "line-width": 2
         }
       }, 'waterway-label');
+    }
+  }
+
+  toggleDraw() {
+    if (this.enabledFeatures.includes('draw')) {
+      this.enabledFeatures = this.enabledFeatures.filter(e => e != 'draw')
+      this.map.removeControl(this.drawControl)
+    } else {
+      this.enabledFeatures.push('draw')
+
+      this.map.addControl(this.drawControl, 'top-left');
     }
   }
 }
