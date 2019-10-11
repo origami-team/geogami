@@ -10,14 +10,16 @@
 </ion-header>
 
 <ion-content>
-  <div #map class="map"></div>
+  <div [className]="showSuccess ? 'blur' : ''">
+    <div #map class="map"></div>
 
-  <div *ngIf="task">
-    <div class="overlay top ion-padding">
-      {{ task.settings.text }}
+    <div *ngIf="task">
+      <div class="overlay top ion-padding">
+        {{ task.settings.text }}
+      </div>
+
+      <ion-button color="light" class="confirm" *ngIf="task.settings.confirmation">OK</ion-button>
     </div>
-
-    <ion-button color="light" class="confirm" *ngIf="task.settings.confirmation">OK</ion-button>
   </div>
 
   <div class="overlay success" *ngIf="showSuccess">
