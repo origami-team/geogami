@@ -39,9 +39,11 @@
     "cordova-plugin-device-orientation": "^2.0.1",
     "cordova-plugin-geolocation": "^4.0.2",
     "core-js": "^2.5.4",
+    "leaflet.offline": "^1.0.4",
     "mapbox-gl": "^1.1.0",
     "mapbox-gl-compare": "^0.2.1",
     "mapbox-gl-style-switcher": "^1.0.3",
+    "ng-lottie": "^0.3.2",
     "osmtogeojson": "^3.0.0-beta.3",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
@@ -101,5 +103,10 @@
   },
   "config": {
     "ionic_sass": "./sass.config.js"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   }
 }

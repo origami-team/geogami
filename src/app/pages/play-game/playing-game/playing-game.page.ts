@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GamesService } from '../../../services/games.service'
 
@@ -9,7 +9,9 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 // import { Geofence } from '@ionic-native/geofence/ngx';
 
 
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
+import { Game } from 'src/app/models/game';
 
 @Component({
   selector: 'app-playing-game',
@@ -18,26 +20,30 @@ import { ModalController } from '@ionic/angular';
 })
 export class PlayingGamePage implements OnInit {
 
-  game: any
-  currentWaypoint: any
-  currentTask: any
-  map: any
-  waypointIndex: number = 0
+  @ViewChild('map') mapContainer
+
+  game: Game
+  map: mapboxgl.Map
+  task: any;
   taskIndex: number = 0
-  triggerTreshold: number = 10
+  triggerTreshold: Number = 10
+
+  showSuccess: boolean = false
+  public lottieConfig: Object;
 
   constructor(
     private route: ActivatedRoute,
     private geolocation: Geolocation,
-    // private geofence: Geofence,
     public modalController: ModalController,
-    private gamesService: GamesService
+    private gamesService: GamesService,
+    public navCtrl: NavController
   ) {
-    // geofence.initialize().then(
-    //   // resolved promise does not return a value
-    //   () => console.log('Geofence Plugin Ready'),
-    //   (err) => console.log(err)
-    // )
+    this.lottieConfig = {
+      path: 'assets/lottie/star-success.json',
+      renderer: 'canvas',
+      autoplay: true,
+      loop: true
+    };
   }
 
   ngOnInit() {
@@ -49,17 +55,16 @@ export class PlayingGamePage implements OnInit {
       this.gamesService.getGame(params.id)
         .then(games => {
           this.game = games[0]
-          this.initGame();
         })
         .finally(() => {
 
         })
     });
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
+    mapboxgl.accessToken = environment.mapboxAccessToken
 
     this.map = new mapboxgl.Map({
-      container: 'playing-game-map',
+      container: this.mapContainer.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v9',
       center: [8, 51.8],
       zoom: 2
@@ -78,70 +83,70 @@ export class PlayingGamePage implements OnInit {
     this.map.addControl(geolocate);
 
     let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      if (this.currentWaypoint) {
-        const distance = this.getDistanceFromLatLonInM(this.currentWaypoint.lat, this.currentWaypoint.lng, data.coords.latitude, data.coords.longitude)
-        console.log(distance)
-        if (distance < this.triggerTreshold) {
-          // alert("You reached the point")
+
+    watch.subscribe(async (data) => {
+      if (this.task) {
+        const waypoint = this.task.settings.point.geometry.coordinates
+        if (await this.userDidArrive(waypoint) && !this.task.settings.confirmation) {
           this.onWaypointReached();
         }
       }
     });
 
-    // Add geolocate control to the map.
-
     this.map.on('load', () => {
       geolocate.trigger();
+      this.initGame()
     })
+  }
 
-    // add marker to map
+  initGame() {
+    this.task = this.game.tasks[this.taskIndex]
+    this.initTask();
+  }
 
+  initTask() {
+    console.log("Current task: ", this.game.tasks[this.taskIndex])
+    // Don't add marker when user has to click OK button
+    if (!this.task.settings.confirmation) {
+      new mapboxgl.Marker()
+        .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
+        .addTo(this.map);
+    }
   }
 
   onWaypointReached() {
-    console.log("onWacpointReached")
-    if (this.currentWaypoint.tasks.length > 0) {
-      this.currentTask = this.currentWaypoint.tasks[this.taskIndex]
-      console.log(this.currentTask)
-    } else {
-      this.goToNextWaypoint()
-    }
+    this.nextTask()
   }
 
   nextTask() {
     this.taskIndex++
-    if (this.taskIndex > this.currentWaypoint.tasks.length - 1) {
-      this.goToNextWaypoint();
-      this.taskIndex = 0
-      this.currentTask = undefined
+    if (this.taskIndex > this.game.tasks.length - 1) {
+      this.showSuccess = true
       return
     }
 
-    this.currentTask = this.currentWaypoint.tasks[this.taskIndex]
-    console.log(this.taskIndex, this.currentTask)
+    this.task = this.game.tasks[this.taskIndex]
+    this.initTask()
+    console.log(this.taskIndex, this.task)
   }
 
-  goToNextWaypoint() {
-    this.waypointIndex++;
-    if (this.waypointIndex > this.game.waypoints.length - 1) {
-      console.log("Finished")
-      this.currentTask = undefined
-      this.currentWaypoint = undefined
-      return
+  async onOkClicked() {
+    const waypoint = this.task.settings.point.geometry.coordinates
+    if (await this.userDidArrive(waypoint)) {
+      this.onWaypointReached();
     }
-    this.initGame()
   }
 
-  initGame() {
-    this.currentWaypoint = this.game.waypoints[this.waypointIndex]
-    this.initWaypoint();
+  async userDidArrive(waypoint): Promise<boolean> {
+    return this.geolocation.getCurrentPosition().then(pos => {
+      const distance = this.getDistanceFromLatLonInM(waypoint[1], waypoint[0], pos.coords.latitude, pos.coords.longitude)
+      return distance < this.triggerTreshold
+    })
   }
 
-  initWaypoint() {
-    new mapboxgl.Marker()
-      .setLngLat([this.currentWaypoint.lng, this.currentWaypoint.lat])
-      .addTo(this.map);
+
+  navigateHome() {
+    this.navCtrl.navigateRoot('/')
   }
 
   getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {

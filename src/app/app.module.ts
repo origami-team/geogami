@@ -17,10 +17,12 @@ import { environment } from '../environments/environment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { TrackingPopoverComponent } from './tracking-popover/tracking-popover.component';
-import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page'
+import { PopoverComponent } from './popover/popover.component';
 
+// Modals
+import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page'
 import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page'
+import { MapFeaturesModalPage } from './pages/create-game/map-features-modal/map-features-modal.page'
 
 import { InfoComponent } from './form-elements/info/info.component'
 import { TextInputComponent } from './form-elements/text-input/text-input.component'
@@ -34,7 +36,11 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+import { DynamicFieldDirective } from './form-elements/dynamic-field.directive';
 
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module'
+
+import { LottieAnimationViewModule } from 'ng-lottie';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -45,18 +51,26 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    TrackingPopoverComponent,
+    PopoverComponent,
     CreateTaskModalPage,
+    MapFeaturesModalPage,
     CreateModuleModalPage,
     // form components ⬇️
-    InfoComponent,
-    TextInputComponent,
-    MapComponent,
-    CameraComponent
+    // InfoComponent,
+    // TextInputComponent,
+    // MapComponent,
+    CameraComponent,
     // form components ⬆️
   ],
-  entryComponents: [TrackingPopoverComponent, CreateTaskModalPage, CreateModuleModalPage],
-  imports: [BrowserModule,
+  entryComponents: [
+    PopoverComponent,
+    CreateTaskModalPage,
+    MapFeaturesModalPage,
+    CreateModuleModalPage,
+  ],
+  imports: [
+    DynamicFormModule,
+    BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -67,7 +81,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,
     SplashScreen,

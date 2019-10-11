@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
 import mapboxgl from 'mapbox-gl';
 
 import { GamesService } from '../../../services/games.service'
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -14,6 +15,8 @@ import { GamesService } from '../../../services/games.service'
   styleUrls: ['./game-detail.page.scss'],
 })
 export class GameDetailPage implements OnInit {
+
+  @ViewChild('map') mapContainer;
 
   game: any;
   activities: any[]
@@ -38,23 +41,25 @@ export class GameDetailPage implements OnInit {
   }
 
   initMap() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
-
+    mapboxgl.accessToken = environment.mapboxAccessToken;
     const map = new mapboxgl.Map({
-      container: 'detailmap',
+      container: this.mapContainer.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v9',
     });
 
-    // const activity = this.game.activities[0];
-    // const markers = activity.points.map(point => new mapboxgl.Marker().setLngLat([point.lng, point.lat]).addTo(map))
 
-    // var bounds = new mapboxgl.LngLatBounds();
+    map.on('load', () => {
+      const tasks = this.game.tasks;
+      // const markers = activity.points.map(point => new mapboxgl.Marker().setLngLat([point.lng, point.lat]).addTo(map))
 
-    // markers.forEach((marker) => {
-    //   bounds.extend(marker._lngLat);
-    // });
+      var bounds = new mapboxgl.LngLatBounds();
 
-    // map.fitBounds(bounds, { padding: 40, duration: 500 });
+      tasks.forEach((task) => {
+        bounds.extend(task.settings.point.geometry.coordinates);
+      });
+
+      map.fitBounds(bounds, { padding: 40, duration: 2000 });
+    })
   }
 
   pointClick(point) {

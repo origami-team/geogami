@@ -48,6 +48,9 @@
     <ion-chip [color]='enabledFeatures.includes("offline") ? "primary" : "medium"' (click)=toggleOffline()>
       <ion-label>Offline</ion-label>
     </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("draw") ? "primary" : "medium"' (click)=toggleDraw()>
+      <ion-label>Draw</ion-label>
+    </ion-chip>
   </div>
 
 </ion-content>

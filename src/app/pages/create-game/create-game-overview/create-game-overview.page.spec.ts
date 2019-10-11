@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MapSwipePage } from './map-swipe.page';
+import { CreateGameOverviewPage } from './create-game-overview.page';
 
-describe('MapSwipePage', () => {
-  let component: MapSwipePage;
-  let fixture: ComponentFixture<MapSwipePage>;
+describe('CreateGameOverviewPage', () => {
+  let component: CreateGameOverviewPage;
+  let fixture: ComponentFixture<CreateGameOverviewPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapSwipePage ],
+      declarations: [CreateGameOverviewPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MapSwipePage);
+    fixture = TestBed.createComponent(CreateGameOverviewPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
