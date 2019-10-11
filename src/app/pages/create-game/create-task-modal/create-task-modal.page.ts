@@ -18,7 +18,7 @@ export class CreateTaskModalPage implements AfterViewInit {
   @Input() type: string = "nav";
   @Input() task: any;
 
-  @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
+  @ViewChild(DynamicFormComponent, { static: false }) form: DynamicFormComponent;
 
   config: FieldConfig[]
 

@@ -20,7 +20,7 @@ import { Game } from 'src/app/models/game';
 })
 export class PlayingGamePage implements OnInit {
 
-  @ViewChild('map') mapContainer
+  @ViewChild('map', { static: false }) mapContainer
 
   game: Game
   map: mapboxgl.Map
