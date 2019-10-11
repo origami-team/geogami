@@ -31,7 +31,6 @@ export class PlayingGamePage implements OnInit {
   showSuccess: boolean = false
   public lottieConfig: Object;
 
-
   constructor(
     private route: ActivatedRoute,
     private geolocation: Geolocation,
@@ -84,12 +83,11 @@ export class PlayingGamePage implements OnInit {
     this.map.addControl(geolocate);
 
     let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
+
+    watch.subscribe(async (data) => {
       if (this.task) {
         const waypoint = this.task.settings.point.geometry.coordinates
-        const distance = this.getDistanceFromLatLonInM(waypoint[1], waypoint[0], data.coords.latitude, data.coords.longitude)
-        console.log(distance)
-        if (distance < this.triggerTreshold && !this.task.confirmation) {
+        if (await this.userDidArrive(waypoint) && !this.task.settings.confirmation) {
           this.onWaypointReached();
         }
       }
@@ -99,6 +97,21 @@ export class PlayingGamePage implements OnInit {
       geolocate.trigger();
       this.initGame()
     })
+  }
+
+  initGame() {
+    this.task = this.game.tasks[this.taskIndex]
+    this.initTask();
+  }
+
+  initTask() {
+    console.log("Current task: ", this.game.tasks[this.taskIndex])
+    // Don't add marker when user has to click OK button
+    if (!this.task.settings.confirmation) {
+      new mapboxgl.Marker()
+        .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
+        .addTo(this.map);
+    }
   }
 
   onWaypointReached() {
@@ -117,28 +130,20 @@ export class PlayingGamePage implements OnInit {
     console.log(this.taskIndex, this.task)
   }
 
-  // goToNextWaypoint() {
-  //   this.waypointIndex++;
-  //   if (this.waypointIndex > this.game.waypoints.length - 1) {
-  //     console.log("Finished")
-  //     this.currentTask = undefined
-  //     this.currentWaypoint = undefined
-  //     return
-  //   }
-  //   this.initGame()
-  // }
-
-  initGame() {
-    this.task = this.game.tasks[this.taskIndex]
-    this.initTask();
+  async onOkClicked() {
+    const waypoint = this.task.settings.point.geometry.coordinates
+    if (await this.userDidArrive(waypoint)) {
+      this.onWaypointReached();
+    }
   }
 
-  initTask() {
-    console.log(this.game.tasks[this.taskIndex])
-    new mapboxgl.Marker()
-      .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
-      .addTo(this.map);
+  async userDidArrive(waypoint): Promise<boolean> {
+    return this.geolocation.getCurrentPosition().then(pos => {
+      const distance = this.getDistanceFromLatLonInM(waypoint[1], waypoint[0], pos.coords.latitude, pos.coords.longitude)
+      return distance < this.triggerTreshold
+    })
   }
+
 
   navigateHome() {
     this.navCtrl.navigateRoot('/')
