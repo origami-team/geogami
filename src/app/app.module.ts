@@ -42,8 +42,6 @@ import { DynamicFormModule } from './dynamic-form/dynamic-form.module'
 
 import { LottieAnimationViewModule } from 'ng-lottie';
 
-
-
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");

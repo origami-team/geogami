@@ -44,9 +44,9 @@ export class CreateGameListPage implements OnInit {
 
   ngOnInit() {
     this.game = this.gameFactory.getGame();
-    // this.name = this.gameFactory.game ? this.gameFactory.game.name : "";
 
     console.log(this.gameFactory.game);
+
   }
 
   ionViewWillEnter() {
@@ -84,6 +84,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   async presentTaskModal(type: string = "nav", task: any = null) {
+
     const modal = await this.modalController.create({
       component: CreateTaskModalPage,
       componentProps: {
@@ -98,6 +99,7 @@ export class CreateGameListPage implements OnInit {
       this.addTaskToGame(data.data);
     }
     return;
+
   }
 
   addTaskToGame(task) {

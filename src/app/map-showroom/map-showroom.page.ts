@@ -16,7 +16,7 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
 @Component({
   selector: 'app-map-showroom',
   templateUrl: './map-showroom.page.html',
-  styleUrls: ['./map-showroom.page.scss', './../../../node_modules/@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'],
+  styleUrls: ['./map-showroom.page.scss'],
 })
 export class MapShowroomPage implements OnInit {
 
