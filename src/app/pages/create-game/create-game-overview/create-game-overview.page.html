@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="create-game/create-game-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gestalte dein Spiel</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="goToCreateGameMap()">
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      <ion-item>
+        <ion-label position="stacked">Name <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input required type="text" [(ngModel)]="model.name" name="name"></ion-input>
+      </ion-item>
+
+
+      <!-- <ion-item>
+        <ion-label>Tracking <ion-icon name="information-circle" (click)='showTrackingInfo($event, "CHANGE ME")'>
+          </ion-icon>
+        </ion-label>
+        <ion-toggle checked [(ngModel)]="model.tracking" name="tracking"></ion-toggle>
+      </ion-item> -->
+
+    </ion-list>
+
+    <div class="ion-padding">
+      <ion-button expand="block" type="submit" class="ion-no-margin">Spiel erstellen
+      </ion-button>
+    </div>
+  </form>
+
+</ion-content>

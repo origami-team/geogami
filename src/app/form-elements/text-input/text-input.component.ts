@@ -1,8 +1,10 @@
-import { Component, Input, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { Field } from '../../dynamic-form/models/field';
 import { FieldConfig } from '../../dynamic-form/models/field-config';
+import { PopoverController } from '@ionic/angular';
+import { PopoverComponent } from 'src/app/popover/popover.component';
 
 
 @Component({
@@ -14,5 +16,16 @@ export class TextInputComponent implements Field {
   config: FieldConfig;
   group: FormGroup;
 
-  constructor() { }
+  constructor(public popoverController: PopoverController) { }
+
+  async showPopover(ev: any, text: string) {
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
+  }
 }

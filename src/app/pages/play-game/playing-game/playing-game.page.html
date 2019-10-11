@@ -1,21 +1,34 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button href="/">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div id="playing-game-map" class="map"></div>
+  <div #map class="map"></div>
 
-  <div class="overlay ion-padding" *ngIf="!currentWaypoint && !currentTask">
-    <p>Herzlichen Glückwunsch!</p>
+  <div *ngIf="task">
+    <div class="overlay top ion-padding">
+      {{ task.settings.text }}
+    </div>
+
+    <ion-button color="light" class="confirm" *ngIf="task.settings.confirmation">OK</ion-button>
   </div>
 
-  <div class="overlay ion-padding" *ngIf="currentWaypoint && !currentTask">
-    <p>Gehe zu {{ currentWaypoint.name }}</p>
+  <div class="overlay success" *ngIf="showSuccess">
+    <h3>Herzlichen Glückwunsch</h3>
+    <p>Du hast das Spiel beendet</p>
+    <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
+    </lottie-animation-view>
+    <ion-button (click)="navigateHome()">Fertig</ion-button>
   </div>
 
-  <div class="overlay ion-padding" *ngIf="currentTask">
+  <!-- <div class="overlay ion-padding" *ngIf="currentTask">
     <ion-img [src]="currentTask.question.img" *ngIf="currentTask.question.img"></ion-img>
     <h2>{{ currentTask.question.txt }}</h2>
     <ion-grid>
@@ -27,6 +40,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
+  </div> -->
 
 </ion-content>

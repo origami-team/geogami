@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="play-game/play-game-list"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
     <ion-buttons slot="primary"></ion-buttons>
@@ -10,46 +10,15 @@
 
 <ion-content>
   <ion-card>
-    <div id="detailmap" class="map"></div>
-    <ion-card-header *ngIf="game">
-      <ion-card-subtitle>
-        <ion-icon name="time"></ion-icon> {{ game.timecompl }} min
-      </ion-card-subtitle>
-      <ion-card-title>{{ game.name }}</ion-card-title>
+    <div #map class="map"></div>
+    <ion-card-header>
+      <ion-card-title *ngIf="game">{{ game.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content *ngIf="game">
-      {{ game.description }}
+      {{ game.tasks.length }} Aufgaben
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngFor="let activity of activities">
-    <ion-card-header>
-      <ion-card-title>{{ activity.type }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list *ngFor="let point of points">
-        <ion-item>
-          <ion-label text-wrap (click)="pointClick(point)">
-            <h2>{{ point.name }}</h2>
-            <p>{{ point.description }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- <ion-card *ngIf="game" ngFor="let activity of game.activities">
-    <ion-card-header>
-      <ion-card-title>{{ activity.type }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list ngFor="let point of activity.points">
-        <ion-item>
-          <ion-label>{{ point.name }}</ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card> -->
 
 </ion-content>
 

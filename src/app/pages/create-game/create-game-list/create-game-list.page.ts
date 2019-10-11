@@ -9,8 +9,11 @@ import { ModalController } from "@ionic/angular";
 import { GameFactoryService } from "../../../services/game-factory.service";
 
 import { CreateTaskModalPage } from "./../create-task-modal/create-task-modal.page";
-
 import { CreateModuleModalPage } from "./../create-module-modal/create-module-modal.page";
+
+import { NavController } from "@ionic/angular";
+
+
 import { Game } from "src/app/models/game";
 
 @Component({
@@ -19,9 +22,10 @@ import { Game } from "src/app/models/game";
   styleUrls: ["./create-game-list.page.scss"]
 })
 export class CreateGameListPage implements OnInit {
-  name: String;
-  tasks: any[] = [];
+  // name: String;
+  // tasks: any[] = [];
   game: Game;
+  reorder: Boolean = false;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
@@ -33,13 +37,14 @@ export class CreateGameListPage implements OnInit {
 
   constructor(
     private gameFactory: GameFactoryService,
-    public modalController: ModalController
+    private modalController: ModalController,
+    private navCtrl: NavController
   ) { }
 
 
   ngOnInit() {
     this.game = this.gameFactory.getGame();
-    this.name = this.gameFactory.game ? this.gameFactory.game.name : "";
+    // this.name = this.gameFactory.game ? this.gameFactory.game.name : "";
 
     console.log(this.gameFactory.game);
   }
@@ -78,84 +83,33 @@ export class CreateGameListPage implements OnInit {
     });
   }
 
-  async presentTaskModal(type: string = "nav", index: number) {
+  async presentTaskModal(type: string = "nav", task: any = null) {
     const modal = await this.modalController.create({
       component: CreateTaskModalPage,
       componentProps: {
-        gameName: this.name,
-        type: type
+        type: type,
+        task: task
       }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data);
     if (data != undefined) {
-      this.addTaskToGame(data.data.task, index);
+      this.addTaskToGame(data.data);
     }
     return;
   }
 
-  addTaskToGame(task, index) {
-    this.gameFactory.addTask(
-      { ...task, id: Math.floor(Date.now() / 1000) },
-      index
-    );
+  addTaskToGame(task) {
+    this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
     this.game = this.gameFactory.getGame();
 
-    this._generateTaskArray();
-
-    console.log(this.tasks);
+    console.log(this.game.tasks);
   }
 
   deleteTask(taskID) {
     console.log("deleting", taskID);
     this.game = this.gameFactory.removeTask(taskID);
-
-    this._generateTaskArray();
-  }
-
-  _generateTaskArray() {
-    let tempTasksArr = [];
-    let lastNavTask = null;
-    this.tasks = [];
-
-    this.game.tasks.forEach((task, key, arr) => {
-      if (task.type.includes("nav")) {
-        // first element
-        if (Object.is(0, key)) {
-          lastNavTask = task;
-        } else {
-          this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
-          lastNavTask = task;
-          tempTasksArr = [];
-        }
-      }
-
-      if (task.type.includes("theme")) {
-        tempTasksArr.push(task);
-      }
-      // last element
-      if (Object.is(this.game.tasks.length - 1, key)) {
-        this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
-        return;
-      }
-    });
-
-    // for (let i = 0; i <= this.game.tasks.length; i++) {
-    //   const task = this.game.tasks[i];
-    //   if (task.type.includes("nav")) {
-    //     this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
-    //     lastNavTask = task;
-    //     tempTasksArr = [];
-    //     // if last element is nav task without theme tasks
-    //     if (i == this.game.tasks.length) {
-    //       this.tasks.push({ ...lastNavTask, tasks: tempTasksArr });
-    //     }
-    //   }
-    //   if (task.type.includes("theme")) {
-    //     tempTasksArr.push(task);
-    //   }
-    // }
   }
 
   doReorder(ev: any) {
@@ -176,5 +130,14 @@ export class CreateGameListPage implements OnInit {
 
     // After complete is called the items will be in the new order
     console.log('After complete', this.game.tasks);
+  }
+
+  toggleReorder() {
+    this.reorder = !this.reorder
+  }
+
+  navigateToOverview() {
+    console.log("navigate")
+    this.navCtrl.navigateForward("create-game/create-game-overview");
   }
 }

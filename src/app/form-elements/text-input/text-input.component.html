@@ -5,11 +5,15 @@
 </ion-item> -->
 
 <div [formGroup]="group">
-  <app-info>{{ config.info }}</app-info>
-  <label>{{ config.label }}</label>
-  <ion-input *ngIf="config.inputType == 'text'" type="text" [value]="config.text"
+  <!-- <app-info>{{ config.info }}</app-info> -->
+  <ion-text>
+    <h3>{{ config.label }} <ion-icon *ngIf="config.info" name="information-circle"
+        (click)='showPopover($event, config.info)'></ion-icon>
+    </h3>
+  </ion-text>
+  <ion-input *ngIf="config.inputType == 'text'" type="text" [(value)]="config.text"
     [attr.placeholder]="config.placeholder" [formControlName]="config.name"></ion-input>
-  <ion-textarea *ngIf="config.inputType == 'area'" [value]="config.text" [attr.placeholder]="config.placeholder"
+  <ion-textarea *ngIf="config.inputType == 'area'" [(value)]="config.text" [attr.placeholder]="config.placeholder"
     [formControlName]="config.name"></ion-textarea>
 
 </div>

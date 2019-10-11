@@ -8,7 +8,7 @@ import { Game } from "./../models/game";
 export class GameFactoryService {
   public game: Game;
 
-  constructor() {}
+  constructor() { }
 
   addGameInformation(data: any) {
     this.game = {
@@ -18,16 +18,13 @@ export class GameFactoryService {
     console.log("New Game: ", this.game);
   }
 
-  addTask(task: any, index) {
+  addTask(task: any) {
     // console.log(task, index);
     if (this.game.hasOwnProperty("tasks")) {
-      const newTaskArr = this.game.tasks;
-      newTaskArr.splice(index, 0, task);
-      console.log(newTaskArr);
-      this.game = {
-        ...this.game,
-        tasks: newTaskArr
-      };
+      // const newTaskArr = this.game.tasks;
+      // newTaskArr.splice(index, 0, task);
+      // console.log(newTaskArr);
+      this.game.tasks.push(task);
     } else {
       this.game = {
         ...this.game,
@@ -45,12 +42,9 @@ export class GameFactoryService {
     if (!this.game) {
       this.game = new Game(
         Math.floor(Date.now() / 1000),
-        "test-name",
-        "test-autor",
-        "test-description",
+        "",
         true,
         [],
-        0
       );
     }
     return this.game;

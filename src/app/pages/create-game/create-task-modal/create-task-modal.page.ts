@@ -4,12 +4,9 @@ import { ModalController } from "@ionic/angular";
 import navtasks from "../../../models/navtasks.js";
 import themetasks from "./../../../models/themetasks.json";
 
-import { FormGroup, FormControl } from "@angular/forms";
-
-import { Validators } from '@angular/forms';
-
 import { FieldConfig } from './../../../dynamic-form/models/field-config'
 import { DynamicFormComponent } from './../../../dynamic-form/container/dynamic-form.component';
+import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 
 @Component({
   selector: "app-create-task-modal",
@@ -19,61 +16,33 @@ import { DynamicFormComponent } from './../../../dynamic-form/container/dynamic-
 export class CreateTaskModalPage implements AfterViewInit {
   @Input() gameName: string = "";
   @Input() type: string = "nav";
+  @Input() task: any;
 
   @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
 
   config: FieldConfig[]
 
-  // = [
-  //   {
-  //     type: 'map',
-  //     label: 'Map one',
-  //     name: 'map-one',
-  //   },
-  //   {
-  //     type: 'input',
-  //     label: 'input one',
-  //     name: 'input-one',
-  //     placeholder: 'Enter your name',
-  //     validation: [Validators.required, Validators.minLength(4)]
-  //   },
-  //   {
-  //     type: 'map',
-  //     label: 'Map two',
-  //     name: 'map-two',
-  //   },
-  // ];
-
   tasks: any[]
   selectedTask: any
+  confirmation: boolean = true
+  mapFeatures: any[]
 
   constructor(public modalController: ModalController) { }
 
   ngOnInit() {
     this.tasks = this.type == "nav" ? navtasks : themetasks;
 
-    this.onTaskSelected(this.tasks[0]);
+    if (this.task) {
+      this.onTaskSelected(this.task)
+    } else {
+      this.onTaskSelected(this.tasks[0]);
+    }
   }
 
   onTaskSelected(newValue) {
     this.selectedTask = newValue;
     console.log(this.selectedTask);
     this.config = this.selectedTask.developer
-
-    // this.elements = this.selectedTask.developer;
-
-    // this.taskForm = new FormGroup({
-    //   taskType: new FormControl(""),
-    //   taskName: new FormControl(""),
-    //   ...this.elements
-    //     .filter(e => e.type != "info")
-    //     .reduce((obj, item) => {
-    //       obj[item.type] = new FormControl("");
-    //       return obj;
-    //     }, {})
-    // });
-
-    // console.log(this.taskForm);
   }
 
   ngAfterViewInit() {
@@ -90,6 +59,16 @@ export class CreateTaskModalPage implements AfterViewInit {
     console.log(value);
   }
 
+  async presentMapFeaturesModal() {
+    const modal = await this.modalController.create({
+      component: MapFeaturesModalPage,
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    this.mapFeatures = data.data
+    return;
+  }
+
   dismissModal(dismissType: string = 'null') {
     if (dismissType == "close") {
       this.modalController.dismiss();
@@ -101,7 +80,14 @@ export class CreateTaskModalPage implements AfterViewInit {
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
       dismissed: true,
-      data: null
+      data: {
+        ...this.selectedTask,
+        settings: {
+          ...this.form.value,
+          confirmation: this.confirmation,
+          mapFeatures: this.mapFeatures
+        }
+      }
     });
   }
 }

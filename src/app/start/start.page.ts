@@ -63,6 +63,10 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('map-showroom');
   }
 
+  navigateInfoPage() {
+    this.navCtrl.navigateForward('info')
+  }
+
   async setLanguage(e) {
     this._translate.use(e.target.dataset.value);
     this._initialiseTranslation()

@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="create-game/create-game-meta"></ion-back-button>
+      <ion-back-button defaultHref="create-game"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ name }}</ion-title>
+    <ion-title>Neues Spiel</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="navigateToOverview()">
         <ion-icon name="save"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -92,41 +92,48 @@
 
   <!-- New reorder list style -->
   <ion-list>
-    <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false">
+    <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!reorder">
       <ion-item class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
         <ion-avatar slot="start" *ngIf="task.type.includes('nav')">
           <div class="mymarker">
             <p class="list">{{ i + 1 }}</p>
           </div>
         </ion-avatar>
-        <ion-chip *ngIf="task.type.includes('nav')" color="primary" (click)="presentTaskModal('nav', 0)">
+        <ion-chip *ngIf="task.type.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
           <ion-label>{{ task.name }}</ion-label>
         </ion-chip>
-        <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', 0)">
+        <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', taks)">
           <ion-label>{{ task.name }}</ion-label>
         </ion-chip>
-        <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
-        <ion-reorder slot="end"></ion-reorder>
+        <ion-icon *ngIf="!reorder" slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
+        <ion-reorder *ngIf="reorder" slot="end"></ion-reorder>
       </ion-item>
     </ion-reorder-group>
   </ion-list>
 
-  <div class="ion-padding">
-    <div class="center">
-      <ion-chip color="primary" (click)="presentTaskModal('nav', 0)">
-        <ion-icon name="navigate"></ion-icon>
+  <ion-item lines="none">
+    <ion-chip color="primary" (click)="presentTaskModal('nav')">
+      <ion-icon name="navigate"></ion-icon>
+    </ion-chip>
+    <ion-chip color="secondary" (click)="presentTaskModal('theme')">
+      <ion-icon name="clipboard"></ion-icon>
+    </ion-chip>
+    <ion-chip color="tertiary" (click)="presentTaskModal('theme')">
+      <ion-icon name="list"></ion-icon>
+    </ion-chip>
+    <ion-chip color="medium" (click)="presentTaskModal('theme')">
+      <ion-icon name="information-circle-outline"></ion-icon>
+    </ion-chip>
+    <ng-container *ngIf="game.tasks.length > 1">
+      <ion-chip color="dark" slot="end" *ngIf="!reorder" (click)="toggleReorder()">
+        <ion-icon name="reorder"></ion-icon>
       </ion-chip>
-      <ion-chip color="secondary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="clipboard"></ion-icon>
+      <ion-chip color="dark" slot="end" *ngIf="reorder" (click)="toggleReorder()">
+        <ion-icon name="close"></ion-icon>
       </ion-chip>
-      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div>
-  </div>
+    </ng-container>
+
+  </ion-item>
 
 
   <!-- <ion-card class="my-card">

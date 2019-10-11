@@ -1,70 +1,61 @@
-import { Component, AfterViewInit, Input, forwardRef, ViewChild, HostBinding } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup } from '@angular/forms';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 import mapboxgl from 'mapbox-gl';
 
 import { Field } from '../../dynamic-form/models/field';
 import { FieldConfig } from '../../dynamic-form/models/field-config';
+import { PopoverComponent } from 'src/app/popover/popover.component';
+import { PopoverController } from '@ionic/angular';
+import { Feature } from 'geojson';
 
 // import MapboxDraw from '@mapbox/mapbox-gl-draw'
-// import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
-  // providers: [
-  //   {
-  //     provide: NG_VALUE_ACCESSOR,
-  //     useExisting: forwardRef(() => MapComponent),
-  //     multi: true
-  //   }
-  // ]
 })
-export class MapComponent implements AfterViewInit, Field {
-
-  // writeValue(obj: any): void {
-  //   this.geometry = obj
-  // }
-  // registerOnChange(fn: any): void {
-  //   this._onChange = fn
-  // }
-  // registerOnTouched(fn: any): void {
-  //   this._onTouched = fn
-  // }
-  // setDisabledState?(isDisabled: boolean): void {
-  //   throw new Error("Method not implemented.");
-  // }
+export class MapComponent implements OnInit, Field {
+  ngOnInit(): void {
+    this.initMap();
+  }
 
   @ViewChild('map') mapContainer;
   @ViewChild('hiddenInput') hiddenInput;
 
-  marker: any;
+  marker: mapboxgl.Marker;
   map: mapboxgl.Map;
-  geometry: any = ''
+  feature: any = ''
 
   config: FieldConfig
   group: FormGroup
 
-  constructor() { }
+  constructor(public popoverController: PopoverController) { }
 
-  ngAfterViewInit() {
-    this.initMap();
+  ionViewWillEnter() {
+
   }
 
-  _onChange = (geometry: any) => {
-    if (geometry != null) {
+  _onChange = (feature: GeoJSON.Feature<GeoJSON.Point>) => {
+    if (feature != null) {
       if (!this.marker) {
         this.marker = new mapboxgl.Marker({
           draggable: true,
-        }).setLngLat(geometry.lngLat).addTo(this.map)
+        }).setLngLat(feature.geometry.coordinates).addTo(this.map)
+
+        this.marker.on('dragend', () => {
+          const lngLat = this.marker._lngLat;
+          const pointFeature = this._toGeoJSONPoint(lngLat.lng, lngLat.lat)
+          this._onChange(pointFeature)
+        });
       } else {
-        this.marker.setLngLat(geometry.lngLat)
+        this.marker.setLngLat(feature.geometry.coordinates)
       }
     }
-    console.log(geometry.lngLat)
-    this.geometry = geometry.lngLat
-    this.group.patchValue({ [this.config.name]: this.geometry });
+
+    this.feature = feature
+    this.group.patchValue({ [this.config.name]: this.feature });
   }
 
   initMap() {
@@ -78,8 +69,29 @@ export class MapComponent implements AfterViewInit, Field {
     });
 
     this.map.on('click', e => {
-      this._onChange(e)
+      const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat)
+      this._onChange(pointFeature)
     });
   }
+
+  async showPopover(ev: any, text: string) {
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
+  }
+
+  _toGeoJSONPoint = (lng, lat): GeoJSON.Feature<GeoJSON.Point> => JSON.parse(`
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [${lng}, ${lat}]
+    }
+  }`)
 
 }

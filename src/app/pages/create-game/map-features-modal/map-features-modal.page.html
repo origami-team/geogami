@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal('close')">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Kartenfeatures</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal(null)">
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Kartenmanipulation</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Zoombar</ion-label>
+      <ion-toggle [(ngModel)]="features.zoombar"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Manueles Verschieben</ion-label>
+      <ion-toggle [(ngModel)]="features.pan"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Manuelle Rotation</ion-label>
+      <ion-toggle [(ngModel)]="features.manualRotation"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Automatische Rotation</ion-label>
+      <ion-toggle [(ngModel)]="features.automaticRotation"></ion-toggle>
+    </ion-item>
+
+    <ion-list-header>
+      <ion-label>Marker</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>Position</ion-label>
+      <ion-toggle [(ngModel)]="features.position"></ion-toggle>
+    </ion-item>
+
+
+
+
+    <ion-item>
+      <ion-label>Blickrichtung</ion-label>
+      <ion-toggle [(ngModel)]="features.heading"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Track</ion-label>
+      <ion-toggle [(ngModel)]="features.track"></ion-toggle>
+    </ion-item>
+
+    <ion-list-header>
+      <ion-label>Kartenmaterial</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Swipe</ion-label>
+      <ion-toggle [(ngModel)]="features.swipe"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Layercontrol</ion-label>
+      <ion-toggle [(ngModel)]="features.layerControl"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>3D</ion-label>
+      <ion-toggle [(ngModel)]="features.threeD"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Straßenabschnitt</ion-label>
+      <ion-toggle [(ngModel)]="features.streetSection"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -18,7 +18,7 @@ export class CreateGamePage implements OnInit {
   }
 
   navigateCreateGamePage() {
-    this.navCtrl.navigateForward('create-game/create-game-meta');
+    this.navCtrl.navigateForward('create-game/create-game-list');
   }
 
 }

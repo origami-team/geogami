@@ -1,9 +1,9 @@
 {
-    "playerMode": "Spieler Modus",
+    "playerMode": "Spiele Ori-Gami",
     "playerModeDescription": "Spiele ein Kartenlese Spiel",
     "developerMode": "Entwickler Modus",
     "developerModeDescription": "Erstelle ein neues Kartenlese Spiel",
-    "evaluateMode": "Auswerungs Modus",
+    "evaluateMode": "Auswertungs Modus",
     "evaluateModeDescription": "Sieh dir die Spielergebnisse an",
     "selectGame": "Wähle ein Spiel",
     "gameTrackingDescription": "Bei der Auswahl „on“ werden alle Zwischenziele, Objekte und Tracks, die im Spielverlauf entstehen, während des gesamten Spielverlaufs angezeigt. Bei der Auswahl „off“ werden nur die aktuellen Ziele, Objekte und Tracks angezeigt"
