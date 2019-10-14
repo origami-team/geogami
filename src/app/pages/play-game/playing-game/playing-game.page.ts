@@ -106,12 +106,9 @@ export class PlayingGamePage implements OnInit {
 
   initTask() {
     console.log("Current task: ", this.game.tasks[this.taskIndex])
-    // Don't add marker when user has to click OK button
-    if (!this.task.settings.confirmation) {
-      new mapboxgl.Marker()
-        .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
-        .addTo(this.map);
-    }
+    new mapboxgl.Marker()
+      .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
+      .addTo(this.map);
   }
 
   onWaypointReached() {
