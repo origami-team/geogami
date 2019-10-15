@@ -48,7 +48,7 @@
   <ion-text>
     <h3>Einstellungen</h3>
   </ion-text>
-  <ion-item lines="none">
+  <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag'">
     <ion-label>Eingabebestätigung</ion-label>
     <ion-toggle [(ngModel)]="confirmation"></ion-toggle>
   </ion-item>

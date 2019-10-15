@@ -6,7 +6,7 @@ import { GamesService } from '../../../services/games.service'
 import mapboxgl from 'mapbox-gl';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-// import { Geofence } from '@ionic-native/geofence/ngx';
+import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
 
 import { ModalController, NavController } from '@ionic/angular';
@@ -24,19 +24,31 @@ export class PlayingGamePage implements OnInit {
 
   game: Game
   map: mapboxgl.Map
+
   task: any;
   taskIndex: number = 0
+
+  // treshold to trigger location arrive
   triggerTreshold: Number = 10
+
+  // degree for nav-arrow
+  heading: number = 0
+  compassHeading: number = 0
+  targetHeading: number = 0
+  targetDistance: number = 0
 
   showSuccess: boolean = false
   public lottieConfig: Object;
+
+  Math: Math = Math
 
   constructor(
     private route: ActivatedRoute,
     private geolocation: Geolocation,
     public modalController: ModalController,
     private gamesService: GamesService,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private deviceOrientation: DeviceOrientation
   ) {
     this.lottieConfig = {
       path: 'assets/lottie/star-success.json',
@@ -44,10 +56,16 @@ export class PlayingGamePage implements OnInit {
       autoplay: true,
       loop: true
     };
+
   }
 
   ngOnInit() {
-
+    console.log(this.deviceOrientation.watchHeading().subscribe(
+      (data: DeviceOrientationCompassHeading) => {
+        this.compassHeading = data.magneticHeading
+        this.targetHeading = 360 - (this.compassHeading - this.heading)
+      }
+    ))
   }
 
   ionViewWillEnter() {
@@ -84,11 +102,18 @@ export class PlayingGamePage implements OnInit {
 
     let watch = this.geolocation.watchPosition();
 
-    watch.subscribe(async (data) => {
+    watch.subscribe(async (pos) => {
       if (this.task) {
         const waypoint = this.task.settings.point.geometry.coordinates
         if (await this.userDidArrive(waypoint) && !this.task.settings.confirmation) {
           this.onWaypointReached();
+        }
+
+        if (this.task.type == "nav-arrow") {
+          const destCoords = this.task.settings.point.geometry.coordinates
+          const bearing = this.bearing(pos.coords.latitude, pos.coords.longitude, destCoords[1], destCoords[0])
+          this.heading = bearing
+
         }
       }
     });
@@ -109,6 +134,7 @@ export class PlayingGamePage implements OnInit {
     new mapboxgl.Marker()
       .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
       .addTo(this.map);
+
   }
 
   onWaypointReached() {
@@ -119,12 +145,14 @@ export class PlayingGamePage implements OnInit {
     this.taskIndex++
     if (this.taskIndex > this.game.tasks.length - 1) {
       this.showSuccess = true
+      navigator.vibrate([300, 300, 300]);
       return
     }
 
     this.task = this.game.tasks[this.taskIndex]
     this.initTask()
     console.log(this.taskIndex, this.task)
+    navigator.vibrate([100, 100, 100]);
   }
 
   async onOkClicked() {
@@ -136,11 +164,10 @@ export class PlayingGamePage implements OnInit {
 
   async userDidArrive(waypoint): Promise<boolean> {
     return this.geolocation.getCurrentPosition().then(pos => {
-      const distance = this.getDistanceFromLatLonInM(waypoint[1], waypoint[0], pos.coords.latitude, pos.coords.longitude)
-      return distance < this.triggerTreshold
+      this.targetDistance = this.getDistanceFromLatLonInM(waypoint[1], waypoint[0], pos.coords.latitude, pos.coords.longitude)
+      return this.targetDistance < this.triggerTreshold
     })
   }
-
 
   navigateHome() {
     this.navCtrl.navigateRoot('/')
@@ -164,4 +191,23 @@ export class PlayingGamePage implements OnInit {
     return deg * (Math.PI / 180)
   }
 
+  // Converts from radians to degrees.
+  toDegrees(radians) {
+    return radians * 180 / Math.PI;
+  }
+
+
+  bearing(startLat, startLng, destLat, destLng) {
+    startLat = this.deg2rad(startLat);
+    startLng = this.deg2rad(startLng);
+    destLat = this.deg2rad(destLat);
+    destLng = this.deg2rad(destLng);
+
+    const y = Math.sin(destLng - startLng) * Math.cos(destLat);
+    const x = Math.cos(startLat) * Math.sin(destLat) -
+      Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
+    const brng = Math.atan2(y, x);
+    const brngDeg = this.toDegrees(brng);
+    return (brngDeg + 360) % 360;
+  }
 }

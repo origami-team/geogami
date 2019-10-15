@@ -24,7 +24,7 @@ export class CreateTaskModalPage implements AfterViewInit {
 
   tasks: any[]
   selectedTask: any
-  confirmation: boolean = true
+  confirmation: boolean = false
   mapFeatures: any[]
 
   constructor(public modalController: ModalController) { }
@@ -43,6 +43,12 @@ export class CreateTaskModalPage implements AfterViewInit {
     this.selectedTask = newValue;
     console.log(this.selectedTask);
     this.config = this.selectedTask.developer
+
+    if (this.selectedTask == "nav-flag") {
+      this.confirmation = true
+    } else {
+      this.confirmation = false
+    }
   }
 
   ngAfterViewInit() {
