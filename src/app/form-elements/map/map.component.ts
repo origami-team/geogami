@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import mapboxgl from 'mapbox-gl';
@@ -16,13 +16,10 @@ import { Feature } from 'geojson';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, Field {
-  ngOnInit(): void {
-    this.initMap();
-  }
+export class MapComponent implements OnInit, Field, AfterViewInit {
 
-  @ViewChild('map') mapContainer;
-  @ViewChild('hiddenInput') hiddenInput;
+  @ViewChild('map', { static: false }) mapContainer;
+  @ViewChild('hiddenInput', { static: false }) hiddenInput;
 
   marker: mapboxgl.Marker;
   map: mapboxgl.Map;
@@ -32,9 +29,15 @@ export class MapComponent implements OnInit, Field {
   group: FormGroup
 
   constructor(public popoverController: PopoverController) { }
+  ngOnInit(): void {
+  }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
+  }
 
+  ngAfterViewInit(): void {
+    console.log("did enter")
+    this.initMap();
   }
 
   _onChange = (feature: GeoJSON.Feature<GeoJSON.Point>) => {

@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
 })
 export class GameDetailPage implements OnInit {
 
-  @ViewChild('map') mapContainer;
+  @ViewChild('map', { static: false }) mapContainer;
 
   game: any;
   activities: any[]
