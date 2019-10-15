@@ -20,7 +20,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       if (this.platform.is("android")) {
-        this.statusBar.styleLightContent();
+        this.statusBar.backgroundColorByName('white');
+        this.statusBar.styleDefault();
       } else {
         this.statusBar.styleDefault();
       }

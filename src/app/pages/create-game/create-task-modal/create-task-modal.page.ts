@@ -2,7 +2,7 @@ import { Component, Input, OnInit, SimpleChanges, ViewChild, AfterViewInit } fro
 import { ModalController } from "@ionic/angular";
 
 import navtasks from "../../../models/navtasks.js";
-import themetasks from "./../../../models/themetasks.json";
+import themetasks from "./../../../models/themetasks.js";
 
 import { FieldConfig } from './../../../dynamic-form/models/field-config'
 import { DynamicFormComponent } from './../../../dynamic-form/container/dynamic-form.component';
@@ -44,7 +44,7 @@ export class CreateTaskModalPage implements AfterViewInit {
     console.log(this.selectedTask);
     this.config = this.selectedTask.developer
 
-    if (this.selectedTask == "nav-flag") {
+    if (["nav-flag", "theme-loc"].includes(this.selectedTask.type)) {
       this.confirmation = true
     } else {
       this.confirmation = false

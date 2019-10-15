@@ -23,7 +23,9 @@ export class PlayingGamePage implements OnInit {
   @ViewChild('map', { static: false }) mapContainer
 
   game: Game
+
   map: mapboxgl.Map
+  userSelectMarker: mapboxgl.Marker
 
   task: any;
   taskIndex: number = 0
@@ -104,16 +106,18 @@ export class PlayingGamePage implements OnInit {
 
     watch.subscribe(async (pos) => {
       if (this.task) {
-        const waypoint = this.task.settings.point.geometry.coordinates
-        if (await this.userDidArrive(waypoint) && !this.task.settings.confirmation) {
-          this.onWaypointReached();
-        }
+        if (this.task.type.includes('nav')) {
+          const waypoint = this.task.settings.point.geometry.coordinates
+          if (await this.userDidArrive(waypoint) && !this.task.settings.confirmation) {
+            this.onWaypointReached();
+          }
 
-        if (this.task.type == "nav-arrow") {
-          const destCoords = this.task.settings.point.geometry.coordinates
-          const bearing = this.bearing(pos.coords.latitude, pos.coords.longitude, destCoords[1], destCoords[0])
-          this.heading = bearing
+          if (this.task.type == "nav-arrow") {
+            const destCoords = this.task.settings.point.geometry.coordinates
+            const bearing = this.bearing(pos.coords.latitude, pos.coords.longitude, destCoords[1], destCoords[0])
+            this.heading = bearing
 
+          }
         }
       }
     });
@@ -121,6 +125,20 @@ export class PlayingGamePage implements OnInit {
     this.map.on('load', () => {
       geolocate.trigger();
       this.initGame()
+    })
+
+    this.map.on('click', e => {
+      console.log("click")
+      if (this.task.type == 'theme-loc') {
+        const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat)
+        if (this.userSelectMarker) {
+
+        } else {
+          this.userSelectMarker = new mapboxgl.Marker()
+            .setLngLat(pointFeature.geometry.coordinates)
+            .addTo(this.map);
+        }
+      }
     })
   }
 
@@ -131,9 +149,10 @@ export class PlayingGamePage implements OnInit {
 
   initTask() {
     console.log("Current task: ", this.game.tasks[this.taskIndex])
-    new mapboxgl.Marker()
-      .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
-      .addTo(this.map);
+    if (!['theme-loc'].includes(this.task.type))
+      new mapboxgl.Marker()
+        .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
+        .addTo(this.map);
 
   }
 
@@ -156,9 +175,14 @@ export class PlayingGamePage implements OnInit {
   }
 
   async onOkClicked() {
-    const waypoint = this.task.settings.point.geometry.coordinates
-    if (await this.userDidArrive(waypoint)) {
-      this.onWaypointReached();
+    if (this.task.type == 'theme-loc') {
+      this.nextTask()
+    } else {
+      // TODO: disable button
+      const waypoint = this.task.settings.point.geometry.coordinates
+      if (await this.userDidArrive(waypoint)) {
+        this.onWaypointReached();
+      }
     }
   }
 
@@ -210,4 +234,13 @@ export class PlayingGamePage implements OnInit {
     const brngDeg = this.toDegrees(brng);
     return (brngDeg + 360) % 360;
   }
+
+  _toGeoJSONPoint = (lng, lat): GeoJSON.Feature<GeoJSON.Point> => JSON.parse(`
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [${lng}, ${lat}]
+    }
+  }`)
 }

@@ -16,7 +16,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- <ion-item lines="none"> -->
   <ion-text>
     <h3>Aufgabentyp</h3>
   </ion-text>
@@ -25,25 +24,9 @@
             task.name
           }}</option>
   </select>
-  <!-- </ion-item> -->
-
-  <!-- <ion-item lines=" none"> -->
-  <!-- <ion-text>
-    <h3>Aufgabenname</h3>
-  </ion-text> -->
-  <!-- <ion-label position="floating">Aufgabenname</ion-label> -->
-  <!-- <ion-input></ion-input> -->
-  <!-- </ion-item> -->
-
-  <!-- <h2>Einstellungen</h2> -->
 
   <dynamic-form [config]="config" #form="dynamicForm" (submit)="submit($event)">
   </dynamic-form>
-
-  <!-- <div>
-    <p>Form valid: {{ form.valid }}</p>
-    <p>Form value: {{ form.value | json }}</p>
-  </div> -->
 
   <ion-text>
     <h3>Einstellungen</h3>
