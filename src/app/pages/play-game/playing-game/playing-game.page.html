@@ -10,14 +10,21 @@
 </ion-header>
 
 <ion-content>
-  <div #map class="map"></div>
+  <div #map class="map" [class.blur]="task != null && task.type=='nav-arrow'"></div>
 
-  <div class="overlay task-control ion-padding" *ngIf="task">
+  <div class="overlay task-control ion-padding" [class.full]="task.type=='nav-arrow'" *ngIf="task">
+    <div class="compass" *ngIf="task.type == 'nav-arrow'">
+      <img src="/assets/icons/compass.png" [ngStyle]="{
+        'transform': 'rotate(' + targetHeading + 'deg)'
+      }" />
+      <p>Distanz: {{ Math.round(targetDistance) }} m</p>
+    </div>
     <div class="task-text">
       {{ task.settings.text }}
     </div>
 
-    <ion-button class="confirm" (click)="onOkClicked()" *ngIf="task.settings.confirmation">OK</ion-button>
+    <ion-button class="confirm" (click)="onOkClicked()" *ngIf="task.type == 'nav-flag' && task.settings.confirmation">OK
+    </ion-button>
   </div>
 
   <div class="overlay success" *ngIf="showSuccess">
