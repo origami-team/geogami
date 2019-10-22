@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Field } from 'src/app/dynamic-form/models/field';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { PopoverController } from '@ionic/angular';
+import { PopoverComponent } from 'src/app/popover/popover.component';
 
 
 @Component({
@@ -32,7 +34,7 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
 
   photo: string
 
-  constructor(private camera: Camera) { }
+  constructor(private camera: Camera, public popoverController: PopoverController) { }
 
   capturePhoto() {
     this.camera.getPicture(this.cameraOptions).then((imageData) => {
@@ -56,6 +58,16 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
     }, (err) => {
       // Handle error
     });
+  }
+
+  async showPopover(ev: any, text: string) {
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 
 }
