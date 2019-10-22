@@ -65,7 +65,7 @@ export class CreateGameListPage implements OnInit {
         enableHighAccuracy: true
       },
       fitBoundsOptions: {
-        maxZoom: 14
+        maxZoom: 25
       },
       trackUserLocation: true
     });

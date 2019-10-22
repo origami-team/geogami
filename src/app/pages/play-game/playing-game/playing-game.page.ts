@@ -132,11 +132,18 @@ export class PlayingGamePage implements OnInit {
       if (this.task.type == 'theme-loc') {
         const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat)
         if (this.userSelectMarker) {
+          this.userSelectMarker.setLngLat(e.lngLat);
 
         } else {
-          this.userSelectMarker = new mapboxgl.Marker()
+          this.userSelectMarker = new mapboxgl.Marker({
+            color: 'green',
+            draggable: true
+          })
             .setLngLat(pointFeature.geometry.coordinates)
             .addTo(this.map);
+          this.userSelectMarker.on("dragend", () => {
+            // TODO: implement
+          });
         }
       }
     })

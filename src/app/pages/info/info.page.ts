@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfoPage implements OnInit {
 
-  constructor() { }
+  dark: boolean = false
+
+  constructor() {
+  }
 
   ngOnInit() {
+    this.dark = document.body.classList.contains('dark')
+  }
+
+  onDarkThemeChange() {
+    document.body.classList.toggle('dark')
+    this.dark = !this.dark
   }
 
 }

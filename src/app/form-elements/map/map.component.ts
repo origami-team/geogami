@@ -27,10 +27,10 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
   config: FieldConfig;
   group: FormGroup;
 
-  constructor(public popoverController: PopoverController) {}
-  ngOnInit(): void {}
+  constructor(public popoverController: PopoverController) { }
+  ngOnInit(): void { }
 
-  ionViewDidEnter() {}
+  ionViewDidEnter() { }
 
   ngAfterViewInit(): void {
     console.log("did enter");
@@ -71,6 +71,17 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
       zoom: 2
     });
 
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true
+      },
+      fitBoundsOptions: {
+        minZoom: 20
+      },
+      trackUserLocation: true
+    })
+    this.map.addControl(geolocate);
+
     this.map.on("click", e => {
       const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
       this._onChange(pointFeature);
@@ -83,6 +94,9 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
     });
 
     this.map.on("load", () => {
+
+      geolocate.trigger()
+
       if (this.config.featureType == "direction") {
         this.marker = new mapboxgl.Marker({
           draggable: true

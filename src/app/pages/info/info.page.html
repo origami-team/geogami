@@ -8,7 +8,8 @@
 </ion-header>
 
 <ion-content padding>
-  <h2 class="ion-text-center">Made with ❤️ by re:edu</h2>
+  <h2 class="ion-text-center">Made with <span (click)="onDarkThemeChange()"><span *ngIf="dark">❤️</span><span
+        *ngIf="!dark">🖤</span></span> by re:edu</h2>
   <h4>Animationen</h4>
   <p>
     ⭐️ Star Success by Taras Chernenko / LottieFiles
