@@ -4,34 +4,33 @@
   <ion-card id="start_card_play" (click)=navigateGamesOverviewPage()>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="logo-game-controller-a"></ion-icon> {{ playerMode }}
+        <ion-icon name="logo-game-controller-a"></ion-icon> Spiele ein OriGami
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      {{ playerModeDescription }}
-    </ion-card-content>
   </ion-card>
 
   <ion-card id="start_card_create" (click)=navigateCreatePage()>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="construct"></ion-icon> {{ developerMode }}
+        <ion-icon name="construct"></ion-icon> Entwickle ein OriGami
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      {{ developerModeDescription }}
-    </ion-card-content>
   </ion-card>
 
   <ion-card id="start_card_analyze" (click)=handleCardClick($event)>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="search"></ion-icon> {{ evaluateMode }}
+        <ion-icon name="search"></ion-icon> Werte dein OriGami aus
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      {{ evaluateModeDescription }}
-    </ion-card-content>
+  </ion-card>
+
+  <ion-card id="start_card_analyze" (click)=handleCardClick($event)>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="planet"></ion-icon> Lerne OriGami kennen
+      </ion-card-title>
+    </ion-card-header>
   </ion-card>
 
   <ion-card id="start_map_showroom" (click)=navigateShowroomPage()>
@@ -52,7 +51,7 @@
 
 </ion-content>
 
-<ion-footer>
+<ion-footer translucent>
   <ion-row>
     <ion-col>
       <h1 class="ion-text-center" data-value="de" (click)=setLanguage($event)>🇩🇪</h1>
