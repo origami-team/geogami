@@ -17,7 +17,7 @@
     </ion-refresher>
 
     <ion-list>
-      <ion-item *ngFor="let game of results" (click)="gameClick(game)" detail>
+      <ion-item *ngFor="let game of games" (click)="gameClick(game)" detail>
         <ion-label>
           <h2>{{ game.name }}</h2>
           <p>{{ game.description }}</p>

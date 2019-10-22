@@ -11,23 +11,23 @@ import { GamesService } from '../../../services/games.service'
 })
 export class PlayGameListPage implements OnInit {
 
-  results: any;
+  games: any;
 
   constructor(public navCtrl: NavController, private gamesService: GamesService) { }
 
   ngOnInit() {
-    this.gamesService.getGames().then(games => this.results = games)
+    this.gamesService.getGames().then(games => this.games = games)
   }
 
   doRefresh(event) {
     this.gamesService.getGames()
-      .then(games => this.results = games)
+      .then(games => this.games = games)
       .finally(() => event.target.complete())
   }
 
   filterList(event) {
-    this.results = this.results.filter(game => game.name)
-      .filter(game => game.name.toLowerCase().includes(event.detail.value.toLowerCase()))
+    this.gamesService.getGames()
+      .then(games => this.games = games.filter(game => game.name.toLowerCase().includes(event.detail.value.toLowerCase())))
   }
 
   gameClick(game: any) {
