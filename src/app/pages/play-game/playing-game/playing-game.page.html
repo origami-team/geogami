@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button href="/">
+      <ion-button (click)="navigateHome()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -13,7 +13,7 @@
   <div class="wrapper" [class.blur]="showSuccess">
     <div #map class="map" [class.blur]="task != null && task.type=='nav-arrow'"></div>
 
-    <div class="overlay task-control ion-padding" [class.full]="task.type=='nav-arrow'" *ngIf="task">
+    <ion-card class="overlay task-control ion-padding" [class.full]="task.type=='nav-arrow'" *ngIf="task">
       <div class="compass" *ngIf="task.type == 'nav-arrow'">
         <img src="/assets/icons/compass.png" [ngStyle]="{
           'transform': 'rotate(' + targetHeading + 'deg)'
@@ -21,21 +21,26 @@
         <p>Distanz: {{ Math.round(targetDistance) }} m</p>
       </div>
       <div class="task-text">
-        {{ task.settings.text }}
+        <p>
+          {{ task.settings.text }}
+        </p>
+        <p *ngIf="task.settings.confirmation">
+          Bestätige mit OK
+        </p>
       </div>
 
       <ion-button class="confirm" (click)="onOkClicked()" *ngIf="task.settings.confirmation">OK
       </ion-button>
-    </div>
+    </ion-card>
   </div>
 
-  <div class="overlay success" *ngIf="showSuccess">
+  <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch</h3>
     <p>Du hast das Spiel beendet</p>
     <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
     </lottie-animation-view>
     <ion-button (click)="navigateHome()">Fertig</ion-button>
-  </div>
+  </ion-card>
 
   <!-- <div class="overlay ion-padding" *ngIf="currentTask">
     <ion-img [src]="currentTask.question.img" *ngIf="currentTask.question.img"></ion-img>

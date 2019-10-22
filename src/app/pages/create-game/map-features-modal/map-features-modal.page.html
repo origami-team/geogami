@@ -17,68 +17,84 @@
 <ion-content padding>
   <ion-list>
     <ion-list-header>
-      <ion-label>Kartenmanipulation</ion-label>
+      <ion-label>Karteneinstellungen</ion-label>
     </ion-list-header>
     <ion-item>
-      <ion-label>Zoombar</ion-label>
+      <ion-label>Zoombalken</ion-label>
       <ion-toggle [(ngModel)]="features.zoombar"></ion-toggle>
     </ion-item>
     <ion-item>
-      <ion-label>Manueles Verschieben</ion-label>
-      <ion-toggle [(ngModel)]="features.pan"></ion-toggle>
+      <ion-label>Kartenbereich</ion-label>
+      <select>
+        <option>verschiebbar</option>
+        <option>automatisch-zentriert</option>
+        <option>statisch</option>
+      </select>
     </ion-item>
     <ion-item>
-      <ion-label>Manuelle Rotation</ion-label>
-      <ion-toggle [(ngModel)]="features.manualRotation"></ion-toggle>
+      <ion-label>Kartenrotation</ion-label>
+      <select>
+        <option>manuell</option>
+        <option>automatisch</option>
+        <option>automatisch auf Knopfdruck</option>
+        <option>geordnet</option>
+      </select>
     </ion-item>
     <ion-item>
-      <ion-label>Automatische Rotation</ion-label>
-      <ion-toggle [(ngModel)]="features.automaticRotation"></ion-toggle>
+      <ion-label>Kartenmaterial</ion-label>
+      <select>
+        <option>Standardkarte</option>
+        <option>Kartenauswahl</option>
+        <option>Satellitenbild</option>
+        <option>Satellitenbild auf Knopfdruck</option>
+        <option>Satellitenbild mit Swipefunktion</option>
+        <option>3D-Ansicht</option>
+        <option>3D-Ansicht auf Knopfdruck</option>
+      </select>
     </ion-item>
+    
 
     <ion-list-header>
       <ion-label>Marker</ion-label>
     </ion-list-header>
 
     <ion-item>
-      <ion-label>Position</ion-label>
-      <ion-toggle [(ngModel)]="features.position"></ion-toggle>
+      <ion-label>Positionsmarker</ion-label>
+      <select>
+        <option>ohne</option>
+        <option>durchgängig</option>
+        <option>auf Knopdfruck</option>
+        <option>zu Aufgabenbeginn</option>
+      </select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Blickrichtungsmarker</ion-label>
+      <select>
+        <option>ohne</option>
+        <option>durchgängig</option>
+        <option>auf Knopdfruck</option>
+        <option>zu Aufgabenbeginn</option>
+      </select>
     </ion-item>
 
-
-
-
     <ion-item>
-      <ion-label>Blickrichtung</ion-label>
-      <ion-toggle [(ngModel)]="features.heading"></ion-toggle>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Track</ion-label>
+      <ion-label>Trackaufzeichnung</ion-label>
       <ion-toggle [(ngModel)]="features.track"></ion-toggle>
     </ion-item>
 
-    <ion-list-header>
-      <ion-label>Kartenmaterial</ion-label>
-    </ion-list-header>
     <ion-item>
-      <ion-label>Swipe</ion-label>
-      <ion-toggle [(ngModel)]="features.swipe"></ion-toggle>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Layercontrol</ion-label>
-      <ion-toggle [(ngModel)]="features.layerControl"></ion-toggle>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>3D</ion-label>
-      <ion-toggle [(ngModel)]="features.threeD"></ion-toggle>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Straßenabschnitt</ion-label>
+      <ion-label>Aktueller Straßenabschnitt</ion-label>
       <ion-toggle [(ngModel)]="features.streetSection"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Reduzierter Kartenausschnitt</ion-label>
+      <ion-toggle></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Landmarken</ion-label>
+      <ion-toggle></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

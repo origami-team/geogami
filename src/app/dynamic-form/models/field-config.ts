@@ -12,4 +12,9 @@ export interface FieldConfig {
     value?: any,
     info?: string,
     inputType?: string,
+    // select
+    selectOptions?: any[]
+
+    // map
+    featureType?: string
 }

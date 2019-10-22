@@ -25,7 +25,7 @@
           }}</option>
   </select>
 
-  <dynamic-form [config]="config" #form="dynamicForm" (submit)="submit($event)">
+  <dynamic-form [config]="config" #form (submit)="submit($event)">
   </dynamic-form>
 
   <ion-text>

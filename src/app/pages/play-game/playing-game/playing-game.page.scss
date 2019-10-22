@@ -21,7 +21,7 @@
   left: 10px;
   right: 10px;
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   align-items: center;
 
   &.full {
@@ -31,10 +31,11 @@
 }
 
 .overlay {
-  animation-duration: 300ms;
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12);
+  // animation-duration: 300ms;
+  background: var(--ion-background-color);
+  // background: white;
+  // border-radius: 4px;
+  // box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12);
   
   .task-text {
     flex-grow: 1;
@@ -49,6 +50,7 @@
     z-index: 10;
     text-align: center;
     padding: 1rem;
+    margin: 0;
   }
 
   .compass {

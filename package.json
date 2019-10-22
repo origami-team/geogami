@@ -22,7 +22,7 @@
     "@angular/pwa": "^0.12.4",
     "@angular/router": "^8.2.10",
     "@angular/service-worker": "^8.2.10",
-    "@ionic-native/camera": "^5.11.0",
+    "@ionic-native/camera": "^5.15.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/device-orientation": "^5.15.0",
     "@ionic-native/geolocation": "^5.11.0",
@@ -95,9 +95,7 @@
       },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-camera": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      },
+      "cordova-plugin-camera": {},
       "cordova-plugin-device-orientation": {}
     },
     "platforms": [

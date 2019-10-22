@@ -6,10 +6,16 @@ import { MapComponent } from './map/map.component';
 import { Field } from '../dynamic-form/models/field';
 import { FieldConfig } from '../dynamic-form/models/field-config';
 import { TextInputComponent } from './text-input/text-input.component';
+import { SelectComponent } from './select/select.component';
+import { PhotoUploadComponent } from './photo-upload/photo-upload.component';
+import { PhotoUploadMultipleChoiceComponent } from './photo-upload-multiple-choice/photo-upload-multiple-choice.component';
 
 const components: { [type: string]: Type<Field> } = {
   map: MapComponent,
-  input: TextInputComponent
+  input: TextInputComponent,
+  select: SelectComponent,
+  photoUpload: PhotoUploadComponent,
+  photoUploadMultipleChoice: PhotoUploadMultipleChoiceComponent
 };
 
 @Directive({

@@ -75,6 +75,18 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
       const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat)
       this._onChange(pointFeature)
     });
+
+    this.map.on('move', e => {
+      this.marker.setLngLat(this.map.getCenter())
+    })
+
+    this.map.on('load', () => {
+      if (this.config.featureType == "direction") {
+        this.marker = new mapboxgl.Marker({
+          draggable: true,
+        }).setLngLat(this.map.getCenter()).addTo(this.map)
+      }
+    })
   }
 
   async showPopover(ev: any, text: string) {
@@ -96,5 +108,15 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
       "coordinates": [${lng}, ${lat}]
     }
   }`)
+
+  _centerPoint = () => {
+    return {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [this.map.getCenter().lng, this.map.getCenter().lat]
+      }
+    }
+  }
 
 }

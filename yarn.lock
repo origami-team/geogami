@@ -925,10 +925,10 @@
     which "^1.3.0"
     xml2js "^0.4.19"
 
-"@ionic-native/camera@^5.11.0":
-  version "5.15.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/camera/-/camera-5.15.0.tgz#1fe831508c7610437f45fac5d02431561a70bcd6"
-  integrity sha512-IjWg8rY2cKpgr7EmAG1pUPk5xWYm4Qiq5VHDBpbIDJd6+62w+Wyq/O3pscyS5guPahNVhGq1LeK/B6V/b+uiyA==
+"@ionic-native/camera@^5.15.1":
+  version "5.15.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/camera/-/camera-5.15.1.tgz#00d96847049d9972049ac46112a2fe6d56c1a72a"
+  integrity sha512-5Jx7pw0e2QXqF0mkzjTkv9GB+e0vcs9STogPdLG81lI1ZfkEgFhjQ6hvgzGyuMmOI4VZcEnBqCkK5NET9RmpSQ==
   dependencies:
     "@types/cordova" latest
 

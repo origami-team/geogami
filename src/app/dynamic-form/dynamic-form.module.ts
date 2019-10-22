@@ -11,26 +11,38 @@ import { TextInputComponent } from './../form-elements/text-input/text-input.com
 
 import { InfoComponent } from './../form-elements/info/info.component'
 
+import { FormsModule } from '@angular/forms';
+import { SelectComponent } from '../form-elements/select/select.component';
+import { PhotoUploadComponent } from '../form-elements/photo-upload/photo-upload.component';
+import { PhotoUploadMultipleChoiceComponent } from '../form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    IonicModule
+    IonicModule,
+    FormsModule
   ],
   declarations: [
     DynamicFieldDirective,
     DynamicFormComponent,
     MapComponent,
     TextInputComponent,
-    InfoComponent
+    InfoComponent,
+    SelectComponent,
+    PhotoUploadComponent,
+    PhotoUploadMultipleChoiceComponent
   ],
   exports: [
     DynamicFormComponent
   ],
   entryComponents: [
     MapComponent,
-    TextInputComponent
+    TextInputComponent,
+    SelectComponent,
+    PhotoUploadComponent,
+    PhotoUploadMultipleChoiceComponent
   ]
 })
 export class DynamicFormModule { }

@@ -9,7 +9,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
 
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Game } from 'src/app/models/game';
 
@@ -48,6 +48,7 @@ export class PlayingGamePage implements OnInit {
     private route: ActivatedRoute,
     private geolocation: Geolocation,
     public modalController: ModalController,
+    public toastController: ToastController,
     private gamesService: GamesService,
     public navCtrl: NavController,
     private deviceOrientation: DeviceOrientation
@@ -95,10 +96,9 @@ export class PlayingGamePage implements OnInit {
         enableHighAccuracy: true
       },
       fitBoundsOptions: {
-        // offset: [0, -100],
-        maxZoom: 14
+        maxZoom: 18
       },
-      trackUserLocation: true
+      trackUserLocation: false
     })
     this.map.addControl(geolocate);
 
@@ -182,6 +182,14 @@ export class PlayingGamePage implements OnInit {
       const waypoint = this.task.settings.point.geometry.coordinates
       if (await this.userDidArrive(waypoint)) {
         this.onWaypointReached();
+      } else {
+        const toast = await this.toastController.create({
+          message: 'Deine Eingabe ist falsch. Versuche es erneut',
+          color: 'dark',
+          showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
       }
     }
   }
