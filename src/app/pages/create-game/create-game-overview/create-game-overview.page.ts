@@ -21,6 +21,7 @@ export class CreateGameOverviewPage implements OnInit {
   public model = this.gameFactory.getGame()
   public lottieConfig: Object;
   showSuccess: boolean = false
+  showUpload: boolean = false
 
   constructor(
     public popoverController: PopoverController,
@@ -55,8 +56,12 @@ export class CreateGameOverviewPage implements OnInit {
     this.gameFactory.addGameInformation(this.model);
     console.log(this.gameFactory.game)
 
-    this.gamesService.postGame(this.gameFactory.game).then(res => console.log(res)).catch(e => console.error(e))
-    this.showSuccess = true
+    this.showUpload = true
+    this.gamesService.postGame(this.gameFactory.game).then(res => {
+      if (res.status == 200) {
+        this.showSuccess = true
+      }
+    }).catch(e => console.error(e))
   }
 
   navigateHome() {

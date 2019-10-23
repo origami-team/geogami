@@ -23,6 +23,7 @@ export default [
             {
                 "type": "select",
                 "label": "Fragetyp",
+                "name": "question-type",
                 "selectOptions": [
                     {
                         "label": "... mittels Beschreibung",
@@ -48,9 +49,11 @@ export default [
                             {
                                 "type": "select",
                                 "label": "Antworttyp",
+                                "name": "answer-type",
                                 "selectOptions": [
                                     {
                                         "label": "Setzen eines Kartenpunktes",
+                                        "name": "set-point",
                                         "items": [
                                             {
                                                 "type": "map",
@@ -64,6 +67,7 @@ export default [
                                     },
                                     {
                                         "label": "Wählen eines Fotos",
+                                        "name": "select-photo",
                                         "items": [
                                             {
                                                 "type": "photoUploadMultipleChoice",
@@ -75,6 +79,7 @@ export default [
                                         ]
                                     }, {
                                         "label": "Aufnahme eines Fotos",
+                                        "name": "take-photo",
                                         "items": []
                                     }
                                 ]
@@ -83,6 +88,7 @@ export default [
                     },
                     {
                         "label": "... mittels Foto",
+                        "name": "photo",
                         "items": [
                             {
                                 "type": "input",
@@ -100,7 +106,14 @@ export default [
                                 "text": "",
                                 "info": "Lade ein Foto von dem Objekt hoch, das der Spieler finden soll.",
                                 validation: [Validators.required, Validators.minLength(4)]
-                            },
+                            }, {
+                                "type": "map",
+                                "name": "point",
+                                "featureType": "point",
+                                "label": "Objektposition",
+                                "info": "Umrande das Objekt, das der Spieler finden soll, mit mehreren Klicks auf der Karte. Die Markierung wird dem Spieler nicht angezeigt",
+                                validation: [Validators.required]
+                            }
                         ]
                     }, {
                         "label": "... mittels Karte",
@@ -125,6 +138,7 @@ export default [
                             {
                                 "type": "select",
                                 "label": "Antworttyp",
+                                "name": "answer-type",
                                 "selectOptions": [
                                     {
                                         "label": "Wählen eines Fotos",
@@ -156,8 +170,7 @@ export default [
             {
                 "type": "select",
                 "label": "Fragetyp",
-                "name": "theme-direction-question-type",
-                "info": "TEST",
+                "name": "question-type",
                 "selectOptions": [
                     {
                         "label": "... durch Blickausrichtung",
@@ -182,6 +195,7 @@ export default [
                         ]
                     }, {
                         "label": "... mittels Foto",
+                        "name": "photo",
                         "items": [
                             {
                                 "type": "input",
@@ -209,7 +223,7 @@ export default [
                         ]
                     }, {
                         "label": "... mittels Karte",
-                        "name": "theme-direction-question-type-map",
+                        "name": "question-type-map",
                         "items": [
                             {
                                 "type": "input",
@@ -222,7 +236,7 @@ export default [
                             },
                             {
                                 "type": "map",
-                                "name": "theme-direction-map-direction",
+                                "name": "map-direction",
                                 "featureType": "direction",
                                 "label": "Richtung auf der Karte",
                                 "info": " Markiere die Richtung, die der Spieler finden soll, mit einem Klick auf der Karte. Diese Richtung wird dem Spieler bei Aufgabenstellung auf der Karte angezeigt.",
@@ -230,7 +244,7 @@ export default [
                             }, {
                                 "type": "select",
                                 "label": "Antworttyp",
-                                "name": "theme-direction-answer-type",
+                                "name": "answer-type",
                                 "selectOptions": [
                                     {
                                         "label": "Einnehmen einer Blickrichtung",

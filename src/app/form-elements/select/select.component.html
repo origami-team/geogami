@@ -4,7 +4,7 @@
         (click)='showPopover($event, config.info)'></ion-icon>
     </h3>
   </ion-text>
-  <select [formControlName]="config.name" [(ngModel)]="selectedQuestionType">
+  <select *ngIf="config" [formControlName]="config.name" [(ngModel)]="selectedQuestionType">
     <option *ngFor="let option of config.selectOptions" [ngValue]="option">{{ option.label }}</option>
   </select>
 

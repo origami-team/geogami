@@ -44,6 +44,7 @@ export class PhotoUploadComponent implements Field {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       this.photo = base64Image
       console.log(base64Image)
+      this.group.patchValue({ [this.config.name]: base64Image });
     }, (err) => {
       // Handle error
     });
@@ -56,6 +57,8 @@ export class PhotoUploadComponent implements Field {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       this.photo = base64Image
       console.log(base64Image)
+      this.group.patchValue({ [this.config.name]: base64Image });
+
     }, (err) => {
       // Handle error
     });

@@ -5,7 +5,7 @@ import { GamesService } from '../../../services/games.service'
 
 import mapboxgl from 'mapbox-gl';
 
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
 
@@ -29,6 +29,9 @@ export class PlayingGamePage implements OnInit {
 
   task: any;
   taskIndex: number = 0
+
+  // position
+  lastKnownPosition: Geoposition
 
   // treshold to trigger location arrive
   triggerTreshold: Number = 10
@@ -98,17 +101,18 @@ export class PlayingGamePage implements OnInit {
       fitBoundsOptions: {
         maxZoom: 18
       },
-      trackUserLocation: false
+      trackUserLocation: true
     })
     this.map.addControl(geolocate);
 
     let watch = this.geolocation.watchPosition();
 
     watch.subscribe(async (pos) => {
+      this.lastKnownPosition = pos
       if (this.task) {
         if (this.task.type.includes('nav')) {
           const waypoint = this.task.settings.point.geometry.coordinates
-          if (await this.userDidArrive(waypoint) && !this.task.settings.confirmation) {
+          if (this.userDidArrive(waypoint) && !this.task.settings.confirmation) {
             this.onWaypointReached();
           }
 
@@ -129,7 +133,10 @@ export class PlayingGamePage implements OnInit {
 
     this.map.on('click', e => {
       console.log("click")
-      if (this.task.type == 'theme-loc') {
+      if (this.task.type == 'theme-loc' ||
+        (this.task.settings['answer-type'] && this.task.settings['answer-type'].name == 'set-point') ||
+        (this.task.type == 'theme-object' && this.task.settings['question-type'].name == 'photo')
+      ) {
         const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat)
         if (this.userSelectMarker) {
           this.userSelectMarker.setLngLat(e.lngLat);
@@ -155,11 +162,17 @@ export class PlayingGamePage implements OnInit {
   }
 
   initTask() {
-    console.log("Current task: ", this.game.tasks[this.taskIndex])
-    if (!['theme-loc'].includes(this.task.type))
+    console.log("Current task: ", this.task)
+
+    if (this.task.type.includes('theme')) {
+      this.task.settings.text = this.task.settings['question-type'].settings.text
+    }
+
+    if (!['theme'].includes(this.task.type)) {
       new mapboxgl.Marker()
         .setLngLat(this.game.tasks[this.taskIndex].settings.point.geometry.coordinates)
         .addTo(this.map);
+    }
 
   }
 
@@ -184,10 +197,26 @@ export class PlayingGamePage implements OnInit {
   async onOkClicked() {
     if (this.task.type == 'theme-loc') {
       this.nextTask()
+    } else if ((this.task.type == 'theme-object' && this.task.settings['question-type'].name == 'photo')) {
+      const targetPosition = this.task.settings['question-type'].settings.point.geometry.coordinates
+      const clickPosition = this.userSelectMarker._lngLat
+
+      const distance = this.getDistanceFromLatLonInM(targetPosition[1], targetPosition[0], clickPosition.lat, clickPosition.lng)
+      if (distance < 20) {
+        this.nextTask()
+      } else {
+        const toast = await this.toastController.create({
+          message: 'Deine Eingabe ist falsch. Versuche es erneut',
+          color: 'dark',
+          showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+      }
     } else {
       // TODO: disable button
       const waypoint = this.task.settings.point.geometry.coordinates
-      if (await this.userDidArrive(waypoint)) {
+      if (this.userDidArrive(waypoint)) {
         this.onWaypointReached();
       } else {
         const toast = await this.toastController.create({
@@ -201,11 +230,12 @@ export class PlayingGamePage implements OnInit {
     }
   }
 
-  async userDidArrive(waypoint): Promise<boolean> {
-    return this.geolocation.getCurrentPosition().then(pos => {
-      this.targetDistance = this.getDistanceFromLatLonInM(waypoint[1], waypoint[0], pos.coords.latitude, pos.coords.longitude)
-      return this.targetDistance < this.triggerTreshold
-    })
+  userDidArrive(waypoint) {
+    this.targetDistance = this.getDistanceFromLatLonInM(waypoint[1], waypoint[0],
+      this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+    return this.targetDistance < this.triggerTreshold
+    // return this.geolocation.getCurrentPosition().then(pos => {
+    // })
   }
 
   navigateHome() {

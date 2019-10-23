@@ -33,7 +33,6 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
   ionViewDidEnter() { }
 
   ngAfterViewInit(): void {
-    console.log("did enter");
     this.initMap();
   }
 
@@ -83,15 +82,29 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
     this.map.addControl(geolocate);
 
     this.map.on("click", e => {
-      const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-      this._onChange(pointFeature);
+      if (this.config.featureType != "direction") {
+        const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+        this._onChange(pointFeature);
+      }
     });
 
     this.map.on("move", e => {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
       if (this.config.featureType == "direction") {
         this.marker.setLngLat(this.map.getCenter());
       }
     });
+
+    this.map.on("rotate", e => {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      if (this.config.featureType == "direction") {
+        this.group.patchValue({ [this.config.name]: this.map.getBearing() });
+      }
+    })
 
     this.map.on("load", () => {
 

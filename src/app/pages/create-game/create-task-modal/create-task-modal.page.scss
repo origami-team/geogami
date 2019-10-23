@@ -3,20 +3,20 @@
     overflow: scroll;
 }
 
-// select {
-//     border-radius: 3px;
-//     cursor: pointer;
-//     border: none;
-//     background: white;
-// }
+select {
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+    background: var(--ion-item-background);
+}
 
-// select:focus {
-//     outline: none;
-// }
+select:focus {
+    outline: none;
+}
 
-// select:disabled {
-//     color: lightgrey;
-// }
+select:disabled {
+    color: lightgrey;
+}
 
 .map {
     height: 200px;

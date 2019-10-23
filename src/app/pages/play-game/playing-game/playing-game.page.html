@@ -13,12 +13,18 @@
   <div class="wrapper" [class.blur]="showSuccess">
     <div #map class="map" [class.blur]="task != null && task.type=='nav-arrow'"></div>
 
-    <ion-card class="overlay task-control ion-padding" [class.full]="task.type=='nav-arrow'" *ngIf="task">
+    <ion-card class="overlay task-control ion-padding" [class.full]="task.type=='nav-arrow'" *ngIf="task" [ngStyle]="{
+      'flex-wrap': ['nav-arrow', 'theme-object'].includes(task.type) ? 'wrap' : 'nowrap'
+    }">
       <div class="compass" *ngIf="task.type == 'nav-arrow'">
         <img src="/assets/icons/compass.png" [ngStyle]="{
           'transform': 'rotate(' + targetHeading + 'deg)'
         }" />
         <p>Distanz: {{ Math.round(targetDistance) }} m</p>
+      </div>
+      <div class="photo-container"
+        *ngIf="task.type == 'theme-object' && task.settings['question-type'].name == 'photo'">
+        <img [src]="task.settings['question-type'].settings.photo" />
       </div>
       <div class="task-text">
         <p>

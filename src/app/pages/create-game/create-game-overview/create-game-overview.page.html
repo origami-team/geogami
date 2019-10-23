@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <form [className]="showSuccess ? 'blur' : ''" (ngSubmit)="uploadGame()">
+  <form [className]="showUpload ? 'blur' : ''" (ngSubmit)="uploadGame()">
     <ion-list lines="full" class="ion-no-margin ion-no-padding">
       <ion-item>
         <ion-label position="stacked">Name <ion-text color="danger">*</ion-text>
@@ -32,9 +32,9 @@
     </div>
   </form>
 
-  <div class="overlay success" *ngIf="showSuccess">
-    <h3>Übertrage Daten...</h3>
-    <p>Dein Spiel wurde gespeichert</p>
+  <div class="overlay success" *ngIf="showUpload">
+    <h3 *ngIf="!showSuccess">Übertrage Daten...</h3>
+    <h3 *ngIf="showSuccess">Dein Spiel wurde gespeichert</h3>
     <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
     </lottie-animation-view>
     <ion-button (click)="navigateHome()">Fertig</ion-button>

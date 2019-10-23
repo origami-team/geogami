@@ -21,17 +21,17 @@
   left: 10px;
   right: 10px;
   display: flex;
-  // flex-wrap: wrap;
+  flex-wrap: wrap;
   align-items: center;
 
   &.full {
-    height: calc(100% - 44px - 5px);
+    height: calc(100% - 56px - 5px);
     z-index: 2;
   }
 }
 
 .overlay {
-  // animation-duration: 300ms;
+  transition: all 0.3s ease-in;
   background: var(--ion-item-background);
   // background: white;
   // border-radius: 4px;
@@ -56,6 +56,26 @@
   .compass {
     text-align: center;
     flex: 0 0 100%;
+
+    > img {
+      height: 100%;
+      width: fit-content;
+      display: initial;
+    }
+  }
+
+  .photo-container {
+    display: inline;
+    max-height: 200px;
+    overflow: hidden;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    > img {
+      max-height: 200px;
+      width: auto;
+    }
   }
 }
 

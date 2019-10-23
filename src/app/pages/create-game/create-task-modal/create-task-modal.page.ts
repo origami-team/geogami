@@ -13,7 +13,7 @@ import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal
   templateUrl: "./create-task-modal.page.html",
   styleUrls: ["./create-task-modal.page.scss"]
 })
-export class CreateTaskModalPage implements AfterViewInit {
+export class CreateTaskModalPage implements OnInit, AfterViewInit {
   @Input() gameName: string = "";
   @Input() type: string = "nav";
   @Input() task: any;
@@ -44,7 +44,7 @@ export class CreateTaskModalPage implements AfterViewInit {
     console.log(this.selectedTask);
     this.config = this.selectedTask.developer
 
-    if (["nav-flag", "theme-loc"].includes(this.selectedTask.type)) {
+    if (["nav-flag", "theme-loc", "theme-object"].includes(this.selectedTask.type)) {
       this.confirmation = true
     } else {
       this.confirmation = false
@@ -52,6 +52,7 @@ export class CreateTaskModalPage implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+
     let previousValid = this.form.valid;
     this.form.changes.subscribe(() => {
       if (this.form.valid !== previousValid) {
@@ -81,15 +82,15 @@ export class CreateTaskModalPage implements AfterViewInit {
       return;
     }
 
-    // console.log(this.external)
-    // using the injected ModalController this page
-    // can "dismiss" itself and optionally pass back data
+    console.log(this.form.value)
+
     this.modalController.dismiss({
       dismissed: true,
       data: {
         ...this.selectedTask,
         settings: {
           ...this.form.value,
+          ['answer-type']: this.form.value['question-type'] ? this.form.value['question-type'].settings['answer-type'] : null,
           confirmation: this.confirmation,
           mapFeatures: this.mapFeatures
         }

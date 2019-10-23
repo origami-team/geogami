@@ -25,6 +25,6 @@ export class GamesService {
   }
 
   postGame(game: Game): Promise<any> {
-    return this.http.post(`${environment.apiURL}/game`, game).toPromise()
+    return this.http.post(`${environment.apiURL}/game`, game, { observe: 'response' }).toPromise()
   }
 }
