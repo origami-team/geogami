@@ -27,6 +27,7 @@ export default [
                 "selectOptions": [
                     {
                         "label": "... mittels Beschreibung",
+                        "name": "description",
                         "items": [
                             {
                                 "type": "input",

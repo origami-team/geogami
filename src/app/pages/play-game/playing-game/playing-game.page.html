@@ -11,19 +11,39 @@
 
 <ion-content>
   <div class="wrapper" [class.blur]="showSuccess">
-    <div #map class="map" [class.blur]="task != null && task.type=='nav-arrow'"></div>
+    <div
+      #map
+      class="map"
+      [class.blur]="task != null && task.type == 'nav-arrow'"
+    ></div>
+    <div *ngIf="swipe" #swipeMap class="map"></div>
 
-    <ion-card class="overlay task-control ion-padding" [class.full]="task.type=='nav-arrow'" *ngIf="task" [ngStyle]="{
-      'flex-wrap': ['nav-arrow', 'theme-object'].includes(task.type) ? 'wrap' : 'nowrap'
-    }">
+    <ion-card
+      class="overlay task-control ion-padding"
+      [class.full]="task.type == 'nav-arrow'"
+      *ngIf="task"
+      [ngStyle]="{
+        'flex-wrap': ['nav-arrow', 'theme-object'].includes(task.type)
+          ? 'wrap'
+          : 'nowrap'
+      }"
+    >
       <div class="compass" *ngIf="task.type == 'nav-arrow'">
-        <img src="/assets/icons/compass.png" [ngStyle]="{
-          'transform': 'rotate(' + targetHeading + 'deg)'
-        }" />
+        <img
+          src="/assets/icons/compass.png"
+          [ngStyle]="{
+            transform: 'rotate(' + targetHeading + 'deg)'
+          }"
+        />
         <p>Distanz: {{ Math.round(targetDistance) }} m</p>
       </div>
-      <div class="photo-container"
-        *ngIf="task.type == 'theme-object' && task.settings['question-type'].name == 'photo'">
+      <div
+        class="photo-container"
+        *ngIf="
+          task.type == 'theme-object' &&
+          task.settings['question-type'].name == 'photo'
+        "
+      >
         <img [src]="task.settings['question-type'].settings.photo" />
       </div>
       <div class="task-text">
@@ -35,7 +55,11 @@
         </p>
       </div>
 
-      <ion-button class="confirm" (click)="onOkClicked()" *ngIf="task.settings.confirmation">OK
+      <ion-button
+        class="confirm"
+        (click)="onOkClicked()"
+        *ngIf="task.settings.confirmation"
+        >OK
       </ion-button>
     </ion-card>
   </div>
@@ -43,7 +67,11 @@
   <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch</h3>
     <p>Du hast das Spiel beendet</p>
-    <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
+    <lottie-animation-view
+      [options]="lottieConfig"
+      [width]="300"
+      [height]="300"
+    >
     </lottie-animation-view>
     <ion-button (click)="navigateHome()">Fertig</ion-button>
   </ion-card>
@@ -61,5 +89,4 @@
       </ion-row>
     </ion-grid>
   </div> -->
-
 </ion-content>

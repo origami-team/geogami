@@ -11,20 +11,18 @@
 <ion-content>
   <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
 
-  <ion-content>
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
-    <ion-list>
-      <ion-item *ngFor="let game of games" (click)="gameClick(game)" detail>
-        <ion-label>
-          <h2>{{ game.name }}</h2>
-          <p>{{ game.description }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+  <ion-list>
+    <ion-item *ngFor="let game of games" (click)="gameClick(game)" detail>
+      <ion-label>
+        <h2>{{ game.name }}</h2>
+        <p>{{ game.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
-  </ion-content>
 
 </ion-content>

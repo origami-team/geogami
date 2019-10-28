@@ -55,7 +55,8 @@ export class GameDetailPage implements OnInit {
       var bounds = new mapboxgl.LngLatBounds();
 
       tasks.forEach((task) => {
-        bounds.extend(task.settings.point.geometry.coordinates);
+        if (task.settings.point)
+          bounds.extend(task.settings.point.geometry.coordinates);
       });
 
       map.fitBounds(bounds, { padding: 40, duration: 2000 });

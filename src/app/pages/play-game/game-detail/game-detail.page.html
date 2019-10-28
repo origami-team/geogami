@@ -15,7 +15,7 @@
       <ion-card-title *ngIf="game">{{ game.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content *ngIf="game">
-      {{ game.tasks.length }} Aufgaben
+      {{ game.tasks.length }} {{ game.tasks.length == 1 ? "Aufgabe" : "Aufgaben"}}
     </ion-card-content>
   </ion-card>
 

@@ -25,34 +25,33 @@
     </ion-item>
     <ion-item>
       <ion-label>Kartenbereich</ion-label>
-      <select>
-        <option>verschiebbar</option>
-        <option>automatisch-zentriert</option>
-        <option>statisch</option>
+      <select [(ngModel)]="features.pan">
+        <option value="true">verschiebbar</option>
+        <option value="center">automatisch-zentriert</option>
+        <option value="static">statisch</option>
       </select>
     </ion-item>
     <ion-item>
       <ion-label>Kartenrotation</ion-label>
-      <select>
-        <option>manuell</option>
-        <option>automatisch</option>
-        <option>automatisch auf Knopfdruck</option>
-        <option>geordnet</option>
+      <select [(ngModel)]="features.rotation">
+        <option value="manual">manuell</option>
+        <option value="auto">automatisch</option>
+        <option value="button">automatisch auf Knopfdruck</option>
+        <option value="north">gegenordet</option>
       </select>
     </ion-item>
     <ion-item>
       <ion-label>Kartenmaterial</ion-label>
-      <select>
-        <option>Standardkarte</option>
-        <option>Kartenauswahl</option>
-        <option>Satellitenbild</option>
-        <option>Satellitenbild auf Knopfdruck</option>
-        <option>Satellitenbild mit Swipefunktion</option>
-        <option>3D-Ansicht</option>
-        <option>3D-Ansicht auf Knopfdruck</option>
+      <select [(ngModel)]="features.material">
+        <option value="standard">Standardkarte</option>
+        <option value="selection">Kartenauswahl</option>
+        <option value="sat">Satellitenbild</option>
+        <option value="sat-button">Satellitenbild auf Knopfdruck</option>
+        <option value="sat-swipe">Satellitenbild mit Swipefunktion</option>
+        <option value="3D">3D-Ansicht</option>
+        <option value="3D-button">3D-Ansicht auf Knopfdruck</option>
       </select>
     </ion-item>
-
 
     <ion-list-header mode="ios">
       <ion-label>Marker</ion-label>
@@ -60,20 +59,20 @@
 
     <ion-item>
       <ion-label>Positionsmarker</ion-label>
-      <select>
-        <option>ohne</option>
-        <option>durchgängig</option>
-        <option>auf Knopdfruck</option>
-        <option>zu Aufgabenbeginn</option>
+      <select [(ngModel)]="features.position">
+        <option value="none">ohne</option>
+        <option value="true">durchgängig</option>
+        <option value="button">auf Knopdfruck</option>
+        <option value="start">zu Aufgabenbeginn</option>
       </select>
     </ion-item>
     <ion-item>
       <ion-label>Blickrichtungsmarker</ion-label>
-      <select>
-        <option>ohne</option>
-        <option>durchgängig</option>
-        <option>auf Knopdfruck</option>
-        <option>zu Aufgabenbeginn</option>
+      <select [(ngModel)]="features.direction">
+        <option value="none">ohne</option>
+        <option value="true">durchgängig</option>
+        <option value="button">auf Knopdfruck</option>
+        <option value="start">zu Aufgabenbeginn</option>
       </select>
     </ion-item>
 
@@ -89,12 +88,12 @@
 
     <ion-item>
       <ion-label>Reduzierter Kartenausschnitt</ion-label>
-      <ion-toggle></ion-toggle>
+      <ion-toggle [(ngModel)]="features.reducedInformation"></ion-toggle>
     </ion-item>
 
     <ion-item>
       <ion-label>Landmarken</ion-label>
-      <ion-toggle></ion-toggle>
+      <ion-toggle [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

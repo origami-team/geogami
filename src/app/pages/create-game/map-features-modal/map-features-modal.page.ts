@@ -1,35 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-
+import { Component, OnInit } from "@angular/core";
+import { ModalController } from "@ionic/angular";
 
 @Component({
-  selector: 'app-map-features-modal',
-  templateUrl: './map-features-modal.page.html',
-  styleUrls: ['./map-features-modal.page.scss'],
+  selector: "app-map-features-modal",
+  templateUrl: "./map-features-modal.page.html",
+  styleUrls: ["./map-features-modal.page.scss"]
 })
 export class MapFeaturesModalPage implements OnInit {
-
   features: any = {
     zoombar: false,
-    swipe: false,
-    pan: true,
-    manualRotation: true,
-    automaticRotation: false,
-    position: false,
-    heading: false,
+    pan: "true",
+    rotation: "manual",
+    material: "standard",
+    position: "none",
+    direction: "none",
     track: false,
-    layerControl: false,
-    threeD: false,
-    streetSection: false
-  }
+    streetSection: false,
+    reducedInformation: false,
+    landmarks: false
+  };
 
-  constructor(public modalController: ModalController) { }
+  constructor(public modalController: ModalController) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-
-  dismissModal(dismissType: string = 'null') {
+  dismissModal(dismissType: string = "null") {
     if (dismissType == "close") {
       this.modalController.dismiss();
       return;
@@ -42,5 +37,4 @@ export class MapFeaturesModalPage implements OnInit {
       data: this.features
     });
   }
-
 }
