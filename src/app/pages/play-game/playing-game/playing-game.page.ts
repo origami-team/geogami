@@ -105,7 +105,7 @@ export class PlayingGamePage implements OnInit {
     };
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ionViewWillEnter() {
     this.route.params.subscribe(params => {
@@ -114,7 +114,7 @@ export class PlayingGamePage implements OnInit {
         .then(games => {
           this.game = games[0];
         })
-        .finally(() => {});
+        .finally(() => { });
     });
 
     mapboxgl.accessToken = environment.mapboxAccessToken;
@@ -427,6 +427,8 @@ export class PlayingGamePage implements OnInit {
         });
         toast.present();
       }
+    } else if (this.task.type == 'info') {
+      this.nextTask();
     } else {
       // TODO: disable button
       const waypoint = this.task.settings.point.geometry.coordinates;
@@ -467,9 +469,9 @@ export class PlayingGamePage implements OnInit {
     var a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(this.deg2rad(lat1)) *
-        Math.cos(this.deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c * 1000; // Distance in km
     return d; // distance in m

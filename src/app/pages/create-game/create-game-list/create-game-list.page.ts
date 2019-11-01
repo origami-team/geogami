@@ -10,6 +10,7 @@ import { GameFactoryService } from "../../../services/game-factory.service";
 
 import { CreateTaskModalPage } from "./../create-task-modal/create-task-modal.page";
 import { CreateModuleModalPage } from "./../create-module-modal/create-module-modal.page";
+import { CreateInfoModalComponent } from "./../create-info-modal/create-info-modal.component";
 
 import { NavController } from "@ionic/angular";
 
@@ -86,12 +87,13 @@ export class CreateGameListPage implements OnInit {
   async presentTaskModal(type: string = "nav", task: any = null) {
 
     const modal = await this.modalController.create({
-      component: CreateTaskModalPage,
+      component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
       componentProps: {
         type: type,
         task: task
       }
     });
+
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data);

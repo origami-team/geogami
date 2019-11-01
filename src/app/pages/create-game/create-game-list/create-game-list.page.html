@@ -105,6 +105,9 @@
         <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', taks)">
           <ion-label>{{ task.name }}</ion-label>
         </ion-chip>
+        <ion-chip *ngIf="task.type.includes('info')" color="warning" (click)="presentTaskModal('info', taks)">
+          <ion-label>{{ task.settings.text }}</ion-label>
+        </ion-chip>
         <ion-icon *ngIf="!reorder" slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
         <ion-reorder *ngIf="reorder" slot="end"></ion-reorder>
       </ion-item>
@@ -121,7 +124,7 @@
     <ion-chip color="medium" (click)="presentTaskModal('theme')">
       <ion-icon name="list"></ion-icon>
     </ion-chip>
-    <ion-chip color="warning" (click)="presentTaskModal('theme')">
+    <ion-chip color="warning" (click)="presentTaskModal('info')">
       <ion-icon name="information-circle-outline"></ion-icon>
     </ion-chip>
     <ng-container *ngIf="game.tasks.length > 1">

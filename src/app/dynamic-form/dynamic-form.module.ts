@@ -31,7 +31,7 @@ import { PhotoUploadMultipleChoiceComponent } from '../form-elements/photo-uploa
     TextInputComponent,
     InfoComponent,
     SelectComponent,
-    PhotoUploadComponent,
+    // PhotoUploadComponent,
     PhotoUploadMultipleChoiceComponent
   ],
   exports: [

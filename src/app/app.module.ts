@@ -23,11 +23,15 @@ import { PopoverComponent } from './popover/popover.component';
 import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page'
 import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page'
 import { MapFeaturesModalPage } from './pages/create-game/map-features-modal/map-features-modal.page'
+import { CreateInfoModalComponent } from './pages/create-game/create-info-modal/create-info-modal.component'
+
 
 import { InfoComponent } from './form-elements/info/info.component'
 import { TextInputComponent } from './form-elements/text-input/text-input.component'
 import { MapComponent } from './form-elements/map/map.component'
 import { CameraComponent } from './form-elements/camera/camera.component'
+
+import { PhotoUploadComponent } from './form-elements/photo-upload/photo-upload.component'
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
@@ -55,6 +59,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateTaskModalPage,
     MapFeaturesModalPage,
     CreateModuleModalPage,
+    CreateInfoModalComponent,
+    PhotoUploadComponent,
     // form components ⬇️
     // InfoComponent,
     // TextInputComponent,
@@ -67,6 +73,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateTaskModalPage,
     MapFeaturesModalPage,
     CreateModuleModalPage,
+    CreateInfoModalComponent
   ],
   imports: [
     DynamicFormModule,
