@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
+import { TrackerService } from "../../../services/tracker.service";
 import osmtogeojson from "osmtogeojson";
+import { Device } from "@ionic-native/device/ngx";
 
 import mapboxgl from "mapbox-gl";
 import MapboxCompare from "mapbox-gl-compare";
@@ -86,6 +88,8 @@ export class PlayingGamePage implements OnInit {
 
   Math: Math = Math;
 
+  uploadDone: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private geolocation: Geolocation,
@@ -95,7 +99,9 @@ export class PlayingGamePage implements OnInit {
     public navCtrl: NavController,
     private deviceOrientation: DeviceOrientation,
     private changeDetectorRef: ChangeDetectorRef,
-    private OSMService: OsmService
+    private OSMService: OsmService,
+    private trackerService: TrackerService,
+    private device: Device
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -105,7 +111,7 @@ export class PlayingGamePage implements OnInit {
     };
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ionViewWillEnter() {
     this.route.params.subscribe(params => {
@@ -114,14 +120,16 @@ export class PlayingGamePage implements OnInit {
         .then(games => {
           this.game = games[0];
         })
-        .finally(() => { });
+        .finally(() => {});
     });
 
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: "mapbox://styles/mapbox/streets-v9",
+      style: document.body.classList.contains("dark")
+        ? "mapbox://styles/mapbox/dark-v9"
+        : "mapbox://styles/mapbox/streets-v9",
       center: [8, 51.8],
       zoom: 2
     });
@@ -131,6 +139,10 @@ export class PlayingGamePage implements OnInit {
     // watch.subscribe(async pos => {
     window.navigator.geolocation.watchPosition(
       pos => {
+        this.trackerService.addWaypoint({
+          position: pos,
+          compassHeading: this.compassHeading
+        });
         this.lastKnownPosition = pos;
         if (this.task) {
           if (this.task.type.includes("nav")) {
@@ -231,6 +243,10 @@ export class PlayingGamePage implements OnInit {
 
     this.map.on("click", e => {
       console.log("click");
+      this.trackerService.addEvent({
+        type: "ON_MAP_CLICKED",
+        event: JSON.parse(JSON.stringify(e.latLng))
+      });
       if (
         this.task.type == "theme-loc" ||
         (this.task.settings["answer-type"] &&
@@ -333,13 +349,36 @@ export class PlayingGamePage implements OnInit {
   }
 
   initGame() {
-    this.task = this.game.tasks[this.taskIndex];
+    const tasks = this.game.tasks;
+
+    var bounds = new mapboxgl.LngLatBounds();
+
+    tasks.forEach(task => {
+      if (task.settings.point)
+        bounds.extend(task.settings.point.geometry.coordinates);
+    });
+
+    try {
+      this.map.fitBounds(bounds, { padding: 40, duration: 2000 });
+    } catch (e) {
+      console.log("Warning: Can not set bounds", bounds);
+    }
+    this.task = tasks[this.taskIndex];
+    console.log("initializing trackerService");
+    this.trackerService.init(this.game._id, this.device);
+    this.trackerService.addEvent({
+      type: "INIT_GAME"
+    });
     this.initTask();
   }
 
   initTask() {
     console.log("Current task: ", this.task);
     this._initMapFeatures();
+    this.trackerService.addEvent({
+      type: "INIT_TASK",
+      task: this.task
+    });
 
     if (this.task.type.includes("theme")) {
       this.task.settings.text = this.task.settings[
@@ -347,15 +386,20 @@ export class PlayingGamePage implements OnInit {
       ].settings.text;
     }
     if (!this.task.type.includes("theme")) {
-      new mapboxgl.Marker()
-        .setLngLat(
-          this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
-        )
-        .addTo(this.map);
+      if (this.task.settings.point != null) {
+        new mapboxgl.Marker()
+          .setLngLat(
+            this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
+          )
+          .addTo(this.map);
+      }
     }
   }
 
   onWaypointReached() {
+    this.trackerService.addEvent({
+      type: "WAYPOINT_REACHED"
+    });
     this.nextTask();
   }
 
@@ -363,6 +407,15 @@ export class PlayingGamePage implements OnInit {
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
       this.showSuccess = true;
+      this.trackerService.addEvent({
+        type: "FINISHED_GAME"
+      });
+      this.trackerService.uploadTrack().then(res => {
+        if (res.status == 200) {
+          console.log(res);
+          this.uploadDone = true;
+        }
+      });
       navigator.vibrate([300, 300, 300]);
       return;
     }
@@ -390,6 +443,14 @@ export class PlayingGamePage implements OnInit {
         clickPosition.lat,
         clickPosition.lng
       );
+
+      this.trackerService.addAnswer({
+        task: this.task,
+        answer: {
+          distance: distance
+        }
+      });
+
       if (distance < 20) {
         this.nextTask();
       } else {
@@ -416,6 +477,14 @@ export class PlayingGamePage implements OnInit {
         clickPosition.lat,
         clickPosition.lng
       );
+
+      this.trackerService.addAnswer({
+        task: this.task,
+        answer: {
+          distance: distance
+        }
+      });
+
       if (distance < 20) {
         this.nextTask();
       } else {
@@ -427,7 +496,7 @@ export class PlayingGamePage implements OnInit {
         });
         toast.present();
       }
-    } else if (this.task.type == 'info') {
+    } else if (this.task.type == "info") {
       this.nextTask();
     } else {
       // TODO: disable button
@@ -469,9 +538,9 @@ export class PlayingGamePage implements OnInit {
     var a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(this.deg2rad(lat1)) *
-      Math.cos(this.deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c * 1000; // Distance in km
     return d; // distance in m
@@ -504,110 +573,128 @@ export class PlayingGamePage implements OnInit {
   _initMapFeatures() {
     const mapFeatures = this.task.settings.mapFeatures;
     console.log(mapFeatures);
+    if (mapFeatures != undefined) {
+      for (let key in mapFeatures) {
+        if (mapFeatures.hasOwnProperty(key)) {
+          console.log(key + " -> " + mapFeatures[key]);
+          switch (key) {
+            case "zoombar":
+              if (mapFeatures[key]) {
+                this.map.addControl(this.zoomControl);
+              } else {
+                try {
+                  // this.map.remove(this.zoomControl);
+                } catch (e) {
+                  console.log("Error: Remove zoomControl", e);
+                }
+              }
+              break;
+            case "pan":
+              this.panCenter = false; // Reset value
+              if (mapFeatures[key] == "true") {
+                this.map.dragPan.enable();
+              } else if (mapFeatures[key] == "center") {
+                this.panCenter = true;
+              } else if (mapFeatures[key] == "static") {
+                this.map.dragPan.disable();
+                this.map.scrollZoom.disable();
+                this.map.doubleClickZoom.disable();
+                this.map.touchZoomRotate.disable();
+              }
+              break;
+            case "rotation":
+              this.autoRotate = false;
 
-    for (let key in mapFeatures) {
-      if (mapFeatures.hasOwnProperty(key)) {
-        console.log(key + " -> " + mapFeatures[key]);
-        switch (key) {
-          case "zoombar":
-            if (mapFeatures[key]) {
-              this.map.addControl(this.zoomControl);
-            }
-            break;
-          case "pan":
-            this.panCenter = false; // Reset value
-            if (mapFeatures[key] == "true") {
-              this.map.dragPan.enable();
-            } else if (mapFeatures[key] == "center") {
-              this.panCenter = true;
-            } else if (mapFeatures[key] == "static") {
-              this.map.dragPan.disable();
-              this.map.scrollZoom.disable();
-              this.map.doubleClickZoom.disable();
-              this.map.touchZoomRotate.disable();
-            }
-            break;
-          case "rotation":
-            this.autoRotate = false;
+              if (mapFeatures[key] == "manual") {
+                // // disable map rotation using right click + drag
+                // this.map.dragRotate.enable();
+                // // disable map rotation using touch rotation gesture
+                // this.map.touchZoomRotate.enableRotation();
+                // this.map.doubleClickZoom.enable();
+              } else if (mapFeatures[key] == "auto") {
+                this.autoRotate = true;
+              } else if (mapFeatures[key] == "button") {
+                // TODO: implememt
+              } else if (mapFeatures[key] == "north") {
+                this.map.setBearing(0);
+                this.map.dragRotate.disable();
+                this.map.touchZoomRotate.disableRotation();
+              }
+              break;
+            case "material":
+              this.swipe = false;
 
-            if (mapFeatures[key] == "manual") {
-              // // disable map rotation using right click + drag
-              // this.map.dragRotate.enable();
-              // // disable map rotation using touch rotation gesture
-              // this.map.touchZoomRotate.enableRotation();
-              // this.map.doubleClickZoom.enable();
-            } else if (mapFeatures[key] == "auto") {
-              this.autoRotate = true;
-            } else if (mapFeatures[key] == "button") {
-              // TODO: implememt
-            } else if (mapFeatures[key] == "north") {
-              this.map.setBearing(0);
-              this.map.dragRotate.disable();
-              this.map.touchZoomRotate.disableRotation();
-            }
-            break;
-          case "material":
-            if (mapFeatures[key] == "standard") {
-              this.map.setStyle("mapbox://styles/mapbox/streets-v9");
-            } else if (mapFeatures[key] == "selection") {
-              this.map.addControl(this.styleSwitcherControl);
-            } else if (mapFeatures[key] == "sat") {
-              this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
-            } else if (mapFeatures[key] == "sat-button") {
-              // TODO: implememt
-            } else if (mapFeatures[key] == "sat-swipe") {
-              this.swipe = true;
-              this.changeDetectorRef.detectChanges();
-
-              const satMap = new mapboxgl.Map({
-                container: this.swipeMapContainer.nativeElement,
-                style: "mapbox://styles/mapbox/satellite-v9",
-                center: [8, 51.8],
-                zoom: 2
-              });
-
-              new MapboxCompare(this.map, satMap);
-            } else if (mapFeatures[key] == "3D") {
-              this.autoRotate = true;
-              addEventListener("deviceorientation", this._orientTo, false);
-              this._add3DBuildingsLayer();
-            } else if (mapFeatures[key] == "3D-button") {
-              this._add3DBuildingsLayer();
-            }
-            break;
-          case "position":
-            if (mapFeatures[key] == "none") {
-              // TODO: implement ?
-            } else if (mapFeatures[key] == "true") {
-              this.map.addControl(this.geolocateControl);
-              this.geolocateControl.trigger();
-            } else if (mapFeatures[key] == "button") {
-              // TODO: implement
-            } else if (mapFeatures[key] == "start") {
-              // TODO: implement
-            }
-            break;
-          case "direction":
-            this.directionArrow = false;
-            if (mapFeatures[key] == "none") {
-              // TODO: implement ?
-            } else if (mapFeatures[key] == "true") {
-              this.directionArrow = true;
-            } else if (mapFeatures[key] == "button") {
-              // TODO: implement
-            } else if (mapFeatures[key] == "start") {
-              // TODO: implement
-            }
-            break;
-          case "track":
-            if (mapFeatures[key]) {
-              this.track = true;
-            }
-            break;
-          case "streetSection":
-            if (mapFeatures[key]) {
-              this.streetSection = true;
-            }
+              const elem = document.getElementsByClassName("mapboxgl-compare");
+              while (elem.length > 0) elem[0].remove();
+              this.autoRotate = false;
+              if (mapFeatures[key] == "standard") {
+                if (document.body.classList.contains("dark")) {
+                  this.map.setStyle("mapbox://styles/mapbox/dark-v9");
+                } else {
+                  this.map.setStyle("mapbox://styles/mapbox/streets-v9");
+                }
+              } else if (mapFeatures[key] == "selection") {
+                this.map.addControl(this.styleSwitcherControl);
+              } else if (mapFeatures[key] == "sat") {
+                this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
+              } else if (mapFeatures[key] == "sat-button") {
+                // TODO: implememt
+              } else if (mapFeatures[key] == "sat-swipe") {
+                this.swipe = true;
+                this.changeDetectorRef.detectChanges();
+                const satMap = new mapboxgl.Map({
+                  container: this.swipeMapContainer.nativeElement,
+                  style: "mapbox://styles/mapbox/satellite-v9",
+                  center: [8, 51.8],
+                  zoom: 2
+                });
+                new MapboxCompare(this.map, satMap);
+              } else if (mapFeatures[key] == "3D") {
+                this.autoRotate = true;
+                addEventListener("deviceorientation", this._orientTo, false);
+                this._add3DBuildingsLayer();
+              } else if (mapFeatures[key] == "3D-button") {
+                this._add3DBuildingsLayer();
+              }
+              break;
+            case "position":
+              if (mapFeatures[key] == "none") {
+                // TODO: implement ?
+              } else if (mapFeatures[key] == "true") {
+                this.map.addControl(this.geolocateControl);
+                this.geolocateControl.trigger();
+              } else if (mapFeatures[key] == "button") {
+                // TODO: implement
+              } else if (mapFeatures[key] == "start") {
+                // TODO: implement
+              }
+              break;
+            case "direction":
+              this.directionArrow = false;
+              if (mapFeatures[key] == "none") {
+                // TODO: implement ?
+              } else if (mapFeatures[key] == "true") {
+                this.directionArrow = true;
+              } else if (mapFeatures[key] == "button") {
+                // TODO: implement
+              } else if (mapFeatures[key] == "start") {
+                // TODO: implement
+              }
+              break;
+            case "track":
+              if (mapFeatures[key]) {
+                this.track = true;
+              } else {
+                this.track = false;
+              }
+              break;
+            case "streetSection":
+              if (mapFeatures[key]) {
+                this.streetSection = true;
+              } else {
+                this.streetSection = false;
+              }
+          }
         }
       }
     }

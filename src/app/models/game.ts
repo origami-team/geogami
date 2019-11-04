@@ -1,10 +1,8 @@
 export class Game {
-
-    constructor(
-        public id: number,
-        public name: string,
-        public tracking: boolean,
-        public tasks: any[],
-    ) { }
-
+  constructor(
+    public _id: number,
+    public name: string,
+    public tracking: boolean,
+    public tasks: any[]
+  ) {}
 }

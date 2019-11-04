@@ -6,54 +6,95 @@
       </ion-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
-    <ion-text slot="end" *ngIf="task">
-      {{ taskIndex + 1 }} von {{ game.tasks.length }}
-    </ion-text>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content forceOverscroll="false">
   <div class="wrapper" [class.blur]="showSuccess">
-    <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div>
+    <div
+      #map
+      class="map"
+      [class.blur]="task != null && task.type == 'nav-arrow'"
+    ></div>
     <div *ngIf="swipe" #swipeMap class="map"></div>
 
-    <ion-card class="overlay task-control ion-padding" [class.full]="task.type == 'nav-arrow'" *ngIf="task" [ngStyle]="{
-        'flex-wrap': ['nav-arrow', 'theme-object'].includes(task.type)
-          ? 'wrap'
-          : 'nowrap'
-      }">
-      <div class="compass" *ngIf="task.type == 'nav-arrow'">
-        <img src="/assets/icons/compass.png" [ngStyle]="{
-            transform: 'rotate(' + targetHeading + 'deg)'
-          }" />
-        <p>Distanz: {{ Math.round(targetDistance) }} m</p>
+    <ion-card
+      class="overlay task-control ion-padding"
+      [class.full]="task.type == 'nav-arrow'"
+      *ngIf="task"
+    >
+      <div class="top-info">
+        <ion-chip color="primary" *ngIf="task.type.includes('nav')">
+          <ion-icon name="navigate"></ion-icon>
+        </ion-chip>
+        <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
+          <ion-icon name="clipboard"></ion-icon>
+        </ion-chip>
+        <ion-chip color="medium" *ngIf="task.type.includes('module')">
+          <ion-icon name="list"></ion-icon>
+        </ion-chip>
+        <ion-chip color="warning" *ngIf="task.type.includes('info')">
+          <ion-icon name="information-circle-outline"></ion-icon>
+        </ion-chip>
+        <p>Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p>
       </div>
-      <div class="photo-container" *ngIf="
-          task.type == 'theme-object' &&
-          task.settings['question-type'].name == 'photo'
-        ">
-        <img [src]="task.settings['question-type'].settings.photo" />
-      </div>
-      <div class="task-text">
-        <p>
-          {{ task.settings.text }}
-        </p>
-        <p *ngIf="task.settings.confirmation">
-          Bestätige mit OK
-        </p>
-      </div>
+      <div
+        class="task-wrapper"
+        [ngStyle]="{
+          'flex-wrap': ['nav-arrow', 'theme-object'].includes(task.type)
+            ? 'wrap'
+            : 'nowrap'
+        }"
+      >
+        <div class="compass" *ngIf="task.type == 'nav-arrow'">
+          <img
+            src="/assets/icons/compass.png"
+            [ngStyle]="{
+              transform: 'rotate(' + targetHeading + 'deg)'
+            }"
+          />
+          <p>Distanz: {{ Math.round(targetDistance) }} m</p>
+        </div>
+        <div
+          class="photo-container"
+          *ngIf="
+            task.type == 'theme-object' &&
+            task.settings['question-type'].name == 'photo'
+          "
+        >
+          <img [src]="task.settings['question-type'].settings.photo" />
+        </div>
+        <div class="task-text">
+          <p>
+            {{ task.settings.text }}
+          </p>
+          <p *ngIf="task.settings.confirmation">
+            Bestätige mit OK
+          </p>
+        </div>
 
-      <ion-button class="confirm" (click)="onOkClicked()" *ngIf="task.settings.confirmation">OK
-      </ion-button>
+        <ion-button
+          class="confirm"
+          (click)="onOkClicked()"
+          *ngIf="task.settings.confirmation"
+          >OK
+        </ion-button>
+      </div>
     </ion-card>
   </div>
 
   <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch</h3>
     <p>Du hast das Spiel beendet</p>
-    <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
+    <lottie-animation-view
+      [options]="lottieConfig"
+      [width]="300"
+      [height]="300"
+    >
     </lottie-animation-view>
-    <ion-button (click)="navigateHome()">Fertig</ion-button>
+    <ion-button (click)="navigateHome()" [disabled]="!uploadDone"
+      >Fertig</ion-button
+    >
   </ion-card>
 
   <!-- <div class="overlay ion-padding" *ngIf="currentTask">

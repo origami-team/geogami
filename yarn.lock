@@ -946,6 +946,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/device@^5.16.0":
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/device/-/device-5.16.0.tgz#f1cfc472e18240a9b52fc69a204dfcc6b079b773"
+  integrity sha512-pQQn0YcYCTu+lVhOvIxmvE3XU21CGQrmwr/w7M0Mf8T9h+6bB9o6OMF1Q2WmbXtx3MeEGVB4HopGQ+ZDQL35MQ==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/geolocation@^5.11.0":
   version "5.15.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/geolocation/-/geolocation-5.15.0.tgz#99b69d111ce62007e5bfc01102445d055a0d48c0"
@@ -5883,10 +5890,10 @@ mapbox-gl@^0.50.0:
     tinyqueue "^1.1.0"
     vt-pbf "^3.0.1"
 
-mapbox-gl@^1.1.0:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-1.4.1.tgz#e08c816f406017ebe22c56fbd92e8fcb56af5592"
-  integrity sha512-4Jkf1JjsBFKlZA3BHHghgIogbbOuodjVjsdOR/j4AtfLx0G4jXrPcGvwSEVcwyQ27kVECBCn6EyRb6eUNUQujw==
+mapbox-gl@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-1.5.0.tgz#d531dcecc01b4e209466f03ffd3d0209fe248123"
+  integrity sha512-seTQUttE7XaL93on+zfLv06HmROsIdTh3riEPrBdbylSirLmBRnofG+iV873ZbJQElf+d2USyHpWAJm37RehEQ==
   dependencies:
     "@mapbox/geojson-rewind" "^0.4.0"
     "@mapbox/geojson-types" "^1.0.2"
@@ -5904,7 +5911,7 @@ mapbox-gl@^1.1.0:
     grid-index "^1.1.0"
     minimist "0.0.8"
     murmurhash-js "^1.0.0"
-    pbf "^3.0.5"
+    pbf "^3.2.1"
     potpack "^1.0.1"
     quickselect "^2.0.0"
     rw "^1.3.3"
@@ -6945,7 +6952,7 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-pbf@^3.0.4, pbf@^3.0.5:
+pbf@^3.0.4, pbf@^3.0.5, pbf@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/pbf/-/pbf-3.2.1.tgz#b4c1b9e72af966cd82c6531691115cc0409ffe2a"
   integrity sha512-ClrV7pNOn7rtmoQVF4TS1vyU0WhYRnP92fzbfF75jAIwpnzdJXf8iTd4CMEqO4yUenH6NDqLiwjqlh6QgZzgLQ==

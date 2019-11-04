@@ -1,56 +1,58 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { RouteReuseStrategy } from "@angular/router";
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
 
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
 
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
-import { PopoverComponent } from './popover/popover.component';
+import { PopoverComponent } from "./popover/popover.component";
 
 // Modals
-import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page'
-import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page'
-import { MapFeaturesModalPage } from './pages/create-game/map-features-modal/map-features-modal.page'
-import { CreateInfoModalComponent } from './pages/create-game/create-info-modal/create-info-modal.component'
+import { CreateTaskModalPage } from "./pages/create-game/create-task-modal/create-task-modal.page";
+import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/create-module-modal.page";
+import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
+import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
 
+import { InfoComponent } from "./form-elements/info/info.component";
+import { TextInputComponent } from "./form-elements/text-input/text-input.component";
+import { MapComponent } from "./form-elements/map/map.component";
+import { CameraComponent } from "./form-elements/camera/camera.component";
 
-import { InfoComponent } from './form-elements/info/info.component'
-import { TextInputComponent } from './form-elements/text-input/text-input.component'
-import { MapComponent } from './form-elements/map/map.component'
-import { CameraComponent } from './form-elements/camera/camera.component'
+import { PhotoUploadComponent } from "./form-elements/photo-upload/photo-upload.component";
 
-import { PhotoUploadComponent } from './form-elements/photo-upload/photo-upload.component'
+import { Geolocation } from "@ionic-native/geolocation/ngx";
 
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Camera } from "@ionic-native/camera/ngx";
 
-import { Camera } from '@ionic-native/camera/ngx';
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  DeviceOrientation,
+  DeviceOrientationCompassHeading
+} from "@ionic-native/device-orientation/ngx";
+import { DynamicFieldDirective } from "./form-elements/dynamic-field.directive";
 
-import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
-import { DynamicFieldDirective } from './form-elements/dynamic-field.directive';
+import { DynamicFormModule } from "./dynamic-form/dynamic-form.module";
 
-import { DynamicFormModule } from './dynamic-form/dynamic-form.module'
-
-import { LottieAnimationViewModule } from 'ng-lottie';
+import { LottieAnimationViewModule } from "ng-lottie";
+import { Device } from "@ionic-native/device/ngx";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
-
 
 @NgModule({
   declarations: [
@@ -65,7 +67,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     // InfoComponent,
     // TextInputComponent,
     // MapComponent,
-    CameraComponent,
+    CameraComponent
     // form components ⬆️
   ],
   entryComponents: [
@@ -91,7 +93,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
+  ],
   providers: [
     StatusBar,
     SplashScreen,
@@ -99,8 +104,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     Geolocation,
     // Geofence,
     Camera,
-    DeviceOrientation
+    DeviceOrientation,
+    Device
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
