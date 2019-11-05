@@ -25,6 +25,7 @@ export class TrackerService {
   }
 
   addWaypoint(waypoint) {
+    console.log(waypoint);
     this.waypoints.push({
       ...waypoint,
       timestamp: new Date().toISOString()

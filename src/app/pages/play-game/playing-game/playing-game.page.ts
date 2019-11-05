@@ -23,6 +23,7 @@ import {
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
 import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-playing-game",
@@ -90,6 +91,9 @@ export class PlayingGamePage implements OnInit {
 
   uploadDone: boolean = false;
 
+  positionWatch: any;
+  deviceOrientationSubscription: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private geolocation: Geolocation,
@@ -137,10 +141,22 @@ export class PlayingGamePage implements OnInit {
     // const watch = this.geolocation.watchPosition();
 
     // watch.subscribe(async pos => {
-    window.navigator.geolocation.watchPosition(
+    this.positionWatch = window.navigator.geolocation.watchPosition(
       pos => {
+        console.log(pos);
         this.trackerService.addWaypoint({
-          position: pos,
+          position: {
+            coordinates: {
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude,
+              altitude: pos.coords.altitude,
+              accuracy: pos.coords.accuracy,
+              altitudeAccuracy: pos.coords.altitudeAccuracy,
+              heading: pos.coords.heading,
+              speed: pos.coords.speed
+            },
+            timestamp: pos.timestamp
+          },
           compassHeading: this.compassHeading
         });
         this.lastKnownPosition = pos;
@@ -242,10 +258,14 @@ export class PlayingGamePage implements OnInit {
     });
 
     this.map.on("click", e => {
+      console.log(e);
       console.log("click");
       this.trackerService.addEvent({
         type: "ON_MAP_CLICKED",
-        event: JSON.parse(JSON.stringify(e.latLng))
+        position: {
+          latitude: e.lngLat.lat,
+          longitude: e.lngLat.lng
+        }
       });
       if (
         this.task.type == "theme-loc" ||
@@ -272,7 +292,7 @@ export class PlayingGamePage implements OnInit {
     });
 
     // rotation
-    this.deviceOrientation
+    this.deviceOrientationSubscription = this.deviceOrientation
       .watchHeading()
       .subscribe((data: DeviceOrientationCompassHeading) => {
         this.compassHeading = data.magneticHeading;
@@ -528,6 +548,8 @@ export class PlayingGamePage implements OnInit {
   }
 
   navigateHome() {
+    navigator.geolocation.clearWatch(this.positionWatch);
+    this.deviceOrientationSubscription.unsubscribe();
     this.navCtrl.navigateRoot("/");
   }
 
