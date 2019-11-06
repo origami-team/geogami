@@ -523,7 +523,10 @@ export class PlayingGamePage implements OnInit {
       this.task.type == "theme-object" &&
       this.task.settings["question-type"].name == "description"
     ) {
-      if (this.task.settings["answer-type"].name == "take-photo") {
+      if (
+        this.task.settings["answer-type"] &&
+        this.task.settings["answer-type"].name == "take-photo"
+      ) {
         if (this.photo == "") {
           const toast = await this.toastController.create({
             message: "Bitte mache ein Foto",
