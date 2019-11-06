@@ -110,5 +110,5 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-geolocation" spec="~4.0.2" />
     <plugin name="cordova-plugin-camera" spec="~4.1.0" />
-    <allow-navigation href="http://localhost:8100" sessionid="a085777e" />
+    <allow-navigation href="http://localhost:8100" sessionid="9e6f25d0" />
 </widget>

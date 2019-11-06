@@ -1,12 +1,19 @@
-import { Component, Input, OnInit, SimpleChanges, ViewChild, AfterViewInit } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  AfterViewInit
+} from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
 import navtasks from "../../../models/navtasks.js";
 import themetasks from "./../../../models/themetasks.js";
 
-import { FieldConfig } from './../../../dynamic-form/models/field-config'
-import { DynamicFormComponent } from './../../../dynamic-form/container/dynamic-form.component';
-import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
+import { FieldConfig } from "./../../../dynamic-form/models/field-config";
+import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
+import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
 
 @Component({
   selector: "app-create-task-modal",
@@ -18,22 +25,23 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   @Input() type: string = "nav";
   @Input() task: any;
 
-  @ViewChild(DynamicFormComponent, { static: false }) form: DynamicFormComponent;
+  @ViewChild(DynamicFormComponent, { static: false })
+  form: DynamicFormComponent;
 
-  config: FieldConfig[]
+  config: FieldConfig[];
 
-  tasks: any[]
-  selectedTask: any
-  confirmation: boolean = false
-  mapFeatures: any[]
+  tasks: any[];
+  selectedTask: any;
+  confirmation: boolean = false;
+  mapFeatures: any[];
 
-  constructor(public modalController: ModalController) { }
+  constructor(public modalController: ModalController) {}
 
   ngOnInit() {
     this.tasks = this.type == "nav" ? navtasks : themetasks;
 
     if (this.task) {
-      this.onTaskSelected(this.task)
+      this.onTaskSelected(this.task);
     } else {
       this.onTaskSelected(this.tasks[0]);
     }
@@ -42,22 +50,25 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   onTaskSelected(newValue) {
     this.selectedTask = newValue;
     console.log(this.selectedTask);
-    this.config = this.selectedTask.developer
+    this.config = this.selectedTask.developer;
 
-    if (["nav-flag", "theme-loc", "theme-object"].includes(this.selectedTask.type)) {
-      this.confirmation = true
+    if (
+      ["nav-flag", "theme-loc", "theme-object", "theme-direction"].includes(
+        this.selectedTask.type
+      )
+    ) {
+      this.confirmation = true;
     } else {
-      this.confirmation = false
+      this.confirmation = false;
     }
   }
 
   ngAfterViewInit() {
-
     let previousValid = this.form.valid;
     this.form.changes.subscribe(() => {
       if (this.form.valid !== previousValid) {
         previousValid = this.form.valid;
-        this.form.setDisabled('submit', !previousValid);
+        this.form.setDisabled("submit", !previousValid);
       }
     });
   }
@@ -68,21 +79,21 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
 
   async presentMapFeaturesModal() {
     const modal = await this.modalController.create({
-      component: MapFeaturesModalPage,
+      component: MapFeaturesModalPage
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    this.mapFeatures = data.data
+    this.mapFeatures = data.data;
     return;
   }
 
-  dismissModal(dismissType: string = 'null') {
+  dismissModal(dismissType: string = "null") {
     if (dismissType == "close") {
       this.modalController.dismiss();
       return;
     }
 
-    console.log(this.form.value)
+    console.log(this.form.value);
 
     this.modalController.dismiss({
       dismissed: true,
@@ -90,7 +101,9 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
         ...this.selectedTask,
         settings: {
           ...this.form.value,
-          ['answer-type']: this.form.value['question-type'] ? this.form.value['question-type'].settings['answer-type'] : null,
+          ["answer-type"]: this.form.value["question-type"]
+            ? this.form.value["question-type"].settings["answer-type"]
+            : null,
           confirmation: this.confirmation,
           mapFeatures: this.mapFeatures
         }
