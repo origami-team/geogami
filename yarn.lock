@@ -960,6 +960,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/insomnia@^5.16.0":
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/insomnia/-/insomnia-5.16.0.tgz#383acc88ead0c0d93360fae0d633ee014aeb2faf"
+  integrity sha512-oRexR6UaVMEMBZOlCAGJmWPzepaTytLknz1bKUe6Z5zZ7zbLfj4mKeOPnKHtu/iZF2cLYCydCogIO+XF0jzbfA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/splash-screen@^5.0.0":
   version "5.15.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.15.0.tgz#34624f272cc7654977883a427aa3f5653e26032e"
@@ -971,6 +978,13 @@
   version "5.15.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-5.15.0.tgz#3ba29fb549886f797aee0eefcffc4be00b5c7a2d"
   integrity sha512-K4Vm20UB5kBfOSYPd51QBj/9zGIN1saaW0ZcM5YHlXb2GMs4Z2UUg7kGZ16wL3XCx2WkPhUk5+bjuWfbui0Mmg==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/vibration@^5.16.0":
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/vibration/-/vibration-5.16.0.tgz#9d627c5a989e55bdcfdde7d4fa0bf5d8ec8c0839"
+  integrity sha512-+gI1aXvSUz4IuDoS0ISNLiasuk0SuHo3jj2Lek6ddAJI1IhUlikr8VCcLxHWRkuW1gqXBPWbLAJNvHF5WQEkaA==
   dependencies:
     "@types/cordova" latest
 
@@ -2950,6 +2964,11 @@ cordova-plugin-statusbar@^2.4.2:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.4.3.tgz#cc557aef66c27484e0f7f045004040d03321f82d"
   integrity sha512-ThmXzl6QIKWFXf4wWw7Q/zpB+VKkz3VM958+5A0sXD4jmR++u7KnGttLksXshVwWr6lvGwUebLYtIyXwS4Ovcg==
+
+cordova-plugin-vibration@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-vibration/-/cordova-plugin-vibration-3.1.1.tgz#38fcdd9a7675cfb44d86339c1b2cb129017e9e00"
+  integrity sha512-qgv67Rueo4Pydfant3TwnXeFiN9dl+6lKMM6h5jYg9XewiGAGOr8vfWsTvQssC3m3xMKGS1ap3xPNH+BzZ4RMA==
 
 cordova-plugin-whitelist@^1.3.3:
   version "1.3.4"

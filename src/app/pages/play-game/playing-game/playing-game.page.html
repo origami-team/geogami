@@ -38,7 +38,8 @@
         </ion-chip>
         <p>Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p>
       </div>
-      <div
+      <div class="task-wrapper">
+        <!-- <div
         class="task-wrapper"
         [ngStyle]="{
           'flex-wrap': [
@@ -49,7 +50,7 @@
             ? 'wrap'
             : 'nowrap'
         }"
-      >
+      > -->
         <div class="compass large" *ngIf="task.type == 'nav-arrow'">
           <img
             src="/assets/icons/compass.svg"
@@ -59,6 +60,7 @@
           />
           <p>Distanz: {{ Math.round(targetDistance) }} m</p>
         </div>
+
         <div
           class="task-wrapper"
           [ngStyle]="{

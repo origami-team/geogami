@@ -9,8 +9,7 @@ import { Game } from "../../../models/game";
 import { GameFactoryService } from "../../../services/game-factory.service";
 
 import { PopoverComponent } from "../../../popover/popover.component";
-import { GamesService } from 'src/app/services/games.service';
-
+import { GamesService } from "src/app/services/games.service";
 
 @Component({
   selector: "app-create-game-overview",
@@ -18,10 +17,10 @@ import { GamesService } from 'src/app/services/games.service';
   styleUrls: ["./create-game-overview.page.scss"]
 })
 export class CreateGameOverviewPage implements OnInit {
-  public model = this.gameFactory.getGame()
+  public model = this.gameFactory.getGame();
   public lottieConfig: Object;
-  showSuccess: boolean = false
-  showUpload: boolean = false
+  showSuccess: boolean = false;
+  showUpload: boolean = false;
 
   constructor(
     public popoverController: PopoverController,
@@ -30,8 +29,8 @@ export class CreateGameOverviewPage implements OnInit {
     public gamesService: GamesService
   ) {
     this.lottieConfig = {
-      path: 'assets/lottie/astronaut.json',
-      renderer: 'canvas',
+      path: "assets/lottie/astronaut.json",
+      renderer: "canvas",
       autoplay: true,
       loop: true
     };
@@ -39,7 +38,7 @@ export class CreateGameOverviewPage implements OnInit {
 
   // #0a1b28
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   async showTrackingInfo(ev: any, text: string) {
     console.log(ev);
@@ -54,17 +53,21 @@ export class CreateGameOverviewPage implements OnInit {
 
   uploadGame() {
     this.gameFactory.addGameInformation(this.model);
-    console.log(this.gameFactory.game)
+    console.log(this.gameFactory.game);
 
-    this.showUpload = true
-    this.gamesService.postGame(this.gameFactory.game).then(res => {
-      if (res.status == 200) {
-        this.showSuccess = true
-      }
-    }).catch(e => console.error(e))
+    this.showUpload = true;
+    this.gamesService
+      .postGame(this.gameFactory.game)
+      .then(res => {
+        if (res.status == 200) {
+          this.showSuccess = true;
+          this.gameFactory.flushGame();
+        }
+      })
+      .catch(e => console.error(e));
   }
 
   navigateHome() {
-    this.navCtrl.navigateRoot('/')
+    this.navCtrl.navigateRoot("/");
   }
 }

@@ -114,6 +114,15 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
         e.preventDefault();
       }
       if (this.config.featureType == "direction") {
+        let bearing = this.map.getBearing();
+
+        while (bearing > 360) {
+          bearing = bearing - 360;
+        }
+        while (bearing < 0) {
+          bearing = bearing + 360;
+        }
+
         this.group.patchValue({ [this.config.name]: this.map.getBearing() });
       }
     });

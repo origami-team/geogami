@@ -49,6 +49,9 @@ import { DynamicFormModule } from "./dynamic-form/dynamic-form.module";
 import { LottieAnimationViewModule } from "ng-lottie";
 import { Device } from "@ionic-native/device/ngx";
 
+import { Insomnia } from "@ionic-native/insomnia/ngx";
+import { Vibration } from "@ionic-native/vibration/ngx";
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -105,7 +108,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     // Geofence,
     Camera,
     DeviceOrientation,
-    Device
+    Device,
+    Insomnia,
+    Vibration
   ],
   bootstrap: [AppComponent]
 })

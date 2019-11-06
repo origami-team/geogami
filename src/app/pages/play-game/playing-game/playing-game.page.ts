@@ -25,6 +25,9 @@ import { Game } from "src/app/models/game";
 import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 import { Subscription } from "rxjs";
 
+import { Insomnia } from "@ionic-native/insomnia/ngx";
+import { Vibration } from "@ionic-native/vibration/ngx";
+
 @Component({
   selector: "app-playing-game",
   templateUrl: "./playing-game.page.html",
@@ -97,7 +100,6 @@ export class PlayingGamePage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private geolocation: Geolocation,
     public modalController: ModalController,
     public toastController: ToastController,
     private gamesService: GamesService,
@@ -106,7 +108,9 @@ export class PlayingGamePage implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private OSMService: OsmService,
     private trackerService: TrackerService,
-    private device: Device
+    private device: Device,
+    private insomnia: Insomnia,
+    private vibration: Vibration
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -367,6 +371,10 @@ export class PlayingGamePage implements OnInit {
         coordinates: []
       }
     };
+
+    this.insomnia
+      .keepAwake()
+      .then(() => console.log("success"), () => console.log("error"));
   }
 
   initGame() {
@@ -394,6 +402,7 @@ export class PlayingGamePage implements OnInit {
   }
 
   initTask() {
+    this.vibration.vibrate([100, 100, 100]);
     console.log("Current task: ", this.task);
     this._initMapFeatures();
     this.trackerService.addEvent({
@@ -444,14 +453,16 @@ export class PlayingGamePage implements OnInit {
           this.uploadDone = true;
         }
       });
-      navigator.vibrate([300, 300, 300]);
+      this.vibration.vibrate([300, 300, 300]);
+      this.insomnia
+        .allowSleepAgain()
+        .then(() => console.log("success"), () => console.log("error"));
       return;
     }
 
     this.task = this.game.tasks[this.taskIndex];
     this.initTask();
     console.log(this.taskIndex, this.task);
-    navigator.vibrate([100, 100, 100]);
   }
 
   async onOkClicked() {
@@ -623,11 +634,10 @@ export class PlayingGamePage implements OnInit {
 
   _initMapFeatures() {
     const mapFeatures = this.task.settings.mapFeatures;
-    console.log(mapFeatures);
+    console.log("MapFeatures: ", mapFeatures);
     if (mapFeatures != undefined) {
       for (let key in mapFeatures) {
         if (mapFeatures.hasOwnProperty(key)) {
-          console.log(key + " -> " + mapFeatures[key]);
           switch (key) {
             case "zoombar":
               if (mapFeatures[key]) {

@@ -8,7 +8,7 @@ import { Game } from "./../models/game";
 export class GameFactoryService {
   public game: Game;
 
-  constructor() { }
+  constructor() {}
 
   addGameInformation(data: any) {
     this.game = {
@@ -40,13 +40,12 @@ export class GameFactoryService {
 
   getGame() {
     if (!this.game) {
-      this.game = new Game(
-        Math.floor(Date.now() / 1000),
-        "",
-        true,
-        [],
-      );
+      this.game = new Game(Math.floor(Date.now() / 1000), "", true, []);
     }
     return this.game;
+  }
+
+  flushGame() {
+    this.game = undefined;
   }
 }
