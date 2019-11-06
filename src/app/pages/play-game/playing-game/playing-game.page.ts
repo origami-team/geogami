@@ -28,6 +28,8 @@ import { Subscription } from "rxjs";
 import { Insomnia } from "@ionic-native/insomnia/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 
+import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
+
 @Component({
   selector: "app-playing-game",
   templateUrl: "./playing-game.page.html",
@@ -98,6 +100,21 @@ export class PlayingGamePage implements OnInit {
   positionWatch: any;
   deviceOrientationSubscription: Subscription;
 
+  baseOptions: CameraOptions = {
+    quality: 50,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE,
+    correctOrientation: true
+  };
+
+  cameraOptions: CameraOptions = {
+    ...this.baseOptions,
+    sourceType: this.camera.PictureSourceType.CAMERA
+  };
+
+  photo: string;
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -110,7 +127,8 @@ export class PlayingGamePage implements OnInit {
     private trackerService: TrackerService,
     private device: Device,
     private insomnia: Insomnia,
-    private vibration: Vibration
+    private vibration: Vibration,
+    private camera: Camera
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -505,35 +523,56 @@ export class PlayingGamePage implements OnInit {
       this.task.type == "theme-object" &&
       this.task.settings["question-type"].name == "description"
     ) {
-      const targetPosition = this.task.settings["question-type"].settings[
-        "answer-type"
-      ].settings.point.geometry.coordinates;
-      const clickPosition = this.userSelectMarker._lngLat;
-
-      const distance = this.getDistanceFromLatLonInM(
-        targetPosition[1],
-        targetPosition[0],
-        clickPosition.lat,
-        clickPosition.lng
-      );
-
-      this.trackerService.addAnswer({
-        task: this.task,
-        answer: {
-          distance: distance
+      if (this.task.settings["answer-type"].name == "take-photo") {
+        if (this.photo == "") {
+          const toast = await this.toastController.create({
+            message: "Bitte mache ein Foto",
+            color: "dark",
+            showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        } else {
+          this.trackerService.addAnswer({
+            task: this.task,
+            answer: {
+              photo: this.photo
+            }
+          });
+          this.nextTask();
+          this.photo = "";
         }
-      });
-
-      if (distance < 20) {
-        this.nextTask();
       } else {
-        const toast = await this.toastController.create({
-          message: "Deine Eingabe ist falsch. Versuche es erneut",
-          color: "dark",
-          showCloseButton: true,
-          duration: 2000
+        const targetPosition = this.task.settings["question-type"].settings[
+          "answer-type"
+        ].settings.point.geometry.coordinates;
+        const clickPosition = this.userSelectMarker._lngLat;
+
+        const distance = this.getDistanceFromLatLonInM(
+          targetPosition[1],
+          targetPosition[0],
+          clickPosition.lat,
+          clickPosition.lng
+        );
+
+        this.trackerService.addAnswer({
+          task: this.task,
+          answer: {
+            distance: distance
+          }
         });
-        toast.present();
+
+        if (distance < 20) {
+          this.nextTask();
+        } else {
+          const toast = await this.toastController.create({
+            message: "Deine Eingabe ist falsch. Versuche es erneut",
+            color: "dark",
+            showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        }
       }
     } else if (this.task.type == "info") {
       this.nextTask();
@@ -630,6 +669,20 @@ export class PlayingGamePage implements OnInit {
     const brng = Math.atan2(y, x);
     const brngDeg = this.toDegrees(brng);
     return (brngDeg + 360) % 360;
+  }
+
+  capturePhoto() {
+    this.camera.getPicture(this.cameraOptions).then(
+      imageData => {
+        // imageData is either a base64 encoded string or a file URI
+        // If it's base64 (DATA_URL):
+        let base64Image = "data:image/jpeg;base64," + imageData;
+        this.photo = base64Image;
+      },
+      err => {
+        // Handle error
+      }
+    );
   }
 
   _initMapFeatures() {

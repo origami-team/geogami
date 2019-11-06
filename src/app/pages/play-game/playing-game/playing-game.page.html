@@ -107,6 +107,15 @@
           </p>
         </div>
 
+        <div *ngIf="task.settings['answer-type'].name == 'take-photo'">
+          <ion-thumbnail slot="start" *ngIf="photo">
+            <img [src]="photo" />
+          </ion-thumbnail>
+          <ion-button (click)="capturePhoto()"
+            ><ion-icon name="camera"></ion-icon
+          ></ion-button>
+        </div>
+
         <ion-button
           class="confirm"
           (click)="onOkClicked()"
