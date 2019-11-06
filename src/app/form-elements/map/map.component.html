@@ -1,8 +1,14 @@
 <ng-container>
-    <ion-text>
-        <h3>{{ config.label }} <ion-icon name="information-circle" (click)='showPopover($event, config.info)'>
-            </ion-icon>
-        </h3>
-    </ion-text>
-    <div #map class="map"></div>
+  <ion-text>
+    <h3>
+      {{ config.label }}
+      <ion-icon
+        name="information-circle"
+        (click)="showPopover($event, config.info)"
+      >
+      </ion-icon>
+    </h3>
+  </ion-text>
+  <div #map class="map"></div>
+  <div #marker class="marker" *ngIf="showDirectionMarker"></div>
 </ng-container>

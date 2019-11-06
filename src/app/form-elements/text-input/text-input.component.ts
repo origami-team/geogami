@@ -1,22 +1,28 @@
-import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 
-import { Field } from '../../dynamic-form/models/field';
-import { FieldConfig } from '../../dynamic-form/models/field-config';
-import { PopoverController } from '@ionic/angular';
-import { PopoverComponent } from 'src/app/popover/popover.component';
-
+import { Field } from "../../dynamic-form/models/field";
+import { FieldConfig } from "../../dynamic-form/models/field-config";
+import { PopoverController } from "@ionic/angular";
+import { PopoverComponent } from "src/app/popover/popover.component";
 
 @Component({
-  selector: 'app-text-input',
-  templateUrl: './text-input.component.html',
-  styleUrls: ['./text-input.component.scss'],
+  selector: "app-text-input",
+  templateUrl: "./text-input.component.html",
+  styleUrls: ["./text-input.component.scss"]
 })
-export class TextInputComponent implements Field {
+export class TextInputComponent implements Field, OnInit {
   config: FieldConfig;
   group: FormGroup;
 
-  constructor(public popoverController: PopoverController) { }
+  value: string;
+
+  constructor(public popoverController: PopoverController) {}
+
+  ngOnInit() {
+    // tslint:disable-next-line
+    this.group.patchValue({ [this.config.name]: this.config.text });
+  }
 
   async showPopover(ev: any, text: string) {
     console.log(ev);

@@ -83,6 +83,7 @@ export class PlayingGamePage implements OnInit {
   compassHeading: number = 0;
   targetHeading: number = 0;
   targetDistance: number = 0;
+  directionBearing: number = 0;
 
   showSuccess: boolean = false;
   public lottieConfig: Object;
@@ -143,7 +144,6 @@ export class PlayingGamePage implements OnInit {
     // watch.subscribe(async pos => {
     this.positionWatch = window.navigator.geolocation.watchPosition(
       pos => {
-        console.log(pos);
         this.trackerService.addWaypoint({
           position: {
             coordinates: {
@@ -413,6 +413,13 @@ export class PlayingGamePage implements OnInit {
           )
           .addTo(this.map);
       }
+    }
+
+    if (this.task.type == "theme-direction") {
+      console.log(this.task.settings["question-type"].settings.direction);
+      this.directionBearing = this.task.settings[
+        "question-type"
+      ].settings.direction;
     }
   }
 

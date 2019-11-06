@@ -1,4 +1,10 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  AfterViewInit,
+  ChangeDetectorRef
+} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 
 import mapboxgl from "mapbox-gl";
@@ -19,6 +25,9 @@ import { Feature } from "geojson";
 export class MapComponent implements OnInit, Field, AfterViewInit {
   @ViewChild("map", { static: false }) mapContainer;
   @ViewChild("hiddenInput", { static: false }) hiddenInput;
+  @ViewChild("marker", { static: false }) directionMarker;
+
+  showDirectionMarker: boolean = false;
 
   marker: mapboxgl.Marker;
   map: mapboxgl.Map;
@@ -27,10 +36,13 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
   config: FieldConfig;
   group: FormGroup;
 
-  constructor(public popoverController: PopoverController) { }
-  ngOnInit(): void { }
+  constructor(
+    public popoverController: PopoverController,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
+  ngOnInit(): void {}
 
-  ionViewDidEnter() { }
+  ionViewDidEnter() {}
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -78,7 +90,7 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
         minZoom: 20
       },
       trackUserLocation: true
-    })
+    });
     this.map.addControl(geolocate);
 
     this.map.on("click", e => {
@@ -104,15 +116,17 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
       if (this.config.featureType == "direction") {
         this.group.patchValue({ [this.config.name]: this.map.getBearing() });
       }
-    })
+    });
 
     this.map.on("load", () => {
-
-      geolocate.trigger()
+      geolocate.trigger();
 
       if (this.config.featureType == "direction") {
-        this.marker = new mapboxgl.Marker({
-          draggable: true
+        this.showDirectionMarker = true;
+        this.changeDetectorRef.detectChanges();
+
+        this.marker = new mapboxgl.Marker(this.directionMarker.nativeElement, {
+          offset: [0, -30]
         })
           .setLngLat(this.map.getCenter())
           .addTo(this.map);

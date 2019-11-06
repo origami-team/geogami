@@ -1,4 +1,12 @@
 .map {
-    height: 200px;
-    border-radius: 1rem;
+  height: 200px;
+  border-radius: 1rem;
+}
+
+.marker {
+  background-image: url("/assets/icons/bearing.svg");
+  background-size: cover;
+  width: 50px;
+  height: 100px;
+  cursor: pointer;
 }

@@ -71,6 +71,20 @@
   .compass {
     text-align: center;
     flex: 0 0 100%;
+    position: relative;
+
+    &.bearing {
+      min-height: 150px;
+
+      > img {
+        position: absolute;
+        transform: translateX(-50%);
+      }
+    }
+
+    &.large {
+      margin-top: 50%;
+    }
 
     > img {
       height: 100%;

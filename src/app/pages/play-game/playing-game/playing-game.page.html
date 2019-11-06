@@ -41,19 +41,51 @@
       <div
         class="task-wrapper"
         [ngStyle]="{
-          'flex-wrap': ['nav-arrow', 'theme-object'].includes(task.type)
+          'flex-wrap': [
+            'nav-arrow',
+            'theme-object',
+            'theme-direction'
+          ].includes(task.type)
             ? 'wrap'
             : 'nowrap'
         }"
       >
-        <div class="compass" *ngIf="task.type == 'nav-arrow'">
+        <div class="compass large" *ngIf="task.type == 'nav-arrow'">
           <img
-            src="/assets/icons/compass.png"
+            src="/assets/icons/compass.svg"
             [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
             }"
           />
           <p>Distanz: {{ Math.round(targetDistance) }} m</p>
+        </div>
+        <div
+          class="task-wrapper"
+          [ngStyle]="{
+            'flex-wrap': [
+              'nav-arrow',
+              'theme-object',
+              'theme-direction'
+            ].includes(task.type)
+              ? 'wrap'
+              : 'nowrap'
+          }"
+        >
+          <div class="compass bearing" *ngIf="task.type == 'theme-direction'">
+            <img
+              src="/assets/icons/direction-bearing.svg"
+              [ngStyle]="{
+                transform:
+                  'translateX(-50%) rotate(' + directionBearing + 'deg)'
+              }"
+            />
+            <img
+              src="/assets/icons/compass.svg"
+              [ngStyle]="{
+                transform: 'translateX(-50%) rotate(' + compassHeading + 'deg)'
+              }"
+            />
+          </div>
         </div>
         <div
           class="photo-container"

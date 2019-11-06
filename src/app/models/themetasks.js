@@ -187,8 +187,8 @@ export default [
                             },
                             {
                                 "type": "map",
-                                "name": "point",
-                                "featureType": "point",
+                                "name": "direction",
+                                "featureType": "direction",
                                 "label": "Gewünschte Blickrichtung",
                                 "info": "Markiere die Richtung, in die der Spieler blicken soll, mit einem Klick auf der Karte. Die App wird den Spieler in diese Richtung „drehen“ und ihn daraufhin auffordern, seine neue Blickrichtung in die Karte einzuzeichnen",
                                 validation: [Validators.required]
