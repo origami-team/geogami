@@ -19,10 +19,12 @@
   <ion-text>
     <h3>Aufgabentyp</h3>
   </ion-text>
-  <select placeholder="Auswählen" [ngModel]="selectedTask" (ngModelChange)="onTaskSelected($event)">
-    <option [ngValue]="task" *ngFor="let task of tasks">{{
-            task.name
-          }}</option>
+  <select
+    placeholder="Auswählen"
+    [ngModel]="selectedTask"
+    (ngModelChange)="onTaskSelected($event)"
+  >
+    <option [ngValue]="task" *ngFor="let task of tasks">{{ task.name }}</option>
   </select>
 
   <dynamic-form [config]="config" #form (submit)="submit($event)">
@@ -34,6 +36,10 @@
   <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag'">
     <ion-label>Eingabebestätigung</ion-label>
     <ion-toggle [(ngModel)]="confirmation"></ion-toggle>
+  </ion-item>
+  <ion-item lines="none" *ngIf="selectedTask.type == 'nav-text'">
+    <ion-label>Zielfahne anzeigen</ion-label>
+    <ion-toggle [(ngModel)]="showMarker"></ion-toggle>
   </ion-item>
   <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
     <ion-label>

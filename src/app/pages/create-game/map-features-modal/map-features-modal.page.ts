@@ -1,5 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnChanges,
+  ChangeDetectorRef
+} from "@angular/core";
 import { ModalController } from "@ionic/angular";
+
+import mapboxgl from "mapbox-gl";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
+
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-map-features-modal",
@@ -7,6 +18,10 @@ import { ModalController } from "@ionic/angular";
   styleUrls: ["./map-features-modal.page.scss"]
 })
 export class MapFeaturesModalPage implements OnInit {
+  @ViewChild("map", { static: false }) mapContainer;
+
+  private draw: MapboxDraw;
+
   features: any = {
     zoombar: false,
     pan: "true",
@@ -17,12 +32,30 @@ export class MapFeaturesModalPage implements OnInit {
     track: false,
     streetSection: false,
     reducedInformation: false,
-    landmarks: false
+    landmarks: false,
+    landmarkFeatures: undefined
   };
 
-  constructor(public modalController: ModalController) {}
+  constructor(
+    public modalController: ModalController,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.changeDetectorRef.detectChanges();
+    mapboxgl.accessToken = environment.mapboxAccessToken;
+
+    const map = new mapboxgl.Map({
+      container: this.mapContainer.nativeElement,
+      style: "mapbox://styles/mapbox/streets-v9",
+      center: [8, 51.8],
+      zoom: 2
+    });
+
+    this.draw = new MapboxDraw();
+
+    map.addControl(this.draw, "top-left");
+  }
 
   dismissModal(dismissType: string = "null") {
     if (dismissType == "close") {
@@ -34,7 +67,10 @@ export class MapFeaturesModalPage implements OnInit {
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
       dismissed: true,
-      data: this.features
+      data: {
+        ...this.features,
+        landmarkFeatures: this.draw.getAll()
+      }
     });
   }
 }

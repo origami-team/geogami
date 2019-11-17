@@ -33,6 +33,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   tasks: any[];
   selectedTask: any;
   confirmation: boolean = false;
+  showMarker: boolean = true;
   mapFeatures: any[];
 
   constructor(public modalController: ModalController) {}
@@ -105,6 +106,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
             ? this.form.value["question-type"].settings["answer-type"]
             : null,
           confirmation: this.confirmation,
+          showMarker: this.showMarker,
           mapFeatures: this.mapFeatures
         }
       }

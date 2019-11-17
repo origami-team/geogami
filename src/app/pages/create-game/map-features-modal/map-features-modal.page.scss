@@ -1,17 +1,27 @@
 select {
-    border-radius: 3px;
-    cursor: pointer;
-    border: none;
-    background: var(--ion-item-background);
+  border-radius: 3px;
+  cursor: pointer;
+  border: none;
+  background: var(--ion-item-background);
 }
 
 select:focus {
-    outline: none;
+  outline: none;
 }
 
 select:disabled {
-    color: lightgrey;
+  color: lightgrey;
 }
 
-select { text-align-last: right; }
-option { direction: rtl; }
+select {
+  text-align-last: right;
+}
+option {
+  direction: rtl;
+}
+
+.map {
+  height: 300px;
+  width: 100%;
+  border-radius: 1rem;
+}

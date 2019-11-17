@@ -1,35 +1,35 @@
 <ion-label>Richtig</ion-label>
 <ion-item lines="none">
-  <ion-thumbnail slot="start" *ngIf="photo">
-    <img [src]="photo">
+  <ion-thumbnail slot="start" *ngIf="photos[0]">
+    <img [src]="photos[0]" />
   </ion-thumbnail>
-  <ion-button (click)=capturePhoto()>Foto aufnehmen</ion-button>
-  <ion-button (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
+  <ion-button (click)="capturePhoto(0)">Foto aufnehmen</ion-button>
+  <ion-button (click)="photoFromLibrary(0)">Foto aus Galerie</ion-button>
 </ion-item>
 
 <ion-label>Falsch</ion-label>
 <ion-item lines="none">
-  <ion-thumbnail slot="start" *ngIf="photo">
-    <img [src]="photo">
+  <ion-thumbnail slot="start" *ngIf="photos[1]">
+    <img [src]="photos[1]" />
   </ion-thumbnail>
-  <ion-button (click)=capturePhoto()>Foto aufnehmen</ion-button>
-  <ion-button (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
+  <ion-button (click)="capturePhoto(1)">Foto aufnehmen</ion-button>
+  <ion-button (click)="photoFromLibrary(1)">Foto aus Galerie</ion-button>
 </ion-item>
 
 <ion-label>Falsch</ion-label>
 <ion-item lines="none">
-  <ion-thumbnail slot="start" *ngIf="photo">
-    <img [src]="photo">
+  <ion-thumbnail slot="start" *ngIf="photos[2]">
+    <img [src]="photos[2]" />
   </ion-thumbnail>
-  <ion-button (click)=capturePhoto()>Foto aufnehmen</ion-button>
-  <ion-button (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
+  <ion-button (click)="capturePhoto(2)">Foto aufnehmen</ion-button>
+  <ion-button (click)="photoFromLibrary(2)">Foto aus Galerie</ion-button>
 </ion-item>
 
 <ion-label>Falsch</ion-label>
 <ion-item lines="none">
-  <ion-thumbnail slot="start" *ngIf="photo">
-    <img [src]="photo">
+  <ion-thumbnail slot="start" *ngIf="photos[3]">
+    <img [src]="photos[3]" />
   </ion-thumbnail>
-  <ion-button (click)=capturePhoto()>Foto aufnehmen</ion-button>
-  <ion-button (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
+  <ion-button (click)="capturePhoto(3)">Foto aufnehmen</ion-button>
+  <ion-button (click)="photoFromLibrary(3)">Foto aus Galerie</ion-button>
 </ion-item>

@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Device } from "@ionic-native/device/ngx";
 
 import { environment } from "../../environments/environment";
+import { IfStmt } from "@angular/compiler";
 
 @Injectable({
   providedIn: "root"
@@ -26,10 +27,12 @@ export class TrackerService {
 
   addWaypoint(waypoint) {
     console.log(waypoint);
-    this.waypoints.push({
-      ...waypoint,
-      timestamp: new Date().toISOString()
-    });
+    if (this.waypoints != undefined) {
+      this.waypoints.push({
+        ...waypoint,
+        timestamp: new Date().toISOString()
+      });
+    }
   }
 
   addEvent(event) {

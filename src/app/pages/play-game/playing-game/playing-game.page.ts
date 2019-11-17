@@ -89,6 +89,7 @@ export class PlayingGamePage implements OnInit {
   targetHeading: number = 0;
   targetDistance: number = 0;
   directionBearing: number = 0;
+  indicatedDirection: number = 0;
 
   showSuccess: boolean = false;
   public lottieConfig: Object;
@@ -182,7 +183,7 @@ export class PlayingGamePage implements OnInit {
           compassHeading: this.compassHeading
         });
         this.lastKnownPosition = pos;
-        if (this.task) {
+        if (this.task && !this.showSuccess) {
           if (this.task.type.includes("nav")) {
             const waypoint = this.task.settings.point.geometry.coordinates;
             if (
@@ -276,6 +277,7 @@ export class PlayingGamePage implements OnInit {
     this.map.on("load", () => {
       // this.map.addControl(this.geolocateControl);
       // this.geolocateControl.trigger();
+
       this.initGame();
     });
 
@@ -320,6 +322,7 @@ export class PlayingGamePage implements OnInit {
       .subscribe((data: DeviceOrientationCompassHeading) => {
         this.compassHeading = data.magneticHeading;
         this.targetHeading = 360 - (this.compassHeading - this.heading);
+        this.indicatedDirection = this.compassHeading - this.directionBearing;
 
         if (this.autoRotate) {
           // this.map.rotateTo(data.magneticHeading, { duration: 10 });
@@ -390,9 +393,10 @@ export class PlayingGamePage implements OnInit {
       }
     };
 
-    this.insomnia
-      .keepAwake()
-      .then(() => console.log("success"), () => console.log("error"));
+    this.insomnia.keepAwake().then(
+      () => console.log("success"),
+      () => console.log("error")
+    );
   }
 
   initGame() {
@@ -428,13 +432,16 @@ export class PlayingGamePage implements OnInit {
       task: this.task
     });
 
-    if (this.task.type.includes("theme")) {
+    if (
+      this.task.type.includes("theme") &&
+      this.task.settings["question-type"] != undefined
+    ) {
       this.task.settings.text = this.task.settings[
         "question-type"
       ].settings.text;
     }
     if (!this.task.type.includes("theme")) {
-      if (this.task.settings.point != null) {
+      if (this.task.settings.point != null && this.task.settings.showMarker) {
         new mapboxgl.Marker()
           .setLngLat(
             this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
@@ -472,9 +479,10 @@ export class PlayingGamePage implements OnInit {
         }
       });
       this.vibration.vibrate([300, 300, 300]);
-      this.insomnia
-        .allowSleepAgain()
-        .then(() => console.log("success"), () => console.log("error"));
+      this.insomnia.allowSleepAgain().then(
+        () => console.log("success"),
+        () => console.log("error")
+      );
       return;
     }
 
@@ -586,10 +594,8 @@ export class PlayingGamePage implements OnInit {
           direction: this.compassHeading
         }
       });
-      console.log(this.directionBearing + 360, this.compassHeading);
-      if (
-        this.Math.abs(this.directionBearing + 360 - this.compassHeading) > 45
-      ) {
+      console.log(this.directionBearing, this.compassHeading);
+      if (this.Math.abs(this.directionBearing - this.compassHeading) > 45) {
         const toast = await this.toastController.create({
           message: "Bitte drehe dich zur angezeigten Blickrichtung",
           color: "dark",
@@ -689,7 +695,7 @@ export class PlayingGamePage implements OnInit {
   }
 
   _initMapFeatures() {
-    const mapFeatures = this.task.settings.mapFeatures;
+    let mapFeatures = this.task.settings.mapFeatures;
     console.log("MapFeatures: ", mapFeatures);
     if (mapFeatures != undefined) {
       for (let key in mapFeatures) {
@@ -740,20 +746,32 @@ export class PlayingGamePage implements OnInit {
               break;
             case "material":
               this.swipe = false;
+              if (this.map.getSource("satellite")) {
+                this.map.removeSource("satellite");
+              }
 
               const elem = document.getElementsByClassName("mapboxgl-compare");
               while (elem.length > 0) elem[0].remove();
               this.autoRotate = false;
               if (mapFeatures[key] == "standard") {
-                if (document.body.classList.contains("dark")) {
-                  this.map.setStyle("mapbox://styles/mapbox/dark-v9");
-                } else {
-                  this.map.setStyle("mapbox://styles/mapbox/streets-v9");
-                }
+                // if (document.body.classList.contains("dark")) {
+                //   this.map.setStyle("mapbox://styles/mapbox/dark-v9");
+                // } else {
+                //   this.map.setStyle("mapbox://styles/mapbox/streets-v9");
+                // }
               } else if (mapFeatures[key] == "selection") {
                 this.map.addControl(this.styleSwitcherControl);
               } else if (mapFeatures[key] == "sat") {
-                this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
+                //this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
+                this.map.addLayer({
+                  id: "satellite",
+                  source: {
+                    type: "raster",
+                    url: "mapbox://mapbox.satellite",
+                    tileSize: 256
+                  },
+                  type: "raster"
+                });
               } else if (mapFeatures[key] == "sat-button") {
                 // TODO: implememt
               } else if (mapFeatures[key] == "sat-swipe") {
@@ -811,6 +829,23 @@ export class PlayingGamePage implements OnInit {
               } else {
                 this.streetSection = false;
               }
+              break;
+            case "landmarks":
+              console.log(mapFeatures.landmarkFeatures);
+              this.map.addLayer({
+                id: "felix",
+                type: "fill-extrusion",
+                source: {
+                  type: "geojson",
+                  data: mapFeatures.landmarkFeatures
+                },
+                paint: {
+                  "fill-extrusion-color": "#ffff00",
+                  "fill-extrusion-opacity": 0.3,
+                  "fill-extrusion-height": 9999
+                }
+              });
+              break;
           }
         }
       }

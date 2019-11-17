@@ -123,7 +123,9 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
           bearing = bearing + 360;
         }
 
-        this.group.patchValue({ [this.config.name]: this.map.getBearing() });
+        console.log(bearing);
+
+        this.group.patchValue({ [this.config.name]: bearing });
       }
     });
 
