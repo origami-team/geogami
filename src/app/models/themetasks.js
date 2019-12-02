@@ -62,8 +62,8 @@ export default [
                     items: [
                       {
                         type: "map",
-                        name: "point",
-                        featureType: "point",
+                        name: "polygon",
+                        featureType: "polygon",
                         label: "Objektposition",
                         info:
                           "Umrande das Objekt, das der Spieler finden soll, mit mehreren Klicks auf der Karte. Die Markierung wird dem Spieler nicht angezeigt",
@@ -121,7 +121,7 @@ export default [
               {
                 type: "map",
                 name: "point",
-                featureType: "point",
+                featureType: "polygon",
                 label: "Objektposition",
                 info:
                   "Umrande das Objekt, das der Spieler finden soll, mit mehreren Klicks auf der Karte. Die Markierung wird dem Spieler nicht angezeigt",
@@ -131,6 +131,7 @@ export default [
           },
           {
             label: "... mittels Karte",
+            name: "question-type-map",
             items: [
               {
                 type: "input",
@@ -144,8 +145,8 @@ export default [
               },
               {
                 type: "map",
-                name: "point",
-                featureType: "point",
+                name: "polygon",
+                featureType: "polygon",
                 label: "Objektposition",
                 info:
                   "Umrande das Objekt, das der Spieler finden soll, mit mehreren Klicks auf der Karte. Diese Markierung wird dem Spieler während der Aufgabenstellung angezeigt",
@@ -158,6 +159,7 @@ export default [
                 selectOptions: [
                   {
                     label: "Wählen eines Fotos",
+                    name: "multiple-choice",
                     items: [
                       {
                         type: "photoUploadMultipleChoice",
@@ -171,6 +173,7 @@ export default [
                   },
                   {
                     label: "Aufnahme eines Fotos",
+                    name: "take-photo",
                     items: []
                   }
                 ]

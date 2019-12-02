@@ -52,7 +52,15 @@ export class MapFeaturesModalPage implements OnInit {
       zoom: 2
     });
 
-    this.draw = new MapboxDraw();
+    this.draw = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        point: true,
+        line_string: true,
+        polygon: true,
+        trash: true
+      }
+    });
 
     map.addControl(this.draw, "top-left");
   }

@@ -93,10 +93,7 @@
 
     <ion-item>
       <ion-label>Landmarken</ion-label>
-      <ion-toggle
-        [(ngModel)]="features.landmarks"
-        (ngModelChange)="update()"
-      ></ion-toggle>
+      <ion-toggle [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
     <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'">
       <div #map class="map"></div>

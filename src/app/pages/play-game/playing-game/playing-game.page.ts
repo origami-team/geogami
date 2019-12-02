@@ -30,6 +30,8 @@ import { Vibration } from "@ionic-native/vibration/ngx";
 
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 
+import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
+
 @Component({
   selector: "app-playing-game",
   templateUrl: "./playing-game.page.html",
@@ -67,11 +69,8 @@ export class PlayingGamePage implements OnInit {
     positionOptions: {
       enableHighAccuracy: true
     },
-    fitBoundsOptions: {
-      maxZoom: 18
-    },
-    trackUserLocation: false,
-    showUserLocation: false
+    trackUserLocation: true,
+    showUserLocation: true
   });
   lastKnownPosition: Geoposition;
 
@@ -456,6 +455,26 @@ export class PlayingGamePage implements OnInit {
         "question-type"
       ].settings.direction;
     }
+
+    if (
+      this.task.type == "theme-object" &&
+      this.task.settings["question-type"].name == "question-type-map"
+    ) {
+      console.log(this.task.settings["question-type"].settings);
+      this.map.addLayer({
+        id: "landmarks",
+        type: "fill-extrusion",
+        source: {
+          type: "geojson",
+          data: this.task.settings["question-type"].settings.polygon[0]
+        },
+        paint: {
+          "fill-extrusion-color": "#3880ff",
+          "fill-extrusion-opacity": 0.5,
+          "fill-extrusion-height": 20
+        }
+      });
+    }
   }
 
   onWaypointReached() {
@@ -554,38 +573,68 @@ export class PlayingGamePage implements OnInit {
           this.photo = "";
         }
       } else {
-        const targetPosition = this.task.settings["question-type"].settings[
-          "answer-type"
-        ].settings.point.geometry.coordinates;
-        const clickPosition = this.userSelectMarker._lngLat;
+        if (
+          this.task.settings["question-type"].settings["answer-type"].settings
+            .polygon
+        ) {
+          const clickPosition = [
+            this.userSelectMarker._lngLat.lng,
+            this.userSelectMarker._lngLat.lat
+          ];
+          const polygon = this.task.settings["question-type"].settings[
+            "answer-type"
+          ].settings.polygon[0];
 
-        const distance = this.getDistanceFromLatLonInM(
-          targetPosition[1],
-          targetPosition[0],
-          clickPosition.lat,
-          clickPosition.lng
-        );
+          const correct = booleanPointInPolygon(clickPosition, polygon);
 
-        this.trackerService.addAnswer({
-          task: this.task,
-          answer: {
-            distance: distance
+          if (!correct) {
+            const toast = await this.toastController.create({
+              message: "Deine Eingabe ist falsch. Versuche es erneut",
+              color: "dark",
+              showCloseButton: true,
+              duration: 2000
+            });
+            toast.present();
+          } else {
+            this.nextTask();
           }
-        });
-
-        if (distance < 20) {
-          this.nextTask();
         } else {
-          const toast = await this.toastController.create({
-            message: "Deine Eingabe ist falsch. Versuche es erneut",
-            color: "dark",
-            showCloseButton: true,
-            duration: 2000
+          const targetPosition = this.task.settings["question-type"].settings[
+            "answer-type"
+          ].settings.point.geometry.coordinates;
+          const clickPosition = this.userSelectMarker._lngLat;
+
+          const distance = this.getDistanceFromLatLonInM(
+            targetPosition[1],
+            targetPosition[0],
+            clickPosition.lat,
+            clickPosition.lng
+          );
+
+          this.trackerService.addAnswer({
+            task: this.task,
+            answer: {
+              distance: distance
+            }
           });
-          toast.present();
+
+          if (distance < 20) {
+            this.nextTask();
+          } else {
+            const toast = await this.toastController.create({
+              message: "Deine Eingabe ist falsch. Versuche es erneut",
+              color: "dark",
+              showCloseButton: true,
+              duration: 2000
+            });
+            toast.present();
+          }
         }
       }
-    } else if (this.task.type == "info") {
+    } else if (
+      this.task.type == "info" ||
+      this.task.type.settings["answer-type"].name == "take-photo"
+    ) {
       this.nextTask();
     } else if (this.task.type == "theme-direction") {
       this.trackerService.addAnswer({
@@ -703,8 +752,12 @@ export class PlayingGamePage implements OnInit {
           switch (key) {
             case "zoombar":
               if (mapFeatures[key]) {
+                this.map.scrollZoom.enable();
+                this.map.doubleClickZoom.enable();
                 this.map.addControl(this.zoomControl);
               } else {
+                this.map.scrollZoom.disable();
+                this.map.doubleClickZoom.disable();
                 try {
                   // this.map.remove(this.zoomControl);
                 } catch (e) {
@@ -797,7 +850,10 @@ export class PlayingGamePage implements OnInit {
                 // TODO: implement ?
               } else if (mapFeatures[key] == "true") {
                 this.map.addControl(this.geolocateControl);
-                this.geolocateControl.trigger();
+                setTimeout(() => {
+                  console.log("triggering this.geolocateControl");
+                  this.geolocateControl.trigger();
+                }, 500);
               } else if (mapFeatures[key] == "button") {
                 // TODO: implement
               } else if (mapFeatures[key] == "start") {
@@ -833,7 +889,7 @@ export class PlayingGamePage implements OnInit {
             case "landmarks":
               console.log(mapFeatures.landmarkFeatures);
               this.map.addLayer({
-                id: "felix",
+                id: "landmarks",
                 type: "fill-extrusion",
                 source: {
                   type: "geojson",
@@ -841,7 +897,7 @@ export class PlayingGamePage implements OnInit {
                 },
                 paint: {
                   "fill-extrusion-color": "#ffff00",
-                  "fill-extrusion-opacity": 0.3,
+                  "fill-extrusion-opacity": 0.5,
                   "fill-extrusion-height": 9999
                 }
               });

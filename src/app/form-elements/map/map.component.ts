@@ -13,7 +13,7 @@ import { Field } from "../../dynamic-form/models/field";
 import { FieldConfig } from "../../dynamic-form/models/field-config";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { PopoverController } from "@ionic/angular";
-import { Feature } from "geojson";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
 // import MapboxDraw from '@mapbox/mapbox-gl-draw'
 
@@ -31,6 +31,7 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
 
   marker: mapboxgl.Marker;
   map: mapboxgl.Map;
+  draw: MapboxDraw;
   feature: any = "";
 
   config: FieldConfig;
@@ -94,7 +95,10 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
     this.map.addControl(geolocate);
 
     this.map.on("click", e => {
-      if (this.config.featureType != "direction") {
+      if (
+        this.config.featureType != "direction" &&
+        this.config.featureType != "polygon"
+      ) {
         const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
         this._onChange(pointFeature);
       }
@@ -141,6 +145,22 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
         })
           .setLngLat(this.map.getCenter())
           .addTo(this.map);
+      } else if (this.config.featureType == "polygon") {
+        this.draw = new MapboxDraw({
+          displayControlsDefault: false,
+          controls: {
+            polygon: true,
+            trash: true
+          }
+        });
+
+        this.map.addControl(this.draw, "top-left");
+
+        this.map.on("draw.create", e => {
+          this.group.patchValue({ [this.config.name]: e.features });
+
+          console.log(e.features);
+        });
       }
     });
   }
