@@ -179,7 +179,15 @@ export class PlayingGamePage implements OnInit {
             },
             timestamp: pos.timestamp
           },
-          compassHeading: this.compassHeading
+          compassHeading: this.compassHeading,
+          mapViewport: {
+            bounds: this.map.getBounds(),
+            center: this.map.getCenter(),
+            zoom: this.map.getZoom(),
+            style: this.map.getStyle(),
+            bearing: this.map.getBearing(),
+            pitch: this.map.getPitch()
+          }
         });
         this.lastKnownPosition = pos;
         if (this.task && !this.showSuccess) {
@@ -276,6 +284,19 @@ export class PlayingGamePage implements OnInit {
     this.map.on("load", () => {
       // this.map.addControl(this.geolocateControl);
       // this.geolocateControl.trigger();
+
+      this.map.addLayer({
+        id: "wms-test-layer",
+        type: "raster",
+        source: {
+          type: "raster",
+          tiles: [
+            "https://ows.terrestris.de/osm/service?format=image/png&layers=OSM-WMS&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&styles&bbox={bbox-epsg-3857}&width=256&height=256"
+          ],
+          tileSize: 256
+        },
+        paint: {}
+      });
 
       this.initGame();
     });
@@ -441,7 +462,7 @@ export class PlayingGamePage implements OnInit {
     }
     if (!this.task.type.includes("theme")) {
       if (this.task.settings.point != null && this.task.settings.showMarker) {
-        new mapboxgl.Marker()
+        const marker = new mapboxgl.Marker()
           .setLngLat(
             this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
           )
@@ -535,7 +556,7 @@ export class PlayingGamePage implements OnInit {
         }
       });
 
-      if (distance < 20) {
+      if (distance < 20 || this.task.settings.feedback == false) {
         this.nextTask();
       } else {
         const toast = await this.toastController.create({
@@ -587,7 +608,7 @@ export class PlayingGamePage implements OnInit {
 
           const correct = booleanPointInPolygon(clickPosition, polygon);
 
-          if (!correct) {
+          if (!correct && this.task.settings.feedback) {
             const toast = await this.toastController.create({
               message: "Deine Eingabe ist falsch. Versuche es erneut",
               color: "dark",
@@ -618,7 +639,7 @@ export class PlayingGamePage implements OnInit {
             }
           });
 
-          if (distance < 20) {
+          if (distance < 20 || this.task.settings.feedback == false) {
             this.nextTask();
           } else {
             const toast = await this.toastController.create({
@@ -658,7 +679,7 @@ export class PlayingGamePage implements OnInit {
     } else {
       // TODO: disable button
       const waypoint = this.task.settings.point.geometry.coordinates;
-      if (this.userDidArrive(waypoint)) {
+      if (this.userDidArrive(waypoint) || this.task.settings.feedback == false) {
         this.onWaypointReached();
       } else {
         const toast = await this.toastController.create({
@@ -754,10 +775,12 @@ export class PlayingGamePage implements OnInit {
               if (mapFeatures[key]) {
                 this.map.scrollZoom.enable();
                 this.map.doubleClickZoom.enable();
+                this.map.touchZoomRotate.enable();
                 this.map.addControl(this.zoomControl);
               } else {
                 this.map.scrollZoom.disable();
                 this.map.doubleClickZoom.disable();
+                this.map.touchZoomRotate.disable();
                 try {
                   // this.map.remove(this.zoomControl);
                 } catch (e) {
@@ -837,6 +860,7 @@ export class PlayingGamePage implements OnInit {
                   zoom: 2
                 });
                 new MapboxCompare(this.map, satMap);
+                console.log(this.map.getStyle());
               } else if (mapFeatures[key] == "3D") {
                 this.autoRotate = true;
                 addEventListener("deviceorientation", this._orientTo, false);
