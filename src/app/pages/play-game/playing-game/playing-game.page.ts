@@ -115,6 +115,10 @@ export class PlayingGamePage implements OnInit {
 
   photo: string;
 
+  // multiple choice
+  selectedPhoto: string;
+  isCorrectPhotoSelected: boolean;
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -535,6 +539,15 @@ export class PlayingGamePage implements OnInit {
 
   async onMultipleChoiceSelected(item) {
     console.log("User clicked on ", item);
+    this.selectedPhoto = item;
+    this.isCorrectPhotoSelected = item.key === "photo-0";
+    this.trackerService.addAnswer({
+      task: this.task,
+      answer: {
+        "multiple-choice": item.key,
+        correct: this.isCorrectPhotoSelected
+      }
+    });
   }
 
   async onOkClicked() {
@@ -660,7 +673,7 @@ export class PlayingGamePage implements OnInit {
       }
     } else if (
       this.task.type == "info" ||
-      this.task.type.settings["answer-type"].name == "take-photo"
+      this.task.settings["answer-type"].name == "take-photo"
     ) {
       this.nextTask();
     } else if (this.task.type == "theme-direction") {
@@ -681,6 +694,40 @@ export class PlayingGamePage implements OnInit {
         toast.present();
       } else {
         this.nextTask();
+      }
+    } else if (
+      this.task.settings["answer-type"] &&
+      this.task.settings["answer-type"].name == "multiple-choice"
+    ) {
+      if (this.selectedPhoto != null) {
+        if (this.task.settings.feedback) {
+          if (this.isCorrectPhotoSelected) {
+            this.nextTask();
+            this.isCorrectPhotoSelected = null;
+            this.selectedPhoto = null;
+          } else {
+            const toast = await this.toastController.create({
+              message: "Deine Eingabe ist falsch. Versuche es erneut",
+              color: "dark",
+              showCloseButton: true,
+              duration: 2000
+            });
+            toast.present();
+            this.isCorrectPhotoSelected = null;
+            this.selectedPhoto = null;
+          }
+        }
+        this.nextTask();
+        this.isCorrectPhotoSelected = null;
+        this.selectedPhoto = null;
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte wähle zuerst ein Foto",
+          color: "dark",
+          showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
       }
     } else {
       // TODO: disable button
