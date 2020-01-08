@@ -68,6 +68,21 @@
     margin: 0;
   }
 
+  .multiple-choice {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    > div > ion-thumbnail {
+      --size: 65px;
+
+      &:active {
+        outline: solid #3880ff 2px;
+        outline-offset: 1px;
+      }
+    }
+  }
+
   .compass {
     text-align: center;
     flex: 0 0 100%;

@@ -1,16 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { Routes, RouterModule } from "@angular/router";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { PlayingGamePage } from './playing-game.page';
-import { LottieAnimationViewModule } from 'ng-lottie';
+import { PlayingGamePage } from "./playing-game.page";
+import { LottieAnimationViewModule } from "ng-lottie";
+
+import { NgShufflePipeModule } from "angular-pipes";
 
 const routes: Routes = [
   {
-    path: '',
+    path: "",
     component: PlayingGamePage
   }
 ];
@@ -21,8 +23,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LottieAnimationViewModule.forRoot()
+    LottieAnimationViewModule.forRoot(),
+    NgShufflePipeModule
   ],
   declarations: [PlayingGamePage]
 })
-export class PlayingGamePageModule { }
+export class PlayingGamePageModule {}

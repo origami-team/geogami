@@ -11,18 +11,10 @@
 
 <ion-content forceOverscroll="false">
   <div class="wrapper" [class.blur]="showSuccess">
-    <div
-      #map
-      class="map"
-      [class.blur]="task != null && task.type == 'nav-arrow'"
-    ></div>
+    <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div>
     <div *ngIf="swipe" #swipeMap class="map"></div>
 
-    <ion-card
-      class="overlay task-control ion-padding"
-      [class.full]="task.type == 'nav-arrow'"
-      *ngIf="task"
-    >
+    <ion-card class="overlay task-control ion-padding" [class.full]="task.type == 'nav-arrow'" *ngIf="task">
       <div class="top-info">
         <ion-chip color="primary" *ngIf="task.type.includes('nav')">
           <ion-icon name="navigate"></ion-icon>
@@ -52,18 +44,13 @@
         }"
       > -->
         <div class="compass large" *ngIf="task.type == 'nav-arrow'">
-          <img
-            src="/assets/icons/compass.svg"
-            [ngStyle]="{
+          <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
-            }"
-          />
+            }" />
           <p>Distanz: {{ Math.round(targetDistance) }} m</p>
         </div>
 
-        <div
-          class="task-wrapper"
-          [ngStyle]="{
+        <div class="task-wrapper" [ngStyle]="{
             'flex-wrap': [
               'nav-arrow',
               'theme-object',
@@ -71,33 +58,35 @@
             ].includes(task.type)
               ? 'wrap'
               : 'nowrap'
-          }"
-        >
+          }">
           <div class="compass bearing" *ngIf="task.type == 'theme-direction'">
-            <img
-              src="/assets/icons/direction-bearing.svg"
-              [ngStyle]="{
+            <img src="/assets/icons/direction-bearing.svg" [ngStyle]="{
                 transform:
                   'translateX(-50%) rotate(0deg)'
-              }"
-            />
-            <img
-              src="/assets/icons/compass.svg"
-              [ngStyle]="{
+              }" />
+            <img src="/assets/icons/compass.svg" [ngStyle]="{
                 transform: 'translateX(-50%) rotate(' + indicatedDirection + 'deg)'
-              }"
-            />
+              }" />
           </div>
         </div>
-        <div
-          class="photo-container"
-          *ngIf="
+        <div class="photo-container" *ngIf="
             task.type == 'theme-object' &&
             task.settings['question-type'].name == 'photo'
-          "
-        >
+          ">
           <img [src]="task.settings['question-type'].settings.photo" />
         </div>
+
+        <div *ngIf="
+            task.settings['answer-type'] &&
+            task.settings['answer-type'].name == 'multiple-choice'
+          " class="multiple-choice">
+          <div *ngFor="let item of task.settings['answer-type'].settings['multiple-choice'] | keyvalue | shuffle">
+            <ion-thumbnail slot="start">
+              <img [src]=item.value (click)=onMultipleChoiceSelected(item) />
+            </ion-thumbnail>
+          </div>
+        </div>
+
         <div class="task-text">
           <p>
             {{ task.settings.text }}
@@ -107,25 +96,19 @@
           </p>
         </div>
 
-        <div
-          *ngIf="
+        <div *ngIf="
             task.settings['answer-type'] &&
             task.settings['answer-type'].name == 'take-photo'
-          "
-        >
+          ">
           <ion-thumbnail slot="start" *ngIf="photo">
             <img [src]="photo" />
           </ion-thumbnail>
-          <ion-button (click)="capturePhoto()"
-            ><ion-icon name="camera"></ion-icon
-          ></ion-button>
+          <ion-button (click)="capturePhoto()">
+            <ion-icon name="camera"></ion-icon>
+          </ion-button>
         </div>
 
-        <ion-button
-          class="confirm"
-          (click)="onOkClicked()"
-          *ngIf="task.settings.confirmation"
-          >OK
+        <ion-button class="confirm" (click)="onOkClicked()" *ngIf="task.settings.confirmation">OK
         </ion-button>
       </div>
     </ion-card>
@@ -134,15 +117,9 @@
   <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch</h3>
     <p>Du hast das Spiel beendet</p>
-    <lottie-animation-view
-      [options]="lottieConfig"
-      [width]="300"
-      [height]="300"
-    >
+    <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
     </lottie-animation-view>
-    <ion-button (click)="navigateHome()" [disabled]="!uploadDone"
-      >Fertig</ion-button
-    >
+    <ion-button (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
   </ion-card>
 
   <!-- <div class="overlay ion-padding" *ngIf="currentTask">

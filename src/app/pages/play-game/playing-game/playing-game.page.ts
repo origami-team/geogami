@@ -141,13 +141,17 @@ export class PlayingGamePage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
+    this.game = null;
+    this.game = new Game(0, "Loading...", false, []);
     this.route.params.subscribe(params => {
       this.gamesService
         .getGame(params.id)
         .then(games => {
           this.game = games[0];
         })
-        .finally(() => {});
+        .finally(() => {
+          this.initGame();
+        });
     });
 
     mapboxgl.accessToken = environment.mapboxAccessToken;
@@ -297,8 +301,6 @@ export class PlayingGamePage implements OnInit {
         },
         paint: {}
       });
-
-      this.initGame();
     });
 
     this.map.on("click", e => {
@@ -483,7 +485,7 @@ export class PlayingGamePage implements OnInit {
     ) {
       console.log(this.task.settings["question-type"].settings);
       this.map.addLayer({
-        id: "landmarks",
+        id: "landmarks-qt-map",
         type: "fill-extrusion",
         source: {
           type: "geojson",
@@ -529,6 +531,10 @@ export class PlayingGamePage implements OnInit {
     this.task = this.game.tasks[this.taskIndex];
     this.initTask();
     console.log(this.taskIndex, this.task);
+  }
+
+  async onMultipleChoiceSelected(item) {
+    console.log("User clicked on ", item);
   }
 
   async onOkClicked() {
@@ -679,7 +685,10 @@ export class PlayingGamePage implements OnInit {
     } else {
       // TODO: disable button
       const waypoint = this.task.settings.point.geometry.coordinates;
-      if (this.userDidArrive(waypoint) || this.task.settings.feedback == false) {
+      if (
+        this.userDidArrive(waypoint) ||
+        this.task.settings.feedback == false
+      ) {
         this.onWaypointReached();
       } else {
         const toast = await this.toastController.create({
@@ -992,4 +1001,16 @@ export class PlayingGamePage implements OnInit {
       "coordinates": [${lng}, ${lat}]
     }
   }`);
+
+  /**
+   * Shuffles array in place. ES6 version
+   * @param {Array} a items An array containing the items.
+   */
+  shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 }

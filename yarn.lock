@@ -1712,6 +1712,13 @@ android-versions@^1.4.0:
   dependencies:
     semver "^5.4.1"
 
+angular-pipes@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/angular-pipes/-/angular-pipes-10.0.0.tgz#f3d79bbd1659c7e043aa5afad206fa4bfa2247dd"
+  integrity sha512-H5PiZQnabARQDC76YY6KMPXGkmI+UJLTSnJH9j/aylvkLBnQr7zN4wKwiWXMd6mYlcY/lcpdFzw9BI/+XqLRwA==
+  dependencies:
+    tslib "^1.9.0"
+
 ansi-colors@4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-4.1.1.tgz#cbb9ae256bf750af1eab344f229aa27fe94ba348"

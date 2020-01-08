@@ -46,8 +46,12 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
         let base64Image = "data:image/jpeg;base64," + imageData;
         this.photos[photoNumber] = base64Image;
         this.group.patchValue({
-          [`${this.config.name}_${photoNumber}`]: base64Image
+          [`${this.config.name}`]: {
+            ...this.group.value[`${this.config.name}`],
+            [`photo-${photoNumber}`]: base64Image
+          }
         });
+        console.log(this.group)
       },
       err => {
         // Handle error
