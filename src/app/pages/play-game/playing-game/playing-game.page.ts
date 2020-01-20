@@ -293,18 +293,23 @@ export class PlayingGamePage implements OnInit {
       // this.map.addControl(this.geolocateControl);
       // this.geolocateControl.trigger();
 
-      this.map.addLayer({
-        id: "wms-test-layer",
-        type: "raster",
-        source: {
+      this.map.addLayer(
+        {
+          id: "wms-test-layer",
           type: "raster",
-          tiles: [
-            "https://ows.terrestris.de/osm/service?format=image/png&layers=OSM-WMS&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&styles&bbox={bbox-epsg-3857}&width=256&height=256"
-          ],
-          tileSize: 256
+          source: {
+            type: "raster",
+            tiles: [
+              "https://ows.terrestris.de/osm/service?format=image/png&layers=OSM-WMS&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&styles&bbox={bbox-epsg-3857}&width=256&height=256"
+            ],
+            tileSize: 256
+          },
+          paint: {}
         },
-        paint: {}
-      });
+        "country-label-lg"
+      );
+      this.map.removeLayer("country-label-lg");
+      console.log(this.map);
     });
 
     this.map.on("click", e => {
@@ -700,7 +705,12 @@ export class PlayingGamePage implements OnInit {
       this.task.settings["answer-type"].name == "multiple-choice"
     ) {
       if (this.selectedPhoto != null) {
+        console.log("feedback:", this.task.settings.feedback);
         if (this.task.settings.feedback) {
+          console.log(
+            "feeisCorrectPhotoSelecteddback:",
+            this.isCorrectPhotoSelected
+          );
           if (this.isCorrectPhotoSelected) {
             this.nextTask();
             this.isCorrectPhotoSelected = null;
@@ -713,13 +723,14 @@ export class PlayingGamePage implements OnInit {
               duration: 2000
             });
             toast.present();
-            this.isCorrectPhotoSelected = null;
-            this.selectedPhoto = null;
+            // this.isCorrectPhotoSelected = null;
+            // this.selectedPhoto = null;
           }
+        } else {
+          this.nextTask();
+          this.isCorrectPhotoSelected = null;
+          this.selectedPhoto = null;
         }
-        this.nextTask();
-        this.isCorrectPhotoSelected = null;
-        this.selectedPhoto = null;
       } else {
         const toast = await this.toastController.create({
           message: "Bitte wähle zuerst ein Foto",
@@ -1035,7 +1046,7 @@ export class PlayingGamePage implements OnInit {
           "fill-extrusion-opacity": 0.6
         }
       },
-      labelLayerId
+      // labelLayerId
     );
   }
 
