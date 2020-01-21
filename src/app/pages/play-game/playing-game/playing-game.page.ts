@@ -678,7 +678,8 @@ export class PlayingGamePage implements OnInit {
       }
     } else if (
       this.task.type == "info" ||
-      this.task.settings["answer-type"].name == "take-photo"
+      (this.task.settings["answer-type"] != null && 
+      this.task.settings["answer-type"].name == "take-photo")
     ) {
       this.nextTask();
     } else if (this.task.type == "theme-direction") {
