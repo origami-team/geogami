@@ -32,6 +32,9 @@ import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 
+import RotationControl, { RotationType } from './../../../components/rotation-control.component'
+import { ViewDirectionControl, ViewDirectionType } from './../../../components/view-direction-control.component';
+
 @Component({
   selector: "app-playing-game",
   templateUrl: "./playing-game.page.html",
@@ -59,6 +62,9 @@ export class PlayingGamePage implements OnInit {
       this.map.setPitch(e.beta);
     }
   };
+
+  rotationControl: RotationControl;
+  viewDirectionControl: ViewDirectionControl;
 
   // tasks
   task: any;
@@ -142,21 +148,21 @@ export class PlayingGamePage implements OnInit {
     };
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ionViewWillEnter() {
-    this.game = null;
-    this.game = new Game(0, "Loading...", false, []);
-    this.route.params.subscribe(params => {
-      this.gamesService
-        .getGame(params.id)
-        .then(games => {
-          this.game = games[0];
-        })
-        .finally(() => {
-          this.initGame();
-        });
-    });
+    // this.game = null;
+    // this.game = new Game(0, "Loading...", false, []);
+    // this.route.params.subscribe(params => {
+    //   this.gamesService
+    //     .getGame(params.id)
+    //     .then(games => {
+    //       this.game = games[0];
+    //     })
+    //     .finally(() => {
+    //       this.initGame();
+    //     });
+    // });
 
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
@@ -292,6 +298,22 @@ export class PlayingGamePage implements OnInit {
     this.map.on("load", () => {
       // this.map.addControl(this.geolocateControl);
       // this.geolocateControl.trigger();
+      this.game = null;
+      this.game = new Game(0, "Loading...", false, []);
+      this.route.params.subscribe(params => {
+        this.gamesService
+          .getGame(params.id)
+          .then(games => {
+            this.game = games[0];
+          })
+          .finally(() => {
+            this.initGame();
+          });
+      });
+
+      this.rotationControl = new RotationControl(this.map)
+      this.viewDirectionControl = new ViewDirectionControl(this.map)
+
 
       this.map.addLayer(
         {
@@ -678,8 +700,8 @@ export class PlayingGamePage implements OnInit {
       }
     } else if (
       this.task.type == "info" ||
-      (this.task.settings["answer-type"] != null && 
-      this.task.settings["answer-type"].name == "take-photo")
+      (this.task.settings["answer-type"] != null &&
+        this.task.settings["answer-type"].name == "take-photo")
     ) {
       this.nextTask();
     } else if (this.task.type == "theme-direction") {
@@ -786,9 +808,9 @@ export class PlayingGamePage implements OnInit {
     var a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(this.deg2rad(lat1)) *
-        Math.cos(this.deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c * 1000; // Distance in km
     return d; // distance in m
@@ -848,7 +870,7 @@ export class PlayingGamePage implements OnInit {
               } else {
                 this.map.scrollZoom.disable();
                 this.map.doubleClickZoom.disable();
-                this.map.touchZoomRotate.disable();
+                // this.map.touchZoomRotate.disable();
                 try {
                   // this.map.remove(this.zoomControl);
                 } catch (e) {
@@ -878,14 +900,18 @@ export class PlayingGamePage implements OnInit {
                 // // disable map rotation using touch rotation gesture
                 // this.map.touchZoomRotate.enableRotation();
                 // this.map.doubleClickZoom.enable();
+                this.rotationControl.setType(RotationType.Manual)
               } else if (mapFeatures[key] == "auto") {
-                this.autoRotate = true;
+                // this.autoRotate = true;
+                this.rotationControl.setType(RotationType.Auto)
               } else if (mapFeatures[key] == "button") {
                 // TODO: implememt
+                this.rotationControl.setType(RotationType.Button)
               } else if (mapFeatures[key] == "north") {
-                this.map.setBearing(0);
-                this.map.dragRotate.disable();
-                this.map.touchZoomRotate.disableRotation();
+                // this.map.setBearing(0);
+                // this.map.dragRotate.disable();
+                // this.map.touchZoomRotate.disableRotation();
+                this.rotationControl.setType(RotationType.North)
               }
               break;
             case "material":
@@ -957,7 +983,7 @@ export class PlayingGamePage implements OnInit {
               if (mapFeatures[key] == "none") {
                 // TODO: implement ?
               } else if (mapFeatures[key] == "true") {
-                this.directionArrow = true;
+                this.viewDirectionControl.setType(ViewDirectionType.Continuous)
               } else if (mapFeatures[key] == "button") {
                 // TODO: implement
               } else if (mapFeatures[key] == "start") {
