@@ -1,9 +1,33 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="start"></ion-back-button>
+    </ion-buttons>
     <ion-title>Lerne OriGami kennen</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card id="create_card_create" (click)=navigateMapShowroom()>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="construct"></ion-icon> Map-Showroom
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Probiere die Kartenfunktionen von OriGami aus.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card id="create_card_edit" (click)=navigateTaskShowroom()>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="create"></ion-icon> Task-Showroom
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Lerne die verschiedenen Aufgabentypen von OriGami kennen.
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>

@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'map-showroom', loadChildren: './map-showroom/map-showroom.module#MapShowroomPageModule' },
   { path: 'info', loadChildren: './pages/info/info.module#InfoPageModule' },
   { path: 'showroom', loadChildren: './pages/showroom/showroom.module#ShowroomPageModule' },
+  { path: 'task-showroom', loadChildren: './pages/showroom/task-showroom/task-showroom.module#TaskShowroomPageModule' },
 ];
 @NgModule({
   imports: [
