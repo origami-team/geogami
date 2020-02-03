@@ -1,36 +1,47 @@
 <ion-content fullscreen>
   <img src="assets/icons/icon-192x192.png" class="center" />
-  <h1 class="ion-text-center ion-padding">OriGami Paper Map</h1>
   <ion-card id="start_card_play" (click)=navigateGamesOverviewPage()>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="logo-game-controller-a"></ion-icon> Spiele ein OriGami
+        <ion-icon name="logo-game-controller-a"></ion-icon> Spiele <b>OriGami</b>
       </ion-card-title>
     </ion-card-header>
+    <ion-card-content>
+      Wähle ein Spiel aus der Spieleliste.
+    </ion-card-content>
   </ion-card>
 
   <ion-card id="start_card_create" (click)=navigateCreatePage()>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="construct"></ion-icon> Entwickle ein OriGami
+        <ion-icon name="construct"></ion-icon> Entwickle dein <b>OriGami</b>
       </ion-card-title>
     </ion-card-header>
+    <ion-card-content>
+      Erstelle ein neues Spiel oder bearbeite ein Spiel.
+    </ion-card-content>
   </ion-card>
 
   <ion-card id="start_card_analyze" (click)=handleCardClick($event)>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="search"></ion-icon> Werte dein OriGami aus
+        <ion-icon name="search"></ion-icon> Werte dein <b>OriGami</b> aus
       </ion-card-title>
     </ion-card-header>
+    <ion-card-content>
+      Sieh dir die Spielergebnisse zu deinem Spiel an.
+    </ion-card-content>
   </ion-card>
 
-  <ion-card id="start_card_analyze" (click)=handleCardClick($event)>
+  <ion-card id="start_showroom" (click)=navigateShowroomPage()>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="planet"></ion-icon> Lerne OriGami kennen
+        <ion-icon name="planet"></ion-icon> Lerne <b>OriGami</b> kennen
       </ion-card-title>
     </ion-card-header>
+    <ion-card-content>
+      Erfahre mehr über die Kartenfunktionen und Aufgabentypen.
+    </ion-card-content>
   </ion-card>
 
   <ion-card id="start_map_showroom" (click)=navigateShowroomPage()>
@@ -44,9 +55,12 @@
   <ion-card id="start_info" (click)=navigateInfoPage()>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="information-circle-outline"></ion-icon> Informationen
+        <ion-icon name="information-circle-outline"></ion-icon> Informationen über OriGami
       </ion-card-title>
     </ion-card-header>
+    <ion-card-content>
+      Erfahre mehr über die OriGami App.
+    </ion-card-content>
   </ion-card>
 
   <!-- <ion-footer translucent>

@@ -1,8 +1,8 @@
 <div [formGroup]="group">
   <ion-text>
-    <h3>{{ config.label }} <ion-icon *ngIf="config.info" name="information-circle"
+    <h5>{{ config.label }} <ion-icon *ngIf="config.info" name="information-circle"
         (click)='showPopover($event, config.info)'></ion-icon>
-    </h3>
+    </h5>
   </ion-text>
   <select *ngIf="config" [formControlName]="config.name" [(ngModel)]="selectedQuestionType">
     <option *ngFor="let option of config.selectOptions" [ngValue]="option">{{ option.label }}</option>

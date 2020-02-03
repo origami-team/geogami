@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'start', loadChildren: './start/start.module#StartPageModule' },
   { path: 'map-showroom', loadChildren: './map-showroom/map-showroom.module#MapShowroomPageModule' },
   { path: 'info', loadChildren: './pages/info/info.module#InfoPageModule' },
+  { path: 'showroom', loadChildren: './pages/showroom/showroom.module#ShowroomPageModule' },
 ];
 @NgModule({
   imports: [

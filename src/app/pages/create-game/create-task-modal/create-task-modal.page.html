@@ -5,8 +5,8 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="type == 'nav'">Navigationsaufgabe</ion-title>
-    <ion-title *ngIf="type == 'theme'">Thematische Aufgabe</ion-title>
+    <ion-title *ngIf="type == 'nav'">Füge eine Navigationsaufgabe hinzu</ion-title>
+    <ion-title *ngIf="type == 'theme'">Füge eine Themenaufgabe hinzu</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal(null)">
         <ion-icon name="save"></ion-icon>
@@ -17,7 +17,7 @@
 
 <ion-content class="ion-padding">
   <ion-text>
-    <h3>Aufgabentyp</h3>
+    <h5>Aufgabentyp</h5>
   </ion-text>
   <select
     placeholder="Auswählen"
@@ -31,7 +31,7 @@
   </dynamic-form>
 
   <ion-text>
-    <h3>Einstellungen</h3>
+    <h5>Weitere Einstellungen</h5>
   </ion-text>
   <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag'">
     <ion-label>Eingabebestätigung</ion-label>

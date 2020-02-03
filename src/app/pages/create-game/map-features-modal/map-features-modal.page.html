@@ -16,11 +16,9 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-list-header mode="ios">
-      <ion-label>Karteneinstellungen</ion-label>
-    </ion-list-header>
+    <h5>Karteneinstellungen</h5>
     <ion-item>
-      <ion-label>Zoombalken</ion-label>
+      <ion-label>Zoom</ion-label>
       <ion-toggle [(ngModel)]="features.zoombar"></ion-toggle>
     </ion-item>
     <ion-item>
@@ -37,7 +35,7 @@
         <option value="manual">manuell</option>
         <option value="auto">automatisch</option>
         <option value="button">automatisch auf Knopfdruck</option>
-        <option value="north">gegenordet</option>
+        <option value="north">genordet</option>
       </select>
     </ion-item>
     <ion-item>
@@ -53,16 +51,13 @@
       </select>
     </ion-item>
 
-    <ion-list-header mode="ios">
-      <ion-label>Marker</ion-label>
-    </ion-list-header>
-
+    <h5>Marker</h5>
     <ion-item>
       <ion-label>Positionsmarker</ion-label>
       <select [(ngModel)]="features.position">
         <option value="none">ohne</option>
         <option value="true">durchgängig</option>
-        <option value="button">auf Knopdfruck</option>
+        <option value="button">auf Knopfdruck</option>
         <option value="start">zu Aufgabenbeginn</option>
       </select>
     </ion-item>
@@ -71,7 +66,7 @@
       <select [(ngModel)]="features.direction">
         <option value="none">ohne</option>
         <option value="true">durchgängig</option>
-        <option value="button">auf Knopdfruck</option>
+        <option value="button">auf Knopfdruck</option>
         <option value="start">zu Aufgabenbeginn</option>
       </select>
     </ion-item>
@@ -92,7 +87,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Landmarken</ion-label>
+      <ion-label>Hervorhebung von Landmarken</ion-label>
       <ion-toggle [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
     <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'">
