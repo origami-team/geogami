@@ -80,7 +80,7 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
       container: this.mapContainer.nativeElement,
       style: "mapbox://styles/mapbox/streets-v9",
       center: [8, 51.8],
-      zoom: 2
+      zoom: 2,
     });
 
     const geolocate = new mapboxgl.GeolocateControl({

@@ -100,13 +100,13 @@
           </div>
         </ion-avatar>
         <ion-chip *ngIf="task.type.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
-          <ion-label>{{ task.name }}</ion-label>
+          <ion-label><ion-icon name="navigate"></ion-icon> {{ task.name }}</ion-label>
         </ion-chip>
         <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', taks)">
-          <ion-label>{{ task.name }}</ion-label>
+          <ion-label><ion-icon name="clipboard"></ion-icon> {{ task.name }}</ion-label>
         </ion-chip>
         <ion-chip *ngIf="task.type.includes('info')" color="warning" (click)="presentTaskModal('info', taks)">
-          <ion-label>{{ task.settings.text }}</ion-label>
+          <ion-label><ion-icon name="information-circle-outline"></ion-icon> {{ task.settings.text }}</ion-label>
         </ion-chip>
         <ion-icon *ngIf="!reorder" slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
         <ion-reorder *ngIf="reorder" slot="end"></ion-reorder>

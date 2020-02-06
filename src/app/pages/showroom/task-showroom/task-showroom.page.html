@@ -1,9 +1,37 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Task-Showroom</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Task Showroom</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+  <p>Hier erfährst du mehr über die verschiedenen Aufgabentypen in OriGami.</p>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="navigate"></ion-icon> Navigationsaufgaben
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Bei einer Navigationsaufgabe muss der Spieler zu einem neuen Ort navigieren. Es gibt vier Arten der Navigation:
+       
+        <ion-chip color="primary">
+          <ion-label><ion-icon name="navigate"></ion-icon> Navigation zur Zielfahne</ion-label>
+        </ion-chip>
+        <ion-grid><ion-row><ion-col>Der Spieler muss sich mittels Karte zum nächsten Zielpunkt begeben. Der Zielpunkt ist auf der Karte markiert.</ion-col></ion-row></ion-grid>
 
+        <ion-chip color="primary">
+          <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Richtungspfeil</ion-label>
+        </ion-chip>
+          <ion-grid><ion-row><ion-col>Der Spieler wird von einem Richtungspfeil und mithilfe einer Entfernungsangabe in Metern zum nächsten Zielpunkt geleitet. Die Karte wird ausgeblendet.</ion-col></ion-row></ion-grid>
+      
+        <ion-chip color="primary">
+          <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Textanweisung</ion-label>
+        </ion-chip>
+          <ion-grid><ion-row><ion-col>Der Spieler wird mittels Textanweisung zum nächsten Zielpunkt geleitet.</ion-col></ion-row></ion-grid>
+      </ion-card-content>
+    </ion-card>
 </ion-content>
