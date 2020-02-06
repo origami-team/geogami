@@ -16,12 +16,15 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Bei einer Navigationsaufgabe muss der Spieler zu einem neuen Ort navigieren. Es gibt vier Arten der Navigation:
+      <p>Bei einer Navigationsaufgabe muss der Spieler zu einem neuen Ort navigieren. Es gibt vier Arten der Navigation:</p>
        
         <ion-chip color="primary">
           <ion-label><ion-icon name="navigate"></ion-icon> Navigation zur Zielfahne</ion-label>
         </ion-chip>
-        <ion-grid><ion-row><ion-col>Der Spieler muss sich mittels Karte zum nächsten Zielpunkt begeben. Der Zielpunkt ist auf der Karte markiert.</ion-col></ion-row></ion-grid>
+        <ion-grid><ion-row>
+          <ion-col><b>Platz für ein Bild</b></ion-col>
+          <ion-col>Der Spieler muss sich mittels Karte zum nächsten Zielpunkt begeben. Der Zielpunkt ist auf der Karte markiert.</ion-col>
+        </ion-row></ion-grid>
 
         <ion-chip color="primary">
           <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Richtungspfeil</ion-label>
@@ -34,4 +37,40 @@
           <ion-grid><ion-row><ion-col>Der Spieler wird mittels Textanweisung zum nächsten Zielpunkt geleitet.</ion-col></ion-row></ion-grid>
       </ion-card-content>
     </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="clipboard"></ion-icon> Themenaufgaben
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Themenaufgaben sind stets ortsgebunden. Es gibt vier Arten, die hinsichtlich ihres Informationsgehalts nochmal weiter unterschieden werden können:</p>
+         
+          <ion-chip color="secondary">
+            <ion-label><ion-icon name="clipboard"></ion-icon> Selbst-Lokalisation</ion-label>
+          </ion-chip>
+          <ion-grid><ion-row>
+            <ion-col><b>Platz für ein Bild</b></ion-col>
+            <ion-col> Text</ion-col>
+          </ion-row></ion-grid>
+  
+          <ion-chip color="secondary">
+            <ion-label><ion-icon name="clipboard"></ion-icon> Objekt-Lokalisation</ion-label>
+          </ion-chip>
+          <ion-grid><ion-row>
+            <ion-col><b>Platz für ein Bild</b></ion-col>
+            <ion-col> Text</ion-col>
+          </ion-row></ion-grid>
+
+          <ion-chip color="secondary">
+            <ion-label><ion-icon name="clipboard"></ion-icon> Richtungsbestimmung</ion-label>
+          </ion-chip>
+          <ion-grid><ion-row>
+            <ion-col><b>Platz für ein Bild</b></ion-col>
+            <ion-col> Text</ion-col>
+          </ion-row></ion-grid>
+        </ion-card-content>
+      </ion-card>
+
 </ion-content>

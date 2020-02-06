@@ -56,7 +56,7 @@ export default [
                 name: "answer-type",
                 selectOptions: [
                   {
-                    label: "... durch Wählen eines aus vier Fotos",
+                    label: "... durch Auswahl eines von vier Fotos",
                     name: "multiple-choice",
                     items: [
                       {
@@ -158,7 +158,7 @@ export default [
                     ]
                   },
                   {
-                    label: "... durch Wählen eines aus vier Fotos",
+                    label: "... durch Auswahl eines von vier Fotos",
                     name: "select-photo",
                     items: [
                       {
@@ -222,7 +222,7 @@ export default [
                 name: "answer-type",
                 selectOptions: [
                   {
-                    label: "... durch Wählen eines aus vier Fotos",
+                    label: "... durch Auswahl eines von vier Fotos",
                     items: [
                       {
                         type: "photoUploadMultipleChoice",
