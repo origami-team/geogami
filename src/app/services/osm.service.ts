@@ -11,7 +11,7 @@ export class OsmService {
 
   getStreetCoordinates(lat: number, lng: number, radius: number = 20) {
     return this.http.get(`
-      https://overpass-api.de/api/interpreter?data=[out:json];(way[highway~"^(primary|secondary|tertiary|residential)$"][name](around:${radius},${lat},${lng});>;);out;
-    `).toPromise();
+        https://overpass-api.de/api/interpreter?data=[out:json];(way[highway~"^(primary|secondary|tertiary|residential)$"][name](around:${radius},${lat},${lng});>;);out;
+      `).toPromise();
   }
 }

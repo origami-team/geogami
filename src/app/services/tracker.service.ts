@@ -26,7 +26,6 @@ export class TrackerService {
   }
 
   addWaypoint(waypoint) {
-    console.log(waypoint);
     if (this.waypoints != undefined) {
       this.waypoints.push({
         ...waypoint,

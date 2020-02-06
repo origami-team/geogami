@@ -16,17 +16,16 @@ export class ViewDirectionControl {
     private deviceOrientationSubscription: Subscription;
     private deviceOrientation: DeviceOrientation
     private positionWatch: number;
-    private position: Position;
     private viewDirectionType: ViewDirectionType = ViewDirectionType.None
 
     private map: MapboxMap;
 
     private isInitalized = false;
 
-    constructor(map: MapboxMap) {
+    constructor(map: MapboxMap, deviceOrientation: DeviceOrientation) {
         this.map = map;
 
-        this.deviceOrientation = new DeviceOrientation()
+        this.deviceOrientation = deviceOrientation;
 
         this.positionWatch = window.navigator.geolocation.watchPosition(
             position => {
@@ -44,7 +43,6 @@ export class ViewDirectionControl {
                 if (error) throw error;
 
                 this.map.addImage("view-direction", image);
-
 
                 this.map.addSource("viewDirection", {
                     type: "geojson",
@@ -82,7 +80,7 @@ export class ViewDirectionControl {
     private reset(): void {
         if (this.deviceOrientationSubscription != undefined)
             this.deviceOrientationSubscription.unsubscribe();
-        if (this.map.getLayoutProperty("viewDirection", "visibility") == 'visible')
+        if (this.map.getStyle().layers.includes('viewDirection') && this.map.getLayoutProperty("viewDirection", "visibility") == 'visible')
             this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
 
     }

@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
-import osmtogeojson from "osmtogeojson";
 import { Device } from "@ionic-native/device/ngx";
 
 import mapboxgl from "mapbox-gl";
-import MapboxCompare from "mapbox-gl-compare";
+// import MapboxCompare from "mapbox-gl-compare";
 
 import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
 import {
@@ -22,7 +21,7 @@ import {
 } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
-import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
+// import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 import { Subscription } from "rxjs";
 
 import { Insomnia } from "@ionic-native/insomnia/ngx";
@@ -32,8 +31,14 @@ import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 
-import RotationControl, { RotationType } from './../../../components/rotation-control.component'
+import { RotationControl, RotationType } from './../../../components/rotation-control.component'
 import { ViewDirectionControl, ViewDirectionType } from './../../../components/view-direction-control.component';
+import { LandmarkControl } from 'src/app/components/landmark-control.component';
+import { StreetSectionControl, StreetSectionType } from './../../../components/street-section-control.component'
+import { LayerControl, LayerType } from 'src/app/components/layer-control.component';
+
+import MapboxCompare from "mapbox-gl-compare";
+
 
 @Component({
   selector: "app-playing-game",
@@ -52,19 +57,22 @@ export class PlayingGamePage implements OnInit {
 
   // map features
   panCenter: boolean = false;
-  styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
-  autoRotate: boolean = false;
+  // styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
+  // autoRotate: boolean = false;
   directionArrow: boolean = false;
   swipe: boolean = false;
 
-  _orientTo = (e: DeviceOrientationEvent) => {
-    if (e.beta <= 60 && e.beta >= 0) {
-      this.map.setPitch(e.beta);
-    }
-  };
+  // _orientTo = (e: DeviceOrientationEvent) => {
+  //   if (e.beta <= 60 && e.beta >= 0) {
+  //     this.map.setPitch(e.beta);
+  //   }
+  // };
 
   rotationControl: RotationControl;
   viewDirectionControl: ViewDirectionControl;
+  landmarkControl: LandmarkControl;
+  streetSectionControl: StreetSectionControl;
+  layerControl: LayerControl
 
   // tasks
   task: any;
@@ -83,7 +91,7 @@ export class PlayingGamePage implements OnInit {
   track: boolean = false;
   path: any;
 
-  streetSection: boolean = false;
+  // streetSection: boolean = false;
 
   // treshold to trigger location arrive
   triggerTreshold: Number = 10;
@@ -257,37 +265,38 @@ export class PlayingGamePage implements OnInit {
           }
         }
 
-        if (this.streetSection) {
-          this.OSMService.getStreetCoordinates(
-            pos.coords.latitude,
-            pos.coords.longitude
-          ).then(data => {
-            const geometries = osmtogeojson(data);
-            console.log(geometries);
+        // if (this.streetSection) {
+        // this.streetSectionControl.setType(StreetSectionType.Enabled)
+        // this.OSMService.getStreetCoordinates(
+        //   pos.coords.latitude,
+        //   pos.coords.longitude
+        // ).then(data => {
+        //   const geometries = osmtogeojson(data);
+        //   console.log(geometries);
 
-            if (this.map.getSource("section") == undefined) {
-              this.map.addSource("section", {
-                type: "geojson",
-                data: geometries
-              });
-              this.map.addLayer({
-                id: "section",
-                type: "line",
-                source: "section",
-                paint: {
-                  "line-color": "red",
-                  "line-opacity": 0.5,
-                  "line-width": 10
-                },
-                layout: {
-                  "line-cap": "round"
-                }
-              });
-            } else {
-              this.map.getSource("section").setData(geometries);
-            }
-          });
-        }
+        //   if (this.map.getSource("section") == undefined) {
+        //     this.map.addSource("section", {
+        //       type: "geojson",
+        //       data: geometries
+        //     });
+        //     this.map.addLayer({
+        //       id: "section",
+        //       type: "line",
+        //       source: "section",
+        //       paint: {
+        //         "line-color": "red",
+        //         "line-opacity": 0.5,
+        //         "line-width": 10
+        //       },
+        //       layout: {
+        //         "line-cap": "round"
+        //       }
+        //     });
+        //   } else {
+        //     this.map.getSource("section").setData(geometries);
+        //   }
+        // });
+        // }
       },
       err => console.log(err),
       {
@@ -296,6 +305,12 @@ export class PlayingGamePage implements OnInit {
     );
 
     this.map.on("load", () => {
+      this.rotationControl = new RotationControl(this.map)
+      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation)
+      this.landmarkControl = new LandmarkControl(this.map)
+      this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService);
+      this.layerControl = new LayerControl(this.map, this.deviceOrientation);
+
       // this.map.addControl(this.geolocateControl);
       // this.geolocateControl.trigger();
       this.game = null;
@@ -311,27 +326,23 @@ export class PlayingGamePage implements OnInit {
           });
       });
 
-      this.rotationControl = new RotationControl(this.map)
-      this.viewDirectionControl = new ViewDirectionControl(this.map)
-
-
-      this.map.addLayer(
-        {
-          id: "wms-test-layer",
-          type: "raster",
-          source: {
-            type: "raster",
-            tiles: [
-              "https://ows.terrestris.de/osm/service?format=image/png&layers=OSM-WMS&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&styles&bbox={bbox-epsg-3857}&width=256&height=256"
-            ],
-            tileSize: 256
-          },
-          paint: {}
-        },
-        "country-label-lg"
-      );
-      this.map.removeLayer("country-label-lg");
-      console.log(this.map);
+      // this.map.addLayer(
+      //   {
+      //     id: "wms-test-layer",
+      //     type: "raster",
+      //     source: {
+      //       type: "raster",
+      //       tiles: [
+      //         "https://ows.terrestris.de/osm/service?format=image/png&layers=OSM-WMS&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&styles&bbox={bbox-epsg-3857}&width=256&height=256"
+      //       ],
+      //       tileSize: 256
+      //     },
+      //     paint: {}
+      //   },
+      //   "country-label-lg"
+      // );
+      // this.map.removeLayer("country-label-lg");
+      // console.log(this.map);
     });
 
     this.map.on("click", e => {
@@ -377,63 +388,63 @@ export class PlayingGamePage implements OnInit {
         this.targetHeading = 360 - (this.compassHeading - this.heading);
         this.indicatedDirection = this.compassHeading - this.directionBearing;
 
-        if (this.autoRotate) {
-          // this.map.rotateTo(data.magneticHeading, { duration: 10 });
-          this.map.setBearing(data.magneticHeading);
-        }
+        // if (this.autoRotate) {
+        // this.map.rotateTo(data.magneticHeading, { duration: 10 });
+        // this.map.setBearing(data.magneticHeading);
+        // }
         if (this.directionArrow) {
-          if (
-            this.map.getSource("viewDirection") == undefined &&
-            !this.map.hasImage("view-direction")
-          ) {
-            this.map.loadImage(
-              "/assets/icons/direction.png",
-              (error, image) => {
-                if (error) throw error;
-                this.map.addImage("view-direction", image);
+          // if (
+          //   this.map.getSource("viewDirection") == undefined &&
+          //   !this.map.hasImage("view-direction")
+          // ) {
+          //   this.map.loadImage(
+          //     "/assets/icons/direction.png",
+          //     (error, image) => {
+          //       if (error) throw error;
+          //       this.map.addImage("view-direction", image);
 
-                this.map.addSource("viewDirection", {
-                  type: "geojson",
-                  data: {
-                    type: "Point",
-                    coordinates: [
-                      this.lastKnownPosition.coords.longitude,
-                      this.lastKnownPosition.coords.latitude
-                    ]
-                  }
-                });
+          //       this.map.addSource("viewDirection", {
+          //         type: "geojson",
+          //         data: {
+          //           type: "Point",
+          //           coordinates: [
+          //             this.lastKnownPosition.coords.longitude,
+          //             this.lastKnownPosition.coords.latitude
+          //           ]
+          //         }
+          //       });
 
-                this.map.addLayer({
-                  id: "viewDirection",
-                  source: "viewDirection",
-                  type: "symbol",
-                  layout: {
-                    "icon-image": "view-direction",
-                    "icon-size": 1,
-                    "icon-offset": [0, -25]
-                  }
-                });
-                this.map.setLayoutProperty(
-                  "viewDirection",
-                  "icon-rotate",
-                  data.magneticHeading
-                );
-              }
-            );
-          } else {
-            this.map.getSource("viewDirection").setData({
-              type: "Point",
-              coordinates: [
-                this.lastKnownPosition.coords.longitude,
-                this.lastKnownPosition.coords.latitude
-              ]
-            });
-            this.map.setLayoutProperty(
-              "viewDirection",
-              "icon-rotate",
-              data.magneticHeading
-            );
-          }
+          //       this.map.addLayer({
+          //         id: "viewDirection",
+          //         source: "viewDirection",
+          //         type: "symbol",
+          //         layout: {
+          //           "icon-image": "view-direction",
+          //           "icon-size": 1,
+          //           "icon-offset": [0, -25]
+          //         }
+          //       });
+          //       this.map.setLayoutProperty(
+          //         "viewDirection",
+          //         "icon-rotate",
+          //         data.magneticHeading
+          //       );
+          //     }
+          //   );
+          // } else {
+          //   this.map.getSource("viewDirection").setData({
+          //     type: "Point",
+          //     coordinates: [
+          //       this.lastKnownPosition.coords.longitude,
+          //       this.lastKnownPosition.coords.latitude
+          //     ]
+          //   });
+          //   this.map.setLayoutProperty(
+          //     "viewDirection",
+          //     "icon-rotate",
+          //     data.magneticHeading
+          //   );
+          // }
         }
       });
 
@@ -515,19 +526,20 @@ export class PlayingGamePage implements OnInit {
       this.task.settings["question-type"].name == "question-type-map"
     ) {
       console.log(this.task.settings["question-type"].settings);
-      this.map.addLayer({
-        id: "landmarks-qt-map",
-        type: "fill-extrusion",
-        source: {
-          type: "geojson",
-          data: this.task.settings["question-type"].settings.polygon[0]
-        },
-        paint: {
-          "fill-extrusion-color": "#3880ff",
-          "fill-extrusion-opacity": 0.5,
-          "fill-extrusion-height": 20
-        }
-      });
+      this.landmarkControl.setQTLandmark(this.task.settings["question-type"].settings.polygon[0])
+      // this.map.addLayer({
+      //   id: "landmarks-qt-map",
+      //   type: "fill-extrusion",
+      //   source: {
+      //     type: "geojson",
+      //     data: this.task.settings["question-type"].settings.polygon[0]
+      //   },
+      //   paint: {
+      //     "fill-extrusion-color": "#3880ff",
+      //     "fill-extrusion-opacity": 0.5,
+      //     "fill-extrusion-height": 20
+      //   }
+      // });
     }
   }
 
@@ -799,6 +811,7 @@ export class PlayingGamePage implements OnInit {
     navigator.geolocation.clearWatch(this.positionWatch);
     this.deviceOrientationSubscription.unsubscribe();
     this.navCtrl.navigateRoot("/");
+    this.streetSectionControl.remove();
   }
 
   getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
@@ -892,7 +905,7 @@ export class PlayingGamePage implements OnInit {
               }
               break;
             case "rotation":
-              this.autoRotate = false;
+              // this.autoRotate = false;
 
               if (mapFeatures[key] == "manual") {
                 // // disable map rotation using right click + drag
@@ -916,51 +929,59 @@ export class PlayingGamePage implements OnInit {
               break;
             case "material":
               this.swipe = false;
-              if (this.map.getSource("satellite")) {
-                this.map.removeSource("satellite");
+              if (this.map.getLayer("satellite")) {
+                this.map.removeLayer("satellite");
               }
 
               const elem = document.getElementsByClassName("mapboxgl-compare");
               while (elem.length > 0) elem[0].remove();
-              this.autoRotate = false;
+              // this.autoRotate = false;
               if (mapFeatures[key] == "standard") {
                 // if (document.body.classList.contains("dark")) {
                 //   this.map.setStyle("mapbox://styles/mapbox/dark-v9");
                 // } else {
                 //   this.map.setStyle("mapbox://styles/mapbox/streets-v9");
                 // }
+                this.layerControl.setType(LayerType.Standard)
               } else if (mapFeatures[key] == "selection") {
-                this.map.addControl(this.styleSwitcherControl);
+                // this.map.addControl(this.styleSwitcherControl);
+                this.layerControl.setType(LayerType.Selection)
+
               } else if (mapFeatures[key] == "sat") {
-                //this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
-                this.map.addLayer({
-                  id: "satellite",
-                  source: {
-                    type: "raster",
-                    url: "mapbox://mapbox.satellite",
-                    tileSize: 256
-                  },
-                  type: "raster"
-                });
+                // //this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
+                // this.map.addLayer({
+                //   id: "satellite",
+                //   source: {
+                //     type: "raster",
+                //     url: "mapbox://mapbox.satellite",
+                //     tileSize: 256
+                //   },
+                //   type: "raster"
+                // });
+                this.layerControl.setType(LayerType.Satellite)
+
               } else if (mapFeatures[key] == "sat-button") {
                 // TODO: implememt
+                this.layerControl.setType(LayerType.SatelliteButton)
               } else if (mapFeatures[key] == "sat-swipe") {
                 this.swipe = true;
                 this.changeDetectorRef.detectChanges();
-                const satMap = new mapboxgl.Map({
-                  container: this.swipeMapContainer.nativeElement,
-                  style: "mapbox://styles/mapbox/satellite-v9",
-                  center: [8, 51.8],
-                  zoom: 2
-                });
-                new MapboxCompare(this.map, satMap);
-                console.log(this.map.getStyle());
+                // const satMap = new mapboxgl.Map({
+                // container: this.swipeMapContainer.nativeElement,
+                //   style: "mapbox://styles/mapbox/satellite-v9",
+                //   center: [8, 51.8],
+                //   zoom: 2
+                // });
+                // new MapboxCompare(this.map, satMap);
+                this.layerControl.setType(LayerType.Swipe, this.swipeMapContainer)
               } else if (mapFeatures[key] == "3D") {
-                this.autoRotate = true;
-                addEventListener("deviceorientation", this._orientTo, false);
-                this._add3DBuildingsLayer();
+                // this.autoRotate = true;
+                // addEventListener("deviceorientation", this._orientTo, false);
+                // this._add3DBuildingsLayer();
+                this.layerControl.setType(LayerType.ThreeDimension)
               } else if (mapFeatures[key] == "3D-button") {
-                this._add3DBuildingsLayer();
+                // this._add3DBuildingsLayer();
+                this.layerControl.setType(LayerType.ThreeDimensionButton)
               }
               break;
             case "position":
@@ -999,26 +1020,30 @@ export class PlayingGamePage implements OnInit {
               break;
             case "streetSection":
               if (mapFeatures[key]) {
-                this.streetSection = true;
+                this.streetSectionControl.setType(StreetSectionType.Enabled)
+                // this.streetSection = true;
               } else {
-                this.streetSection = false;
+                this.streetSectionControl.setType(StreetSectionType.Disabled)
+                // this.streetSection = false;
               }
               break;
             case "landmarks":
-              console.log(mapFeatures.landmarkFeatures);
-              this.map.addLayer({
-                id: "landmarks",
-                type: "fill-extrusion",
-                source: {
-                  type: "geojson",
-                  data: mapFeatures.landmarkFeatures
-                },
-                paint: {
-                  "fill-extrusion-color": "#ffff00",
-                  "fill-extrusion-opacity": 0.5,
-                  "fill-extrusion-height": 9999
-                }
-              });
+              if (mapFeatures[key]) {
+                this.landmarkControl.setLandmark(mapFeatures.landmarkFeatures)
+              }
+              // this.map.addLayer({
+              //   id: "landmarks",
+              //   type: "fill-extrusion",
+              //   source: {
+              //     type: "geojson",
+              //     data: mapFeatures.landmarkFeatures
+              //   },
+              //   paint: {
+              //     "fill-extrusion-color": "#ffff00",
+              //     "fill-extrusion-opacity": 0.5,
+              //     "fill-extrusion-height": 9999
+              //   }
+              // });
               break;
           }
         }
@@ -1026,56 +1051,56 @@ export class PlayingGamePage implements OnInit {
     }
   }
 
-  _add3DBuildingsLayer(): void {
-    // Add 3D buildungs
-    // Insert the layer beneath any symbol layer.
-    var layers = this.map.getStyle().layers;
+  // _add3DBuildingsLayer(): void {
+  //   // Add 3D buildungs
+  //   // Insert the layer beneath any symbol layer.
+  //   var layers = this.map.getStyle().layers;
 
-    var labelLayerId;
-    for (var i = 0; i < layers.length; i++) {
-      if (layers[i].type === "symbol" && layers[i].layout["text-field"]) {
-        labelLayerId = layers[i].id;
-        break;
-      }
-    }
+  //   var labelLayerId;
+  //   for (var i = 0; i < layers.length; i++) {
+  //     if (layers[i].type === "symbol" && layers[i].layout["text-field"]) {
+  //       labelLayerId = layers[i].id;
+  //       break;
+  //     }
+  //   }
 
-    this.map.addLayer(
-      {
-        id: "3d-buildings",
-        source: "composite",
-        "source-layer": "building",
-        filter: ["==", "extrude", "true"],
-        type: "fill-extrusion",
-        minzoom: 15,
-        paint: {
-          "fill-extrusion-color": "#aaa",
+  //   this.map.addLayer(
+  //     {
+  //       id: "3d-buildings",
+  //       source: "composite",
+  //       "source-layer": "building",
+  //       filter: ["==", "extrude", "true"],
+  //       type: "fill-extrusion",
+  //       minzoom: 15,
+  //       paint: {
+  //         "fill-extrusion-color": "#aaa",
 
-          // use an 'interpolate' expression to add a smooth transition effect to the
-          // buildings as the user zooms in
-          "fill-extrusion-height": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            15,
-            0,
-            15.05,
-            ["get", "height"]
-          ],
-          "fill-extrusion-base": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            15,
-            0,
-            15.05,
-            ["get", "min_height"]
-          ],
-          "fill-extrusion-opacity": 0.6
-        }
-      },
-      // labelLayerId
-    );
-  }
+  //         // use an 'interpolate' expression to add a smooth transition effect to the
+  //         // buildings as the user zooms in
+  //         "fill-extrusion-height": [
+  //           "interpolate",
+  //           ["linear"],
+  //           ["zoom"],
+  //           15,
+  //           0,
+  //           15.05,
+  //           ["get", "height"]
+  //         ],
+  //         "fill-extrusion-base": [
+  //           "interpolate",
+  //           ["linear"],
+  //           ["zoom"],
+  //           15,
+  //           0,
+  //           15.05,
+  //           ["get", "min_height"]
+  //         ],
+  //         "fill-extrusion-opacity": 0.6
+  //       }
+  //     },
+  //     // labelLayerId
+  //   );
+  // }
 
   _toGeoJSONPoint = (lng, lat): GeoJSON.Feature<GeoJSON.Point> =>
     JSON.parse(`

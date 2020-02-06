@@ -12,7 +12,7 @@ export enum RotationType {
     North
 }
 
-export default class RotationControl {
+export class RotationControl {
     private deviceOrientationSubscription: Subscription;
     private deviceOrientation: DeviceOrientation
     private rotationType: RotationType = RotationType.Manual
