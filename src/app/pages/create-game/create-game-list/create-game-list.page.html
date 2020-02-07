@@ -99,13 +99,21 @@
             <p class="list">{{ i + 1 }}</p>
           </div>
         </ion-avatar>
+        <ion-avatar slot="start" *ngIf="task.type.includes('theme')">
+          <div class="mymarker invisible">
+          </div>
+        </ion-avatar>
+        <ion-avatar slot="start" *ngIf="task.type.includes('info')">
+          <div class="mymarker invisible">
+          </div>
+        </ion-avatar>
         <ion-chip *ngIf="task.type.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
           <ion-label><ion-icon name="navigate"></ion-icon> {{ task.name }}</ion-label>
         </ion-chip>
-        <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', taks)">
+        <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', task)">
           <ion-label><ion-icon name="clipboard"></ion-icon> {{ task.name }}</ion-label>
         </ion-chip>
-        <ion-chip *ngIf="task.type.includes('info')" color="warning" (click)="presentTaskModal('info', taks)">
+        <ion-chip *ngIf="task.type.includes('info')" color="warning" (click)="presentTaskModal('info', task)">
           <ion-label><ion-icon name="information-circle-outline"></ion-icon> Information</ion-label>
         </ion-chip>
         <ion-icon *ngIf="!reorder" slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
