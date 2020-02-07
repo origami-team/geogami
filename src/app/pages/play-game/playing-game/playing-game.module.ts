@@ -28,4 +28,4 @@ const routes: Routes = [
   ],
   declarations: [PlayingGamePage]
 })
-export class PlayingGamePageModule {}
+export class PlayingGamePageModule { }
