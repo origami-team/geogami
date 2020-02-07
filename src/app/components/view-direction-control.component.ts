@@ -22,6 +22,14 @@ export class ViewDirectionControl {
 
     private isInitalized = false;
 
+    // geolocateControl: MapboxMap.GeolocateControl = new MapboxMap.GeolocateControl({
+    //     positionOptions: {
+    //         enableHighAccuracy: true
+    //     },
+    //     trackUserLocation: true,
+    //     showUserLocation: true
+    // });
+
     constructor(map: MapboxMap, deviceOrientation: DeviceOrientation) {
         this.map = map;
 
@@ -91,6 +99,10 @@ export class ViewDirectionControl {
                 this.reset()
                 break;
             case ViewDirectionType.Continuous:
+                // this.map.addControl(this.geolocateControl);
+                // setTimeout(() => {
+                //     this.geolocateControl.trigger();
+                // }, 500);
                 this.deviceOrientationSubscription = this.deviceOrientation
                     .watchHeading({
                         frequency: 300
