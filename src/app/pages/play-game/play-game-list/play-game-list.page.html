@@ -3,12 +3,13 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Spiele</ion-title>
+    <ion-title>Spiele OriGami</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
-<ion-content>
+<ion-content padding>
+  <h5>Wähle ein Spiel aus der Spieleliste.</h5>
   <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

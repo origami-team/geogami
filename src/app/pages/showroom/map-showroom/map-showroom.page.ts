@@ -7,7 +7,7 @@ import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
-import { OsmService } from './../services/osm.service'
+import { OsmService } from './../../../services/osm.service'
 
 import osmtogeojson from 'osmtogeojson';
 

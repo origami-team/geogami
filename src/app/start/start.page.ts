@@ -60,7 +60,7 @@ export class StartPage implements OnInit {
   }
 
   navigateShowroomPage() {
-    this.navCtrl.navigateForward('map-showroom');
+    this.navCtrl.navigateForward('showroom');
   }
 
   navigateInfoPage() {

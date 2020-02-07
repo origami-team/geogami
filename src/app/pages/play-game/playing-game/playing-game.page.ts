@@ -887,12 +887,7 @@ export class PlayingGamePage implements OnInit {
               } else {
                 this.map.scrollZoom.disable();
                 this.map.doubleClickZoom.disable();
-                // this.map.touchZoomRotate.disable();
-                try {
-                  // this.map.remove(this.zoomControl);
-                } catch (e) {
-                  console.log("Error: Remove zoomControl", e);
-                }
+                this.map.touchZoomRotate.disable();
               }
               break;
             case "pan":
@@ -994,7 +989,6 @@ export class PlayingGamePage implements OnInit {
               } else if (mapFeatures[key] == "true") {
                 this.map.addControl(this.geolocateControl);
                 setTimeout(() => {
-                  console.log("triggering this.geolocateControl");
                   this.geolocateControl.trigger();
                 }, 500);
               } else if (mapFeatures[key] == "button") {

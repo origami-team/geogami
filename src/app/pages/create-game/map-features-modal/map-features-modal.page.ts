@@ -23,7 +23,7 @@ export class MapFeaturesModalPage implements OnInit {
   private draw: MapboxDraw;
 
   features: any = {
-    zoombar: false,
+    zoombar: "true",
     pan: "true",
     rotation: "manual",
     material: "standard",
