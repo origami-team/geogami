@@ -1,12 +1,13 @@
 import { Map as MapboxMap } from "mapbox-gl";
 import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 import MapboxCompare from "mapbox-gl-compare";
-import { ElementRef } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import {
     DeviceOrientation,
     DeviceOrientationCompassHeading
 } from "@ionic-native/device-orientation/ngx";
 import { Subscription } from 'rxjs';
+import { AlertController, Platform } from '@ionic/angular';
 
 
 export enum LayerType {
@@ -21,6 +22,8 @@ export enum LayerType {
 
 export class LayerControl {
     private map: MapboxMap;
+    private alertController: AlertController;
+    private platform: Platform;
     private layerType: LayerType;
     private styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
     private swipeMapContainer: ElementRef;
@@ -28,12 +31,16 @@ export class LayerControl {
 
     private tilt = (e: DeviceOrientationEvent) => {
         if (e.beta <= 60 && e.beta >= 0) {
-            this.map.setPitch(e.beta);
+            requestAnimationFrame(() => {
+                this.map.setPitch(e.beta);
+            })
         }
     }
 
-    constructor(map: MapboxMap, private deviceOrientation: DeviceOrientation) {
+    constructor(map: MapboxMap, private deviceOrientation: DeviceOrientation, alertController: AlertController, platform: Platform) {
         this.map = map;
+        this.alertController = alertController;
+        this.platform = platform;
     }
 
     public setType(type: LayerType, swipeMapContainer: ElementRef = undefined): void {
@@ -57,7 +64,7 @@ export class LayerControl {
         }
     }
 
-    private update(): void {
+    update = async () => {
         switch (this.layerType) {
             case LayerType.Standard:
                 break;
@@ -91,11 +98,39 @@ export class LayerControl {
             case LayerType.ThreeDimension:
                 this._add3DBuildingsLayer()
                 this.deviceOrientationSubscription = this.deviceOrientation
-                    .watchHeading()
+                    .watchHeading({ frequency: 10 })
                     .subscribe((data: DeviceOrientationCompassHeading) => {
-                        this.map.setBearing(data.magneticHeading);
+                        requestAnimationFrame(() => {
+                            this.map.setBearing(data.magneticHeading);
+                        })
                     })
-                addEventListener("deviceorientation", this.tilt, false);
+                if (this.platform.is('ios')) {
+                    const alert = await this.alertController.create({
+                        header: 'Neigungssensor nutzen?',
+                        message: 'Bitte Bestätige die Nutzung des Neigungssensors',
+                        buttons: [
+                            {
+                                text: 'Okay',
+                                handler: () => {
+                                    if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+                                        (DeviceOrientationEvent as any).requestPermission()
+                                            .then(permissionState => {
+                                                if (permissionState === 'granted') {
+                                                    window.addEventListener('deviceorientation', this.tilt, false);
+                                                }
+                                            })
+                                            .catch(console.error);
+                                    } else {
+                                        addEventListener("deviceorientation", this.tilt, false);
+                                    }
+                                }
+                            }
+                        ]
+                    });
+                    alert.present();
+                } else {
+                    addEventListener("deviceorientation", this.tilt, false);
+                }
                 break;
             case LayerType.ThreeDimensionButton:
                 // TODO: implement

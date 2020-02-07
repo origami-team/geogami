@@ -37,7 +37,9 @@ import { LandmarkControl } from 'src/app/components/landmark-control.component';
 import { StreetSectionControl, StreetSectionType } from './../../../components/street-section-control.component'
 import { LayerControl, LayerType } from 'src/app/components/layer-control.component';
 
-import MapboxCompare from "mapbox-gl-compare";
+import { AlertController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
+
 
 
 @Component({
@@ -146,7 +148,9 @@ export class PlayingGamePage implements OnInit {
     private device: Device,
     private insomnia: Insomnia,
     private vibration: Vibration,
-    private camera: Camera
+    private camera: Camera,
+    public alertController: AlertController,
+    public platform: Platform
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -309,7 +313,7 @@ export class PlayingGamePage implements OnInit {
       this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation)
       this.landmarkControl = new LandmarkControl(this.map)
       this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService);
-      this.layerControl = new LayerControl(this.map, this.deviceOrientation);
+      this.layerControl = new LayerControl(this.map, this.deviceOrientation, this.alertController, this.platform);
 
       // this.map.addControl(this.geolocateControl);
       // this.geolocateControl.trigger();
