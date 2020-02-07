@@ -47,9 +47,11 @@ export class RotationControl {
                 break;
             case RotationType.Auto:
                 this.deviceOrientationSubscription = this.deviceOrientation
-                    .watchHeading()
+                    .watchHeading({ frequency: 10 })
                     .subscribe((data: DeviceOrientationCompassHeading) => {
-                        this.map.setBearing(data.magneticHeading);
+                        requestAnimationFrame(() => {
+                            this.map.setBearing(data.magneticHeading);
+                        })
                     })
                 break;
             case RotationType.Button:

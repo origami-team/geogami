@@ -580,10 +580,13 @@ export class PlayingGamePage implements OnInit {
     console.log(this.taskIndex, this.task);
   }
 
-  async onMultipleChoiceSelected(item) {
-    console.log("User clicked on ", item);
+  async onMultipleChoiceSelected(item, event) {
     this.selectedPhoto = item;
     this.isCorrectPhotoSelected = item.key === "photo-0";
+    Array.from(document.getElementsByClassName('multiple-choize-img')).forEach(elem => {
+      elem.classList.remove('selected')
+    })
+    event.target.classList.add('selected')
     this.trackerService.addAnswer({
       task: this.task,
       answer: {
