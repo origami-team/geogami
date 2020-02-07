@@ -82,7 +82,7 @@
           " class="multiple-choice">
           <div *ngFor="let item of task.settings['answer-type'].settings['multiple-choice'] | keyvalue | shuffle">
             <ion-thumbnail slot="start">
-              <img [src]=item.value (click)=onMultipleChoiceSelected(item) />
+              <img [src]=item.value class="multiple-choize-img" (click)='onMultipleChoiceSelected(item, $event)' />
             </ion-thumbnail>
           </div>
         </div>

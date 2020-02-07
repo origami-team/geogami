@@ -1,4 +1,4 @@
-import { IControl, Map as MapboxMap, GeoJSONSource } from "mapbox-gl";
+import { Map as MapboxMap } from "mapbox-gl";
 import {
     DeviceOrientation,
     DeviceOrientationCompassHeading
@@ -22,14 +22,6 @@ export class ViewDirectionControl {
 
     private isInitalized = false;
 
-    // geolocateControl: MapboxMap.GeolocateControl = new MapboxMap.GeolocateControl({
-    //     positionOptions: {
-    //         enableHighAccuracy: true
-    //     },
-    //     trackUserLocation: true,
-    //     showUserLocation: true
-    // });
-
     constructor(map: MapboxMap, deviceOrientation: DeviceOrientation) {
         this.map = map;
 
@@ -46,7 +38,7 @@ export class ViewDirectionControl {
             }
         );
         this.map.loadImage(
-            "/assets/icons/direction.png",
+            "/assets/icons/directionv2.png",
             (error, image) => {
                 if (error) throw error;
 
@@ -67,8 +59,8 @@ export class ViewDirectionControl {
                     type: "symbol",
                     layout: {
                         "icon-image": "view-direction",
-                        "icon-size": 1,
-                        "icon-offset": [0, -25]
+                        "icon-size": 0.65,
+                        "icon-offset": [0, -12.5]
                     }
                 });
                 this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
@@ -99,10 +91,6 @@ export class ViewDirectionControl {
                 this.reset()
                 break;
             case ViewDirectionType.Continuous:
-                // this.map.addControl(this.geolocateControl);
-                // setTimeout(() => {
-                //     this.geolocateControl.trigger();
-                // }, 500);
                 this.deviceOrientationSubscription = this.deviceOrientation
                     .watchHeading({
                         frequency: 300

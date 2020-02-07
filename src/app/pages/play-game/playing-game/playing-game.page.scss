@@ -68,6 +68,11 @@
     margin: 0;
   }
 
+  .selected {
+    outline: solid #3880ff 2px;
+    outline-offset: 1px;
+  }
+
   .multiple-choice {
     display: flex;
     width: 100%;
