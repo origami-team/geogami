@@ -7,6 +7,10 @@
 
 @import '~@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
+.invisible {
+    opacity: 0;
+}
+
 .mymarker {
     background-image: url('/assets/icons/marker-editor.svg');
     background-size: cover;
