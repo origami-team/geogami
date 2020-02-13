@@ -59,7 +59,10 @@
               ? 'wrap'
               : 'nowrap'
           }">
-          <div class="compass bearing" *ngIf="task.type == 'theme-direction' && task.settings['question-type'].name && task.settings['question-type'].name != 'question-type-current-direction'">
+          <div class="compass bearing" *ngIf="task.type == 'theme-direction' && 
+            task.settings['question-type'].name && 
+            task.settings['question-type'].name != 'question-type-current-direction' && 
+            task.settings['question-type'].name != 'photo'">
             <img src="/assets/icons/direction-bearing.svg" [ngStyle]="{
                 transform:
                   'translateX(-50%) rotate(0deg)'
@@ -70,8 +73,10 @@
           </div>
         </div>
         <div class="photo-container" *ngIf="
-            task.type == 'theme-object' &&
-            task.settings['question-type'].name == 'photo'
+            (task.type == 'theme-object' &&
+            task.settings['question-type'].name == 'photo') ||
+            (task.type == 'theme-direction' &&
+            task.settings['question-type'].name == 'photo')
           ">
           <img [src]="task.settings['question-type'].settings.photo" />
         </div>

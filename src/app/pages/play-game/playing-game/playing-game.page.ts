@@ -271,7 +271,8 @@ export class PlayingGamePage implements OnInit {
           }
         }
 
-        if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
+        if (this.task.type == "theme-direction" &&
+          ((this.task.settings["question-type"].name == "question-type-current-direction") || (this.task.settings["question-type"].name == "photo"))) {
           if (this.map.getSource('viewDirectionClick')) {
             this.map.getSource('viewDirectionClick').setData({
               type: "Point",
@@ -373,7 +374,9 @@ export class PlayingGamePage implements OnInit {
           longitude: e.lngLat.lng
         }
       });
-      if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
+      if (this.task.type == "theme-direction" &&
+        ((this.task.settings["question-type"].name == "question-type-current-direction") ||
+          (this.task.settings["question-type"].name == "photo"))) {
         // let direction = Math.atan2(e.lngLat.lat - this.lastKnownPosition.coords.latitude, e.lngLat.lng - this.lastKnownPosition.coords.longitude) * 180 / Math.PI
         this.clickDirection = this.bearing(this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude, e.lngLat.lat, e.lngLat.lng)
         this.map.setLayoutProperty(
@@ -542,7 +545,9 @@ export class PlayingGamePage implements OnInit {
       }
     }
 
-    if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
+    if (this.task.type == "theme-direction" &&
+      ((this.task.settings["question-type"].name == "question-type-current-direction") ||
+        (this.task.settings["question-type"].name == "photo"))) {
       this.map.loadImage(
         "/assets/icons/directionv2.png",
         (error, image) => {
@@ -574,6 +579,8 @@ export class PlayingGamePage implements OnInit {
             });
           })
         });
+
+    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-photo") {
 
     } else if (this.task.type == "theme-direction") {
       console.log(this.task.settings["question-type"].settings.direction);
@@ -780,7 +787,9 @@ export class PlayingGamePage implements OnInit {
         this.task.settings["answer-type"].name == "take-photo")
     ) {
       this.nextTask();
-    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-current-direction") {
+    } else if (this.task.type == "theme-direction" &&
+      this.task.settings["question-type"].name != "question-type-current-direction" &&
+      this.task.settings["question-type"].name != "photo") {
       this.trackerService.addAnswer({
         task: this.task,
         answer: {
@@ -803,6 +812,26 @@ export class PlayingGamePage implements OnInit {
       console.log(this.clickDirection, this.compassHeading)
       if (this.task.settings.feedback) {
         if (Math.abs(this.clickDirection - this.compassHeading) < 45) {
+          this.nextTask()
+          this.map.removeLayer('viewDirectionClick')
+        } else {
+          const toast = await this.toastController.create({
+            message: "Deine Eingabe ist falsch. Versuche es erneut",
+            color: "dark",
+            showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        }
+      } else {
+        this.nextTask();
+        this.map.removeLayer('viewDirectionClick')
+      }
+    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
+      const myTargetHeading = this.task.settings["question-type"].settings.direction
+      console.log(this.clickDirection, myTargetHeading)
+      if (this.task.settings.feedback) {
+        if (Math.abs(this.clickDirection - myTargetHeading) < 45) {
           this.nextTask()
           this.map.removeLayer('viewDirectionClick')
         } else {

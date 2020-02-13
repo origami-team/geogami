@@ -281,7 +281,7 @@ export default [
                 info:
                   "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
-              },
+              }
             ]
           },
           {
