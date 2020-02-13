@@ -3,33 +3,32 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Task Showroom</ion-title>
+    <ion-title>Aufgabentypen</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <p>Hier erfährst du mehr über die verschiedenen Aufgabentypen in OriGami.</p>
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="navigate"></ion-icon> Navigationsaufgaben
+        <ion-icon name="navigate" color="primary"></ion-icon> Navigationsaufgaben
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Bei einer Navigationsaufgabe muss der Spieler zu einem neuen Ort navigieren. Es gibt vier Arten der Navigation:</p>
+      <p>Navigationsaufgabe verlangen das Navigieren zu einem neuen Ort.</p>
        
         <ion-chip color="primary">
           <ion-label><ion-icon name="navigate"></ion-icon> Navigation zur Zielfahne</ion-label>
         </ion-chip>
         <ion-grid><ion-row>
           <ion-col><b>Platz für ein Bild</b></ion-col>
-          <ion-col>Der Spieler muss sich mittels Karte zum nächsten Zielpunkt begeben. Der Zielpunkt ist auf der Karte markiert.</ion-col>
+          <ion-col>Der nächste Zielpunkt ist mit einem Zielfähnchen auf der Karte markiert.</ion-col>
         </ion-row></ion-grid>
 
         <ion-chip color="primary">
           <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Richtungspfeil</ion-label>
         </ion-chip>
-          <ion-grid><ion-row><ion-col>Der Spieler wird von einem Richtungspfeil und mithilfe einer Entfernungsangabe in Metern zum nächsten Zielpunkt geleitet. Die Karte wird ausgeblendet.</ion-col></ion-row></ion-grid>
+          <ion-grid><ion-row><ion-col>Der Spieler wird mittels Richtungspfeil und Entfernungsangabe zum nächsten Zielpunkt geleitet. Die Karte wird ausgeblendet.</ion-col></ion-row></ion-grid>
       
         <ion-chip color="primary">
           <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Textanweisung</ion-label>
@@ -41,11 +40,11 @@
     <ion-card>
       <ion-card-header>
         <ion-card-title>
-          <ion-icon name="clipboard"></ion-icon> Themenaufgaben
+          <ion-icon name="clipboard" color="secondary"></ion-icon> Themenaufgaben
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p>Themenaufgaben sind stets ortsgebunden. Es gibt vier Arten, die hinsichtlich ihres Informationsgehalts nochmal weiter unterschieden werden können:</p>
+        <p>Themenaufgaben sind ortsgebundene Aufgaben zum Kartenlesenlernen oder beliebigen anderen Themen.</p>
          
           <ion-chip color="secondary">
             <ion-label><ion-icon name="clipboard"></ion-icon> Selbst-Lokalisation</ion-label>

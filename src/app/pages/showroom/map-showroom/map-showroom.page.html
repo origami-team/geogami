@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/showroom"></ion-back-button>
     </ion-buttons>
-    <ion-title>Map Showroom</ion-title>
+    <ion-title>Kartenfeatures</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,8 +12,9 @@
   <div *ngIf='enabledFeatures.includes("swipe")' id="secondary-map" class="map"></div>
 
   <div class="control">
+    <ion-icon name="map" size="large"></ion-icon> 
     <ion-chip [color]='enabledFeatures.includes("zoomBar") ? "primary" : "medium"' (click)=toggleZoomBar()>
-      <ion-label>Zoombalken</ion-label>
+      <ion-label>Zoom</ion-label>
     </ion-chip>
     <ion-chip [color]='enabledFeatures.includes("swipe") ? "primary" : "medium"' (click)=toggleSwipe()>
       <ion-label>Swipe</ion-label>
@@ -25,7 +26,7 @@
       <ion-label>Manuelle Rotation</ion-label>
     </ion-chip>
     <ion-chip [color]='enabledFeatures.includes("autoRotate") ? "primary" : "medium"' (click)=toggleAutoRotate()>
-      <ion-label>Automatische Kartenrotation</ion-label>
+      <ion-label>Automatische Rotation</ion-label>
     </ion-chip>
     <ion-chip [color]='enabledFeatures.includes("position") ? "primary" : "medium"' (click)=togglePosition()>
       <ion-label>Position</ion-label>
