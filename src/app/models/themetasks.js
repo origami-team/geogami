@@ -269,7 +269,20 @@ export default [
           },
           {
             label: "... entspricht der aktuellen Blickrichtung",
-            items: []
+            name: "question-type-current-direction",
+            items: [
+              {
+                type: "input",
+                name: "text",
+                inputType: "area",
+                label: "Aufgabenstellung",
+                text:
+                  "Markiere die Richtung, in du die jetzt siehst, mit einem Klick auf der Karte.",
+                info:
+                  "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
+                validation: [Validators.required, Validators.minLength(4)]
+              },
+            ]
           },
           {
             label: "... wird mit einem Foto angezeigt",
@@ -291,7 +304,7 @@ export default [
                 name: "photo",
                 label: "Foto der zu suchenden Richtung",
                 info:
-                  " Lade ein Foto hoch, das am Startpunkt aufgenommen wurde und in die gesuchte Richtung zeigt.",
+                  "Lade ein Foto hoch, das am Startpunkt aufgenommen wurde und in die gesuchte Richtung zeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {

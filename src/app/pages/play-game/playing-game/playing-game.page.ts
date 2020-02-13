@@ -70,6 +70,8 @@ export class PlayingGamePage implements OnInit {
   //   }
   // };
 
+  clickDirection = 0;
+
   rotationControl: RotationControl;
   viewDirectionControl: ViewDirectionControl;
   landmarkControl: LandmarkControl;
@@ -96,7 +98,7 @@ export class PlayingGamePage implements OnInit {
   // streetSection: boolean = false;
 
   // treshold to trigger location arrive
-  triggerTreshold: Number = 10;
+  triggerTreshold: Number = 15;
 
   // degree for nav-arrow
   heading: number = 0;
@@ -269,6 +271,18 @@ export class PlayingGamePage implements OnInit {
           }
         }
 
+        if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
+          if (this.map.getSource('viewDirectionClick')) {
+            this.map.getSource('viewDirectionClick').setData({
+              type: "Point",
+              coordinates: [
+                pos.coords.longitude,
+                pos.coords.latitude
+              ]
+            })
+          }
+        }
+
         // if (this.streetSection) {
         // this.streetSectionControl.setType(StreetSectionType.Enabled)
         // this.OSMService.getStreetCoordinates(
@@ -359,27 +373,37 @@ export class PlayingGamePage implements OnInit {
           longitude: e.lngLat.lng
         }
       });
-      if (
-        this.task.type == "theme-loc" ||
-        (this.task.settings["answer-type"] &&
-          this.task.settings["answer-type"].name == "set-point") ||
-        (this.task.type == "theme-object" &&
-          this.task.settings["question-type"].name == "photo") ||
-        this.task.type == "theme-direction"
-      ) {
-        const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-        if (this.userSelectMarker) {
-          this.userSelectMarker.setLngLat(e.lngLat);
-        } else {
-          this.userSelectMarker = new mapboxgl.Marker({
-            color: "green",
-            draggable: true
-          })
-            .setLngLat(pointFeature.geometry.coordinates)
-            .addTo(this.map);
-          this.userSelectMarker.on("dragend", () => {
-            // TODO: implement
-          });
+      if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
+        // let direction = Math.atan2(e.lngLat.lat - this.lastKnownPosition.coords.latitude, e.lngLat.lng - this.lastKnownPosition.coords.longitude) * 180 / Math.PI
+        this.clickDirection = this.bearing(this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude, e.lngLat.lat, e.lngLat.lng)
+        this.map.setLayoutProperty(
+          "viewDirectionClick",
+          "icon-rotate",
+          this.clickDirection
+        );
+      } else {
+        if (
+          this.task.type == "theme-loc" ||
+          (this.task.settings["answer-type"] &&
+            this.task.settings["answer-type"].name == "set-point") ||
+          (this.task.type == "theme-object" &&
+            this.task.settings["question-type"].name == "photo") ||
+          this.task.type == "theme-direction"
+        ) {
+          const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+          if (this.userSelectMarker) {
+            this.userSelectMarker.setLngLat(e.lngLat);
+          } else {
+            this.userSelectMarker = new mapboxgl.Marker({
+              color: "green",
+              draggable: true
+            })
+              .setLngLat(pointFeature.geometry.coordinates)
+              .addTo(this.map);
+            this.userSelectMarker.on("dragend", () => {
+              // TODO: implement
+            });
+          }
         }
       }
     });
@@ -396,60 +420,60 @@ export class PlayingGamePage implements OnInit {
         // this.map.rotateTo(data.magneticHeading, { duration: 10 });
         // this.map.setBearing(data.magneticHeading);
         // }
-        if (this.directionArrow) {
-          // if (
-          //   this.map.getSource("viewDirection") == undefined &&
-          //   !this.map.hasImage("view-direction")
-          // ) {
-          //   this.map.loadImage(
-          //     "/assets/icons/direction.png",
-          //     (error, image) => {
-          //       if (error) throw error;
-          //       this.map.addImage("view-direction", image);
+        // if (this.directionArrow) {
+        // if (
+        //   this.map.getSource("viewDirection") == undefined &&
+        //   !this.map.hasImage("view-direction")
+        // ) {
+        //   this.map.loadImage(
+        //     "/assets/icons/direction.png",
+        //     (error, image) => {
+        //       if (error) throw error;
+        //       this.map.addImage("view-direction", image);
 
-          //       this.map.addSource("viewDirection", {
-          //         type: "geojson",
-          //         data: {
-          //           type: "Point",
-          //           coordinates: [
-          //             this.lastKnownPosition.coords.longitude,
-          //             this.lastKnownPosition.coords.latitude
-          //           ]
-          //         }
-          //       });
+        //       this.map.addSource("viewDirection", {
+        //         type: "geojson",
+        //         data: {
+        //           type: "Point",
+        //           coordinates: [
+        //             this.lastKnownPosition.coords.longitude,
+        //             this.lastKnownPosition.coords.latitude
+        //           ]
+        //         }
+        //       });
 
-          //       this.map.addLayer({
-          //         id: "viewDirection",
-          //         source: "viewDirection",
-          //         type: "symbol",
-          //         layout: {
-          //           "icon-image": "view-direction",
-          //           "icon-size": 1,
-          //           "icon-offset": [0, -25]
-          //         }
-          //       });
-          //       this.map.setLayoutProperty(
-          //         "viewDirection",
-          //         "icon-rotate",
-          //         data.magneticHeading
-          //       );
-          //     }
-          //   );
-          // } else {
-          //   this.map.getSource("viewDirection").setData({
-          //     type: "Point",
-          //     coordinates: [
-          //       this.lastKnownPosition.coords.longitude,
-          //       this.lastKnownPosition.coords.latitude
-          //     ]
-          //   });
-          //   this.map.setLayoutProperty(
-          //     "viewDirection",
-          //     "icon-rotate",
-          //     data.magneticHeading
-          //   );
-          // }
-        }
+        //       this.map.addLayer({
+        //         id: "viewDirection",
+        //         source: "viewDirection",
+        //         type: "symbol",
+        //         layout: {
+        //           "icon-image": "view-direction",
+        //           "icon-size": 1,
+        //           "icon-offset": [0, -25]
+        //         }
+        //       });
+        //       this.map.setLayoutProperty(
+        //         "viewDirection",
+        //         "icon-rotate",
+        //         data.magneticHeading
+        //       );
+        //     }
+        //   );
+        // } else {
+        //   this.map.getSource("viewDirection").setData({
+        //     type: "Point",
+        //     coordinates: [
+        //       this.lastKnownPosition.coords.longitude,
+        //       this.lastKnownPosition.coords.latitude
+        //     ]
+        //   });
+        //   this.map.setLayoutProperty(
+        //     "viewDirection",
+        //     "icon-rotate",
+        //     data.magneticHeading
+        //   );
+        // }
+        // }
       });
 
     this.path = {
@@ -518,7 +542,40 @@ export class PlayingGamePage implements OnInit {
       }
     }
 
-    if (this.task.type == "theme-direction") {
+    if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
+      this.map.loadImage(
+        "/assets/icons/directionv2.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("view-direction-click", image);
+
+          navigator.geolocation.getCurrentPosition(position => {
+            console.log(position)
+            this.map.addSource("viewDirectionClick", {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: [
+                  position.coords.longitude,
+                  position.coords.latitude
+                ]
+              }
+            });
+            this.map.addLayer({
+              id: "viewDirectionClick",
+              source: "viewDirectionClick",
+              type: "symbol",
+              layout: {
+                "icon-image": "view-direction",
+                "icon-size": 0.65,
+                "icon-offset": [0, -12.5]
+              }
+            });
+          })
+        });
+
+    } else if (this.task.type == "theme-direction") {
       console.log(this.task.settings["question-type"].settings.direction);
       this.directionBearing = this.task.settings[
         "question-type"
@@ -621,7 +678,7 @@ export class PlayingGamePage implements OnInit {
         }
       });
 
-      if (distance < 20 || this.task.settings.feedback == false) {
+      if (distance < this.triggerTreshold || this.task.settings.feedback == false) {
         this.nextTask();
       } else {
         const toast = await this.toastController.create({
@@ -704,7 +761,7 @@ export class PlayingGamePage implements OnInit {
             }
           });
 
-          if (distance < 20 || this.task.settings.feedback == false) {
+          if (distance < this.triggerTreshold || this.task.settings.feedback == false) {
             this.nextTask();
           } else {
             const toast = await this.toastController.create({
@@ -723,7 +780,7 @@ export class PlayingGamePage implements OnInit {
         this.task.settings["answer-type"].name == "take-photo")
     ) {
       this.nextTask();
-    } else if (this.task.type == "theme-direction") {
+    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-current-direction") {
       this.trackerService.addAnswer({
         task: this.task,
         answer: {
@@ -741,6 +798,25 @@ export class PlayingGamePage implements OnInit {
         toast.present();
       } else {
         this.nextTask();
+      }
+    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
+      console.log(this.clickDirection, this.compassHeading)
+      if (this.task.settings.feedback) {
+        if (Math.abs(this.clickDirection - this.compassHeading) < 45) {
+          this.nextTask()
+          this.map.removeLayer('viewDirectionClick')
+        } else {
+          const toast = await this.toastController.create({
+            message: "Deine Eingabe ist falsch. Versuche es erneut",
+            color: "dark",
+            showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        }
+      } else {
+        this.nextTask();
+        this.map.removeLayer('viewDirectionClick')
       }
     } else if (
       this.task.settings["answer-type"] &&
