@@ -223,6 +223,7 @@ export default [
                 selectOptions: [
                   {
                     label: "... durch Auswahl eines von vier Fotos",
+                    name: "multiple-choice",
                     items: [
                       {
                         type: "photoUploadMultipleChoice",

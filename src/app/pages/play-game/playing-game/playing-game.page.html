@@ -62,7 +62,8 @@
           <div class="compass bearing" *ngIf="task.type == 'theme-direction' && 
             task.settings['question-type'].name && 
             task.settings['question-type'].name != 'question-type-current-direction' && 
-            task.settings['question-type'].name != 'photo'">
+            task.settings['question-type'].name != 'photo' && 
+            task.settings['question-type'].name != 'question-type-map'">
             <img src="/assets/icons/direction-bearing.svg" [ngStyle]="{
                 transform:
                   'translateX(-50%) rotate(0deg)'
@@ -80,11 +81,8 @@
           ">
           <img [src]="task.settings['question-type'].settings.photo" />
         </div>
-
-        <div *ngIf="
-            task.settings['answer-type'] &&
-            task.settings['answer-type'].name == 'multiple-choice'
-          " class="multiple-choice">
+        <div *ngIf="task.settings['answer-type'] &&
+            task.settings['answer-type'].name == 'multiple-choice'" class="multiple-choice">
           <div *ngFor="let item of task.settings['answer-type'].settings['multiple-choice'] | keyvalue | shuffle">
             <ion-thumbnail slot="start">
               <img [src]=item.value class="multiple-choize-img" (click)='onMultipleChoiceSelected(item, $event)' />

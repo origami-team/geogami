@@ -789,7 +789,8 @@ export class PlayingGamePage implements OnInit {
       this.nextTask();
     } else if (this.task.type == "theme-direction" &&
       this.task.settings["question-type"].name != "question-type-current-direction" &&
-      this.task.settings["question-type"].name != "photo") {
+      this.task.settings["question-type"].name != "photo" &&
+      this.task.settings["answer-type"].name != "multiple-choice") {
       this.trackerService.addAnswer({
         task: this.task,
         answer: {
