@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { environment } from 'src/environments/environment';
 
 // import { Plugins, CameraResultType } from '@capacitor/core';
 // const { Camera } = Plugins;
@@ -20,7 +21,7 @@ export class CameraComponent implements OnInit {
 
   async capturePhoto() {
     const options: CameraOptions = {
-      quality: 100,
+      quality: environment.photoQuality,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE

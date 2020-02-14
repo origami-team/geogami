@@ -3,6 +3,7 @@ import { Field } from "src/app/dynamic-form/models/field";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-photo-upload-multiple-choice",
@@ -14,7 +15,7 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
   group: import("@angular/forms").FormGroup;
 
   baseOptions: CameraOptions = {
-    quality: 50,
+    quality: environment.photoQuality,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,
@@ -36,7 +37,7 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
   constructor(
     private camera: Camera,
     public popoverController: PopoverController
-  ) {}
+  ) { }
 
   capturePhoto(photoNumber) {
     this.camera.getPicture(this.cameraOptions).then(

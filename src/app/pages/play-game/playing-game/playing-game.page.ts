@@ -119,7 +119,7 @@ export class PlayingGamePage implements OnInit {
   deviceOrientationSubscription: Subscription;
 
   baseOptions: CameraOptions = {
-    quality: 50,
+    quality: environment.photoQuality,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,

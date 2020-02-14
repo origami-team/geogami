@@ -5,6 +5,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class CreateInfoModalComponent implements OnInit {
   photo: string
 
   baseOptions: CameraOptions = {
-    quality: 50,
+    quality: environment.photoQuality,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,

@@ -81,6 +81,9 @@
           ">
           <img [src]="task.settings['question-type'].settings.photo" />
         </div>
+        <div class="photo-container" *ngIf="task.type == 'info'">
+          <img [src]="task.settings.photo" />
+        </div>
         <div *ngIf="task.settings['answer-type'] &&
             task.settings['answer-type'].name == 'multiple-choice'" class="multiple-choice">
           <div *ngFor="let item of task.settings['answer-type'].settings['multiple-choice'] | keyvalue | shuffle">
