@@ -691,25 +691,30 @@ export class PlayingGamePage implements OnInit {
       this.task.type == "theme-object" &&
       this.task.settings["question-type"].name == "photo"
     ) {
-      const targetPosition = this.task.settings["question-type"].settings.point
-        .geometry.coordinates;
-      const clickPosition = this.userSelectMarker._lngLat;
+      // const targetPosition = this.task.settings["question-type"].settings.point
+      //   .geometry.coordinates;
+      const clickPosition = [
+        this.userSelectMarker._lngLat.lng,
+        this.userSelectMarker._lngLat.lat
+      ];
 
-      const distance = this.getDistanceFromLatLonInM(
-        targetPosition[1],
-        targetPosition[0],
-        clickPosition.lat,
-        clickPosition.lng
-      );
+      const isInPolygon = booleanPointInPolygon(clickPosition, this.task.settings["question-type"].settings.polygon[0])
+
+      // const distance = this.getDistanceFromLatLonInM(
+      //   targetPosition[1],
+      //   targetPosition[0],
+      //   clickPosition.lat,
+      //   clickPosition.lng
+      // );
 
       this.trackerService.addAnswer({
         task: this.task,
         answer: {
-          distance: distance
+          inPolygon: isInPolygon
         }
       });
 
-      if (distance < this.triggerTreshold || this.task.settings.feedback == false) {
+      if (isInPolygon || this.task.settings.feedback == false) {
         this.nextTask();
       } else {
         const toast = await this.toastController.create({

@@ -104,7 +104,7 @@ export default [
               },
               {
                 type: "map",
-                name: "point",
+                name: "polygon",
                 featureType: "polygon",
                 label: "Objektposition",
                 info:
