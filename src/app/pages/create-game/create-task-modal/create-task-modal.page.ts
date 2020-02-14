@@ -34,10 +34,22 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   selectedTask: any;
   confirmation: boolean = false;
   showMarker: boolean = true;
-  mapFeatures: any[];
+  mapFeatures: any = {
+    zoombar: "true",
+    pan: "true",
+    rotation: "manual",
+    material: "standard",
+    position: "none",
+    direction: "none",
+    track: false,
+    streetSection: false,
+    reducedInformation: false,
+    landmarks: false,
+    landmarkFeatures: undefined
+  }
   feedback: boolean = true;
 
-  constructor(public modalController: ModalController) {}
+  constructor(public modalController: ModalController) { }
 
   ngOnInit() {
     this.tasks = this.type == "nav" ? navtasks : themetasks;

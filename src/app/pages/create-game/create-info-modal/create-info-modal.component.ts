@@ -15,7 +15,19 @@ import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal
 export class CreateInfoModalComponent implements OnInit {
 
   info: string
-  mapFeatures: any
+  mapFeatures: any = {
+    zoombar: "true",
+    pan: "true",
+    rotation: "manual",
+    material: "standard",
+    position: "none",
+    direction: "none",
+    track: false,
+    streetSection: false,
+    reducedInformation: false,
+    landmarks: false,
+    landmarkFeatures: undefined
+  }
   photo: string
 
   baseOptions: CameraOptions = {
