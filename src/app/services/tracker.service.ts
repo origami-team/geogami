@@ -15,7 +15,7 @@ export class TrackerService {
   private events: any[];
   private answers: any[];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   init(gameID, device: Device) {
     this.game = gameID;

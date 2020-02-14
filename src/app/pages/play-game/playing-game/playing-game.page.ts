@@ -212,7 +212,7 @@ export class PlayingGamePage implements OnInit {
             bounds: this.map.getBounds(),
             center: this.map.getCenter(),
             zoom: this.map.getZoom(),
-            style: this.map.getStyle(),
+            // style: this.map.getStyle(),
             bearing: this.map.getBearing(),
             pitch: this.map.getPitch()
           }
@@ -655,12 +655,36 @@ export class PlayingGamePage implements OnInit {
       task: this.task,
       answer: {
         "multiple-choice": item.key,
-        correct: this.isCorrectPhotoSelected
+        correct: this.isCorrectPhotoSelected,
       }
     });
   }
 
   async onOkClicked() {
+    this.trackerService.addEvent({
+      type: "ON_OK_CLICKED",
+      position: {
+        coordinates: {
+          latitude: this.lastKnownPosition.coords.latitude,
+          longitude: this.lastKnownPosition.coords.longitude,
+          altitude: this.lastKnownPosition.coords.altitude,
+          accuracy: this.lastKnownPosition.coords.accuracy,
+          altitudeAccuracy: this.lastKnownPosition.coords.altitudeAccuracy,
+          heading: this.lastKnownPosition.coords.heading,
+          speed: this.lastKnownPosition.coords.speed
+        },
+        timestamp: this.lastKnownPosition.timestamp
+      },
+      compassHeading: this.compassHeading,
+      mapViewport: {
+        bounds: this.map.getBounds(),
+        center: this.map.getCenter(),
+        zoom: this.map.getZoom(),
+        // style: this.map.getStyle(),
+        bearing: this.map.getBearing(),
+        pitch: this.map.getPitch()
+      }
+    });
     if (this.task.type == "theme-loc") {
       this.nextTask();
     } else if (
