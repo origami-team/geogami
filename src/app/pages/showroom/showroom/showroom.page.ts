@@ -13,11 +13,8 @@ export class ShowroomPage implements OnInit {
   ngOnInit() {
   }
 
-  // Das hier ist etwas unsauber. Es wäre schöner, wenn map-showroom im Unterordner stecken würde,
-  // aber beim Verschieben treten immer Fehler auf...
-
   navigateMapShowroom() {
-    this.navCtrl.navigateBack('map-showroom');
+    this.navCtrl.navigateForward('map-showroom');
   }
   navigateTaskShowroom() {
     this.navCtrl.navigateForward('task-showroom');

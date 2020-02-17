@@ -48,6 +48,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     landmarkFeatures: undefined
   }
   feedback: boolean = true;
+  accuracy: number = 20;
 
   constructor(public modalController: ModalController) { }
 
@@ -121,7 +122,8 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
           confirmation: this.confirmation,
           showMarker: this.showMarker,
           mapFeatures: this.mapFeatures,
-          feedback: this.feedback
+          feedback: this.feedback,
+          accuracy: this.accuracy
         }
       }
     });

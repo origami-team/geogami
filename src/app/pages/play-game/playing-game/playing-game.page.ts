@@ -98,7 +98,7 @@ export class PlayingGamePage implements OnInit {
   // streetSection: boolean = false;
 
   // treshold to trigger location arrive
-  triggerTreshold: Number = 15;
+  triggerTreshold: Number = 20;
 
   // degree for nav-arrow
   heading: number = 0;
@@ -526,6 +526,12 @@ export class PlayingGamePage implements OnInit {
       type: "INIT_TASK",
       task: this.task
     });
+
+    if (this.task.settings.accuracy) {
+      this.triggerTreshold = this.task.settings.accuracy
+    } else {
+      this.triggerTreshold = 20;
+    }
 
     if (
       this.task.type.includes("theme") &&
