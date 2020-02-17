@@ -4,15 +4,12 @@ import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
-
 import mapboxgl from "mapbox-gl";
-
-import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
+import { Geoposition } from "@ionic-native/geolocation/ngx";
 import {
   DeviceOrientation,
   DeviceOrientationCompassHeading
 } from "@ionic-native/device-orientation/ngx";
-
 import {
   ModalController,
   NavController,
@@ -20,28 +17,20 @@ import {
 } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
-// import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 import { Subscription } from "rxjs";
-
 import { Insomnia } from "@ionic-native/insomnia/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
-
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
-
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
-
 import { RotationControl, RotationType } from './../../../components/rotation-control.component'
 import { ViewDirectionControl, ViewDirectionType } from './../../../components/view-direction-control.component';
 import { LandmarkControl } from 'src/app/components/landmark-control.component';
 import { StreetSectionControl, StreetSectionType } from './../../../components/street-section-control.component'
 import { LayerControl, LayerType } from 'src/app/components/layer-control.component';
-
 import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { HelperService } from 'src/app/services/helper.service';
 import { TrackControl, TrackType } from 'src/app/components/track-control.component';
-
-
 
 @Component({
   selector: "app-playing-game",

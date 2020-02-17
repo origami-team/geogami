@@ -25,9 +25,6 @@ import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/c
 import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
 import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
 
-import { InfoComponent } from "./form-elements/info/info.component";
-import { TextInputComponent } from "./form-elements/text-input/text-input.component";
-import { MapComponent } from "./form-elements/map/map.component";
 import { CameraComponent } from "./form-elements/camera/camera.component";
 
 import { PhotoUploadComponent } from "./form-elements/photo-upload/photo-upload.component";
@@ -40,13 +37,10 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
 import {
   DeviceOrientation,
-  DeviceOrientationCompassHeading
 } from "@ionic-native/device-orientation/ngx";
-import { DynamicFieldDirective } from "./form-elements/dynamic-field.directive";
 
 import { DynamicFormModule } from "./dynamic-form/dynamic-form.module";
 
-import { LottieAnimationViewModule } from "ng-lottie";
 import { Device } from "@ionic-native/device/ngx";
 
 import { Insomnia } from "@ionic-native/insomnia/ngx";
