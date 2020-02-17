@@ -67,6 +67,10 @@ export class StreetSectionControl {
                 }
               }).catch(e => { console.log("error", e) })
             }
+          },
+          err => console.error(err),
+          {
+            enableHighAccuracy: true
           }
         );
 

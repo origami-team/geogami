@@ -35,6 +35,10 @@ export class ViewDirectionControl {
                         coordinates: [position.coords.longitude, position.coords.latitude]
                     });
                 }
+            },
+            err => console.error(err),
+            {
+                enableHighAccuracy: true
             }
         );
         this.map.loadImage(
