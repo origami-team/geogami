@@ -7,7 +7,7 @@ import { Device } from "@ionic-native/device/ngx";
 
 import mapboxgl from "mapbox-gl";
 
-import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
+import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
 import {
   DeviceOrientation,
   DeviceOrientationCompassHeading
@@ -167,19 +167,19 @@ export class PlayingGamePage implements OnInit {
     });
 
     this.positionWatch = window.navigator.geolocation.watchPosition(
-      pos => {
+      position => {
         this.trackerService.addWaypoint({
           position: {
             coordinates: {
-              latitude: pos.coords.latitude,
-              longitude: pos.coords.longitude,
-              altitude: pos.coords.altitude,
-              accuracy: pos.coords.accuracy,
-              altitudeAccuracy: pos.coords.altitudeAccuracy,
-              heading: pos.coords.heading,
-              speed: pos.coords.speed
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              altitude: position.coords.altitude,
+              accuracy: position.coords.accuracy,
+              altitudeAccuracy: position.coords.altitudeAccuracy,
+              heading: position.coords.heading,
+              speed: position.coords.speed
             },
-            timestamp: pos.timestamp
+            timestamp: position.timestamp
           },
           compassHeading: this.compassHeading,
           mapViewport: {
@@ -191,7 +191,7 @@ export class PlayingGamePage implements OnInit {
             pitch: this.map.getPitch()
           }
         });
-        this.lastKnownPosition = pos;
+        this.lastKnownPosition = position;
         if (this.task && !this.showSuccess) {
           if (this.task.type.includes("nav")) {
             const waypoint = this.task.settings.point.geometry.coordinates;
@@ -205,8 +205,8 @@ export class PlayingGamePage implements OnInit {
             if (this.task.type == "nav-arrow") {
               const destCoords = this.task.settings.point.geometry.coordinates;
               const bearing = this.helperService.bearing(
-                pos.coords.latitude,
-                pos.coords.longitude,
+                position.coords.latitude,
+                position.coords.longitude,
                 destCoords[1],
                 destCoords[0]
               );
@@ -216,7 +216,7 @@ export class PlayingGamePage implements OnInit {
         }
 
         if (this.panCenter) {
-          this.map.setCenter(pos.coords);
+          this.map.setCenter(position.coords);
         }
 
         if (this.task && this.task.type == "theme-direction" &&
@@ -225,8 +225,8 @@ export class PlayingGamePage implements OnInit {
             this.map.getSource('viewDirectionClick').setData({
               type: "Point",
               coordinates: [
-                pos.coords.longitude,
-                pos.coords.latitude
+                position.coords.longitude,
+                position.coords.latitude
               ]
             })
           }
@@ -814,8 +814,6 @@ export class PlayingGamePage implements OnInit {
               }
               break;
             case "rotation":
-              // this.autoRotate = false;
-
               if (mapFeatures[key] == "manual") {
                 this.rotationControl.setType(RotationType.Manual)
               } else if (mapFeatures[key] == "auto") {
@@ -841,7 +839,6 @@ export class PlayingGamePage implements OnInit {
                 this.layerControl.setType(LayerType.Selection)
               } else if (mapFeatures[key] == "sat") {
                 this.layerControl.setType(LayerType.Satellite)
-
               } else if (mapFeatures[key] == "sat-button") {
                 // TODO: implememt
                 this.layerControl.setType(LayerType.SatelliteButton)
