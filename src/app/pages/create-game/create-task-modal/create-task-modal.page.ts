@@ -36,8 +36,9 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   showMarker: boolean = true;
   mapFeatures: any[];
   feedback: boolean = true;
+  accuracy: number = 20;
 
-  constructor(public modalController: ModalController) {}
+  constructor(public modalController: ModalController) { }
 
   ngOnInit() {
     this.tasks = this.type == "nav" ? navtasks : themetasks;
@@ -109,7 +110,8 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
           confirmation: this.confirmation,
           showMarker: this.showMarker,
           mapFeatures: this.mapFeatures,
-          feedback: this.feedback
+          feedback: this.feedback,
+          accuracy: this.accuracy
         }
       }
     });

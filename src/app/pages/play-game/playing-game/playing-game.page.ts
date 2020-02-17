@@ -96,7 +96,7 @@ export class PlayingGamePage implements OnInit {
   // streetSection: boolean = false;
 
   // treshold to trigger location arrive
-  triggerTreshold: Number = 10;
+  triggerTreshold: Number = 20;
 
   // degree for nav-arrow
   heading: number = 0;
@@ -500,6 +500,12 @@ export class PlayingGamePage implements OnInit {
       task: this.task
     });
 
+    if (this.task.settings.accuracy) {
+      this.triggerTreshold = this.task.settings.accuracy
+    } else {
+      this.triggerTreshold = 20;
+    }
+
     if (
       this.task.type.includes("theme") &&
       this.task.settings["question-type"] != undefined
@@ -618,7 +624,7 @@ export class PlayingGamePage implements OnInit {
         }
       });
 
-      if (distance < 20 || this.task.settings.feedback == false) {
+      if (distance < this.triggerTreshold || this.task.settings.feedback == false) {
         this.nextTask();
       } else {
         const toast = await this.toastController.create({
@@ -701,7 +707,7 @@ export class PlayingGamePage implements OnInit {
             }
           });
 
-          if (distance < 20 || this.task.settings.feedback == false) {
+          if (distance < this.triggerTreshold || this.task.settings.feedback == false) {
             this.nextTask();
           } else {
             const toast = await this.toastController.create({

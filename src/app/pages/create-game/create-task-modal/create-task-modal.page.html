@@ -5,13 +5,17 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="type == 'nav'"><ion-icon name="navigate" color="primary"></ion-icon> Navigationsaufgabe</ion-title>
-    <ion-title *ngIf="type == 'theme'"><ion-icon name="clipboard" color="secondary"></ion-icon> Themenaufgabe</ion-title>
+    <ion-title *ngIf="type == 'nav'">
+      <ion-icon name="navigate" color="primary"></ion-icon> Navigationsaufgabe
+    </ion-title>
+    <ion-title *ngIf="type == 'theme'">
+      <ion-icon name="clipboard" color="secondary"></ion-icon> Themenaufgabe
+    </ion-title>
     <ion-buttons slot="end">
       <!--Beim Klicken soll sich ein Pop-Up mit dem Task-Showroom öffnen-->
       <ion-button>
         <ion-icon name="help"></ion-icon>
-      </ion-button>      
+      </ion-button>
       <ion-button (click)="dismissModal(null)">
         <ion-icon name="save"></ion-icon>
       </ion-button>
@@ -23,11 +27,7 @@
   <ion-text>
     <h5>Aufgabentyp</h5>
   </ion-text>
-  <select
-    placeholder="Auswählen"
-    [ngModel]="selectedTask"
-    (ngModelChange)="onTaskSelected($event)"
-  >
+  <select placeholder="Auswählen" [ngModel]="selectedTask" (ngModelChange)="onTaskSelected($event)">
     <option [ngValue]="task" *ngFor="let task of tasks">{{ task.name }}</option>
   </select>
 
@@ -37,7 +37,7 @@
   <ion-text>
     <h5>Weitere Einstellungen</h5>
   </ion-text>
-    <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag'">
+  <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag'">
     <ion-label>Eingabebestätigung</ion-label>
     <ion-toggle [(ngModel)]="confirmation"></ion-toggle>
   </ion-item>
@@ -45,7 +45,8 @@
     <ion-label>Zielfahne anzeigen</ion-label>
     <ion-toggle [(ngModel)]="showMarker"></ion-toggle>
   </ion-item>
-  <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
+  <ion-item lines="none"
+    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
     <ion-label>Feedback</ion-label>
     <ion-toggle [(ngModel)]="feedback" color="primary"></ion-toggle>
   </ion-item>
@@ -53,23 +54,24 @@
     <ion-label>Feedback</ion-label>
     <ion-toggle [(ngModel)]="feedback" color="secondary"></ion-toggle>
   </ion-item>
-  <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
-    <ion-label>Genauigkeit</ion-label>    
-    <ion-range [(ngModel)]="accuracy" dualKnobs="true" min="10" max="100" step="10" snaps="true" snaps color="primary" ticks="true" pin="true">
+  <ion-item lines="none"
+    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
+    <ion-label>Genauigkeit</ion-label>
+    <ion-range [(ngModel)]="accuracy" min="10" max="100" step="10" snaps color="primary" ticks pin>
       <ion-label slot="start">10m</ion-label>
       <ion-icon slot="start" size="small" color="primary" name="locate"></ion-icon>
       <ion-icon slot="end" color="primary" name="locate"></ion-icon>
       <ion-label slot="end">100m</ion-label>
-    </ion-range>  
+    </ion-range>
   </ion-item>
   <ion-item lines="none" *ngIf="selectedTask.type == 'theme-loc'">
-    <ion-label>Genauigkeit</ion-label>    
-    <ion-range [(ngModel)]="accuracy" dualKnobs="true" min="10" max="100" step="10" snaps="true" snaps color="secondary" ticks="true" pin="true">
+    <ion-label>Genauigkeit</ion-label>
+    <ion-range [(ngModel)]="accuracy" min="10" max="100" step="10" snaps color="secondary" ticks pin>
       <ion-label slot="start">10m</ion-label>
       <ion-icon slot="start" size="small" color="secondary" name="locate"></ion-icon>
       <ion-icon slot="end" color="secondary" name="locate"></ion-icon>
       <ion-label slot="end">100m</ion-label>
-    </ion-range>  
+    </ion-range>
   </ion-item>
   <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
     <ion-label>
