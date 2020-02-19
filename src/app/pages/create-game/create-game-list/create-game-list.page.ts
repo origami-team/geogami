@@ -44,7 +44,7 @@ export class CreateGameListPage implements OnInit {
 
 
   ngOnInit() {
-    this.game = this.gameFactory.getGame();
+    this.gameFactory.getGame().then(game => this.game = game);
 
     console.log(this.gameFactory.game);
 
@@ -106,7 +106,10 @@ export class CreateGameListPage implements OnInit {
 
   addTaskToGame(task) {
     this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
-    this.game = this.gameFactory.getGame();
+    this.gameFactory.getGame().then(game => {
+      console.log(game)
+      this.game = game
+    });
 
     console.log(this.game.tasks);
   }
