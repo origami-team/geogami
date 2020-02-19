@@ -81,7 +81,7 @@
           ">
           <img [src]="task.settings['question-type'].settings.photo" />
         </div>
-        <div class="photo-container" *ngIf="task.type == 'info'">
+        <div class="photo-container" *ngIf="task.type == 'info' && task.settings.photo">
           <img [src]="task.settings.photo" />
         </div>
         <div *ngIf="task.settings['answer-type'] &&
