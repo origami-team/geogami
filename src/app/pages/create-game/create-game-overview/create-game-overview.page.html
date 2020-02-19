@@ -1,27 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="create-game/create-game-list"
-      ></ion-back-button>
+      <ion-back-button defaultHref="create-game/create-game-list"></ion-back-button>
     </ion-buttons>
     <ion-title>Speichere dein OriGami</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [className]="showUpload ? 'blur' : ''" (ngSubmit)="uploadGame()">
+  <form [className]="showUpload ? 'blur' : ''" (ngSubmit)="uploadGame()" *ngIf="model">
     <ion-list lines="full" class="ion-no-margin ion-no-padding">
       <ion-item>
-        <ion-label position="stacked"
-          >Name des Spiels: <ion-text color="danger">*</ion-text>
+        <ion-label position="stacked">Name des Spiels: <ion-text color="danger">*</ion-text>
         </ion-label>
-        <ion-input
-          required
-          type="text"
-          [(ngModel)]="model.name"
-          name="name"
-        ></ion-input>
+        <ion-input required type="text" [(ngModel)]="model.name" name="name"></ion-input>
       </ion-item>
 
       <!-- <ion-item>
@@ -33,8 +25,7 @@
     </ion-list>
 
     <div class="ion-padding">
-      <ion-button expand="block" type="submit" class="ion-no-margin"
-        >Spiel speichern
+      <ion-button expand="block" type="submit" class="ion-no-margin">Spiel speichern
       </ion-button>
     </div>
   </form>
@@ -42,14 +33,8 @@
   <div class="overlay success" *ngIf="showUpload">
     <h3 *ngIf="!showSuccess">Übertrage Daten...</h3>
     <h3 *ngIf="showSuccess">Dein Spiel wurde gespeichert</h3>
-    <lottie-animation-view
-      [options]="lottieConfig"
-      [width]="300"
-      [height]="300"
-    >
+    <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
     </lottie-animation-view>
-    <ion-button (click)="navigateHome()" [disabled]="!showSuccess"
-      >Fertig</ion-button
-    >
+    <ion-button (click)="navigateHome()" [disabled]="!showSuccess">Fertig</ion-button>
   </div>
 </ion-content>

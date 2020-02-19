@@ -5,6 +5,8 @@ import { PopoverController } from "@ionic/angular";
 import { NavController } from "@ionic/angular";
 
 import { Game } from "../../../models/game";
+import { Storage } from '@ionic/storage';
+
 
 import { GameFactoryService } from "../../../services/game-factory.service";
 
@@ -17,7 +19,7 @@ import { GamesService } from "src/app/services/games.service";
   styleUrls: ["./create-game-overview.page.scss"]
 })
 export class CreateGameOverviewPage implements OnInit {
-  public model = this.gameFactory.getGame();
+  public model;
   public lottieConfig: Object;
   showSuccess: boolean = false;
   showUpload: boolean = false;
@@ -26,7 +28,8 @@ export class CreateGameOverviewPage implements OnInit {
     public popoverController: PopoverController,
     public navCtrl: NavController,
     public gameFactory: GameFactoryService,
-    public gamesService: GamesService
+    public gamesService: GamesService,
+    private storage: Storage
   ) {
     this.lottieConfig = {
       path: "assets/lottie/astronaut.json",
@@ -38,7 +41,9 @@ export class CreateGameOverviewPage implements OnInit {
 
   // #0a1b28
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.gameFactory.getGame().then(game => { this.model = game });
+  }
 
   async showTrackingInfo(ev: any, text: string) {
     console.log(ev);

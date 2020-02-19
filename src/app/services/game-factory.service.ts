@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Storage } from '@ionic/storage';
 
 import { Game } from "./../models/game";
 
@@ -8,7 +9,7 @@ import { Game } from "./../models/game";
 export class GameFactoryService {
   public game: Game;
 
-  constructor() {}
+  constructor(private storage: Storage) { }
 
   addGameInformation(data: any) {
     this.game = {
@@ -16,6 +17,7 @@ export class GameFactoryService {
       ...data
     };
     console.log("New Game: ", this.game);
+    this.storage.set('game', this.game);
   }
 
   addTask(task: any) {
@@ -31,21 +33,30 @@ export class GameFactoryService {
         tasks: [task]
       };
     }
+    this.storage.set('game', this.game);
   }
 
   removeTask(taskID: number) {
     this.game.tasks = this.game.tasks.filter(t => t.id != taskID);
+    this.storage.set('game', this.game);
     return this.game;
   }
 
-  getGame() {
-    if (!this.game) {
-      this.game = new Game(Math.floor(Date.now() / 1000), "", true, []);
-    }
-    return this.game;
+  async getGame(): Promise<Game> {
+    return this.storage.get('game').then((val) => {
+      console.log(val)
+      if (val != undefined) {
+        this.game = val
+      } else if (!this.game) {
+        this.game = new Game(Math.floor(Date.now() / 1000), "", true, []);
+        this.storage.set('game', this.game);
+      }
+      return this.game;
+    });
   }
 
   flushGame() {
     this.game = undefined;
+    this.storage.remove('game');
   }
 }

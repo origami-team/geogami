@@ -45,6 +45,8 @@ import { Device } from "@ionic-native/device/ngx";
 
 import { Insomnia } from "@ionic-native/insomnia/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
+import { IonicStorageModule } from '@ionic/storage';
+
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -92,6 +94,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
+    }),
+    IonicStorageModule.forRoot({
+      driverOrder: ['localstorage', 'indexeddb']
     })
   ],
   providers: [
