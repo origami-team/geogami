@@ -5,6 +5,7 @@ import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
+
 import { Geoposition } from "@ionic-native/geolocation/ngx";
 import {
   DeviceOrientation,

@@ -21,7 +21,6 @@ export class TrackControl {
                 coordinates: []
             }
         };
-        console.log("in track")
         this.trackPositionWatch = window.navigator.geolocation.watchPosition(
             position => {
                 this.path.geometry.coordinates.push([
