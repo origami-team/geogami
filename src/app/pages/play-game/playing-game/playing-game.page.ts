@@ -33,6 +33,7 @@ import { Platform } from '@ionic/angular';
 import { HelperService } from 'src/app/services/helper.service';
 import { TrackControl, TrackType } from 'src/app/components/track-control.component';
 import { GeolocateControl, GeolocateType } from 'src/app/components/geolocate-control.component';
+import { PanControl, PanType } from 'src/app/components/pan-control.component';
 
 @Component({
   selector: "app-playing-game",
@@ -63,6 +64,7 @@ export class PlayingGamePage implements OnInit {
   layerControl: LayerControl
   trackControl: TrackControl
   geolocateControl: GeolocateControl
+  panControl: PanControl
 
   // tasks
   task: any;
@@ -238,6 +240,7 @@ export class PlayingGamePage implements OnInit {
       this.layerControl = new LayerControl(this.map, this.deviceOrientation, this.alertController, this.platform);
       this.trackControl = new TrackControl(this.map)
       this.geolocateControl = new GeolocateControl(this.map)
+      this.panControl = new PanControl(this.map)
 
       this.game = null;
       this.game = new Game(0, "Loading...", false, []);
@@ -796,14 +799,17 @@ export class PlayingGamePage implements OnInit {
             case "pan":
               this.panCenter = false; // Reset value
               if (mapFeatures[key] == "true") {
-                this.map.dragPan.enable();
+                this.panControl.setType(PanType.True)
+                /* this.map.dragPan.enable(); */
               } else if (mapFeatures[key] == "center") {
-                this.panCenter = true;
+                this.panControl.setType(PanType.Center)
+                /* this.panCenter = true; */
               } else if (mapFeatures[key] == "static") {
-                this.map.dragPan.disable();
+                this.panControl.setType(PanType.Static)
+                /* this.map.dragPan.disable();
                 this.map.scrollZoom.disable();
                 this.map.doubleClickZoom.disable();
-                this.map.touchZoomRotate.disable();
+                this.map.touchZoomRotate.disable(); */
               }
               break;
             case "rotation":
@@ -847,13 +853,9 @@ export class PlayingGamePage implements OnInit {
               break;
             case "position":
               if (mapFeatures[key] == "none") {
-                // TODO: implement ?
+                this.geolocateControl.setType(GeolocateType.None)
               } else if (mapFeatures[key] == "true") {
                 this.geolocateControl.setType(GeolocateType.Continuous)
-                /* this.map.addControl(this.geolocateControl);
-                setTimeout(() => {
-                  this.geolocateControl.trigger();
-                }, 500); */
               } else if (mapFeatures[key] == "button") {
                 // TODO: implement
               } else if (mapFeatures[key] == "start") {
@@ -863,7 +865,7 @@ export class PlayingGamePage implements OnInit {
             case "direction":
               this.directionArrow = false;
               if (mapFeatures[key] == "none") {
-                // TODO: implement ?
+                this.viewDirectionControl.setType(ViewDirectionType.None)
               } else if (mapFeatures[key] == "true") {
                 this.viewDirectionControl.setType(ViewDirectionType.Continuous)
               } else if (mapFeatures[key] == "button") {
@@ -889,6 +891,8 @@ export class PlayingGamePage implements OnInit {
             case "landmarks":
               if (mapFeatures[key]) {
                 this.landmarkControl.setLandmark(mapFeatures.landmarkFeatures)
+              } else {
+                this.landmarkControl.remove()
               }
               break;
           }
@@ -909,3 +913,4 @@ export class PlayingGamePage implements OnInit {
     return a;
   }
 }
+

@@ -62,6 +62,11 @@ export class LayerControl {
         if (this.map.getLayer('3d-buildings')) {
             this.map.removeLayer('3d-buildings')
         }
+        try {
+            this.map.removeControl(this.styleSwitcherControl)
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     update = async () => {

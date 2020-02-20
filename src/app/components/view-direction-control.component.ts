@@ -81,6 +81,7 @@ export class ViewDirectionControl {
         }
     }
 
+
     private reset(): void {
         if (this.deviceOrientationSubscription != undefined)
             this.deviceOrientationSubscription.unsubscribe();
