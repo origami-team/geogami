@@ -32,6 +32,7 @@ import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { HelperService } from 'src/app/services/helper.service';
 import { TrackControl, TrackType } from 'src/app/components/track-control.component';
+import { GeolocateControl, GeolocateType } from 'src/app/components/geolocate-control.component';
 
 @Component({
   selector: "app-playing-game",
@@ -61,19 +62,20 @@ export class PlayingGamePage implements OnInit {
   streetSectionControl: StreetSectionControl;
   layerControl: LayerControl
   trackControl: TrackControl
+  geolocateControl: GeolocateControl
 
   // tasks
   task: any;
   taskIndex: number = 0;
 
   // position
-  geolocateControl: mapboxgl.GeolocateControl = new mapboxgl.GeolocateControl({
+  /* geolocateControl: mapboxgl.GeolocateControl = new mapboxgl.GeolocateControl({
     positionOptions: {
       enableHighAccuracy: true
     },
     trackUserLocation: true,
     showUserLocation: true
-  });
+  }); */
   lastKnownPosition: Geoposition;
 
   // treshold to trigger location arrive
@@ -235,6 +237,7 @@ export class PlayingGamePage implements OnInit {
       this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService);
       this.layerControl = new LayerControl(this.map, this.deviceOrientation, this.alertController, this.platform);
       this.trackControl = new TrackControl(this.map)
+      this.geolocateControl = new GeolocateControl(this.map)
 
       this.game = null;
       this.game = new Game(0, "Loading...", false, []);
@@ -846,10 +849,11 @@ export class PlayingGamePage implements OnInit {
               if (mapFeatures[key] == "none") {
                 // TODO: implement ?
               } else if (mapFeatures[key] == "true") {
-                this.map.addControl(this.geolocateControl);
+                this.geolocateControl.setType(GeolocateType.Continuous)
+                /* this.map.addControl(this.geolocateControl);
                 setTimeout(() => {
                   this.geolocateControl.trigger();
-                }, 500);
+                }, 500); */
               } else if (mapFeatures[key] == "button") {
                 // TODO: implement
               } else if (mapFeatures[key] == "start") {
