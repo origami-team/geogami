@@ -31,7 +31,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   config: FieldConfig[];
 
   tasks: any[];
-  selectedTask: any;
+  selectedTask: any = this.task;
   confirmation: boolean = false;
   showMarker: boolean = true;
   mapFeatures: any = {

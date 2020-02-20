@@ -29,7 +29,6 @@ export class CreateGameOverviewPage implements OnInit {
     public navCtrl: NavController,
     public gameFactory: GameFactoryService,
     public gamesService: GamesService,
-    private storage: Storage
   ) {
     this.lottieConfig = {
       path: "assets/lottie/astronaut.json",

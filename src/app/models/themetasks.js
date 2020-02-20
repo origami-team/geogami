@@ -245,6 +245,7 @@ export default [
           },
           {
             label: "... wird mit einem Pfeil vorgegeben",
+            name: "question-type-arrow",
             items: [
               {
                 type: "input",
