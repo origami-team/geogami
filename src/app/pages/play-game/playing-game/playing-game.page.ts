@@ -5,7 +5,7 @@ import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
-
+import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { Geoposition } from "@ionic-native/geolocation/ngx";
 import {
   DeviceOrientation,
@@ -137,7 +137,8 @@ export class PlayingGamePage implements OnInit {
     private camera: Camera,
     public alertController: AlertController,
     public platform: Platform,
-    public helperService: HelperService
+    public helperService: HelperService,
+    private nativeAudio: NativeAudio
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -145,6 +146,9 @@ export class PlayingGamePage implements OnInit {
       autoplay: true,
       loop: true
     };
+    this.nativeAudio.preloadSimple('sound', 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3')
+      .then(() => console.log("loaded sound"), 
+      (e) => console.log("sound load error ", e));
   }
 
   ngOnInit() { }
@@ -315,8 +319,8 @@ export class PlayingGamePage implements OnInit {
 
 
     this.insomnia.keepAwake().then(
-      () => console.log("success"),
-      () => console.log("error")
+      () => console.log("insomnia keep awake success"),
+      () => console.log("insomnia keep awake error")
     );
   }
 
@@ -346,6 +350,7 @@ export class PlayingGamePage implements OnInit {
 
   initTask() {
     this.vibration.vibrate([100, 100, 100]);
+    this.nativeAudio.play('sound');
     console.log("Current task: ", this.task);
     this._initMapFeatures();
     this.trackerService.addEvent({
@@ -372,7 +377,7 @@ export class PlayingGamePage implements OnInit {
         try {
           this.waypointMarker.remove()
         } catch (e) {
-          
+
         }
         this.waypointMarker = new mapboxgl.Marker()
           .setLngLat(
@@ -457,8 +462,8 @@ export class PlayingGamePage implements OnInit {
       });
       this.vibration.vibrate([300, 300, 300]);
       this.insomnia.allowSleepAgain().then(
-        () => console.log("success"),
-        () => console.log("error")
+        () => console.log("insomnia allow sleep again success"),
+        () => console.log("insomnia allow sleep again error")
       );
       return;
     }

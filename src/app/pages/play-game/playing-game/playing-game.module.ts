@@ -7,6 +7,7 @@ import { IonicModule } from "@ionic/angular";
 
 import { PlayingGamePage } from "./playing-game.page";
 import { LottieAnimationViewModule } from "ng-lottie";
+import { NativeAudio } from '@ionic-native/native-audio/ngx';
 
 import { NgShufflePipeModule } from "angular-pipes";
 
@@ -26,6 +27,9 @@ const routes: Routes = [
     LottieAnimationViewModule.forRoot(),
     NgShufflePipeModule
   ],
-  declarations: [PlayingGamePage]
+  declarations: [PlayingGamePage],
+  providers: [
+    NativeAudio
+  ]
 })
 export class PlayingGamePageModule { }
