@@ -22,7 +22,7 @@ export class LandmarkControl {
             paint: {
                 "fill-extrusion-color": "#ffff00",
                 "fill-extrusion-opacity": 0.5,
-                "fill-extrusion-height": 9999
+                "fill-extrusion-height": 50
             }
         });
     }
