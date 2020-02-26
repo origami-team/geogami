@@ -6,6 +6,11 @@
       </ion-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="nextTask()">
+        <ion-icon name="arrow-forward"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
