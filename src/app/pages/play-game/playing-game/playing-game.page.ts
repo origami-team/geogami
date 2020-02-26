@@ -48,6 +48,7 @@ export class PlayingGamePage implements OnInit {
 
   map: mapboxgl.Map;
   userSelectMarker: mapboxgl.Marker;
+  waypointMarker: mapboxgl.Marker;
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
 
   // map features
@@ -368,7 +369,12 @@ export class PlayingGamePage implements OnInit {
     }
     if (!this.task.type.includes("theme")) {
       if (this.task.settings.point != null && this.task.settings.showMarker) {
-        const marker = new mapboxgl.Marker()
+        try {
+          this.waypointMarker.remove()
+        } catch (e) {
+          
+        }
+        this.waypointMarker = new mapboxgl.Marker()
           .setLngLat(
             this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
           )
