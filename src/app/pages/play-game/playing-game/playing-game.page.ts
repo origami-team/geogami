@@ -524,7 +524,26 @@ export class PlayingGamePage implements OnInit {
       }
     });
     if (this.task.type == "theme-loc") {
-      this.nextTask();
+      if(this.task.settings.feedback == false) {
+        this.nextTask();
+      } else {
+        const clickPosition = [
+          this.userSelectMarker._lngLat.lng,
+          this.userSelectMarker._lngLat.lat
+        ];
+        const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+        if(distance < this.triggerTreshold) {
+          this.nextTask()
+        } else {
+          const toast = await this.toastController.create({
+            message: "Deine Eingabe ist falsch. Versuche es erneut",
+            color: "dark",
+            showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        }
+      }
     } else if (
       this.task.type == "theme-object" &&
       this.task.settings["question-type"].name == "photo"
