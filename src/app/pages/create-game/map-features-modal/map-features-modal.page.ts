@@ -55,7 +55,6 @@ export class MapFeaturesModalPage implements OnInit {
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
-        point: true,
         line_string: true,
         polygon: true,
         trash: true

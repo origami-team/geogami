@@ -13,6 +13,7 @@ export class TrackControl {
 
     constructor(map: MapboxMap) {
         this.map = map;
+        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
         this.path = {
             type: "Feature",
             properties: {},
@@ -43,7 +44,7 @@ export class TrackControl {
             type: "line",
             source: "track",
             paint: {
-                "line-color": "cyan",
+                "line-color": primaryColor,
                 "line-opacity": 0.5,
                 "line-width": 5
             },

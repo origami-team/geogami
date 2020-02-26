@@ -14,10 +14,13 @@ export class StreetSectionControl {
   private streetSectionType: StreetSectionType;
   private osm: OsmService
   private positionWatch: number;
+  private primaryColor: string;
 
   constructor(map: MapboxMap, osm: OsmService) {
     this.map = map;
     this.osm = osm;
+    this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
+
   }
 
   public setType(type: StreetSectionType): void {
@@ -54,7 +57,7 @@ export class StreetSectionControl {
                     type: "line",
                     source: "section",
                     paint: {
-                      "line-color": "red",
+                      "line-color": this.primaryColor,
                       "line-opacity": 0.5,
                       "line-width": 10
                     },

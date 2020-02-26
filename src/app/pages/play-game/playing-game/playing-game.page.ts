@@ -121,6 +121,9 @@ export class PlayingGamePage implements OnInit {
   selectedPhoto: string;
   isCorrectPhotoSelected: boolean;
 
+  primaryColor: string;
+  secondaryColor: string;
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -149,6 +152,8 @@ export class PlayingGamePage implements OnInit {
     this.nativeAudio.preloadSimple('sound', 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3')
       .then(() => console.log("loaded sound"), 
       (e) => console.log("sound load error ", e));
+    this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
+    this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
 
   ngOnInit() { }
@@ -295,7 +300,7 @@ export class PlayingGamePage implements OnInit {
             this.userSelectMarker.setLngLat(e.lngLat);
           } else {
             this.userSelectMarker = new mapboxgl.Marker({
-              color: "green",
+              color: this.secondaryColor,
               draggable: true
             })
               .setLngLat(pointFeature.geometry.coordinates)
@@ -379,7 +384,11 @@ export class PlayingGamePage implements OnInit {
         } catch (e) {
 
         }
-        this.waypointMarker = new mapboxgl.Marker()
+        this.waypointMarker = new mapboxgl.Marker(
+          {
+            color: this.primaryColor,
+          }
+        )
           .setLngLat(
             this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
           )
