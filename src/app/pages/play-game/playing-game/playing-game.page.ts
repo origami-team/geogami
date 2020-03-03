@@ -307,14 +307,13 @@ export class PlayingGamePage implements OnInit {
           "icon-rotate",
           this.clickDirection
         );
-      } else {
-        if (
+      } else if (
           this.task.type == "theme-loc" ||
           (this.task.settings["answer-type"] &&
             this.task.settings["answer-type"].name == "set-point") ||
           (this.task.type == "theme-object" &&
             this.task.settings["question-type"].name == "photo") ||
-          this.task.type == "theme-direction"
+          (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow")
         ) {
           const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
           if (this.userSelectMarker) {
@@ -331,7 +330,6 @@ export class PlayingGamePage implements OnInit {
             });
           }
         }
-      }
     });
 
     // rotation
@@ -685,7 +683,34 @@ export class PlayingGamePage implements OnInit {
         this.task.settings["answer-type"].name == "take-photo")
     ) {
       this.nextTask();
-    } else if (this.task.type == "theme-direction" &&
+    } 
+    else if (this.task.type == "theme-direction" &&
+    this.task.settings["question-type"].name == "question-type-arrow") {
+      this.trackerService.addAnswer({
+        task: this.task,
+        answer: {
+          direction: this.compassHeading
+        }
+      });
+      console.log(this.directionBearing, this.compassHeading);
+      if(this.task.settings.feedback) {
+        if (this.Math.abs(this.directionBearing - this.compassHeading) > 45) {
+          const toast = await this.toastController.create({
+            message: "Bitte drehe dich zur angezeigten Blickrichtung",
+            color: "dark",
+            showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        } else {
+          this.nextTask();
+        }
+      } else {
+        this.nextTask();
+      }
+      console.log("Im here")
+    } 
+    else if (this.task.type == "theme-direction" &&
       this.task.settings["question-type"].name != "question-type-current-direction" &&
       this.task.settings["question-type"].name != "photo" &&
       this.task.settings["answer-type"].name != "multiple-choice") {

@@ -145,6 +145,7 @@ export default [
                   {
                     label: "... durch Setzen eines Kartenpunktes",
                     name: "set-point",
+                    text: "Markiere das beschriebene Objekt mit einem Punkt auf der Karte.",
                     items: [
                       {
                         type: "map",
@@ -160,6 +161,7 @@ export default [
                   {
                     label: "... durch Auswahl eines von vier Fotos",
                     name: "select-photo",
+                    text: "Wähle aus den vier Fotos das passende Bild zum beschriebenen Objekt aus.",
                     items: [
                       {
                         type: "photoUploadMultipleChoice",
@@ -174,6 +176,7 @@ export default [
                   {
                     label: "... mit der Aufnahme eines Fotos",
                     name: "take-photo",
+                    text: "Nehme ein Foto von dem beschriebenen Objekt auf.",
                     items: []
                   }
                 ]
@@ -253,7 +256,7 @@ export default [
                 inputType: "area",
                 label: "Aufgabenstellung",
                 text:
-                  "Drehe dich, bis die Pfeile übereinander liegen. Markiere deine neue Blickrichtung mit einem Klick auf der Karte.",
+                  "Drehe dich, bis die Pfeile übereinander liegen.",
                 info:
                   "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
@@ -264,7 +267,7 @@ export default [
                 featureType: "direction",
                 label: "Gewünschte Blickrichtung",
                 info:
-                  "Markiere die Richtung, in die der Spieler blicken soll, mit einem Klick auf der Karte. Die App wird den Spieler in diese Richtung „drehen“ und ihn daraufhin auffordern, seine neue Blickrichtung in die Karte einzuzeichnen",
+                  "Markiere die Richtung, in die der Spieler blicken soll, mit einem Klick auf der Karte. Die App wird den Spieler in diese Richtung „drehen“",
                 validation: [Validators.required]
               }
             ]

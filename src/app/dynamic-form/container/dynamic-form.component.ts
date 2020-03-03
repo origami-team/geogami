@@ -30,6 +30,7 @@ export class DynamicFormComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
+    console.log(this.form, this.controls)
     if (this.form) {
       const controls = Object.keys(this.form.controls);
       const configControls = this.controls.map((item) => item.name);

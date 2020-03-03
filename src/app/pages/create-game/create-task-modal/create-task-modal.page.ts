@@ -67,6 +67,8 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     console.log(this.selectedTask);
     this.config = this.selectedTask.developer;
 
+    console.log(this.config)
+
     if (
       ["theme-loc", "theme-object", "theme-direction"].includes(
         this.selectedTask.type
