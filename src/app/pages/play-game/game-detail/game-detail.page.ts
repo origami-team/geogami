@@ -34,7 +34,9 @@ export class GameDetailPage implements OnInit {
           console.log(this.game)
           // this.activities = this.game.activities
           // this.points = this.activities[0].points
-          this.initMap()
+          if(this.mapContainer.nativeElement) {
+            this.initMap()
+          }
         })
     });
 

@@ -102,6 +102,9 @@
           <p>
             {{ task.settings.text }}
           </p>
+          <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
+            {{ task.settings["question-type"].settings["object-description"] }}
+          </p>
           <p *ngIf="task.settings.confirmation">
             Bestätige mit OK
           </p>
