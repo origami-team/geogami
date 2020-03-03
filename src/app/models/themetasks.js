@@ -240,6 +240,7 @@ export default [
                   },
                   {
                     label: "... durch Einnehmen der Richtung",
+                    type: "rotateTo",
                     items: []
                   }
                 ]

@@ -452,12 +452,59 @@ export class PlayingGamePage implements OnInit {
 
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-photo") {
 
-    } else if (this.task.type == "theme-direction") {
+    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map") {
+      this.directionBearing = this.task.settings[
+        "question-type"
+      ].settings.direction;
+      this.map.loadImage(
+        "/assets/icons/directionv2.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("view-direction-task", image);
+
+          navigator.geolocation.getCurrentPosition(position => {
+            if(this.map.getSource('viewDirectionTask')) {
+              this.map.getSource('viewDirectionTask').setData({
+                type: "Point",
+                coordinates: [
+                  position.coords.longitude,
+                  position.coords.latitude
+                ]
+              })
+            } else {
+              this.map.addSource("viewDirectionTask", {
+                type: "geojson",
+                data: {
+                  type: "Point",
+                  coordinates: [
+                    position.coords.longitude,
+                  position.coords.latitude
+                  ]
+                }
+              });
+              this.map.addLayer({
+                id: "viewDirectionTask",
+                source: "viewDirectionTask",
+                type: "symbol",
+                layout: {
+                  "icon-image": "view-direction-task",
+                  "icon-size": 0.65,
+                  "icon-offset": [0, -12.5],
+                  "icon-rotate": this.directionBearing
+                }
+              });
+            }
+          })
+        });
+    }
+    if (this.task.type == "theme-direction") {
       console.log(this.task.settings["question-type"].settings.direction);
       this.directionBearing = this.task.settings[
         "question-type"
       ].settings.direction;
-    }
+    } 
+    
 
     if (
       this.task.type == "theme-object" &&
@@ -708,7 +755,6 @@ export class PlayingGamePage implements OnInit {
       } else {
         this.nextTask();
       }
-      console.log("Im here")
     } 
     else if (this.task.type == "theme-direction" &&
       this.task.settings["question-type"].name != "question-type-current-direction" &&
@@ -750,6 +796,26 @@ export class PlayingGamePage implements OnInit {
       } else {
         this.nextTask();
         this.map.removeLayer('viewDirectionClick')
+      }
+    } 
+    else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map") {
+      console.log(this.clickDirection, this.compassHeading)
+      if (this.task.settings.feedback) {
+        if (Math.abs(this.clickDirection - this.compassHeading) < 45) {
+          this.nextTask()
+          this.map.removeLayer('viewDirectionTask')
+        } else {
+          const toast = await this.toastController.create({
+            message: "Deine Eingabe ist falsch. Versuche es erneut",
+            color: "dark",
+            showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        }
+      } else {
+        this.nextTask();
+        this.map.removeLayer('viewDirectionTask')
       }
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
