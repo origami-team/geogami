@@ -150,8 +150,8 @@ export class PlayingGamePage implements OnInit {
       loop: true
     };
     this.nativeAudio.preloadSimple('sound', 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3')
-      .then(() => console.log("loaded sound"), 
-      (e) => console.log("sound load error ", e));
+      .then(() => console.log("loaded sound"),
+        (e) => console.log("sound load error ", e));
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
@@ -163,9 +163,30 @@ export class PlayingGamePage implements OnInit {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: document.body.classList.contains("dark")
-        ? "mapbox://styles/mapbox/dark-v9"
-        : "mapbox://styles/mapbox/streets-v9",
+      // style: document.body.classList.contains("dark")
+      //   ? "mapbox://styles/mapbox/dark-v9"
+      //   : "mapbox://styles/mapbox/streets-v9",
+      style: {
+        'version': 8,
+        'sources': {
+          'raster-tiles': {
+            'type': 'raster',
+            'tiles': [
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+            ],
+            'tileSize': 256,
+            }
+        },
+        'layers': [
+          {
+            'id': 'simple-tiles',
+            'type': 'raster',
+            'source': 'raster-tiles',
+            'minzoom': 0,
+            'maxzoom': 22
+          }
+        ]
+      },
       center: [8, 51.8],
       zoom: 2
     });
@@ -524,7 +545,7 @@ export class PlayingGamePage implements OnInit {
       }
     });
     if (this.task.type == "theme-loc") {
-      if(this.task.settings.feedback == false) {
+      if (this.task.settings.feedback == false) {
         this.nextTask();
       } else {
         const clickPosition = [
@@ -532,7 +553,7 @@ export class PlayingGamePage implements OnInit {
           this.userSelectMarker._lngLat.lat
         ];
         const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-        if(distance < this.triggerTreshold) {
+        if (distance < this.triggerTreshold) {
           this.nextTask()
         } else {
           const toast = await this.toastController.create({
@@ -803,6 +824,7 @@ export class PlayingGamePage implements OnInit {
   }
 
   capturePhoto() {
+    this.photo = '';
     this.camera.getPicture(this.cameraOptions).then(
       imageData => {
         // imageData is either a base64 encoded string or a file URI
@@ -810,8 +832,15 @@ export class PlayingGamePage implements OnInit {
         let base64Image = "data:image/jpeg;base64," + imageData;
         this.photo = base64Image;
       },
-      err => {
-        // Handle error
+      async err => {
+        const toast = await this.toastController.create({
+          header: 'Error',
+          message: err,
+          color: "danger",
+          showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
       }
     );
   }
