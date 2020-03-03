@@ -50,7 +50,7 @@
     "cordova-plugin-vibration": "^3.1.1",
     "core-js": "^2.5.4",
     "leaflet.offline": "^1.0.4",
-    "mapbox-gl": "^1.7.0",
+    "mapbox-gl": "^1.8.1",
     "mapbox-gl-compare": "^0.2.1",
     "mapbox-gl-style-switcher": "^1.0.3",
     "ng-lottie": "^0.3.2",
