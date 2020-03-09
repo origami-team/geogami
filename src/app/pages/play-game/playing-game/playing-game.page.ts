@@ -408,6 +408,11 @@ export class PlayingGamePage implements OnInit {
       this.userSelectMarker = null;
     }
 
+    if(this.waypointMarker) {
+      this.waypointMarker.remove();
+      this.waypointMarker = null;
+    }
+
     if (
       this.task.type.includes("theme") &&
       this.task.settings["question-type"] != undefined
@@ -419,7 +424,7 @@ export class PlayingGamePage implements OnInit {
     if (!this.task.type.includes("theme")) {
       if (this.task.settings.point != null && this.task.settings.showMarker) {
         try {
-          this.waypointMarker.remove()
+          
         } catch (e) {
 
         }
