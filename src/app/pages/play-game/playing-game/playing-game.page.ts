@@ -163,30 +163,30 @@ export class PlayingGamePage implements OnInit {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      // style: document.body.classList.contains("dark")
-      //   ? "mapbox://styles/mapbox/dark-v9"
-      //   : "mapbox://styles/mapbox/streets-v9",
-      style: {
-        'version': 8,
-        'sources': {
-          'raster-tiles': {
-            'type': 'raster',
-            'tiles': [
-              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-            ],
-            'tileSize': 256,
-            }
-        },
-        'layers': [
-          {
-            'id': 'simple-tiles',
-            'type': 'raster',
-            'source': 'raster-tiles',
-            'minzoom': 0,
-            'maxzoom': 22
-          }
-        ]
-      },
+      style: document.body.classList.contains("dark")
+        ? "mapbox://styles/mapbox/dark-v9"
+        : "mapbox://styles/mapbox/streets-v9",
+      // style: {
+      //   'version': 8,
+      //   'sources': {
+      //     'raster-tiles': {
+      //       'type': 'raster',
+      //       'tiles': [
+      //         'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+      //       ],
+      //       'tileSize': 256,
+      //       }
+      //   },
+      //   'layers': [
+      //     {
+      //       'id': 'simple-tiles',
+      //       'type': 'raster',
+      //       'source': 'raster-tiles',
+      //       'minzoom': 0,
+      //       'maxzoom': 22
+      //     }
+      //   ]
+      // },
       center: [8, 51.8],
       zoom: 2
     });
@@ -353,9 +353,24 @@ export class PlayingGamePage implements OnInit {
 
     var bounds = new mapboxgl.LngLatBounds();
 
+    console.log(tasks)
+
     tasks.forEach(task => {
       if (task.settings.point)
         bounds.extend(task.settings.point.geometry.coordinates);
+      if(task.settings['question-type'] && 
+        task.settings['question-type'].settings && 
+        task.settings['question-type'].settings.polygon != undefined) {
+        console.log(task.settings['question-type'].settings.polygon)
+        task.settings['question-type'].settings.polygon.forEach(e => {
+          e.geometry.coordinates.forEach(c => {
+            c.forEach(coords => {
+              console.log(coords)
+              bounds.extend(coords)
+            })
+          })
+        })
+      }
     });
 
     try {
@@ -386,6 +401,11 @@ export class PlayingGamePage implements OnInit {
       this.triggerTreshold = this.task.settings.accuracy
     } else {
       this.triggerTreshold = 20;
+    }
+
+    if(this.userSelectMarker) {
+      this.userSelectMarker.remove();
+      this.userSelectMarker = null;
     }
 
     if (
