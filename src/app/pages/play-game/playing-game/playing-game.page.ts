@@ -798,7 +798,7 @@ export class PlayingGamePage implements OnInit {
         this.map.removeLayer('viewDirectionClick')
       }
     } 
-    else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map") {
+    else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
       console.log(this.clickDirection, this.compassHeading)
       if (this.task.settings.feedback) {
         if (Math.abs(this.clickDirection - this.compassHeading) < 45) {
