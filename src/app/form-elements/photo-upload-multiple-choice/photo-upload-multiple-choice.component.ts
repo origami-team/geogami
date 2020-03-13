@@ -4,6 +4,11 @@ import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { environment } from 'src/environments/environment';
+import { File } from '@ionic-native/file/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: "app-photo-upload-multiple-choice",
@@ -16,7 +21,7 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
 
   baseOptions: CameraOptions = {
     quality: environment.photoQuality,
-    destinationType: this.camera.DestinationType.DATA_URL,
+    destinationType: this.camera.DestinationType.FILE_URI,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,
     correctOrientation: true
@@ -32,27 +37,33 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
   };
 
-  photos: any[] = ["", "", "", ""];
+  photos: SafeResourceUrl[] = ["", "", "", ""];
 
   constructor(
     private camera: Camera,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private transfer: FileTransfer, private file: File, private webview: WebView, private sanitizer: DomSanitizer
   ) { }
 
   capturePhoto(photoNumber) {
     this.camera.getPicture(this.cameraOptions).then(
       imageData => {
-        // imageData is either a base64 encoded string or a file URI
-        // If it's base64 (DATA_URL):
-        let base64Image = "data:image/jpeg;base64," + imageData;
-        this.photos[photoNumber] = base64Image;
-        this.group.patchValue({
-          [`${this.config.name}`]: {
-            ...this.group.value[`${this.config.name}`],
-            [`photo-${photoNumber}`]: base64Image
-          }
-        });
-        console.log(this.group)
+        
+        const filePath = this.webview.convertFileSrc(imageData)
+        this.photos[photoNumber] = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+
+        const fileTransfer: FileTransferObject = this.transfer.create();
+        fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
+          console.log(JSON.parse(res.response))
+          const filename = JSON.parse(res.response).filename
+          this.group.patchValue({
+            [`${this.config.name}`]: {
+              ...this.group.value[`${this.config.name}`],
+              [`photo-${photoNumber}`]: `${environment.apiURL}/file/${filename}`
+            }
+          });
+        })
+        .catch(err => console.log(err))
       },
       err => {
         // Handle error
@@ -63,13 +74,21 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
   photoFromLibrary(photoNumber) {
     this.camera.getPicture(this.libraryOptions).then(
       imageData => {
-        // imageData is either a base64 encoded string or a file URI
-        // If it's base64 (DATA_URL):
-        let base64Image = "data:image/jpeg;base64," + imageData;
-        this.photos[photoNumber] = base64Image;
-        this.group.patchValue({
-          [`${this.config.name}_${photoNumber}`]: base64Image
-        });
+        const filePath = this.webview.convertFileSrc(imageData)
+        this.photos[photoNumber] = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+
+        const fileTransfer: FileTransferObject = this.transfer.create();
+        fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
+          console.log(JSON.parse(res.response))
+          const filename = JSON.parse(res.response).filename
+          this.group.patchValue({
+            [`${this.config.name}`]: {
+              ...this.group.value[`${this.config.name}`],
+              [`photo-${photoNumber}`]: `${environment.apiURL}/file/${filename}`
+            }
+          });
+        })
+        .catch(err => console.log(err))
       },
       err => {
         // Handle error

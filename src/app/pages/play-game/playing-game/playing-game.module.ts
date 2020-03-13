@@ -11,6 +11,10 @@ import { NativeAudio } from '@ionic-native/native-audio/ngx';
 
 import { NgShufflePipeModule } from "angular-pipes";
 
+import { File } from '@ionic-native/file/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
+
 const routes: Routes = [
   {
     path: "",
@@ -29,7 +33,7 @@ const routes: Routes = [
   ],
   declarations: [PlayingGamePage],
   providers: [
-    NativeAudio
+    File, FileTransfer, WebView, NativeAudio
   ]
 })
 export class PlayingGamePageModule { }

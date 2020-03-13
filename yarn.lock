@@ -953,6 +953,20 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/file-transfer@^5.22.0":
+  version "5.22.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/file-transfer/-/file-transfer-5.22.0.tgz#c52ccf60fefbfd6d3188780a23faa25d7c0a39de"
+  integrity sha512-1xX/53bhUqX2xVJricd4QkATWsXcVBsA3uDy6AX4FXkWvo6GDI8V9TipEW9FY1LPsbvu8/gemixPLeuH/9IpDQ==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/file@^5.22.0":
+  version "5.22.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/file/-/file-5.22.0.tgz#fcce3ee6723899e4e6637f60158a50dc4202fdd2"
+  integrity sha512-D9P+SvqQywb2/s06No5IYCkCWWyTqCBUAVT3x2zsHOLiqzldw04VUxReigUbos/b8T/D3QoTc5AzNidBIcWvDg==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/geolocation@^5.11.0":
   version "5.15.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/geolocation/-/geolocation-5.15.0.tgz#99b69d111ce62007e5bfc01102445d055a0d48c0"
@@ -964,6 +978,13 @@
   version "5.16.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/insomnia/-/insomnia-5.16.0.tgz#383acc88ead0c0d93360fae0d633ee014aeb2faf"
   integrity sha512-oRexR6UaVMEMBZOlCAGJmWPzepaTytLknz1bKUe6Z5zZ7zbLfj4mKeOPnKHtu/iZF2cLYCydCogIO+XF0jzbfA==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/ionic-webview@^5.22.0":
+  version "5.22.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/ionic-webview/-/ionic-webview-5.22.0.tgz#c4a98ad8f7491e68ff4aff091c9ead830abcd366"
+  integrity sha512-J2nziQsvSiLq2/spJUpdYQZsygh5KYIMcAQLXnnEMhzeH8Ybr4vtS2ajjhBaccNDHIIW3P+7HtE1jpA7BaM8Xw==
   dependencies:
     "@types/cordova" latest
 
@@ -3213,6 +3234,16 @@ cordova-plugin-device@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz#c2b41b7efd0455dd097f89356d85bfdd5dadeb0f"
   integrity sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw==
+
+cordova-plugin-file-transfer@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.1.tgz#a75d8be2ebc3bb9b23c5b1bbd199214ec267586b"
+  integrity sha1-p12L4uvDu5sjxbG70ZkhTsJnWGs=
+
+cordova-plugin-file@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-6.0.2.tgz#f3911479f8357e9aacb5576674f8d95b31a1fb20"
+  integrity sha512-m7cughw327CjONN/qjzsTpSesLaeybksQh420/gRuSXJX5Zt9NfgsSbqqKDon6jnQ9Mm7h7imgyO2uJ34XMBtA==
 
 cordova-plugin-geolocation@^4.0.2:
   version "4.0.2"

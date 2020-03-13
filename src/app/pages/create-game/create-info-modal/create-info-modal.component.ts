@@ -7,6 +7,11 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { environment } from 'src/environments/environment';
 
+import { File } from '@ionic-native/file/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-create-info-modal',
@@ -29,11 +34,12 @@ export class CreateInfoModalComponent implements OnInit {
     landmarks: false,
     landmarkFeatures: undefined
   }
-  photo: string
+  photo: SafeResourceUrl
+  photoURL: string;
 
   baseOptions: CameraOptions = {
     quality: environment.photoQuality,
-    destinationType: this.camera.DestinationType.DATA_URL,
+    destinationType: this.camera.DestinationType.FILE_URI,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,
     correctOrientation: true
@@ -49,17 +55,25 @@ export class CreateInfoModalComponent implements OnInit {
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
   }
 
-  constructor(public modalController: ModalController, private camera: Camera) { }
+  constructor(
+    public modalController: ModalController, private camera: Camera,
+    private transfer: FileTransfer, private file: File, private webview: WebView, private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit() { }
 
   capturePhoto() {
     this.camera.getPicture(this.cameraOptions).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      this.photo = base64Image
-      console.log(base64Image)
+      const filePath = this.webview.convertFileSrc(imageData)
+      this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+
+      const fileTransfer: FileTransferObject = this.transfer.create();
+      fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
+        console.log(JSON.parse(res.response))
+        const filename = JSON.parse(res.response).filename
+        this.photoURL = `${environment.apiURL}/file/${filename}`
+      })
+        .catch(err => console.log(err))
     }, (err) => {
       // Handle error
     });
@@ -67,12 +81,16 @@ export class CreateInfoModalComponent implements OnInit {
 
   photoFromLibrary() {
     this.camera.getPicture(this.libraryOptions).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      this.photo = base64Image
-      console.log(base64Image)
+      const filePath = this.webview.convertFileSrc(imageData)
+      this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
 
+      const fileTransfer: FileTransferObject = this.transfer.create();
+      fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
+        console.log(JSON.parse(res.response))
+        const filename = JSON.parse(res.response).filename
+        this.photoURL = `${environment.apiURL}/file/${filename}`
+      })
+      .catch(err => console.log(err))
     }, (err) => {
       // Handle error
     });
@@ -101,7 +119,7 @@ export class CreateInfoModalComponent implements OnInit {
         type: 'info',
         settings: {
           text: this.info,
-          photo: this.photo,
+          photo: this.photoURL,
           mapFeatures: this.mapFeatures,
           confirmation: true
         }

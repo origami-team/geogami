@@ -35,6 +35,12 @@ import { TrackControl, TrackType } from 'src/app/components/track-control.compon
 import { GeolocateControl, GeolocateType } from 'src/app/components/geolocate-control.component';
 import { PanControl, PanType } from 'src/app/components/pan-control.component';
 
+import { File } from '@ionic-native/file/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+
 @Component({
   selector: "app-playing-game",
   templateUrl: "./playing-game.page.html",
@@ -104,7 +110,7 @@ export class PlayingGamePage implements OnInit {
 
   baseOptions: CameraOptions = {
     quality: environment.photoQuality,
-    destinationType: this.camera.DestinationType.DATA_URL,
+    destinationType: this.camera.DestinationType.FILE_URI,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,
     correctOrientation: true
@@ -115,7 +121,8 @@ export class PlayingGamePage implements OnInit {
     sourceType: this.camera.PictureSourceType.CAMERA
   };
 
-  photo: string;
+  photo: SafeResourceUrl;
+  photoURL: string;
 
   // multiple choice
   selectedPhoto: string;
@@ -141,7 +148,11 @@ export class PlayingGamePage implements OnInit {
     public alertController: AlertController,
     public platform: Platform,
     public helperService: HelperService,
-    private nativeAudio: NativeAudio
+    private nativeAudio: NativeAudio,
+    private transfer: FileTransfer, 
+    private file: File, 
+    private webview: WebView,
+    private sanitizer: DomSanitizer
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -684,11 +695,12 @@ export class PlayingGamePage implements OnInit {
           this.trackerService.addAnswer({
             task: this.task,
             answer: {
-              photo: this.photo
+              photo: this.photoURL
             }
           });
           this.nextTask();
           this.photo = "";
+          this.photoURL = "";
         }
       } else {
         if (
@@ -941,12 +953,19 @@ export class PlayingGamePage implements OnInit {
 
   capturePhoto() {
     this.photo = '';
+    this.photoURL = '';
     this.camera.getPicture(this.cameraOptions).then(
       imageData => {
-        // imageData is either a base64 encoded string or a file URI
-        // If it's base64 (DATA_URL):
-        let base64Image = "data:image/jpeg;base64," + imageData;
-        this.photo = base64Image;
+        const filePath = this.webview.convertFileSrc(imageData)
+        this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+
+        const fileTransfer: FileTransferObject = this.transfer.create();
+        fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
+          console.log(JSON.parse(res.response))
+          const filename = JSON.parse(res.response).filename
+          this.photoURL = `${environment.apiURL}/file/${filename}`
+        })
+        .catch(err => console.log(err))
       },
       async err => {
         const toast = await this.toastController.create({
