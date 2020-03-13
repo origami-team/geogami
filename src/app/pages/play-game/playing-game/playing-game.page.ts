@@ -174,30 +174,30 @@ export class PlayingGamePage implements OnInit {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: document.body.classList.contains("dark")
-        ? "mapbox://styles/mapbox/dark-v9"
-        : "mapbox://styles/mapbox/streets-v9",
-      // style: {
-      //   'version': 8,
-      //   'sources': {
-      //     'raster-tiles': {
-      //       'type': 'raster',
-      //       'tiles': [
-      //         'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-      //       ],
-      //       'tileSize': 256,
-      //       }
-      //   },
-      //   'layers': [
-      //     {
-      //       'id': 'simple-tiles',
-      //       'type': 'raster',
-      //       'source': 'raster-tiles',
-      //       'minzoom': 0,
-      //       'maxzoom': 22
-      //     }
-      //   ]
-      // },
+      // style: document.body.classList.contains("dark")
+      //   ? "mapbox://styles/mapbox/dark-v9"
+      //   : "mapbox://styles/mapbox/streets-v9",
+      style: {
+        'version': 8,
+        'sources': {
+          'raster-tiles': {
+            'type': 'raster',
+            'tiles': [
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+            ],
+            'tileSize': 256,
+            }
+        },
+        'layers': [
+          {
+            'id': 'simple-tiles',
+            'type': 'raster',
+            'source': 'raster-tiles',
+            'minzoom': 0,
+            'maxzoom': 22
+          }
+        ]
+      },
       center: [8, 51.8],
       zoom: 2
     });
