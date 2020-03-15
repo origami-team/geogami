@@ -48,7 +48,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     landmarkFeatures: undefined
   }
   feedback: boolean = true;
-  accuracy: number = 20;
+  accuracy: number = 10;
 
   constructor(public modalController: ModalController) { }
 
