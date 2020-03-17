@@ -37,3 +37,10 @@
     background-repeat: no-repeat;
     background-size: 70%;
 }
+
+.waypoint-marker {
+    background-image: url('/assets/icons/target-flag.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+  }

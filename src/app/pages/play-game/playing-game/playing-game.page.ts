@@ -149,8 +149,8 @@ export class PlayingGamePage implements OnInit {
     public platform: Platform,
     public helperService: HelperService,
     private nativeAudio: NativeAudio,
-    private transfer: FileTransfer, 
-    private file: File, 
+    private transfer: FileTransfer,
+    private file: File,
     private webview: WebView,
     private sanitizer: DomSanitizer
   ) {
@@ -172,12 +172,9 @@ export class PlayingGamePage implements OnInit {
   ionViewWillEnter() {
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
-    this.map = new mapboxgl.Map({
-      container: this.mapContainer.nativeElement,
-      // style: document.body.classList.contains("dark")
-      //   ? "mapbox://styles/mapbox/dark-v9"
-      //   : "mapbox://styles/mapbox/streets-v9",
-      style: {
+    let mapStyle;
+    if (environment.production) {
+      mapStyle = {
         'version': 8,
         'sources': {
           'raster-tiles': {
@@ -186,7 +183,7 @@ export class PlayingGamePage implements OnInit {
               'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
             ],
             'tileSize': 256,
-            }
+          }
         },
         'layers': [
           {
@@ -197,7 +194,16 @@ export class PlayingGamePage implements OnInit {
             'maxzoom': 22
           }
         ]
-      },
+      }
+    } else {
+      mapStyle = document.body.classList.contains("dark")
+        ? "mapbox://styles/mapbox/dark-v9"
+        : "mapbox://styles/mapbox/streets-v9"
+    }
+
+    this.map = new mapboxgl.Map({
+      container: this.mapContainer.nativeElement,
+      style: mapStyle,
       center: [8, 51.8],
       zoom: 2
     });
@@ -319,28 +325,28 @@ export class PlayingGamePage implements OnInit {
           this.clickDirection
         );
       } else if (
-          this.task.type == "theme-loc" ||
-          (this.task.settings["answer-type"] &&
-            this.task.settings["answer-type"].name == "set-point") ||
-          (this.task.type == "theme-object" &&
-            this.task.settings["question-type"].name == "photo") ||
-          (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow")
-        ) {
-          const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-          if (this.userSelectMarker) {
-            this.userSelectMarker.setLngLat(e.lngLat);
-          } else {
-            this.userSelectMarker = new mapboxgl.Marker({
-              color: this.secondaryColor,
-              draggable: true
-            })
-              .setLngLat(pointFeature.geometry.coordinates)
-              .addTo(this.map);
-            this.userSelectMarker.on("dragend", () => {
-              // TODO: implement
-            });
-          }
+        this.task.type == "theme-loc" ||
+        (this.task.settings["answer-type"] &&
+          this.task.settings["answer-type"].name == "set-point") ||
+        (this.task.type == "theme-object" &&
+          this.task.settings["question-type"].name == "photo") ||
+        (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow")
+      ) {
+        const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+        if (this.userSelectMarker) {
+          this.userSelectMarker.setLngLat(e.lngLat);
+        } else {
+          this.userSelectMarker = new mapboxgl.Marker({
+            color: this.secondaryColor,
+            draggable: true
+          })
+            .setLngLat(pointFeature.geometry.coordinates)
+            .addTo(this.map);
+          this.userSelectMarker.on("dragend", () => {
+            // TODO: implement
+          });
         }
+      }
     });
 
     // rotation
@@ -369,8 +375,8 @@ export class PlayingGamePage implements OnInit {
     tasks.forEach(task => {
       if (task.settings.point)
         bounds.extend(task.settings.point.geometry.coordinates);
-      if(task.settings['question-type'] && 
-        task.settings['question-type'].settings && 
+      if (task.settings['question-type'] &&
+        task.settings['question-type'].settings &&
         task.settings['question-type'].settings.polygon != undefined) {
         console.log(task.settings['question-type'].settings.polygon)
         task.settings['question-type'].settings.polygon.forEach(e => {
@@ -414,12 +420,12 @@ export class PlayingGamePage implements OnInit {
       this.triggerTreshold = 20;
     }
 
-    if(this.userSelectMarker) {
+    if (this.userSelectMarker) {
       this.userSelectMarker.remove();
       this.userSelectMarker = null;
     }
 
-    if(this.waypointMarker) {
+    if (this.waypointMarker) {
       this.waypointMarker.remove();
       this.waypointMarker = null;
     }
@@ -434,16 +440,14 @@ export class PlayingGamePage implements OnInit {
     }
     if (!this.task.type.includes("theme")) {
       if (this.task.settings.point != null && this.task.settings.showMarker) {
-        try {
-          
-        } catch (e) {
+        // create a HTML element for each feature
+        const el = document.createElement('div');
+        el.className = 'waypoint-marker';
 
-        }
-        this.waypointMarker = new mapboxgl.Marker(
-          {
-            color: this.primaryColor,
-          }
-        )
+        this.waypointMarker = new mapboxgl.Marker(el, {
+          anchor: 'bottom',
+          offset: [15, 0]
+      })
           .setLngLat(
             this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
           )
@@ -500,7 +504,7 @@ export class PlayingGamePage implements OnInit {
           this.map.addImage("view-direction-task", image);
 
           navigator.geolocation.getCurrentPosition(position => {
-            if(this.map.getSource('viewDirectionTask')) {
+            if (this.map.getSource('viewDirectionTask')) {
               this.map.getSource('viewDirectionTask').setData({
                 type: "Point",
                 coordinates: [
@@ -515,7 +519,7 @@ export class PlayingGamePage implements OnInit {
                   type: "Point",
                   coordinates: [
                     position.coords.longitude,
-                  position.coords.latitude
+                    position.coords.latitude
                   ]
                 }
               });
@@ -539,8 +543,8 @@ export class PlayingGamePage implements OnInit {
       this.directionBearing = this.task.settings[
         "question-type"
       ].settings.direction;
-    } 
-    
+    }
+
 
     if (
       this.task.type == "theme-object" &&
@@ -767,9 +771,9 @@ export class PlayingGamePage implements OnInit {
         this.task.settings["answer-type"].name == "take-photo")
     ) {
       this.nextTask();
-    } 
+    }
     else if (this.task.type == "theme-direction" &&
-    this.task.settings["question-type"].name == "question-type-arrow") {
+      this.task.settings["question-type"].name == "question-type-arrow") {
       this.trackerService.addAnswer({
         task: this.task,
         answer: {
@@ -777,7 +781,7 @@ export class PlayingGamePage implements OnInit {
         }
       });
       console.log(this.directionBearing, this.compassHeading);
-      if(this.task.settings.feedback) {
+      if (this.task.settings.feedback) {
         if (this.Math.abs(this.directionBearing - this.compassHeading) > 45) {
           const toast = await this.toastController.create({
             message: "Bitte drehe dich zur angezeigten Blickrichtung",
@@ -792,7 +796,7 @@ export class PlayingGamePage implements OnInit {
       } else {
         this.nextTask();
       }
-    } 
+    }
     else if (this.task.type == "theme-direction" &&
       this.task.settings["question-type"].name != "question-type-current-direction" &&
       this.task.settings["question-type"].name != "photo" &&
@@ -834,7 +838,7 @@ export class PlayingGamePage implements OnInit {
         this.nextTask();
         this.map.removeLayer('viewDirectionClick')
       }
-    } 
+    }
     else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
       console.log(this.clickDirection, this.compassHeading)
       if (this.task.settings.feedback) {
@@ -965,7 +969,7 @@ export class PlayingGamePage implements OnInit {
           const filename = JSON.parse(res.response).filename
           this.photoURL = `${environment.apiURL}/file/${filename}`
         })
-        .catch(err => console.log(err))
+          .catch(err => console.log(err))
       },
       async err => {
         const toast = await this.toastController.create({
