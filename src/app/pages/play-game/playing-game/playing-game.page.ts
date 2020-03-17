@@ -205,7 +205,8 @@ export class PlayingGamePage implements OnInit {
       container: this.mapContainer.nativeElement,
       style: mapStyle,
       center: [8, 51.8],
-      zoom: 2
+      zoom: 2,
+      maxZoom: 18
     });
 
     this.positionWatch = window.navigator.geolocation.watchPosition(
@@ -391,7 +392,12 @@ export class PlayingGamePage implements OnInit {
     });
 
     try {
-      this.map.fitBounds(bounds, { padding: 40, duration: 2000 });
+      this.map.fitBounds(bounds, { padding: {
+        top: 40,
+        bottom: 160,
+        left: 40,
+        right: 40
+      }, duration: 2000 });
     } catch (e) {
       console.log("Warning: Can not set bounds", bounds);
     }
