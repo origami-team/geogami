@@ -54,6 +54,7 @@
 
   .task-text {
     flex-grow: 1;
+    font-size: 20px;
   }
 
   &.success {
@@ -69,7 +70,7 @@
   }
 
   .selected {
-    outline: solid #3880ff 2px;
+    outline: solid #0cd1e8 2px;
     outline-offset: 1px;
   }
 
@@ -82,7 +83,7 @@
       --size: 65px;
 
       &:active {
-        outline: solid #3880ff 2px;
+        outline: solid #0cd1e8 2px;
         outline-offset: 1px;
       }
     }

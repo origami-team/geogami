@@ -423,7 +423,7 @@ export class PlayingGamePage implements OnInit {
     if (this.task.settings.accuracy) {
       this.triggerTreshold = this.task.settings.accuracy
     } else {
-      this.triggerTreshold = 20;
+      this.triggerTreshold = 10;
     }
 
     if (this.userSelectMarker) {
