@@ -132,8 +132,12 @@ export class CreateGameListPage implements OnInit {
     // Finish the reorder and position the item in the DOM based on
     // where the gesture ended. Update the items variable to the
     // new order of items
-    // this.game.tasks = ev.detail.complete(this.game.tasks);
+    this.game.tasks = ev.detail.complete(this.game.tasks);
+    
+    this.gameFactory.applyReorder(this.game.tasks)
 
+    console.log(this.game.tasks)
+    
     ev.detail.complete(true);
 
     // After complete is called the items will be in the new order

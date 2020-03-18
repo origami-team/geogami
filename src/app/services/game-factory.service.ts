@@ -42,6 +42,11 @@ export class GameFactoryService {
     return this.game;
   }
 
+  applyReorder(tasks) {
+    this.game.tasks = tasks
+    this.storage.set('game', this.game);
+  }
+
   async getGame(): Promise<Game> {
     return this.storage.get('game').then((val) => {
       console.log(val)
