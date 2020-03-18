@@ -19,23 +19,29 @@
     <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div>
     <div *ngIf="swipe" #swipeMap class="map"></div>
 
-    <ion-card class="overlay task-control ion-padding" [class.full]="task.type == 'nav-arrow'" *ngIf="task">
+    <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized" [class.full]="task.type == 'nav-arrow'" *ngIf="task">
       <div class="top-info">
-        <ion-chip color="primary" *ngIf="task.type.includes('nav')">
-          <ion-icon name="navigate"></ion-icon>
-        </ion-chip>
-        <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
-          <ion-icon name="clipboard"></ion-icon>
-        </ion-chip>
-        <ion-chip color="medium" *ngIf="task.type.includes('module')">
-          <ion-icon name="list"></ion-icon>
-        </ion-chip>
-        <ion-chip color="warning" *ngIf="task.type.includes('info')">
-          <ion-icon name="information-circle-outline"></ion-icon>
-        </ion-chip>
-        <p>Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p>
+        <div *ngIf="!panelMinimized">
+          <ion-chip color="primary" *ngIf="task.type.includes('nav')">
+            <ion-icon name="navigate"></ion-icon>
+          </ion-chip>
+          <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
+            <ion-icon name="clipboard"></ion-icon>
+          </ion-chip>
+          <ion-chip color="medium" *ngIf="task.type.includes('module')">
+            <ion-icon name="list"></ion-icon>
+          </ion-chip>
+          <ion-chip color="warning" *ngIf="task.type.includes('info')">
+            <ion-icon name="information-circle-outline"></ion-icon>
+          </ion-chip>
+        </div>
+        <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p>
+        <ion-button fill="clear" (click)="togglePanel()">
+          <ion-icon slot="end" name="close" size="large" *ngIf="!panelMinimized"></ion-icon>
+          <ion-icon slot="end" name="ios-expand" size="large" *ngIf="panelMinimized"></ion-icon>
+        </ion-button>
       </div>
-      <div class="task-wrapper">
+      <div class="task-wrapper" *ngIf="!panelMinimized">
         <!-- <div
         class="task-wrapper"
         [ngStyle]="{

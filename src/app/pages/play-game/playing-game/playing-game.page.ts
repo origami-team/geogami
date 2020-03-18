@@ -131,6 +131,8 @@ export class PlayingGamePage implements OnInit {
   primaryColor: string;
   secondaryColor: string;
 
+  panelMinimized: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -959,6 +961,10 @@ export class PlayingGamePage implements OnInit {
     this.deviceOrientationSubscription.unsubscribe();
     this.navCtrl.navigateRoot("/");
     this.streetSectionControl.remove();
+  }
+
+  togglePanel() {
+    this.panelMinimized = !this.panelMinimized;
   }
 
   capturePhoto() {
