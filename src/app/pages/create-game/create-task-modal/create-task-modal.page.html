@@ -57,8 +57,8 @@
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
     <ion-label>Genauigkeit</ion-label>
-    <ion-range [(ngModel)]="accuracy" min="5" max="100" step="5" snaps color="primary" ticks pin>
-      <ion-label slot="start">10m</ion-label>
+    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="primary" ticks pin (ionChange)="rangeChange()">
+      <ion-label slot="start">0m</ion-label>
       <ion-icon slot="start" size="small" color="primary" name="locate"></ion-icon>
       <ion-icon slot="end" color="primary" name="locate"></ion-icon>
       <ion-label slot="end">100m</ion-label>
@@ -66,8 +66,8 @@
   </ion-item>
   <ion-item lines="none" *ngIf="selectedTask.type == 'theme-loc'">
     <ion-label>Genauigkeit</ion-label>
-    <ion-range [(ngModel)]="accuracy" min="5" max="100" step="5" snaps color="secondary" ticks pin>
-      <ion-label slot="start">10m</ion-label>
+    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="secondary" ticks pin (ionChange)="rangeChange()">
+      <ion-label slot="start">0m</ion-label>
       <ion-icon slot="start" size="small" color="secondary" name="locate"></ion-icon>
       <ion-icon slot="end" color="secondary" name="locate"></ion-icon>
       <ion-label slot="end">100m</ion-label>

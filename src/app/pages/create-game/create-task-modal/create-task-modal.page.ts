@@ -50,6 +50,8 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   feedback: boolean = true;
   accuracy: number = 10;
 
+  step: number = 5;
+
   constructor(public modalController: ModalController) { }
 
   ngOnInit() {
@@ -78,6 +80,10 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     } else {
       this.confirmation = false;
     }
+  }
+
+  rangeChange() {
+    this.step = this.accuracy <= 5 ? 1 : 5;
   }
 
   ngAfterViewInit() {
