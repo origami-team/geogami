@@ -652,7 +652,7 @@ export class PlayingGamePage implements OnInit {
           const toast = await this.toastController.create({
             message: "Deine Eingabe ist falsch. Versuche es erneut",
             color: "dark",
-            showCloseButton: true,
+            // showCloseButton: true,
             duration: 2000
           });
           toast.present();
@@ -682,7 +682,7 @@ export class PlayingGamePage implements OnInit {
         const toast = await this.toastController.create({
           message: "Deine Eingabe ist falsch. Versuche es erneut",
           color: "dark",
-          showCloseButton: true,
+          // showCloseButton: true,
           duration: 2000
         });
         toast.present();
@@ -699,7 +699,7 @@ export class PlayingGamePage implements OnInit {
           const toast = await this.toastController.create({
             message: "Bitte mache ein Foto",
             color: "dark",
-            showCloseButton: true,
+            // showCloseButton: true,
             duration: 2000
           });
           toast.present();
@@ -733,7 +733,7 @@ export class PlayingGamePage implements OnInit {
             const toast = await this.toastController.create({
               message: "Deine Eingabe ist falsch. Versuche es erneut",
               color: "dark",
-              showCloseButton: true,
+              // showCloseButton: true,
               duration: 2000
             });
             toast.present();
@@ -766,7 +766,7 @@ export class PlayingGamePage implements OnInit {
             const toast = await this.toastController.create({
               message: "Deine Eingabe ist falsch. Versuche es erneut",
               color: "dark",
-              showCloseButton: true,
+              // showCloseButton: true,
               duration: 2000
             });
             toast.present();
@@ -794,7 +794,7 @@ export class PlayingGamePage implements OnInit {
           const toast = await this.toastController.create({
             message: "Bitte drehe dich zur angezeigten Blickrichtung",
             color: "dark",
-            showCloseButton: true,
+            // showCloseButton: true,
             duration: 2000
           });
           toast.present();
@@ -820,7 +820,7 @@ export class PlayingGamePage implements OnInit {
         const toast = await this.toastController.create({
           message: "Bitte drehe dich zur angezeigten Blickrichtung",
           color: "dark",
-          showCloseButton: true,
+          // showCloseButton: true,
           duration: 2000
         });
         toast.present();
@@ -837,7 +837,7 @@ export class PlayingGamePage implements OnInit {
           const toast = await this.toastController.create({
             message: "Deine Eingabe ist falsch. Versuche es erneut",
             color: "dark",
-            showCloseButton: true,
+            // showCloseButton: true,
             duration: 2000
           });
           toast.present();
@@ -857,7 +857,7 @@ export class PlayingGamePage implements OnInit {
           const toast = await this.toastController.create({
             message: "Deine Eingabe ist falsch. Versuche es erneut",
             color: "dark",
-            showCloseButton: true,
+            // showCloseButton: true,
             duration: 2000
           });
           toast.present();
@@ -877,7 +877,7 @@ export class PlayingGamePage implements OnInit {
           const toast = await this.toastController.create({
             message: "Deine Eingabe ist falsch. Versuche es erneut",
             color: "dark",
-            showCloseButton: true,
+            // showCloseButton: true,
             duration: 2000
           });
           toast.present();
@@ -905,7 +905,7 @@ export class PlayingGamePage implements OnInit {
             const toast = await this.toastController.create({
               message: "Deine Eingabe ist falsch. Versuche es erneut",
               color: "dark",
-              showCloseButton: true,
+              // showCloseButton: true,
               duration: 2000
             });
             toast.present();
@@ -921,7 +921,7 @@ export class PlayingGamePage implements OnInit {
         const toast = await this.toastController.create({
           message: "Bitte wähle zuerst ein Foto",
           color: "dark",
-          showCloseButton: true,
+          // showCloseButton: true,
           duration: 2000
         });
         toast.present();
@@ -938,7 +938,7 @@ export class PlayingGamePage implements OnInit {
         const toast = await this.toastController.create({
           message: "Deine Eingabe ist falsch. Versuche es erneut",
           color: "dark",
-          showCloseButton: true,
+          // showCloseButton: true,
           duration: 2000
         });
         toast.present();
@@ -988,7 +988,7 @@ export class PlayingGamePage implements OnInit {
           header: 'Error',
           message: err,
           color: "danger",
-          showCloseButton: true,
+          // showCloseButton: true,
           duration: 2000
         });
         toast.present();

@@ -38,7 +38,7 @@
         <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p>
         <ion-button fill="clear" (click)="togglePanel()">
           <ion-icon slot="end" name="close" size="large" *ngIf="!panelMinimized"></ion-icon>
-          <ion-icon slot="end" name="ios-expand" size="large" *ngIf="panelMinimized"></ion-icon>
+          <ion-icon slot="end" name="expand" size="large" *ngIf="panelMinimized"></ion-icon>
         </ion-button>
       </div>
       <div class="task-wrapper" *ngIf="!panelMinimized">
