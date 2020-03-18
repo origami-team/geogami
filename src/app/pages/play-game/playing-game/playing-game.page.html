@@ -136,6 +136,9 @@
         <ion-button class="confirm" color=primary (click)="onOkClicked()" *ngIf="task.settings.confirmation && task.type.includes('nav')">OK
         </ion-button>
 
+        <ion-button class="confirm" color=warning (click)="nextTask()" *ngIf="task.type.includes('info')">OK
+        </ion-button>
+
       </div>
     </ion-card>
   </div>
