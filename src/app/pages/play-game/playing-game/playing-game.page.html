@@ -16,8 +16,10 @@
 
 <ion-content forceOverscroll="false">
   <div class="wrapper" [class.blur]="showSuccess">
-    <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div>
-    <div *ngIf="swipe" #swipeMap class="map"></div>
+    <div #mapWrapper>
+      <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div>
+      <div *ngIf="swipe" #swipeMap class="map"></div>
+    </div>
 
     <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized" [class.full]="task.type == 'nav-arrow'" *ngIf="task">
       <div class="top-info">

@@ -1,7 +1,7 @@
 import { Map as MapboxMap } from "mapbox-gl";
 import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 import MapboxCompare from "mapbox-gl-compare";
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, ViewChild } from '@angular/core';
 import {
     DeviceOrientation,
     DeviceOrientationCompassHeading
@@ -28,6 +28,9 @@ export class LayerControl {
     private styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
     private swipeMapContainer: ElementRef;
     private deviceOrientationSubscription: Subscription;
+    private mapWrapper: ElementRef;
+
+    private compare: MapboxCompare;
 
     private tilt = (e: DeviceOrientationEvent) => {
         if (e.beta <= 60 && e.beta >= 0) {
@@ -37,10 +40,11 @@ export class LayerControl {
         }
     }
 
-    constructor(map: MapboxMap, private deviceOrientation: DeviceOrientation, alertController: AlertController, platform: Platform) {
+    constructor(map: MapboxMap, mapWrapper: ElementRef, private deviceOrientation: DeviceOrientation, alertController: AlertController, platform: Platform) {
         this.map = map;
         this.alertController = alertController;
         this.platform = platform;
+        this.mapWrapper = mapWrapper;
     }
 
     public setType(type: LayerType, swipeMapContainer: ElementRef = undefined): void {
@@ -66,6 +70,10 @@ export class LayerControl {
             this.map.removeControl(this.styleSwitcherControl)
         } catch (e) {
             console.log(e)
+        }
+        if(this.compare != null) {
+            this.compare.remove()
+            this.compare = null;
         }
     }
 
@@ -98,7 +106,8 @@ export class LayerControl {
                     center: [8, 51.8],
                     zoom: 2
                 });
-                new MapboxCompare(this.map, satMap);
+                
+                this.compare = new MapboxCompare(this.map, satMap, this.mapWrapper.nativeElement);
                 break;
             case LayerType.ThreeDimension:
                 this._add3DBuildingsLayer()

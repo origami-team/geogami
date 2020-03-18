@@ -47,6 +47,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ["./playing-game.page.scss"]
 })
 export class PlayingGamePage implements OnInit {
+  @ViewChild("mapWrapper", { static: false }) mapWrapper;
   @ViewChild("map", { static: false }) mapContainer;
   @ViewChild("swipeMap", { static: false }) swipeMapContainer;
 
@@ -288,7 +289,7 @@ export class PlayingGamePage implements OnInit {
       this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation)
       this.landmarkControl = new LandmarkControl(this.map)
       this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService);
-      this.layerControl = new LayerControl(this.map, this.deviceOrientation, this.alertController, this.platform);
+      this.layerControl = new LayerControl(this.map, this.mapWrapper, this.deviceOrientation, this.alertController, this.platform);
       this.trackControl = new TrackControl(this.map)
       this.geolocateControl = new GeolocateControl(this.map)
       this.panControl = new PanControl(this.map)
