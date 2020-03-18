@@ -88,6 +88,7 @@ export class CreateGameListPage implements OnInit {
 
     const modal = await this.modalController.create({
       component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
+      backdropDismiss: false,
       componentProps: {
         type: type,
         task: task

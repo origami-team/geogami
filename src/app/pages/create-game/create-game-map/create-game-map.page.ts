@@ -93,6 +93,7 @@ export class CreateGameMapPage implements OnInit {
     console.log(index)
     const modal = await this.modalController.create({
       component: CreateTaskModalPage,
+      backdropDismiss: false,
       componentProps: {
         gameName: this.name
       }
@@ -103,6 +104,7 @@ export class CreateGameMapPage implements OnInit {
   async presentModuleModal() {
     const modal = await this.modalController.create({
       component: CreateModuleModalPage,
+      backdropDismiss: false,
       componentProps: {
         gameName: this.name
       }

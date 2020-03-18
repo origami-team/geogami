@@ -102,7 +102,8 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
 
   async presentMapFeaturesModal() {
     const modal = await this.modalController.create({
-      component: MapFeaturesModalPage
+      component: MapFeaturesModalPage,
+      backdropDismiss: false,
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
