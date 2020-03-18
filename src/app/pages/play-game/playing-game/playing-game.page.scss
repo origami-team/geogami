@@ -92,6 +92,20 @@
     margin: 0;
   }
 
+  &.feedback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    padding: 1rem;
+    margin: 0;
+    background-color: lightcoral;
+    color: white;
+  }
+
   .selected {
     outline: solid #0cd1e8 2px;
     outline-offset: 1px;
