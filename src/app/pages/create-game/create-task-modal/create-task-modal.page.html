@@ -56,6 +56,15 @@
   </ion-item>
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
+    <ion-label>Mehrere Versuche</ion-label>
+    <ion-toggle [(ngModel)]="multipleTries" color="primary"></ion-toggle>
+  </ion-item>
+  <ion-item lines="none" *ngIf="selectedTask.type == 'theme-loc'">
+    <ion-label>Mehrere Versuche</ion-label>
+    <ion-toggle [(ngModel)]="multipleTries" color="secondary"></ion-toggle>
+  </ion-item>
+  <ion-item lines="none"
+    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
     <ion-label>Genauigkeit</ion-label>
     <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="primary" ticks pin (ionChange)="rangeChange()">
       <ion-label slot="start">0m</ion-label>

@@ -48,6 +48,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     landmarkFeatures: undefined
   }
   feedback: boolean = true;
+  multipleTries: boolean = false;
   accuracy: number = 10;
 
   step: number = 5;
@@ -132,6 +133,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
           showMarker: this.showMarker,
           mapFeatures: this.mapFeatures,
           feedback: this.feedback,
+          multipleTries: this.multipleTries,
           accuracy: this.accuracy
         }
       }

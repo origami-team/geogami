@@ -40,6 +40,12 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
+enum FeedbackType {
+  Correct,
+  Wrong,
+  TryAgain,
+  Saved
+}
 
 @Component({
   selector: "app-playing-game",
@@ -102,6 +108,10 @@ export class PlayingGamePage implements OnInit {
   showSuccess: boolean = false;
   public lottieConfig: Object;
 
+  showFeedback: boolean = false;
+  feedbackText: string;
+  feedbackRetry: boolean = false;
+
   Math: Math = Math;
 
   uploadDone: boolean = false;
@@ -133,6 +143,8 @@ export class PlayingGamePage implements OnInit {
   secondaryColor: string;
 
   panelMinimized: boolean = false;
+
+
 
   constructor(
     private route: ActivatedRoute,
@@ -395,12 +407,14 @@ export class PlayingGamePage implements OnInit {
     });
 
     try {
-      this.map.fitBounds(bounds, { padding: {
-        top: 40,
-        bottom: 160,
-        left: 40,
-        right: 40
-      }, duration: 2000 });
+      this.map.fitBounds(bounds, {
+        padding: {
+          top: 40,
+          bottom: 160,
+          left: 40,
+          right: 40
+        }, duration: 2000
+      });
     } catch (e) {
       console.log("Warning: Can not set bounds", bounds);
     }
@@ -456,7 +470,7 @@ export class PlayingGamePage implements OnInit {
         this.waypointMarker = new mapboxgl.Marker(el, {
           anchor: 'bottom',
           offset: [15, 0]
-      })
+        })
           .setLngLat(
             this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
           )
@@ -568,10 +582,49 @@ export class PlayingGamePage implements OnInit {
     this.trackerService.addEvent({
       type: "WAYPOINT_REACHED"
     });
-    this.nextTask();
+    this.initFeedback(true);
+  }
+
+  initFeedback(correct: boolean) {
+    let type: FeedbackType;
+
+    if (this.task.settings.feedback) {
+      if (correct) {
+        type = FeedbackType.Correct;
+      } else if (this.task.settings.multipleTries) {
+        type = FeedbackType.TryAgain;
+      } else {
+        type = FeedbackType.Wrong;
+      }
+    } else {
+      type = FeedbackType.Saved
+    }
+
+    switch (type) {
+      case FeedbackType.Correct:
+        this.feedbackText = "Du hast die Aufgabe richtig gelöst!"
+        break;
+      case FeedbackType.Wrong:
+        this.feedbackText = "Das war leider nicht richtig!"
+        break;
+      case FeedbackType.TryAgain:
+        this.feedbackText = "Probiere es noch einmal!"
+        this.feedbackRetry = true;
+        break;
+      case FeedbackType.Saved:
+        this.feedbackText = "Deine Antwort wurde gespeichert!"
+        break;
+    }
+    this.showFeedback = true
+  }
+
+  dismissFeedback() {
+    this.showFeedback = false;
+    this.feedbackRetry = false;
   }
 
   nextTask() {
+    this.showFeedback = false;
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
       this.showSuccess = true;
@@ -639,26 +692,14 @@ export class PlayingGamePage implements OnInit {
       }
     });
     if (this.task.type == "theme-loc") {
-      if (this.task.settings.feedback == false) {
-        this.nextTask();
-      } else {
-        const clickPosition = [
-          this.userSelectMarker._lngLat.lng,
-          this.userSelectMarker._lngLat.lat
-        ];
-        const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-        if (distance < this.triggerTreshold) {
-          this.nextTask()
-        } else {
-          const toast = await this.toastController.create({
-            message: "Deine Eingabe ist falsch. Versuche es erneut",
-            color: "dark",
-            // showCloseButton: true,
-            duration: 2000
-          });
-          toast.present();
-        }
-      }
+      const clickPosition = [
+        this.userSelectMarker._lngLat.lng,
+        this.userSelectMarker._lngLat.lat
+      ];
+      const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+
+      this.initFeedback(distance < this.triggerTreshold)
+
     } else if (
       this.task.type == "theme-object" &&
       this.task.settings["question-type"].name == "photo"
@@ -676,18 +717,7 @@ export class PlayingGamePage implements OnInit {
           inPolygon: isInPolygon
         }
       });
-
-      if (isInPolygon || this.task.settings.feedback == false) {
-        this.nextTask();
-      } else {
-        const toast = await this.toastController.create({
-          message: "Deine Eingabe ist falsch. Versuche es erneut",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-      }
+      this.initFeedback(isInPolygon);
     } else if (
       this.task.type == "theme-object" &&
       this.task.settings["question-type"].name == "description"
@@ -711,7 +741,7 @@ export class PlayingGamePage implements OnInit {
               photo: this.photoURL
             }
           });
-          this.nextTask();
+          this.initFeedback(true);
           this.photo = "";
           this.photoURL = "";
         }
@@ -730,17 +760,7 @@ export class PlayingGamePage implements OnInit {
 
           const correct = booleanPointInPolygon(clickPosition, polygon);
 
-          if (!correct && this.task.settings.feedback) {
-            const toast = await this.toastController.create({
-              message: "Deine Eingabe ist falsch. Versuche es erneut",
-              color: "dark",
-              // showCloseButton: true,
-              duration: 2000
-            });
-            toast.present();
-          } else {
-            this.nextTask();
-          }
+          this.initFeedback(correct);
         } else {
           const targetPosition = this.task.settings["question-type"].settings[
             "answer-type"
@@ -760,18 +780,7 @@ export class PlayingGamePage implements OnInit {
               distance: distance
             }
           });
-
-          if (distance < this.triggerTreshold || this.task.settings.feedback == false) {
-            this.nextTask();
-          } else {
-            const toast = await this.toastController.create({
-              message: "Deine Eingabe ist falsch. Versuche es erneut",
-              color: "dark",
-              // showCloseButton: true,
-              duration: 2000
-            });
-            toast.present();
-          }
+          this.initFeedback(distance < this.triggerTreshold);
         }
       }
     } else if (
@@ -779,7 +788,7 @@ export class PlayingGamePage implements OnInit {
       (this.task.settings["answer-type"] != null &&
         this.task.settings["answer-type"].name == "take-photo")
     ) {
-      this.nextTask();
+      this.initFeedback(true);
     }
     else if (this.task.type == "theme-direction" &&
       this.task.settings["question-type"].name == "question-type-arrow") {
@@ -790,21 +799,7 @@ export class PlayingGamePage implements OnInit {
         }
       });
       console.log(this.directionBearing, this.compassHeading);
-      if (this.task.settings.feedback) {
-        if (this.Math.abs(this.directionBearing - this.compassHeading) > 45) {
-          const toast = await this.toastController.create({
-            message: "Bitte drehe dich zur angezeigten Blickrichtung",
-            color: "dark",
-            // showCloseButton: true,
-            duration: 2000
-          });
-          toast.present();
-        } else {
-          this.nextTask();
-        }
-      } else {
-        this.nextTask();
-      }
+      this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
     }
     else if (this.task.type == "theme-direction" &&
       this.task.settings["question-type"].name != "question-type-current-direction" &&
@@ -817,104 +812,37 @@ export class PlayingGamePage implements OnInit {
         }
       });
       console.log(this.directionBearing, this.compassHeading);
-      if (this.Math.abs(this.directionBearing - this.compassHeading) > 45) {
-        const toast = await this.toastController.create({
-          message: "Bitte drehe dich zur angezeigten Blickrichtung",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-      } else {
-        this.nextTask();
-      }
+      this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
       console.log(this.clickDirection, this.compassHeading)
-      if (this.task.settings.feedback) {
-        if (Math.abs(this.clickDirection - this.compassHeading) < 45) {
-          this.nextTask()
-          this.map.removeLayer('viewDirectionClick')
-        } else {
-          const toast = await this.toastController.create({
-            message: "Deine Eingabe ist falsch. Versuche es erneut",
-            color: "dark",
-            // showCloseButton: true,
-            duration: 2000
-          });
-          toast.present();
-        }
-      } else {
-        this.nextTask();
-        this.map.removeLayer('viewDirectionClick')
+      const correct = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
+      this.initFeedback(correct);
+      if (correct) {
+        this.map.removeLayer('viewDirectionTask');
       }
     }
     else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
       console.log(this.clickDirection, this.compassHeading)
-      if (this.task.settings.feedback) {
-        if (Math.abs(this.clickDirection - this.compassHeading) < 45) {
-          this.nextTask()
-          this.map.removeLayer('viewDirectionTask')
-        } else {
-          const toast = await this.toastController.create({
-            message: "Deine Eingabe ist falsch. Versuche es erneut",
-            color: "dark",
-            // showCloseButton: true,
-            duration: 2000
-          });
-          toast.present();
-        }
-      } else {
-        this.nextTask();
-        this.map.removeLayer('viewDirectionTask')
+      const correct = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
+      this.initFeedback(correct);
+      if (correct) {
+        this.map.removeLayer('viewDirectionTask');
       }
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
       console.log(this.clickDirection, myTargetHeading)
-      if (this.task.settings.feedback) {
-        if (Math.abs(this.clickDirection - myTargetHeading) < 45) {
-          this.nextTask()
-          this.map.removeLayer('viewDirectionClick')
-        } else {
-          const toast = await this.toastController.create({
-            message: "Deine Eingabe ist falsch. Versuche es erneut",
-            color: "dark",
-            // showCloseButton: true,
-            duration: 2000
-          });
-          toast.present();
-        }
-      } else {
-        this.nextTask();
-        this.map.removeLayer('viewDirectionClick')
+      const correct = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
+      this.initFeedback(correct);
+      if (correct) {
+        this.map.removeLayer('viewDirectionTask');
       }
     } else if (
       this.task.settings["answer-type"] &&
       this.task.settings["answer-type"].name == "multiple-choice"
     ) {
       if (this.selectedPhoto != null) {
-        console.log("feedback:", this.task.settings.feedback);
-        if (this.task.settings.feedback) {
-          console.log(
-            "feeisCorrectPhotoSelecteddback:",
-            this.isCorrectPhotoSelected
-          );
-          if (this.isCorrectPhotoSelected) {
-            this.nextTask();
-            this.isCorrectPhotoSelected = null;
-            this.selectedPhoto = null;
-          } else {
-            const toast = await this.toastController.create({
-              message: "Deine Eingabe ist falsch. Versuche es erneut",
-              color: "dark",
-              // showCloseButton: true,
-              duration: 2000
-            });
-            toast.present();
-            // this.isCorrectPhotoSelected = null;
-            // this.selectedPhoto = null;
-          }
-        } else {
-          this.nextTask();
+        this.initFeedback(this.isCorrectPhotoSelected);
+        if (this.isCorrectPhotoSelected) {
           this.isCorrectPhotoSelected = null;
           this.selectedPhoto = null;
         }
@@ -930,19 +858,11 @@ export class PlayingGamePage implements OnInit {
     } else {
       // TODO: disable button
       const waypoint = this.task.settings.point.geometry.coordinates;
-      if (
-        this.userDidArrive(waypoint) ||
-        this.task.settings.feedback == false
-      ) {
-        this.onWaypointReached();
+      const arrived = this.userDidArrive(waypoint);
+      if (!arrived) {
+        this.initFeedback(false)
       } else {
-        const toast = await this.toastController.create({
-          message: "Deine Eingabe ist falsch. Versuche es erneut",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
+        this.onWaypointReached();
       }
     }
   }
