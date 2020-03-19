@@ -346,7 +346,7 @@ export class PlayingGamePage implements OnInit {
           this.task.settings["answer-type"].name == "set-point") ||
         (this.task.type == "theme-object" &&
           this.task.settings["question-type"].name == "photo") ||
-        (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow")
+        (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow" && this.task.settings["answer-type"].name != "rotateTo" )
       ) {
         const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
         if (this.userSelectMarker) {
@@ -451,6 +451,16 @@ export class PlayingGamePage implements OnInit {
     if (this.waypointMarker) {
       this.waypointMarker.remove();
       this.waypointMarker = null;
+    }
+
+    if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
+      this.map.removeLayer('viewDirectionTask');
+      this.map.removeSource('viewDirectionTask');
+    }
+
+    if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionClick').length > 0) {
+      this.map.removeLayer('viewDirectionClick');
+      this.map.removeSource('viewDirectionClick');
     }
 
     if (

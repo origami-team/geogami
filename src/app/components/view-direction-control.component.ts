@@ -83,10 +83,12 @@ export class ViewDirectionControl {
 
 
     private reset(): void {
-        if (this.deviceOrientationSubscription != undefined)
+        if (this.deviceOrientationSubscription != undefined) {
             this.deviceOrientationSubscription.unsubscribe();
-        if (this.map.getStyle().layers.includes('viewDirection') && this.map.getLayoutProperty("viewDirection", "visibility") == 'visible')
+        }
+        if (this.map.getStyle().layers.filter(e => e.id == 'viewDirection').length > 0 && this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
             this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
+        }
 
     }
 
