@@ -18,7 +18,7 @@ export class PanControl {
         this.positionWatch = window.navigator.geolocation.watchPosition(
             position => {
                 if (map != undefined && this.panType == PanType.Center) {
-                    this.map.setCenter(position.coords);
+                    this.map.panTo([position.coords.longitude, position.coords.latitude]);
                 }
             },
             err => console.error(err),
@@ -47,7 +47,10 @@ export class PanControl {
                 this.map.dragPan.enable();
                 break;
             case PanType.Center:
-
+                this.map.dragPan.disable();
+                this.map.scrollZoom.disable();
+                this.map.doubleClickZoom.disable();
+                this.map.touchZoomRotate.disable();
                 break;
             case PanType.Static:
                 this.map.dragPan.disable();
