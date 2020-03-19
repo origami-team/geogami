@@ -160,7 +160,7 @@ export default [
                   },
                   {
                     label: "... durch Auswahl eines von vier Fotos",
-                    name: "select-photo",
+                    name: "multiple-choice",
                     text: "Wähle aus den vier Fotos das passende Bild zum beschriebenen Objekt aus.",
                     items: [
                       {

@@ -755,6 +755,25 @@ export class PlayingGamePage implements OnInit {
           this.photo = "";
           this.photoURL = "";
         }
+      } else if (
+        this.task.settings["answer-type"] &&
+        this.task.settings["answer-type"].name == "multiple-choice"
+      ) {
+          if (this.selectedPhoto != null) {
+            this.initFeedback(this.isCorrectPhotoSelected);
+            if (this.isCorrectPhotoSelected) {
+              this.isCorrectPhotoSelected = null;
+              this.selectedPhoto = null;
+            }
+          } else {
+            const toast = await this.toastController.create({
+              message: "Bitte wähle zuerst ein Foto",
+              color: "dark",
+              // showCloseButton: true,
+              duration: 2000
+            });
+            toast.present();
+          }
       } else {
         if (
           this.task.settings["question-type"].settings["answer-type"].settings
