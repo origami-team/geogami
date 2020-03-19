@@ -144,6 +144,8 @@ export class PlayingGamePage implements OnInit {
 
   panelMinimized: boolean = false;
 
+  viewDirectionTaskGeolocateSubscription: number;
+
 
 
   constructor(
@@ -456,6 +458,7 @@ export class PlayingGamePage implements OnInit {
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
       this.map.removeLayer('viewDirectionTask');
       this.map.removeSource('viewDirectionTask');
+      navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
     }
 
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionClick').length > 0) {
@@ -536,7 +539,7 @@ export class PlayingGamePage implements OnInit {
 
           this.map.addImage("view-direction-task", image);
 
-          navigator.geolocation.getCurrentPosition(position => {
+          this.viewDirectionTaskGeolocateSubscription = navigator.geolocation.watchPosition(position => {
             if (this.map.getSource('viewDirectionTask')) {
               this.map.getSource('viewDirectionTask').setData({
                 type: "Point",
@@ -848,6 +851,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
+        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
       }
     }
     else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
@@ -856,6 +860,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
+        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
       }
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
@@ -864,6 +869,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
+        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
       }
     } else if (
       this.task.settings["answer-type"] &&
