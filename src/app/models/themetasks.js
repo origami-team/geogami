@@ -11,9 +11,9 @@ export default [
         inputType: "area",
         label: "Aufgabenstellung",
         text:
-          "Wo befindest du dich gerade? Markiere deine Position mit einem Klick auf der Karte.",
+          "Wo bist du jetzt? Tippe auf die Karte.",
         info:
-          "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt",
+          "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
         validation: [Validators.required, Validators.minLength(4)]
       }
     ]
@@ -38,7 +38,7 @@ export default [
                 label: "Aufgabenstellung",
                 text: "",
                 info:
-                  "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
+                  "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {
@@ -47,7 +47,7 @@ export default [
                 featureType: "polygon",
                 label: "Objektposition",
                 info:
-                  "Umrande das Objekt, das der Spieler finden soll, mit mehreren Klicks auf der Karte. Diese Markierung wird dem Spieler während der Aufgabenstellung angezeigt",
+                  "Markiere das Objekt, das der Spieler in seiner Umgebung finden soll. Diese Markierung wird dem Spieler im Spiel angezeigt. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.",
                 validation: [Validators.required]
               },
               {
@@ -56,15 +56,14 @@ export default [
                 name: "answer-type",
                 selectOptions: [
                   {
-                    label: "... durch Auswahl eines von vier Fotos",
+                    label: "... durch Wählen eines Fotos (Multiple Choice)",
                     name: "multiple-choice",
+                    text: "Finde das markierte Haus in deiner Umgebung. Wähle das passende Foto.",
                     items: [
                       {
                         type: "photoUploadMultipleChoice",
                         name: "multiple-choice",
                         label: "Multiple Choice",
-                        info:
-                          "Lade ein Foto vom dem zu suchenden Objekt hoch sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.",
                         validation: [Validators.required]
                       }
                     ]
@@ -72,6 +71,7 @@ export default [
                   {
                     label: "... mit der Aufnahme eines Fotos",
                     name: "take-photo",
+                    text: "Finde das markierte Haus in deiner Umgebung. Mache ein Foto davon.",
                     items: []
                   }
                 ]
@@ -88,9 +88,9 @@ export default [
                 inputType: "area",
                 label: "Aufgabenstellung",
                 text:
-                  "Suche in deiner Umgebung das Objekt, das du hier auf dem Foto siehst. Klicke das Objekt auf der Karte an.",
+                  "Suche dieses Haus in deiner Umgebung. Finde es auf der Karte und tippe es an.",
                 info:
-                  "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
+                  "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {
@@ -99,7 +99,7 @@ export default [
                 label: "Foto des zu suchenden Objekts",
                 text: "",
                 info:
-                  "Lade ein Foto von dem Objekt hoch, das der Spieler finden soll.",
+                  "Wähle ein Foto vom Objekt, das der Spieler auf der Karte finden soll.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {
@@ -108,7 +108,7 @@ export default [
                 featureType: "polygon",
                 label: "Objektposition",
                 info:
-                  "Umrande das Objekt, das der Spieler finden soll, mit mehreren Klicks auf der Karte. Die Markierung wird dem Spieler nicht angezeigt",
+                  "Markiere das fotografierte Objekt. Diese Markierung wird dem Spieler im Spiel NICHT angezeigt. Klicke dazu auf das kleine Quadrat, umrande dann das Objekt mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.",
                 validation: [Validators.required]
               }
             ]
@@ -134,7 +134,7 @@ export default [
                 label: "Aufgabenstellung",
                 text: "",
                 info:
-                  "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
+                  "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {
@@ -143,9 +143,9 @@ export default [
                 name: "answer-type",
                 selectOptions: [
                   {
-                    label: "... durch Setzen eines Kartenpunktes",
+                    label: "... durch Setzen einer Kartenmarkierung",
                     name: "set-point",
-                    text: "Markiere das beschriebene Objekt mit einem Punkt auf der Karte.",
+                    text: "Finde das Haus auf der Karte. Tippe es an.",
                     items: [
                       {
                         type: "map",
@@ -153,22 +153,20 @@ export default [
                         featureType: "polygon",
                         label: "Objektposition",
                         info:
-                          "Umrande das Objekt, das der Spieler finden soll, mit mehreren Klicks auf der Karte. Die Markierung wird dem Spieler nicht angezeigt",
+                          "Markiere das beschriebene Objekt. Diese Markierung wird dem Spieler im Spiel NICHT angezeigt. Klicke dazu auf das kleine Quadrat, umrande dann das Objekt mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.",
                         validation: [Validators.required]
                       }
                     ]
                   },
                   {
-                    label: "... durch Auswahl eines von vier Fotos",
+                    label: "... durch Wählen eines Fotos (Multiple Choice)",
                     name: "select-photo",
-                    text: "Wähle aus den vier Fotos das passende Bild zum beschriebenen Objekt aus.",
+                    text: "Wähle das passende Foto.",
                     items: [
                       {
                         type: "photoUploadMultipleChoice",
                         name: "multiple-choice",
                         label: "Multiple Choice",
-                        info:
-                          "Lade ein Foto vom dem zu suchenden Objekt hoch sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.",
                         validation: [Validators.required]
                       }
                     ]
@@ -176,7 +174,7 @@ export default [
                   {
                     label: "... mit der Aufnahme eines Fotos",
                     name: "take-photo",
-                    text: "Nehme ein Foto von dem beschriebenen Objekt auf.",
+                    text: "Mache ein Foto davon.",
                     items: []
                   }
                 ]
@@ -216,7 +214,7 @@ export default [
                 featureType: "direction",
                 label: "Richtung auf der Karte",
                 info:
-                  " Markiere die Richtung, die der Spieler finden soll, mit einem Klick auf der Karte. Diese Richtung wird dem Spieler bei Aufgabenstellung auf der Karte angezeigt.",
+                  "Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Diese Markierung wird ihm im Spiel angezeigt. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt.",
                 validation: [Validators.required]
               },
               {
@@ -225,8 +223,9 @@ export default [
                 name: "answer-type",
                 selectOptions: [
                   {
-                    label: "... durch Auswahl eines von vier Fotos",
+                    label: "... durch Auswahl eines Fotos (Multiple Choice)",
                     name: "multiple-choice",
+                    text: "Drehe dich in die Richtung, die auf der Karte zu sehen ist. Wähle das passende Foto dazu.",
                     items: [
                       {
                         type: "photoUploadMultipleChoice",
@@ -241,6 +240,7 @@ export default [
                   {
                     label: "... durch Einnehmen der Richtung",
                     type: "rotateTo",
+                    text: "Drehe dich in die Richtung, die auf der Karte zu sehen ist.",
                     items: []
                   }
                 ]
@@ -257,9 +257,9 @@ export default [
                 inputType: "area",
                 label: "Aufgabenstellung",
                 text:
-                  "Drehe dich, bis die Pfeile übereinander liegen.",
+                  "Drehe dich, bis die Pfeile in die gleiche Richtung zeigen.",
                 info:
-                  "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
+                  "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt. Die Karte wird im Spiel ausgeblendet und der Spieler sieht zwei Pfeile, die er in dieselbe Richtung bringen muss, indem er seine eigene Blickrichtung verändert.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {
@@ -268,7 +268,7 @@ export default [
                 featureType: "direction",
                 label: "Gewünschte Blickrichtung",
                 info:
-                  "Markiere die Richtung, in die der Spieler blicken soll, mit einem Klick auf der Karte. Die App wird den Spieler in diese Richtung „drehen“",
+                  "Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Die App wird den Spieler in diese Richtung leiten, ohne die Karte anzuzeigen. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt.",
                 validation: [Validators.required]
               }
             ]
@@ -283,9 +283,9 @@ export default [
                 inputType: "area",
                 label: "Aufgabenstellung",
                 text:
-                  "Markiere die Richtung, in du die jetzt siehst, mit einem Klick auf der Karte.",
+                  "Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte.",
                 info:
-                  "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
+                  "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
               }
             ]
@@ -300,9 +300,9 @@ export default [
                 inputType: "area",
                 label: "Aufgabenstellung",
                 text:
-                  "Markiere die Richtung, die du auf dem Bild siehst, mit einem Klick auf der Karte.",
+                  "Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte.",
                 info:
-                  "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
+                  "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {
@@ -310,7 +310,7 @@ export default [
                 name: "photo",
                 label: "Foto der zu suchenden Richtung",
                 info:
-                  "Lade ein Foto hoch, das am Startpunkt aufgenommen wurde und in die gesuchte Richtung zeigt.",
+                  "Wähle ein Foto, das die gesuchte Blickrichtung zeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
               },
               {
@@ -319,7 +319,7 @@ export default [
                 featureType: "direction",
                 label: "Richtung auf der Karte",
                 info:
-                  "Markiere die Richtung, die der Spieler finden soll, mit einem Klick auf der Karte. Diese Markierung wird dem Spieler bei Aufgabenstellung nicht angezeigt",
+                  "Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Diese Markierung wird im Spiel NICHT angezeigt. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt.",
                 validation: [Validators.required]
               }
             ]

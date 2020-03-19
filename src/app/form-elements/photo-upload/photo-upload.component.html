@@ -8,8 +8,8 @@
     <ion-thumbnail slot="start" *ngIf="photo">
       <img [src]="photo">
     </ion-thumbnail>
-    <ion-button (click)=capturePhoto()>Foto aufnehmen</ion-button>
-    <ion-button (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
+    <ion-button color=secondary (click)=capturePhoto()>Foto aufnehmen</ion-button>
+    <ion-button color=secondary (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
   </ion-item>
 
 
