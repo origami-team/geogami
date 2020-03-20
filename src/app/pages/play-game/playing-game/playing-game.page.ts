@@ -409,13 +409,14 @@ export class PlayingGamePage implements OnInit {
     });
 
     try {
+      console.log("setting bounds", bounds)
       this.map.fitBounds(bounds, {
         padding: {
           top: 40,
           bottom: 160,
           left: 40,
           right: 40
-        }, duration: 2000
+        }, duration: 1000
       });
     } catch (e) {
       console.log("Warning: Can not set bounds", bounds);
