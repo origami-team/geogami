@@ -21,6 +21,7 @@ export class MapFeaturesModalPage implements OnInit {
   @ViewChild("map", { static: false }) mapContainer;
 
   private draw: MapboxDraw;
+  private map: mapboxgl.Map;
 
   features: any = {
     zoombar: "true",
@@ -45,7 +46,7 @@ export class MapFeaturesModalPage implements OnInit {
     this.changeDetectorRef.detectChanges();
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
-    const map = new mapboxgl.Map({
+     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: "mapbox://styles/mapbox/streets-v9",
       center: [8, 51.8],
@@ -53,15 +54,19 @@ export class MapFeaturesModalPage implements OnInit {
     });
 
     this.draw = new MapboxDraw({
-      displayControlsDefault: false,
-      controls: {
-        line_string: true,
-        polygon: true,
-        trash: true
-      }
-    });
+        displayControlsDefault: false,
+        controls: {
+          line_string: true,
+          polygon: true,
+          trash: true
+        }
+      });
+  
+      this.map.addControl(this.draw, "top-left");
+  }
 
-    map.addControl(this.draw, "top-left");
+  ionViewDidEnter() {
+    this.map.resize();
   }
 
   dismissModal(dismissType: string = "null") {

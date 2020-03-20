@@ -134,6 +134,7 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
     });
 
     this.map.on("load", () => {
+      this.map.resize();
       geolocate.trigger();
 
       if (this.config.featureType == "direction") {

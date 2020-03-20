@@ -51,37 +51,37 @@ export class CreateGameListPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA";
+    // mapboxgl.accessToken =
+    //   "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA";
 
-    const map = new mapboxgl.Map({
-      container: "create-game-map",
-      style: "mapbox://styles/mapbox/streets-v9",
-      center: [8, 51.8],
-      zoom: 2
-    });
-
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      fitBoundsOptions: {
-        maxZoom: 25
-      },
-      trackUserLocation: true
-    });
-    map.addControl(geolocate);
-
-    // let watch = this.geolocation.watchPosition();
-    // watch.subscribe((data) => {
-    //   console.log(data)
+    // const map = new mapboxgl.Map({
+    //   container: "create-game-map",
+    //   style: "mapbox://styles/mapbox/streets-v9",
+    //   center: [8, 51.8],
+    //   zoom: 2
     // });
 
-    // Add geolocate control to the map.
+    // const geolocate = new mapboxgl.GeolocateControl({
+    //   positionOptions: {
+    //     enableHighAccuracy: true
+    //   },
+    //   fitBoundsOptions: {
+    //     maxZoom: 25
+    //   },
+    //   trackUserLocation: true
+    // });
+    // map.addControl(geolocate);
 
-    map.on("load", () => {
-      geolocate.trigger();
-    });
+    // // let watch = this.geolocation.watchPosition();
+    // // watch.subscribe((data) => {
+    // //   console.log(data)
+    // // });
+
+    // // Add geolocate control to the map.
+
+    // map.on("load", () => {
+    //   geolocate.trigger();
+    // });
   }
 
   async presentTaskModal(type: string = "nav", task: any = null) {
