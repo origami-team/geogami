@@ -134,13 +134,13 @@ export class LayerControl {
                 break;
             case LayerType.ThreeDimension:
                 this._add3DBuildingsLayer()
-                this.deviceOrientationSubscription = this.deviceOrientation
-                    .watchHeading({ frequency: 10 })
-                    .subscribe((data: DeviceOrientationCompassHeading) => {
-                        requestAnimationFrame(() => {
-                            this.map.setBearing(data.magneticHeading);
-                        })
-                    })
+                // this.deviceOrientationSubscription = this.deviceOrientation
+                //     .watchHeading({ frequency: 10 })
+                //     .subscribe((data: DeviceOrientationCompassHeading) => {
+                //         requestAnimationFrame(() => {
+                //             this.map.setBearing(data.magneticHeading);
+                //         })
+                //     })
                 if (this.platform.is('ios')) {
                     const alert = await this.alertController.create({
                         header: 'Neigungssensor nutzen?',
