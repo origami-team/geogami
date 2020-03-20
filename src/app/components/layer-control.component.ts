@@ -45,6 +45,12 @@ export class LayerControl {
         this.alertController = alertController;
         this.platform = platform;
         this.mapWrapper = mapWrapper;
+
+        this.map.addSource('satellite', {
+            type: "raster",
+            url: "mapbox://mapbox.satellite",
+            tileSize: 256
+        })
     }
 
     public setType(type: LayerType, swipeMapContainer: ElementRef = undefined): void {
@@ -53,6 +59,26 @@ export class LayerControl {
             this.reset();
             this.swipeMapContainer = swipeMapContainer
             this.update();
+        }
+    }
+
+    public toggleSat() {
+        if (this.map.getLayer('satellite')) {
+            this.map.removeLayer('satellite')
+        } else {
+            this.map.addLayer({
+                id: "satellite",
+                source: 'satellite',
+                type: "raster"
+            }, 'country-label-lg');
+        }
+    }
+
+    public toggle3D() {
+        if (this.layerType != LayerType.ThreeDimension) {
+            this.setType(LayerType.ThreeDimension)
+        } else {
+            this.setType(LayerType.Standard)
         }
     }
 
@@ -80,6 +106,7 @@ export class LayerControl {
     update = async () => {
         switch (this.layerType) {
             case LayerType.Standard:
+                this.map.resetNorthPitch();
                 break;
             case LayerType.Selection:
                 this.map.addControl(this.styleSwitcherControl);
@@ -88,11 +115,7 @@ export class LayerControl {
                 //this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
                 this.map.addLayer({
                     id: "satellite",
-                    source: {
-                        type: "raster",
-                        url: "mapbox://mapbox.satellite",
-                        tileSize: 256
-                    },
+                    source: 'satellite',
                     type: "raster"
                 });
                 break;

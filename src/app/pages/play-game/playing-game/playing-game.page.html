@@ -21,6 +21,36 @@
       <div *ngIf="swipe" #swipeMap class="map"></div>
     </div>
 
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.rotation == 'button'" (click)="toggleRotate()">
+      <ion-button fill="clear">
+        <ion-icon name="refresh" size="large"></ion-icon>
+      </ion-button>
+    </ion-card>
+    
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == 'sat-button'" (click)="toggleSat()">
+      <ion-button fill="clear">
+        <ion-icon name="map" size="large"></ion-icon>
+      </ion-button>
+    </ion-card>
+    
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == '3D-button'" (click)="toggle3D()">
+      <ion-button fill="clear">
+        <ion-icon name="cube" size="large"></ion-icon>
+      </ion-button>
+    </ion-card>
+    
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.position == 'button'" (click)="toggleGeolocate()">
+      <ion-button fill="clear">
+        <ion-icon name="locate" size="large"></ion-icon>
+      </ion-button>
+    </ion-card>
+    
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.direction == 'button'" (click)="toggleDirection()">
+      <ion-button fill="clear">
+        <ion-icon name="compass" size="large"></ion-icon>
+      </ion-button>
+    </ion-card>
+
     <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized" [class.full]="task.type == 'nav-arrow'" *ngIf="task">
       <div class="top-info">
         <div *ngIf="!panelMinimized">

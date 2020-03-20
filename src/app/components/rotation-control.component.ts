@@ -34,6 +34,14 @@ export class RotationControl {
         }
     }
 
+    public toggle() {
+        if(this.rotationType != RotationType.Auto) {
+            this.setType(RotationType.Auto)
+        } else {
+            this.setType(RotationType.North)
+        }
+    }
+
     private reset(): void {
         if (this.deviceOrientationSubscription != undefined)
             this.deviceOrientationSubscription.unsubscribe();

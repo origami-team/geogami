@@ -72,6 +72,15 @@ export class GeolocateControl {
         }
     }
 
+    toggle() {
+        if (this.map.getLayoutProperty("geolocate", "visibility") == 'none') {
+            this.map.setLayoutProperty('geolocate', 'visibility', 'visible');
+        } else {
+            this.map.setLayoutProperty('geolocate', 'visibility', 'none');
+        }
+
+    }
+
     private reset(): void {
         if (this.map.getStyle().layers.includes('geolocate') && this.map.getLayoutProperty("geolocate", "visibility") == 'visible')
             this.map.setLayoutProperty('geolocate', 'visibility', 'none');

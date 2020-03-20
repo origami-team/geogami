@@ -952,6 +952,26 @@ export class PlayingGamePage implements OnInit {
     );
   }
 
+  toggleRotate() {
+    this.rotationControl.toggle();
+  }
+
+  toggleSat() {
+    this.layerControl.toggleSat();
+  }
+
+  toggle3D() {
+    this.layerControl.toggle3D();
+  }
+
+  toggleDirection() {
+    this.viewDirectionControl.toggle();
+  }
+
+  toggleGeolocate() {
+    this.geolocateControl.toggle();
+  }
+
   _initMapFeatures() {
     let mapFeatures = this.task.settings.mapFeatures;
     console.log("MapFeatures: ", mapFeatures);
