@@ -383,14 +383,10 @@ export class PlayingGamePage implements OnInit {
     );
   }
 
-  initGame() {
-    const tasks = this.game.tasks;
-
+  zoomBounds() {
     var bounds = new mapboxgl.LngLatBounds();
 
-    console.log(tasks)
-
-    tasks.forEach(task => {
+    this.game.tasks.forEach(task => {
       if (task.settings.point)
         bounds.extend(task.settings.point.geometry.coordinates);
       if (task.settings['question-type'] &&
@@ -421,7 +417,10 @@ export class PlayingGamePage implements OnInit {
     } catch (e) {
       console.log("Warning: Can not set bounds", bounds);
     }
-    this.task = tasks[this.taskIndex];
+  }
+
+  initGame() {
+    this.task = this.game.tasks[this.taskIndex];
     console.log("initializing trackerService");
     this.trackerService.init(this.game._id, this.device);
     this.trackerService.addEvent({
@@ -590,6 +589,8 @@ export class PlayingGamePage implements OnInit {
       console.log(this.task.settings["question-type"].settings);
       this.landmarkControl.setQTLandmark(this.task.settings["question-type"].settings.polygon[0])
     }
+
+    this.zoomBounds()
   }
 
   onWaypointReached() {
