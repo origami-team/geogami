@@ -11,8 +11,8 @@ export default [
                 "name": "text",
                 "inputType": "area",
                 "label": "Aufgabenstellung",
-                "text": "Gehe zur nächsten Zielfahne.",
-                "info": "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt",
+                "text": "Gehe zur Fahne.",
+                "info": "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
             },
             {
@@ -20,7 +20,7 @@ export default [
                 "name": "point",
                 "featureType": "point",
                 "label": "Zielort",
-                "info": "Dieser Zielort wird dem Spieler im Spielverlauf mit einer Zielfahne auf der Karte angezeigt",
+                "info": "Setze einen Marker. Dieser Zielort wird dem Spieler auf der Karte als Zielfahne angezeigt.",
                 validation: [Validators.required]
             }
         ]
@@ -34,8 +34,8 @@ export default [
                 "name": "text",
                 "inputType": "area",
                 "label": "Aufgabenstellung",
-                "text": "Folge dem Pfeil bis zum nächsten Ziel.",
-                "info": "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt",
+                "text": "Folge dem Pfeil bis zum Ziel.",
+                "info": "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
                 validation: [Validators.required, Validators.minLength(4)]
             },
             {
@@ -43,7 +43,7 @@ export default [
                 "name": "point",
                 "featureType": "point",
                 "label": "Zielort",
-                "info": "Zu diesem Zielort wird der Spieler mithilfe eines Richtungspfeils geleitet. Die Karte ist während der Aufgabe nicht sichtbar",
+                "info": "Setze einen Marker. Zu diesem Zielort wird der Spieler mithilfe eines Richtungspfeils geleitet. Die Karte ist während der Aufgabe nicht sichtbar.",
                 validation: [Validators.required]
             }
         ]
@@ -56,43 +56,43 @@ export default [
                 "type": "map",
                 "name": "point",
                 "featureType": "point",
-                "label": "Zielort (und Zwischenziele)",
-                "info": "Der letztgewählte Ort wir dem Spieler als Ziel auf der Karte angezeigt. Alle weiteren Ziele sind Zwischenziele, die auf der Karte nicht angezeigt werden, also unsichtbar sind. In der Aufgabenübersicht könnenden unsichtbaren Zwischenzielen nachträglich thematische Aufgaben zugeordnet werden.",
+                "label": "Zielort",
+                "info": "Setze einen Marker. Zu diesem Zielort wird der Spieler mithilfe deiner Navigationsanweisung geleitet.",
                 validation: [Validators.required]
             },
             {
                 "type": "input",
                 "name": "text",
                 "inputType": "area",
-                "label": "Navigationsanweisung(en)",
-                "info": "Diese Navigationsanweisungen werden dem Spieler im Spielverlauf angezeigt.Für jedes Zwischenziel muss eine eigene Navigationsanweisung formuliert werden",
+                "label": "Navigationsanweisung",
+                "info": "Diese Navigationsanweisung wird dem Spieler im Spiel angezeigt. Sofern keine Zielfahne eingeblendet werden soll, muss die Navigationsanweisung sehr genau sein.",
                 validation: [Validators.required, Validators.minLength(4)]
             },
         ]
     },
-    {
-        "type": "nav-route",
-        "name": "Navigation entlang einer Route",
-        "developer": [
-            {
-                "type": "input",
-                "name": "text",
-                "inputType": "area",
-                "label": "Aufgabenstellung",
-                "text": "Gehe entlang der Route bis zur nächsten Zielfahne.",
-                "info": "Diese Aufgabenstellung wird dem Spieler im Spielverlauf angezeigt.",
-                validation: [Validators.required, Validators.minLength(4)]
-            },
-            {
-                "type": "map",
-                "name": "point",
-                "featureType": "point",
-                "label": "Route (und Zwischenziele)",
-                "info": "Wähle die zu laufende Route durch einfaches Klicken auf der Karte. Wähle „unsichtbare“ Zwischenziele mit einem Doppelklick. In der Aufgabenübersicht können den unsichtbaren Zwischenzielen nachträglich thematische Aufgaben zugeordnet werden.",
-                validation: [Validators.required]
-            },
-        ]
-    },
+    //{
+    //    "type": "nav-route",
+    //    "name": "Navigation entlang einer Route",
+    //    "developer": [
+    //        {
+    //            "type": "input",
+    //            "name": "text",
+    //            "inputType": "area",
+    //            "label": "Aufgabenstellung",
+    //            "text": "Folge der Route.",
+    //            "info": "Diese Aufgabenstellung wird dem Spieler im Spiel angezeigt.",
+    //            validation: [Validators.required, Validators.minLength(4)]
+    //        },
+    //        {
+    //            "type": "map",
+    //            "name": "point",
+    //            "featureType": "point",
+    //            "label": "Route (und Zwischenziele)",
+    //            "info": "Wähle die zu laufende Route durch einfaches Klicken auf der Karte. Wähle „unsichtbare“ Zwischenziele mit einem Doppelklick. In der Aufgabenübersicht können den unsichtbaren Zwischenzielen nachträglich thematische Aufgaben zugeordnet werden.",
+    //            validation: [Validators.required]
+    //        },
+    //    ]
+    // },
     // {
     //     "type": "nav-text",
     //     "name": "Textnavigation",

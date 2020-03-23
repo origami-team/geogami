@@ -6,7 +6,11 @@
       </ion-button>
     </ion-buttons>
     <ion-title><ion-icon name="information-circle-outline" color="warning"></ion-icon> Information</ion-title>
+    
     <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="help"></ion-icon>
+      </ion-button>
       <ion-button (click)="dismissModal(null)">
         <ion-icon name="save"></ion-icon>
       </ion-button>
@@ -16,18 +20,23 @@
 
 <ion-content class="ion-padding">
 
+  <h5>Informationstext</h5>
+
   <ion-item>
-    <ion-textarea placeholder=" Informationstext an den Spieler (optional)" [(ngModel)]=info></ion-textarea>
+    <ion-textarea placeholder=" (optional)" [(ngModel)]=info></ion-textarea>
   </ion-item>
 
+  <h5>Fotos und Grafiken</h5>
 
   <ion-item lines="none">
     <ion-thumbnail slot="start" *ngIf="photo">
       <img [src]="photo">
     </ion-thumbnail>
-    <ion-button (click)=capturePhoto()>Foto aufnehmen</ion-button>
-    <ion-button (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
+    <ion-button color=warning (click)=capturePhoto()>Foto aufnehmen</ion-button>
+    <ion-button color=warning (click)=photoFromLibrary()>Foto aus Galerie</ion-button>
   </ion-item>
+
+  <h5>Weitere Einstellungen</h5>
 
   <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
     <ion-label>
