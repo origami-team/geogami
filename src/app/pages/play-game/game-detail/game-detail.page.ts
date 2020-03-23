@@ -34,36 +34,36 @@ export class GameDetailPage implements OnInit {
           console.log(this.game)
           // this.activities = this.game.activities
           // this.points = this.activities[0].points
-          if(this.mapContainer.nativeElement) {
-            this.initMap()
-          }
+          // if(this.mapContainer.nativeElement) {
+          //   this.initMap()
+          // }
         })
     });
 
   }
 
-  initMap() {
-    mapboxgl.accessToken = environment.mapboxAccessToken;
-    const map = new mapboxgl.Map({
-      container: this.mapContainer.nativeElement,
-      style: 'mapbox://styles/mapbox/streets-v9',
-    });
+  // initMap() {
+  //   mapboxgl.accessToken = environment.mapboxAccessToken;
+  //   const map = new mapboxgl.Map({
+  //     container: this.mapContainer.nativeElement,
+  //     style: 'mapbox://styles/mapbox/streets-v9',
+  //   });
 
 
-    map.on('load', () => {
-      const tasks = this.game.tasks;
-      // const markers = activity.points.map(point => new mapboxgl.Marker().setLngLat([point.lng, point.lat]).addTo(map))
+  //   map.on('load', () => {
+  //     const tasks = this.game.tasks;
+  //     // const markers = activity.points.map(point => new mapboxgl.Marker().setLngLat([point.lng, point.lat]).addTo(map))
 
-      var bounds = new mapboxgl.LngLatBounds();
+  //     var bounds = new mapboxgl.LngLatBounds();
 
-      tasks.forEach((task) => {
-        if (task.settings.point)
-          bounds.extend(task.settings.point.geometry.coordinates);
-      });
+  //     tasks.forEach((task) => {
+  //       if (task.settings.point)
+  //         bounds.extend(task.settings.point.geometry.coordinates);
+  //     });
 
-      map.fitBounds(bounds, { padding: 40, duration: 2000 });
-    })
-  }
+  //     map.fitBounds(bounds, { padding: 40, duration: 2000 });
+  //   })
+  // }
 
   pointClick(point) {
     console.log(point)
