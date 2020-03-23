@@ -72,7 +72,7 @@ export class MapShowroomPage implements OnInit {
       if (this.map.getSource('viewDirection') == undefined) {
         // this.map.addImage('view-direction', 'assets/icons/direction.png')
 
-        this.map.loadImage('/assets/icons/direction.png', (error, image) => {
+        this.map.loadImage('/assets/icons/directionv2-richtung.png', (error, image) => {
           if (error) throw error;
           this.map.addImage('view-direction', image);
 

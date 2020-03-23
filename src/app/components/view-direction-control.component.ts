@@ -82,7 +82,7 @@ export class ViewDirectionControl {
     }
 
     public toggle() {
-        if(this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
+        if (this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
             this.setType(ViewDirectionType.None)
         } else {
             this.setType(ViewDirectionType.Continuous)

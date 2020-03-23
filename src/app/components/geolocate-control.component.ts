@@ -54,7 +54,7 @@ export class GeolocateControl {
                     type: "symbol",
                     layout: {
                         "icon-image": "geolocate",
-                        "icon-size": 0.2,
+                        "icon-size": 0.4,
                         "icon-offset": [0, 0]
                     }
                 });

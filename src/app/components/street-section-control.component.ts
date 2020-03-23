@@ -15,11 +15,13 @@ export class StreetSectionControl {
   private osm: OsmService
   private positionWatch: number;
   private primaryColor: string;
+  private dangerColor: string;
 
   constructor(map: MapboxMap, osm: OsmService) {
     this.map = map;
     this.osm = osm;
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
+    this.dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
 
   }
 
@@ -57,7 +59,7 @@ export class StreetSectionControl {
                     type: "line",
                     source: "section",
                     paint: {
-                      "line-color": this.primaryColor,
+                      "line-color": this.dangerColor,
                       "line-opacity": 0.5,
                       "line-width": 10
                     },

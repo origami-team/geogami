@@ -5,12 +5,15 @@ export class LandmarkControl {
     private map: MapboxMap;
     private warningColor: string;
     private secondaryColor: string;
+    private dangerColor: string;
 
 
     constructor(map: MapboxMap) {
         this.map = map;
         this.warningColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning');
         this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
+        this.dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
+
     }
 
     public setLandmark(landmark: any) {
@@ -20,7 +23,7 @@ export class LandmarkControl {
         if (this.map.getLayer('landmarksLayerLine')) {
             this.map.removeLayer('landmarksLayer')
         }
-        if(this.map.getSource('landmarksLayerLine')) {
+        if (this.map.getSource('landmarksLayerLine')) {
             this.map.removeSource('landmarksSource')
         }
 
@@ -33,7 +36,7 @@ export class LandmarkControl {
             type: "fill-extrusion",
             source: 'landmarksSource',
             paint: {
-                "fill-extrusion-color": this.warningColor,
+                "fill-extrusion-color": this.dangerColor,
                 "fill-extrusion-opacity": 0.5,
                 "fill-extrusion-height": 50,
             }
@@ -43,7 +46,7 @@ export class LandmarkControl {
             type: "line",
             source: 'landmarksSource',
             paint: {
-                "line-color": this.warningColor,
+                "line-color": this.dangerColor,
                 "line-opacity": 0.5,
                 "line-width": 5,
             }
@@ -54,7 +57,7 @@ export class LandmarkControl {
         if (this.map.getLayer('landmarks-qt-map-layer')) {
             this.map.removeLayer('landmarks-qt-map-layer')
         }
-        if(this.map.getSource('landmarks-qt-map-source')) {
+        if (this.map.getSource('landmarks-qt-map-source')) {
             this.map.removeSource('landmarks-qt-map-source')
         }
 
@@ -81,14 +84,14 @@ export class LandmarkControl {
         if (this.map.getLayer('landmarksLayerLine')) {
             this.map.removeLayer('landmarksLayer')
         }
-        if(this.map.getSource('landmarksLayerLine')) {
+        if (this.map.getSource('landmarksLayerLine')) {
             this.map.removeSource('landmarksSource')
         }
 
         if (this.map.getLayer('landmarks-qt-map-layer')) {
             this.map.removeLayer('landmarks-qt-map-layer')
         }
-        if(this.map.getSource('landmarks-qt-map-source')) {
+        if (this.map.getSource('landmarks-qt-map-source')) {
             this.map.removeSource('landmarks-qt-map-source')
         }
     }

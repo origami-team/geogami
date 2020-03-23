@@ -348,7 +348,7 @@ export class PlayingGamePage implements OnInit {
           this.task.settings["answer-type"].name == "set-point") ||
         (this.task.type == "theme-object" &&
           this.task.settings["question-type"].name == "photo") ||
-        (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow" && this.task.settings["answer-type"].name != "rotateTo" )
+        (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow" && this.task.settings["answer-type"].name != "rotateTo")
       ) {
         const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
         if (this.userSelectMarker) {
@@ -495,7 +495,7 @@ export class PlayingGamePage implements OnInit {
       ((this.task.settings["question-type"].name == "question-type-current-direction") ||
         (this.task.settings["question-type"].name == "photo"))) {
       this.map.loadImage(
-        "/assets/icons/directionv2.png",
+        "/assets/icons/directionv2-richtung.png",
         (error, image) => {
           if (error) throw error;
 
@@ -533,7 +533,7 @@ export class PlayingGamePage implements OnInit {
         "question-type"
       ].settings.direction;
       this.map.loadImage(
-        "/assets/icons/directionv2.png",
+        "/assets/icons/directionv2-richtung.png",
         (error, image) => {
           if (error) throw error;
 
@@ -764,21 +764,21 @@ export class PlayingGamePage implements OnInit {
         this.task.settings["answer-type"] &&
         this.task.settings["answer-type"].name == "multiple-choice"
       ) {
-          if (this.selectedPhoto != null) {
-            this.initFeedback(this.isCorrectPhotoSelected);
-            if (this.isCorrectPhotoSelected) {
-              this.isCorrectPhotoSelected = null;
-              this.selectedPhoto = null;
-            }
-          } else {
-            const toast = await this.toastController.create({
-              message: "Bitte wähle zuerst ein Foto",
-              color: "dark",
-              // showCloseButton: true,
-              duration: 2000
-            });
-            toast.present();
+        if (this.selectedPhoto != null) {
+          this.initFeedback(this.isCorrectPhotoSelected);
+          if (this.isCorrectPhotoSelected) {
+            this.isCorrectPhotoSelected = null;
+            this.selectedPhoto = null;
           }
+        } else {
+          const toast = await this.toastController.create({
+            message: "Bitte wähle zuerst ein Foto",
+            color: "dark",
+            // showCloseButton: true,
+            duration: 2000
+          });
+          toast.present();
+        }
       } else {
         if (
           this.task.settings["question-type"].settings["answer-type"].settings
