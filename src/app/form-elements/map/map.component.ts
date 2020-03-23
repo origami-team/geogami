@@ -40,10 +40,10 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
   constructor(
     public popoverController: PopoverController,
     private changeDetectorRef: ChangeDetectorRef
-  ) {}
-  ngOnInit(): void {}
+  ) { }
+  ngOnInit(): void { }
 
-  ionViewDidEnter() {}
+  ionViewDidEnter() { }
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -108,7 +108,7 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
       if (e.cancelable) {
         e.preventDefault();
       }
-      if (this.config.featureType == "direction") {
+      if (this.config.featureType == "direction" && this.marker) {
         this.marker.setLngLat(this.map.getCenter());
       }
     });
