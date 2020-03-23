@@ -55,6 +55,7 @@
   .task-text {
     flex-grow: 1;
     font-size: 20px;
+    text-align: center;
   }
 
   &.success {
@@ -91,6 +92,7 @@
 
   .compass {
     text-align: center;
+    font-size: 18px;
     flex: 0 0 100%;
     position: relative;
 

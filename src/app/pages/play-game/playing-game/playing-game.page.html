@@ -21,19 +21,20 @@
 
     <ion-card class="overlay task-control ion-padding" [class.full]="task.type == 'nav-arrow'" *ngIf="task">
       <div class="top-info">
+       <p>
         <ion-chip color="primary" *ngIf="task.type.includes('nav')">
-          <ion-icon name="navigate"></ion-icon>
-        </ion-chip>
-        <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
-          <ion-icon name="clipboard"></ion-icon>
-        </ion-chip>
-        <ion-chip color="medium" *ngIf="task.type.includes('module')">
-          <ion-icon name="list"></ion-icon>
-        </ion-chip>
-        <ion-chip color="warning" *ngIf="task.type.includes('info')">
-          <ion-icon name="information-circle-outline"></ion-icon>
-        </ion-chip>
-        <p>Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p>
+            <ion-icon name="navigate"></ion-icon>
+            &nbsp;Aufgabe {{ taskIndex + 1 }} &nbsp;von {{ game.tasks.length }}
+          </ion-chip>
+          <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
+            <ion-icon name="clipboard"></ion-icon>
+            &nbsp;Aufgabe {{ taskIndex + 1 }} &nbsp;von {{ game.tasks.length }}
+          </ion-chip>
+          <ion-chip color="warning" *ngIf="task.type.includes('info')">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            &nbsp;Info
+          </ion-chip>
+        </p>
       </div>
       <div class="task-wrapper">
         <!-- <div
@@ -52,7 +53,7 @@
           <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
             }" />
-          <p>Distanz: {{ Math.round(targetDistance) }} m</p>
+          <p>Zum Ziel: <br><b>{{ Math.round(targetDistance) }}</b> m</p>
         </div>
 
         <div class="task-wrapper" [ngStyle]="{
@@ -122,10 +123,9 @@
           </ion-button>
         </div>
 
-        <ion-button class="confirm" color=secondary (click)="onOkClicked()" *ngIf="task.settings.confirmation && task.type.includes('theme')">OK
+        <ion-button slot="end" class="confirm" color=secondary (click)="onOkClicked()" *ngIf="task.settings.confirmation && task.type.includes('theme')">OK
         </ion-button>
-
-        <ion-button class="confirm" color=primary (click)="onOkClicked()" *ngIf="task.settings.confirmation && task.type.includes('nav')">OK
+        <ion-button slot="end" class="confirm" color=primary (click)="onOkClicked()" *ngIf="task.settings.confirmation && task.type.includes('nav')">OK
         </ion-button>
 
       </div>
