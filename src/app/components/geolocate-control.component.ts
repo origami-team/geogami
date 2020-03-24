@@ -82,12 +82,13 @@ export class GeolocateControl {
     }
 
     private reset(): void {
-        if (this.map.getStyle().layers.includes('geolocate') && this.map.getLayoutProperty("geolocate", "visibility") == 'visible')
+        if (this.map.getLayer('geolocate') && this.map.getLayoutProperty("geolocate", "visibility") == 'visible')
             this.map.setLayoutProperty('geolocate', 'visibility', 'none');
 
     }
 
     private update(): void {
+        console.log("setting geolocate to", this.geolocateType)
         switch (this.geolocateType) {
             case GeolocateType.None:
                 this.reset()

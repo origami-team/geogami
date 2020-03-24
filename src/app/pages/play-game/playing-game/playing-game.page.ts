@@ -345,6 +345,30 @@ export class PlayingGamePage implements OnInit {
           (this.task.settings["question-type"].name == "photo"))) {
 
         this.clickDirection = this.helperService.bearing(this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude, e.lngLat.lat, e.lngLat.lng)
+
+        if (!this.map.getLayer('viewDirectionClick')) {
+          this.map.addSource("viewDirectionClick", {
+            type: "geojson",
+            data: {
+              type: "Point",
+              coordinates: [
+                this.lastKnownPosition.coords.longitude,
+                this.lastKnownPosition.coords.latitude
+              ]
+            }
+          });
+          this.map.addLayer({
+            id: "viewDirectionClick",
+            source: "viewDirectionClick",
+            type: "symbol",
+            layout: {
+              "icon-image": "view-direction-task",
+              "icon-size": 0.65,
+              "icon-offset": [0, -8]
+            }
+          });
+          this.geolocateControl.setType(GeolocateType.None)
+        }
         this.map.setLayoutProperty(
           "viewDirectionClick",
           "icon-rotate",
@@ -505,31 +529,8 @@ export class PlayingGamePage implements OnInit {
       ((this.task.settings["question-type"].name == "question-type-current-direction") ||
         (this.task.settings["question-type"].name == "photo"))) {
 
-
-      navigator.geolocation.getCurrentPosition(position => {
-        console.log(position)
-        this.map.addSource("viewDirectionClick", {
-          type: "geojson",
-          data: {
-            type: "Point",
-            coordinates: [
-              position.coords.longitude,
-              position.coords.latitude
-            ]
-          }
-        });
-        this.map.addLayer({
-          id: "viewDirectionClick",
-          source: "viewDirectionClick",
-          type: "symbol",
-          layout: {
-            "icon-image": "view-direction-task",
-            "icon-size": 0.65,
-            "icon-offset": [0, -8]
-          }
-        });
-      })
-
+      this.geolocateControl.setType(GeolocateType.Continuous)
+      // further stuff is one on map click
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-photo") {
 
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map") {
@@ -864,7 +865,7 @@ export class PlayingGamePage implements OnInit {
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
       console.log(this.clickDirection, myTargetHeading)
-      const correct = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
+      const correct = this.Math.abs(this.clickDirection - myTargetHeading) <= 45;
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');

@@ -94,7 +94,7 @@ export class ViewDirectionControl {
         if (this.deviceOrientationSubscription != undefined) {
             this.deviceOrientationSubscription.unsubscribe();
         }
-        if (this.map.getStyle().layers.filter(e => e.id == 'viewDirection').length > 0 && this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
+        if (this.map.getLayer('viewDirection') && this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
             this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
         }
 
@@ -106,13 +106,13 @@ export class ViewDirectionControl {
                 this.reset()
                 break;
             case ViewDirectionType.Continuous:
+                if (this.map.getLayoutProperty("viewDirection", "visibility") == 'none')
+                    this.map.setLayoutProperty('viewDirection', 'visibility', 'visible');
                 this.deviceOrientationSubscription = this.deviceOrientation
                     .watchHeading({
                         frequency: 300
                     })
                     .subscribe((data: DeviceOrientationCompassHeading) => {
-                        if (this.map.getLayoutProperty("viewDirection", "visibility") == 'none')
-                            this.map.setLayoutProperty('viewDirection', 'visibility', 'visible');
                         this.map.setLayoutProperty(
                             "viewDirection",
                             "icon-rotate",
