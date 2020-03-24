@@ -917,6 +917,7 @@ export class PlayingGamePage implements OnInit {
     this.deviceOrientationSubscription.unsubscribe();
     this.navCtrl.navigateRoot("/");
     this.streetSectionControl.remove();
+    this.map.remove();
   }
 
   togglePanel() {

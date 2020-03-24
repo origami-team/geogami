@@ -3,7 +3,8 @@ import {
   ViewChild,
   OnInit,
   AfterViewInit,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnDestroy
 } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 
@@ -22,7 +23,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
   templateUrl: "./map.component.html",
   styleUrls: ["./map.component.scss"]
 })
-export class MapComponent implements OnInit, Field, AfterViewInit {
+export class MapComponent implements OnInit, Field, AfterViewInit, OnDestroy {
   @ViewChild("map", { static: false }) mapContainer;
   @ViewChild("hiddenInput", { static: false }) hiddenInput;
   @ViewChild("marker", { static: false }) directionMarker;
@@ -41,6 +42,10 @@ export class MapComponent implements OnInit, Field, AfterViewInit {
     public popoverController: PopoverController,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
+
+  ngOnDestroy(): void {
+    this.map.remove();
+  }
   ngOnInit(): void { }
 
   ionViewDidEnter() { }
