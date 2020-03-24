@@ -21,50 +21,56 @@
       <div *ngIf="swipe" #swipeMap class="map"></div>
     </div>
 
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.rotation == 'button'" (click)="toggleRotate()">
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.rotation == 'button'"
+      (click)="toggleRotate()">
       <ion-button fill="clear">
         <ion-icon name="refresh" size="large"></ion-icon>
       </ion-button>
     </ion-card>
-    
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == 'sat-button'" (click)="toggleSat()">
+
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == 'sat-button'"
+      (click)="toggleSat()">
       <ion-button fill="clear">
         <ion-icon name="map" size="large"></ion-icon>
       </ion-button>
     </ion-card>
-    
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == '3D-button'" (click)="toggle3D()">
+
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == '3D-button'"
+      (click)="toggle3D()">
       <ion-button fill="clear">
         <ion-icon name="cube" size="large"></ion-icon>
       </ion-button>
     </ion-card>
-    
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.position == 'button'" (click)="toggleGeolocate()">
+
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.position == 'button'"
+      (click)="toggleGeolocate()">
       <ion-button fill="clear">
         <ion-icon name="locate" size="large"></ion-icon>
       </ion-button>
     </ion-card>
-    
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.direction == 'button'" (click)="toggleDirection()">
+
+    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.direction == 'button'"
+      (click)="toggleDirection()">
       <ion-button fill="clear">
         <ion-icon name="compass" size="large"></ion-icon>
       </ion-button>
     </ion-card>
 
-    <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized" [class.full]="task.type == 'nav-arrow'" *ngIf="task">
+    <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized"
+      [class.full]="task.type == 'nav-arrow'" *ngIf="task">
       <div class="top-info">
         <div *ngIf="!panelMinimized">
           <ion-chip color="primary" *ngIf="task.type.includes('nav')">
             <ion-icon name="navigate"></ion-icon>
+            &nbsp;Aufgabe {{ taskIndex + 1 }} &nbsp;von {{ game.tasks.length }}
           </ion-chip>
           <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
             <ion-icon name="clipboard"></ion-icon>
-          </ion-chip>
-          <ion-chip color="medium" *ngIf="task.type.includes('module')">
-            <ion-icon name="list"></ion-icon>
+            &nbsp;Aufgabe {{ taskIndex + 1 }} &nbsp;von {{ game.tasks.length }}
           </ion-chip>
           <ion-chip color="warning" *ngIf="task.type.includes('info')">
             <ion-icon name="information-circle-outline"></ion-icon>
+            &nbsp;Info
           </ion-chip>
         </div>
         <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p>
@@ -90,7 +96,7 @@
           <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
             }" />
-          <p>Distanz: {{ Math.round(targetDistance) }} m</p>
+          <p>Zum Ziel: <br><b>{{ Math.round(targetDistance) }}</b> m</p>
         </div>
 
         <div class="task-wrapper" [ngStyle]="{
@@ -160,10 +166,11 @@
           </ion-button>
         </div>
 
-        <ion-button class="confirm" color=secondary (click)="onOkClicked()" *ngIf="task.settings.confirmation && task.type.includes('theme')">OK
+        <ion-button slot="end" class="confirm" color=secondary (click)="onOkClicked()"
+          *ngIf="task.settings.confirmation && task.type.includes('theme')">OK
         </ion-button>
-
-        <ion-button class="confirm" color=primary (click)="onOkClicked()" *ngIf="task.settings.confirmation && task.type.includes('nav')">OK
+        <ion-button slot="end" class="confirm" color=primary (click)="onOkClicked()"
+          *ngIf="task.settings.confirmation && task.type.includes('nav')">OK
         </ion-button>
 
         <ion-button class="confirm" color=warning (click)="nextTask()" *ngIf="task.type.includes('info')">OK
@@ -183,7 +190,7 @@
 
   <ion-card class="overlay feedback" *ngIf="showFeedback">
     <h4>{{ feedbackText }}</h4>
-    
+
     <ion-button (click)="feedbackRetry ? dismissFeedback() : nextTask()" color="danger">Weiter</ion-button>
   </ion-card>
 
