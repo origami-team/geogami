@@ -308,6 +308,14 @@ export class PlayingGamePage implements OnInit {
       this.geolocateControl = new GeolocateControl(this.map)
       this.panControl = new PanControl(this.map)
 
+      this.map.loadImage(
+        "/assets/icons/directionv2-richtung.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("view-direction-task", image);
+        })
+
       this.game = null;
       this.game = new Game(0, "Loading...", false, []);
       this.route.params.subscribe(params => {
@@ -466,6 +474,8 @@ export class PlayingGamePage implements OnInit {
       this.map.removeSource('viewDirectionClick');
     }
 
+    this.clickDirection = 0;
+
     if (
       this.task.type.includes("theme") &&
       this.task.settings["question-type"] != undefined
@@ -494,37 +504,31 @@ export class PlayingGamePage implements OnInit {
     if (this.task.type == "theme-direction" &&
       ((this.task.settings["question-type"].name == "question-type-current-direction") ||
         (this.task.settings["question-type"].name == "photo"))) {
-      this.map.loadImage(
-        "/assets/icons/directionv2-richtung.png",
-        (error, image) => {
-          if (error) throw error;
 
-          this.map.addImage("view-direction-click", image);
 
-          navigator.geolocation.getCurrentPosition(position => {
-            console.log(position)
-            this.map.addSource("viewDirectionClick", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates: [
-                  position.coords.longitude,
-                  position.coords.latitude
-                ]
-              }
-            });
-            this.map.addLayer({
-              id: "viewDirectionClick",
-              source: "viewDirectionClick",
-              type: "symbol",
-              layout: {
-                "icon-image": "view-direction",
-                "icon-size": 0.65,
-                "icon-offset": [0, -12.5]
-              }
-            });
-          })
+      navigator.geolocation.getCurrentPosition(position => {
+        console.log(position)
+        this.map.addSource("viewDirectionClick", {
+          type: "geojson",
+          data: {
+            type: "Point",
+            coordinates: [
+              position.coords.longitude,
+              position.coords.latitude
+            ]
+          }
         });
+        this.map.addLayer({
+          id: "viewDirectionClick",
+          source: "viewDirectionClick",
+          type: "symbol",
+          layout: {
+            "icon-image": "view-direction-task",
+            "icon-size": 0.65,
+            "icon-offset": [0, -8]
+          }
+        });
+      })
 
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-photo") {
 
@@ -532,47 +536,40 @@ export class PlayingGamePage implements OnInit {
       this.directionBearing = this.task.settings[
         "question-type"
       ].settings.direction;
-      this.map.loadImage(
-        "/assets/icons/directionv2-richtung.png",
-        (error, image) => {
-          if (error) throw error;
 
-          this.map.addImage("view-direction-task", image);
-
-          this.viewDirectionTaskGeolocateSubscription = navigator.geolocation.watchPosition(position => {
-            if (this.map.getSource('viewDirectionTask')) {
-              this.map.getSource('viewDirectionTask').setData({
-                type: "Point",
-                coordinates: [
-                  position.coords.longitude,
-                  position.coords.latitude
-                ]
-              })
-            } else {
-              this.map.addSource("viewDirectionTask", {
-                type: "geojson",
-                data: {
-                  type: "Point",
-                  coordinates: [
-                    position.coords.longitude,
-                    position.coords.latitude
-                  ]
-                }
-              });
-              this.map.addLayer({
-                id: "viewDirectionTask",
-                source: "viewDirectionTask",
-                type: "symbol",
-                layout: {
-                  "icon-image": "view-direction-task",
-                  "icon-size": 0.65,
-                  "icon-offset": [0, -12.5],
-                  "icon-rotate": this.directionBearing
-                }
-              });
-            }
+      this.viewDirectionTaskGeolocateSubscription = navigator.geolocation.watchPosition(position => {
+        if (this.map.getSource('viewDirectionTask')) {
+          this.map.getSource('viewDirectionTask').setData({
+            type: "Point",
+            coordinates: [
+              position.coords.longitude,
+              position.coords.latitude
+            ]
           })
-        });
+        } else {
+          this.map.addSource("viewDirectionTask", {
+            type: "geojson",
+            data: {
+              type: "Point",
+              coordinates: [
+                position.coords.longitude,
+                position.coords.latitude
+              ]
+            }
+          });
+          this.map.addLayer({
+            id: "viewDirectionTask",
+            source: "viewDirectionTask",
+            type: "symbol",
+            layout: {
+              "icon-image": "view-direction-task",
+              "icon-size": 0.65,
+              "icon-offset": [0, -8],
+              "icon-rotate": this.directionBearing
+            }
+          });
+        }
+      })
     }
     if (this.task.type == "theme-direction") {
       console.log(this.task.settings["question-type"].settings.direction);

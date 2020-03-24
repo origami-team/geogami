@@ -64,7 +64,7 @@ export class ViewDirectionControl {
                     layout: {
                         "icon-image": "view-direction",
                         "icon-size": 0.65,
-                        "icon-offset": [0, -11]
+                        "icon-offset": [0, -8]
                     }
                 });
                 this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
