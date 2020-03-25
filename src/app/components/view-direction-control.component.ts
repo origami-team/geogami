@@ -29,8 +29,8 @@ export class ViewDirectionControl {
 
         this.positionWatch = window.navigator.geolocation.watchPosition(
             position => {
-                if (map != undefined && this.isInitalized) {
-                    map.getSource('viewDirection').setData({
+                if (this.map != undefined && this.isInitalized) {
+                    this.map.getSource('viewDirection').setData({
                         type: "Point",
                         coordinates: [position.coords.longitude, position.coords.latitude]
                     });
@@ -129,8 +129,8 @@ export class ViewDirectionControl {
         }
     }
 
-    public remove(map: MapboxMap): void {
-        this.deviceOrientationSubscription.unsubscribe();
+    public remove(): void {
+        this.reset();
         navigator.geolocation.clearWatch(this.positionWatch);
     }
 }

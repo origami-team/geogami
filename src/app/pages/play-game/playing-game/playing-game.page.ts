@@ -915,9 +915,20 @@ export class PlayingGamePage implements OnInit {
   navigateHome() {
     navigator.geolocation.clearWatch(this.positionWatch);
     this.deviceOrientationSubscription.unsubscribe();
+
+    this.rotationControl.remove();
+    this.viewDirectionControl.remove()
+    this.landmarkControl.remove()
+    this.streetSectionControl.remove()
+    this.layerControl.remove()
+    this.trackControl.remove()
+    this.geolocateControl.remove()
+    this.panControl.remove();
+
     this.navCtrl.navigateRoot("/");
     this.streetSectionControl.remove();
     this.map.remove();
+
   }
 
   togglePanel() {

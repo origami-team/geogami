@@ -20,8 +20,8 @@ export class GeolocateControl {
 
         this.positionWatch = window.navigator.geolocation.watchPosition(
             position => {
-                if (map != undefined && this.isInitalized) {
-                    map.getSource('geolocate').setData({
+                if (this.map != undefined && this.isInitalized) {
+                    this.map.getSource('geolocate').setData({
                         type: "Point",
                         coordinates: [position.coords.longitude, position.coords.latitude]
                     });
@@ -107,7 +107,8 @@ export class GeolocateControl {
         }
     }
 
-    public remove(map: MapboxMap): void {
+    public remove(): void {
+        this.reset();
         navigator.geolocation.clearWatch(this.positionWatch);
     }
 }

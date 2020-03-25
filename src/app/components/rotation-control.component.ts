@@ -35,7 +35,7 @@ export class RotationControl {
     }
 
     public toggle() {
-        if(this.rotationType != RotationType.Auto) {
+        if (this.rotationType != RotationType.Auto) {
             this.setType(RotationType.Auto)
         } else {
             this.setType(RotationType.North)
@@ -73,8 +73,9 @@ export class RotationControl {
         }
     }
 
-    public remove(map: MapboxMap): void {
-        this.map.rotateTo(0);
-        this.deviceOrientationSubscription.unsubscribe();
+    public remove(): void {
+        if (this.deviceOrientationSubscription != undefined) {
+            this.deviceOrientationSubscription.unsubscribe();
+        }
     }
 }

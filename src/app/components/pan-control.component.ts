@@ -61,7 +61,7 @@ export class PanControl {
         }
     }
 
-    public remove(map: MapboxMap): void {
+    public remove(): void {
         navigator.geolocation.clearWatch(this.positionWatch);
     }
 }
