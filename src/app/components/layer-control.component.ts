@@ -97,7 +97,7 @@ export class LayerControl {
         } catch (e) {
             console.log(e)
         }
-        if(this.compare != null) {
+        if (this.compare != null) {
             this.compare.remove()
             this.compare = null;
         }
@@ -129,7 +129,7 @@ export class LayerControl {
                     center: [8, 51.8],
                     zoom: 2
                 });
-                
+
                 this.compare = new MapboxCompare(this.map, satMap, this.mapWrapper.nativeElement);
                 break;
             case LayerType.ThreeDimension:
@@ -191,7 +191,7 @@ export class LayerControl {
         this.map.addLayer(
             {
                 id: "3d-buildings",
-                source: "composite",
+                source: "mapbox",
                 "source-layer": "building",
                 filter: ["==", "extrude", "true"],
                 type: "fill-extrusion",

@@ -91,9 +91,6 @@ export class ViewDirectionControl {
 
 
     private reset(): void {
-        if (this.deviceOrientationSubscription != undefined) {
-            this.deviceOrientationSubscription.unsubscribe();
-        }
         if (this.map.getLayer('viewDirection') && this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
             this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
         }
@@ -131,6 +128,9 @@ export class ViewDirectionControl {
 
     public remove(): void {
         this.reset();
+        if (this.deviceOrientationSubscription != undefined) {
+            this.deviceOrientationSubscription.unsubscribe();
+        }
         navigator.geolocation.clearWatch(this.positionWatch);
     }
 }

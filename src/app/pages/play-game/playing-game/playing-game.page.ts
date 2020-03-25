@@ -190,33 +190,52 @@ export class PlayingGamePage implements OnInit {
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
     let mapStyle;
-    if (environment.production) {
-      mapStyle = {
-        'version': 8,
-        'sources': {
-          'raster-tiles': {
-            'type': 'raster',
-            'tiles': [
-              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-            ],
-            'tileSize': 256,
-          }
+    // if (environment.production) {
+    mapStyle = {
+      'version': 8,
+      "metadata": {
+        "mapbox:autocomposite": true,
+        "mapbox:type": "template"
+      },
+      'sources': {
+        'raster-tiles': {
+          'type': 'raster',
+          'tiles': [
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+          ],
+          'tileSize': 256,
         },
-        'layers': [
-          {
-            'id': 'simple-tiles',
-            'type': 'raster',
-            'source': 'raster-tiles',
-            'minzoom': 0,
-            'maxzoom': 22
-          }
-        ]
-      }
-    } else {
-      mapStyle = document.body.classList.contains("dark")
-        ? "mapbox://styles/mapbox/dark-v9"
-        : "mapbox://styles/mapbox/streets-v9"
+        "mapbox": {
+          "url": "mapbox://mapbox.mapbox-streets-v7",
+          "type": "vector"
+        }
+      },
+      'layers': [
+        {
+          'id': 'simple-tiles',
+          'type': 'raster',
+          'source': 'raster-tiles',
+          'minzoom': 0,
+          'maxzoom': 22
+        },
+        {
+          "id": "building",
+          "type": "fill",
+          "source": "mapbox",
+          "source-layer": "building",
+          "paint": {
+            "fill-color": "#d6d6d6",
+            "fill-opacity": 0,
+          },
+          "interactive": true
+        },
+      ]
     }
+    // } else {
+    //   mapStyle = document.body.classList.contains("dark")
+    //     ? "mapbox://styles/mapbox/dark-v9"
+    //     : "mapbox://styles/mapbox/streets-v9"
+    // }
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
