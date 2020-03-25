@@ -391,7 +391,7 @@ export class PlayingGamePage implements OnInit {
         this.map.setLayoutProperty(
           "viewDirectionClick",
           "icon-rotate",
-          this.clickDirection
+          this.clickDirection - this.map.getBearing()
         );
       } else if (
         this.task.type == "theme-loc" ||
@@ -417,6 +417,16 @@ export class PlayingGamePage implements OnInit {
         }
       }
     });
+
+    this.map.on('rotate', () => {
+      if (this.map.getLayer('viewDirectionTask')) {
+        this.map.setLayoutProperty(
+          "viewDirectionTask",
+          "icon-rotate",
+          this.directionBearing - this.map.getBearing()
+        );
+      }
+    })
 
     // rotation
     this.deviceOrientationSubscription = this.deviceOrientation
@@ -585,7 +595,7 @@ export class PlayingGamePage implements OnInit {
               "icon-image": "view-direction-task",
               "icon-size": 0.65,
               "icon-offset": [0, -8],
-              "icon-rotate": this.directionBearing
+              "icon-rotate": this.directionBearing - this.map.getBearing()
             }
           });
         }

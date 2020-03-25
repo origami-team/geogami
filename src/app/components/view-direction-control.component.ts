@@ -113,7 +113,7 @@ export class ViewDirectionControl {
                         this.map.setLayoutProperty(
                             "viewDirection",
                             "icon-rotate",
-                            data.magneticHeading
+                            data.magneticHeading - this.map.getBearing()
                         );
                     })
                 break;
