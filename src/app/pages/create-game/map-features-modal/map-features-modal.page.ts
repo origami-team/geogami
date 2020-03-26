@@ -40,29 +40,68 @@ export class MapFeaturesModalPage implements OnInit {
   constructor(
     public modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.changeDetectorRef.detectChanges();
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
-     this.map = new mapboxgl.Map({
+    this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: "mapbox://styles/mapbox/streets-v9",
+      style: {
+        'version': 8,
+        "metadata": {
+          "mapbox:autocomposite": true,
+          "mapbox:type": "template"
+        },
+        'sources': {
+          'raster-tiles': {
+            'type': 'raster',
+            'tiles': [
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+            ],
+            'tileSize': 256,
+          },
+          "mapbox": {
+            "url": "mapbox://mapbox.mapbox-streets-v7",
+            "type": "vector"
+          }
+        },
+        'layers': [
+          {
+            'id': 'simple-tiles',
+            'type': 'raster',
+            'source': 'raster-tiles',
+            'minzoom': 0,
+            'maxzoom': 22
+          },
+          {
+            "id": "building",
+            "type": "fill",
+            "source": "mapbox",
+            "source-layer": "building",
+            "paint": {
+              "fill-color": "#d6d6d6",
+              "fill-opacity": 0,
+            },
+            "interactive": true
+          },
+        ]
+      },
       center: [8, 51.8],
       zoom: 2
     });
 
     this.draw = new MapboxDraw({
-        displayControlsDefault: false,
-        controls: {
-          line_string: true,
-          polygon: true,
-          trash: true
-        }
-      });
-  
-      this.map.addControl(this.draw, "top-left");
+      displayControlsDefault: false,
+      controls: {
+        line_string: true,
+        polygon: true,
+        trash: true
+      }
+    });
+
+    this.map.addControl(this.draw, "top-left");
   }
 
   ionViewDidEnter() {

@@ -131,7 +131,46 @@ export class MapShowroomPage implements OnInit {
 
     this.map = new mapboxgl.Map({
       container: 'primary-map',
-      style: 'mapbox://styles/mapbox/streets-v9',
+      style: {
+        'version': 8,
+        "metadata": {
+          "mapbox:autocomposite": true,
+          "mapbox:type": "template"
+        },
+        'sources': {
+          'raster-tiles': {
+            'type': 'raster',
+            'tiles': [
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+            ],
+            'tileSize': 256,
+          },
+          "mapbox": {
+            "url": "mapbox://mapbox.mapbox-streets-v7",
+            "type": "vector"
+          }
+        },
+        'layers': [
+          {
+            'id': 'simple-tiles',
+            'type': 'raster',
+            'source': 'raster-tiles',
+            'minzoom': 0,
+            'maxzoom': 22
+          },
+          {
+            "id": "building",
+            "type": "fill",
+            "source": "mapbox",
+            "source-layer": "building",
+            "paint": {
+              "fill-color": "#d6d6d6",
+              "fill-opacity": 0,
+            },
+            "interactive": true
+          },
+        ]
+      },
       center: [8, 51.8],
       zoom: 2
     });
