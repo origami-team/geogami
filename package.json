@@ -38,7 +38,7 @@
     "@ionic-native/vibration": "^5.16.0",
     "@ionic/angular": "^5.0.5",
     "@ionic/storage": "^2.2.0",
-    "@mapbox/mapbox-gl-draw": "^1.1.2",
+    "@mapbox/mapbox-gl-draw": "trygveaa/mapbox-gl-draw#dont-drag-with-multiple-fingers",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "@turf/boolean-point-in-polygon": "^6.0.1",

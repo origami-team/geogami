@@ -92,6 +92,17 @@ export class MapFeaturesModalPage implements OnInit {
       zoom: 2
     });
 
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true
+      },
+      fitBoundsOptions: {
+        minZoom: 20
+      },
+      trackUserLocation: true
+    });
+    this.map.addControl(geolocate);
+
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
@@ -102,6 +113,11 @@ export class MapFeaturesModalPage implements OnInit {
     });
 
     this.map.addControl(this.draw, "top-left");
+
+    this.map.on('load', () => {
+      this.map.resize();
+      geolocate.trigger();
+    })
   }
 
   ionViewDidEnter() {
