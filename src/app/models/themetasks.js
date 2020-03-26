@@ -160,7 +160,7 @@ export default [
                   },
                   {
                     label: "... durch Wählen eines Fotos (Multiple Choice)",
-                    name: "select-photo",
+                    name: "multiple-choice",
                     text: "Wähle das passende Foto.",
                     items: [
                       {
