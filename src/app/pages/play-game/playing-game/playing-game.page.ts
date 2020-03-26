@@ -40,6 +40,9 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
+import { mappings } from './../../../pipes/keywords.js'
+
+
 enum FeedbackType {
   Correct,
   Wrong,
@@ -1147,6 +1150,10 @@ export class PlayingGamePage implements OnInit {
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
+  }
+
+  isKey(key: string) {
+    return mappings.filter(m => key.includes(m.tag)).length > 0
   }
 }
 

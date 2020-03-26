@@ -91,6 +91,10 @@
     flex-grow: 1;
     font-size: 20px;
     text-align: center;
+
+    ion-icon {
+      margin: 0;
+    }
   }
 
   &.success {
