@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="navigateHome()">
+      <ion-button color=dark (click)="navigateHome()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="nextTask()">
+      <ion-button color=dark (click)="nextTask()">
         <ion-icon name="arrow-forward"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -74,9 +74,9 @@
           </ion-chip>
         </div>
         <!-- <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p> -->
-        <ion-button fill="clear" (click)="togglePanel()">
-          <ion-icon slot="end" name="contract" size="large" *ngIf="!panelMinimized"></ion-icon>
-          <ion-icon slot="end" name="expand" size="large" *ngIf="panelMinimized"></ion-icon>
+        <ion-button color=dark fill="clear" (click)="togglePanel()">
+          <ion-icon slot="end" name="arrow-down" size="large" *ngIf="!panelMinimized"></ion-icon>
+          <ion-icon slot="end" name="arrow-up" size="large" *ngIf="panelMinimized"></ion-icon>
         </ion-button>
       </div>
       <div class="task-wrapper" *ngIf="!panelMinimized">
@@ -143,11 +143,11 @@
         </div>
 
         <div class="task-text">
-          <p>
-            {{ task.settings.text }}
-          </p>
           <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
             {{ task.settings["question-type"].settings["object-description"] }}
+          </p>
+          <p>
+            {{ task.settings.text }}
           </p>
           <p *ngIf="task.settings.confirmation">
             Drücke "OK"
@@ -185,7 +185,7 @@
     <p>Du hast das Spiel beendet</p>
     <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
     </lottie-animation-view>
-    <ion-button (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
+    <ion-button color=warning (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
   </ion-card>
 
   <ion-card class="overlay feedback" *ngIf="showFeedback">

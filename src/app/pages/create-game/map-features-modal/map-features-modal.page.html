@@ -60,7 +60,7 @@
       <ion-label>Positionsmarker</ion-label>
       <select [(ngModel)]="features.position">
         <option value="none">ohne</option>
-        <option value="true">durchgängig</option>
+        <option value="true">mit</option>
         <option value="button">auf Knopfdruck</option>
         <option value="start">zu Aufgabenbeginn</option>
       </select>
@@ -69,7 +69,7 @@
       <ion-label>Blickrichtungsmarker</ion-label>
       <select [(ngModel)]="features.direction">
         <option value="none">ohne</option>
-        <option value="true">durchgängig</option>
+        <option value="true">mit</option>
         <option value="button">auf Knopfdruck</option>
         <option value="start">zu Aufgabenbeginn</option>
       </select>
@@ -85,10 +85,10 @@
       <ion-toggle [(ngModel)]="features.streetSection"></ion-toggle>
     </ion-item>
 
-    <ion-item>
+<!--<ion-item>
       <ion-label>Reduzierter Kartenausschnitt</ion-label>
       <ion-toggle [(ngModel)]="features.reducedInformation"></ion-toggle>
-    </ion-item>
+    </ion-item> -->
 
     <ion-item>
       <ion-label>Hervorhebung von Landmarken</ion-label>

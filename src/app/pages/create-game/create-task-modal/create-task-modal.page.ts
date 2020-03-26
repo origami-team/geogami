@@ -48,7 +48,7 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     landmarkFeatures: undefined
   }
   feedback: boolean = true;
-  multipleTries: boolean = false;
+  multipleTries: boolean = true;
   accuracy: number = 10;
 
   step: number = 5;
