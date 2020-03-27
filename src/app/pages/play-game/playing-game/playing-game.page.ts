@@ -59,6 +59,7 @@ export class PlayingGamePage implements OnInit {
   @ViewChild("mapWrapper", { static: false }) mapWrapper;
   @ViewChild("map", { static: false }) mapContainer;
   @ViewChild("swipeMap", { static: false }) swipeMapContainer;
+  @ViewChild('panel', { static: false }) panel;
 
   game: Game;
 
@@ -468,12 +469,16 @@ export class PlayingGamePage implements OnInit {
       }
     });
 
+    this.changeDetectorRef.detectChanges()
+    const panelHeight = this.panel.nativeElement.children[0].offsetHeight;
+    console.log(panelHeight)
+
     try {
       console.log("setting bounds", bounds)
       this.map.fitBounds(bounds, {
         padding: {
           top: 40,
-          bottom: 160,
+          bottom: panelHeight < 250 ? 280 : panelHeight + 40,
           left: 40,
           right: 40
         }, duration: 1000
@@ -529,6 +534,9 @@ export class PlayingGamePage implements OnInit {
       this.map.removeLayer('viewDirectionClick');
       this.map.removeSource('viewDirectionClick');
     }
+
+    this.photo = '';
+    this.photoURL = '';
 
     this.clickDirection = 0;
 
@@ -1153,7 +1161,12 @@ export class PlayingGamePage implements OnInit {
   }
 
   isKey(key: string) {
-    return mappings.filter(m => key.includes(m.tag)).length > 0
+    return mappings.filter(m => {
+      if (key == null) {
+        return
+      }
+      return key.includes(m.tag)
+    }).length > 0
   }
 }
 

@@ -3,7 +3,7 @@
     <name>OriGami</name>
     <description>OriGami is an orientation game.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.0.87:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -116,5 +116,4 @@
     <plugin name="cordova-plugin-geolocation" spec="~4.0.2" />
     <plugin name="cordova-plugin-camera" spec="~4.1.0" />
     <allow-navigation href="http://localhost:8100" sessionid="cd439eff" />
-    <allow-navigation href="http://192.168.0.87:8100" sessionid="2745676d" />
 </widget>
