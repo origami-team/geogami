@@ -147,8 +147,8 @@
             <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
               {{ task.settings["question-type"].settings["object-description"] }}
             </p>
-            <p>
-              <span *ngIf="task.settings.text" ngFor="let tag of (task.settings.text | keyword).split(' ')">
+            <p *ngIf="task.settings.text">
+              <span *ngFor="let tag of (task.settings.text | keyword).split(' ')">
                 <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_FLAG')" color="primary">Fahne
                   <ion-chip color="primary">
                     <ion-icon name="flag"></ion-icon>
