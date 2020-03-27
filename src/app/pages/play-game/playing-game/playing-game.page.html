@@ -148,44 +148,49 @@
               {{ task.settings["question-type"].settings["object-description"] }}
             </p>
             <p>
-              <span *ngFor="let tag of (task.settings.text | keyword).split(' ')">
-                <ion-text *ngIf="tag.includes('KEYWORD_FLAG')" color="primary">Fahne
+              <span *ngIf="task.settings.text" ngFor="let tag of (task.settings.text | keyword).split(' ')">
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_FLAG')" color="primary">Fahne
                   <ion-chip color="primary">
                     <ion-icon name="flag"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_HERE')" color="warning">Du bist hier
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_HERE')" color="warning">Du bist hier
                   <ion-chip color="warning">
                     <ion-icon name="locate"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKER')" color="secondary">Marker
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_MARKER')" color="secondary">Marker
                   <ion-chip color="secondary">
                     <ion-icon name="location-sharp"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARK')" color="secondary">Markiere
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_MARK')" color="secondary">Markiere
                   <ion-chip color="secondary">
                     <ion-icon name="location-sharp"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_MAP')" color="secondary">Tippe auf die Karte
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_TAP_ON_MAP')" color="secondary">Tippe auf die
+                  Karte
                   <ion-chip color="secondary">
                     <ion-icon name="location-sharp"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_IT')" color="secondary">Tippe es an
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_TAP_ON_IT')" color="secondary">Tippe es an
                   <ion-chip color="secondary">
                     <ion-icon name="location-sharp"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_VIEW_DIRECTION')" color="secondary">Blickrichtung
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_VIEW_DIRECTION')" color="secondary">
+                  Blickrichtung
                   <ion-chip color="secondary">
                     <ion-icon name="navigate"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKED')" color="secondary">markierte </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKED_HOUSE')" color="secondary">markierte Haus </ion-text>
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_MARKED')" color="secondary">markierte
+                </ion-text>
+                <ion-text *ngIf="tag != undefined && tag.includes('KEYWORD_MARKED_HOUSE')" color="secondary">markierte
+                  Haus
+                </ion-text>
                 <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
               </span>
             </p>

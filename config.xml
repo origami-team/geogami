@@ -116,5 +116,5 @@
     <plugin name="cordova-plugin-geolocation" spec="~4.0.2" />
     <plugin name="cordova-plugin-camera" spec="~4.1.0" />
     <allow-navigation href="http://localhost:8100" sessionid="cd439eff" />
-    <allow-navigation href="http://192.168.0.87:8100" sessionid="2745676d" />
+    <allow-navigation href="http://192.168.0.87:8100" sessionid="fe1dc64d" />
 </widget>

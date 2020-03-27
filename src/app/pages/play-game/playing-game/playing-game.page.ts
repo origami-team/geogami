@@ -535,6 +535,9 @@ export class PlayingGamePage implements OnInit {
       this.map.removeSource('viewDirectionClick');
     }
 
+    this.photo = '';
+    this.photoURL = '';
+
     this.clickDirection = 0;
 
     if (
@@ -1158,7 +1161,12 @@ export class PlayingGamePage implements OnInit {
   }
 
   isKey(key: string) {
-    return mappings.filter(m => key.includes(m.tag)).length > 0
+    return mappings.filter(m => {
+      if (key == null) {
+        return
+      }
+      return key.includes(m.tag)
+    }).length > 0
   }
 }
 
