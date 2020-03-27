@@ -74,9 +74,9 @@
           </ion-chip>
         </div>
         <!-- <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p> -->
-        <ion-button color=dark fill="clear" (click)="togglePanel()">
-          <ion-icon slot="end" name="arrow-down" size="large" *ngIf="!panelMinimized"></ion-icon>
-          <ion-icon slot="end" name="arrow-up" size="large" *ngIf="panelMinimized"></ion-icon>
+        <ion-button color=dark fill="clear" (click)="togglePanel()" *ngIf="task.type.includes('nav-flag') || task.type.includes('nav-text') || task.type.includes('theme')">
+          <ion-icon slot="end" name="chevron-down" size="large" *ngIf="!panelMinimized"></ion-icon>
+          <ion-icon slot="end" name="chevron-up" size="large" *ngIf="panelMinimized"></ion-icon>
         </ion-button>
       </div>
       <div class="task-wrapper" *ngIf="!panelMinimized">
@@ -153,17 +153,12 @@
                   <ion-icon name="flag"></ion-icon>
                 </ion-chip>
               </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_HERE')" color="warning">Du bist hier
-                <ion-chip color="warning">
-                  <ion-icon name="locate"></ion-icon>
+              <ion-text *ngIf="tag.includes('KEYWORD_HERE')" color="danger">Du bist hier
+                <ion-chip color="danger">
+                  <ion-icon name="radio-button-on"></ion-icon>
                 </ion-chip>
               </ion-text>
               <ion-text *ngIf="tag.includes('KEYWORD_MARKER')" color="secondary">Marker
-                <ion-chip color="secondary">
-                  <ion-icon name="location-sharp"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_MARK')" color="secondary">Markiere
                 <ion-chip color="secondary">
                   <ion-icon name="location-sharp"></ion-icon>
                 </ion-chip>
@@ -180,16 +175,34 @@
               </ion-text>
               <ion-text *ngIf="tag.includes('KEYWORD_VIEW_DIRECTION')" color="secondary">Blickrichtung
                 <ion-chip color="secondary">
-                  <ion-icon name="navigate"></ion-icon>
+                  <ion-icon name="caret-foreward"></ion-icon>
                 </ion-chip>
               </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_MARKED')" color="secondary">markierte </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_MARKED_HOUSE')" color="secondary">markierte Haus </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_MARKEDHOUSE')" color="secondary">markierte Haus
+                <ion-chip color="secondary">
+                  <ion-icon name="cube-outline"></ion-icon>
+                </ion-chip>
+              </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_MARKEDBUILDING')" color="secondary">markierte Gebäude
+                <ion-chip color="secondary">
+                  <ion-icon name="cube-outline"></ion-icon>
+                </ion-chip>
+              </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_MARKEDPLACE')" color="secondary">markierten Platz
+                <ion-chip color="secondary">
+                  <ion-icon name="cube-outline"></ion-icon>
+                </ion-chip>
+              </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_STREETSECTION')" color="danger">Straßenabschnitt </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_STREETPART')" color="danger">Straßenteil </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_ROUTESECTION')" color="danger">Wegstück </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_WALKEDROUTE')" color="danger">zurückgelegter Weg </ion-text>
+              <ion-text *ngIf="tag.includes('KEYWORD_TRACK')" color="danger">Track </ion-text>
               <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
             </span>
           </p>
           <p *ngIf="task.settings.confirmation">
-            Drücke "OK"
+            Drücke OK!
           </p>
         </div>
 

@@ -82,7 +82,7 @@
       <ion-label slot="end">100m</ion-label>
     </ion-range>
   </ion-item>
-  <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
+  <ion-item detail lines="none" (click)="presentMapFeaturesModal()" *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
     <ion-label>
       Kartenfeatures
     </ion-label>
