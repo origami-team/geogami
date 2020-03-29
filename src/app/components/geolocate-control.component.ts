@@ -1,4 +1,5 @@
 import { Map as MapboxMap } from "mapbox-gl";
+import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 
 export enum GeolocateType {
     None,
@@ -15,10 +16,10 @@ export class GeolocateControl {
 
     private isInitalized = false;
 
-    constructor(map: MapboxMap) {
+    constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
 
-        this.positionWatch = window.navigator.geolocation.watchPosition(
+        this.geolocationService.geolocationSubscription.subscribe(
             position => {
                 if (this.map != undefined && this.isInitalized) {
                     this.map.getSource('geolocate').setData({
@@ -26,10 +27,6 @@ export class GeolocateControl {
                         coordinates: [position.coords.longitude, position.coords.latitude]
                     });
                 }
-            },
-            err => console.error(err),
-            {
-                enableHighAccuracy: true
             }
         );
         this.map.loadImage(

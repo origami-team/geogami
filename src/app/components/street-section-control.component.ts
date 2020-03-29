@@ -1,6 +1,8 @@
 import { Map as MapboxMap } from "mapbox-gl";
 import { OsmService } from './../services/osm.service'
 import osmtogeojson from "osmtogeojson";
+import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
+
 
 
 
@@ -17,7 +19,7 @@ export class StreetSectionControl {
   private primaryColor: string;
   private dangerColor: string;
 
-  constructor(map: MapboxMap, osm: OsmService) {
+  constructor(map: MapboxMap, osm: OsmService, private geolocationService: OrigamiGeolocationService) {
     this.map = map;
     this.osm = osm;
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
@@ -40,7 +42,7 @@ export class StreetSectionControl {
   private update(): void {
     switch (this.streetSectionType) {
       case StreetSectionType.Enabled:
-        this.positionWatch = window.navigator.geolocation.watchPosition(
+        this.geolocationService.geolocationSubscription.subscribe(
           position => {
             if (this.map != undefined) {
               this.osm.getStreetCoordinates(
@@ -72,10 +74,6 @@ export class StreetSectionControl {
                 }
               }).catch(e => { console.log("error", e) })
             }
-          },
-          err => console.error(err),
-          {
-            enableHighAccuracy: true
           }
         );
 

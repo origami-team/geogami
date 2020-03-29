@@ -4,6 +4,7 @@ import {
     DeviceOrientationCompassHeading
 } from "@ionic-native/device-orientation/ngx";
 import { Subscription } from 'rxjs';
+import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 
 export enum ViewDirectionType {
     None,
@@ -22,12 +23,12 @@ export class ViewDirectionControl {
 
     private isInitalized = false;
 
-    constructor(map: MapboxMap, deviceOrientation: DeviceOrientation) {
+    constructor(map: MapboxMap, deviceOrientation: DeviceOrientation, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
 
         this.deviceOrientation = deviceOrientation;
 
-        this.positionWatch = window.navigator.geolocation.watchPosition(
+        this.geolocationService.geolocationSubscription.subscribe(
             position => {
                 if (this.map != undefined && this.isInitalized) {
                     this.map.getSource('viewDirection').setData({
@@ -35,10 +36,6 @@ export class ViewDirectionControl {
                         coordinates: [position.coords.longitude, position.coords.latitude]
                     });
                 }
-            },
-            err => console.error(err),
-            {
-                enableHighAccuracy: true
             }
         );
         this.map.loadImage(

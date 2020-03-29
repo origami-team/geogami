@@ -6,7 +6,7 @@ import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
-import { Geoposition } from "@ionic-native/geolocation/ngx";
+import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
 import {
   DeviceOrientation,
   DeviceOrientationCompassHeading
@@ -41,6 +41,9 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { mappings } from './../../../pipes/keywords.js'
+
+import { OrigamiGeolocationService } from './../../../services/origami-geolocation.service';
+
 
 
 enum FeedbackType {
@@ -173,7 +176,8 @@ export class PlayingGamePage implements OnInit {
     private transfer: FileTransfer,
     private file: File,
     private webview: WebView,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private geolocationService: OrigamiGeolocationService
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -249,87 +253,81 @@ export class PlayingGamePage implements OnInit {
       maxZoom: 18
     });
 
-    this.positionWatch = window.navigator.geolocation.watchPosition(
-      position => {
-        this.trackerService.addWaypoint({
-          position: {
-            coordinates: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              altitude: position.coords.altitude,
-              accuracy: position.coords.accuracy,
-              altitudeAccuracy: position.coords.altitudeAccuracy,
-              heading: position.coords.heading,
-              speed: position.coords.speed
-            },
-            timestamp: position.timestamp
+    this.geolocationService.geolocationSubscription.subscribe(position => {
+      this.trackerService.addWaypoint({
+        position: {
+          coordinates: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            altitude: position.coords.altitude,
+            accuracy: position.coords.accuracy,
+            altitudeAccuracy: position.coords.altitudeAccuracy,
+            heading: position.coords.heading,
+            speed: position.coords.speed
           },
-          compassHeading: this.compassHeading,
-          mapViewport: {
-            bounds: this.map.getBounds(),
-            center: this.map.getCenter(),
-            zoom: this.map.getZoom(),
-            // style: this.map.getStyle(),
-            bearing: this.map.getBearing(),
-            pitch: this.map.getPitch()
-          }
-        });
-        this.lastKnownPosition = position;
-        if (this.task && !this.showSuccess) {
-          if (this.task.type.includes("nav")) {
-            const waypoint = this.task.settings.point.geometry.coordinates;
-            if (
-              this.userDidArrive(waypoint) &&
-              !this.task.settings.confirmation
-            ) {
-              this.onWaypointReached();
-            }
-
-            if (this.task.type == "nav-arrow") {
-              const destCoords = this.task.settings.point.geometry.coordinates;
-              const bearing = this.helperService.bearing(
-                position.coords.latitude,
-                position.coords.longitude,
-                destCoords[1],
-                destCoords[0]
-              );
-              this.heading = bearing;
-            }
-          }
+          timestamp: position.timestamp
+        },
+        compassHeading: this.compassHeading,
+        mapViewport: {
+          bounds: this.map.getBounds(),
+          center: this.map.getCenter(),
+          zoom: this.map.getZoom(),
+          // style: this.map.getStyle(),
+          bearing: this.map.getBearing(),
+          pitch: this.map.getPitch()
         }
+      });
+      this.lastKnownPosition = position;
+      if (this.task && !this.showSuccess) {
+        if (this.task.type.includes("nav")) {
+          const waypoint = this.task.settings.point.geometry.coordinates;
+          if (
+            this.userDidArrive(waypoint) &&
+            !this.task.settings.confirmation
+          ) {
+            this.onWaypointReached();
+          }
 
-        if (this.panCenter) {
-          this.map.setCenter(position.coords);
-        }
-
-        if (this.task && this.task.type == "theme-direction" &&
-          ((this.task.settings["question-type"].name == "question-type-current-direction") || (this.task.settings["question-type"].name == "photo"))) {
-          if (this.map.getSource('viewDirectionClick')) {
-            this.map.getSource('viewDirectionClick').setData({
-              type: "Point",
-              coordinates: [
-                position.coords.longitude,
-                position.coords.latitude
-              ]
-            })
+          if (this.task.type == "nav-arrow") {
+            const destCoords = this.task.settings.point.geometry.coordinates;
+            const bearing = this.helperService.bearing(
+              position.coords.latitude,
+              position.coords.longitude,
+              destCoords[1],
+              destCoords[0]
+            );
+            this.heading = bearing;
           }
         }
-      },
-      err => console.log(err),
-      {
-        enableHighAccuracy: true
       }
-    );
+
+      if (this.panCenter) {
+        this.map.setCenter(position.coords);
+      }
+
+      if (this.task && this.task.type == "theme-direction" &&
+        ((this.task.settings["question-type"].name == "question-type-current-direction") || (this.task.settings["question-type"].name == "photo"))) {
+        if (this.map.getSource('viewDirectionClick')) {
+          this.map.getSource('viewDirectionClick').setData({
+            type: "Point",
+            coordinates: [
+              position.coords.longitude,
+              position.coords.latitude
+            ]
+          })
+        }
+      }
+    });
 
     this.map.on("load", () => {
       this.rotationControl = new RotationControl(this.map)
-      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation)
+      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
       this.landmarkControl = new LandmarkControl(this.map)
-      this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService);
+      this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService, this.geolocationService);
       this.layerControl = new LayerControl(this.map, this.mapWrapper, this.deviceOrientation, this.alertController, this.platform);
-      this.trackControl = new TrackControl(this.map)
-      this.geolocateControl = new GeolocateControl(this.map)
-      this.panControl = new PanControl(this.map)
+      this.trackControl = new TrackControl(this.map, this.geolocationService)
+      this.geolocateControl = new GeolocateControl(this.map, this.geolocationService)
+      this.panControl = new PanControl(this.map, this.geolocationService)
 
       this.map.loadImage(
         "/assets/icons/directionv2-richtung.png",
@@ -953,6 +951,7 @@ export class PlayingGamePage implements OnInit {
   }
 
   navigateHome() {
+    this.geolocationService.clear()
     navigator.geolocation.clearWatch(this.positionWatch);
     this.deviceOrientationSubscription.unsubscribe();
 

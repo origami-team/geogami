@@ -1,4 +1,5 @@
 import { Map as MapboxMap } from "mapbox-gl";
+import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 
 export enum TrackType {
     Enabled,
@@ -11,7 +12,7 @@ export class TrackControl {
     private trackType: TrackType;
     private trackPositionWatch: number;
 
-    constructor(map: MapboxMap) {
+    constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
         const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
         const dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
@@ -24,7 +25,7 @@ export class TrackControl {
                 coordinates: []
             }
         };
-        this.trackPositionWatch = window.navigator.geolocation.watchPosition(
+        this.geolocationService.geolocationSubscription.subscribe(
             position => {
                 this.path.geometry.coordinates.push([
                     position.coords.longitude,
@@ -33,10 +34,6 @@ export class TrackControl {
                 if (this.map && this.map.getSource("track")) {
                     this.map.getSource("track").setData(this.path);
                 }
-            },
-            err => console.error(err),
-            {
-                enableHighAccuracy: true
             }
         );
 
