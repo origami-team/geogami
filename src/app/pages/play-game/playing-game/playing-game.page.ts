@@ -475,7 +475,7 @@ export class PlayingGamePage implements OnInit {
       console.log("setting bounds", bounds)
       this.map.fitBounds(bounds, {
         padding: {
-          top: 40,
+          top: 80,
           bottom: panelHeight < 250 ? 280 : panelHeight + 40,
           left: 40,
           right: 40
