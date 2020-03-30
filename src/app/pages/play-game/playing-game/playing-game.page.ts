@@ -67,8 +67,8 @@ export class PlayingGamePage implements OnInit {
   game: Game;
 
   map: mapboxgl.Map;
-  userSelectMarker: mapboxgl.Marker;
   waypointMarker: mapboxgl.Marker;
+  waypointMarkerDuplicate: mapboxgl.Marker;
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
 
   // map features
@@ -337,6 +337,14 @@ export class PlayingGamePage implements OnInit {
           this.map.addImage("view-direction-task", image);
         })
 
+      this.map.loadImage(
+        "/assets/icons/marker-editor.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("marker-editor", image);
+        })
+
       this.game = null;
       this.game = new Game(0, "Loading...", false, []);
       this.route.params.subscribe(params => {
@@ -404,17 +412,26 @@ export class PlayingGamePage implements OnInit {
         (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow" && this.task.settings["answer-type"].name != "rotateTo")
       ) {
         const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-        if (this.userSelectMarker) {
-          this.userSelectMarker.setLngLat(e.lngLat);
+
+        if (this.map.getSource('marker-point')) {
+          this.map.getSource('marker-point').setData(pointFeature)
         } else {
-          this.userSelectMarker = new mapboxgl.Marker({
-            color: this.secondaryColor,
-            draggable: true
-          })
-            .setLngLat(pointFeature.geometry.coordinates)
-            .addTo(this.map);
-          this.userSelectMarker.on("dragend", () => {
-            // TODO: implement
+          this.map.addSource('marker-point', {
+            'type': 'geojson',
+            'data': pointFeature
+          });
+        }
+
+        if (!this.map.getLayer('marker-point')) {
+          this.map.addLayer({
+            'id': 'marker-point',
+            'type': 'symbol',
+            'source': 'marker-point',
+            'layout': {
+              "icon-image": "marker-editor",
+              "icon-size": 0.65,
+              "icon-anchor": 'bottom'
+            }
           });
         }
       }
@@ -455,7 +472,6 @@ export class PlayingGamePage implements OnInit {
       if (task.settings['question-type'] &&
         task.settings['question-type'].settings &&
         task.settings['question-type'].settings.polygon != undefined) {
-        console.log(task.settings['question-type'].settings.polygon)
         task.settings['question-type'].settings.polygon.forEach(e => {
           e.geometry.coordinates.forEach(c => {
             c.forEach(coords => {
@@ -512,14 +528,18 @@ export class PlayingGamePage implements OnInit {
       this.triggerTreshold = 10;
     }
 
-    if (this.userSelectMarker) {
-      this.userSelectMarker.remove();
-      this.userSelectMarker = null;
+    if (this.map.getSource('marker-point')) {
+      this.map.removeSource('marker-point')
+    }
+
+    if (this.map.getLayer('marker-point')) {
+      this.map.removeLayer('marker-point')
     }
 
     if (this.waypointMarker) {
       this.waypointMarker.remove();
       this.waypointMarker = null;
+      this.waypointMarkerDuplicate = null;
     }
 
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
@@ -560,6 +580,18 @@ export class PlayingGamePage implements OnInit {
             this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
           )
           .addTo(this.map);
+
+        // create a HTML element for each feature
+        const elDuplicate = document.createElement('div');
+        elDuplicate.className = 'waypoint-marker';
+
+        this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
+          anchor: 'bottom',
+          offset: [15, 0]
+        })
+          .setLngLat(
+            this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
+          )
       }
     }
 
@@ -743,10 +775,8 @@ export class PlayingGamePage implements OnInit {
       }
     });
     if (this.task.type == "theme-loc") {
-      const clickPosition = [
-        this.userSelectMarker._lngLat.lng,
-        this.userSelectMarker._lngLat.lat
-      ];
+      const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
+      console.log(clickPosition)
       const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
 
       this.initFeedback(distance < this.triggerTreshold)
@@ -755,10 +785,7 @@ export class PlayingGamePage implements OnInit {
       this.task.type == "theme-object" &&
       this.task.settings["question-type"].name == "photo"
     ) {
-      const clickPosition = [
-        this.userSelectMarker._lngLat.lng,
-        this.userSelectMarker._lngLat.lat
-      ];
+      const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
 
       const isInPolygon = booleanPointInPolygon(clickPosition, this.task.settings["question-type"].settings.polygon[0])
 
@@ -820,10 +847,7 @@ export class PlayingGamePage implements OnInit {
           this.task.settings["question-type"].settings["answer-type"].settings
             .polygon
         ) {
-          const clickPosition = [
-            this.userSelectMarker._lngLat.lng,
-            this.userSelectMarker._lngLat.lat
-          ];
+          const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
           const polygon = this.task.settings["question-type"].settings[
             "answer-type"
           ].settings.polygon[0];
@@ -835,13 +859,13 @@ export class PlayingGamePage implements OnInit {
           const targetPosition = this.task.settings["question-type"].settings[
             "answer-type"
           ].settings.point.geometry.coordinates;
-          const clickPosition = this.userSelectMarker._lngLat;
+          const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
 
           const distance = this.helperService.getDistanceFromLatLonInM(
             targetPosition[1],
             targetPosition[0],
-            clickPosition.lat,
-            clickPosition.lng
+            clickPosition[1],
+            clickPosition[0]
           );
 
           this.trackerService.addAnswer({
@@ -1091,6 +1115,13 @@ export class PlayingGamePage implements OnInit {
                 this.swipe = true;
                 this.changeDetectorRef.detectChanges();
                 this.layerControl.setType(LayerType.Swipe, this.swipeMapContainer)
+                if (this.waypointMarkerDuplicate) {
+                  setTimeout(() => {
+                    this.layerControl.passMarkers({ waypointMarker: this.waypointMarkerDuplicate }, (marker) => {
+                      console.log('update marker', marker)
+                    })
+                  }, 2000)
+                }
               } else if (mapFeatures[key] == "3D") {
                 this.layerControl.setType(LayerType.ThreeDimension)
               } else if (mapFeatures[key] == "3D-button") {
