@@ -29,7 +29,7 @@ import { CameraComponent } from "./form-elements/camera/camera.component";
 
 import { PhotoUploadComponent } from "./form-elements/photo-upload/photo-upload.component";
 
-import { Geolocation } from "@ionic-native/geolocation/ngx";
+// import { Geolocation } from "@ionic-native/geolocation/ngx";
 
 import { Camera } from "@ionic-native/camera/ngx";
 
@@ -103,7 +103,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Geolocation,
+    // Geolocation,
     // Geofence,
     Camera,
     DeviceOrientation,

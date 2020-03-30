@@ -128,6 +128,6 @@ export class ViewDirectionControl {
         if (this.deviceOrientationSubscription != undefined) {
             this.deviceOrientationSubscription.unsubscribe();
         }
-        navigator.geolocation.clearWatch(this.positionWatch);
+        // navigator.geolocation.clearWatch(this.positionWatch);
     }
 }

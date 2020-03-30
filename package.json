@@ -23,6 +23,7 @@
     "@angular/pwa": "^0.12.4",
     "@angular/router": "^8.2.10",
     "@angular/service-worker": "^8.2.10",
+    "@capacitor/android": "^1.5.2",
     "@capacitor/core": "^1.5.2",
     "@capacitor/ios": "^1.5.2",
     "@ionic-native/camera": "^5.15.1",
@@ -31,7 +32,6 @@
     "@ionic-native/device-orientation": "^5.15.0",
     "@ionic-native/file": "^5.22.0",
     "@ionic-native/file-transfer": "^5.22.0",
-    "@ionic-native/geolocation": "^5.11.0",
     "@ionic-native/insomnia": "^5.16.0",
     "@ionic-native/ionic-webview": "^5.22.0",
     "@ionic-native/native-audio": "^5.21.6",
@@ -113,7 +113,6 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-geolocation": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-insomnia": {},

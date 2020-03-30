@@ -36,7 +36,7 @@ export class StreetSectionControl {
   }
 
   private reset(): void {
-    window.navigator.geolocation.clearWatch(this.positionWatch);
+    // window.navigator.geolocation.clearWatch(this.positionWatch);
   }
 
   private update(): void {
@@ -88,7 +88,7 @@ export class StreetSectionControl {
   }
 
   public remove(): void {
-    window.navigator.geolocation.clearWatch(this.positionWatch);
+    // window.navigator.geolocation.clearWatch(this.positionWatch);
     if (this.map.getLayer('section'))
       this.map.removeLayer('section');
   }

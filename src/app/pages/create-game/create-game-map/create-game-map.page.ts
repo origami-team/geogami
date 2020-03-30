@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import mapboxgl from 'mapbox-gl';
 
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+// import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { ModalController } from '@ionic/angular';
 

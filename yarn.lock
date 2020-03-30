@@ -1026,6 +1026,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@capacitor/android@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-1.5.2.tgz#ef2f1cb6af26823735f07f36c9660d367c29635e"
+  integrity sha512-pJOFjYgpuVMSN0Bm+Ndkyf/xuMwRDPx3jtz/5xCbypM1tf6W75tqV+z5ABLhKySx8Bo+b/t7xDKwRG7+PEUwWQ==
+
 "@capacitor/cli@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-1.1.1.tgz#f0eaee03f735ce4903347fd4473596ed3ba9b03c"
@@ -1097,13 +1102,6 @@
   version "5.22.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/file/-/file-5.22.0.tgz#fcce3ee6723899e4e6637f60158a50dc4202fdd2"
   integrity sha512-D9P+SvqQywb2/s06No5IYCkCWWyTqCBUAVT3x2zsHOLiqzldw04VUxReigUbos/b8T/D3QoTc5AzNidBIcWvDg==
-  dependencies:
-    "@types/cordova" latest
-
-"@ionic-native/geolocation@^5.11.0":
-  version "5.22.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/geolocation/-/geolocation-5.22.0.tgz#8746d0b5a5343938db40acf759efd74df1d08e78"
-  integrity sha512-eQi/YVi0CmKNSuMuO4rPePOUlXsSfYcuc86WQdMbxNI7JCHFtnKNy/CbhLdnZxHTqPu4Me62XY0s6ypRdNBLdQ==
   dependencies:
     "@types/cordova" latest
 

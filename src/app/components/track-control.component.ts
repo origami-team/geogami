@@ -82,6 +82,6 @@ export class TrackControl {
         if (this.map.getLayer('track')) {
             this.map.removeLayer('track')
         }
-        window.navigator.geolocation.clearWatch(this.trackPositionWatch);
+        // window.navigator.geolocation.clearWatch(this.trackPositionWatch);
     }
 }

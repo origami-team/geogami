@@ -21,13 +21,14 @@ export class GeolocateControl {
 
         this.geolocationService.geolocationSubscription.subscribe(
             position => {
-                if (this.map != undefined && this.isInitalized) {
+                console.log(position)
+                if (this.map && this.map.getLayer('geolocate')) {
                     this.map.getSource('geolocate').setData({
                         type: "Point",
                         coordinates: [position.coords.longitude, position.coords.latitude]
                     });
                 }
-            }
+            }, err => console.error(err)
         );
         this.map.loadImage(
             "/assets/icons/position.png",
@@ -85,7 +86,9 @@ export class GeolocateControl {
     }
 
     private update(): void {
-        console.log("setting geolocate to", this.geolocateType)
+        if (!this.isInitalized) {
+            return
+        }
         switch (this.geolocateType) {
             case GeolocateType.None:
                 this.reset()
@@ -106,6 +109,6 @@ export class GeolocateControl {
 
     public remove(): void {
         this.reset();
-        navigator.geolocation.clearWatch(this.positionWatch);
+        // navigator.geolocation.clearWatch(this.positionWatch);
     }
 }

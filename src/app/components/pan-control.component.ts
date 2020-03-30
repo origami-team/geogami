@@ -60,6 +60,6 @@ export class PanControl {
     }
 
     public remove(): void {
-        navigator.geolocation.clearWatch(this.positionWatch);
+        // navigator.geolocation.clearWatch(this.positionWatch);
     }
 }

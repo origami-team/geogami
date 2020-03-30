@@ -6,7 +6,9 @@ import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
-import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
+// import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
+import { Plugins, HapticsImpactStyle, GeolocationPosition } from '@capacitor/core';
+
 import {
   DeviceOrientation,
   DeviceOrientationCompassHeading
@@ -20,7 +22,7 @@ import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
 import { Subscription } from "rxjs";
 import { Insomnia } from "@ionic-native/insomnia/ngx";
-import { Vibration } from "@ionic-native/vibration/ngx";
+// import { Vibration } from "@ionic-native/vibration/ngx";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { RotationControl, RotationType } from './../../../components/rotation-control.component'
@@ -99,7 +101,7 @@ export class PlayingGamePage implements OnInit {
     trackUserLocation: true,
     showUserLocation: true
   }); */
-  lastKnownPosition: Geoposition;
+  lastKnownPosition: GeolocationPosition;
 
   // treshold to trigger location arrive
   triggerTreshold: Number = 20;
@@ -167,7 +169,7 @@ export class PlayingGamePage implements OnInit {
     private trackerService: TrackerService,
     private device: Device,
     private insomnia: Insomnia,
-    private vibration: Vibration,
+    // private vibration: Vibration,
     private camera: Camera,
     public alertController: AlertController,
     public platform: Platform,
@@ -254,6 +256,7 @@ export class PlayingGamePage implements OnInit {
     });
 
     this.geolocationService.geolocationSubscription.subscribe(position => {
+      console.log('pos', position)
       this.trackerService.addWaypoint({
         position: {
           coordinates: {
@@ -278,7 +281,7 @@ export class PlayingGamePage implements OnInit {
         }
       });
       // TODO: undo
-      // this.lastKnownPosition = position;
+      this.lastKnownPosition = position;
       if (this.task && !this.showSuccess) {
         if (this.task.type.includes("nav")) {
           const waypoint = this.task.settings.point.geometry.coordinates;
@@ -432,13 +435,13 @@ export class PlayingGamePage implements OnInit {
     })
 
     // rotation
-    this.deviceOrientationSubscription = this.deviceOrientation
-      .watchHeading()
-      .subscribe((data: DeviceOrientationCompassHeading) => {
-        this.compassHeading = data.magneticHeading;
-        this.targetHeading = 360 - (this.compassHeading - this.heading);
-        this.indicatedDirection = this.compassHeading - this.directionBearing;
-      });
+    // this.deviceOrientationSubscription = this.deviceOrientation
+    //   .watchHeading()
+    //   .subscribe((data: DeviceOrientationCompassHeading) => {
+    //     this.compassHeading = data.magneticHeading;
+    //     this.targetHeading = 360 - (this.compassHeading - this.heading);
+    //     this.indicatedDirection = this.compassHeading - this.directionBearing;
+    //   });
 
 
     this.insomnia.keepAwake().then(
@@ -498,7 +501,8 @@ export class PlayingGamePage implements OnInit {
   }
 
   initTask() {
-    this.vibration.vibrate([100, 100, 100]);
+    // this.vibration.vibrate([100, 100, 100]);
+    Plugins.Haptics.vibrate();
     // this.nativeAudio.play('sound');
     console.log("Current task: ", this.task);
     this._initMapFeatures();
@@ -526,7 +530,7 @@ export class PlayingGamePage implements OnInit {
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
       this.map.removeLayer('viewDirectionTask');
       this.map.removeSource('viewDirectionTask');
-      navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+      // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
     }
 
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionClick').length > 0) {
@@ -689,7 +693,8 @@ export class PlayingGamePage implements OnInit {
           this.uploadDone = true;
         }
       });
-      this.vibration.vibrate([300, 300, 300]);
+      // this.vibration.vibrate([300, 300, 300]);
+      Plugins.Haptics.vibrate();
       this.insomnia.allowSleepAgain().then(
         () => console.log("insomnia allow sleep again success"),
         () => console.log("insomnia allow sleep again error")
@@ -890,7 +895,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
       }
     }
     else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
@@ -899,7 +904,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
       }
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
@@ -908,7 +913,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
       }
     } else if (
       this.task.settings["answer-type"] &&
@@ -953,8 +958,8 @@ export class PlayingGamePage implements OnInit {
 
   navigateHome() {
     this.geolocationService.clear()
-    navigator.geolocation.clearWatch(this.positionWatch);
-    this.deviceOrientationSubscription.unsubscribe();
+    // navigator.geolocation.clearWatch(this.positionWatch);
+    // this.deviceOrientationSubscription.unsubscribe();
 
     this.rotationControl.remove();
     this.viewDirectionControl.remove()

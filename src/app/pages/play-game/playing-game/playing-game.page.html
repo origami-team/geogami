@@ -57,32 +57,33 @@
     </ion-card>
 
     <div #panel>
-    <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized"
-    [class.full]="task.type == 'nav-arrow'" *ngIf="task">
-    
-      <div class="top-info">
-        <div *ngIf="!panelMinimized">
-          <ion-chip color="primary" *ngIf="task.type.includes('nav')">
-            <ion-icon name="navigate"></ion-icon>
-            &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
-          </ion-chip>
-          <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
-            <ion-icon name="clipboard"></ion-icon>
-            &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
-          </ion-chip>
-          <ion-chip color="warning" *ngIf="task.type.includes('info')">
-            <ion-icon name="information-circle-outline"></ion-icon>
-            &nbsp;Info
-          </ion-chip>
+      <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized"
+        [class.full]="task.type == 'nav-arrow'" *ngIf="task">
+
+        <div class="top-info">
+          <div *ngIf="!panelMinimized">
+            <ion-chip color="primary" *ngIf="task.type.includes('nav')">
+              <ion-icon name="navigate"></ion-icon>
+              &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
+            </ion-chip>
+            <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
+              <ion-icon name="clipboard"></ion-icon>
+              &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
+            </ion-chip>
+            <ion-chip color="warning" *ngIf="task.type.includes('info')">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              &nbsp;Info
+            </ion-chip>
+          </div>
+          <!-- <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p> -->
+          <ion-button color=dark fill="clear" (click)="togglePanel()"
+            *ngIf="task.type.includes('nav-flag') || task.type.includes('nav-text') || task.type.includes('theme')">
+            <ion-icon slot="end" name="chevron-down" size="large" *ngIf="!panelMinimized"></ion-icon>
+            <ion-icon slot="end" name="chevron-up" size="large" *ngIf="panelMinimized"></ion-icon>
+          </ion-button>
         </div>
-        <!-- <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p> -->
-        <ion-button color=dark fill="clear" (click)="togglePanel()" *ngIf="task.type.includes('nav-flag') || task.type.includes('nav-text') || task.type.includes('theme')">
-          <ion-icon slot="end" name="chevron-down" size="large" *ngIf="!panelMinimized"></ion-icon>
-          <ion-icon slot="end" name="chevron-up" size="large" *ngIf="panelMinimized"></ion-icon>
-        </ion-button>
-      </div>
-      <div class="task-wrapper" *ngIf="!panelMinimized">
-        <!-- <div
+        <div class="task-wrapper" *ngIf="!panelMinimized">
+          <!-- <div
         class="task-wrapper"
         [ngStyle]="{
           'flex-wrap': [
@@ -94,12 +95,12 @@
             : 'nowrap'
         }"
       > -->
-        <div class="compass large" *ngIf="task.type == 'nav-arrow'">
-          <img src="/assets/icons/compass.svg" [ngStyle]="{
+          <div class="compass large" *ngIf="task.type == 'nav-arrow'">
+            <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
             }" />
-          <p>Zum Ziel: <br><b>{{ Math.round(targetDistance) }}</b> m</p>
-        </div>
+            <p>Zum Ziel: <br><b>{{ Math.round(targetDistance) }}</b> m</p>
+          </div>
 
           <div class="task-wrapper" [ngStyle]="{
               'flex-wrap': [
@@ -144,69 +145,69 @@
             </div>
           </div>
 
-        <div class="task-text">
-          <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
-            {{ task.settings["question-type"].settings["object-description"] }}
-          </p>
-          <p *ngIf="task.settings.text">
-            <span *ngFor="let tag of (task.settings.text | keyword).split(' ')">
-              <ion-text *ngIf="tag.includes('KEYWORD_FLAG')" color="primary">Fahne
-                <ion-chip color="primary">
-                  <ion-icon name="flag"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_HERE')" color="danger">Du bist hier
-                <ion-chip color="danger">
-                  <ion-icon name="radio-button-on"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_MARKER')" color="secondary">Marker
-                <ion-chip color="secondary">
-                  <ion-icon name="location-sharp"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_MAP')" color="secondary">Tippe auf die Karte
-                <ion-chip color="secondary">
-                  <ion-icon name="location-sharp"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_IT')" color="secondary">Tippe es an
-                <ion-chip color="secondary">
-                  <ion-icon name="location-sharp"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_VIEW_DIRECTION')" color="secondary">Blickrichtung
-                <ion-chip color="secondary">
-                  <ion-icon name="caret-forward"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_MARKEDHOUSE')" color="secondary">markierte Haus
-                <ion-chip color="secondary">
-                  <ion-icon name="cube-outline"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_MARKEDBUILDING')" color="secondary">markierte Gebäude
-                <ion-chip color="secondary">
-                  <ion-icon name="cube-outline"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_MARKEDPLACE')" color="secondary">markierten Platz
-                <ion-chip color="secondary">
-                  <ion-icon name="cube-outline"></ion-icon>
-                </ion-chip>
-              </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_STREETSECTION')" color="danger">Straßenabschnitt </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_STREETPART')" color="danger">Straßenteil </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_ROUTESECTION')" color="danger">Wegstück </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_WALKEDROUTE')" color="danger">zurückgelegter Weg </ion-text>
-              <ion-text *ngIf="tag.includes('KEYWORD_TRACK')" color="danger">Track </ion-text>
-              <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
-            </span>
-          </p>
-          <p *ngIf="task.settings.confirmation">
-            Drücke OK!
-          </p>
-        </div>
+          <div class="task-text">
+            <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
+              {{ task.settings["question-type"].settings["object-description"] }}
+            </p>
+            <p *ngIf="task.settings.text">
+              <span *ngFor="let tag of (task.settings.text | keyword).split(' ')">
+                <ion-text *ngIf="tag.includes('KEYWORD_FLAG')" color="primary">Fahne
+                  <ion-chip color="primary">
+                    <ion-icon name="flag"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_HERE')" color="danger">Du bist hier
+                  <ion-chip color="danger">
+                    <ion-icon name="radio-button-on"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_MARKER')" color="secondary">Marker
+                  <ion-chip color="secondary">
+                    <ion-icon name="location-sharp"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_MAP')" color="secondary">Tippe auf die Karte
+                  <ion-chip color="secondary">
+                    <ion-icon name="location-sharp"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_IT')" color="secondary">Tippe es an
+                  <ion-chip color="secondary">
+                    <ion-icon name="location-sharp"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_VIEW_DIRECTION')" color="secondary">Blickrichtung
+                  <ion-chip color="secondary">
+                    <ion-icon name="caret-forward"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDHOUSE')" color="secondary">markierte Haus
+                  <ion-chip color="secondary">
+                    <ion-icon name="cube-outline"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDBUILDING')" color="secondary">markierte Gebäude
+                  <ion-chip color="secondary">
+                    <ion-icon name="cube-outline"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDPLACE')" color="secondary">markierten Platz
+                  <ion-chip color="secondary">
+                    <ion-icon name="cube-outline"></ion-icon>
+                  </ion-chip>
+                </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_STREETSECTION')" color="danger">Straßenabschnitt </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_STREETPART')" color="danger">Straßenteil </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_ROUTESECTION')" color="danger">Wegstück </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_WALKEDROUTE')" color="danger">zurückgelegter Weg </ion-text>
+                <ion-text *ngIf="tag.includes('KEYWORD_TRACK')" color="danger">Track </ion-text>
+                <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
+              </span>
+            </p>
+            <p *ngIf="task.settings.confirmation">
+              Drücke OK!
+            </p>
+          </div>
 
           <div *ngIf="
               task.settings['answer-type'] &&

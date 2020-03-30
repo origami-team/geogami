@@ -1,25 +1,38 @@
 import { Injectable } from '@angular/core';
-import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
-import { Subscription, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Observable, Subscriber } from 'rxjs';
 
+import { Plugins, GeolocationPosition } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrigamiGeolocationService {
 
-  public geolocationSubscription: Observable<Geoposition>;
+  public geolocationSubscription: Observable<GeolocationPosition>;
+  private watchID: string;
 
-  constructor(private geolocation: Geolocation) {
-    console.log('creating new geolocation subscription')
-    this.geolocationSubscription = this.geolocation.watchPosition({ enableHighAccuracy: true, timeout: 1000, maximumAge: 1000 })
-      .pipe(filter((p) => p.coords !== undefined))
+  constructor() {
+    Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
+      console.log(position)
+      if (error) {
+        console.error(error)
+      }
+    })
 
-    this.geolocationSubscription.subscribe(() => { }, (err) => console.error(err))
+    console.log("init geoloc service")
+    this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
+      Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
+        console.log(position)
+        if (error) {
+          observer.error(error)
+        }
+        observer.next(position);
+        observer.complete();
+      })
+    });
   }
 
   clear() {
-    this.geolocationSubscription = null;
+    Plugins.Geolocation.clearWatch({ id: this.watchID })
   }
 }
