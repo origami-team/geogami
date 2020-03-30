@@ -12,10 +12,6 @@
       <ion-icon name="clipboard" color="secondary"></ion-icon> Themenaufgabe
     </ion-title>
     <ion-buttons slot="end">
-      <!--Beim Klicken soll sich ein Pop-Up mit dem Task-Showroom öffnen-->
-      <ion-button color=dark>
-        <ion-icon name="help"></ion-icon>
-      </ion-button>
       <ion-button color=dark (click)="dismissModal(null)">
         <ion-icon name="save"></ion-icon>
       </ion-button>
@@ -24,12 +20,50 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <ion-card color="primary" *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-arrow' || selectedTask.type == 'nav-text'">
+    <ion-card-content>
+      <ion-icon name="help-circle"></ion-icon>
+      <b> "Navigationsaufgaben"</b> leiten den Spieler an neue Orte.
+    </ion-card-content>
+  </ion-card>
+  <ion-card color="secondary" *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
+    <ion-card-content>
+      <ion-icon name="help-circle"></ion-icon>
+      <b> "Themenaufgaben"</b> sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.
+    </ion-card-content>
+  </ion-card>
+
   <ion-text>
     <h5>Aufgabentyp</h5>
   </ion-text>
   <select placeholder="Auswählen" [ngModel]="selectedTask" (ngModelChange)="onTaskSelected($event)">
     <option [ngValue]="task" *ngFor="let task of tasks">{{ task.name }}</option>
   </select>
+
+  <ion-card color="medium">
+    <ion-card-content>
+      <ion-icon name="help-circle"></ion-icon>
+      <ion-text *ngIf="selectedTask.type == 'nav-flag'">
+        Bei der <b>"Navigation zur Zielfahne"</b> sieht der Spieler eine Fahne auf der Karte, die einen Zielort markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.
+      </ion-text>
+      <ion-text *ngIf="selectedTask.type == 'nav-arrow'">
+      Bei der <b>"Navigation mit Richtungspfeil"</b> sieht der Spieler einen Pfeil und eine Distanzangabe, die ihm die Richtung zum nächsten Zielort weisen. Die Karte sieht er hingegen nicht.
+      </ion-text>
+      <ion-text *ngIf="selectedTask.type == 'nav-text'">
+      Bei der <b>"Navigation mit Textanweisung"</b> bekommt der Spieler eine genaue Navigationsanweisung zum nächsten Zielort.
+      </ion-text>
+      <ion-text *ngIf="selectedTask.type == 'theme-loc'">
+        Bei der <b>"Selbst-Lokalisation"</b> muss der Spieler seine aktuelle Position auf der Karte finden.
+      </ion-text>
+      <ion-text *ngIf="selectedTask.type == 'theme-object'">
+      Bei der <b>"Objekt-Lokalisation"</b> muss der Spieler Objekte von der Karte Objekten seiner Umgebung zuordnen und umgekehrt.
+      </ion-text>
+      <ion-text *ngIf="selectedTask.type == 'theme-direction'">
+      Bei der <b>"Richtungsbestimmung"</b> muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in Verbindung bringen.
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
 
   <dynamic-form [config]="config" #form (submit)="submit($event)">
   </dynamic-form>
