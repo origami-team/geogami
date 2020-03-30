@@ -8,6 +8,12 @@
     <option *ngFor="let option of config.selectOptions" [ngValue]="option">{{ option.label }}</option>
   </select>
 
+  <!-- <ion-select interface="action-sheet" *ngIf="config" [formControlName]="config.name"
+    [(ngModel)]="selectedQuestionType">
+    <ion-select-option *ngFor="let option of config.selectOptions" [value]="option">{{ option.label }}
+    </ion-select-option>
+  </ion-select> -->
+
   <dynamic-form *ngIf="selectedQuestionType" [(config)]="selectedQuestionType.items" #form (submit)="submit($event)">
   </dynamic-form>
 </div>

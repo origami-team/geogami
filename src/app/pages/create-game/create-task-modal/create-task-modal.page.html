@@ -21,13 +21,15 @@
 
 <ion-content class="ion-padding">
 
-  <ion-card color="primary" *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-arrow' || selectedTask.type == 'nav-text'">
+  <ion-card color="primary"
+    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-arrow' || selectedTask.type == 'nav-text'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
       <b> "Navigationsaufgaben"</b> leiten den Spieler an neue Orte.
     </ion-card-content>
   </ion-card>
-  <ion-card color="secondary" *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
+  <ion-card color="secondary"
+    *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
       <b> "Themenaufgaben"</b> sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.
@@ -41,26 +43,36 @@
     <option [ngValue]="task" *ngFor="let task of tasks">{{ task.name }}</option>
   </select>
 
+  <!-- <ion-select interface="action-sheet" placeholder="Auswählen" [ngModel]="selectedTask"
+    (ngModelChange)="onTaskSelected($event)">
+    <ion-select-option [value]="task" *ngFor="let task of tasks">{{ task.name }}</ion-select-option>
+  </ion-select> -->
+
   <ion-card color="medium">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
       <ion-text *ngIf="selectedTask.type == 'nav-flag'">
-        Bei der <b>"Navigation zur Zielfahne"</b> sieht der Spieler eine Fahne auf der Karte, die einen Zielort markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.
+        Bei der <b>"Navigation zur Zielfahne"</b> sieht der Spieler eine Fahne auf der Karte, die einen Zielort
+        markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.
       </ion-text>
       <ion-text *ngIf="selectedTask.type == 'nav-arrow'">
-      Bei der <b>"Navigation mit Richtungspfeil"</b> sieht der Spieler einen Pfeil und eine Distanzangabe, die ihm die Richtung zum nächsten Zielort weisen. Die Karte sieht er hingegen nicht.
+        Bei der <b>"Navigation mit Richtungspfeil"</b> sieht der Spieler einen Pfeil und eine Distanzangabe, die ihm die
+        Richtung zum nächsten Zielort weisen. Die Karte sieht er hingegen nicht.
       </ion-text>
       <ion-text *ngIf="selectedTask.type == 'nav-text'">
-      Bei der <b>"Navigation mit Textanweisung"</b> bekommt der Spieler eine genaue Navigationsanweisung zum nächsten Zielort.
+        Bei der <b>"Navigation mit Textanweisung"</b> bekommt der Spieler eine genaue Navigationsanweisung zum nächsten
+        Zielort.
       </ion-text>
       <ion-text *ngIf="selectedTask.type == 'theme-loc'">
         Bei der <b>"Selbst-Lokalisation"</b> muss der Spieler seine aktuelle Position auf der Karte finden.
       </ion-text>
       <ion-text *ngIf="selectedTask.type == 'theme-object'">
-      Bei der <b>"Objekt-Lokalisation"</b> muss der Spieler Objekte von der Karte Objekten seiner Umgebung zuordnen und umgekehrt.
+        Bei der <b>"Objekt-Lokalisation"</b> muss der Spieler Objekte von der Karte Objekten seiner Umgebung zuordnen
+        und umgekehrt.
       </ion-text>
       <ion-text *ngIf="selectedTask.type == 'theme-direction'">
-      Bei der <b>"Richtungsbestimmung"</b> muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in Verbindung bringen.
+        Bei der <b>"Richtungsbestimmung"</b> muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in
+        Verbindung bringen.
       </ion-text>
     </ion-card-content>
   </ion-card>
@@ -84,7 +96,8 @@
     <ion-label>Feedback</ion-label>
     <ion-toggle [(ngModel)]="feedback" color="primary"></ion-toggle>
   </ion-item>
-  <ion-item lines="none" *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
+  <ion-item lines="none"
+    *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
     <ion-label>Feedback</ion-label>
     <ion-toggle [(ngModel)]="feedback" color="secondary"></ion-toggle>
   </ion-item>
@@ -93,14 +106,16 @@
     <ion-label>Mehrere Versuche</ion-label>
     <ion-toggle [(ngModel)]="multipleTries" color="primary"></ion-toggle>
   </ion-item>
-  <ion-item lines="none" *ngIf="selectedTask.type == 'theme-loc'|| selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
+  <ion-item lines="none"
+    *ngIf="selectedTask.type == 'theme-loc'|| selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
     <ion-label>Mehrere Versuche</ion-label>
     <ion-toggle [(ngModel)]="multipleTries" color="secondary"></ion-toggle>
   </ion-item>
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
     <ion-label>Genauigkeit</ion-label>
-    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="primary" ticks pin (ionChange)="rangeChange()">
+    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="primary" ticks pin
+      (ionChange)="rangeChange()">
       <ion-label slot="start">0m</ion-label>
       <ion-icon slot="start" size="small" color="primary" name="locate"></ion-icon>
       <ion-icon slot="end" color="primary" name="locate"></ion-icon>
@@ -109,14 +124,16 @@
   </ion-item>
   <ion-item lines="none" *ngIf="selectedTask.type == 'theme-loc'">
     <ion-label>Genauigkeit</ion-label>
-    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="secondary" ticks pin (ionChange)="rangeChange()">
+    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="secondary" ticks pin
+      (ionChange)="rangeChange()">
       <ion-label slot="start">0m</ion-label>
       <ion-icon slot="start" size="small" color="secondary" name="locate"></ion-icon>
       <ion-icon slot="end" color="secondary" name="locate"></ion-icon>
       <ion-label slot="end">100m</ion-label>
     </ion-range>
   </ion-item>
-  <ion-item detail lines="none" (click)="presentMapFeaturesModal()" *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
+  <ion-item detail lines="none" (click)="presentMapFeaturesModal()"
+    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
     <ion-label>
       Kartenfeatures
     </ion-label>
