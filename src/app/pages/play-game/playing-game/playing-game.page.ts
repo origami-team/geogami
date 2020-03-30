@@ -185,9 +185,9 @@ export class PlayingGamePage implements OnInit {
       autoplay: true,
       loop: true
     };
-    this.nativeAudio.preloadSimple('sound', 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3')
-      .then(() => console.log("loaded sound"),
-        (e) => console.log("sound load error ", e));
+    // this.nativeAudio.preloadSimple('sound', 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3')
+    //   .then(() => console.log("loaded sound"),
+    //     (e) => console.log("sound load error ", e));
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
@@ -277,7 +277,8 @@ export class PlayingGamePage implements OnInit {
           pitch: this.map.getPitch()
         }
       });
-      this.lastKnownPosition = position;
+      // TODO: undo
+      // this.lastKnownPosition = position;
       if (this.task && !this.showSuccess) {
         if (this.task.type.includes("nav")) {
           const waypoint = this.task.settings.point.geometry.coordinates;
@@ -498,7 +499,7 @@ export class PlayingGamePage implements OnInit {
 
   initTask() {
     this.vibration.vibrate([100, 100, 100]);
-    this.nativeAudio.play('sound');
+    // this.nativeAudio.play('sound');
     console.log("Current task: ", this.task);
     this._initMapFeatures();
     this.trackerService.addEvent({

@@ -2,9 +2,7 @@
   "name": "origami",
   "integrations": {
     "cordova": {},
-    "capacitor": {
-      "enabled": false
-    }
+    "capacitor": {}
   },
   "type": "angular"
 }
