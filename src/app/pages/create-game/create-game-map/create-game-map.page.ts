@@ -24,7 +24,7 @@ export class CreateGameMapPage implements OnInit {
   waypoints: any[]
   addMarker: boolean
 
-  constructor(private geolocation: Geolocation, private gameFactory: GameFactoryService, public modalController: ModalController) {
+  constructor(private gameFactory: GameFactoryService, public modalController: ModalController) {
     this.waypoints = []
   }
 

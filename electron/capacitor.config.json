@@ -3,5 +3,8 @@
   "appName": "OriGami",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
-  "webDir": "www"
+  "webDir": "www",
+  "ios": {
+    "hideLogs": true
+  }
 }

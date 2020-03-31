@@ -7,7 +7,7 @@ import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
 // import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
-import { Plugins, HapticsImpactStyle, GeolocationPosition } from '@capacitor/core';
+import { Plugins, GeolocationPosition, Capacitor } from '@capacitor/core';
 
 import {
   DeviceOrientation,
@@ -255,7 +255,8 @@ export class PlayingGamePage implements OnInit {
       maxZoom: 18
     });
 
-    this.geolocationService.geolocationSubscription.subscribe(position => {
+    Plugins.Geolocation.watchPosition({ enableHighAccuracy: true, requireAltitude: true }, (position, error) => {
+      // this.geolocationService.geolocationSubscription.subscribe(position => {
       console.log('pos', position)
       this.trackerService.addWaypoint({
         position: {
@@ -435,13 +436,13 @@ export class PlayingGamePage implements OnInit {
     })
 
     // rotation
-    // this.deviceOrientationSubscription = this.deviceOrientation
-    //   .watchHeading()
-    //   .subscribe((data: DeviceOrientationCompassHeading) => {
-    //     this.compassHeading = data.magneticHeading;
-    //     this.targetHeading = 360 - (this.compassHeading - this.heading);
-    //     this.indicatedDirection = this.compassHeading - this.directionBearing;
-    //   });
+    this.deviceOrientationSubscription = this.deviceOrientation
+      .watchHeading()
+      .subscribe((data: DeviceOrientationCompassHeading) => {
+        this.compassHeading = data.magneticHeading;
+        this.targetHeading = 360 - (this.compassHeading - this.heading);
+        this.indicatedDirection = this.compassHeading - this.directionBearing;
+      });
 
 
     this.insomnia.keepAwake().then(
@@ -502,7 +503,9 @@ export class PlayingGamePage implements OnInit {
 
   initTask() {
     // this.vibration.vibrate([100, 100, 100]);
-    Plugins.Haptics.vibrate();
+    if (Capacitor.isNative) {
+      Plugins.Haptics.vibrate();
+    }
     // this.nativeAudio.play('sound');
     console.log("Current task: ", this.task);
     this._initMapFeatures();
@@ -959,7 +962,7 @@ export class PlayingGamePage implements OnInit {
   navigateHome() {
     this.geolocationService.clear()
     // navigator.geolocation.clearWatch(this.positionWatch);
-    // this.deviceOrientationSubscription.unsubscribe();
+    this.deviceOrientationSubscription.unsubscribe();
 
     this.rotationControl.remove();
     this.viewDirectionControl.remove()

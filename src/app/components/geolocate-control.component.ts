@@ -1,5 +1,7 @@
 import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
+import { Plugins, GeolocationPosition } from '@capacitor/core';
+
 
 export enum GeolocateType {
     None,
@@ -19,17 +21,17 @@ export class GeolocateControl {
     constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
 
-        this.geolocationService.geolocationSubscription.subscribe(
-            position => {
-                console.log(position)
-                if (this.map && this.map.getLayer('geolocate')) {
-                    this.map.getSource('geolocate').setData({
-                        type: "Point",
-                        coordinates: [position.coords.longitude, position.coords.latitude]
-                    });
-                }
-            }, err => console.error(err)
-        );
+        // Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
+        this.geolocationService.geolocationSubscription.subscribe(position => {
+            console.log("geolocate", position)
+            if (this.map && this.map.getLayer('geolocate')) {
+                this.map.getSource('geolocate').setData({
+                    type: "Point",
+                    coordinates: [position.coords.longitude, position.coords.latitude]
+                });
+            }
+            // }, err => console.error(err)
+        });
         this.map.loadImage(
             "/assets/icons/position.png",
             (error, image) => {

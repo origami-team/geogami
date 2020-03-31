@@ -23,6 +23,11 @@
   </feature>
 
 
+  <feature name="Insomnia">
+    <param name="ios-package" value="Insomnia"/>
+  </feature>
+
+
   <feature name="NativeAudio">
     <param name="ios-package" value="NativeAudio"/>
   </feature>

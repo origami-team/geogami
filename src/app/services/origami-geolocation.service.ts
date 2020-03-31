@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
+import { shareReplay } from "rxjs/operators";
+
 
 import { Plugins, GeolocationPosition } from '@capacitor/core';
 
@@ -12,24 +14,15 @@ export class OrigamiGeolocationService {
   private watchID: string;
 
   constructor() {
-    Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
-      console.log(position)
-      if (error) {
-        console.error(error)
-      }
-    })
-
     console.log("init geoloc service")
     this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
-      Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
-        console.log(position)
-        if (error) {
+      this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true, requireAltitude: true }, (position, error) => {
+        if (error != null) {
           observer.error(error)
         }
         observer.next(position);
-        observer.complete();
       })
-    });
+    }).pipe(shareReplay())
   }
 
   clear() {
