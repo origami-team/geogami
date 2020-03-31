@@ -8,9 +8,6 @@
     <ion-title><ion-icon name="information-circle-outline" color="warning"></ion-icon> Information</ion-title>
     
     <ion-buttons slot="end">
-      <ion-button color=dark>
-        <ion-icon name="help"></ion-icon>
-      </ion-button>
       <ion-button color=dark (click)="dismissModal(null)">
         <ion-icon name="save"></ion-icon>
       </ion-button>
@@ -19,6 +16,13 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <ion-card color="warning">
+    <ion-card-content>
+      <ion-icon name="help-circle"></ion-icon>
+      Mit <b>"Information"</b> kannst du dem Spieler Hinweise und Tipps geben.
+    </ion-card-content>
+  </ion-card>
 
   <h5>Informationstext</h5>
 

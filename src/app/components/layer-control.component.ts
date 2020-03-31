@@ -32,6 +32,9 @@ export class LayerControl {
 
     private compare: MapboxCompare;
 
+    private interval: NodeJS.Timeout;
+    private satMap: MapboxMap;
+
     private tilt = (e: DeviceOrientationEvent) => {
         if (e.beta <= 60 && e.beta >= 0) {
             requestAnimationFrame(() => {
@@ -101,6 +104,7 @@ export class LayerControl {
             this.compare.remove()
             this.compare = null;
         }
+        clearInterval(this.interval)
     }
 
     update = async () => {
@@ -123,14 +127,60 @@ export class LayerControl {
                 // TODO: implement
                 break;
             case LayerType.Swipe:
-                const satMap = new MapboxMap({
+                this.satMap = new MapboxMap({
                     container: this.swipeMapContainer.nativeElement,
                     style: "mapbox://styles/mapbox/satellite-v9",
                     center: [8, 51.8],
                     zoom: 2
                 });
 
-                this.compare = new MapboxCompare(this.map, satMap, this.mapWrapper.nativeElement);
+                this.satMap.loadImage(
+                    "/assets/icons/position.png",
+                    (error, image) => {
+                        if (error) throw error;
+
+                        this.satMap.addImage("geolocate", image);
+                    });
+
+                this.satMap.loadImage(
+                    "/assets/icons/directionv2.png",
+                    (error, image) => {
+                        if (error) throw error;
+
+                        this.satMap.addImage("view-direction", image);
+                    });
+
+                this.satMap.loadImage(
+                    "/assets/icons/directionv2-richtung.png",
+                    (error, image) => {
+                        if (error) throw error;
+
+                        this.satMap.addImage("view-direction-task", image);
+                    })
+
+                this.satMap.loadImage(
+                    "/assets/icons/marker-editor.png",
+                    (error, image) => {
+                        if (error) throw error;
+
+                        this.satMap.addImage("marker-editor", image);
+                    })
+
+                this.interval = setInterval(() => this.syncMaps(), 500)
+
+                this.satMap.on('click', (e) => {
+                    const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+                    if (this.map.getSource('marker-point')) {
+                        this.map.getSource('marker-point').setData(pointFeature)
+                    } else {
+                        this.map.addSource('marker-point', {
+                            'type': 'geojson',
+                            'data': pointFeature
+                        });
+                    }
+                })
+
+                this.compare = new MapboxCompare(this.map, this.satMap, this.mapWrapper.nativeElement);
                 break;
             case LayerType.ThreeDimension:
                 this._add3DBuildingsLayer()
@@ -230,4 +280,48 @@ export class LayerControl {
         if (this.deviceOrientationSubscription != undefined)
             this.deviceOrientationSubscription.unsubscribe();
     }
+
+    private syncMaps(): void {
+        const defaultMapSources = this.map.getStyle().sources
+        const { mapbox, satellite, ...sources } = defaultMapSources
+        delete sources['raster-tiles']
+
+        const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building')
+
+        Object.entries(sources).forEach(s => {
+            if (this.satMap.getSource(s[0])) {
+                this.satMap.getSource(s[0]).setData(s[1]['data'])
+            } else {
+                this.satMap.addSource(s[0], s[1])
+            }
+        })
+
+        layers.forEach(l => {
+            if (this.satMap.getLayer(l.id)) {
+                if (l.id == 'viewDirection' || l.id == 'viewDirectionTask' || l.id == 'viewDirectionClick') {
+                    const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate')
+                    this.satMap.setLayoutProperty(l.id, 'icon-rotate', bearing)
+                }
+            } else {
+                this.satMap.addLayer(l)
+            }
+        })
+    }
+
+    public passMarkers(markers, callback: Function) {
+        const { waypointMarker } = markers
+        console.log(markers)
+        waypointMarker.addTo(this.satMap)
+
+    }
+
+    private _toGeoJSONPoint = (lng, lat): GeoJSON.Feature<GeoJSON.Point> =>
+        JSON.parse(`
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [${lng}, ${lat}]
+    }
+  }`);
 }

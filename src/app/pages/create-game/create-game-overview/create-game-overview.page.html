@@ -8,27 +8,33 @@
 </ion-header>
 
 <ion-content>
-  <form [className]="showUpload ? 'blur' : ''" (ngSubmit)="uploadGame()" *ngIf="model">
-    <ion-list lines="full" class="ion-no-margin ion-no-padding">
-      <ion-item>
-        <ion-label position="stacked">Name des Spiels: <ion-text color="danger">*</ion-text>
-        </ion-label>
-        <ion-input required type="text" [(ngModel)]="model.name" name="name"></ion-input>
-      </ion-item>
+  <ion-card color="light">
+    <ion-card-content>
+      Gib deinem Spiel einen aussagekräftigen Namen
+        <form [className]="showUpload ? 'blur' : ''" (ngSubmit)="uploadGame()" *ngIf="model">
+          <ion-list lines="full" class="ion-no-margin ion-no-padding">
+            <ion-item color="light">
+              <ion-label position="stacked">Spiel-Name:<ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input color="primary" required type="text" [(ngModel)]="model.name" name="name"></ion-input>
+            </ion-item>
 
-      <!-- <ion-item>
-        <ion-label>Tracking <ion-icon name="information-circle" (click)='showTrackingInfo($event, "CHANGE ME")'>
-          </ion-icon>
-        </ion-label>
-        <ion-toggle checked [(ngModel)]="model.tracking" name="tracking"></ion-toggle>
-      </ion-item> -->
-    </ion-list>
+            <!-- <ion-item>
+              <ion-label>Tracking <ion-icon name="information-circle" (click)='showTrackingInfo($event, "CHANGE ME")'>
+                </ion-icon>
+              </ion-label>
+              <ion-toggle checked [(ngModel)]="model.tracking" name="tracking"></ion-toggle>
+            </ion-item> -->
+          </ion-list>
 
-    <div class="ion-padding">
-      <ion-button expand="block" type="submit" class="ion-no-margin">Spiel speichern
-      </ion-button>
-    </div>
-  </form>
+          <div class="ion-padding">
+            <ion-button expand="block" type="submit" class="ion-no-margin">Spiel speichern
+            </ion-button>
+          </div>
+        </form>
+
+    </ion-card-content>
+  </ion-card>
 
   <div class="overlay success" *ngIf="showUpload">
     <h3 *ngIf="!showSuccess">Übertrage Daten...</h3>
