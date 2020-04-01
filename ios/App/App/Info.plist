@@ -17,12 +17,12 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.getcapacitor.capacitor</string>
+			<string>de.reedu.origaminext</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>capacitor</string>

@@ -1119,13 +1119,6 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/native-audio@^5.21.6":
-  version "5.22.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/native-audio/-/native-audio-5.22.0.tgz#34af044671c63c8a29c25aa36abe89bb6fd6335a"
-  integrity sha512-E1CmXTouULy+zDfkfzjYB+NDwkjqrOxV8qac5J7QOnPtKVO3bnI8wDrTFSaD74MLzcDGYg5ePxivtTG5snAU8A==
-  dependencies:
-    "@types/cordova" latest
-
 "@ionic-native/splash-screen@^5.0.0":
   version "5.22.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.22.0.tgz#2c5bb7b94ba027194779f6ea369cb034b597f396"
@@ -3324,11 +3317,6 @@ cordova-plugin-ionic-webview@^4.1.1:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-4.1.3.tgz#7f3963208708951fedd975c0808a5d27382812a7"
   integrity sha512-hlrUF0kLjjEkZmpYlLJO0NnXmVjMmQ3MOZVXm1ytDihLPKHklYCOpCvjA5Wz3hJrPD1shFEsqi/SPnp873AsdQ==
-
-cordova-plugin-nativeaudio@^3.0.9:
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-nativeaudio/-/cordova-plugin-nativeaudio-3.0.9.tgz#16cebfdaee24beb23c05f49713cb8773bc78536c"
-  integrity sha1-Fs6/2u4kvrI8BfSXE8uHc7x4U2w=
 
 cordova-plugin-splashscreen@^5.0.2:
   version "5.0.3"

@@ -7,8 +7,6 @@ import { IonicModule } from "@ionic/angular";
 
 import { PlayingGamePage } from "./playing-game.page";
 import { LottieAnimationViewModule } from "ng-lottie";
-import { NativeAudio } from '@ionic-native/native-audio/ngx';
-
 import { NgShufflePipeModule } from "angular-pipes";
 
 import { File } from '@ionic-native/file/ngx';
@@ -34,7 +32,7 @@ const routes: Routes = [
   ],
   declarations: [PlayingGamePage, KeywordPipe],
   providers: [
-    File, FileTransfer, WebView, NativeAudio
+    File, FileTransfer, WebView
   ]
 })
 export class PlayingGamePageModule { }

@@ -28,11 +28,6 @@
   </feature>
 
 
-  <feature name="NativeAudio">
-    <param name="ios-package" value="NativeAudio"/>
-  </feature>
-
-
   <feature name="Vibration">
     <param name="ios-package" value="CDVVibration"/>
   </feature>

@@ -16,7 +16,7 @@ export enum ViewDirectionType {
 export class ViewDirectionControl {
     private deviceOrientationSubscription: Subscription;
     private deviceOrientation: DeviceOrientation
-    private positionWatch: number;
+    private positionSubscription: Subscription;
     private viewDirectionType: ViewDirectionType = ViewDirectionType.None
 
     private map: MapboxMap;
@@ -28,7 +28,7 @@ export class ViewDirectionControl {
 
         this.deviceOrientation = deviceOrientation;
 
-        this.geolocationService.geolocationSubscription.subscribe(
+        this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
             position => {
                 if (this.map != undefined && this.isInitalized) {
                     this.map.getSource('viewDirection').setData({
@@ -125,6 +125,7 @@ export class ViewDirectionControl {
 
     public remove(): void {
         this.reset();
+        this.positionSubscription.unsubscribe();
         if (this.deviceOrientationSubscription != undefined) {
             this.deviceOrientationSubscription.unsubscribe();
         }

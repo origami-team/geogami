@@ -5,8 +5,6 @@ import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
-import { NativeAudio } from '@ionic-native/native-audio/ngx';
-// import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
 import { Plugins, GeolocationPosition, Capacitor } from '@capacitor/core';
 
 import {
@@ -22,7 +20,6 @@ import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
 import { Subscription } from "rxjs";
 import { Insomnia } from "@ionic-native/insomnia/ngx";
-// import { Vibration } from "@ionic-native/vibration/ngx";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { RotationControl, RotationType } from './../../../components/rotation-control.component'
@@ -74,7 +71,6 @@ export class PlayingGamePage implements OnInit {
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
 
   // map features
-  panCenter: boolean = false;
   directionArrow: boolean = false;
   swipe: boolean = false;
 
@@ -101,6 +97,7 @@ export class PlayingGamePage implements OnInit {
     trackUserLocation: true,
     showUserLocation: true
   }); */
+  positionSubscription: Subscription;
   lastKnownPosition: GeolocationPosition;
 
   // treshold to trigger location arrive
@@ -155,6 +152,8 @@ export class PlayingGamePage implements OnInit {
 
   viewDirectionTaskGeolocateSubscription: number;
 
+  private audioPlayer: HTMLAudioElement = new Audio();
+
 
 
   constructor(
@@ -169,12 +168,10 @@ export class PlayingGamePage implements OnInit {
     private trackerService: TrackerService,
     private device: Device,
     private insomnia: Insomnia,
-    // private vibration: Vibration,
     private camera: Camera,
     public alertController: AlertController,
     public platform: Platform,
     public helperService: HelperService,
-    private nativeAudio: NativeAudio,
     private transfer: FileTransfer,
     private file: File,
     private webview: WebView,
@@ -187,9 +184,7 @@ export class PlayingGamePage implements OnInit {
       autoplay: true,
       loop: true
     };
-    // this.nativeAudio.preloadSimple('sound', 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3')
-    //   .then(() => console.log("loaded sound"),
-    //     (e) => console.log("sound load error ", e));
+    this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
@@ -255,9 +250,7 @@ export class PlayingGamePage implements OnInit {
       maxZoom: 18
     });
 
-    Plugins.Geolocation.watchPosition({ enableHighAccuracy: true, requireAltitude: true }, (position, error) => {
-      // this.geolocationService.geolocationSubscription.subscribe(position => {
-      console.log('pos', position)
+    this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
       this.trackerService.addWaypoint({
         position: {
           coordinates: {
@@ -281,7 +274,7 @@ export class PlayingGamePage implements OnInit {
           pitch: this.map.getPitch()
         }
       });
-      // TODO: undo
+
       this.lastKnownPosition = position;
       if (this.task && !this.showSuccess) {
         if (this.task.type.includes("nav")) {
@@ -304,10 +297,6 @@ export class PlayingGamePage implements OnInit {
             this.heading = bearing;
           }
         }
-      }
-
-      if (this.panCenter) {
-        this.map.setCenter(position.coords);
       }
 
       if (this.task && this.task.type == "theme-direction" &&
@@ -522,7 +511,7 @@ export class PlayingGamePage implements OnInit {
     if (Capacitor.isNative) {
       Plugins.Haptics.vibrate();
     }
-    // this.nativeAudio.play('sound');
+    this.audioPlayer.play()
     console.log("Current task: ", this.task);
     this._initMapFeatures();
     this.trackerService.addEvent({
@@ -984,6 +973,7 @@ export class PlayingGamePage implements OnInit {
   }
 
   navigateHome() {
+    this.positionSubscription.unsubscribe();
     this.geolocationService.clear()
     // navigator.geolocation.clearWatch(this.positionWatch);
     this.deviceOrientationSubscription.unsubscribe();
@@ -1076,13 +1066,10 @@ export class PlayingGamePage implements OnInit {
               }
               break;
             case "pan":
-              this.panCenter = false; // Reset value
               if (mapFeatures[key] == "true") {
                 this.panControl.setType(PanType.True)
-                /* this.map.dragPan.enable(); */
               } else if (mapFeatures[key] == "center") {
                 this.panControl.setType(PanType.Center)
-                /* this.panCenter = true; */
               } else if (mapFeatures[key] == "static") {
                 this.panControl.setType(PanType.Static)
                 /* this.map.dragPan.disable();
