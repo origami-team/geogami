@@ -5,7 +5,7 @@ import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
-import { Plugins, GeolocationPosition, Capacitor } from '@capacitor/core';
+import { Plugins, GeolocationPosition, Capacitor, CameraResultType } from '@capacitor/core';
 
 import {
   DeviceOrientation,
@@ -20,7 +20,6 @@ import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
 import { Subscription } from "rxjs";
 import { Insomnia } from "@ionic-native/insomnia/ngx";
-import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { RotationControl, RotationType } from './../../../components/rotation-control.component'
 import { ViewDirectionControl, ViewDirectionType } from './../../../components/view-direction-control.component';
@@ -128,19 +127,6 @@ export class PlayingGamePage implements OnInit {
   positionWatch: any;
   deviceOrientationSubscription: Subscription;
 
-  baseOptions: CameraOptions = {
-    quality: environment.photoQuality,
-    destinationType: this.camera.DestinationType.FILE_URI,
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE,
-    correctOrientation: true
-  };
-
-  cameraOptions: CameraOptions = {
-    ...this.baseOptions,
-    sourceType: this.camera.PictureSourceType.CAMERA
-  };
-
   photo: SafeResourceUrl;
   photoURL: string;
 
@@ -157,6 +143,8 @@ export class PlayingGamePage implements OnInit {
 
   private audioPlayer: HTMLAudioElement = new Audio();
 
+  uploading: boolean = false;
+
 
 
   constructor(
@@ -171,7 +159,6 @@ export class PlayingGamePage implements OnInit {
     private trackerService: TrackerService,
     private device: Device,
     private insomnia: Insomnia,
-    private camera: Camera,
     public alertController: AlertController,
     public platform: Platform,
     public helperService: HelperService,
@@ -1020,33 +1007,31 @@ export class PlayingGamePage implements OnInit {
     this.panelMinimized = !this.panelMinimized;
   }
 
-  capturePhoto() {
+  async capturePhoto() {
     this.photo = '';
     this.photoURL = '';
-    this.camera.getPicture(this.cameraOptions).then(
-      imageData => {
-        const filePath = this.webview.convertFileSrc(imageData)
-        this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
 
-        const fileTransfer: FileTransferObject = this.transfer.create();
-        fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
-          console.log(JSON.parse(res.response))
-          const filename = JSON.parse(res.response).filename
-          this.photoURL = `${environment.apiURL}/file/${filename}`
-        })
-          .catch(err => console.log(err))
-      },
-      async err => {
-        const toast = await this.toastController.create({
-          header: 'Error',
-          message: err,
-          color: "danger",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-      }
-    );
+    const image = await Plugins.Camera.getPhoto({
+      quality: 50,
+      allowEditing: true,
+      resultType: CameraResultType.Uri
+    });
+
+    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+
+    this.uploading = true;
+
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
+      console.log(JSON.parse(res.response))
+      const filename = JSON.parse(res.response).filename
+      this.photoURL = `${environment.apiURL}/file/${filename}`
+      this.uploading = false;
+    })
+      .catch(err => {
+        console.log(err)
+        this.uploading = false;
+      })
   }
 
   toggleRotate() {

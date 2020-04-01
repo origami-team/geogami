@@ -25,13 +25,7 @@ import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/c
 import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
 import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
 
-import { CameraComponent } from "./form-elements/camera/camera.component";
-
 import { PhotoUploadComponent } from "./form-elements/photo-upload/photo-upload.component";
-
-// import { Geolocation } from "@ionic-native/geolocation/ngx";
-
-import { Camera } from "@ionic-native/camera/ngx";
 
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
@@ -66,7 +60,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     // InfoComponent,
     // TextInputComponent,
     // MapComponent,
-    CameraComponent
     // form components ⬆️
   ],
   entryComponents: [
@@ -100,12 +93,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [
-    // StatusBar,
-    // SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    // Geolocation,
-    // Geofence,
-    Camera,
     DeviceOrientation,
     Device,
     Insomnia,
