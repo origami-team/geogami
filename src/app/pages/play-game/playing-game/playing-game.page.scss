@@ -119,8 +119,12 @@
     text-align: center;
     padding: 1rem;
     margin: 0;
-    background-color: lightcoral;
-    color: white;
+    // background-color: lightcoral;
+    // color: white;
+
+    .feedback-icon {
+      font-size: 65px;
+    }
   }
 
   .selected {

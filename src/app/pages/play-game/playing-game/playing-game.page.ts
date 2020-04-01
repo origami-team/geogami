@@ -115,7 +115,10 @@ export class PlayingGamePage implements OnInit {
   public lottieConfig: Object;
 
   showFeedback: boolean = false;
-  feedbackText: string;
+  feedback: any = {
+    text: '',
+    icon: ''
+  }
   feedbackRetry: boolean = false;
 
   Math: Math = Math;
@@ -682,20 +685,40 @@ export class PlayingGamePage implements OnInit {
 
     switch (type) {
       case FeedbackType.Correct:
-        this.feedbackText = "Du hast die Aufgabe richtig gelöst!"
+        this.feedback.icon = "😊"
+        this.feedback.text = "Du hast die Aufgabe richtig gelöst!"
         break;
       case FeedbackType.Wrong:
-        this.feedbackText = "Das war leider nicht richtig!"
+        this.feedback.icon = "😕"
+        this.feedback.text = "Da ist etwas schief gegangen! Weiter geht es mit der nächsten Aufgabe!"
         break;
       case FeedbackType.TryAgain:
-        this.feedbackText = "Probiere es noch einmal!"
+        this.feedback.icon = "😕"
+        this.feedback.text = "Probiere es noch einmal!"
         this.feedbackRetry = true;
         break;
       case FeedbackType.Saved:
-        this.feedbackText = "Deine Antwort wurde gespeichert!"
+        this.feedback.icon = ""
+        this.feedback.text = "Deine Antwort wurde gespeichert!"
         break;
     }
     this.showFeedback = true
+
+    if (this.task.settings.multipleTries) {
+      setTimeout(() => {
+        this.dismissFeedback()
+        if (type !== FeedbackType.TryAgain) {
+          this.nextTask()
+        }
+      }, 2000)
+    }
+
+    if (!this.task.settings.feedback) {
+      setTimeout(() => {
+        this.dismissFeedback()
+        this.nextTask()
+      }, 2000)
+    }
   }
 
   dismissFeedback() {
@@ -776,7 +799,7 @@ export class PlayingGamePage implements OnInit {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
       console.log(clickPosition)
       const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-
+      console.log(distance)
       this.initFeedback(distance < this.triggerTreshold)
 
     } else if (
