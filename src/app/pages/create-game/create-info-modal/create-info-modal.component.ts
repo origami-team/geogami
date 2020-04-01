@@ -1,15 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from "@ionic/angular";
-
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-
-
+import { Plugins, CameraResultType } from '@capacitor/core';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { environment } from 'src/environments/environment';
-
-import { File } from '@ionic-native/file/ngx';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
@@ -37,63 +31,39 @@ export class CreateInfoModalComponent implements OnInit {
   photo: SafeResourceUrl
   photoURL: string;
 
-  baseOptions: CameraOptions = {
-    quality: environment.photoQuality,
-    destinationType: this.camera.DestinationType.FILE_URI,
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE,
-    correctOrientation: true
-  }
-
-  cameraOptions: CameraOptions = {
-    ...this.baseOptions,
-    sourceType: this.camera.PictureSourceType.CAMERA
-  }
-
-  libraryOptions: CameraOptions = {
-    ...this.baseOptions,
-    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
-  }
+  uploading: boolean = false;
 
   constructor(
-    public modalController: ModalController, private camera: Camera,
-    private transfer: FileTransfer, private file: File, private webview: WebView, private sanitizer: DomSanitizer
+    public modalController: ModalController,
+    private transfer: FileTransfer,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() { }
 
-  capturePhoto() {
-    this.camera.getPicture(this.cameraOptions).then((imageData) => {
-      const filePath = this.webview.convertFileSrc(imageData)
-      this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+  async capturePhoto() {
 
-      const fileTransfer: FileTransferObject = this.transfer.create();
-      fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
-        console.log(JSON.parse(res.response))
-        const filename = JSON.parse(res.response).filename
-        this.photoURL = `${environment.apiURL}/file/${filename}`
-      })
-        .catch(err => console.log(err))
-    }, (err) => {
-      // Handle error
+    const image = await Plugins.Camera.getPhoto({
+      quality: 50,
+      allowEditing: true,
+      resultType: CameraResultType.Uri
     });
-  }
 
-  photoFromLibrary() {
-    this.camera.getPicture(this.libraryOptions).then((imageData) => {
-      const filePath = this.webview.convertFileSrc(imageData)
-      this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
 
-      const fileTransfer: FileTransferObject = this.transfer.create();
-      fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
-        console.log(JSON.parse(res.response))
-        const filename = JSON.parse(res.response).filename
-        this.photoURL = `${environment.apiURL}/file/${filename}`
+    this.uploading = true;
+
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
+      console.log(JSON.parse(res.response))
+      const filename = JSON.parse(res.response).filename
+      this.photoURL = `${environment.apiURL}/file/${filename}`
+      this.uploading = false;
+    })
+      .catch(err => {
+        console.log(err)
+        this.uploading = false;
       })
-      .catch(err => console.log(err))
-    }, (err) => {
-      // Handle error
-    });
   }
 
   async presentMapFeaturesModal() {
@@ -108,11 +78,13 @@ export class CreateInfoModalComponent implements OnInit {
   }
 
   dismissModal(dismissType: string = 'null') {
+    if (this.uploading) {
+      return;
+    }
     if (dismissType == "close") {
       this.modalController.dismiss();
       return;
     }
-
 
     this.modalController.dismiss({
       dismissed: true,

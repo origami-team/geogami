@@ -216,8 +216,8 @@
             <ion-thumbnail slot="start" *ngIf="photo">
               <img [src]="photo" />
             </ion-thumbnail>
-            <ion-button color=secondary (click)="capturePhoto()">
-              <ion-icon name="camera"></ion-icon>
+            <ion-button color="secondary" size="default" (click)=capturePhoto()>
+              <ion-icon slot="icon-only" name="camera"></ion-icon>
             </ion-button>
           </div>
 
