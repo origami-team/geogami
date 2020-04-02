@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
@@ -33,7 +33,6 @@ import { TrackControl, TrackType } from 'src/app/components/track-control.compon
 import { GeolocateControl, GeolocateType } from 'src/app/components/geolocate-control.component';
 import { PanControl, PanType } from 'src/app/components/pan-control.component';
 
-import { File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -56,7 +55,7 @@ enum FeedbackType {
   templateUrl: "./playing-game.page.html",
   styleUrls: ["./playing-game.page.scss"]
 })
-export class PlayingGamePage implements OnInit {
+export class PlayingGamePage implements OnInit, OnDestroy {
   @ViewChild("mapWrapper", { static: false }) mapWrapper;
   @ViewChild("map", { static: false }) mapContainer;
   @ViewChild("swipeMap", { static: false }) swipeMapContainer;
@@ -163,7 +162,6 @@ export class PlayingGamePage implements OnInit {
     public platform: Platform,
     public helperService: HelperService,
     private transfer: FileTransfer,
-    private file: File,
     private webview: WebView,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService
@@ -239,6 +237,8 @@ export class PlayingGamePage implements OnInit {
       zoom: 2,
       maxZoom: 18
     });
+
+    this.geolocationService.init();
 
     this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
       this.trackerService.addWaypoint({
@@ -497,7 +497,6 @@ export class PlayingGamePage implements OnInit {
   }
 
   initTask() {
-    // this.vibration.vibrate([100, 100, 100]);
     if (Capacitor.isNative) {
       Plugins.Haptics.vibrate();
     }
@@ -727,8 +726,9 @@ export class PlayingGamePage implements OnInit {
           this.uploadDone = true;
         }
       });
-      // this.vibration.vibrate([300, 300, 300]);
-      Plugins.Haptics.vibrate();
+      if (Capacitor.isNative) {
+        Plugins.Haptics.vibrate();
+      }
       this.insomnia.allowSleepAgain().then(
         () => console.log("insomnia allow sleep again success"),
         () => console.log("insomnia allow sleep again error")
@@ -982,6 +982,10 @@ export class PlayingGamePage implements OnInit {
     return this.targetDistance < this.triggerTreshold;
   }
 
+  ngOnDestroy() {
+    console.log("destroying playing game compoonent")
+  }
+
   navigateHome() {
     this.positionSubscription.unsubscribe();
     this.geolocationService.clear()
@@ -997,9 +1001,9 @@ export class PlayingGamePage implements OnInit {
     this.geolocateControl.remove()
     this.panControl.remove();
 
+    // this.map.remove();
     this.navCtrl.navigateRoot("/");
     this.streetSectionControl.remove();
-    this.map.remove();
 
   }
 

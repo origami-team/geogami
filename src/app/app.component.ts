@@ -22,7 +22,12 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      
       Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light })
+      if (this.platform.is("android")) {
+        Plugins.StatusBar.setBackgroundColor({ color: 'white' });
+      }
+      
       // if (this.platform.is("android")) {
       //   Plugins.StatusBar.setStyle({style: StatusBarStyle.Dark})
       //   this.statusBar.styleDefault();

@@ -38,7 +38,6 @@ import { DynamicFormModule } from "./dynamic-form/dynamic-form.module";
 import { Device } from "@ionic-native/device/ngx";
 
 import { Insomnia } from "@ionic-native/insomnia/ngx";
-import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicStorageModule } from '@ionic/storage';
 
 
@@ -97,7 +96,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     DeviceOrientation,
     Device,
     Insomnia,
-    Vibration
   ],
   bootstrap: [AppComponent]
 })

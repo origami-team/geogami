@@ -30,6 +30,9 @@ export class InfoPage implements OnInit {
     // change status bar
     if (this.dark) {
       Plugins.StatusBar.setStyle({ style: StatusBarStyle.Dark })
+      if (this.platform.is("android")) {
+        Plugins.StatusBar.setBackgroundColor({ color: 'black' });
+      }
     } else {
       Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light })
       if (this.platform.is("android")) {

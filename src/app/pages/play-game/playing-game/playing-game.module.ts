@@ -9,7 +9,6 @@ import { PlayingGamePage } from "./playing-game.page";
 import { LottieAnimationViewModule } from "ng-lottie";
 import { NgShufflePipeModule } from "angular-pipes";
 
-import { File } from '@ionic-native/file/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { KeywordPipe } from 'src/app/pipes/keyword.pipe';
@@ -32,7 +31,7 @@ const routes: Routes = [
   ],
   declarations: [PlayingGamePage, KeywordPipe],
   providers: [
-    File, FileTransfer, WebView
+    FileTransfer, WebView
   ]
 })
 export class PlayingGamePageModule { }

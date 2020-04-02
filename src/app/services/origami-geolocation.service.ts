@@ -11,10 +11,13 @@ import { Plugins, GeolocationPosition } from '@capacitor/core';
 export class OrigamiGeolocationService {
 
   public geolocationSubscription: Observable<GeolocationPosition>;
+
   private watchID: string;
 
-  constructor() {
-    console.log("init geoloc service")
+  constructor() { }
+
+  init() {
+    console.log("initializing geolocation service")
     this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
       this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true, requireAltitude: true }, (position, error) => {
         if (error != null) {
@@ -22,7 +25,7 @@ export class OrigamiGeolocationService {
         }
         observer.next(position);
       })
-    }).pipe(shareReplay())
+    }).pipe(shareReplay());
   }
 
   clear() {
