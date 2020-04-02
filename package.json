@@ -46,6 +46,7 @@
     "cordova-browser": "6.0.0",
     "cordova-ios": "^5.1.0",
     "cordova-plugin-device-orientation": "^2.0.1",
+    "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-insomnia": "^4.3.0",
     "core-js": "^2.5.4",

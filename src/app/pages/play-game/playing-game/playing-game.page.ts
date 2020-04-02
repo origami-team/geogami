@@ -138,7 +138,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   panelMinimized: boolean = false;
 
-  viewDirectionTaskGeolocateSubscription: number;
+  viewDirectionTaskGeolocateSubscription: Subscription;
 
   private audioPlayer: HTMLAudioElement = new Audio();
 
@@ -345,7 +345,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.map.on("click", e => {
       console.log(e);
-      console.log("click");
       this.trackerService.addEvent({
         type: "ON_MAP_CLICKED",
         position: {
@@ -459,7 +458,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         task.settings['question-type'].settings.polygon.forEach(e => {
           e.geometry.coordinates.forEach(c => {
             c.forEach(coords => {
-              console.log(coords)
               bounds.extend(coords)
             })
           })
@@ -531,7 +529,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
       this.map.removeLayer('viewDirectionTask');
       this.map.removeSource('viewDirectionTask');
-      // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+      this.viewDirectionTaskGeolocateSubscription.unsubscribe();
     }
 
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionClick').length > 0) {
@@ -594,7 +592,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         "question-type"
       ].settings.direction;
 
-      this.viewDirectionTaskGeolocateSubscription = navigator.geolocation.watchPosition(position => {
+      this.viewDirectionTaskGeolocateSubscription = this.geolocationService.getSinglePositionWatch().subscribe(position => {
         if (this.map.getSource('viewDirectionTask')) {
           this.map.getSource('viewDirectionTask').setData({
             type: "Point",
@@ -921,7 +919,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     }
     else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
@@ -930,7 +928,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
@@ -939,7 +937,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        // navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     } else if (
       this.task.settings["answer-type"] &&

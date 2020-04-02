@@ -28,6 +28,21 @@ export class OrigamiGeolocationService {
     }).pipe(shareReplay());
   }
 
+  getSinglePositionWatch(): Observable<GeolocationPosition> {
+    return Observable.create((observer: Subscriber<GeolocationPosition>) => {
+      const watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true, requireAltitude: true }, (position, error) => {
+        if (error != null) {
+          observer.error(error)
+        }
+        observer.next(position);
+      })
+
+      return () => {
+        Plugins.Geolocation.clearWatch({ id: watchID })
+      }
+    }).pipe(shareReplay());
+  }
+
   clear() {
     Plugins.Geolocation.clearWatch({ id: this.watchID })
   }
