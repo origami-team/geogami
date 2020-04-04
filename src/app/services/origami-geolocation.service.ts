@@ -19,7 +19,7 @@ export class OrigamiGeolocationService {
   init() {
     console.log("initializing geolocation service")
     this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
-      this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true, requireAltitude: true }, (position, error) => {
+      this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
         if (error != null) {
           observer.error(error)
         }
@@ -29,8 +29,8 @@ export class OrigamiGeolocationService {
   }
 
   getSinglePositionWatch(): Observable<GeolocationPosition> {
-    return Observable.create((observer: Subscriber<GeolocationPosition>) => {
-      const watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true, requireAltitude: true }, (position, error) => {
+    return new Observable((observer: Subscriber<GeolocationPosition>) => {
+      const singleWatchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
         if (error != null) {
           observer.error(error)
         }
@@ -38,9 +38,10 @@ export class OrigamiGeolocationService {
       })
 
       return () => {
-        Plugins.Geolocation.clearWatch({ id: watchID })
+        Plugins.Geolocation.clearWatch({ id: singleWatchID })
       }
-    }).pipe(shareReplay());
+    });
+
   }
 
   clear() {

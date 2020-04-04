@@ -3,7 +3,8 @@ import {
   OnInit,
   ViewChild,
   OnChanges,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  AfterViewInit
 } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
@@ -17,7 +18,7 @@ import { environment } from "src/environments/environment";
   templateUrl: "./map-features-modal.page.html",
   styleUrls: ["./map-features-modal.page.scss"]
 })
-export class MapFeaturesModalPage implements OnInit {
+export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   @ViewChild("map", { static: false }) mapContainer;
 
   private draw: MapboxDraw;
@@ -103,6 +104,10 @@ export class MapFeaturesModalPage implements OnInit {
     });
     this.map.addControl(geolocate);
 
+    geolocate.on('error', err => {
+      console.error(err)
+    })
+
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
@@ -111,7 +116,6 @@ export class MapFeaturesModalPage implements OnInit {
         trash: true
       }
     });
-
     this.map.addControl(this.draw, "top-left");
 
     this.map.on('load', () => {
@@ -120,8 +124,8 @@ export class MapFeaturesModalPage implements OnInit {
     })
   }
 
-  ionViewDidEnter() {
-    this.map.resize();
+  ngAfterViewInit() {
+    this.map.resize()
   }
 
   dismissModal(dismissType: string = "null") {

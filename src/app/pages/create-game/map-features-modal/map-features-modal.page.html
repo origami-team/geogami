@@ -90,8 +90,8 @@
       <ion-label>Hervorhebung von Landmarken</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
-    <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'" lines="none">
-      <div #map class="map"></div>
-    </ion-item>
+    <!-- <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'" lines="none"> -->
+      <div #map class="map" [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"></div>
+    <!-- </ion-item> -->
   </ion-list>
 </ion-content>

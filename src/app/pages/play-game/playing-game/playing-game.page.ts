@@ -18,7 +18,7 @@ import {
 } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
-import { Subscription } from "rxjs";
+import { Subscription, Observable, Subscriber } from "rxjs";
 import { Insomnia } from "@ionic-native/insomnia/ngx";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { RotationControl, RotationType } from './../../../components/rotation-control.component'
@@ -34,7 +34,7 @@ import { GeolocateControl, GeolocateType } from 'src/app/components/geolocate-co
 import { PanControl, PanType } from 'src/app/components/pan-control.component';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { WebView } from '@ionic-native/ionic-webview/ngx';
+// import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { mappings } from './../../../pipes/keywords.js'
@@ -162,7 +162,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     public platform: Platform,
     public helperService: HelperService,
     private transfer: FileTransfer,
-    private webview: WebView,
+    // private webview: WebView,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService
   ) {
@@ -529,7 +529,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
       this.map.removeLayer('viewDirectionTask');
       this.map.removeSource('viewDirectionTask');
-      this.viewDirectionTaskGeolocateSubscription.unsubscribe();
+      // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
     }
 
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionClick').length > 0) {
@@ -592,23 +592,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         "question-type"
       ].settings.direction;
 
-      this.viewDirectionTaskGeolocateSubscription = this.geolocationService.getSinglePositionWatch().subscribe(position => {
-        if (this.map.getSource('viewDirectionTask')) {
-          this.map.getSource('viewDirectionTask').setData({
-            type: "Point",
-            coordinates: [
-              position.coords.longitude,
-              position.coords.latitude
-            ]
-          })
-        } else {
+      // this.viewDirectionTaskGeolocateSubscription = this.geolocationService.getSinglePositionWatch().subscribe(position => {
+      //   if (this.map.getSource('viewDirectionTask')) {
+      //     this.map.getSource('viewDirectionTask').setData({
+      //       type: "Point",
+      //       coordinates: [
+      //         position.coords.longitude,
+      //         position.coords.latitude
+      //       ]
+      //     })
+      //   } else {
           this.map.addSource("viewDirectionTask", {
             type: "geojson",
             data: {
               type: "Point",
               coordinates: [
-                position.coords.longitude,
-                position.coords.latitude
+                this.lastKnownPosition.coords.longitude,
+                this.lastKnownPosition.coords.latitude
+                // position.coords.longitude,
+                // position.coords.latitude
               ]
             }
           });
@@ -623,8 +625,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               "icon-rotate": this.directionBearing - this.map.getBearing()
             }
           });
-        }
-      })
+        // }
+      // })
     }
     if (this.task.type == "theme-direction") {
       console.log(this.task.settings["question-type"].settings.direction);
@@ -653,6 +655,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   initFeedback(correct: boolean) {
+    // feedback is already showing. 
+    if(this.showFeedback) {
+      return;
+    }
+
     let type: FeedbackType;
 
     if (this.task.settings.feedback) {
@@ -919,7 +926,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        this.viewDirectionTaskGeolocateSubscription.unsubscribe();
+        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     }
     else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
@@ -928,7 +935,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        this.viewDirectionTaskGeolocateSubscription.unsubscribe();
+        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
@@ -937,7 +944,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        this.viewDirectionTaskGeolocateSubscription.unsubscribe();
+        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     } else if (
       this.task.settings["answer-type"] &&

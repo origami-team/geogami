@@ -17,7 +17,7 @@ import { PhotoUploadComponent } from '../form-elements/photo-upload/photo-upload
 import { PhotoUploadMultipleChoiceComponent } from '../form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component';
 
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-import { WebView } from '@ionic-native/ionic-webview/ngx';
+// import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 @NgModule({
   imports: [
@@ -47,7 +47,8 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
     PhotoUploadMultipleChoiceComponent
   ],
   providers: [
-    FileTransfer, WebView
+    FileTransfer, 
+    // WebView
   ]
 })
 export class DynamicFormModule { }
