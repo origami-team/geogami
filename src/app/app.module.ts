@@ -39,6 +39,9 @@ import { Device } from "@ionic-native/device/ngx";
 
 import { Insomnia } from "@ionic-native/insomnia/ngx";
 import { IonicStorageModule } from '@ionic/storage';
+import { QuestionTypeComponent } from './pages/create-game/form-elements/question-types/question-type.component'
+import { AnswerTypeComponent } from './pages/create-game/form-elements/question-types/answer-type.component'
+import { MapComponent } from './pages/create-game/form-elements/map/map.component'
 
 
 // AoT requires an exported function for factories
@@ -58,8 +61,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     // form components ⬇️
     // InfoComponent,
     // TextInputComponent,
-    // MapComponent,
+    MapComponent,
     // form components ⬆️
+    QuestionTypeComponent,
+    AnswerTypeComponent
+  ],
+  exports: [
+    
   ],
   entryComponents: [
     PopoverComponent,

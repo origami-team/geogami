@@ -8,11 +8,11 @@ import {
 } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
-import navtasks from "../../../models/navigation-tasks";
-import themetasks from "./../../../models/theme-tasks";
+import navtasks from "../../../models/navtasks.js";
+import themetasks from "./../../../models/themetasks.js";
 
-// import { FieldConfig } from "./../../../dynamic-form/models/field-config";
-// import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
+import { FieldConfig } from "./../../../dynamic-form/models/field-config";
+import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
 import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
 
 @Component({
@@ -25,10 +25,10 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   @Input() type: string = "nav";
   @Input() task: any;
 
-  // @ViewChild(DynamicFormComponent, { static: false })
-  // form: DynamicFormComponent;
+  @ViewChild(DynamicFormComponent, { static: false })
+  form: DynamicFormComponent;
 
-  // config: FieldConfig[];
+  config: FieldConfig[];
 
   tasks: any[];
   selectedTask: any = this.task;
@@ -68,11 +68,9 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   onTaskSelected(newValue) {
     this.selectedTask = newValue;
     console.log(this.selectedTask);
-    // this.config = this.selectedTask.developer;
+    this.config = this.selectedTask.developer;
 
-    // console.log(this.config)
-
-
+    console.log(this.config)
 
     if (
       ["theme-loc", "theme-object", "theme-direction"].includes(
@@ -85,29 +83,29 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     }
   }
 
-  // rangeChange() {
-  //   this.step = this.accuracy <= 5 ? 1 : 5;
-  // }
-
-  // feedbackChange() {
-  //   if (!this.feedback) {
-  //     this.multipleTries = false
-  //   }
-  // }
-
-  ngAfterViewInit() {
-  //   let previousValid = this.form.valid;
-  //   this.form.changes.subscribe(() => {
-  //     if (this.form.valid !== previousValid) {
-  //       previousValid = this.form.valid;
-  //       this.form.setDisabled("submit", !previousValid);
-  //     }
-  //   });
+  rangeChange() {
+    this.step = this.accuracy <= 5 ? 1 : 5;
   }
 
-  // submit(value: { [name: string]: any }) {
-  //   console.log(value);
-  // }
+  feedbackChange() {
+    if (!this.feedback) {
+      this.multipleTries = false
+    }
+  }
+
+  ngAfterViewInit() {
+    let previousValid = this.form.valid;
+    this.form.changes.subscribe(() => {
+      if (this.form.valid !== previousValid) {
+        previousValid = this.form.valid;
+        this.form.setDisabled("submit", !previousValid);
+      }
+    });
+  }
+
+  submit(value: { [name: string]: any }) {
+    console.log(value);
+  }
 
   async presentMapFeaturesModal() {
     const modal = await this.modalController.create({
@@ -126,25 +124,25 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
       return;
     }
 
-    // console.log(this.form.value);
+    console.log(this.form.value);
 
-    // this.modalController.dismiss({
-    //   dismissed: true,
-    //   data: {
-    //     ...this.selectedTask,
-    //     settings: {
-    //       ...this.form.value,
-    //       ["answer-type"]: this.form.value["question-type"]
-    //         ? this.form.value["question-type"].settings["answer-type"]
-    //         : null,
-    //       confirmation: this.confirmation,
-    //       showMarker: this.showMarker,
-    //       mapFeatures: this.mapFeatures,
-    //       feedback: this.feedback,
-    //       multipleTries: this.multipleTries,
-    //       accuracy: this.accuracy
-    //     }
-    //   }
-    // });
+    this.modalController.dismiss({
+      dismissed: true,
+      data: {
+        ...this.selectedTask,
+        settings: {
+          ...this.form.value,
+          ["answer-type"]: this.form.value["question-type"]
+            ? this.form.value["question-type"].settings["answer-type"]
+            : null,
+          confirmation: this.confirmation,
+          showMarker: this.showMarker,
+          mapFeatures: this.mapFeatures,
+          feedback: this.feedback,
+          multipleTries: this.multipleTries,
+          accuracy: this.accuracy
+        }
+      }
+    });
   }
 }
