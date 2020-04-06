@@ -4,7 +4,8 @@
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www",
-  "ios": {
-    "hideLogs": true
+  "server": {
+    "iosScheme": "https",
+    "androidScheme": "https"
   }
 }
