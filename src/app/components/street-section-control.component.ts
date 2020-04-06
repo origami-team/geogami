@@ -2,6 +2,7 @@ import { Map as MapboxMap } from "mapbox-gl";
 import { OsmService } from './../services/osm.service'
 import osmtogeojson from "osmtogeojson";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
+import { Subscription } from 'rxjs';
 
 
 
@@ -15,7 +16,7 @@ export class StreetSectionControl {
   private map: MapboxMap;
   private streetSectionType: StreetSectionType;
   private osm: OsmService
-  private positionWatch: number;
+  private positionSubscription: Subscription;
   private primaryColor: string;
   private dangerColor: string;
 
@@ -36,13 +37,15 @@ export class StreetSectionControl {
   }
 
   private reset(): void {
-    window.navigator.geolocation.clearWatch(this.positionWatch);
+    if (this.positionSubscription) {
+      this.positionSubscription.unsubscribe();
+    }
   }
 
   private update(): void {
     switch (this.streetSectionType) {
       case StreetSectionType.Enabled:
-        this.geolocationService.geolocationSubscription.subscribe(
+        this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
           position => {
             if (this.map != undefined) {
               this.osm.getStreetCoordinates(
@@ -88,7 +91,6 @@ export class StreetSectionControl {
   }
 
   public remove(): void {
-    window.navigator.geolocation.clearWatch(this.positionWatch);
     if (this.map.getLayer('section'))
       this.map.removeLayer('section');
   }

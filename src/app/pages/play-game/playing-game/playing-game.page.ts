@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
-import { NativeAudio } from '@ionic-native/native-audio/ngx';
-import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
+import { Plugins, GeolocationPosition, Capacitor, CameraResultType } from '@capacitor/core';
+
 import {
   DeviceOrientation,
   DeviceOrientationCompassHeading
@@ -18,10 +18,8 @@ import {
 } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
-import { Subscription } from "rxjs";
+import { Subscription, Observable, Subscriber } from "rxjs";
 import { Insomnia } from "@ionic-native/insomnia/ngx";
-import { Vibration } from "@ionic-native/vibration/ngx";
-import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { RotationControl, RotationType } from './../../../components/rotation-control.component'
 import { ViewDirectionControl, ViewDirectionType } from './../../../components/view-direction-control.component';
@@ -35,9 +33,8 @@ import { TrackControl, TrackType } from 'src/app/components/track-control.compon
 import { GeolocateControl, GeolocateType } from 'src/app/components/geolocate-control.component';
 import { PanControl, PanType } from 'src/app/components/pan-control.component';
 
-import { File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { WebView } from '@ionic-native/ionic-webview/ngx';
+// import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { mappings } from './../../../pipes/keywords.js'
@@ -58,7 +55,7 @@ enum FeedbackType {
   templateUrl: "./playing-game.page.html",
   styleUrls: ["./playing-game.page.scss"]
 })
-export class PlayingGamePage implements OnInit {
+export class PlayingGamePage implements OnInit, OnDestroy {
   @ViewChild("mapWrapper", { static: false }) mapWrapper;
   @ViewChild("map", { static: false }) mapContainer;
   @ViewChild("swipeMap", { static: false }) swipeMapContainer;
@@ -72,7 +69,6 @@ export class PlayingGamePage implements OnInit {
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
 
   // map features
-  panCenter: boolean = false;
   directionArrow: boolean = false;
   swipe: boolean = false;
 
@@ -99,7 +95,8 @@ export class PlayingGamePage implements OnInit {
     trackUserLocation: true,
     showUserLocation: true
   }); */
-  lastKnownPosition: Geoposition;
+  positionSubscription: Subscription;
+  lastKnownPosition: GeolocationPosition;
 
   // treshold to trigger location arrive
   triggerTreshold: Number = 20;
@@ -116,7 +113,10 @@ export class PlayingGamePage implements OnInit {
   public lottieConfig: Object;
 
   showFeedback: boolean = false;
-  feedbackText: string;
+  feedback: any = {
+    text: '',
+    icon: ''
+  }
   feedbackRetry: boolean = false;
 
   Math: Math = Math;
@@ -125,19 +125,6 @@ export class PlayingGamePage implements OnInit {
 
   positionWatch: any;
   deviceOrientationSubscription: Subscription;
-
-  baseOptions: CameraOptions = {
-    quality: environment.photoQuality,
-    destinationType: this.camera.DestinationType.FILE_URI,
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE,
-    correctOrientation: true
-  };
-
-  cameraOptions: CameraOptions = {
-    ...this.baseOptions,
-    sourceType: this.camera.PictureSourceType.CAMERA
-  };
 
   photo: SafeResourceUrl;
   photoURL: string;
@@ -151,7 +138,11 @@ export class PlayingGamePage implements OnInit {
 
   panelMinimized: boolean = false;
 
-  viewDirectionTaskGeolocateSubscription: number;
+  viewDirectionTaskGeolocateSubscription: Subscription;
+
+  private audioPlayer: HTMLAudioElement = new Audio();
+
+  uploading: boolean = false;
 
 
 
@@ -167,15 +158,11 @@ export class PlayingGamePage implements OnInit {
     private trackerService: TrackerService,
     private device: Device,
     private insomnia: Insomnia,
-    private vibration: Vibration,
-    private camera: Camera,
     public alertController: AlertController,
     public platform: Platform,
     public helperService: HelperService,
-    private nativeAudio: NativeAudio,
     private transfer: FileTransfer,
-    private file: File,
-    private webview: WebView,
+    // private webview: WebView,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService
   ) {
@@ -185,9 +172,7 @@ export class PlayingGamePage implements OnInit {
       autoplay: true,
       loop: true
     };
-    this.nativeAudio.preloadSimple('sound', 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3')
-      .then(() => console.log("loaded sound"),
-        (e) => console.log("sound load error ", e));
+    this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
@@ -253,7 +238,9 @@ export class PlayingGamePage implements OnInit {
       maxZoom: 18
     });
 
-    this.geolocationService.geolocationSubscription.subscribe(position => {
+    this.geolocationService.init();
+
+    this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
       this.trackerService.addWaypoint({
         position: {
           coordinates: {
@@ -277,6 +264,7 @@ export class PlayingGamePage implements OnInit {
           pitch: this.map.getPitch()
         }
       });
+
       this.lastKnownPosition = position;
       if (this.task && !this.showSuccess) {
         if (this.task.type.includes("nav")) {
@@ -299,10 +287,6 @@ export class PlayingGamePage implements OnInit {
             this.heading = bearing;
           }
         }
-      }
-
-      if (this.panCenter) {
-        this.map.setCenter(position.coords);
       }
 
       if (this.task && this.task.type == "theme-direction" &&
@@ -361,7 +345,6 @@ export class PlayingGamePage implements OnInit {
 
     this.map.on("click", e => {
       console.log(e);
-      console.log("click");
       this.trackerService.addEvent({
         type: "ON_MAP_CLICKED",
         position: {
@@ -475,7 +458,6 @@ export class PlayingGamePage implements OnInit {
         task.settings['question-type'].settings.polygon.forEach(e => {
           e.geometry.coordinates.forEach(c => {
             c.forEach(coords => {
-              console.log(coords)
               bounds.extend(coords)
             })
           })
@@ -513,8 +495,10 @@ export class PlayingGamePage implements OnInit {
   }
 
   initTask() {
-    this.vibration.vibrate([100, 100, 100]);
-    this.nativeAudio.play('sound');
+    if (Capacitor.isNative) {
+      Plugins.Haptics.vibrate();
+    }
+    this.audioPlayer.play()
     console.log("Current task: ", this.task);
     this._initMapFeatures();
     this.trackerService.addEvent({
@@ -545,7 +529,7 @@ export class PlayingGamePage implements OnInit {
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
       this.map.removeLayer('viewDirectionTask');
       this.map.removeSource('viewDirectionTask');
-      navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+      // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
     }
 
     if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionClick').length > 0) {
@@ -608,23 +592,25 @@ export class PlayingGamePage implements OnInit {
         "question-type"
       ].settings.direction;
 
-      this.viewDirectionTaskGeolocateSubscription = navigator.geolocation.watchPosition(position => {
-        if (this.map.getSource('viewDirectionTask')) {
-          this.map.getSource('viewDirectionTask').setData({
-            type: "Point",
-            coordinates: [
-              position.coords.longitude,
-              position.coords.latitude
-            ]
-          })
-        } else {
+      // this.viewDirectionTaskGeolocateSubscription = this.geolocationService.getSinglePositionWatch().subscribe(position => {
+      //   if (this.map.getSource('viewDirectionTask')) {
+      //     this.map.getSource('viewDirectionTask').setData({
+      //       type: "Point",
+      //       coordinates: [
+      //         position.coords.longitude,
+      //         position.coords.latitude
+      //       ]
+      //     })
+      //   } else {
           this.map.addSource("viewDirectionTask", {
             type: "geojson",
             data: {
               type: "Point",
               coordinates: [
-                position.coords.longitude,
-                position.coords.latitude
+                this.lastKnownPosition.coords.longitude,
+                this.lastKnownPosition.coords.latitude
+                // position.coords.longitude,
+                // position.coords.latitude
               ]
             }
           });
@@ -639,8 +625,8 @@ export class PlayingGamePage implements OnInit {
               "icon-rotate": this.directionBearing - this.map.getBearing()
             }
           });
-        }
-      })
+        // }
+      // })
     }
     if (this.task.type == "theme-direction") {
       console.log(this.task.settings["question-type"].settings.direction);
@@ -669,6 +655,11 @@ export class PlayingGamePage implements OnInit {
   }
 
   initFeedback(correct: boolean) {
+    // feedback is already showing. 
+    if(this.showFeedback) {
+      return;
+    }
+
     let type: FeedbackType;
 
     if (this.task.settings.feedback) {
@@ -685,20 +676,40 @@ export class PlayingGamePage implements OnInit {
 
     switch (type) {
       case FeedbackType.Correct:
-        this.feedbackText = "Du hast die Aufgabe richtig gelöst!"
+        this.feedback.icon = "😊"
+        this.feedback.text = "Du hast die Aufgabe richtig gelöst!"
         break;
       case FeedbackType.Wrong:
-        this.feedbackText = "Das war leider nicht richtig!"
+        this.feedback.icon = "😕"
+        this.feedback.text = "Da ist etwas schief gegangen! Weiter geht es mit der nächsten Aufgabe!"
         break;
       case FeedbackType.TryAgain:
-        this.feedbackText = "Probiere es noch einmal!"
+        this.feedback.icon = "😕"
+        this.feedback.text = "Probiere es noch einmal!"
         this.feedbackRetry = true;
         break;
       case FeedbackType.Saved:
-        this.feedbackText = "Deine Antwort wurde gespeichert!"
+        this.feedback.icon = ""
+        this.feedback.text = "Deine Antwort wurde gespeichert!"
         break;
     }
     this.showFeedback = true
+
+    if (this.task.settings.multipleTries) {
+      setTimeout(() => {
+        this.dismissFeedback()
+        if (type !== FeedbackType.TryAgain) {
+          this.nextTask()
+        }
+      }, 2000)
+    }
+
+    if (!this.task.settings.feedback) {
+      setTimeout(() => {
+        this.dismissFeedback()
+        this.nextTask()
+      }, 2000)
+    }
   }
 
   dismissFeedback() {
@@ -720,7 +731,9 @@ export class PlayingGamePage implements OnInit {
           this.uploadDone = true;
         }
       });
-      this.vibration.vibrate([300, 300, 300]);
+      if (Capacitor.isNative) {
+        Plugins.Haptics.vibrate();
+      }
       this.insomnia.allowSleepAgain().then(
         () => console.log("insomnia allow sleep again success"),
         () => console.log("insomnia allow sleep again error")
@@ -778,7 +791,7 @@ export class PlayingGamePage implements OnInit {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
       console.log(clickPosition)
       const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-
+      console.log(distance)
       this.initFeedback(distance < this.triggerTreshold)
 
     } else if (
@@ -913,7 +926,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     }
     else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
@@ -922,7 +935,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
       const myTargetHeading = this.task.settings["question-type"].settings.direction
@@ -931,7 +944,7 @@ export class PlayingGamePage implements OnInit {
       this.initFeedback(correct);
       if (correct) {
         this.map.removeLayer('viewDirectionTask');
-        navigator.geolocation.clearWatch(this.viewDirectionTaskGeolocateSubscription);
+        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
       }
     } else if (
       this.task.settings["answer-type"] &&
@@ -974,9 +987,14 @@ export class PlayingGamePage implements OnInit {
     return this.targetDistance < this.triggerTreshold;
   }
 
+  ngOnDestroy() {
+    console.log("destroying playing game compoonent")
+  }
+
   navigateHome() {
+    this.positionSubscription.unsubscribe();
     this.geolocationService.clear()
-    navigator.geolocation.clearWatch(this.positionWatch);
+    // navigator.geolocation.clearWatch(this.positionWatch);
     this.deviceOrientationSubscription.unsubscribe();
 
     this.rotationControl.remove();
@@ -988,9 +1006,9 @@ export class PlayingGamePage implements OnInit {
     this.geolocateControl.remove()
     this.panControl.remove();
 
+    // this.map.remove();
     this.navCtrl.navigateRoot("/");
     this.streetSectionControl.remove();
-    this.map.remove();
 
   }
 
@@ -998,33 +1016,31 @@ export class PlayingGamePage implements OnInit {
     this.panelMinimized = !this.panelMinimized;
   }
 
-  capturePhoto() {
+  async capturePhoto() {
     this.photo = '';
     this.photoURL = '';
-    this.camera.getPicture(this.cameraOptions).then(
-      imageData => {
-        const filePath = this.webview.convertFileSrc(imageData)
-        this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
 
-        const fileTransfer: FileTransferObject = this.transfer.create();
-        fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
-          console.log(JSON.parse(res.response))
-          const filename = JSON.parse(res.response).filename
-          this.photoURL = `${environment.apiURL}/file/${filename}`
-        })
-          .catch(err => console.log(err))
-      },
-      async err => {
-        const toast = await this.toastController.create({
-          header: 'Error',
-          message: err,
-          color: "danger",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-      }
-    );
+    const image = await Plugins.Camera.getPhoto({
+      quality: 50,
+      allowEditing: true,
+      resultType: CameraResultType.Uri
+    });
+
+    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+
+    this.uploading = true;
+
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
+      console.log(JSON.parse(res.response))
+      const filename = JSON.parse(res.response).filename
+      this.photoURL = `${environment.apiURL}/file/${filename}`
+      this.uploading = false;
+    })
+      .catch(err => {
+        console.log(err)
+        this.uploading = false;
+      })
   }
 
   toggleRotate() {
@@ -1067,13 +1083,10 @@ export class PlayingGamePage implements OnInit {
               }
               break;
             case "pan":
-              this.panCenter = false; // Reset value
               if (mapFeatures[key] == "true") {
                 this.panControl.setType(PanType.True)
-                /* this.map.dragPan.enable(); */
               } else if (mapFeatures[key] == "center") {
                 this.panControl.setType(PanType.Center)
-                /* this.panCenter = true; */
               } else if (mapFeatures[key] == "static") {
                 this.panControl.setType(PanType.Static)
                 /* this.map.dragPan.disable();

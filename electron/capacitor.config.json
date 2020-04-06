@@ -1,0 +1,10 @@
+{
+  "appId": "de.reedu.origaminext",
+  "appName": "OriGami",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "ios": {
+    "hideLogs": true
+  }
+}

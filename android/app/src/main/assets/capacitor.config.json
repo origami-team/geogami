@@ -1,0 +1,11 @@
+{
+  "appId": "de.reedu.origaminext",
+  "appName": "OriGami",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "iosScheme": "https",
+    "androidScheme": "https"
+  }
+}

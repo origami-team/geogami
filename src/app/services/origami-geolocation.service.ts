@@ -1,25 +1,50 @@
 import { Injectable } from '@angular/core';
-import { Geoposition, Geolocation } from "@ionic-native/geolocation/ngx";
-import { Subscription, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Observable, Subscriber } from 'rxjs';
+import { shareReplay } from "rxjs/operators";
 
+
+import { Plugins, GeolocationPosition } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrigamiGeolocationService {
 
-  public geolocationSubscription: Observable<Geoposition>;
+  public geolocationSubscription: Observable<GeolocationPosition>;
 
-  constructor(private geolocation: Geolocation) {
-    console.log('creating new geolocation subscription')
-    this.geolocationSubscription = this.geolocation.watchPosition({ enableHighAccuracy: true, timeout: 1000, maximumAge: 1000 })
-      .pipe(filter((p) => p.coords !== undefined))
+  private watchID: string;
 
-    this.geolocationSubscription.subscribe(() => { }, (err) => console.error(err))
+  constructor() { }
+
+  init() {
+    console.log("initializing geolocation service")
+    this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
+      this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
+        if (error != null) {
+          observer.error(error)
+        }
+        observer.next(position);
+      })
+    }).pipe(shareReplay());
+  }
+
+  getSinglePositionWatch(): Observable<GeolocationPosition> {
+    return new Observable((observer: Subscriber<GeolocationPosition>) => {
+      const singleWatchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
+        if (error != null) {
+          observer.error(error)
+        }
+        observer.next(position);
+      })
+
+      return () => {
+        Plugins.Geolocation.clearWatch({ id: singleWatchID })
+      }
+    });
+
   }
 
   clear() {
-    this.geolocationSubscription = null;
+    Plugins.Geolocation.clearWatch({ id: this.watchID })
   }
 }

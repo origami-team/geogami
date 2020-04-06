@@ -1,13 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { Field } from "src/app/dynamic-form/models/field";
-import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { PopoverController } from "@ionic/angular";
 import { environment } from 'src/environments/environment';
-import { File } from '@ionic-native/file/ngx';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+import { Plugins, CameraResultType } from '@capacitor/core';
 
 @Component({
   selector: "app-photo-upload",
@@ -18,71 +17,38 @@ export class PhotoUploadComponent implements Field {
   config: import("../../dynamic-form/models/field-config").FieldConfig;
   group: import("@angular/forms").FormGroup;
 
-  baseOptions: CameraOptions = {
-    quality: environment.photoQuality,
-    destinationType: this.camera.DestinationType.FILE_URI,
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE,
-    correctOrientation: true
-  };
-
-  cameraOptions: CameraOptions = {
-    ...this.baseOptions,
-    sourceType: this.camera.PictureSourceType.CAMERA
-  };
-
-  libraryOptions: CameraOptions = {
-    ...this.baseOptions,
-    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
-  };
-
   photo: SafeResourceUrl;
 
+  uploading: boolean = false
+
   constructor(
-    private camera: Camera,
     public popoverController: PopoverController,
-    private transfer: FileTransfer, private file: File, private webview: WebView, private sanitizer: DomSanitizer
+    private transfer: FileTransfer,
+    private sanitizer: DomSanitizer
   ) { }
 
-  capturePhoto() {
-    this.camera.getPicture(this.cameraOptions).then(
-      imageData => {
-        const filePath = this.webview.convertFileSrc(imageData)
-        this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
-        
+  async capturePhoto() {
+    const image = await Plugins.Camera.getPhoto({
+      quality: 50,
+      allowEditing: true,
+      resultType: CameraResultType.Uri
+    });
 
-        const fileTransfer: FileTransferObject = this.transfer.create();
-        fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
-          console.log(JSON.parse(res.response))
-          const filename = JSON.parse(res.response).filename
-          this.group.patchValue({ [this.config.name]: `${environment.apiURL}/file/${filename}` });
-        })
-        .catch(err => console.log(err))
-      },
-      err => {
-        // Handle error
-      }
-    );
-  }
+    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
 
-  photoFromLibrary() {
-    this.camera.getPicture(this.libraryOptions).then(
-      imageData => {
-        const filePath = this.webview.convertFileSrc(imageData)
-        this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+    this.uploading = true;
 
-        const fileTransfer: FileTransferObject = this.transfer.create();
-        fileTransfer.upload(imageData, `${environment.apiURL}/upload`).then(res => {
-          console.log(JSON.parse(res.response))
-          const filename = JSON.parse(res.response).filename
-          this.group.patchValue({ [this.config.name]: `${environment.apiURL}/file/${filename}` });
-        })
-        .catch(err => console.log(err))
-      },
-      err => {
-        // Handle error
-      }
-    );
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
+      console.log(JSON.parse(res.response))
+      const filename = JSON.parse(res.response).filename
+      this.group.patchValue({ [this.config.name]: `${environment.apiURL}/file/${filename}` })
+      this.uploading = false;
+    })
+      .catch(err => {
+        console.log(err)
+        this.uploading = false;
+      })
   }
 
   async showPopover(ev: any, text: string) {

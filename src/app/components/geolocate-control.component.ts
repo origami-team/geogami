@@ -1,5 +1,8 @@
 import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
+import { Plugins, GeolocationPosition } from '@capacitor/core';
+import { Subscription } from 'rxjs';
+
 
 export enum GeolocateType {
     None,
@@ -9,7 +12,7 @@ export enum GeolocateType {
 }
 
 export class GeolocateControl {
-    private positionWatch: number;
+    private positionSubscription: Subscription;
     private geolocateType: GeolocateType = GeolocateType.None
 
     private map: MapboxMap;
@@ -19,16 +22,14 @@ export class GeolocateControl {
     constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
 
-        this.geolocationService.geolocationSubscription.subscribe(
-            position => {
-                if (this.map != undefined && this.isInitalized) {
-                    this.map.getSource('geolocate').setData({
-                        type: "Point",
-                        coordinates: [position.coords.longitude, position.coords.latitude]
-                    });
-                }
+        this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
+            if (this.map && this.map.getLayer('geolocate')) {
+                this.map.getSource('geolocate').setData({
+                    type: "Point",
+                    coordinates: [position.coords.longitude, position.coords.latitude]
+                });
             }
-        );
+        });
         this.map.loadImage(
             "/assets/icons/position.png",
             (error, image) => {
@@ -85,7 +86,9 @@ export class GeolocateControl {
     }
 
     private update(): void {
-        console.log("setting geolocate to", this.geolocateType)
+        if (!this.isInitalized) {
+            return
+        }
         switch (this.geolocateType) {
             case GeolocateType.None:
                 this.reset()
@@ -106,6 +109,6 @@ export class GeolocateControl {
 
     public remove(): void {
         this.reset();
-        navigator.geolocation.clearWatch(this.positionWatch);
+        this.positionSubscription.unsubscribe();
     }
 }

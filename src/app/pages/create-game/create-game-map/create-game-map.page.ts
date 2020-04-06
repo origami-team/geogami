@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import mapboxgl from 'mapbox-gl';
 
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+// import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { ModalController } from '@ionic/angular';
 
@@ -24,7 +24,7 @@ export class CreateGameMapPage implements OnInit {
   waypoints: any[]
   addMarker: boolean
 
-  constructor(private geolocation: Geolocation, private gameFactory: GameFactoryService, public modalController: ModalController) {
+  constructor(private gameFactory: GameFactoryService, public modalController: ModalController) {
     this.waypoints = []
   }
 

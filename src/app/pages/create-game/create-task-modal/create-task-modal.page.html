@@ -94,22 +94,22 @@
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
     <ion-label>Feedback</ion-label>
-    <ion-toggle [(ngModel)]="feedback" color="primary"></ion-toggle>
+    <ion-toggle [(ngModel)]="feedback" color="primary" (ionChange)="feedbackChange()"></ion-toggle>
   </ion-item>
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
     <ion-label>Feedback</ion-label>
-    <ion-toggle [(ngModel)]="feedback" color="secondary"></ion-toggle>
+    <ion-toggle [(ngModel)]="feedback" color="secondary" (ionChange)="feedbackChange()"></ion-toggle>
   </ion-item>
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
     <ion-label>Mehrere Versuche</ion-label>
-    <ion-toggle [(ngModel)]="multipleTries" color="primary"></ion-toggle>
+    <ion-toggle [(ngModel)]="multipleTries" color="primary" [disabled]="!feedback"></ion-toggle>
   </ion-item>
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'theme-loc'|| selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
     <ion-label>Mehrere Versuche</ion-label>
-    <ion-toggle [(ngModel)]="multipleTries" color="secondary"></ion-toggle>
+    <ion-toggle [(ngModel)]="multipleTries" color="secondary" [disabled]="!feedback"></ion-toggle>
   </ion-item>
   <ion-item lines="none"
     *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">

@@ -4,7 +4,7 @@ import { RouteReuseStrategy } from "@angular/router";
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
+// import { StatusBar } from "@ionic-native/status-bar/ngx";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -25,13 +25,7 @@ import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/c
 import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
 import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
 
-import { CameraComponent } from "./form-elements/camera/camera.component";
-
 import { PhotoUploadComponent } from "./form-elements/photo-upload/photo-upload.component";
-
-import { Geolocation } from "@ionic-native/geolocation/ngx";
-
-import { Camera } from "@ionic-native/camera/ngx";
 
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
@@ -44,7 +38,6 @@ import { DynamicFormModule } from "./dynamic-form/dynamic-form.module";
 import { Device } from "@ionic-native/device/ngx";
 
 import { Insomnia } from "@ionic-native/insomnia/ngx";
-import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicStorageModule } from '@ionic/storage';
 
 
@@ -66,7 +59,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     // InfoComponent,
     // TextInputComponent,
     // MapComponent,
-    CameraComponent
     // form components ⬆️
   ],
   entryComponents: [
@@ -100,16 +92,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Geolocation,
-    // Geofence,
-    Camera,
     DeviceOrientation,
     Device,
     Insomnia,
-    Vibration
   ],
   bootstrap: [AppComponent]
 })

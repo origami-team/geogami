@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+import {
+  Plugins,
+  StatusBarStyle,
+} from '@capacitor/core';
 
 
 @Component({
@@ -12,7 +16,7 @@ export class InfoPage implements OnInit {
 
   dark: boolean = false
 
-  constructor(private platform: Platform, private statusBar: StatusBar) {
+  constructor(private platform: Platform) {
   }
 
   ngOnInit() {
@@ -25,13 +29,15 @@ export class InfoPage implements OnInit {
 
     // change status bar
     if (this.dark) {
-      this.statusBar.backgroundColorByName('black');
-      this.statusBar.styleLightContent();
-    } else {
+      Plugins.StatusBar.setStyle({ style: StatusBarStyle.Dark })
       if (this.platform.is("android")) {
-        this.statusBar.backgroundColorByName('white');
+        Plugins.StatusBar.setBackgroundColor({ color: 'black' });
       }
-      this.statusBar.styleDefault();
+    } else {
+      Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light })
+      if (this.platform.is("android")) {
+        Plugins.StatusBar.setBackgroundColor({ color: 'white' });
+      }
     }
   }
 

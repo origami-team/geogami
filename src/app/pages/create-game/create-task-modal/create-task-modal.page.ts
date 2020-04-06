@@ -87,6 +87,12 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     this.step = this.accuracy <= 5 ? 1 : 5;
   }
 
+  feedbackChange() {
+    if (!this.feedback) {
+      this.multipleTries = false
+    }
+  }
+
   ngAfterViewInit() {
     let previousValid = this.form.valid;
     this.form.changes.subscribe(() => {

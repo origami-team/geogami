@@ -1,5 +1,6 @@
 import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
+import { Subscription } from 'rxjs';
 
 export enum TrackType {
     Enabled,
@@ -10,7 +11,7 @@ export class TrackControl {
     private map: MapboxMap;
     private path: any;
     private trackType: TrackType;
-    private trackPositionWatch: number;
+    private positionSubscription: Subscription;
 
     constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
@@ -25,7 +26,7 @@ export class TrackControl {
                 coordinates: []
             }
         };
-        this.geolocationService.geolocationSubscription.subscribe(
+        this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
             position => {
                 this.path.geometry.coordinates.push([
                     position.coords.longitude,
@@ -82,6 +83,7 @@ export class TrackControl {
         if (this.map.getLayer('track')) {
             this.map.removeLayer('track')
         }
-        window.navigator.geolocation.clearWatch(this.trackPositionWatch);
+        this.positionSubscription.unsubscribe();
+        // window.navigator.geolocation.clearWatch(this.trackPositionWatch);
     }
 }
