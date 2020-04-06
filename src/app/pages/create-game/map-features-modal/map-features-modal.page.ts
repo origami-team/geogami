@@ -13,6 +13,8 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
 import { environment } from "src/environments/environment";
 
+import { Plugins } from '@capacitor/core'
+
 @Component({
   selector: "app-map-features-modal",
   templateUrl: "./map-features-modal.page.html",
@@ -93,21 +95,6 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
       zoom: 2
     });
 
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      fitBoundsOptions: {
-        minZoom: 20
-      },
-      trackUserLocation: true
-    });
-    this.map.addControl(geolocate);
-
-    geolocate.on('error', err => {
-      console.error(err)
-    })
-
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
@@ -120,7 +107,40 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
 
     this.map.on('load', () => {
       this.map.resize();
-      geolocate.trigger();
+
+      Plugins.Geolocation.getCurrentPosition().then(position => {
+        this.map.flyTo({
+          center: [position.coords.longitude, position.coords.latitude],
+          zoom: 13,
+          speed: 3
+        })
+
+        this.map.loadImage(
+          "/assets/icons/position.png",
+          (error, image) => {
+            if (error) throw error;
+
+            this.map.addImage("geolocate", image);
+
+            this.map.addSource("geolocate", {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: [position.coords.longitude, position.coords.latitude]
+              }
+            });
+            this.map.addLayer({
+              id: "geolocate",
+              source: "geolocate",
+              type: "symbol",
+              layout: {
+                "icon-image": "geolocate",
+                "icon-size": 0.4,
+                "icon-offset": [0, 0]
+              }
+            });
+          });
+      })
     })
   }
 

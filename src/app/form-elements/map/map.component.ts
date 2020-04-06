@@ -15,6 +15,7 @@ import { FieldConfig } from "../../dynamic-form/models/field-config";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { PopoverController } from "@ionic/angular";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import { Plugins } from '@capacitor/core';
 
 // import MapboxDraw from '@mapbox/mapbox-gl-draw'
 
@@ -127,16 +128,16 @@ export class MapComponent implements OnInit, Field, AfterViewInit, OnDestroy {
       zoom: 2,
     });
 
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      fitBoundsOptions: {
-        minZoom: 20
-      },
-      trackUserLocation: true
-    });
-    this.map.addControl(geolocate);
+    // const geolocate = new mapboxgl.GeolocateControl({
+    //   positionOptions: {
+    //     enableHighAccuracy: true
+    //   },
+    //   fitBoundsOptions: {
+    //     minZoom: 20
+    //   },
+    //   trackUserLocation: true
+    // });
+    // this.map.addControl(geolocate);
 
     this.map.on("click", e => {
       if (
@@ -179,7 +180,39 @@ export class MapComponent implements OnInit, Field, AfterViewInit, OnDestroy {
 
     this.map.on("load", () => {
       this.map.resize();
-      geolocate.trigger();
+
+      Plugins.Geolocation.getCurrentPosition().then(position => {
+        this.map.flyTo({
+          center: [position.coords.longitude, position.coords.latitude],
+          zoom: 13,
+          speed: 3
+        })
+        this.map.loadImage(
+          "/assets/icons/position.png",
+          (error, image) => {
+            if (error) throw error;
+
+            this.map.addImage("geolocate", image);
+
+            this.map.addSource("geolocate", {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: [position.coords.longitude, position.coords.latitude]
+              }
+            });
+            this.map.addLayer({
+              id: "geolocate",
+              source: "geolocate",
+              type: "symbol",
+              layout: {
+                "icon-image": "geolocate",
+                "icon-size": 0.4,
+                "icon-offset": [0, 0]
+              }
+            });
+          });
+      })
 
       if (this.config.featureType == "direction") {
         this.showDirectionMarker = true;
