@@ -4,7 +4,8 @@ import {
   ViewChild,
   OnChanges,
   ChangeDetectorRef,
-  AfterViewInit
+  AfterViewInit,
+  Input
 } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
@@ -26,7 +27,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   private draw: MapboxDraw;
   private map: mapboxgl.Map;
 
-  features: any = {
+  @Input() features: any = {
     zoombar: "true",
     pan: "true",
     rotation: "manual",
@@ -46,6 +47,21 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    if (this.features == undefined) {
+      this.features = {
+        zoombar: "true",
+        pan: "true",
+        rotation: "manual",
+        material: "standard",
+        position: "none",
+        direction: "none",
+        track: false,
+        streetSection: false,
+        reducedInformation: false,
+        landmarks: false,
+        landmarkFeatures: undefined
+      }
+    }
     this.changeDetectorRef.detectChanges();
     mapboxgl.accessToken = environment.mapboxAccessToken;
 

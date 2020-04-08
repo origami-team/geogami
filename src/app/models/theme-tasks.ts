@@ -1,89 +1,189 @@
-enum QuestionType {
-    TEXT,
-    MAP_FEATURE
-}
+import { QuestionType, AnswerType, TaskMode } from './types'
 
 export default [
     {
-        name:           "Selbst-Lokalisation",
-        category:       "selfLocaization",
-        question:       {
+        name: "Selbst-Lokalisation",
+        type: "theme-loc",
+        // category: "themeSelfLocalization",
+        category: "theme",
+        question: {
             type: QuestionType.TEXT,
             text: "Wo bist du jetzt? Tippe auf die Karte."
         },
-        answerType:     "mapPoint",
-        evaluate:       "evalDistanceToPoint",
-    }, 
-    {
-        category:       "objectLocalization",
-        questionType:   "textMapFeature",
-        question:       {
-            type: QuestionType.MAP_FEATURE,
-            text: "Finde das markierte Haus in deiner Umgebung. Wähle das passende Foto."
-        },       
-        answerType:     "multipleChoice",
-        evaluate:       "evalMultipleChoice",
-        text:           "LOREM IPSUM"
-    }, {
-        category:       "objectLocalization",
-        questionType:   "textMapFeature",       
-        answerType:     "photo",
-        evaluate:       "evalNone",
-        text:           "LOREM IPSUM"
-    }, {
-        category:       "objectLocalization",
-        questionType:   "textPhoto",
-        answerType:     "mapPoint",
-        evaluate:       "evalPointInPolygon",
-        text:           "Suche dieses Haus in deiner Umgebung. Finde es auf der Karte und tippe es an."
-    }, {
-        category:       "objectLocalization",
-        questionType:   "text",
-        answerType:     "mapPoint",
-        evaluate:       "evalPointInPolygon",
-        text:           "LOREM IPSUM"
-    }, {
-        category:       "objectLocalization",
-        questionType:   "text",
-        answerType:     "multipleChoice",
-        evaluate:       "evalMultipleChoice",
-        text:           "LOREM IPSUM"
-    }, {
-        category:       "objectLocalization",
-        questionType:   "text",
-        answerType:     "photo",
-        evaluate:       "evalNone",
-        text:           "LOREM IPSUM"
+        answer: {
+            type: AnswerType.MAP_POINT
+        },
+        evaluate: "evalDistanceToPoint",
+        settings: {}
     },
     {
-        category:       "direction",
-        questionType:   "textMapFeature",       
-        answerType:     "multipleChoice",
-        evaluate:       "evalMultipleChoice",
-        text:           "LOREM IPSUM"
+        name: "Objekt-Lokalisation",
+        type: "theme-object",
+        // category: "themeobjectLocalization",
+        category: "theme",
+        question: {
+            type: QuestionType.MAP_FEATURE,
+            text: "Finde das markierte Haus in deiner Umgebung. Wähle das passende Foto.",
+        },
+        answer: {
+            type: AnswerType.MULTIPLE_CHOICE
+        },
+        evaluate: "evalMultipleChoice",
+        settings: {}
     }, {
-        category:       "direction",
-        questionType:   "textMapFeature",       
-        answerType:     "direction",
-        evaluate:       "evalDirection",
-        text:           "LOREM IPSUM"
+        name: "Objekt-Lokalisation",
+        type: "theme-object",
+        // category: "themeobjectLocalization",
+        category: "theme",
+        question: {
+            type: QuestionType.MAP_FEATURE,
+            text: "Finde das markierte Haus in deiner Umgebung. Mache ein Foto.",
+        },
+        answer: {
+            type: AnswerType.PHOTO
+        },
+        evaluate: "evalNone",
+        settings: {}
     }, {
-        category:       "direction",
-        questionType:   "textOrientation",       
-        answerType:     "direction",
-        evaluate:       "evalDirection",
-        text:           "Drehe dich, bis die Pfeile in die gleiche Richtung zeigen."
+        name: "Objekt-Lokalisation",
+        type: "theme-object",
+        // category: "themeobjectLocalization",
+        category: "theme",
+        questionType: "textPhoto",
+        question: {
+            type: QuestionType.MAP_FEATURE_PHOTO,
+            text: "Suche dieses Haus in deiner Umgebung. Finde es auf der Karte und tippe es an.",
+        },
+        answer: {
+            type: AnswerType.MAP_POINT
+        },
+        evaluate: "evalPointInPolygon",
+        settings: {}
     }, {
-        category:       "direction",
-        questionType:   "text",       
-        answerType:     "mapDirection",
-        evaluate:       "evalMapDirection",
-        text:           "Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte."
+        name: "Objekt-Lokalisation",
+        type: "theme-object",
+        // category: "themeobjectLocalization",
+        category: "theme",
+        questionType: "text",
+        question: {
+            type: QuestionType.MAP_FEATURE,
+            text: "Suche [...] in deiner Umgebung. Finde es auf der Karte und tippe es an."
+        },
+        answerType: "mapPoint",
+        answer: {
+            type: AnswerType.MAP_POINT,
+            mode: TaskMode.NO_FEATURE
+        },
+        evaluate: "evalPointInPolygon",
+        settings: {}
     }, {
-        category:       "direction",
-        questionType:   "textPhoto",       
-        answerType:     "mapDirection",
-        evaluate:       "evalMapDirection",
-        text:           "Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte."
+        name: "Objekt-Lokalisation",
+        type: "theme-object",
+        // category: "themeobjectLocalization",
+        category: "theme",
+        questionType: "text",
+        question: {
+            type: QuestionType.TEXT,
+            text: "Suche [...] in deiner Umgebung. Wähle das passende Foto"
+        },
+        answerType: "multipleChoice",
+        answer: {
+            type: AnswerType.MULTIPLE_CHOICE
+        },
+        evaluate: "evalMultipleChoice",
+        settings: {}
+    }, {
+        name: "Objekt-Lokalisation",
+        type: "theme-object",
+        // category: "themeobjectLocalization",
+        category: "theme",
+        questionType: "text",
+        question: {
+            type: QuestionType.TEXT,
+            text: "Suche [...] in deiner Umgebung. Mache ein Foto"
+        },
+        answerType: "photo",
+        answer: {
+            type: AnswerType.PHOTO
+        },
+        evaluate: "evalNone",
+        settings: {}
+    },
+    {
+        name: "Richtungssuche",
+        // category: "themedirection",
+        category: "theme",
+        questionType: "textMapFeature",
+        question: {
+            type: QuestionType.MAP_DIRECTION_MARKER,
+            text: "Drehe dich. Finde es auf der Karte und tippe es an."
+        },
+        answerType: "multipleChoice",
+        answer: {
+            type: AnswerType.MULTIPLE_CHOICE
+        },
+        evaluate: "evalMultipleChoice",
+        settings: {}
+    }, {
+        name: "Richtungssuche",
+        // category: "themedirection",
+        category: "theme",
+        questionType: "textMapFeature",
+        question: {
+            type: QuestionType.MAP_DIRECTION_MARKER,
+            text: "Drehe dich in die angezeigte Richtung."
+        },
+        answerType: "direction",
+        answer: {
+            type: AnswerType.DIRECTION
+        },
+        evaluate: "evalDirection",
+        settings: {}
+    }, {
+        name: "Richtungssuche",
+        // category: "themedirection",
+        category: "theme",
+        questionType: "textOrientation",
+        question: {
+            type: QuestionType.MAP_DIRECTION,
+            text: "Drehe dich, bis die Pfeile in die gleiche Richtung zeigen."
+        },
+        answerType: "direction",
+        answer: {
+            type: AnswerType.DIRECTION,
+            mode: TaskMode.DIRECTION_ARROW,
+        },
+        evaluate: "evalDirection",
+        settings: {}
+    }, {
+        name: "Richtungssuche",
+        // category: "themedirection",
+        category: "theme",
+        questionType: "text",
+        question: {
+            type: QuestionType.TEXT,
+            text: "Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte."
+        },
+        answer: {
+            type: AnswerType.MAP_DIRECTION,
+        },
+        answerType: "mapDirection",
+        evaluate: "evalMapDirection",
+        settings: {}
+    }, {
+        name: "Richtungssuche",
+        // category: "themedirection",
+        category: "theme",
+        questionType: "textPhoto",
+        question: {
+            type: QuestionType.MAP_DIRECTION_PHOTO,
+            text: "Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte."
+        },
+        answerType: "mapDirection",
+        answer: {
+            type: AnswerType.MAP_DIRECTION,
+        },
+        evaluate: "evalMapDirection",
+        settings: {}
     }
 ]

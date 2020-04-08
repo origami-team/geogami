@@ -34,10 +34,25 @@ export class GameFactoryService {
       };
     }
     this.storage.set('game', this.game);
+    return this.game;
   }
 
   removeTask(taskID: number) {
     this.game.tasks = this.game.tasks.filter(t => t.id != taskID);
+    this.storage.set('game', this.game);
+    return this.game;
+  }
+
+  updateTask(taskID: number, task) {
+    console.log(this.game.tasks)
+    this.game.tasks = this.game.tasks.map(t => {
+      if (t.id == taskID) {
+        return task
+      }
+
+      return t
+    });
+    console.log(this.game.tasks)
     this.storage.set('game', this.game);
     return this.game;
   }

@@ -1,27 +1,23 @@
-import { Component, OnInit } from "@angular/core";
-import { Field } from "src/app/dynamic-form/models/field";
-import { PopoverController } from "@ionic/angular";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { PopoverComponent } from "src/app/popover/popover.component";
+import { PopoverController } from "@ionic/angular";
 import { environment } from 'src/environments/environment';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { Plugins, CameraResultType } from '@capacitor/core';
 
-
-
 @Component({
-  selector: "app-photo-upload-multiple-choice",
-  templateUrl: "./photo-upload-multiple-choice.component.html",
-  styleUrls: ["./photo-upload-multiple-choice.component.scss"]
+  selector: "app-photo-upload",
+  templateUrl: "./photo-upload.component.html",
+  styleUrls: ["./photo-upload.component.scss"]
 })
-export class PhotoUploadMultipleChoiceComponent implements Field {
-  config: import("../../dynamic-form/models/field-config").FieldConfig;
-  group: import("@angular/forms").FormGroup;
+export class PhotoUploadComponent implements OnInit {
 
-  photos: SafeResourceUrl[] = ["", "", "", ""];
+  @Input() photo: SafeResourceUrl = '';
+  @Output() photoChange: EventEmitter<any> = new EventEmitter<any>();
 
-  uploading: boolean = false;
+  uploading: boolean = false
 
   constructor(
     public popoverController: PopoverController,
@@ -29,14 +25,18 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
     private sanitizer: DomSanitizer
   ) { }
 
-  async capturePhoto(photoNumber) {
+  ngOnInit(): void {
+    // throw new Error("Method not implemented.");
+  }
+
+  async capturePhoto() {
     const image = await Plugins.Camera.getPhoto({
       quality: 50,
       allowEditing: true,
       resultType: CameraResultType.Uri
     });
 
-    this.photos[photoNumber] = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
 
     this.uploading = true;
 
@@ -44,12 +44,10 @@ export class PhotoUploadMultipleChoiceComponent implements Field {
     fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
       console.log(JSON.parse(res.response))
       const filename = JSON.parse(res.response).filename
-      this.group.patchValue({
-        [`${this.config.name}`]: {
-          ...this.group.value[`${this.config.name}`],
-          [`photo-${photoNumber}`]: `${environment.apiURL}/file/${filename}`
-        }
-      }); this.uploading = false;
+      this.photo = `${environment.apiURL}/file/${filename}`
+      this.photoChange.emit(this.photo)
+      // this.group.patchValue({ [this.config.name]: `${environment.apiURL}/file/${filename}` })
+      this.uploading = false;
     })
       .catch(err => {
         console.log(err)

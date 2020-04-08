@@ -3,9 +3,9 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="create-game"></ion-back-button>
     </ion-buttons>
-    <ion-title>Erstelle ein neues OriGami</ion-title>
+    <ion-title>Bearbeite <span *ngIf="game">{{game.name}}</span></ion-title>
     <ion-buttons slot="end">
-      <ion-button color=dark (click)="navigateToOverview()">
+      <ion-button color=dark (click)="uploadGame()">
         <ion-icon name="save"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -102,8 +102,7 @@
                 <p class="list">{{ i + 1 }}</p>
               </div>
             </ion-avatar>
-            <ion-avatar slot="start"
-              *ngIf="task.category.includes('Localization') || task.category.includes('direction')">
+            <ion-avatar slot="start" *ngIf="task.category.includes('theme')">
               <div class="mymarker invisible">
               </div>
             </ion-avatar>

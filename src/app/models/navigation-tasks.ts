@@ -1,40 +1,49 @@
-enum QuestionType {
-    MAP_TARGET
-}
+import { QuestionType, AnswerType, TaskMode } from './types'
 
-enum AnswerType {
-    POSITION
-}
 
-export default [
+export const navtasks: ReadonlyArray<any> = [
     {
-        category: "navTask",
+        category: "nav",
+        type: "nav-flag",
         name: "Navigation zur Zielfahne",
         question: {
-            type: QuestionType.MAP_TARGET,
+            type: QuestionType.TEXT,
             text: "Gehe zur Fahne."
         },
         answer: {
-            type: AnswerType.POSITION
+            type: AnswerType.POSITION,
+            position: undefined
         },
         evaluate: "distanceToPoint",
+        settings: {}
     }, {
-        category: "navTask",
+        category: "nav",
+        type: "nav-arrow",
         name: "Navigation mit Richtungspfeil",
-        questionType: "textDirection",
-        answerType: "position",
+        question: {
+            type: QuestionType.TEXT,
+            text: "Folge dem Pfeil bis zum Ziel."
+        },
+        answer: {
+            type: AnswerType.POSITION,
+            mode: TaskMode.NAV_ARROW,
+            position: undefined
+        },
         evaluate: "distanceToPoint",
-        settings: {
-            text: "Gehe zur Fahne."
-        }
+        settings: {}
     }, {
-        category: "navTask",
+        category: "nav",
+        type: "nav-text",
         name: "Navigation mit Textanweisung",
-        questionType: "text",
-        answerType: "position",
+        question: {
+            type: QuestionType.NAV_INSTRUCTION,
+            text: ""
+        },
+        answer: {
+            type: AnswerType.POSITION,
+            position: undefined
+        },
         evaluate: "distanceToPoint",
-        settings: {
-            text: "Gehe zur Fahne."
-        }
+        settings: {}
     }
 ]

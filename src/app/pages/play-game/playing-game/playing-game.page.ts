@@ -40,6 +40,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { mappings } from './../../../pipes/keywords.js'
 
 import { OrigamiGeolocationService } from './../../../services/origami-geolocation.service';
+import { AnswerType, TaskMode, QuestionType } from 'src/app/models/types';
+import { QuestionTypeText } from 'docs_tasks/questionTypeText.model';
 
 
 
@@ -87,14 +89,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   task: any;
   taskIndex: number = 0;
 
-  // position
-  /* geolocateControl: mapboxgl.GeolocateControl = new mapboxgl.GeolocateControl({
-    positionOptions: {
-      enableHighAccuracy: true
-    },
-    trackUserLocation: true,
-    showUserLocation: true
-  }); */
+
   positionSubscription: Subscription;
   lastKnownPosition: GeolocationPosition;
 
@@ -144,8 +139,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   uploading: boolean = false;
 
-
-
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -162,7 +155,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     public platform: Platform,
     public helperService: HelperService,
     private transfer: FileTransfer,
-    // private webview: WebView,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService
   ) {
@@ -266,9 +258,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
 
       this.lastKnownPosition = position;
+
       if (this.task && !this.showSuccess) {
-        if (this.task.type.includes("nav")) {
-          const waypoint = this.task.settings.point.geometry.coordinates;
+        if (this.task.answer.type == AnswerType.POSITION) {
+          const waypoint = this.task.answer.position.geometry.coordinates;
           if (
             this.userDidArrive(waypoint) &&
             !this.task.settings.confirmation
@@ -276,8 +269,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.onWaypointReached();
           }
 
-          if (this.task.type == "nav-arrow") {
-            const destCoords = this.task.settings.point.geometry.coordinates;
+          if (this.task.answer.mode == TaskMode.NAV_ARROW) {
+            const destCoords = this.task.answer.position.geometry.coordinates;
             const bearing = this.helperService.bearing(
               position.coords.latitude,
               position.coords.longitude,
@@ -289,8 +282,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       }
 
-      if (this.task && this.task.type == "theme-direction" &&
-        ((this.task.settings["question-type"].name == "question-type-current-direction") || (this.task.settings["question-type"].name == "photo"))) {
+      if (this.task && this.task.answer.type == AnswerType.MAP_DIRECTION) {
         if (this.map.getSource('viewDirectionClick')) {
           this.map.getSource('viewDirectionClick').setData({
             type: "Point",
@@ -344,7 +336,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     this.map.on("click", e => {
-      console.log(e);
       this.trackerService.addEvent({
         type: "ON_MAP_CLICKED",
         position: {
@@ -352,12 +343,35 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           longitude: e.lngLat.lng
         }
       });
-      if (this.task.type == "theme-direction" &&
-        ((this.task.settings["question-type"].name == "question-type-current-direction") ||
-          (this.task.settings["question-type"].name == "photo"))) {
 
+      if (this.task.answer.type == AnswerType.MAP_POINT) {
+        const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+
+        if (this.map.getSource('marker-point')) {
+          this.map.getSource('marker-point').setData(pointFeature)
+        } else {
+          this.map.addSource('marker-point', {
+            'type': 'geojson',
+            'data': pointFeature
+          });
+        }
+
+        if (!this.map.getLayer('marker-point')) {
+          this.map.addLayer({
+            'id': 'marker-point',
+            'type': 'symbol',
+            'source': 'marker-point',
+            'layout': {
+              "icon-image": "marker-editor",
+              "icon-size": 0.65,
+              "icon-anchor": 'bottom'
+            }
+          });
+        }
+      }
+
+      if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
         this.clickDirection = this.helperService.bearing(this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude, e.lngLat.lat, e.lngLat.lng)
-
         if (!this.map.getLayer('viewDirectionClick')) {
           this.map.addSource("viewDirectionClick", {
             type: "geojson",
@@ -386,37 +400,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           "icon-rotate",
           this.clickDirection - this.map.getBearing()
         );
-      } else if (
-        this.task.type == "theme-loc" ||
-        (this.task.settings["answer-type"] &&
-          this.task.settings["answer-type"].name == "set-point") ||
-        (this.task.type == "theme-object" &&
-          this.task.settings["question-type"].name == "photo") ||
-        (this.task.type == "theme-direction" && this.task.settings["question-type"].name != "question-type-arrow" && this.task.settings["answer-type"].name != "rotateTo")
-      ) {
-        const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-
-        if (this.map.getSource('marker-point')) {
-          this.map.getSource('marker-point').setData(pointFeature)
-        } else {
-          this.map.addSource('marker-point', {
-            'type': 'geojson',
-            'data': pointFeature
-          });
-        }
-
-        if (!this.map.getLayer('marker-point')) {
-          this.map.addLayer({
-            'id': 'marker-point',
-            'type': 'symbol',
-            'source': 'marker-point',
-            'layout': {
-              "icon-image": "marker-editor",
-              "icon-size": 0.65,
-              "icon-anchor": 'bottom'
-            }
-          });
-        }
       }
     });
 
@@ -426,6 +409,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           "viewDirectionTask",
           "icon-rotate",
           this.directionBearing - this.map.getBearing()
+        );
+      }
+
+      if (this.map.getLayer('viewDirectionClick')) {
+        this.map.setLayoutProperty(
+          "viewDirectionClick",
+          "icon-rotate",
+          this.clickDirection - this.map.getBearing()
         );
       }
     })
@@ -439,7 +430,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.indicatedDirection = this.compassHeading - this.directionBearing;
       });
 
-
     this.insomnia.keepAwake().then(
       () => console.log("insomnia keep awake success"),
       () => console.log("insomnia keep awake error")
@@ -450,8 +440,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     var bounds = new mapboxgl.LngLatBounds();
 
     this.game.tasks.forEach(task => {
-      if (task.settings.point)
-        bounds.extend(task.settings.point.geometry.coordinates);
+      if (task.answer.position)
+        bounds.extend(task.answer.position.geometry.coordinates);
       if (task.settings['question-type'] &&
         task.settings['question-type'].settings &&
         task.settings['question-type'].settings.polygon != undefined) {
@@ -467,10 +457,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.changeDetectorRef.detectChanges()
     const panelHeight = this.panel.nativeElement.children[0].offsetHeight;
-    console.log(panelHeight)
 
     try {
-      console.log("setting bounds", bounds)
       this.map.fitBounds(bounds, {
         padding: {
           top: 80,
@@ -486,7 +474,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   initGame() {
     this.task = this.game.tasks[this.taskIndex];
-    console.log("initializing trackerService");
     this.trackerService.init(this.game._id, this.device);
     this.trackerService.addEvent({
       type: "INIT_GAME"
@@ -506,7 +493,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       task: this.task
     });
 
-    if (this.task.settings.accuracy) {
+    if (this.task.settings && this.task.settings.accuracy) {
       this.triggerTreshold = this.task.settings.accuracy
     } else {
       this.triggerTreshold = 10;
@@ -539,20 +526,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.photo = '';
     this.photoURL = '';
-
     this.clickDirection = 0;
 
-    if (
-      this.task.type.includes("theme") &&
-      this.task.settings["question-type"] != undefined
-    ) {
-      this.task.settings.text = this.task.settings[
-        "question-type"
-      ].settings.text;
-    }
-    if (!this.task.type.includes("theme")) {
-      if (this.task.settings.point != null && this.task.settings.showMarker) {
-        // create a HTML element for each feature
+
+    if (this.task.answer.type == AnswerType.POSITION) {
+      if (this.task.answer.position != null && this.task.settings.showMarker) {
         const el = document.createElement('div');
         el.className = 'waypoint-marker';
 
@@ -561,11 +539,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           offset: [15, 0]
         })
           .setLngLat(
-            this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
+            this.task.answer.position.geometry.coordinates
           )
           .addTo(this.map);
 
-        // create a HTML element for each feature
+        // create a duplicate for the swipe map
         const elDuplicate = document.createElement('div');
         elDuplicate.className = 'waypoint-marker';
 
@@ -574,74 +552,47 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           offset: [15, 0]
         })
           .setLngLat(
-            this.game.tasks[this.taskIndex].settings.point.geometry.coordinates
+            this.task.answer.position.geometry.coordinates
           )
       }
     }
 
-    if (this.task.type == "theme-direction" &&
-      ((this.task.settings["question-type"].name == "question-type-current-direction") ||
-        (this.task.settings["question-type"].name == "photo"))) {
+    if (this.task.question.type == QuestionType.MAP_DIRECTION) {
+      this.directionBearing = this.task.question.direction
+    }
 
+    if (this.task.question.type == QuestionType.MAP_DIRECTION_MARKER) {
+      this.directionBearing = this.task.question.direction
+
+      this.map.addSource("viewDirectionTask", {
+        type: "geojson",
+        data: {
+          type: "Point",
+          coordinates: [
+            this.lastKnownPosition.coords.longitude,
+            this.lastKnownPosition.coords.latitude
+          ]
+        }
+      });
+      this.map.addLayer({
+        id: "viewDirectionTask",
+        source: "viewDirectionTask",
+        type: "symbol",
+        layout: {
+          "icon-image": "view-direction-task",
+          "icon-size": 0.65,
+          "icon-offset": [0, -8],
+          "icon-rotate": this.directionBearing - this.map.getBearing()
+        }
+      });
+    }
+
+    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
       this.geolocateControl.setType(GeolocateType.Continuous)
-      // further stuff is one on map click
-    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-photo") {
-
-    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map") {
-      this.directionBearing = this.task.settings[
-        "question-type"
-      ].settings.direction;
-
-      // this.viewDirectionTaskGeolocateSubscription = this.geolocationService.getSinglePositionWatch().subscribe(position => {
-      //   if (this.map.getSource('viewDirectionTask')) {
-      //     this.map.getSource('viewDirectionTask').setData({
-      //       type: "Point",
-      //       coordinates: [
-      //         position.coords.longitude,
-      //         position.coords.latitude
-      //       ]
-      //     })
-      //   } else {
-          this.map.addSource("viewDirectionTask", {
-            type: "geojson",
-            data: {
-              type: "Point",
-              coordinates: [
-                this.lastKnownPosition.coords.longitude,
-                this.lastKnownPosition.coords.latitude
-                // position.coords.longitude,
-                // position.coords.latitude
-              ]
-            }
-          });
-          this.map.addLayer({
-            id: "viewDirectionTask",
-            source: "viewDirectionTask",
-            type: "symbol",
-            layout: {
-              "icon-image": "view-direction-task",
-              "icon-size": 0.65,
-              "icon-offset": [0, -8],
-              "icon-rotate": this.directionBearing - this.map.getBearing()
-            }
-          });
-        // }
-      // })
-    }
-    if (this.task.type == "theme-direction") {
-      console.log(this.task.settings["question-type"].settings.direction);
-      this.directionBearing = this.task.settings[
-        "question-type"
-      ].settings.direction;
     }
 
-
-    if (
-      this.task.type == "theme-object" &&
-      this.task.settings["question-type"].name == "question-type-map"
-    ) {
-      console.log(this.task.settings["question-type"].settings);
-      this.landmarkControl.setQTLandmark(this.task.settings["question-type"].settings.polygon[0])
+    if (this.task.question.type == QuestionType.MAP_FEATURE && this.task.answer.mode != TaskMode.NO_FEATURE) {
+      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0])
     }
 
     this.zoomBounds()
@@ -656,7 +607,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   initFeedback(correct: boolean) {
     // feedback is already showing. 
-    if(this.showFeedback) {
+    if (this.showFeedback) {
       return;
     }
 
@@ -727,7 +678,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
       this.trackerService.uploadTrack().then(res => {
         if (res.status == 200) {
-          console.log(res);
           this.uploadDone = true;
         }
       });
@@ -743,12 +693,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.task = this.game.tasks[this.taskIndex];
     this.initTask();
-    console.log(this.taskIndex, this.task);
   }
 
   async onMultipleChoiceSelected(item, event) {
     this.selectedPhoto = item;
-    this.isCorrectPhotoSelected = item.key === "photo-0";
+    this.isCorrectPhotoSelected = item.key === "0";
+
     Array.from(document.getElementsByClassName('multiple-choize-img')).forEach(elem => {
       elem.classList.remove('selected')
     })
@@ -789,167 +739,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
     if (this.task.type == "theme-loc") {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-      console.log(clickPosition)
       const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-      console.log(distance)
       this.initFeedback(distance < this.triggerTreshold)
-
-    } else if (
-      this.task.type == "theme-object" &&
-      this.task.settings["question-type"].name == "photo"
-    ) {
-      const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-
-      const isInPolygon = booleanPointInPolygon(clickPosition, this.task.settings["question-type"].settings.polygon[0])
-
-      this.trackerService.addAnswer({
-        task: this.task,
-        answer: {
-          inPolygon: isInPolygon
-        }
-      });
-      this.initFeedback(isInPolygon);
-    } else if (
-      this.task.type == "theme-object" &&
-      this.task.settings["question-type"].name == "description"
-    ) {
-      if (
-        this.task.settings["answer-type"] &&
-        this.task.settings["answer-type"].name == "take-photo"
-      ) {
-        if (this.photo == "") {
-          const toast = await this.toastController.create({
-            message: "Bitte mache ein Foto",
-            color: "dark",
-            // showCloseButton: true,
-            duration: 2000
-          });
-          toast.present();
-        } else {
-          this.trackerService.addAnswer({
-            task: this.task,
-            answer: {
-              photo: this.photoURL
-            }
-          });
-          this.initFeedback(true);
-          this.photo = "";
-          this.photoURL = "";
-        }
-      } else if (
-        this.task.settings["answer-type"] &&
-        this.task.settings["answer-type"].name == "multiple-choice"
-      ) {
-        if (this.selectedPhoto != null) {
-          this.initFeedback(this.isCorrectPhotoSelected);
-          if (this.isCorrectPhotoSelected) {
-            this.isCorrectPhotoSelected = null;
-            this.selectedPhoto = null;
-          }
-        } else {
-          const toast = await this.toastController.create({
-            message: "Bitte wähle zuerst ein Foto",
-            color: "dark",
-            // showCloseButton: true,
-            duration: 2000
-          });
-          toast.present();
-        }
-      } else {
-        if (
-          this.task.settings["question-type"].settings["answer-type"].settings
-            .polygon
-        ) {
-          const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-          const polygon = this.task.settings["question-type"].settings[
-            "answer-type"
-          ].settings.polygon[0];
-
-          const correct = booleanPointInPolygon(clickPosition, polygon);
-
-          this.initFeedback(correct);
-        } else {
-          const targetPosition = this.task.settings["question-type"].settings[
-            "answer-type"
-          ].settings.point.geometry.coordinates;
-          const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-
-          const distance = this.helperService.getDistanceFromLatLonInM(
-            targetPosition[1],
-            targetPosition[0],
-            clickPosition[1],
-            clickPosition[0]
-          );
-
-          this.trackerService.addAnswer({
-            task: this.task,
-            answer: {
-              distance: distance
-            }
-          });
-          this.initFeedback(distance < this.triggerTreshold);
-        }
-      }
-    } else if (
-      this.task.type == "info" ||
-      (this.task.settings["answer-type"] != null &&
-        this.task.settings["answer-type"].name == "take-photo")
-    ) {
-      this.initFeedback(true);
     }
-    else if (this.task.type == "theme-direction" &&
-      this.task.settings["question-type"].name == "question-type-arrow") {
-      this.trackerService.addAnswer({
-        task: this.task,
-        answer: {
-          direction: this.compassHeading
-        }
-      });
-      console.log(this.directionBearing, this.compassHeading);
-      this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
-    }
-    else if (this.task.type == "theme-direction" &&
-      this.task.settings["question-type"].name != "question-type-current-direction" &&
-      this.task.settings["question-type"].name != "photo" &&
-      this.task.settings["answer-type"].name != "multiple-choice") {
-      this.trackerService.addAnswer({
-        task: this.task,
-        answer: {
-          direction: this.compassHeading
-        }
-      });
-      console.log(this.directionBearing, this.compassHeading);
-      this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
-    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-current-direction") {
-      console.log(this.clickDirection, this.compassHeading)
-      const correct = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
-      this.initFeedback(correct);
-      if (correct) {
-        this.map.removeLayer('viewDirectionTask');
-        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
-      }
-    }
-    else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "question-type-map" && this.task.settings["answer-type"].name != "multiple-choice") {
-      console.log(this.clickDirection, this.compassHeading)
-      const correct = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
-      this.initFeedback(correct);
-      if (correct) {
-        this.map.removeLayer('viewDirectionTask');
-        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
-      }
-    } else if (this.task.type == "theme-direction" && this.task.settings["question-type"].name == "photo") {
-      const myTargetHeading = this.task.settings["question-type"].settings.direction
-      console.log(this.clickDirection, myTargetHeading)
-      const correct = this.Math.abs(this.clickDirection - myTargetHeading) <= 45;
-      this.initFeedback(correct);
-      if (correct) {
-        this.map.removeLayer('viewDirectionTask');
-        // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
-      }
-    } else if (
-      this.task.settings["answer-type"] &&
-      this.task.settings["answer-type"].name == "multiple-choice"
-    ) {
+
+    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
       if (this.selectedPhoto != null) {
         this.initFeedback(this.isCorrectPhotoSelected);
         if (this.isCorrectPhotoSelected) {
@@ -965,15 +759,52 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
         toast.present();
       }
-    } else {
-      // TODO: disable button
-      const waypoint = this.task.settings.point.geometry.coordinates;
-      const arrived = this.userDidArrive(waypoint);
-      if (!arrived) {
-        this.initFeedback(false)
+    }
+
+    if (this.task.answer.type == AnswerType.PHOTO) {
+      if (this.photo == "") {
+        const toast = await this.toastController.create({
+          message: "Bitte mache ein Foto",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
       } else {
-        this.onWaypointReached();
+        this.trackerService.addAnswer({
+          task: this.task,
+          answer: {
+            photo: this.photoURL
+          }
+        });
+        this.initFeedback(true);
+        this.photo = "";
+        this.photoURL = "";
       }
+    }
+
+    if (this.task.answer.type == AnswerType.MAP_POINT) {
+      const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
+
+      const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
+
+      this.trackerService.addAnswer({
+        task: this.task,
+        answer: {
+          inPolygon: isInPolygon
+        }
+      });
+      this.initFeedback(isInPolygon);
+    }
+
+    if (this.task.answer.type == AnswerType.DIRECTION) {
+      this.trackerService.addAnswer({
+        task: this.task,
+        answer: {
+          direction: this.compassHeading
+        }
+      });
+      this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
     }
   }
 
@@ -988,13 +819,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log("destroying playing game compoonent")
+
   }
 
   navigateHome() {
     this.positionSubscription.unsubscribe();
     this.geolocationService.clear()
-    // navigator.geolocation.clearWatch(this.positionWatch);
     this.deviceOrientationSubscription.unsubscribe();
 
     this.rotationControl.remove();
@@ -1009,7 +839,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // this.map.remove();
     this.navCtrl.navigateRoot("/");
     this.streetSectionControl.remove();
-
   }
 
   togglePanel() {
@@ -1032,7 +861,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     const fileTransfer: FileTransferObject = this.transfer.create();
     fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
-      console.log(JSON.parse(res.response))
       const filename = JSON.parse(res.response).filename
       this.photoURL = `${environment.apiURL}/file/${filename}`
       this.uploading = false;
@@ -1064,8 +892,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   _initMapFeatures() {
-    let mapFeatures = this.task.settings.mapFeatures;
-    console.log("MapFeatures: ", mapFeatures);
+    let mapFeatures = this.task.mapFeatures;
     if (mapFeatures != undefined) {
       for (let key in mapFeatures) {
         if (mapFeatures.hasOwnProperty(key)) {
@@ -1089,10 +916,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                 this.panControl.setType(PanType.Center)
               } else if (mapFeatures[key] == "static") {
                 this.panControl.setType(PanType.Static)
-                /* this.map.dragPan.disable();
-                this.map.scrollZoom.disable();
-                this.map.doubleClickZoom.disable();
-                this.map.touchZoomRotate.disable(); */
               }
               break;
             case "rotation":
@@ -1131,7 +954,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                 if (this.waypointMarkerDuplicate) {
                   setTimeout(() => {
                     this.layerControl.passMarkers({ waypointMarker: this.waypointMarkerDuplicate }, (marker) => {
-                      console.log('update marker', marker)
                     })
                   }, 2000)
                 }

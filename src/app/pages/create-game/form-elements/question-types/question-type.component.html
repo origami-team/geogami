@@ -1,0 +1,31 @@
+<div *ngIf="question.type != questionTypeEnum.NAV_INSTRUCTION">
+    <h5>Aufgabenstellung</h5>
+    <ion-textarea [(ngModel)]="question.text"></ion-textarea>
+</div>
+
+<div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION">
+    <h5>Navigationsanweisung</h5>
+    <ion-textarea [(ngModel)]="question.text"></ion-textarea>
+</div>
+
+<div *ngIf="question.type == questionTypeEnum.MAP_FEATURE">
+    <app-map featureType="geometry" [(feature)]="question.geometry"></app-map>
+</div>
+
+<div *ngIf="question.type == questionTypeEnum.MAP_FEATURE_PHOTO">
+    <app-photo-upload [(photo)]="question.photo"></app-photo-upload>
+    <app-map featureType="geometry" [(feature)]="question.geometry"></app-map>
+</div>
+
+<div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION">
+    <app-map featureType="direction" [(feature)]="question.direction"></app-map>
+</div>
+
+<div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_MARKER">
+    <app-map featureType="direction" [(feature)]="question.direction"></app-map>
+</div>
+
+<div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_PHOTO">
+    <app-photo-upload [(photo)]="question.photo"></app-photo-upload>
+    <app-map featureType="direction" [(feature)]="question.direction"></app-map>
+</div>

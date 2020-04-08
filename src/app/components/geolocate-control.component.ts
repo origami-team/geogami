@@ -58,8 +58,8 @@ export class GeolocateControl {
                 });
                 this.map.setLayoutProperty('geolocate', 'visibility', 'none');
                 this.isInitalized = true;
+                this.update()
             });
-        this.update()
     }
 
     public setType(type: GeolocateType): void {

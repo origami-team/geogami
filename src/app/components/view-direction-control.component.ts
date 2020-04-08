@@ -66,8 +66,8 @@ export class ViewDirectionControl {
                 });
                 this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
                 this.isInitalized = true;
+                this.update()
             });
-        this.update()
     }
 
     public setType(type: ViewDirectionType): void {
@@ -95,6 +95,9 @@ export class ViewDirectionControl {
     }
 
     private update(): void {
+        if (!this.isInitalized) {
+            return
+        }
         switch (this.viewDirectionType) {
             case ViewDirectionType.None:
                 this.reset()

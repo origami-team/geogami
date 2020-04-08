@@ -8,21 +8,23 @@ import { ModalController } from "@ionic/angular";
 
 import { GameFactoryService } from "../../../services/game-factory.service";
 
-import { CreateTaskModalPage } from "./../create-task-modal/create-task-modal.page";
-import { CreateModuleModalPage } from "./../create-module-modal/create-module-modal.page";
-import { CreateInfoModalComponent } from "./../create-info-modal/create-info-modal.component";
+import { CreateTaskModalPage } from "./../../create-game/create-task-modal/create-task-modal.page";
+import { CreateModuleModalPage } from "./../../create-game/create-module-modal/create-module-modal.page";
+import { CreateInfoModalComponent } from "./../../create-game/create-info-modal/create-info-modal.component";
 
 import { NavController } from "@ionic/angular";
 
 
 import { Game } from "src/app/models/game";
+import { GamesService } from 'src/app/services/games.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: "app-create-game-list",
-  templateUrl: "./create-game-list.page.html",
-  styleUrls: ["./create-game-list.page.scss"]
+  selector: "app-edit-game-list",
+  templateUrl: "./edit-game-list.page.html",
+  styleUrls: ["./edit-game-list.page.scss"]
 })
-export class CreateGameListPage implements OnInit {
+export class EditGameListPage implements OnInit {
   // name: String;
   // tasks: any[] = [];
   game: Game;
@@ -39,14 +41,23 @@ export class CreateGameListPage implements OnInit {
   constructor(
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private gamesService: GamesService,
+    private route: ActivatedRoute,
+
   ) { }
 
 
   ngOnInit() {
-    this.gameFactory.getGame().then(game => this.game = game);
-
-    console.log(this.gameFactory.game);
+    this.route.params.subscribe(params => {
+      this.gamesService
+        .getGame(params.id)
+        .then(games => {
+          this.game = games[0];
+          this.gameFactory.flushGame();
+          this.gameFactory.addGameInformation(this.game)
+        })
+    });
 
   }
 
@@ -112,7 +123,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   addTaskToGame(task) {
-    this.game = this.gameFactory.addTask({ ...task });
+    this.game = this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
     // this.gameFactory.getGame().then(game => {
     //   console.log(game)
     //   this.game = game
@@ -160,8 +171,13 @@ export class CreateGameListPage implements OnInit {
     this.reorder = !this.reorder
   }
 
-  navigateToOverview() {
-    console.log("navigate")
-    this.navCtrl.navigateForward("create-game/create-game-overview");
+  uploadGame() {
+    this.gamesService.updateGame(this.game).then(res => {
+      if (res.status == 200) {
+        this.navCtrl.navigateForward("/");
+        this.gameFactory.flushGame();
+      }
+    })
+    // this.navCtrl.navigateForward("create-game/create-game-overview");
   }
 }

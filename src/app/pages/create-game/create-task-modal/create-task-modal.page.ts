@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
-import navtasks from "../../../models/navigation-tasks";
+import { navtasks } from "../../../models/navigation-tasks";
 import themetasks from "./../../../models/theme-tasks";
 
 // import { FieldConfig } from "./../../../dynamic-form/models/field-config";
@@ -23,33 +23,11 @@ import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal
 export class CreateTaskModalPage implements OnInit, AfterViewInit {
   @Input() gameName: string = "";
   @Input() type: string = "nav";
-  @Input() task: any;
+  @Input() task: any = {};
 
-  // @ViewChild(DynamicFormComponent, { static: false })
-  // form: DynamicFormComponent;
+  tasks: ReadonlyArray<any>;
 
-  // config: FieldConfig[];
-
-  tasks: any[];
-  selectedTask: any = this.task;
-  confirmation: boolean = false;
-  showMarker: boolean = true;
-  mapFeatures: any = {
-    zoombar: "true",
-    pan: "true",
-    rotation: "manual",
-    material: "standard",
-    position: "none",
-    direction: "none",
-    track: false,
-    streetSection: false,
-    reducedInformation: false,
-    landmarks: false,
-    landmarkFeatures: undefined
-  }
-  feedback: boolean = true;
-  multipleTries: boolean = true;
-  accuracy: number = 10;
+  mapFeatures: any = this.task.mapFeatures;
 
   step: number = 5;
 
@@ -58,51 +36,63 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
   ngOnInit() {
     this.tasks = this.type == "nav" ? navtasks : themetasks;
 
-    if (this.task) {
-      this.onTaskSelected(this.task);
-    } else {
-      this.onTaskSelected(this.tasks[0]);
+    if (!this.task) {
+      this.task = this.tasks[0]
     }
+    this.onTaskSelected(this.task);
+
+    // console.log('qts', new Set(this.tasks.filter(e => e.category === "objectLocalization").map(e => e.questionType)))
+    // console.log('ats', new Set(this.tasks.filter(e => e.category === "objectLocalization").map(e => e.answerType)))
   }
 
   onTaskSelected(newValue) {
-    this.selectedTask = newValue;
-    console.log(this.selectedTask);
-    // this.config = this.selectedTask.developer;
+    this.task = newValue;
 
-    // console.log(this.config)
+    this.task.settings = {
+      feedback: true,
+      multipleTries: true,
+      confirmation: false,
+      accuracy: 10,
+      showMarker: true,
+      ...this.task.settings
+    }
 
+    console.log(this.task);
 
+    this.mapFeatures = this.task.mapFeatures
 
-    if (
-      ["theme-loc", "theme-object", "theme-direction"].includes(
-        this.selectedTask.type
-      )
-    ) {
-      this.confirmation = true;
+    if (this.task.category.includes('theme')) {
+      this.task.settings.confirmation = true;
     } else {
-      this.confirmation = false;
+      this.task.settings.confirmation = false;
     }
   }
 
-  // rangeChange() {
-  //   this.step = this.accuracy <= 5 ? 1 : 5;
-  // }
+  rangeChange() {
+    this.step = this.task.settings.accuracy <= 5 ? 1 : 5;
+  }
 
-  // feedbackChange() {
-  //   if (!this.feedback) {
-  //     this.multipleTries = false
-  //   }
-  // }
+  feedbackChange() {
+    if (!this.task.settings.feedback) {
+      this.task.settings.multipleTries = false
+    }
+  }
+
+  selectCompare(task1, task2) {
+    if (task1 == null || task2 == null) {
+      return false
+    }
+    return task1.type == task2.type
+  }
 
   ngAfterViewInit() {
-  //   let previousValid = this.form.valid;
-  //   this.form.changes.subscribe(() => {
-  //     if (this.form.valid !== previousValid) {
-  //       previousValid = this.form.valid;
-  //       this.form.setDisabled("submit", !previousValid);
-  //     }
-  //   });
+    //   let previousValid = this.form.valid;
+    //   this.form.changes.subscribe(() => {
+    //     if (this.form.valid !== previousValid) {
+    //       previousValid = this.form.valid;
+    //       this.form.setDisabled("submit", !previousValid);
+    //     }
+    //   });
   }
 
   // submit(value: { [name: string]: any }) {
@@ -113,10 +103,15 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
     const modal = await this.modalController.create({
       component: MapFeaturesModalPage,
       backdropDismiss: false,
+      componentProps: {
+        features: this.mapFeatures
+      }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    this.mapFeatures = data.data;
+    if (data != undefined) {
+      this.mapFeatures = data.data;
+    }
     return;
   }
 
@@ -125,6 +120,14 @@ export class CreateTaskModalPage implements OnInit, AfterViewInit {
       this.modalController.dismiss();
       return;
     }
+
+    this.modalController.dismiss({
+      dismissed: true,
+      data: {
+        ...this.task,
+        mapFeatures: this.mapFeatures
+      }
+    })
 
     // console.log(this.form.value);
 

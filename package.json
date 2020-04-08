@@ -104,7 +104,10 @@
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-insomnia": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-file-transfer": {}
+      "cordova-plugin-file-transfer": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-splashscreen": {}
     },
     "platforms": [
       "android",

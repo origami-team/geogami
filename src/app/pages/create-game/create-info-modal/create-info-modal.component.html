@@ -29,14 +29,14 @@
   <h5>Informationstext</h5>
 
   <ion-item>
-    <ion-textarea placeholder=" (optional)" [(ngModel)]=info></ion-textarea>
+    <ion-textarea placeholder=" (optional)" *ngIf="task" [(ngModel)]="task.question.text"></ion-textarea>
   </ion-item>
 
   <h5>Fotos und Grafiken</h5>
 
   <ion-item lines="none">
-    <ion-thumbnail slot="start" *ngIf="photo">
-      <img [src]="photo">
+    <ion-thumbnail slot="start" *ngIf="task?.question?.photo">
+      <img [src]="task.question.photo">
     </ion-thumbnail>
     <ion-button color="warning" size="default" (click)=capturePhoto()>
       <ion-icon slot="icon-only" name="camera"></ion-icon>
