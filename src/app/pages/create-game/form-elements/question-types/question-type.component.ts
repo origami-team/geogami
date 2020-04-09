@@ -3,6 +3,8 @@ import {
 } from "@angular/core";
 
 import { QuestionType } from './../../../../models/types'
+import { PopoverComponent } from 'src/app/popover/popover.component';
+import { PopoverController } from '@ionic/angular';
 
 
 @Component({
@@ -14,7 +16,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     questionTypeEnum = QuestionType
 
-    constructor() { }
+    constructor(public popoverController: PopoverController) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         // console.log(changes)
@@ -22,5 +24,16 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         // console.log(this.question)
+    }
+
+    async showPopover(ev: any, text: string) {
+        console.log(ev);
+        const popover = await this.popoverController.create({
+            component: PopoverComponent,
+            event: ev,
+            translucent: true,
+            componentProps: { text }
+        });
+        return await popover.present();
     }
 }

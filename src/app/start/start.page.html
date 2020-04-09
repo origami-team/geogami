@@ -55,6 +55,12 @@
     </ion-card-content>
   </ion-card>
 
+  <div class="ion-text-center" *ngIf="device">
+    <p>
+      {{device.appVersion}} ({{device.appBuild}})
+    </p>
+  </div>
+
   <!-- <ion-footer translucent>
     <ion-row>
       <ion-col>

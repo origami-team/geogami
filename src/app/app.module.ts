@@ -31,6 +31,9 @@ import { MapComponent } from './pages/create-game/form-elements/map/map.componen
 import { PhotoUploadMultipleChoiceComponent } from './pages/create-game/form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component'
 import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-upload/photo-upload.component'
 
+import { TypeToTextPipe } from './pipes/typeToText.pipe';
+
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -48,7 +51,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PhotoUploadMultipleChoiceComponent,
     PhotoUploadComponent,
     QuestionTypeComponent,
-    AnswerTypeComponent
+    AnswerTypeComponent,
+    TypeToTextPipe
   ],
   exports: [
 

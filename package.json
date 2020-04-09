@@ -52,6 +52,7 @@
     "core-js": "^2.5.4",
     "jetifier": "^1.6.5",
     "leaflet.offline": "^1.0.4",
+    "lodash": "^4.17.15",
     "mapbox-gl": "^1.8.1",
     "mapbox-gl-compare": "^0.4.0",
     "mapbox-gl-style-switcher": "^1.0.3",

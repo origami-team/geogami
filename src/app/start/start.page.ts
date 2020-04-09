@@ -4,6 +4,8 @@ import { NavController } from '@ionic/angular';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { Plugins } from '@capacitor/core';
+
 
 @Component({
   selector: 'app-start',
@@ -19,11 +21,16 @@ export class StartPage implements OnInit {
   evaluateMode: String
   evaluateModeDescription: String
 
+  device: any;
+
   constructor(public navCtrl: NavController, public toastController: ToastController, private _translate: TranslateService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this._translate.setDefaultLang('de');
     this._initialiseTranslation()
+
+    this.device = await Plugins.Device.getInfo();
+    console.log(this.device)
   }
 
   _initialiseTranslation(): void {

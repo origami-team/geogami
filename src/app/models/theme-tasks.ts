@@ -1,6 +1,6 @@
 import { QuestionType, AnswerType, TaskMode } from './types'
 
-export default [
+export const themetasks: ReadonlyArray<any> = [
     {
         name: "Selbst-Lokalisation",
         type: "theme-loc",
@@ -111,12 +111,13 @@ export default [
     },
     {
         name: "Richtungssuche",
+        type: "theme-direction",
         // category: "themedirection",
         category: "theme",
         questionType: "textMapFeature",
         question: {
             type: QuestionType.MAP_DIRECTION_MARKER,
-            text: "Drehe dich. Finde es auf der Karte und tippe es an."
+            text: "Drehe dich in die Richtung, die auf der Karte zu sehen ist. Wähle das passende Foto dazu."
         },
         answerType: "multipleChoice",
         answer: {
@@ -126,6 +127,7 @@ export default [
         settings: {}
     }, {
         name: "Richtungssuche",
+        type: "theme-direction",
         // category: "themedirection",
         category: "theme",
         questionType: "textMapFeature",
@@ -141,6 +143,7 @@ export default [
         settings: {}
     }, {
         name: "Richtungssuche",
+        type: "theme-direction",
         // category: "themedirection",
         category: "theme",
         questionType: "textOrientation",
@@ -157,6 +160,7 @@ export default [
         settings: {}
     }, {
         name: "Richtungssuche",
+        type: "theme-direction",
         // category: "themedirection",
         category: "theme",
         questionType: "text",
@@ -172,6 +176,7 @@ export default [
         settings: {}
     }, {
         name: "Richtungssuche",
+        type: "theme-direction",
         // category: "themedirection",
         category: "theme",
         questionType: "textPhoto",

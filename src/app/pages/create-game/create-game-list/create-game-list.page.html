@@ -99,11 +99,10 @@
           <ion-item color="light" class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
             <ion-avatar slot="start" *ngIf="task.category.includes('nav')">
               <div class="mymarker">
-                <p class="list">{{ i + 1 }}</p>
+                <!-- <p class="list">{{ i + 1}}</p> -->
               </div>
             </ion-avatar>
-            <ion-avatar slot="start"
-              *ngIf="task.category.includes('Localization') || task.category.includes('direction')">
+            <ion-avatar slot="start" *ngIf="task.category.includes('theme')">
               <div class="mymarker invisible">
               </div>
             </ion-avatar>

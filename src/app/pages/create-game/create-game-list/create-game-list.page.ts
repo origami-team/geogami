@@ -112,7 +112,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   addTaskToGame(task) {
-    this.game = this.gameFactory.addTask({ ...task });
+    this.game = this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
     // this.gameFactory.getGame().then(game => {
     //   console.log(game)
     //   this.game = game

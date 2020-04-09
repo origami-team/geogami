@@ -105,18 +105,6 @@
                 }" />
             </div>
           </div>
-          <!-- <div class="photo-container" *ngIf="
-              (task.type == 'theme-object' &&
-              task.settings['question-type'].name == 'photo') ||
-              (task.type == 'theme-direction' &&
-              task.settings['question-type'].name == 'photo')
-            ">
-            <img [src]="task.settings['question-type'].settings.photo" />
-          </div>
-          <div class="photo-container" *ngIf="task.type == 'info' && task.settings.photo">
-            <img [src]="task.settings.photo" />
-          </div> -->
-
 
           <div class="photo-container"
             *ngIf="task.question?.type == 'MAP_FEATURE_PHOTO' || task.question?.type == 'MAP_DIRECTION_PHOTO' || task.question?.type == 'INFO'">
@@ -207,9 +195,6 @@
           <ion-button slot="end" class="confirm" [color]="task.category.includes('nav') ? 'primary' : 'secondary'"
             (click)="onOkClicked()" *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
           </ion-button>
-          <!-- <ion-button slot="end" class="confirm" color=primary (click)="onOkClicked()"
-            *ngIf="task.settings.confirmation && task.type.includes('nav')">OK
-          </ion-button> -->
 
           <ion-button class="confirm" color=warning (click)="nextTask()" *ngIf="task?.category?.includes('info')">OK
           </ion-button>
@@ -234,18 +219,4 @@
     <ion-button *ngIf="!task.settings.multipleTries && task.settings.feedback"
       (click)="feedbackRetry ? dismissFeedback() : nextTask()" color="danger">Weiter</ion-button>
   </ion-card>
-
-  <!-- <div class="overlay ion-padding" *ngIf="currentTask">
-    <ion-img [src]="currentTask.question.img" *ngIf="currentTask.question.img"></ion-img>
-    <h2>{{ currentTask.question.txt }}</h2>
-    <ion-grid>
-      <ion-row>
-        <ion-col *ngFor="let answer of currentTask.answers">
-          <ion-button (click)=nextTask()>
-            {{ answer.txt }}
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div> -->
 </ion-content>

@@ -13,7 +13,6 @@ export class LandmarkControl {
         this.warningColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning');
         this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
         this.dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
-
     }
 
     public setLandmark(landmark: any) {
@@ -87,7 +86,6 @@ export class LandmarkControl {
         if (this.map.getSource('landmarksLayerLine')) {
             this.map.removeSource('landmarksSource')
         }
-
         if (this.map.getLayer('landmarks-qt-map-layer')) {
             this.map.removeLayer('landmarks-qt-map-layer')
         }

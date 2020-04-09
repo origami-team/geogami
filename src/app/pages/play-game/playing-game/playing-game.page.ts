@@ -524,6 +524,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('viewDirectionClick');
     }
 
+    this.landmarkControl.remove();
+
     this.photo = '';
     this.photoURL = '';
     this.clickDirection = 0;
@@ -737,6 +739,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         pitch: this.map.getPitch()
       }
     });
+
+    if (this.task.answer.type == AnswerType.POSITION) {
+      const waypoint = this.task.answer.position.geometry.coordinates;
+      const arrived = this.userDidArrive(waypoint);
+      if (!arrived) {
+        this.initFeedback(false)
+      } else {
+        this.onWaypointReached();
+      }
+    }
+
     if (this.task.type == "theme-loc") {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
       const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
@@ -805,6 +818,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       });
       this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
+    }
+
+    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+      this.trackerService.addAnswer({
+        task: this.task,
+        answer: {
+          direction: this.compassHeading
+        }
+      });
+      this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
     }
   }
 
