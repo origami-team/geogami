@@ -2,7 +2,7 @@ import {
     Component, OnInit, Input, OnChanges, SimpleChanges
 } from "@angular/core";
 
-import { QuestionType } from './../../../../models/types'
+import { QuestionType, TaskMode } from './../../../../models/types'
 import { PopoverComponent } from 'src/app/popover/popover.component';
 import { PopoverController } from '@ionic/angular';
 
@@ -15,6 +15,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     @Input() question: any;
 
     questionTypeEnum = QuestionType
+    taskModeEnum = TaskMode
 
     constructor(public popoverController: PopoverController) { }
 

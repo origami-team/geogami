@@ -20,6 +20,12 @@ export class GamesService {
       .toPromise();
   }
 
+  getTracks(): Promise<any> {
+    return this.http
+      .get(`${environment.apiURL}/tracks`)
+      .toPromise();
+  }
+
   getGame(id: string): Promise<any> {
     return this.http.get(`${environment.apiURL}/game/${id}`).toPromise();
   }

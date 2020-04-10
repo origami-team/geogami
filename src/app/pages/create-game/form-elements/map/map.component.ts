@@ -183,17 +183,17 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.map.addControl(this.draw, "top-left");
 
-        this.map.on("draw.create", e => {
+        this.draw.on("draw.create", e => {
           this.feature = this.draw.getAll();
           this.featureChange.emit(this.draw.getAll());
         });
 
-        this.map.on("draw.delete", e => {
+        this.draw.on("draw.delete", e => {
           this.feature = this.draw.getAll();
           this.featureChange.emit(this.draw.getAll());
         });
 
-        this.map.on("draw.update", e => {
+        this.draw.on("draw.update", e => {
           this.feature = this.draw.getAll();
           this.featureChange.emit(this.draw.getAll());
         });

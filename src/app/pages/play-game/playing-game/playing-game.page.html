@@ -196,7 +196,7 @@
             (click)="onOkClicked()" *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
           </ion-button>
 
-          <ion-button class="confirm" color=warning (click)="nextTask()" *ngIf="task?.category?.includes('info')">OK
+          <ion-button class="confirm" color=warning (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">OK
           </ion-button>
 
         </div>

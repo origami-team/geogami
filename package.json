@@ -57,6 +57,7 @@
     "mapbox-gl-compare": "^0.4.0",
     "mapbox-gl-style-switcher": "^1.0.3",
     "ng-lottie": "^0.3.2",
+    "ngx-json-viewer": "^2.4.0",
     "osmtogeojson": "^3.0.0-beta.3",
     "pwa": "^1.9.7",
     "rxjs": "~6.5.1",

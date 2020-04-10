@@ -66,8 +66,9 @@ export const themetasks: ReadonlyArray<any> = [
         category: "theme",
         questionType: "text",
         question: {
-            type: QuestionType.MAP_FEATURE,
-            text: "Suche [...] in deiner Umgebung. Finde es auf der Karte und tippe es an."
+            type: QuestionType.TEXT,
+            text: "Suche [...] in deiner Umgebung. Finde es auf der Karte und tippe es an.",
+            mode: TaskMode.NO_FEATURE
         },
         answerType: "mapPoint",
         answer: {

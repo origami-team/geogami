@@ -74,6 +74,10 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('info')
   }
 
+  navigateAnalyzePage() {
+    this.navCtrl.navigateForward('analyze')
+  }
+
   async setLanguage(e) {
     this._translate.use(e.target.dataset.value);
     this._initialiseTranslation()

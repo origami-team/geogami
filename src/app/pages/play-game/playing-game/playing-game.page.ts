@@ -233,29 +233,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.geolocationService.init();
 
     this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
-      this.trackerService.addWaypoint({
-        position: {
-          coordinates: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            altitude: position.coords.altitude,
-            accuracy: position.coords.accuracy,
-            altitudeAccuracy: position.coords.altitudeAccuracy,
-            heading: position.coords.heading,
-            speed: position.coords.speed
-          },
-          timestamp: position.timestamp
-        },
-        compassHeading: this.compassHeading,
-        mapViewport: {
-          bounds: this.map.getBounds(),
-          center: this.map.getCenter(),
-          zoom: this.map.getZoom(),
-          // style: this.map.getStyle(),
-          bearing: this.map.getBearing(),
-          pitch: this.map.getPitch()
-        }
-      });
+      this.trackerService.addWaypoint({});
 
       this.lastKnownPosition = position;
 
@@ -329,8 +307,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           .then(games => {
             this.game = games[0];
           })
-          .finally(() => {
-            this.initGame();
+          .finally(async () => {
+            await this.initGame();
           });
       });
     });
@@ -338,7 +316,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map.on("click", e => {
       this.trackerService.addEvent({
         type: "ON_MAP_CLICKED",
-        position: {
+        clickPosition: {
           latitude: e.lngLat.lat,
           longitude: e.lngLat.lng
         }
@@ -472,9 +450,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
   }
 
-  initGame() {
+  async initGame() {
     this.task = this.game.tasks[this.taskIndex];
-    this.trackerService.init(this.game._id, this.device);
+    await this.trackerService.init(this.game._id, this.map);
     this.trackerService.addEvent({
       type: "INIT_GAME"
     });
@@ -487,7 +465,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
     this.audioPlayer.play()
     console.log("Current task: ", this.task);
-    this._initMapFeatures();
+
     this.trackerService.addEvent({
       type: "INIT_TASK",
       task: this.task
@@ -525,6 +503,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     this.landmarkControl.remove();
+
+    this._initMapFeatures();
 
     this.photo = '';
     this.photoURL = '';
@@ -705,48 +685,28 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       elem.classList.remove('selected')
     })
     event.target.classList.add('selected')
-    this.trackerService.addAnswer({
-      task: this.task,
+
+    this.trackerService.addEvent({
+      type: "PHOTO_SELECTED",
       answer: {
-        "multiple-choice": item.key,
+        photo: item.value,
         correct: this.isCorrectPhotoSelected,
       }
     });
   }
 
   async onOkClicked() {
-    this.trackerService.addEvent({
-      type: "ON_OK_CLICKED",
-      position: {
-        coordinates: {
-          latitude: this.lastKnownPosition.coords.latitude,
-          longitude: this.lastKnownPosition.coords.longitude,
-          altitude: this.lastKnownPosition.coords.altitude,
-          accuracy: this.lastKnownPosition.coords.accuracy,
-          altitudeAccuracy: this.lastKnownPosition.coords.altitudeAccuracy,
-          heading: this.lastKnownPosition.coords.heading,
-          speed: this.lastKnownPosition.coords.speed
-        },
-        timestamp: this.lastKnownPosition.timestamp
-      },
-      compassHeading: this.compassHeading,
-      mapViewport: {
-        bounds: this.map.getBounds(),
-        center: this.map.getCenter(),
-        zoom: this.map.getZoom(),
-        // style: this.map.getStyle(),
-        bearing: this.map.getBearing(),
-        pitch: this.map.getPitch()
-      }
-    });
+    let isCorrect: boolean = true;
 
     if (this.task.answer.type == AnswerType.POSITION) {
       const waypoint = this.task.answer.position.geometry.coordinates;
       const arrived = this.userDidArrive(waypoint);
       if (!arrived) {
         this.initFeedback(false)
+        isCorrect = false;
       } else {
         this.onWaypointReached();
+        isCorrect = true;
       }
     }
 
@@ -754,11 +714,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
       const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
       this.initFeedback(distance < this.triggerTreshold)
+      isCorrect = distance < this.triggerTreshold;
     }
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
       if (this.selectedPhoto != null) {
         this.initFeedback(this.isCorrectPhotoSelected);
+        isCorrect = this.isCorrectPhotoSelected
         if (this.isCorrectPhotoSelected) {
           this.isCorrectPhotoSelected = null;
           this.selectedPhoto = null;
@@ -771,6 +733,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           duration: 2000
         });
         toast.present();
+        isCorrect = false;
       }
     }
 
@@ -783,6 +746,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           duration: 2000
         });
         toast.present();
+        isCorrect = false;
       } else {
         this.trackerService.addAnswer({
           task: this.task,
@@ -791,6 +755,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           }
         });
         this.initFeedback(true);
+        isCorrect = true;
         this.photo = "";
         this.photoURL = "";
       }
@@ -800,7 +765,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
 
       const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
-
       this.trackerService.addAnswer({
         task: this.task,
         answer: {
@@ -808,6 +772,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       });
       this.initFeedback(isInPolygon);
+      isCorrect = isInPolygon;
     }
 
     if (this.task.answer.type == AnswerType.DIRECTION) {
@@ -818,6 +783,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       });
       this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
+      isCorrect = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
     }
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
@@ -828,6 +794,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       });
       this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
+      isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+    }
+
+    this.trackerService.addEvent({
+      type: "ON_OK_CLICKED",
+      compassHeading: this.compassHeading,
+      correct: isCorrect
+    });
+
+    if (this.task.category == "info") {
+      this.nextTask()
     }
   }
 
@@ -887,6 +864,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const filename = JSON.parse(res.response).filename
       this.photoURL = `${environment.apiURL}/file/${filename}`
       this.uploading = false;
+
+      this.trackerService.addEvent({
+        type: "PHOTO_TAKEN",
+        photo: `${environment.apiURL}/file/${filename}`
+      })
     })
       .catch(err => {
         console.log(err)

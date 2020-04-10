@@ -25,6 +25,15 @@
     <app-map featureType="geometry" [(feature)]="question.geometry"></app-map>
 </div>
 
+<div *ngIf="question.mode == taskModeEnum.NO_FEATURE">
+    <h5>Objektposition
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Markiere das Objekt, das der Spieler in seiner Umgebung finden soll. Diese Markierung wird dem Spieler nicht im Spiel angezeigt. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.')">
+        </ion-icon>
+    </h5>
+    <app-map featureType="geometry" [(feature)]="question.geometry"></app-map>
+</div>
+
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE_PHOTO">
     <h5>Foto des zu suchenden Objekts
         <ion-icon name="information-circle"
