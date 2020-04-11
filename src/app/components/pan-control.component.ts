@@ -22,7 +22,8 @@ export class PanControl {
         this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
             position => {
                 if (this.map != undefined && this.panType == PanType.Center) {
-                    this.map.panTo([position.coords.longitude, position.coords.latitude]);
+                    this.map.setCenter([position.coords.longitude, position.coords.latitude])
+                    // this.map.panTo([position.coords.longitude, position.coords.latitude]);
                 }
             }
         );

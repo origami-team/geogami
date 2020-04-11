@@ -13,6 +13,8 @@ import { cloneDeep } from 'lodash';
 import { navtasks } from "../../../models/navigation-tasks";
 import { themetasks } from "./../../../models/theme-tasks";
 
+import { standardMapFeatures } from "./../../../models/mapFeatures"
+
 // import { FieldConfig } from "./../../../dynamic-form/models/field-config";
 // import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
 import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
@@ -195,6 +197,10 @@ export class CreateTaskModalPage implements OnInit {
     if (dismissType == "close") {
       this.modalController.dismiss();
       return;
+    }
+
+    if (this.mapFeatures == undefined) {
+      this.mapFeatures = cloneDeep(standardMapFeatures)
     }
 
     this.modalController.dismiss({

@@ -58,7 +58,7 @@ export class RotationControl {
                     .watchHeading({ frequency: 10 })
                     .subscribe((data: DeviceOrientationCompassHeading) => {
                         requestAnimationFrame(() => {
-                            this.map.setBearing(data.magneticHeading);
+                            this.map.rotateTo(data.magneticHeading, { duration: 20 });
                         })
                     })
                 break;
