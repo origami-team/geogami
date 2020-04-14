@@ -456,7 +456,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async initGame() {
     this.task = this.game.tasks[this.taskIndex];
-    await this.trackerService.init(this.game._id, this.map);
+    await this.trackerService.init(this.game._id, this.game.name, this.map);
     this.trackerService.addEvent({
       type: "INIT_GAME"
     });
@@ -497,13 +497,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.waypointMarkerDuplicate = null;
     }
 
-    if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionTask').length > 0) {
+    if (this.map.getLayer('viewDirectionTask')) {
       this.map.removeLayer('viewDirectionTask');
       this.map.removeSource('viewDirectionTask');
-      // this.viewDirectionTaskGeolocateSubscription.unsubscribe();
     }
 
-    if (this.map.getStyle().layers.filter(e => e.id == 'viewDirectionClick').length > 0) {
+    if (this.map.getLayer('viewDirectionClick')) {
       this.map.removeLayer('viewDirectionClick');
       this.map.removeSource('viewDirectionClick');
     }
@@ -546,11 +545,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.question.type == QuestionType.MAP_DIRECTION) {
-      this.directionBearing = this.task.question.direction.bearing
+      this.directionBearing = this.task.question.direction.bearing || 0
     }
 
     if (this.task.question.type == QuestionType.MAP_DIRECTION_MARKER) {
-      this.directionBearing = this.task.question.direction.bearing
+      this.directionBearing = this.task.question.direction.bearing || 0
 
       this.map.addSource("viewDirectionTask", {
         type: "geojson",
