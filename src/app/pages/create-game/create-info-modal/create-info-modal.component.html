@@ -34,16 +34,17 @@
 
   <h5>Fotos und Grafiken</h5>
 
-  <ion-item lines="none">
+  <div class="photo-wrapper">
     <ion-thumbnail slot="start" *ngIf="task?.question?.photo">
       <img [src]="task.question.photo">
     </ion-thumbnail>
-    <ion-button color="warning" size="default" (click)=capturePhoto()>
+    <ion-button color="warning" size="default" (click)=capturePhoto(false)>
       <ion-icon slot="icon-only" name="camera"></ion-icon>
     </ion-button>
-    <!-- <ion-button color=warning (click)=capturePhoto()>Foto aufnehmen</ion-button>
-    <ion-button color=warning (click)=photoFromLibrary()>Foto aus Galerie</ion-button> -->
-  </ion-item>
+    <ion-button color="warning" size="default" (click)=capturePhoto(true)>
+      <ion-icon slot="icon-only" name="images"></ion-icon>
+    </ion-button>
+  </div>
 
   <h5>Weitere Einstellungen</h5>
 

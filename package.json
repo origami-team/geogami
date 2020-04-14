@@ -35,7 +35,7 @@
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.11.0",
     "@ionic/angular": "^5.0.5",
-    "@ionic/pwa-elements": "^1.5.1",
+    "@ionic/pwa-elements": "^1.5.2",
     "@ionic/storage": "^2.2.0",
     "@mapbox/mapbox-gl-draw": "trygveaa/mapbox-gl-draw#dont-drag-with-multiple-fingers",
     "@ngx-translate/core": "^11.0.1",

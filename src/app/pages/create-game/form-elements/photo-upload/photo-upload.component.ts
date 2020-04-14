@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-import { Plugins, CameraResultType } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 
 @Component({
   selector: "app-photo-upload",
@@ -18,6 +18,7 @@ export class PhotoUploadComponent implements OnInit {
   @Output() photoChange: EventEmitter<any> = new EventEmitter<any>();
 
   uploading: boolean = false
+  uploadingProgress: number = 100;
 
   constructor(
     public popoverController: PopoverController,
@@ -29,11 +30,13 @@ export class PhotoUploadComponent implements OnInit {
     // throw new Error("Method not implemented.");
   }
 
-  async capturePhoto() {
+  async capturePhoto(library: boolean = false) {
     const image = await Plugins.Camera.getPhoto({
       quality: 50,
-      allowEditing: true,
-      resultType: CameraResultType.Uri
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: library ? CameraSource.Photos : CameraSource.Camera,
+      width: 500
     });
 
     this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
@@ -41,12 +44,16 @@ export class PhotoUploadComponent implements OnInit {
     this.uploading = true;
 
     const fileTransfer: FileTransferObject = this.transfer.create();
+
+    fileTransfer.onProgress(e => {
+      this.uploadingProgress = e.loaded / e.total * 100
+    })
+
     fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
       console.log(JSON.parse(res.response))
       const filename = JSON.parse(res.response).filename
       this.photo = `${environment.apiURL}/file/${filename}`
       this.photoChange.emit(this.photo)
-      // this.group.patchValue({ [this.config.name]: `${environment.apiURL}/file/${filename}` })
       this.uploading = false;
     })
       .catch(err => {

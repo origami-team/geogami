@@ -5,7 +5,7 @@ import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
-import { Plugins, GeolocationPosition, Capacitor, CameraResultType } from '@capacitor/core';
+import { Plugins, GeolocationPosition, Capacitor, CameraResultType, CameraSource } from '@capacitor/core';
 
 import {
   DeviceOrientation,
@@ -857,8 +857,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     const image = await Plugins.Camera.getPhoto({
       quality: 50,
-      allowEditing: true,
-      resultType: CameraResultType.Uri
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+      width: 500
     });
 
     this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);

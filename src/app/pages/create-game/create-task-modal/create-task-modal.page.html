@@ -107,7 +107,7 @@
     <ion-text>
       <h5>Weitere Einstellungen</h5>
     </ion-text>
-    <ion-item lines="none" *ngIf="task.category == 'nav'">
+    <ion-item lines="none" *ngIf="task.type == 'nav-flag'">
       <ion-label>Eingabebestätigung</ion-label>
       <ion-toggle [(ngModel)]="task.settings.confirmation"></ion-toggle>
     </ion-item>
@@ -126,21 +126,20 @@
         [disabled]="!task.settings.feedback">
       </ion-toggle>
     </ion-item>
-    <ion-item lines="none">
+    <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction'">
       <ion-label>Genauigkeit</ion-label>
-      <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="100" [step]="step" snaps
+      <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="50" [step]="step" snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'" ticks pin (ionChange)="rangeChange()">
         <ion-label slot="start">0m</ion-label>
         <ion-icon slot="start" size="small" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate">
         </ion-icon>
         <ion-icon slot="end" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate"></ion-icon>
-        <ion-label slot="end">100m</ion-label>
+        <ion-label slot="end">50m</ion-label>
       </ion-range>
     </ion-item>
   </div>
 
-  <ion-item detail lines="none" (click)="presentMapFeaturesModal()"
-    *ngIf="task.type == 'nav-flag' || task.type == 'nav-text' || task.type == 'theme-loc' || task.type == 'theme-object' || task.type == 'theme-direction'">
+  <ion-item detail lines="none" (click)="presentMapFeaturesModal()" *ngIf="task.type != 'nav-arrow'">
     <ion-label>
       Kartenfeatures
     </ion-label>

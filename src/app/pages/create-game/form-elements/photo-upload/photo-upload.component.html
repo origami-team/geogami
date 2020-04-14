@@ -4,14 +4,20 @@
       </ion-icon>
     </h5>
   </ion-text> -->
-  <ion-item lines="none">
-    <ion-thumbnail slot="start" *ngIf="photo">
-      <img [src]="photo">
+  <div class="photo-wrapper">
+    <ion-thumbnail *ngIf="photo" class="preview">
+      <ion-spinner *ngIf="uploading"></ion-spinner>
+      <img [src]="photo" [ngStyle]="{
+        filter: 'blur(' + ((100 - uploadingProgress) / 10) + 'px)'
+      }">
     </ion-thumbnail>
-    <ion-button color="secondary" size="default" (click)=capturePhoto()>
+    <ion-button color="secondary" size="default" (click)=capturePhoto(false)>
       <ion-icon slot="icon-only" name="camera"></ion-icon>
     </ion-button>
-  </ion-item>
+    <ion-button color="secondary" size="default" (click)=capturePhoto(true)>
+      <ion-icon slot="icon-only" name="images"></ion-icon>
+    </ion-button>
+  </div>
 
 
 </ng-container>
