@@ -75,7 +75,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      backButtonText: 'Zurück'
+    }),
     AppRoutingModule,
     HttpClientModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
