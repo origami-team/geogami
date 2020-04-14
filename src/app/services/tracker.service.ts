@@ -12,6 +12,7 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
 })
 export class TrackerService {
   private game: string;
+  private gameName: string;
   private device: DeviceInfo;
   private waypoints: any[];
   private events: any[];
@@ -34,7 +35,7 @@ export class TrackerService {
 
   }
 
-  async init(gameID, map: any) {
+  async init(gameID, name, map: any) {
     this.positionWatch = this.geolocateService.geolocationSubscription.subscribe(position => {
       this.position = position
     })
@@ -48,6 +49,7 @@ export class TrackerService {
     this.map = map;
 
     this.game = gameID;
+    this.gameName = name;
     this.device = await Plugins.Device.getInfo().then(device => device)
     this.waypoints = [];
     this.events = [];
@@ -99,6 +101,7 @@ export class TrackerService {
   uploadTrack() {
     const data = {
       game: this.game,
+      name: this.gameName,
       start: this.start,
       end: new Date().toISOString(),
       device: this.device,

@@ -223,7 +223,17 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (this.featureType == "direction" && this.marker) {
           this.marker.setLngLat(this.map.getCenter());
-          this.featureChange.emit({ ...this.feature, position: this._toGeoJSONPoint(this.map.getCenter().lng, this.map.getCenter().lat) });
+
+          let bearing = this.map.getBearing();
+
+          while (bearing > 360) {
+            bearing = bearing - 360;
+          }
+          while (bearing < 0) {
+            bearing = bearing + 360;
+          }
+
+          this.featureChange.emit({ bearing: bearing, position: this._toGeoJSONPoint(this.map.getCenter().lng, this.map.getCenter().lat) });
         }
       });
 
