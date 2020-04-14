@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
 import { shareReplay } from "rxjs/operators";
 
-
 import { Plugins, GeolocationPosition } from '@capacitor/core';
 
 @Injectable({
@@ -14,10 +13,11 @@ export class OrigamiGeolocationService {
 
   private watchID: string;
 
-  constructor() { }
+  constructor() {
+
+  }
 
   init() {
-    console.log("initializing geolocation service")
     this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
       this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
         if (error != null) {
@@ -26,6 +26,7 @@ export class OrigamiGeolocationService {
         observer.next(position);
       })
     }).pipe(shareReplay());
+    console.log("initializing geolocation service")
   }
 
   getSinglePositionWatch(): Observable<GeolocationPosition> {

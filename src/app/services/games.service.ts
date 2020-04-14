@@ -12,11 +12,17 @@ import { environment } from "../../environments/environment";
   providedIn: "root"
 })
 export class GamesService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getGames(minimal: boolean = false): Promise<any> {
     return this.http
       .get(`${environment.apiURL}/games?minimal=${minimal}`)
+      .toPromise();
+  }
+
+  getTracks(): Promise<any> {
+    return this.http
+      .get(`${environment.apiURL}/tracks`)
       .toPromise();
   }
 
@@ -27,6 +33,12 @@ export class GamesService {
   postGame(game: Game): Promise<any> {
     return this.http
       .post(`${environment.apiURL}/game`, game, { observe: "response" })
+      .toPromise();
+  }
+
+  updateGame(game: Game): Promise<any> {
+    return this.http
+      .put(`${environment.apiURL}/game`, game, { observe: "response" })
       .toPromise();
   }
 }

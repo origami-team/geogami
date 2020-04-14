@@ -35,7 +35,7 @@
 
   <!-- Old card style -->
   <!-- <div *ngFor="let task of game.tasks; index as i">
-    <ion-card class="my-card" *ngIf="task.type.includes('nav')">
+    <ion-card class="my-card" *ngIf="task.category.includes('nav')">
       <ion-card-content>
         <ion-item class="item-text-wrap" lines="none">
           <ion-avatar slot="start">
@@ -57,7 +57,7 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card class="my-card" *ngIf="task.type.includes('theme')">
+    <ion-card class="my-card" *ngIf="task.category.includes('theme')">
       <ion-card-content>
         <ion-item class="item-text-wrap" lines="none">
           <ion-label text-wrap class="ion-text-wrap">
@@ -97,30 +97,31 @@
       <ion-list mode="ios" *ngIf="game">
         <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!reorder">
           <ion-item color="light" class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
-            <ion-avatar slot="start" *ngIf="task.type.includes('nav')">
+            <ion-avatar slot="start" *ngIf="task.category.includes('nav')">
               <div class="mymarker">
-                <p class="list">{{ i + 1 }}</p>
+                <!-- <p class="list">{{ i + 1}}</p> -->
               </div>
             </ion-avatar>
-            <ion-avatar slot="start" *ngIf="task.type.includes('theme')">
+            <ion-avatar slot="start" *ngIf="task.category.includes('theme')">
               <div class="mymarker invisible">
               </div>
             </ion-avatar>
-            <ion-avatar slot="start" *ngIf="task.type.includes('info')">
+            <ion-avatar slot="start" *ngIf="task.category.includes('info')">
               <div class="mymarker invisible">
               </div>
             </ion-avatar>
-            <ion-chip *ngIf="task.type.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
+            <ion-chip *ngIf="task.category.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
               <ion-label>
                 <ion-icon name="navigate"></ion-icon> {{ task.name }}
               </ion-label>
             </ion-chip>
-            <ion-chip *ngIf="task.type.includes('theme')" color="secondary" (click)="presentTaskModal('theme', task)">
+            <ion-chip *ngIf="task.category.includes('theme')" color="secondary"
+              (click)="presentTaskModal('theme', task)">
               <ion-label>
                 <ion-icon name="clipboard"></ion-icon> {{ task.name }}
               </ion-label>
             </ion-chip>
-            <ion-chip *ngIf="task.type.includes('info')" color="warning" (click)="presentTaskModal('info', task)">
+            <ion-chip *ngIf="task.category.includes('info')" color="warning" (click)="presentTaskModal('info', task)">
               <ion-label>
                 <ion-icon name="information-circle-outline"></ion-icon> Information
               </ion-label>

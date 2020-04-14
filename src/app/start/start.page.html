@@ -22,7 +22,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card id="start_card_analyze" (click)=handleCardClick($event)>
+  <ion-card id="start_card_analyze" (click)=navigateAnalyzePage()>
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="ribbon"></ion-icon> Auswerten
@@ -54,6 +54,12 @@
       Erfahre mehr über die App.
     </ion-card-content>
   </ion-card>
+
+  <div class="ion-text-center" *ngIf="device">
+    <p>
+      {{device.appVersion}} ({{device.appBuild}})
+    </p>
+  </div>
 
   <!-- <ion-footer translucent>
     <ion-row>

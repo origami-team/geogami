@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from "@ionic/angular";
 import { Plugins, CameraResultType } from '@capacitor/core';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { environment } from 'src/environments/environment';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { QuestionType, AnswerType } from 'src/app/models/types';
 
 
 @Component({
@@ -14,22 +15,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class CreateInfoModalComponent implements OnInit {
 
-  info: string
-  mapFeatures: any = {
-    zoombar: "true",
-    pan: "true",
-    rotation: "manual",
-    material: "standard",
-    position: "none",
-    direction: "none",
-    track: false,
-    streetSection: false,
-    reducedInformation: false,
-    landmarks: false,
-    landmarkFeatures: undefined
-  }
-  photo: SafeResourceUrl
-  photoURL: string;
+  @Input() task: any;
 
   uploading: boolean = false;
 
@@ -39,7 +25,25 @@ export class CreateInfoModalComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.task == null) {
+      this.task = {
+        category: 'info',
+        question: {
+          type: QuestionType.INFO,
+          text: '',
+          photo: '',
+        },
+        answer: {
+          type: AnswerType.INFO,
+        },
+        settings: {
+          confirmation: true
+        },
+        mapFeatures: null,
+      }
+    }
+  }
 
   async capturePhoto() {
 
@@ -49,7 +53,7 @@ export class CreateInfoModalComponent implements OnInit {
       resultType: CameraResultType.Uri
     });
 
-    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+    this.task.question.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
 
     this.uploading = true;
 
@@ -57,7 +61,7 @@ export class CreateInfoModalComponent implements OnInit {
     fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
       console.log(JSON.parse(res.response))
       const filename = JSON.parse(res.response).filename
-      this.photoURL = `${environment.apiURL}/file/${filename}`
+      this.task.question.photo = `${environment.apiURL}/file/${filename}`
       this.uploading = false;
     })
       .catch(err => {
@@ -70,10 +74,13 @@ export class CreateInfoModalComponent implements OnInit {
     const modal = await this.modalController.create({
       component: MapFeaturesModalPage,
       backdropDismiss: false,
+      componentProps: {
+        features: this.task.mapFeatures
+      }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    this.mapFeatures = data.data
+    this.task.mapFeatures = data.data
     return;
   }
 
@@ -88,15 +95,7 @@ export class CreateInfoModalComponent implements OnInit {
 
     this.modalController.dismiss({
       dismissed: true,
-      data: {
-        type: 'info',
-        settings: {
-          text: this.info,
-          photo: this.photoURL,
-          mapFeatures: this.mapFeatures,
-          confirmation: true
-        }
-      }
+      data: this.task
     });
   }
 

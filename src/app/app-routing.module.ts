@@ -11,6 +11,9 @@ const routes: Routes = [
   { path: 'create-game/create-game-overview', loadChildren: './pages/create-game/create-game-overview/create-game-overview.module#CreateGameOverviewPageModule' },
   { path: 'create-game/create-game-list', loadChildren: './pages/create-game/create-game-list/create-game-list.module#CreateGameListPageModule' },
   { path: 'create-game/create-game-map', loadChildren: './pages/create-game/create-game-map/create-game-map.module#CreateGameMapPageModule' },
+  { path: 'edit-game', loadChildren: './pages/edit-game/edit-game-list/edit-game-list.module#EditGameListPageModule' },
+  { path: 'edit-game/:id', loadChildren: './pages/edit-game/edit-game-overview/edit-game-list.module#EditGameListPageModule' },
+  { path: 'analyze', loadChildren: './pages/analyze-game/analyze-game-list/analyze-game-list.module#AnalyzeGameListPageModule' },
   // older stuff
   // { path: 'map-swipe', loadChildren: './map-swipe/map-swipe.module#MapSwipePageModule' },
   { path: 'start', loadChildren: './start/start.module#StartPageModule' },

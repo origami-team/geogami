@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color=dark defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Bearbeite ein OriGami</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  <h5>Wähle ein Spiel aus der Spieleliste.</h5>
+  <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item *ngFor="let game of games" (click)="gameClick(game)" detail>
+      <ion-label>
+        <h2>{{ game.name }}</h2>
+        <p>{{ game.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

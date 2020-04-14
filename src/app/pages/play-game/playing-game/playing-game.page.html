@@ -21,35 +21,32 @@
       <div *ngIf="swipe" #swipeMap class="map"></div>
     </div>
 
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.rotation == 'button'"
-      (click)="toggleRotate()">
+    <ion-card class="overlay feature-button" *ngIf="task?.mapFeatures?.rotation == 'button'" (click)="toggleRotate()">
       <ion-button fill="clear">
         <ion-icon name="refresh" size="large"></ion-icon>
       </ion-button>
     </ion-card>
 
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == 'sat-button'"
-      (click)="toggleSat()">
+    <ion-card class="overlay feature-button" *ngIf="task?.mapFeatures?.material == 'sat-button'" (click)="toggleSat()">
       <ion-button fill="clear">
         <ion-icon name="map" size="large"></ion-icon>
       </ion-button>
     </ion-card>
 
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.material == '3D-button'"
-      (click)="toggle3D()">
+    <ion-card class="overlay feature-button" *ngIf="task?.mapFeatures?.material == '3D-button'" (click)="toggle3D()">
       <ion-button fill="clear">
         <ion-icon name="cube" size="large"></ion-icon>
       </ion-button>
     </ion-card>
 
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.position == 'button'"
+    <ion-card class="overlay feature-button" *ngIf="task?.mapFeatures?.position == 'button'"
       (click)="toggleGeolocate()">
       <ion-button fill="clear">
         <ion-icon name="locate" size="large"></ion-icon>
       </ion-button>
     </ion-card>
 
-    <ion-card class="overlay feature-button" *ngIf="task && task.settings.mapFeatures.direction == 'button'"
+    <ion-card class="overlay feature-button" *ngIf="task?.mapFeatures?.direction == 'button'"
       (click)="toggleDirection()">
       <ion-button fill="clear">
         <ion-icon name="compass" size="large"></ion-icon>
@@ -62,39 +59,26 @@
 
         <div class="top-info">
           <div *ngIf="!panelMinimized">
-            <ion-chip color="primary" *ngIf="task.type.includes('nav')">
+            <ion-chip color="primary" *ngIf="task.category.includes('nav')">
               <ion-icon name="navigate"></ion-icon>
               &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
             </ion-chip>
-            <ion-chip color="secondary" *ngIf="task.type.includes('theme')">
+            <ion-chip color="secondary" *ngIf="task.category.includes('theme')">
               <ion-icon name="clipboard"></ion-icon>
               &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
             </ion-chip>
-            <ion-chip color="warning" *ngIf="task.type.includes('info')">
+            <ion-chip color="warning" *ngIf="task.category.includes('info')">
               <ion-icon name="information-circle-outline"></ion-icon>
               &nbsp;Info
             </ion-chip>
           </div>
-          <!-- <p *ngIf="!panelMinimized">Aufgabe {{ taskIndex + 1 }} von {{ game.tasks.length }}</p> -->
           <ion-button color=dark fill="clear" (click)="togglePanel()"
-            *ngIf="task.type.includes('nav-flag') || task.type.includes('nav-text') || task.type.includes('theme')">
+            *ngIf="task.category?.includes('theme') || task.answer.mode != 'NAV_ARROW'">
             <ion-icon slot="end" name="chevron-down" size="large" *ngIf="!panelMinimized"></ion-icon>
             <ion-icon slot="end" name="chevron-up" size="large" *ngIf="panelMinimized"></ion-icon>
           </ion-button>
         </div>
         <div class="task-wrapper" *ngIf="!panelMinimized">
-          <!-- <div
-        class="task-wrapper"
-        [ngStyle]="{
-          'flex-wrap': [
-            'nav-arrow',
-            'theme-object',
-            'theme-direction'
-          ].includes(task.type)
-            ? 'wrap'
-            : 'nowrap'
-        }"
-      > -->
           <div class="compass large" *ngIf="task.type == 'nav-arrow'">
             <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
@@ -111,11 +95,7 @@
                 ? 'wrap'
                 : 'nowrap'
             }">
-            <div class="compass bearing" *ngIf="task.type == 'theme-direction' && 
-              task.settings['question-type'].name && 
-              task.settings['question-type'].name != 'question-type-current-direction' && 
-              task.settings['question-type'].name != 'photo' && 
-              task.settings['question-type'].name != 'question-type-map'">
+            <div class="compass bearing" *ngIf="task.answer?.mode == 'DIRECTION_ARROW'">
               <img src="/assets/icons/direction-bearing.svg" [ngStyle]="{
                   transform:
                     'translateX(-50%) rotate(0deg)'
@@ -125,20 +105,14 @@
                 }" />
             </div>
           </div>
-          <div class="photo-container" *ngIf="
-              (task.type == 'theme-object' &&
-              task.settings['question-type'].name == 'photo') ||
-              (task.type == 'theme-direction' &&
-              task.settings['question-type'].name == 'photo')
-            ">
-            <img [src]="task.settings['question-type'].settings.photo" />
+
+          <div class="photo-container"
+            *ngIf="task.question?.type == 'MAP_FEATURE_PHOTO' || task.question?.type == 'MAP_DIRECTION_PHOTO' || task.question?.type == 'INFO'">
+            <img *ngIf="task.question.photo" [src]="task.question.photo" />
           </div>
-          <div class="photo-container" *ngIf="task.type == 'info' && task.settings.photo">
-            <img [src]="task.settings.photo" />
-          </div>
-          <div *ngIf="task.settings['answer-type'] &&
-              task.settings['answer-type'].name == 'multiple-choice'" class="multiple-choice">
-            <div *ngFor="let item of task.settings['answer-type'].settings['multiple-choice'] | keyvalue | shuffle">
+
+          <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE'" class="multiple-choice">
+            <div *ngFor="let item of task.answer.photos | keyvalue | shuffle">
               <ion-thumbnail slot="start">
                 <img [src]=item.value class="multiple-choize-img" (click)='onMultipleChoiceSelected(item, $event)' />
               </ion-thumbnail>
@@ -146,11 +120,11 @@
           </div>
 
           <div class="task-text">
-            <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
+            <!-- <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
               {{ task.settings["question-type"].settings["object-description"] }}
-            </p>
-            <p *ngIf="task.settings.text">
-              <span *ngFor="let tag of (task.settings.text | keyword).split(' ')">
+            </p> -->
+            <p *ngIf="task.question?.text">
+              <span *ngFor="let tag of (task.question.text | keyword).split(' ')">
                 <ion-text *ngIf="tag.includes('KEYWORD_FLAG')" color="primary">Fahne
                   <ion-chip color="primary">
                     <ion-icon name="flag"></ion-icon>
@@ -204,15 +178,12 @@
                 <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
               </span>
             </p>
-            <p *ngIf="task.settings.confirmation">
+            <p *ngIf="task?.settings?.confirmation">
               Drücke OK!
             </p>
           </div>
 
-          <div *ngIf="
-              task.settings['answer-type'] &&
-              task.settings['answer-type'].name == 'take-photo'
-            ">
+          <div *ngIf="task.answer?.type == 'PHOTO'">
             <ion-thumbnail slot="start" *ngIf="photo">
               <img [src]="photo" />
             </ion-thumbnail>
@@ -221,14 +192,11 @@
             </ion-button>
           </div>
 
-          <ion-button slot="end" class="confirm" color=secondary (click)="onOkClicked()"
-            *ngIf="task.settings.confirmation && task.type.includes('theme')">OK
-          </ion-button>
-          <ion-button slot="end" class="confirm" color=primary (click)="onOkClicked()"
-            *ngIf="task.settings.confirmation && task.type.includes('nav')">OK
+          <ion-button slot="end" class="confirm" [color]="task.category.includes('nav') ? 'primary' : 'secondary'"
+            (click)="onOkClicked()" *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
           </ion-button>
 
-          <ion-button class="confirm" color=warning (click)="nextTask()" *ngIf="task.type.includes('info')">OK
+          <ion-button class="confirm" color=warning (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">OK
           </ion-button>
 
         </div>
@@ -251,18 +219,4 @@
     <ion-button *ngIf="!task.settings.multipleTries && task.settings.feedback"
       (click)="feedbackRetry ? dismissFeedback() : nextTask()" color="danger">Weiter</ion-button>
   </ion-card>
-
-  <!-- <div class="overlay ion-padding" *ngIf="currentTask">
-    <ion-img [src]="currentTask.question.img" *ngIf="currentTask.question.img"></ion-img>
-    <h2>{{ currentTask.question.txt }}</h2>
-    <ion-grid>
-      <ion-row>
-        <ion-col *ngFor="let answer of currentTask.answers">
-          <ion-button (click)=nextTask()>
-            {{ answer.txt }}
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div> -->
 </ion-content>

@@ -75,7 +75,7 @@
   }
 
   &.full {
-    height: calc(100% - 56px - 5px);
+    height: calc(100% - 44px - 40px - 10px);
     z-index: 2;
   }
 }

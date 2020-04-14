@@ -1,0 +1,8 @@
+<div *ngIf="answer.type == answerTypeEnum.POSITION">
+    <h5>Zielort</h5>
+    <app-map featureType="point" [(feature)]="answer.position"></app-map>
+</div>
+
+<div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
+    <app-photo-upload-multiple-choice [(photos)]="answer.photos"></app-photo-upload-multiple-choice>
+</div>

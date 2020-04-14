@@ -86,6 +86,8 @@ export class CreateGameListPage implements OnInit {
 
   async presentTaskModal(type: string = "nav", task: any = null) {
 
+    console.log(task)
+
     const modal = await this.modalController.create({
       component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
       backdropDismiss: false,
@@ -99,18 +101,22 @@ export class CreateGameListPage implements OnInit {
     const { data } = await modal.onWillDismiss();
     console.log(data);
     if (data != undefined) {
-      this.addTaskToGame(data.data);
+      if (task != null) {
+        this.updateTask(task.id, data.data)
+      } else {
+        this.addTaskToGame(data.data);
+      }
     }
-    return;
 
+    modal.remove();
   }
 
   addTaskToGame(task) {
-    this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
-    this.gameFactory.getGame().then(game => {
-      console.log(game)
-      this.game = game
-    });
+    this.game = this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
+    // this.gameFactory.getGame().then(game => {
+    //   console.log(game)
+    //   this.game = game
+    // });
 
     console.log(this.game.tasks);
   }
@@ -118,6 +124,12 @@ export class CreateGameListPage implements OnInit {
   deleteTask(taskID) {
     console.log("deleting", taskID);
     this.game = this.gameFactory.removeTask(taskID);
+  }
+
+  updateTask(taskID, task) {
+    console.log("updating", taskID);
+    this.game = this.gameFactory.updateTask(taskID, task);
+    console.log(this.game)
   }
 
   doReorder(ev: any) {
@@ -133,11 +145,11 @@ export class CreateGameListPage implements OnInit {
     // where the gesture ended. Update the items variable to the
     // new order of items
     this.game.tasks = ev.detail.complete(this.game.tasks);
-    
+
     this.gameFactory.applyReorder(this.game.tasks)
 
     console.log(this.game.tasks)
-    
+
     ev.detail.complete(true);
 
     // After complete is called the items will be in the new order

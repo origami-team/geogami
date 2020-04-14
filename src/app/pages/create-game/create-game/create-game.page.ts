@@ -21,4 +21,8 @@ export class CreateGamePage implements OnInit {
     this.navCtrl.navigateForward('create-game/create-game-list');
   }
 
+  navigateEditGame() {
+    this.navCtrl.navigateForward('edit-game');
+  }
+
 }

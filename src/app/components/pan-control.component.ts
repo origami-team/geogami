@@ -2,6 +2,8 @@ import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Subscription } from 'rxjs';
 
+import { Plugins } from '@capacitor/core'
+
 
 export enum PanType {
     True,
@@ -17,11 +19,11 @@ export class PanControl {
 
     constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
-
         this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
             position => {
-                if (map != undefined && this.panType == PanType.Center) {
-                    this.map.panTo([position.coords.longitude, position.coords.latitude]);
+                if (this.map != undefined && this.panType == PanType.Center) {
+                    this.map.setCenter([position.coords.longitude, position.coords.latitude])
+                    // this.map.panTo([position.coords.longitude, position.coords.latitude]);
                 }
             }
         );

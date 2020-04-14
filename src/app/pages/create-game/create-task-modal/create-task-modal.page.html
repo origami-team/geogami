@@ -21,15 +21,13 @@
 
 <ion-content class="ion-padding">
 
-  <ion-card color="primary"
-    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-arrow' || selectedTask.type == 'nav-text'">
+  <ion-card color="primary" *ngIf="task.category == 'nav'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
       <b> "Navigationsaufgaben"</b> leiten den Spieler an neue Orte.
     </ion-card-content>
   </ion-card>
-  <ion-card color="secondary"
-    *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
+  <ion-card color="secondary" *ngIf="task.category == 'theme'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
       <b> "Themenaufgaben"</b> sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.
@@ -39,101 +37,110 @@
   <ion-text>
     <h5>Aufgabentyp</h5>
   </ion-text>
-  <select placeholder="Auswählen" [ngModel]="selectedTask" (ngModelChange)="onTaskSelected($event)">
-    <option [ngValue]="task" *ngFor="let task of tasks">{{ task.name }}</option>
+  <select *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompare" [(ngModel)]="task"
+    (ngModelChange)="onTaskSelected($event)">
+    <option [ngValue]="myTask" *ngFor="let myTask of tasks">{{ myTask.name }}</option>
   </select>
 
-  <!-- <ion-select interface="action-sheet" placeholder="Auswählen" [ngModel]="selectedTask"
-    (ngModelChange)="onTaskSelected($event)">
-    <ion-select-option [value]="task" *ngFor="let task of tasks">{{ task.name }}</ion-select-option>
-  </ion-select> -->
+  <select *ngIf="type != 'nav'" [compareWith]="taskTypeCompare" [(ngModel)]="selectedTaskType"
+    (ngModelChange)="onTaskTypeChange($event)">
+    <option [ngValue]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</option>
+  </select>
 
   <ion-card color="medium">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
-      <ion-text *ngIf="selectedTask.type == 'nav-flag'">
+      <ion-text *ngIf="task.type == 'nav-flag'">
         Bei der <b>"Navigation zur Zielfahne"</b> sieht der Spieler eine Fahne auf der Karte, die einen Zielort
         markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.
       </ion-text>
-      <ion-text *ngIf="selectedTask.type == 'nav-arrow'">
+      <ion-text *ngIf="task.type == 'nav-arrow'">
         Bei der <b>"Navigation mit Richtungspfeil"</b> sieht der Spieler einen Pfeil und eine Distanzangabe, die ihm die
         Richtung zum nächsten Zielort weisen. Die Karte sieht er hingegen nicht.
       </ion-text>
-      <ion-text *ngIf="selectedTask.type == 'nav-text'">
+      <ion-text *ngIf="task.type == 'nav-text'">
         Bei der <b>"Navigation mit Textanweisung"</b> bekommt der Spieler eine genaue Navigationsanweisung zum nächsten
         Zielort.
       </ion-text>
-      <ion-text *ngIf="selectedTask.type == 'theme-loc'">
+      <ion-text *ngIf="task.type == 'theme-loc'">
         Bei der <b>"Selbst-Lokalisation"</b> muss der Spieler seine aktuelle Position auf der Karte finden.
       </ion-text>
-      <ion-text *ngIf="selectedTask.type == 'theme-object'">
+      <ion-text *ngIf="task.type == 'theme-object'">
         Bei der <b>"Objekt-Lokalisation"</b> muss der Spieler Objekte von der Karte Objekten seiner Umgebung zuordnen
         und umgekehrt.
       </ion-text>
-      <ion-text *ngIf="selectedTask.type == 'theme-direction'">
+      <ion-text *ngIf="task.type == 'theme-direction'">
         Bei der <b>"Richtungsbestimmung"</b> muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in
         Verbindung bringen.
       </ion-text>
     </ion-card-content>
   </ion-card>
 
-  <dynamic-form [config]="config" #form (submit)="submit($event)">
-  </dynamic-form>
+  <div class="select-flex-container" *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
+    <div>
+      <ion-text>
+        <h5 *ngIf="task.type == 'theme-object'">Das gesuchte Objekt...</h5>
+        <h5 *ngIf="task.type == 'theme-direction'">Die gesuchte Richtung...</h5>
+      </ion-text>
+      <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)">
+        <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
+          {{ option.text | typeToText: task.type : false }}</option>
+      </select>
+    </div>
+    <div>
+      <ion-text>
+        <h5>Der Spieler antwortet ...</h5>
+      </ion-text>
+      <select [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
+        <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+          {{ option.text | typeToText: task.type : true }}</option>
+      </select>
+    </div>
+  </div>
 
-  <ion-text>
-    <h5>Weitere Einstellungen</h5>
-  </ion-text>
-  <ion-item lines="none" *ngIf="selectedTask.type == 'nav-flag'">
-    <ion-label>Eingabebestätigung</ion-label>
-    <ion-toggle [(ngModel)]="confirmation"></ion-toggle>
-  </ion-item>
-  <ion-item lines="none" *ngIf="selectedTask.type == 'nav-text'">
-    <ion-label>Zielfahne anzeigen</ion-label>
-    <ion-toggle [(ngModel)]="showMarker"></ion-toggle>
-  </ion-item>
-  <ion-item lines="none"
-    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
-    <ion-label>Feedback</ion-label>
-    <ion-toggle [(ngModel)]="feedback" color="primary" (ionChange)="feedbackChange()"></ion-toggle>
-  </ion-item>
-  <ion-item lines="none"
-    *ngIf="selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
-    <ion-label>Feedback</ion-label>
-    <ion-toggle [(ngModel)]="feedback" color="secondary" (ionChange)="feedbackChange()"></ion-toggle>
-  </ion-item>
-  <ion-item lines="none"
-    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
-    <ion-label>Mehrere Versuche</ion-label>
-    <ion-toggle [(ngModel)]="multipleTries" color="primary" [disabled]="!feedback"></ion-toggle>
-  </ion-item>
-  <ion-item lines="none"
-    *ngIf="selectedTask.type == 'theme-loc'|| selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
-    <ion-label>Mehrere Versuche</ion-label>
-    <ion-toggle [(ngModel)]="multipleTries" color="secondary" [disabled]="!feedback"></ion-toggle>
-  </ion-item>
-  <ion-item lines="none"
-    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'nav-arrow'">
-    <ion-label>Genauigkeit</ion-label>
-    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="primary" ticks pin
-      (ionChange)="rangeChange()">
-      <ion-label slot="start">0m</ion-label>
-      <ion-icon slot="start" size="small" color="primary" name="locate"></ion-icon>
-      <ion-icon slot="end" color="primary" name="locate"></ion-icon>
-      <ion-label slot="end">100m</ion-label>
-    </ion-range>
-  </ion-item>
-  <ion-item lines="none" *ngIf="selectedTask.type == 'theme-loc'">
-    <ion-label>Genauigkeit</ion-label>
-    <ion-range [(ngModel)]="accuracy" min="0" max="100" [step]="step" snaps color="secondary" ticks pin
-      (ionChange)="rangeChange()">
-      <ion-label slot="start">0m</ion-label>
-      <ion-icon slot="start" size="small" color="secondary" name="locate"></ion-icon>
-      <ion-icon slot="end" color="secondary" name="locate"></ion-icon>
-      <ion-label slot="end">100m</ion-label>
-    </ion-range>
-  </ion-item>
+  <div>
+    <question-type [(question)]="task.question"></question-type>
+    <answer-type [(answer)]="task.answer"></answer-type>
+  </div>
+
+  <div *ngIf="task.settings">
+    <ion-text>
+      <h5>Weitere Einstellungen</h5>
+    </ion-text>
+    <ion-item lines="none" *ngIf="task.category == 'nav'">
+      <ion-label>Eingabebestätigung</ion-label>
+      <ion-toggle [(ngModel)]="task.settings.confirmation"></ion-toggle>
+    </ion-item>
+    <ion-item lines="none" *ngIf="task.type == 'nav-text'">
+      <ion-label>Zielfahne anzeigen</ion-label>
+      <ion-toggle [(ngModel)]="task.settings.showMarker"></ion-toggle>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Feedback</ion-label>
+      <ion-toggle [(ngModel)]="task.settings.feedback" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+        (ionChange)="feedbackChange()"></ion-toggle>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Mehrere Versuche</ion-label>
+      <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+        [disabled]="!task.settings.feedback">
+      </ion-toggle>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Genauigkeit</ion-label>
+      <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="100" [step]="step" snaps
+        [color]="task.category == 'nav' ? 'primary' : 'secondary'" ticks pin (ionChange)="rangeChange()">
+        <ion-label slot="start">0m</ion-label>
+        <ion-icon slot="start" size="small" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate">
+        </ion-icon>
+        <ion-icon slot="end" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate"></ion-icon>
+        <ion-label slot="end">100m</ion-label>
+      </ion-range>
+    </ion-item>
+  </div>
+
   <ion-item detail lines="none" (click)="presentMapFeaturesModal()"
-    *ngIf="selectedTask.type == 'nav-flag' || selectedTask.type == 'nav-text' || selectedTask.type == 'theme-loc' || selectedTask.type == 'theme-object' || selectedTask.type == 'theme-direction'">
+    *ngIf="task.type == 'nav-flag' || task.type == 'nav-text' || task.type == 'theme-loc' || task.type == 'theme-object' || task.type == 'theme-direction'">
     <ion-label>
       Kartenfeatures
     </ion-label>

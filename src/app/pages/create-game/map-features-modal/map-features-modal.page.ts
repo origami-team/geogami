@@ -4,7 +4,8 @@ import {
   ViewChild,
   OnChanges,
   ChangeDetectorRef,
-  AfterViewInit
+  AfterViewInit,
+  Input
 } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
@@ -14,6 +15,9 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { environment } from "src/environments/environment";
 
 import { Plugins } from '@capacitor/core'
+
+import { cloneDeep } from 'lodash';
+import { standardMapFeatures } from "./../../../models/mapFeatures"
 
 @Component({
   selector: "app-map-features-modal",
@@ -26,19 +30,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   private draw: MapboxDraw;
   private map: mapboxgl.Map;
 
-  features: any = {
-    zoombar: "true",
-    pan: "true",
-    rotation: "manual",
-    material: "standard",
-    position: "none",
-    direction: "none",
-    track: false,
-    streetSection: false,
-    reducedInformation: false,
-    landmarks: false,
-    landmarkFeatures: undefined
-  };
+  @Input() features: any = cloneDeep(standardMapFeatures);
 
   constructor(
     public modalController: ModalController,
@@ -46,6 +38,9 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    if (this.features == undefined) {
+      this.features = cloneDeep(standardMapFeatures);
+    }
     this.changeDetectorRef.detectChanges();
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
@@ -141,6 +136,15 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
             });
           });
       })
+
+      if (this.features.landmarkFeatures != undefined) {
+        console.log('adding feature', this.features.landmarkFeatures)
+        if (this.features.landmarkFeatures.type == "FeatureCollection") {
+          this.features.landmarkFeatures.features.forEach(element => {
+            this.draw.add(element)
+          });
+        }
+      }
     })
   }
 

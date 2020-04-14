@@ -7103,6 +7103,11 @@ ng-lottie@^0.3.2:
   dependencies:
     lottie-web "^5.1.3"
 
+ngx-json-viewer@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/ngx-json-viewer/-/ngx-json-viewer-2.4.0.tgz#55eab11dda36c3752285efec1579dba3fcb18163"
+  integrity sha512-26QmLp+0ds90aFug3KbSIwqtmQgCcJYFNNNcmcZHgPRj75nhKzbo4ceKxkhWmY5auKZClVO0HTZSs5bBhgb1Bw==
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
