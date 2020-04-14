@@ -128,13 +128,13 @@
     </ion-item>
     <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction'">
       <ion-label>Genauigkeit</ion-label>
-      <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="100" [step]="step" snaps
+      <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="50" [step]="step" snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'" ticks pin (ionChange)="rangeChange()">
         <ion-label slot="start">0m</ion-label>
         <ion-icon slot="start" size="small" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate">
         </ion-icon>
         <ion-icon slot="end" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate"></ion-icon>
-        <ion-label slot="end">100m</ion-label>
+        <ion-label slot="end">50m</ion-label>
       </ion-range>
     </ion-item>
   </div>
