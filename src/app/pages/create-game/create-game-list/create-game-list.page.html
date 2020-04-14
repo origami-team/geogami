@@ -138,16 +138,16 @@
       <ion-text>Wähle aus den folgenden Bausteinen</ion-text>
       <ion-item color="light" lines="none" *ngIf="game">
         <ion-chip color="primary" (click)="presentTaskModal('nav')">
-          <ion-icon name="navigate"></ion-icon>
+          + <ion-icon name="navigate"></ion-icon>
         </ion-chip>
         <ion-chip color="secondary" (click)="presentTaskModal('theme')">
-          <ion-icon name="clipboard"></ion-icon>
+          + <ion-icon name="clipboard"></ion-icon>
         </ion-chip>
         <ion-chip color="warning" (click)="presentTaskModal('info')">
-          <ion-icon name="information-circle-outline"></ion-icon>
+          + <ion-icon name="information-circle-outline"></ion-icon>
         </ion-chip>
         <ion-chip color="medium">
-          <ion-icon name="list"></ion-icon>
+          + <ion-icon name="list"></ion-icon>
         </ion-chip>
 
         <ng-container *ngIf="game.tasks && game.tasks.length > 1">
