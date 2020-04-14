@@ -546,21 +546,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.question.type == QuestionType.MAP_DIRECTION) {
-      this.directionBearing = this.task.question.direction
+      this.directionBearing = this.task.question.direction.bearing
     }
 
     if (this.task.question.type == QuestionType.MAP_DIRECTION_MARKER) {
-      this.directionBearing = this.task.question.direction
+      this.directionBearing = this.task.question.direction.bearing
 
       this.map.addSource("viewDirectionTask", {
         type: "geojson",
-        data: {
-          type: "Point",
-          coordinates: [
-            this.lastKnownPosition.coords.longitude,
-            this.lastKnownPosition.coords.latitude
-          ]
-        }
+        data: this.task.question.direction.position.geometry
       });
       this.map.addLayer({
         id: "viewDirectionTask",

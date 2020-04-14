@@ -5,7 +5,9 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title><ion-icon color="danger" name="map"></ion-icon> Kartenfeatures</ion-title>
+    <ion-title>
+      <ion-icon color="danger" name="map"></ion-icon> Kartenfeatures
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button color="dark" (click)="dismissModal(null)">
         <ion-icon name="save"></ion-icon>
@@ -19,56 +21,56 @@
     <h5>Karteneinstellungen</h5>
     <ion-item>
       <ion-label>Zoom</ion-label>
-      <ion-toggle color="danger"[(ngModel)]="features.zoombar"></ion-toggle>
+      <ion-toggle color="danger" [(ngModel)]="features.zoombar"></ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label>Kartenbereich</ion-label>
-      <select [(ngModel)]="features.pan">
-        <option value="true">verschiebbar</option>
-        <option value="center">automatisch-zentriert</option>
-        <option value="static">statisch</option>
-      </select>
+      <ion-select [(ngModel)]="features.pan" interface="popover">
+        <ion-select-option value="true">verschiebbar</ion-select-option>
+        <ion-select-option value="center">automatisch-zentriert</ion-select-option>
+        <ion-select-option value="static">statisch</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Kartenrotation</ion-label>
-      <select [(ngModel)]="features.rotation">
-        <option value="manual">manuell</option>
-        <option value="auto">automatisch</option>
-        <option value="button">automatisch auf Knopfdruck</option>
-        <option value="north">genordet</option>
-      </select>
+      <ion-select [(ngModel)]="features.rotation" interface="popover">
+        <ion-select-option value="manual">manuell</ion-select-option>
+        <ion-select-option value="auto">automatisch</ion-select-option>
+        <ion-select-option value="button">automatisch auf Knopfdruck</ion-select-option>
+        <ion-select-option value="north">genordet</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Kartenmaterial</ion-label>
-      <select [(ngModel)]="features.material">
-        <option value="standard">Standardkarte</option>
-        <option value="selection">Kartenauswahl</option>
-        <option value="sat">Satellitenbild</option>
-        <option value="sat-button">Satellitenbild auf Knopfdruck</option>
-        <option value="sat-swipe">Satellitenbild mit Swipefunktion</option>
-        <option value="3D">3D-Ansicht</option>
-        <option value="3D-button">3D-Ansicht auf Knopfdruck</option>
-      </select>
+      <ion-select [(ngModel)]="features.material" interface="popover">
+        <ion-select-option value="standard">Standardkarte</ion-select-option>
+        <ion-select-option value="selection">Kartenauswahl</ion-select-option>
+        <ion-select-option value="sat">Satellitenbild</ion-select-option>
+        <ion-select-option value="sat-button">Satellitenbild auf Knopfdruck</ion-select-option>
+        <ion-select-option value="sat-swipe">Satellitenbild mit Swipefunktion</ion-select-option>
+        <ion-select-option value="3D">3D-Ansicht</ion-select-option>
+        <ion-select-option value="3D-button">3D-Ansicht auf Knopfdruck</ion-select-option>
+      </ion-select>
     </ion-item>
 
     <h5>Marker</h5>
     <ion-item>
       <ion-label>Positionsmarker</ion-label>
-      <select [(ngModel)]="features.position">
-        <option value="none">ohne</option>
-        <option value="true">mit</option>
-        <option value="button">auf Knopfdruck</option>
-        <option value="start">zu Aufgabenbeginn</option>
-      </select>
+      <ion-select [(ngModel)]="features.position" interface="popover">
+        <ion-select-option value="none">ohne</ion-select-option>
+        <ion-select-option value="true">mit</ion-select-option>
+        <ion-select-option value="button">auf Knopfdruck</ion-select-option>
+        <ion-select-option value="start">zu Aufgabenbeginn</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Blickrichtungsmarker</ion-label>
-      <select [(ngModel)]="features.direction">
-        <option value="none">ohne</option>
-        <option value="true">mit</option>
-        <option value="button">auf Knopfdruck</option>
-        <option value="start">zu Aufgabenbeginn</option>
-      </select>
+      <ion-select [(ngModel)]="features.direction" interface="popover">
+        <ion-select-option value="none">ohne</ion-select-option>
+        <ion-select-option value="true">mit</ion-select-option>
+        <ion-select-option value="button">auf Knopfdruck</ion-select-option>
+        <ion-select-option value="start">zu Aufgabenbeginn</ion-select-option>
+      </ion-select>
     </ion-item>
 
     <ion-item>
@@ -81,7 +83,7 @@
       <ion-toggle color="danger" [(ngModel)]="features.streetSection"></ion-toggle>
     </ion-item>
 
-<!--<ion-item>
+    <!--<ion-item>
       <ion-label>Reduzierter Kartenausschnitt</ion-label>
       <ion-toggle [(ngModel)]="features.reducedInformation"></ion-toggle>
     </ion-item> -->
@@ -91,7 +93,7 @@
       <ion-toggle color="danger" [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
     <!-- <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'" lines="none"> -->
-      <div #map class="map" [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"></div>
+    <div #map class="map" [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"></div>
     <!-- </ion-item> -->
   </ion-list>
 </ion-content>

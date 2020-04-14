@@ -135,12 +135,21 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       this.map.resize();
 
       Plugins.Geolocation.getCurrentPosition().then(position => {
-        this.map.flyTo({
-          center: [position.coords.longitude, position.coords.latitude],
-          zoom: 13,
-          bearing: this.featureType == "direction" ? this.feature ? this.feature : 0 : 0,
-          speed: 3
-        })
+        if (this.featureType == 'direction' && (this.feature && this.feature.position) != undefined) {
+          this.map.flyTo({
+            center: this.feature.position.geometry.coordinates,
+            zoom: 13,
+            bearing: this.featureType == "direction" ? (this.feature && this.feature.bearing) ? this.feature.bearing : 0 : 0,
+            speed: 3
+          })
+        } else {
+          this.map.flyTo({
+            center: [position.coords.longitude, position.coords.latitude],
+            zoom: 13,
+            bearing: this.featureType == "direction" ? (this.feature && this.feature.bearing) ? this.feature.bearing : 0 : 0,
+            speed: 3
+          })
+        }
         this.map.loadImage(
           "/assets/icons/position.png",
           (error, image) => {
@@ -214,6 +223,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (this.featureType == "direction" && this.marker) {
           this.marker.setLngLat(this.map.getCenter());
+          this.featureChange.emit({ ...this.feature, position: this._toGeoJSONPoint(this.map.getCenter().lng, this.map.getCenter().lat) });
         }
       });
 
@@ -243,7 +253,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
           bearing = bearing + 360;
         }
 
-        this.featureChange.emit(bearing);
+        this.featureChange.emit({ bearing: bearing, position: this._toGeoJSONPoint(this.map.getCenter().lng, this.map.getCenter().lat) });
       }
     });
   }
