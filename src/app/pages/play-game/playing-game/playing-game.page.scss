@@ -27,6 +27,10 @@
   }
 }
 
+ion-thumbnail {
+  --size: 150px !important;
+}
+
 .task-control {
   position: absolute;
   bottom: 40px;

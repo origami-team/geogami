@@ -19,7 +19,7 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
   @Output() photosChange: EventEmitter<any> = new EventEmitter<any>();
 
   uploading: boolean[] = [false, false, false, false];
-  uploadingProgress: number[] = [0, 0, 0, 0];
+  uploadingProgress: number[] = [100, 100, 100, 100];
 
   constructor(
     public popoverController: PopoverController,
@@ -39,6 +39,7 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
       allowEditing: false,
       resultType: CameraResultType.Uri,
       source: library ? CameraSource.Photos : CameraSource.Camera,
+      width: 500
     });
 
     this.photos[photoNumber] = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);

@@ -859,7 +859,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       quality: 50,
       allowEditing: false,
       resultType: CameraResultType.Uri,
-      source: CameraSource.Camera
+      source: CameraSource.Camera,
+      width: 500
     });
 
     this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);

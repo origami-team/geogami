@@ -8,3 +8,12 @@
         transform: translate(-50%,-50%);
     }
 }
+
+ion-thumbnail {
+    --size: 150px !important;
+}
+
+.photo-wrapper {
+    display: flex;
+    align-items: center;
+}

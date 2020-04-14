@@ -18,7 +18,7 @@ export class PhotoUploadComponent implements OnInit {
   @Output() photoChange: EventEmitter<any> = new EventEmitter<any>();
 
   uploading: boolean = false
-  uploadingProgress: number = 0;
+  uploadingProgress: number = 100;
 
   constructor(
     public popoverController: PopoverController,
@@ -36,6 +36,7 @@ export class PhotoUploadComponent implements OnInit {
       allowEditing: false,
       resultType: CameraResultType.Uri,
       source: library ? CameraSource.Photos : CameraSource.Camera,
+      width: 500
     });
 
     this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);

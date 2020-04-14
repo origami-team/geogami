@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from "@ionic/angular";
-import { Plugins, CameraResultType } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { environment } from 'src/environments/environment';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
@@ -45,12 +45,14 @@ export class CreateInfoModalComponent implements OnInit {
     }
   }
 
-  async capturePhoto() {
+  async capturePhoto(library: boolean = false) {
 
     const image = await Plugins.Camera.getPhoto({
       quality: 50,
-      allowEditing: true,
-      resultType: CameraResultType.Uri
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: library ? CameraSource.Photos : CameraSource.Camera,
+      width: 500
     });
 
     this.task.question.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);

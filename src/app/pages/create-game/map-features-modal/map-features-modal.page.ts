@@ -141,7 +141,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
         console.log('adding feature', this.features.landmarkFeatures)
         if (this.features.landmarkFeatures.type == "FeatureCollection") {
           this.features.landmarkFeatures.features.forEach(element => {
-            this.draw.add(element)
+            this.draw.add({ properties: {}, ...element })
           });
         }
       }
