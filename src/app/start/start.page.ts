@@ -29,8 +29,8 @@ export class StartPage implements OnInit {
     this._translate.setDefaultLang('de');
     this._initialiseTranslation()
 
-    this.device = await Plugins.Device.getInfo();
-    console.log(this.device)
+    this.device = Plugins.Device.getInfo().then(device => device)
+    // console.log(this.device)
   }
 
   _initialiseTranslation(): void {

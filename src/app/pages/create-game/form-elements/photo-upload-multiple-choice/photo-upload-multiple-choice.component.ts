@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-import { Plugins, CameraResultType } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 
 @Component({
   selector: "app-photo-upload-multiple-choice",
@@ -18,7 +18,8 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
 
   @Output() photosChange: EventEmitter<any> = new EventEmitter<any>();
 
-  uploading: boolean = false;
+  uploading: boolean[] = [false, false, false, false];
+  uploadingProgress: number[] = [0, 0, 0, 0];
 
   constructor(
     public popoverController: PopoverController,
@@ -32,34 +33,32 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
     }
   }
 
-  async capturePhoto(photoNumber) {
+  async capturePhoto(photoNumber, library: boolean = false) {
     const image = await Plugins.Camera.getPhoto({
       quality: 50,
-      allowEditing: true,
-      resultType: CameraResultType.Uri
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: library ? CameraSource.Photos : CameraSource.Camera,
     });
 
     this.photos[photoNumber] = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
 
-    this.uploading = true;
+    this.uploading[photoNumber] = true;
 
     const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer.onProgress(e => {
+      this.uploadingProgress[photoNumber] = e.loaded / e.total * 100
+    })
     fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
       console.log(JSON.parse(res.response))
       const filename = JSON.parse(res.response).filename
       this.photos[photoNumber] = `${environment.apiURL}/file/${filename}`
       this.photosChange.emit(this.photos)
-      // this.group.patchValue({
-      //   [`${this.config.name}`]: {
-      //     ...this.group.value[`${this.config.name}`],
-      //     [`photo-${photoNumber}`]: `${environment.apiURL}/file/${filename}`
-      //   }
-      // }); 
-      this.uploading = false;
+      this.uploading[photoNumber] = false;
     })
       .catch(err => {
         console.log(err)
-        this.uploading = false;
+        this.uploading[photoNumber] = false;
       })
   }
 

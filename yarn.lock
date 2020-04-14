@@ -1183,10 +1183,10 @@
     tslib "^1.9.0"
     ws "^7.0.0"
 
-"@ionic/pwa-elements@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@ionic/pwa-elements/-/pwa-elements-1.5.1.tgz#cef3624a36517ced8e7b80a35a0e495e08f1cfa8"
-  integrity sha512-mz95UN+5CFVYqnMX7WpkM5vyuK3nlIFleOH2yST5plbVrMiuIlBQrrveKPlAqb9YZc1lerQGSPSD1S3fm2ZlGA==
+"@ionic/pwa-elements@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@ionic/pwa-elements/-/pwa-elements-1.5.2.tgz#fa09df335edac62b48f350c38b12647310f1b967"
+  integrity sha512-OMa+el4XjnAx22P6S8CN2GGEfDgMkuwOxE5x5Cd/6ZDfcZKRuP//l4+JLF4YBvfvyPPHvaQLI+Ies7H2OTmAuA==
 
 "@ionic/storage@^2.2.0":
   version "2.2.0"
