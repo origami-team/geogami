@@ -54,6 +54,8 @@ export class CreateTaskModalPage implements OnInit {
 
   selectedTaskType: any;
 
+  objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT]
+
   constructor(public modalController: ModalController) { }
 
   ngOnInit() {
@@ -88,7 +90,6 @@ export class CreateTaskModalPage implements OnInit {
     } else {
       this.task = this.tasks[7]
     }
-    console.log(this.tasks)
     this.onTaskSelected(this.task)
   }
 
@@ -104,8 +105,6 @@ export class CreateTaskModalPage implements OnInit {
       ...this.task.settings
     }
 
-    console.log(this.task);
-
     this.mapFeatures = this.task.mapFeatures
 
     if (this.task.category.includes('theme')) {
@@ -114,15 +113,17 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings.confirmation = false;
     }
 
-    this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type))).map(t => ({ type: t as QuestionType, text: t }))
+    this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
+      .map(t => ({ type: t as QuestionType, text: t }))
+      .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)))
+
+    console.log(this.objectQuestionSelect)
 
     const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    console.log(similarTypes)
 
     const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
 
-    console.log(similarQ)
 
     this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
   }
@@ -130,11 +131,8 @@ export class CreateTaskModalPage implements OnInit {
   onObjectQuestionSelectChange() {
     const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    console.log(similarTypes)
 
     const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
-
-    console.log(similarQ)
 
     this.onTaskSelected(similarQ[0])
 
@@ -144,11 +142,7 @@ export class CreateTaskModalPage implements OnInit {
   onObjectAnswerSelectChange() {
     const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    console.log(similarTypes)
-
     const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type)
-
-    console.log(similarQ)
 
     this.onTaskSelected(similarQ[0])
   }
