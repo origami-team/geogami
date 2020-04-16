@@ -192,8 +192,9 @@
             </ion-button>
           </div>
 
-          <ion-button slot="end" class="confirm" [color]="task.category.includes('nav') ? 'primary' : 'secondary'"
-            (click)="onOkClicked()" *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
+          <ion-button slot="end" class="confirm" [disabled]="uploading"
+            [color]="task.category.includes('nav') ? 'primary' : 'secondary'" (click)="onOkClicked()"
+            *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
           </ion-button>
 
           <ion-button class="confirm" color=warning (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">OK

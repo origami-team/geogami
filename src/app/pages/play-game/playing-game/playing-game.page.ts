@@ -241,11 +241,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       if (this.task && !this.showSuccess) {
         if (this.task.answer.type == AnswerType.POSITION) {
+
           const waypoint = this.task.answer.position.geometry.coordinates;
-          if (
-            this.userDidArrive(waypoint) &&
-            !this.task.settings.confirmation
-          ) {
+
+          if (this.userDidArrive(waypoint) && !this.task.settings.confirmation && !this.showFeedback) {
             this.onWaypointReached();
           }
 
@@ -261,18 +260,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           }
         }
       }
-
-      if (this.task && this.task.answer.type == AnswerType.MAP_DIRECTION) {
-        if (this.map.getSource('viewDirectionClick')) {
-          this.map.getSource('viewDirectionClick').setData({
-            type: "Point",
-            coordinates: [
-              position.coords.longitude,
-              position.coords.latitude
-            ]
-          })
-        }
-      }
     });
 
     this.map.on("load", () => {
@@ -280,7 +267,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
       this.landmarkControl = new LandmarkControl(this.map)
       this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService, this.geolocationService);
-      this.layerControl = new LayerControl(this.map, this.mapWrapper, this.deviceOrientation, this.alertController, this.platform);
+      this.layerControl = new LayerControl(this.map, this.mapWrapper, this.deviceOrientation, this.alertController, this.platform)
       this.trackControl = new TrackControl(this.map, this.geolocationService)
       this.geolocateControl = new GeolocateControl(this.map, this.geolocationService)
       this.panControl = new PanControl(this.map, this.geolocationService)
@@ -299,6 +286,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           if (error) throw error;
 
           this.map.addImage("marker-editor", image);
+        })
+
+      this.map.loadImage(
+        "/assets/icons/position.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("view-direction-click-geolocate", image);
         })
 
       this.game = null;
@@ -351,16 +346,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
 
       if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-        this.clickDirection = this.helperService.bearing(this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude, e.lngLat.lat, e.lngLat.lng)
+        this.clickDirection = this.helperService.bearing(
+          this.task.question.direction.position.geometry.coordinates[1],
+          this.task.question.direction.position.geometry.coordinates[0],
+          e.lngLat.lat,
+          e.lngLat.lng
+        )
         if (!this.map.getLayer('viewDirectionClick')) {
           this.map.addSource("viewDirectionClick", {
             type: "geojson",
             data: {
               type: "Point",
-              coordinates: [
-                this.lastKnownPosition.coords.longitude,
-                this.lastKnownPosition.coords.latitude
-              ]
+              coordinates: this.task.question.direction.position.geometry.coordinates
             }
           });
           this.map.addLayer({
@@ -373,7 +370,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               "icon-offset": [0, -8]
             }
           });
-          this.geolocateControl.setType(GeolocateType.None)
+          if (this.map.getLayer('viewDirectionClickGeolocate')) {
+            this.map.removeLayer('viewDirectionClickGeolocate')
+            this.map.removeSource('viewDirectionClickGeolocate')
+          } else {
+            this.geolocateControl.setType(GeolocateType.None)
+          }
         }
         this.map.setLayoutProperty(
           "viewDirectionClick",
@@ -477,19 +479,22 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       task: this.task
     });
 
+    this.trackerService.setTask(this.task)
+
     if (this.task.settings && this.task.settings.accuracy) {
       this.triggerTreshold = this.task.settings.accuracy
     } else {
       this.triggerTreshold = 10;
     }
 
+    if (this.map.getLayer('marker-point')) {
+      this.map.removeLayer('marker-point')
+    }
+
     if (this.map.getSource('marker-point')) {
       this.map.removeSource('marker-point')
     }
 
-    if (this.map.getLayer('marker-point')) {
-      this.map.removeLayer('marker-point')
-    }
 
     if (this.waypointMarker) {
       this.waypointMarker.remove();
@@ -507,9 +512,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('viewDirectionClick');
     }
 
-    this.landmarkControl.remove();
+    if (this.map.getLayer('viewDirectionClickGeolocate')) {
+      this.map.removeLayer('viewDirectionClickGeolocate')
+      this.map.removeSource('viewDirectionClickGeolocate')
+    }
 
     this._initMapFeatures();
+    this.landmarkControl.removeQT();
 
     this.photo = '';
     this.photoURL = '';
@@ -541,6 +550,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           .setLngLat(
             this.task.answer.position.geometry.coordinates
           )
+
+        this.layerControl.passMarkers({ waypointMarker: this.waypointMarkerDuplicate })
       }
     }
 
@@ -569,7 +580,24 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      this.geolocateControl.setType(GeolocateType.Continuous)
+      if (this.task.question.direction.position) {
+        this.map.addSource("viewDirectionClickGeolocate", {
+          type: "geojson",
+          data: this.task.question.direction.position.geometry
+        });
+        this.map.addLayer({
+          id: "viewDirectionClickGeolocate",
+          source: "viewDirectionClickGeolocate",
+          type: "symbol",
+          layout: {
+            "icon-image": "view-direction-click-geolocate",
+            "icon-size": 0.4,
+            "icon-offset": [0, 0],
+          }
+        });
+      } else {
+        this.geolocateControl.setType(GeolocateType.Continuous)
+      }
     }
 
     if (this.task.question.type == QuestionType.MAP_FEATURE && this.task.answer.mode != TaskMode.NO_FEATURE) {
@@ -760,7 +788,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     }
 
-    if (this.task.answer.type == AnswerType.MAP_POINT) {
+    if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
 
       const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
@@ -798,7 +826,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.trackerService.addEvent({
       type: "ON_OK_CLICKED",
-      compassHeading: this.compassHeading,
       correct: isCorrect
     });
 
@@ -959,12 +986,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.swipe = true;
               this.changeDetectorRef.detectChanges();
               this.layerControl.setType(LayerType.Swipe, this.swipeMapContainer)
-              if (this.waypointMarkerDuplicate) {
-                setTimeout(() => {
-                  this.layerControl.passMarkers({ waypointMarker: this.waypointMarkerDuplicate }, (marker) => {
-                  })
-                }, 2000)
-              }
             } else if (mapFeatures[key] == "3D") {
               this.layerControl.setType(LayerType.ThreeDimension)
             } else if (mapFeatures[key] == "3D-button") {

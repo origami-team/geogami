@@ -19,6 +19,9 @@ import { standardMapFeatures } from "./../../../models/mapFeatures"
 // import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
 import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
 import { QuestionType, AnswerType } from 'src/app/models/types';
+import { PopoverController } from '@ionic/angular';
+import { PopoverComponent } from 'src/app/popover/popover.component';
+
 
 @Component({
   selector: "app-create-task-modal",
@@ -45,16 +48,18 @@ export class CreateTaskModalPage implements OnInit {
       text: "Selbst-Lokalisation"
     }, {
       type: 2,
-      text: "Objektsuche"
+      text: "Objekt-Lokalisation"
     }, {
       type: 3,
-      text: "Richtungssuche"
+      text: "Richtungsbestimmung"
     }
   ]
 
   selectedTaskType: any;
 
-  constructor(public modalController: ModalController) { }
+  objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT]
+
+  constructor(public modalController: ModalController, public popoverController: PopoverController) { }
 
   ngOnInit() {
     if (this.type == "nav") {
@@ -88,7 +93,6 @@ export class CreateTaskModalPage implements OnInit {
     } else {
       this.task = this.tasks[7]
     }
-    console.log(this.tasks)
     this.onTaskSelected(this.task)
   }
 
@@ -104,8 +108,6 @@ export class CreateTaskModalPage implements OnInit {
       ...this.task.settings
     }
 
-    console.log(this.task);
-
     this.mapFeatures = this.task.mapFeatures
 
     if (this.task.category.includes('theme')) {
@@ -114,15 +116,13 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings.confirmation = false;
     }
 
-    this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type))).map(t => ({ type: t as QuestionType, text: t }))
+    this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
+      .map(t => ({ type: t as QuestionType, text: t }))
+      .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)))
 
     const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    console.log(similarTypes)
-
     const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
-
-    console.log(similarQ)
 
     this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
   }
@@ -130,11 +130,7 @@ export class CreateTaskModalPage implements OnInit {
   onObjectQuestionSelectChange() {
     const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    console.log(similarTypes)
-
     const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
-
-    console.log(similarQ)
 
     this.onTaskSelected(similarQ[0])
 
@@ -144,11 +140,7 @@ export class CreateTaskModalPage implements OnInit {
   onObjectAnswerSelectChange() {
     const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    console.log(similarTypes)
-
     const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type)
-
-    console.log(similarQ)
 
     this.onTaskSelected(similarQ[0])
   }
@@ -210,26 +202,16 @@ export class CreateTaskModalPage implements OnInit {
         mapFeatures: this.mapFeatures
       }
     })
+  }
 
-    // console.log(this.form.value);
-
-    // this.modalController.dismiss({
-    //   dismissed: true,
-    //   data: {
-    //     ...this.selectedTask,
-    //     settings: {
-    //       ...this.form.value,
-    //       ["answer-type"]: this.form.value["question-type"]
-    //         ? this.form.value["question-type"].settings["answer-type"]
-    //         : null,
-    //       confirmation: this.confirmation,
-    //       showMarker: this.showMarker,
-    //       mapFeatures: this.mapFeatures,
-    //       feedback: this.feedback,
-    //       multipleTries: this.multipleTries,
-    //       accuracy: this.accuracy
-    //     }
-    //   }
-    // });
+  async showPopover(ev: any, text: string) {
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 }

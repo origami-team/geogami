@@ -8,5 +8,8 @@
     "iosScheme": "https",
     "androidScheme": "https",
     "url": "http://192.168.0.87:8100"
+  },
+  "ios": {
+    "hideLogs": true
   }
 }

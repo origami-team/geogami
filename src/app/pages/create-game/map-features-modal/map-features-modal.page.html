@@ -25,52 +25,52 @@
     </ion-item>
     <ion-item>
       <ion-label>Kartenbereich</ion-label>
-      <ion-select [(ngModel)]="features.pan" interface="popover">
-        <ion-select-option value="true">verschiebbar</ion-select-option>
-        <ion-select-option value="center">automatisch-zentriert</ion-select-option>
-        <ion-select-option value="static">statisch</ion-select-option>
-      </ion-select>
+      <select [(ngModel)]="features.pan" interface="popover">
+        <option value="true">verschiebbar</option>
+        <option value="center">automatisch-zentriert</option>
+        <option value="static">statisch</option>
+      </select>
     </ion-item>
     <ion-item>
       <ion-label>Kartenrotation</ion-label>
-      <ion-select [(ngModel)]="features.rotation" interface="popover">
-        <ion-select-option value="manual">manuell</ion-select-option>
-        <ion-select-option value="auto">automatisch</ion-select-option>
-        <ion-select-option value="button">automatisch auf Knopfdruck</ion-select-option>
-        <ion-select-option value="north">genordet</ion-select-option>
-      </ion-select>
+      <select [(ngModel)]="features.rotation" interface="popover">
+        <option value="manual">manuell</option>
+        <option value="auto">automatisch</option>
+        <option value="button">automatisch auf Knopfdruck</option>
+        <option value="north">genordet</option>
+      </select>
     </ion-item>
     <ion-item>
       <ion-label>Kartenmaterial</ion-label>
-      <ion-select [(ngModel)]="features.material" interface="popover">
-        <ion-select-option value="standard">Standardkarte</ion-select-option>
-        <ion-select-option value="selection">Kartenauswahl</ion-select-option>
-        <ion-select-option value="sat">Satellitenbild</ion-select-option>
-        <ion-select-option value="sat-button">Satellitenbild auf Knopfdruck</ion-select-option>
-        <ion-select-option value="sat-swipe">Satellitenbild mit Swipefunktion</ion-select-option>
-        <ion-select-option value="3D">3D-Ansicht</ion-select-option>
-        <ion-select-option value="3D-button">3D-Ansicht auf Knopfdruck</ion-select-option>
-      </ion-select>
+      <select [(ngModel)]="features.material" interface="popover">
+        <option value="standard">Standardkarte</option>
+        <option value="selection">Kartenauswahl</option>
+        <option value="sat">Satellitenbild</option>
+        <option value="sat-button">Satellitenbild auf Knopfdruck</option>
+        <option value="sat-swipe">Satellitenbild mit Swipefunktion</option>
+        <option value="3D">3D-Ansicht</option>
+        <option value="3D-button">3D-Ansicht auf Knopfdruck</option>
+      </select>
     </ion-item>
 
     <h5>Marker</h5>
     <ion-item>
       <ion-label>Positionsmarker</ion-label>
-      <ion-select [(ngModel)]="features.position" interface="popover">
-        <ion-select-option value="none">ohne</ion-select-option>
-        <ion-select-option value="true">mit</ion-select-option>
-        <ion-select-option value="button">auf Knopfdruck</ion-select-option>
-        <ion-select-option value="start">zu Aufgabenbeginn</ion-select-option>
-      </ion-select>
+      <select [(ngModel)]="features.position" interface="popover">
+        <option value="none">ohne</option>
+        <option value="true">mit</option>
+        <option value="button">auf Knopfdruck</option>
+        <option value="start">zu Aufgabenbeginn</option>
+      </select>
     </ion-item>
     <ion-item>
       <ion-label>Blickrichtungsmarker</ion-label>
-      <ion-select [(ngModel)]="features.direction" interface="popover">
-        <ion-select-option value="none">ohne</ion-select-option>
-        <ion-select-option value="true">mit</ion-select-option>
-        <ion-select-option value="button">auf Knopfdruck</ion-select-option>
-        <ion-select-option value="start">zu Aufgabenbeginn</ion-select-option>
-      </ion-select>
+      <select [(ngModel)]="features.direction" interface="popover">
+        <option value="none">ohne</option>
+        <option value="true">mit</option>
+        <option value="button">auf Knopfdruck</option>
+        <option value="start">zu Aufgabenbeginn</option>
+      </select>
     </ion-item>
 
     <ion-item>

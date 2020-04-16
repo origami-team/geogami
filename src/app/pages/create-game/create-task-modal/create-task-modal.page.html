@@ -37,15 +37,15 @@
   <ion-text>
     <h5>Aufgabentyp</h5>
   </ion-text>
-  <ion-select interface="popover" *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompare"
+  <select interface="popover" *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompare"
     [(ngModel)]="task" (ngModelChange)="onTaskSelected($event)">
-    <ion-select-option [value]="myTask" *ngFor="let myTask of tasks">{{ myTask.name }}</ion-select-option>
-  </ion-select>
+    <option [ngValue]="myTask" *ngFor="let myTask of tasks">{{ myTask.name }}</option>
+  </select>
 
-  <ion-select interface="popover" *ngIf="type != 'nav'" [compareWith]="taskTypeCompare" [(ngModel)]="selectedTaskType"
+  <select interface="popover" *ngIf="type != 'nav'" [compareWith]="taskTypeCompare" [(ngModel)]="selectedTaskType"
     (ngModelChange)="onTaskTypeChange($event)">
-    <ion-select-option [value]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</ion-select-option>
-  </ion-select>
+    <option [ngValue]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</option>
+  </select>
 
   <ion-card color="medium">
     <ion-card-content>
@@ -76,27 +76,26 @@
     </ion-card-content>
   </ion-card>
 
-  <div class="select-flex-container" *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
+  <div *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
     <div>
       <ion-text>
         <h5 *ngIf="task.type == 'theme-object'">Das gesuchte Objekt...</h5>
         <h5 *ngIf="task.type == 'theme-direction'">Die gesuchte Richtung...</h5>
       </ion-text>
-      <ion-select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
+      <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
         interface="popover">
-        <ion-select-option [value]="option.type" *ngFor="let option of objectQuestionSelect">
-          {{ option.text | typeToText: task.type : false }}</ion-select-option>
-      </ion-select>
+        <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
+          {{ option.text | typeToText: task.type : false }}</option>
+      </select>
     </div>
     <div>
       <ion-text>
         <h5>Der Spieler antwortet ...</h5>
       </ion-text>
-      <ion-select interface="popover" [(ngModel)]="task.answer.type"
-        (ngModelChange)="onObjectAnswerSelectChange($event)">
-        <ion-select-option [value]="option.type" *ngFor="let option of objectAnswerSelect">
-          {{ option.text | typeToText: task.type : true }}</ion-select-option>
-      </ion-select>
+      <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
+        <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+          {{ option.text | typeToText: task.type : true }}</option>
+      </select>
     </div>
   </div>
 
@@ -110,26 +109,41 @@
       <h5>Weitere Einstellungen</h5>
     </ion-text>
     <ion-item lines="none" *ngIf="task.type == 'nav-flag'">
-      <ion-label>Eingabebestätigung</ion-label>
+      <ion-label>Eingabebestätigung
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        </ion-icon>
+      </ion-label>
       <ion-toggle [(ngModel)]="task.settings.confirmation"></ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="task.type == 'nav-text'">
-      <ion-label>Zielfahne anzeigen</ion-label>
+      <ion-label>Zielfahne anzeigen
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        </ion-icon>
+      </ion-label>
       <ion-toggle [(ngModel)]="task.settings.showMarker"></ion-toggle>
     </ion-item>
     <ion-item lines="none">
-      <ion-label>Feedback</ion-label>
+      <ion-label>Feedback
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        </ion-icon>
+      </ion-label>
       <ion-toggle [(ngModel)]="task.settings.feedback" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
         (ionChange)="feedbackChange()"></ion-toggle>
     </ion-item>
     <ion-item lines="none">
-      <ion-label>Mehrere Versuche</ion-label>
+      <ion-label>Mehrere Versuche
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        </ion-icon>
+      </ion-label>
       <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
         [disabled]="!task.settings.feedback">
       </ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction'">
-      <ion-label>Genauigkeit</ion-label>
+      <ion-label>Genauigkeit
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        </ion-icon>
+      </ion-label>
       <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="50" [step]="step" snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'" ticks pin (ionChange)="rangeChange()">
         <ion-label slot="start">0m</ion-label>
