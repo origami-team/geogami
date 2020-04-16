@@ -3,7 +3,6 @@ import { ActivatedRoute } from "@angular/router";
 import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
-import { Device } from "@ionic-native/device/ngx";
 import mapboxgl from "mapbox-gl";
 import { Plugins, GeolocationPosition, Capacitor, CameraResultType, CameraSource } from '@capacitor/core';
 
@@ -151,7 +150,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private OSMService: OsmService,
     private trackerService: TrackerService,
-    private device: Device,
     private insomnia: Insomnia,
     public alertController: AlertController,
     public platform: Platform,
@@ -311,13 +309,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     this.map.on("click", e => {
-      this.trackerService.addEvent({
-        type: "ON_MAP_CLICKED",
-        clickPosition: {
-          latitude: e.lngLat.lat,
-          longitude: e.lngLat.lng
-        }
-      });
+      let clickDirection = undefined;
 
       if (this.task.answer.type == AnswerType.MAP_POINT) {
         const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
@@ -352,6 +344,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           e.lngLat.lat,
           e.lngLat.lng
         )
+        clickDirection = this.clickDirection;
         if (!this.map.getLayer('viewDirectionClick')) {
           this.map.addSource("viewDirectionClick", {
             type: "geojson",
@@ -383,6 +376,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.clickDirection - this.map.getBearing()
         );
       }
+
+      this.trackerService.addEvent({
+        type: "ON_MAP_CLICKED",
+        clickPosition: {
+          latitude: e.lngLat.lat,
+          longitude: e.lngLat.lng
+        },
+        clickDirection: clickDirection
+      });
     });
 
     this.map.on('rotate', () => {
@@ -424,17 +426,23 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.game.tasks.forEach(task => {
       if (task.answer.position)
         bounds.extend(task.answer.position.geometry.coordinates);
-      // if (task.settings['question-type'] &&
-      //   task.settings['question-type'].settings &&
-      //   task.settings['question-type'].settings.polygon != undefined) {
-      //   task.settings['question-type'].settings.polygon.forEach(e => {
-      //     e.geometry.coordinates.forEach(c => {
-      //       c.forEach(coords => {
-      //         bounds.extend(coords)
-      //       })
-      //     })
-      //   })
-      // }
+
+      if (task.question.geometry) {
+        task.question.geometry.features.forEach(f => {
+          f.geometry.coordinates.forEach(c => {
+            c.forEach(coords => bounds.extend(coords))
+          })
+        })
+      }
+
+      if (task.mapFeatures.landmarkFeatures) {
+        task.mapFeatures.landmarkFeatures.features.forEach(f => {
+          f.geometry.coordinates.forEach(c => {
+            c.forEach(coords => bounds.extend(coords))
+          })
+        })
+      }
+
     });
 
     this.changeDetectorRef.detectChanges()
@@ -474,12 +482,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.audioPlayer.play()
     console.log("Current task: ", this.task);
 
+    this.trackerService.setTask(this.task)
+
     this.trackerService.addEvent({
-      type: "INIT_TASK",
-      task: this.task
+      type: "INIT_TASK"
     });
 
-    this.trackerService.setTask(this.task)
 
     if (this.task.settings && this.task.settings.accuracy) {
       this.triggerTreshold = this.task.settings.accuracy

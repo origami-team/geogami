@@ -1074,13 +1074,6 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/device@^5.16.0":
-  version "5.22.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/device/-/device-5.22.0.tgz#69d2206ca12c2bd0c46c8652f6b0f23c0abd8b5f"
-  integrity sha512-2H8OlU+dihUDRIEFHVFZks3b3D3jGSLt4DmDluX8pNzQVKJ8EJBAIpkSFv0USGr8TpaLDd0NN48p+k2BYV1rIg==
-  dependencies:
-    "@types/cordova" latest
-
 "@ionic-native/file-transfer@^5.22.0":
   version "5.22.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/file-transfer/-/file-transfer-5.22.0.tgz#c52ccf60fefbfd6d3188780a23faa25d7c0a39de"
@@ -1092,20 +1085,6 @@
   version "5.23.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/insomnia/-/insomnia-5.23.0.tgz#48c95c1c9004a3e90ee30ed2982b473a198c1137"
   integrity sha512-jP1+rzvTC5RMulpXy5Nu6XU67nf2ZMxgGGCgx5CHVMxjeOSSoFk1rW7XRT0FjMiySdQq2V5NchWUukUKFuhlqw==
-  dependencies:
-    "@types/cordova" latest
-
-"@ionic-native/splash-screen@^5.0.0":
-  version "5.22.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.22.0.tgz#2c5bb7b94ba027194779f6ea369cb034b597f396"
-  integrity sha512-cJC93eCsxYAhC9kn4GMA09pbCcpihiKXhMedelkUpeeBa2w0QBG0RiCIUFQ8G4G963vT991gxzwQO625xoCekQ==
-  dependencies:
-    "@types/cordova" latest
-
-"@ionic-native/status-bar@^5.11.0":
-  version "5.22.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-5.22.0.tgz#0d499886557216ba4b406b53aa4f8501fceb4490"
-  integrity sha512-CVb/HjNZdYMmUHK/H2q1uo6uIt+KOG/NnOgn4jUNTiw5XiGWvT+hqrMNTBrRk1nG573ky5OhW0f0oe+GqWaxOg==
   dependencies:
     "@types/cordova" latest
 
@@ -3252,11 +3231,6 @@ cordova-plugin-device-orientation@^2.0.1:
   resolved "https://registry.yarnpkg.com/cordova-plugin-device-orientation/-/cordova-plugin-device-orientation-2.0.1.tgz#149d51250defc309f0d03d306fe28e89881ba84d"
   integrity sha1-FJ1RJQ3vwwnw0D0wb+KOiYgbqE0=
 
-cordova-plugin-device@^2.0.2:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz#c2b41b7efd0455dd097f89356d85bfdd5dadeb0f"
-  integrity sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw==
-
 cordova-plugin-file-transfer@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.1.tgz#a75d8be2ebc3bb9b23c5b1bbd199214ec267586b"
@@ -3271,26 +3245,6 @@ cordova-plugin-insomnia@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/cordova-plugin-insomnia/-/cordova-plugin-insomnia-4.3.0.tgz#832a33f6d763f0b80273bdf761b35b678c43b957"
   integrity sha1-gyoz9tdj8LgCc733YbNbZ4xDuVc=
-
-cordova-plugin-ionic-keyboard@^2.1.3:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-keyboard/-/cordova-plugin-ionic-keyboard-2.2.0.tgz#53ba9ccd5e765165446a094cfe042a2ddd87d81d"
-  integrity sha512-yDUG+9ieKVRitq5mGlNxjaZh/MgEhFFIgTIPhqSbUaQ8UuZbawy5mhJAVClqY97q8/rcQtL6dCDa7x2sEtCLcA==
-
-cordova-plugin-splashscreen@^5.0.2:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-5.0.3.tgz#02820472771c3e10b43ceedd54b0a1e4674efa6d"
-  integrity sha512-rnoDXMDfzoeHDBvsnu6JmzDE/pV5YJCAfc5hYX/Mb2BIXGgSjFJheByt0tU6kp3Wl40tSyFX4pYfBwFblBGyRg==
-
-cordova-plugin-statusbar@^2.4.2:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.4.3.tgz#cc557aef66c27484e0f7f045004040d03321f82d"
-  integrity sha512-ThmXzl6QIKWFXf4wWw7Q/zpB+VKkz3VM958+5A0sXD4jmR++u7KnGttLksXshVwWr6lvGwUebLYtIyXwS4Ovcg==
-
-cordova-plugin-whitelist@^1.3.3:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-whitelist/-/cordova-plugin-whitelist-1.3.4.tgz#31938545c7c3e7de35c20ab08c2c3afa06e8a3f9"
-  integrity sha512-EYC5eQFVkoYXq39l7tYKE6lEjHJ04mvTmKXxGL7quHLdFPfJMNzru/UYpn92AOfpl3PQaZmou78C7EgmFOwFQQ==
 
 cordova-serve@^3.0.0:
   version "3.0.0"

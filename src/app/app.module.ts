@@ -22,7 +22,6 @@ import {
   DeviceOrientation,
 } from "@ionic-native/device-orientation/ngx";
 
-import { Device } from "@ionic-native/device/ngx";
 import { Insomnia } from "@ionic-native/insomnia/ngx";
 import { IonicStorageModule } from '@ionic/storage';
 import { QuestionTypeComponent } from './pages/create-game/form-elements/question-types/question-type.component'
@@ -90,7 +89,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceOrientation,
-    Device,
     Insomnia,
   ],
   bootstrap: [AppComponent]
