@@ -76,6 +76,15 @@ export class LandmarkControl {
         });
     }
 
+    public removeQT(): void {
+        if (this.map.getLayer('landmarks-qt-map-layer')) {
+            this.map.removeLayer('landmarks-qt-map-layer')
+        }
+        if (this.map.getSource('landmarks-qt-map-source')) {
+            this.map.removeSource('landmarks-qt-map-source')
+        }
+    }
+
     public remove(): void {
         if (this.map.getLayer('landmarksLayerPolygon')) {
             this.map.removeLayer('landmarksLayerPolygon')
@@ -85,12 +94,6 @@ export class LandmarkControl {
         }
         if (this.map.getSource('landmarksSource')) {
             this.map.removeSource('landmarksSource')
-        }
-        if (this.map.getLayer('landmarks-qt-map-layer')) {
-            this.map.removeLayer('landmarks-qt-map-layer')
-        }
-        if (this.map.getSource('landmarks-qt-map-source')) {
-            this.map.removeSource('landmarks-qt-map-source')
         }
     }
 }

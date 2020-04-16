@@ -27,13 +27,13 @@ export class TrackerService {
 
   private map: any;
 
+  private task: any;
+
   constructor(
     private http: HttpClient,
     private geolocateService: OrigamiGeolocationService,
     private deviceOrientation: DeviceOrientation
-  ) {
-
-  }
+  ) { }
 
   async init(gameID, name, map: any) {
     this.positionWatch = this.geolocateService.geolocationSubscription.subscribe(position => {
@@ -55,6 +55,10 @@ export class TrackerService {
     this.events = [];
     this.answers = [];
     this.start = new Date().toISOString()
+  }
+
+  setTask(task) {
+    this.task = task;
   }
 
   addWaypoint(waypoint) {
@@ -87,7 +91,8 @@ export class TrackerService {
         bearing: this.map.getBearing(),
         pitch: this.map.getPitch()
       },
-      compassHeading: this.compassHeading
+      compassHeading: this.compassHeading,
+      task: this.task
     });
   }
 

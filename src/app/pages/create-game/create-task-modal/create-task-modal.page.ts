@@ -48,10 +48,10 @@ export class CreateTaskModalPage implements OnInit {
       text: "Selbst-Lokalisation"
     }, {
       type: 2,
-      text: "Objektsuche"
+      text: "Objekt-Lokalisation"
     }, {
       type: 3,
-      text: "Richtungssuche"
+      text: "Richtungsbestimmung"
     }
   ]
 

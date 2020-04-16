@@ -58,6 +58,10 @@ export class LayerControl {
 
     public setType(type: LayerType, swipeMapContainer: ElementRef = undefined): void {
         if (this.map != undefined) {
+            if (this.satMap) {
+                this.satMap.remove();
+                this.satMap = null;
+            }
             this.layerType = type
             this.reset();
             this.swipeMapContainer = swipeMapContainer
@@ -308,11 +312,11 @@ export class LayerControl {
         })
     }
 
-    public passMarkers(markers, callback: Function) {
-        const { waypointMarker } = markers
-        console.log(markers)
-        waypointMarker.addTo(this.satMap)
-
+    public passMarkers(markers) {
+        if (this.layerType == LayerType.Swipe) {
+            const { waypointMarker } = markers
+            waypointMarker.addTo(this.satMap)
+        }
     }
 
     private _toGeoJSONPoint = (lng, lat): GeoJSON.Feature<GeoJSON.Point> =>

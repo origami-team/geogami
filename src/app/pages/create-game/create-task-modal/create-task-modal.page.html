@@ -76,7 +76,7 @@
     </ion-card-content>
   </ion-card>
 
-  <div class="select-flex-container" *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
+  <div *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
     <div>
       <ion-text>
         <h5 *ngIf="task.type == 'theme-object'">Das gesuchte Objekt...</h5>
