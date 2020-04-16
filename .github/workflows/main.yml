@@ -32,4 +32,12 @@ jobs:
       run: npx cap sync android
 
     - name: Android Build
-      uses: vgaidarji/android-github-actions-build@v1.0.1
+      run: ./android/gradlew :app:assembleDebug
+    
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        asset_path: ./android/app/build/outputs/apk/release/app-release-unsigned.apk
+        asset_name: app-release-unsigned.apk
