@@ -113,16 +113,16 @@
         <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
         </ion-icon>
       </ion-label>
-      <ion-toggle [(ngModel)]="task.settings.confirmation"></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.confirmation" (ionChange)="settingsChange()"></ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="task.type == 'nav-text'">
       <ion-label>Zielfahne anzeigen
         <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
         </ion-icon>
       </ion-label>
-      <ion-toggle [(ngModel)]="task.settings.showMarker"></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.showMarker" (ionChange)="settingsChange()"></ion-toggle>
     </ion-item>
-    <ion-item lines="none">
+    <ion-item lines="none" *ngIf="showFeedback">
       <ion-label>Feedback
         <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
         </ion-icon>
@@ -130,13 +130,13 @@
       <ion-toggle [(ngModel)]="task.settings.feedback" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
         (ionChange)="feedbackChange()"></ion-toggle>
     </ion-item>
-    <ion-item lines="none">
+    <ion-item lines="none" *ngIf="showMultipleTries">
       <ion-label>Mehrere Versuche
         <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
-        [disabled]="!task.settings.feedback">
+        [disabled]="!task.settings.feedback" (ionChange)="settingsChange()">
       </ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction'">

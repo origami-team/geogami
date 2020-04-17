@@ -18,7 +18,7 @@ import { standardMapFeatures } from "./../../../models/mapFeatures"
 // import { FieldConfig } from "./../../../dynamic-form/models/field-config";
 // import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
 import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
-import { QuestionType, AnswerType } from 'src/app/models/types';
+import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
 
@@ -36,6 +36,9 @@ export class CreateTaskModalPage implements OnInit {
   tasks: any[] = [];
 
   mapFeatures: any = this.task.mapFeatures;
+
+  showFeedback: boolean = true;
+  showMultipleTries: boolean = true;
 
   step: number = 5;
 
@@ -116,6 +119,8 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings.confirmation = false;
     }
 
+    this.settingsChange();
+
     this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
       .map(t => ({ type: t as QuestionType, text: t }))
       .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)))
@@ -152,6 +157,32 @@ export class CreateTaskModalPage implements OnInit {
   feedbackChange() {
     if (!this.task.settings.feedback) {
       this.task.settings.multipleTries = false
+    }
+  }
+
+  settingsChange() {
+    this.showFeedback = true;
+    this.showMultipleTries = true;
+
+    if (this.task.category == 'nav' && !this.task.settings.confirmation) {
+      this.showFeedback = false;
+      this.showMultipleTries = false;
+    }
+
+    if (this.task.answer.type == AnswerType.PHOTO) {
+      this.task.settings.feedback = false;
+
+      this.showFeedback = false;
+      this.showMultipleTries = false;
+    }
+
+    if (this.task.answer.mode == TaskMode.NAV_ARROW ||
+      this.task.question.type == QuestionType.NAV_INSTRUCTION ||
+      this.task.answer.type == AnswerType.PHOTO ||
+      this.task.type == 'nav-flag' && !this.task.settings.confirmation) {
+      this.task.settings.multipleTries = false;
+
+      this.showMultipleTries = false;
     }
   }
 
