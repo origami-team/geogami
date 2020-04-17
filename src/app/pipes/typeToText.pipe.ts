@@ -8,7 +8,7 @@ export class TypeToTextPipe implements PipeTransform {
         MAP_FEATURE_PHOTO: "... wird als Foto angezeigt",
         TEXT: "... wird mit einem Text beschrieben",
         MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
-        MAP_POINT: "... durch Setzen einer Kartenmarkierung",
+        MAP_POINT: "... durch Markierung des Objekts auf der Karte",
         PHOTO: "... mit der Aufnahme eines Fotos",
     }
 
@@ -18,7 +18,7 @@ export class TypeToTextPipe implements PipeTransform {
         MAP_DIRECTION: "... wird mit einem Pfeil vorgegeben",
         TEXT: "... entspricht der aktuellen Blickrichtung",
         MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
-        DIRECTION: "... durch einnehmen der Blickrichtung"
+        DIRECTION: "... durch Einnehmen der Blickrichtung"
     }
 
     transform(value: string, taskType: string, answer: boolean): string {
@@ -27,7 +27,7 @@ export class TypeToTextPipe implements PipeTransform {
         }
 
         if (value == "MAP_DIRECTION" && answer) {
-            return "... durch Setzen der Richtung auf der Karte"
+            return "... durch Markierung der Richtung auf der Karte"
         }
 
         return this.textMappingsDirection[value];
