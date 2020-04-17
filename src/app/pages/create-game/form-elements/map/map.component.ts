@@ -22,9 +22,9 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
   styleUrls: ["./map.component.scss"],
 })
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild("map", { static: false }) mapContainer;
-  @ViewChild("hiddenInput", { static: false }) hiddenInput;
-  @ViewChild("marker", { static: false }) directionMarker;
+  @ViewChild("map") mapContainer;
+  @ViewChild("hiddenInput") hiddenInput;
+  @ViewChild("marker") directionMarker;
 
   @Input() feature: any;
 

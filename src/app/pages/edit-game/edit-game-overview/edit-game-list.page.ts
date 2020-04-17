@@ -30,7 +30,7 @@ export class EditGameListPage implements OnInit {
   game: Game;
   reorder: Boolean = false;
 
-  @ViewChild(IonReorderGroup, { static: false }) reorderGroup: IonReorderGroup;
+  @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   // dismiss modal on hardware back button
   @HostListener('document:ionBackButton', ['$event'])

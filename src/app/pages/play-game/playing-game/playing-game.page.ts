@@ -44,6 +44,7 @@ import { AnswerType, TaskMode, QuestionType } from 'src/app/models/types';
 import { cloneDeep } from 'lodash';
 import { standardMapFeatures } from "./../../../models/mapFeatures"
 
+import { AnimationOptions } from 'ngx-lottie';
 
 
 enum FeedbackType {
@@ -59,10 +60,10 @@ enum FeedbackType {
   styleUrls: ["./playing-game.page.scss"]
 })
 export class PlayingGamePage implements OnInit, OnDestroy {
-  @ViewChild("mapWrapper", { static: false }) mapWrapper;
-  @ViewChild("map", { static: false }) mapContainer;
-  @ViewChild("swipeMap", { static: false }) swipeMapContainer;
-  @ViewChild('panel', { static: false }) panel;
+  @ViewChild("mapWrapper") mapWrapper;
+  @ViewChild("map") mapContainer;
+  @ViewChild("swipeMap") swipeMapContainer;
+  @ViewChild('panel') panel;
 
   game: Game;
 
@@ -106,7 +107,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   indicatedDirection: number = 0;
 
   showSuccess: boolean = false;
-  public lottieConfig: Object;
+  public lottieConfig: AnimationOptions;
 
   showFeedback: boolean = false;
   feedback: any = {
@@ -338,21 +339,40 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
 
       if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-        this.clickDirection = this.helperService.bearing(
-          this.task.question.direction.position.geometry.coordinates[1],
-          this.task.question.direction.position.geometry.coordinates[0],
-          e.lngLat.lat,
-          e.lngLat.lng
-        )
+        if (this.task.question.direction?.position) {
+          this.clickDirection = this.helperService.bearing(
+            this.task.question.direction.position.geometry.coordinates[1],
+            this.task.question.direction.position.geometry.coordinates[0],
+            e.lngLat.lat,
+            e.lngLat.lng
+          )
+        } else {
+          this.clickDirection = this.helperService.bearing(
+            this.lastKnownPosition.coords.latitude,
+            this.lastKnownPosition.coords.longitude,
+            e.lngLat.lat,
+            e.lngLat.lng
+          )
+        }
         clickDirection = this.clickDirection;
         if (!this.map.getLayer('viewDirectionClick')) {
-          this.map.addSource("viewDirectionClick", {
-            type: "geojson",
-            data: {
-              type: "Point",
-              coordinates: this.task.question.direction.position.geometry.coordinates
-            }
-          });
+          if (this.task.question.direction?.position) {
+            this.map.addSource("viewDirectionClick", {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: this.task.question.direction.position.geometry.coordinates
+              }
+            });
+          } else {
+            this.map.addSource("viewDirectionClick", {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+              }
+            });
+          }
           this.map.addLayer({
             id: "viewDirectionClick",
             source: "viewDirectionClick",
@@ -375,6 +395,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           "icon-rotate",
           this.clickDirection - this.map.getBearing()
         );
+        console.log(this.map.getStyle())
       }
 
       this.trackerService.addEvent({
@@ -435,7 +456,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         })
       }
 
-      if (task.mapFeatures.landmarkFeatures) {
+      if (task.mapFeatures?.landmarkFeatures) {
         task.mapFeatures.landmarkFeatures.features.forEach(f => {
           f.geometry.coordinates.forEach(c => {
             c.forEach(coords => bounds.extend(coords))
@@ -489,7 +510,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
 
-    if (this.task.settings && this.task.settings.accuracy) {
+    if (this.task.settings?.accuracy) {
       this.triggerTreshold = this.task.settings.accuracy
     } else {
       this.triggerTreshold = 10;
@@ -588,7 +609,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      if (this.task.question.direction.position) {
+      if (this.task.question.direction?.position) {
         this.map.addSource("viewDirectionClickGeolocate", {
           type: "geojson",
           data: this.task.question.direction.position.geometry

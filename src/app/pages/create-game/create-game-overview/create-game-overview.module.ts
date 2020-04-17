@@ -6,7 +6,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { CreateGameOverviewPage } from './create-game-overview.page';
-import { LottieAnimationViewModule } from 'ng-lottie';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
+
+// Note we need a separate function as it's required
+// by the AOT compiler.
+export function playerFactory() {
+  return player;
+}
 
 const routes: Routes = [
   {
@@ -21,7 +28,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LottieAnimationViewModule.forRoot()
+    LottieModule.forRoot({ player: playerFactory })
   ],
   declarations: [CreateGameOverviewPage]
 })
