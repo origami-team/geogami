@@ -25,7 +25,7 @@ import { standardMapFeatures } from "./../../../models/mapFeatures"
   styleUrls: ["./map-features-modal.page.scss"]
 })
 export class MapFeaturesModalPage implements OnInit, AfterViewInit {
-  @ViewChild("map", { static: false }) mapContainer;
+  @ViewChild("map") mapContainer;
 
   private draw: MapboxDraw;
   private map: mapboxgl.Map;

@@ -208,8 +208,7 @@
   <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch!</h3>
     <p>Du hast das Spiel beendet</p>
-    <lottie-animation-view [options]="lottieConfig" [width]="300" [height]="300">
-    </lottie-animation-view>
+    <div lottie [options]="lottieConfig"></div>
     <ion-button color=warning (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
   </ion-card>
 

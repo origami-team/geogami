@@ -13,6 +13,8 @@ import { GameFactoryService } from "../../../services/game-factory.service";
 import { PopoverComponent } from "../../../popover/popover.component";
 import { GamesService } from "src/app/services/games.service";
 
+import { AnimationOptions } from 'ngx-lottie';
+
 @Component({
   selector: "app-create-game-overview",
   templateUrl: "./create-game-overview.page.html",
@@ -20,7 +22,7 @@ import { GamesService } from "src/app/services/games.service";
 })
 export class CreateGameOverviewPage implements OnInit {
   public model;
-  public lottieConfig: Object;
+  public lottieConfig: AnimationOptions;
   showSuccess: boolean = false;
   showUpload: boolean = false;
 

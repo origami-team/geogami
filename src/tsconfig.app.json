@@ -6,8 +6,12 @@
       "node"
     ]
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
+  "files": [
+    "main.ts",
+    "polyfills.ts",
+    "zone-flags.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
   ]
 }
