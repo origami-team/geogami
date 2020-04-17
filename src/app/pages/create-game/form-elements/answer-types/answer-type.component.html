@@ -1,7 +1,7 @@
 <div *ngIf="answer.type == answerTypeEnum.POSITION">
     <h5>Zielort
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'Dieser Zielort wird dem Spieler im Spielverlauf mit einer Zielfahne auf der Karte angezeigt.')">
+            (click)="showPopover($event, 'Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.')">
         </ion-icon>
     </h5>
     <app-map featureType="point" [(feature)]="answer.position"></app-map>
@@ -10,7 +10,7 @@
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
     <h5>Multiple Choice
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'Lade ein Foto vom dem zu suchenden Objekt hoch sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.')">
+            (click)="showPopover($event, 'Füge ein Foto vom dem zu suchenden Objekt ein sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.')">
         </ion-icon>
     </h5>
     <app-photo-upload-multiple-choice [(photos)]="answer.photos"></app-photo-upload-multiple-choice>

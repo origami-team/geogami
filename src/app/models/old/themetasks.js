@@ -331,7 +331,7 @@ export default [
   }
   // {
   //     "type": "theme-object",
-  //     "name": "Objektsuche",
+  //     "name": "Objekt-Lokalisation",
   //     "developer": [
   //         {
   //             "type": "input",

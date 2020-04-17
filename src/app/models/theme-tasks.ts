@@ -23,7 +23,7 @@ export const themetasks: ReadonlyArray<any> = [
         category: "theme",
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: "Finde das markierte Haus in deiner Umgebung. Wähle das passende Foto.",
+            text: "Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.",
         },
         answer: {
             type: AnswerType.MULTIPLE_CHOICE
@@ -37,7 +37,7 @@ export const themetasks: ReadonlyArray<any> = [
         category: "theme",
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: "Finde das markierte Haus in deiner Umgebung. Mache ein Foto.",
+            text: "Finde das markierte Haus in deiner Nähe. Mache ein Foto.",
         },
         answer: {
             type: AnswerType.PHOTO
@@ -52,7 +52,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: "textPhoto",
         question: {
             type: QuestionType.MAP_FEATURE_PHOTO,
-            text: "Suche dieses Haus in deiner Umgebung. Finde es auf der Karte und tippe es an.",
+            text: "Suche dieses Haus in deiner Nähe. Finde es auf der Karte und tippe es an.",
         },
         answer: {
             type: AnswerType.MAP_POINT
@@ -67,7 +67,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: "text",
         question: {
             type: QuestionType.TEXT,
-            text: "Suche [...] in deiner Umgebung. Finde es auf der Karte und tippe es an.",
+            text: "Suche [...] in deiner Nähe. Finde es auf der Karte und tippe es an.",
             mode: TaskMode.NO_FEATURE
         },
         answerType: "mapPoint",
@@ -85,7 +85,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: "text",
         question: {
             type: QuestionType.TEXT,
-            text: "Suche [...] in deiner Umgebung. Wähle das passende Foto"
+            text: "Suche [...] in deiner Nähe. Wähle das passende Foto."
         },
         answerType: "multipleChoice",
         answer: {
@@ -101,7 +101,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: "text",
         question: {
             type: QuestionType.TEXT,
-            text: "Suche [...] in deiner Umgebung. Mache ein Foto"
+            text: "Suche [...] in deiner Nähe. Mache ein Foto."
         },
         answerType: "photo",
         answer: {
@@ -111,14 +111,14 @@ export const themetasks: ReadonlyArray<any> = [
         settings: {}
     },
     {
-        name: "Richtungssuche",
+        name: "Richtungsbestimmung",
         type: "theme-direction",
         // category: "themedirection",
         category: "theme",
         questionType: "textMapFeature",
         question: {
             type: QuestionType.MAP_DIRECTION_MARKER,
-            text: "Drehe dich in die Richtung, die auf der Karte zu sehen ist. Wähle das passende Foto dazu."
+            text: "Drehe dich in die Blickrichtung, die du auf der Karte siehst. Wähle das passende Foto."
         },
         answerType: "multipleChoice",
         answer: {
@@ -127,14 +127,14 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: "evalMultipleChoice",
         settings: {}
     }, {
-        name: "Richtungssuche",
+        name: "Richtungsbestimmung",
         type: "theme-direction",
         // category: "themedirection",
         category: "theme",
         questionType: "textMapFeature",
         question: {
             type: QuestionType.MAP_DIRECTION_MARKER,
-            text: "Drehe dich in die angezeigte Richtung."
+            text: "Drehe dich in die Blickrichtung, die du auf der Karte siehst."
         },
         answerType: "direction",
         answer: {
@@ -143,7 +143,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: "evalDirection",
         settings: {}
     }, {
-        name: "Richtungssuche",
+        name: "Richtungsbestimmung",
         type: "theme-direction",
         // category: "themedirection",
         category: "theme",
@@ -160,7 +160,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: "evalDirection",
         settings: {}
     }, {
-        name: "Richtungssuche",
+        name: "Richtungsbestimmung",
         type: "theme-direction",
         // category: "themedirection",
         category: "theme",
@@ -176,7 +176,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: "evalMapDirection",
         settings: {}
     }, {
-        name: "Richtungssuche",
+        name: "Richtungsbestimmung",
         type: "theme-direction",
         // category: "themedirection",
         category: "theme",
