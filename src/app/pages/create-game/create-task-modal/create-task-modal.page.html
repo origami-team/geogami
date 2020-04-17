@@ -110,21 +110,21 @@
     </ion-text>
     <ion-item lines="none" *ngIf="task.type == 'nav-flag'">
       <ion-label>Eingabebestätigung
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Soll der Spieler seine Ankunft am Ziel mit OK bestätigen?')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.confirmation"></ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="task.type == 'nav-text'">
       <ion-label>Zielfahne anzeigen
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Soll eine Zielfahne auf der Karte angezeigt werden?')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.showMarker"></ion-toggle>
     </ion-item>
     <ion-item lines="none">
       <ion-label>Feedback
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Soll der Spieler Feedback darüber erhalten, ob er die Aufgabe korrekt gelöst hat?')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.feedback" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
@@ -132,7 +132,7 @@
     </ion-item>
     <ion-item lines="none">
       <ion-label>Mehrere Versuche
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Darf der Spieler sich verbessern, wenn er die Aufgabe falsch gelöst hat?')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
@@ -141,7 +141,7 @@
     </ion-item>
     <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction'">
       <ion-label>Genauigkeit
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem ipsum...')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Setze die Genauigkeit auf >10m, wenn der markierte Punkt an einem Ort ist, an dem sich hohe Gebäude oder dichte Baumkronen befinden, oder wenn du ein größeres Gebiet als korrekte Lösung zulassen möchtest.')">
         </ion-icon>
       </ion-label>
       <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="50" [step]="step" snaps

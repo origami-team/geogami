@@ -1,12 +1,14 @@
 <ion-label>Die korrekte Anwort:</ion-label>
+
 <div class="photo-wrapper">
+  (1)&nbsp;
   <ion-thumbnail slot="start" *ngIf="photos[0]" class="preview">
     <ion-spinner *ngIf="uploading[0]"></ion-spinner>
     <img [src]="photos[0]" [ngStyle]="{
       filter: 'blur(' + ((100 - uploadingProgress[0]) / 10) + 'px)'
     }">
   </ion-thumbnail>
-  (1)
+  &nbsp;
   <ion-button color="secondary" size="default" (click)='capturePhoto(0, false)'>
     <ion-icon slot="icon-only" name="camera"></ion-icon>
   </ion-button>
@@ -17,13 +19,14 @@
 
 <ion-label>Drei falsche Antwortmöglichkeiten:</ion-label>
 <div class="photo-wrapper">
+  (2)&nbsp;
   <ion-thumbnail slot="start" *ngIf="photos[1]" class="preview">
     <ion-spinner *ngIf="uploading[1]"></ion-spinner>
     <img [src]="photos[1]" [ngStyle]="{
       filter: 'blur(' + ((100 - uploadingProgress[1]) / 10) + 'px)'
     }">
   </ion-thumbnail>
-  (2)
+  &nbsp;
   <ion-button color="secondary" size="default" (click)='capturePhoto(1, false)'>
     <ion-icon slot="icon-only" name="camera"></ion-icon>
   </ion-button>
@@ -32,13 +35,14 @@
   </ion-button>
 </div>
 <div class="photo-wrapper">
+  (3)&nbsp;
   <ion-thumbnail slot="start" *ngIf="photos[2]" class="preview">
     <ion-spinner *ngIf="uploading[2]"></ion-spinner>
     <img [src]="photos[2]" [ngStyle]="{
       filter: 'blur(' + ((100 - uploadingProgress[2]) / 10) + 'px)'
     }">
   </ion-thumbnail>
-  (3)
+  &nbsp;
   <ion-button color="secondary" size="default" (click)='capturePhoto(2, false)'>
     <ion-icon slot="icon-only" name="camera"></ion-icon>
   </ion-button>
@@ -47,13 +51,14 @@
   </ion-button>
 </div>
 <div class="photo-wrapper">
+  (4)&nbsp;
   <ion-thumbnail slot="start" *ngIf="photos[3]" class="preview">
     <ion-spinner *ngIf="uploading[3]"></ion-spinner>
     <img [src]="photos[3]" [ngStyle]="{
       filter: 'blur(' + ((100 - uploadingProgress[3]) / 10) + 'px)'
     }">
   </ion-thumbnail>
-  (4)
+  &nbsp;
   <ion-button color="secondary" size="default" (click)='capturePhoto(3, false)'>
     <ion-icon slot="icon-only" name="camera"></ion-icon>
   </ion-button>
