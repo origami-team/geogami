@@ -236,7 +236,6 @@ export class CreateTaskModalPage implements OnInit {
   }
 
   async showPopover(ev: any, text: string) {
-    console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

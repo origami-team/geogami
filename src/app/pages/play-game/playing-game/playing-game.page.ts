@@ -762,30 +762,46 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async onOkClicked() {
     let isCorrect: boolean = true;
+    let answer: any = {}
 
     if (this.task.answer.type == AnswerType.POSITION) {
       const waypoint = this.task.answer.position.geometry.coordinates;
       const arrived = this.userDidArrive(waypoint);
+      answer = {
+        target: waypoint,
+        position: this.lastKnownPosition,
+        distance: this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude),
+        correct: arrived
+      }
+      isCorrect = arrived
       if (!arrived) {
         this.initFeedback(false)
-        isCorrect = false;
       } else {
         this.onWaypointReached();
-        isCorrect = true;
       }
     }
 
     if (this.task.type == "theme-loc") {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
       const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-      this.initFeedback(distance < this.triggerTreshold)
       isCorrect = distance < this.triggerTreshold;
+      answer = {
+        clickPosition: clickPosition,
+        distance: distance,
+        correct: isCorrect
+      }
+
+      this.initFeedback(distance < this.triggerTreshold)
     }
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
       if (this.selectedPhoto != null) {
         this.initFeedback(this.isCorrectPhotoSelected);
         isCorrect = this.isCorrectPhotoSelected
+        answer = {
+          selectedPhoto: this.selectedPhoto,
+          correct: isCorrect
+        }
         if (this.isCorrectPhotoSelected) {
           this.isCorrectPhotoSelected = null;
           this.selectedPhoto = null;
@@ -799,6 +815,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
         toast.present();
         isCorrect = false;
+        answer = {
+          selectedPhoto: null,
+          correct: isCorrect
+        }
       }
     }
 
@@ -811,16 +831,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           duration: 2000
         });
         toast.present();
+
         isCorrect = false;
+        answer = {
+          photo: null,
+          correct: isCorrect
+        }
       } else {
-        this.trackerService.addAnswer({
-          task: this.task,
-          answer: {
-            photo: this.photoURL
-          }
-        });
         this.initFeedback(true);
         isCorrect = true;
+        answer = {
+          photo: this.photo,
+          correct: isCorrect
+        }
         this.photo = "";
         this.photoURL = "";
       }
@@ -830,41 +853,36 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
 
       const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
-      this.trackerService.addAnswer({
-        task: this.task,
-        answer: {
-          inPolygon: isInPolygon
-        }
-      });
       this.initFeedback(isInPolygon);
       isCorrect = isInPolygon;
+      answer = {
+        clickPosition: clickPosition,
+        correct: isCorrect
+      }
     }
 
     if (this.task.answer.type == AnswerType.DIRECTION) {
-      this.trackerService.addAnswer({
-        task: this.task,
-        answer: {
-          direction: this.compassHeading
-        }
-      });
       this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
       isCorrect = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
+      answer = {
+        compassHeading: this.compassHeading,
+        correct: isCorrect
+      }
     }
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      this.trackerService.addAnswer({
-        task: this.task,
-        answer: {
-          direction: this.compassHeading
-        }
-      });
       this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
       isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+      answer = {
+        compassHeading: this.clickDirection,
+        correct: isCorrect
+      }
     }
 
     this.trackerService.addEvent({
       type: "ON_OK_CLICKED",
-      correct: isCorrect
+      correct: isCorrect,
+      answer: answer
     });
 
     if (this.task.category == "info") {

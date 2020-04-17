@@ -16,7 +16,6 @@ export class TrackerService {
   private device: DeviceInfo;
   private waypoints: any[];
   private events: any[];
-  private answers: any[];
 
   private start: String;
 
@@ -53,7 +52,6 @@ export class TrackerService {
     this.device = await Plugins.Device.getInfo().then(device => device)
     this.waypoints = [];
     this.events = [];
-    this.answers = [];
     this.start = new Date().toISOString()
   }
 
@@ -94,13 +92,7 @@ export class TrackerService {
       compassHeading: this.compassHeading,
       task: this.task
     });
-  }
-
-  addAnswer(answer) {
-    this.answers.push({
-      ...answer,
-      timestamp: new Date().toISOString()
-    });
+    console.log(this.events)
   }
 
   uploadTrack() {
@@ -112,7 +104,7 @@ export class TrackerService {
       device: this.device,
       waypoints: this.waypoints,
       events: this.events,
-      answers: this.answers
+      answers: null
     };
 
     console.log(data);
