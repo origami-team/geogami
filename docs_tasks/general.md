@@ -25,8 +25,8 @@ Eingezeichnete Blickrichtung korrekt?       "evalMapDirection"
 
 Jeder Fragetyp gehört zu einer Kategorie
 - Navigationsaufgabe                        "navTask"
-- Objektsuche
-- Richtungssuche
+- Objekt-Lokalisation
+- Richtungsbestimmung
 
 
 Navigationsaufgaben:
@@ -66,7 +66,7 @@ Thematische Aufgaben:
         evaluate:       "evalDistanceToPoint"
         text:           "Wo bist du jetzt? Tippe auf die Karte."
     }, 
-    // Objektsuche
+    // Objekt-Lokalisation
     {
         category:       "objectLocalization"
         questionType:   "textMapFeature",       // polygon
@@ -104,7 +104,7 @@ Thematische Aufgaben:
         evaluate:       "evalNone"
         text:           "LOREM IPSUM"
     }
-    // Richtungssuche
+    // Richtungsbestimmung
     {
         category:       "direction"
         questionType:   "textMapFeature",       // direction marker
