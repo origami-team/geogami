@@ -155,9 +155,7 @@ export class CreateTaskModalPage implements OnInit {
   }
 
   feedbackChange() {
-    if (!this.task.settings.feedback) {
-      this.task.settings.multipleTries = false
-    }
+    this.task.settings.multipleTries = this.task.settings.feedback
   }
 
   settingsChange() {
