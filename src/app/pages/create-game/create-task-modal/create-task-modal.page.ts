@@ -71,9 +71,20 @@ export class CreateTaskModalPage implements OnInit {
       this.tasks = cloneDeep(themetasks)
     }
 
-    if (!this.task) {
+    if (this.task == null) {
       this.task = this.tasks[0]
       this.selectedTaskType = this.taskTypes[0]
+
+      this.task.settings = {
+        feedback: true,
+        multipleTries: true,
+        confirmation: this.task.category.includes('theme'),
+        accuracy: 10,
+        showMarker: true,
+      }
+
+      this.settingsChange();
+
     } else {
       if (this.task.type.includes('self')) {
         this.selectedTaskType = this.taskTypes[0]
@@ -102,24 +113,9 @@ export class CreateTaskModalPage implements OnInit {
   onTaskSelected(newValue) {
     this.task = newValue;
 
-    this.task.settings = {
-      feedback: true,
-      multipleTries: true,
-      confirmation: false,
-      accuracy: 10,
-      showMarker: true,
-      ...this.task.settings
-    }
+    this.settingsChange()
 
     this.mapFeatures = this.task.mapFeatures
-
-    if (this.task.category.includes('theme')) {
-      this.task.settings.confirmation = true;
-    } else {
-      this.task.settings.confirmation = false;
-    }
-
-    this.settingsChange();
 
     this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
       .map(t => ({ type: t as QuestionType, text: t }))
@@ -165,6 +161,9 @@ export class CreateTaskModalPage implements OnInit {
     if (this.task.category == 'nav' && !this.task.settings.confirmation) {
       this.showFeedback = false;
       this.showMultipleTries = false;
+
+      this.task.settings.feedback = false;
+      this.task.settings.multipleTries = false;
     }
 
     if (this.task.answer.type == AnswerType.PHOTO) {
