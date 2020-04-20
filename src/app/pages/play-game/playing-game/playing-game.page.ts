@@ -310,104 +310,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
     });
 
-    this.map.on("click", e => {
-      let clickDirection = undefined;
-
-      if (this.task.answer.type == AnswerType.MAP_POINT) {
-        const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-
-        if (this.map.getSource('marker-point')) {
-          this.map.getSource('marker-point').setData(pointFeature)
-        } else {
-          this.map.addSource('marker-point', {
-            'type': 'geojson',
-            'data': pointFeature
-          });
-        }
-
-        if (!this.map.getLayer('marker-point')) {
-          this.map.addLayer({
-            'id': 'marker-point',
-            'type': 'symbol',
-            'source': 'marker-point',
-            'layout': {
-              "icon-image": "marker-editor",
-              "icon-size": 0.65,
-              "icon-anchor": 'bottom'
-            }
-          });
-        }
-      }
-
-      if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-        if (this.task.question.direction?.position) {
-          this.clickDirection = this.helperService.bearing(
-            this.task.question.direction.position.geometry.coordinates[1],
-            this.task.question.direction.position.geometry.coordinates[0],
-            e.lngLat.lat,
-            e.lngLat.lng
-          )
-        } else {
-          this.clickDirection = this.helperService.bearing(
-            this.lastKnownPosition.coords.latitude,
-            this.lastKnownPosition.coords.longitude,
-            e.lngLat.lat,
-            e.lngLat.lng
-          )
-        }
-        clickDirection = this.clickDirection;
-        if (!this.map.getLayer('viewDirectionClick')) {
-          if (this.task.question.direction?.position) {
-            this.map.addSource("viewDirectionClick", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates: this.task.question.direction.position.geometry.coordinates
-              }
-            });
-          } else {
-            this.map.addSource("viewDirectionClick", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
-              }
-            });
-          }
-          this.map.addLayer({
-            id: "viewDirectionClick",
-            source: "viewDirectionClick",
-            type: "symbol",
-            layout: {
-              "icon-image": "view-direction-task",
-              "icon-size": 0.65,
-              "icon-offset": [0, -8]
-            }
-          });
-          if (this.map.getLayer('viewDirectionClickGeolocate')) {
-            this.map.removeLayer('viewDirectionClickGeolocate')
-            this.map.removeSource('viewDirectionClickGeolocate')
-          } else {
-            this.geolocateControl.setType(GeolocateType.None)
-          }
-        }
-        this.map.setLayoutProperty(
-          "viewDirectionClick",
-          "icon-rotate",
-          this.clickDirection - this.map.getBearing()
-        );
-        console.log(this.map.getStyle())
-      }
-
-      this.trackerService.addEvent({
-        type: "ON_MAP_CLICKED",
-        clickPosition: {
-          latitude: e.lngLat.lat,
-          longitude: e.lngLat.lng
-        },
-        clickDirection: clickDirection
-      });
-    });
+    this.map.on("click", e => this.onMapClick(e, "standard"));
 
     this.map.on('rotate', () => {
       if (this.map.getLayer('viewDirectionTask')) {
@@ -440,6 +343,105 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       () => console.log("insomnia keep awake success"),
       () => console.log("insomnia keep awake error")
     );
+  }
+
+  onMapClick(e, mapType) {
+    let clickDirection = undefined;
+
+    if (this.task.answer.type == AnswerType.MAP_POINT) {
+      const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+
+      if (this.map.getSource('marker-point')) {
+        this.map.getSource('marker-point').setData(pointFeature)
+      } else {
+        this.map.addSource('marker-point', {
+          'type': 'geojson',
+          'data': pointFeature
+        });
+      }
+
+      if (!this.map.getLayer('marker-point')) {
+        this.map.addLayer({
+          'id': 'marker-point',
+          'type': 'symbol',
+          'source': 'marker-point',
+          'layout': {
+            "icon-image": "marker-editor",
+            "icon-size": 0.65,
+            "icon-anchor": 'bottom'
+          }
+        });
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+      if (this.task.question.direction?.position) {
+        this.clickDirection = this.helperService.bearing(
+          this.task.question.direction.position.geometry.coordinates[1],
+          this.task.question.direction.position.geometry.coordinates[0],
+          e.lngLat.lat,
+          e.lngLat.lng
+        )
+      } else {
+        this.clickDirection = this.helperService.bearing(
+          this.lastKnownPosition.coords.latitude,
+          this.lastKnownPosition.coords.longitude,
+          e.lngLat.lat,
+          e.lngLat.lng
+        )
+      }
+      clickDirection = this.clickDirection;
+      if (!this.map.getLayer('viewDirectionClick')) {
+        if (this.task.question.direction?.position) {
+          this.map.addSource("viewDirectionClick", {
+            type: "geojson",
+            data: {
+              type: "Point",
+              coordinates: this.task.question.direction.position.geometry.coordinates
+            }
+          });
+        } else {
+          this.map.addSource("viewDirectionClick", {
+            type: "geojson",
+            data: {
+              type: "Point",
+              coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+            }
+          });
+        }
+        this.map.addLayer({
+          id: "viewDirectionClick",
+          source: "viewDirectionClick",
+          type: "symbol",
+          layout: {
+            "icon-image": "view-direction-task",
+            "icon-size": 0.65,
+            "icon-offset": [0, -8]
+          }
+        });
+        if (this.map.getLayer('viewDirectionClickGeolocate')) {
+          this.map.removeLayer('viewDirectionClickGeolocate')
+          this.map.removeSource('viewDirectionClickGeolocate')
+        } else {
+          this.geolocateControl.setType(GeolocateType.None)
+        }
+      }
+      this.map.setLayoutProperty(
+        "viewDirectionClick",
+        "icon-rotate",
+        this.clickDirection - this.map.getBearing()
+      );
+    }
+
+    this.trackerService.addEvent({
+      type: "ON_MAP_CLICKED",
+      clickPosition: {
+        latitude: e.lngLat.lat,
+        longitude: e.lngLat.lng
+      },
+      clickDirection: clickDirection,
+      map: mapType
+    });
   }
 
   zoomBounds() {
@@ -1042,6 +1044,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.swipe = true;
               this.changeDetectorRef.detectChanges();
               this.layerControl.setType(LayerType.Swipe, this.swipeMapContainer)
+              this.layerControl.swipeClickSubscription.subscribe(e => this.onMapClick(e, "swipe"))
             } else if (mapFeatures[key] == "3D") {
               this.layerControl.setType(LayerType.ThreeDimension)
             } else if (mapFeatures[key] == "3D-button") {

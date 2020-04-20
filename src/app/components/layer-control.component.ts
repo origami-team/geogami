@@ -6,8 +6,9 @@ import {
     DeviceOrientation,
     DeviceOrientationCompassHeading
 } from "@ionic-native/device-orientation/ngx";
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, Subscriber, fromEvent } from 'rxjs';
 import { AlertController, Platform } from '@ionic/angular';
+import { shareReplay } from 'rxjs/operators';
 
 
 export enum LayerType {
@@ -42,6 +43,8 @@ export class LayerControl {
             })
         }
     }
+
+    public swipeClickSubscription: Observable<any> = null;
 
     constructor(map: MapboxMap, mapWrapper: ElementRef, private deviceOrientation: DeviceOrientation, alertController: AlertController, platform: Platform) {
         this.map = map;
@@ -170,31 +173,18 @@ export class LayerControl {
                         this.satMap.addImage("marker-editor", image);
                     })
 
-                this.interval = setInterval(() => this.syncMaps(), 500)
 
-                this.satMap.on('click', (e) => {
-                    const pointFeature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-                    if (this.map.getSource('marker-point')) {
-                        this.map.getSource('marker-point').setData(pointFeature)
-                    } else {
-                        this.map.addSource('marker-point', {
-                            'type': 'geojson',
-                            'data': pointFeature
-                        });
-                    }
-                })
+                this.map.on('styledata', () => this.syncMaps())
+                this.map.on('sourcedata', () => this.syncMaps())
+                this.satMap.on('load', () => this.syncMaps())
+
+                this.swipeClickSubscription = fromEvent(this.satMap, "click")
 
                 this.compare = new MapboxCompare(this.map, this.satMap, this.mapWrapper.nativeElement);
                 break;
             case LayerType.ThreeDimension:
                 this._add3DBuildingsLayer()
-                // this.deviceOrientationSubscription = this.deviceOrientation
-                //     .watchHeading({ frequency: 10 })
-                //     .subscribe((data: DeviceOrientationCompassHeading) => {
-                //         requestAnimationFrame(() => {
-                //             this.map.setBearing(data.magneticHeading);
-                //         })
-                //     })
+
                 if (this.platform.is('ios')) {
                     const alert = await this.alertController.create({
                         header: 'Neigungssensor nutzen?',
@@ -283,33 +273,39 @@ export class LayerControl {
     public remove(): void {
         if (this.deviceOrientationSubscription != undefined)
             this.deviceOrientationSubscription.unsubscribe();
+
+        if (this.swipeClickSubscription != undefined)
+            this.swipeClickSubscription = null;
     }
 
     private syncMaps(): void {
-        const defaultMapSources = this.map.getStyle().sources
-        const { mapbox, satellite, ...sources } = defaultMapSources
-        delete sources['raster-tiles']
 
-        const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building')
+        if (this.satMap.loaded()) {
+            const defaultMapSources = this.map.getStyle().sources
+            const { mapbox, satellite, ...sources } = defaultMapSources
+            delete sources['raster-tiles']
 
-        Object.entries(sources).forEach(s => {
-            if (this.satMap.getSource(s[0])) {
-                this.satMap.getSource(s[0]).setData(s[1]['data'])
-            } else {
-                this.satMap.addSource(s[0], s[1])
-            }
-        })
+            const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building')
 
-        layers.forEach(l => {
-            if (this.satMap.getLayer(l.id)) {
-                if (l.id == 'viewDirection' || l.id == 'viewDirectionTask' || l.id == 'viewDirectionClick') {
-                    const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate')
-                    this.satMap.setLayoutProperty(l.id, 'icon-rotate', bearing)
+            Object.entries(sources).forEach(s => {
+                if (this.satMap.getSource(s[0])) {
+                    this.satMap.getSource(s[0]).setData(s[1]['data'])
+                } else {
+                    this.satMap.addSource(s[0], s[1])
                 }
-            } else {
-                this.satMap.addLayer(l)
-            }
-        })
+            })
+
+            layers.forEach(l => {
+                if (this.satMap.getLayer(l.id)) {
+                    if (l.id == 'viewDirection' || l.id == 'viewDirectionTask' || l.id == 'viewDirectionClick') {
+                        const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate')
+                        this.satMap.setLayoutProperty(l.id, 'icon-rotate', bearing)
+                    }
+                } else {
+                    this.satMap.addLayer(l)
+                }
+            })
+        }
     }
 
     public passMarkers(markers) {
