@@ -663,7 +663,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         type = FeedbackType.Wrong;
       }
     } else {
-      if (this.task.category == 'nav' && this.task.settings.confirmation == false) {
+      if (this.task.category == 'nav' && this.task.settings.confirmation) {
         type = FeedbackType.Success
       } else {
         type = FeedbackType.Saved
@@ -784,16 +784,33 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.type == "theme-loc") {
-      const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-      const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-      isCorrect = distance < this.triggerTreshold;
-      answer = {
-        clickPosition: clickPosition,
-        distance: distance,
-        correct: isCorrect
-      }
+      if (this.map.getSource('marker-point')) {
+        const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
+        const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+        isCorrect = distance < this.triggerTreshold;
+        answer = {
+          clickPosition: clickPosition,
+          distance: distance,
+          correct: isCorrect
+        }
 
-      this.initFeedback(distance < this.triggerTreshold)
+        this.initFeedback(distance < this.triggerTreshold)
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte setze zuerst deine Position",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+
+        isCorrect = false;
+        answer = {
+          clickPosition: undefined,
+          distance: undefined,
+          correct: isCorrect
+        }
+      }
     }
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
@@ -852,14 +869,28 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
-      const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-
-      const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
-      this.initFeedback(isInPolygon);
-      isCorrect = isInPolygon;
-      answer = {
-        clickPosition: clickPosition,
-        correct: isCorrect
+      if (this.map.getSource('marker-point')) {
+        const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
+        const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
+        this.initFeedback(isInPolygon);
+        isCorrect = isInPolygon;
+        answer = {
+          clickPosition: clickPosition,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte setze zuerst einen Punkt auf der Karte",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          clickPosition: undefined,
+          correct: isCorrect
+        }
       }
     }
 
@@ -873,11 +904,26 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
-      isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
-      answer = {
-        compassHeading: this.clickDirection,
-        correct: isCorrect
+      if (this.clickDirection != 0) {
+        this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
+        isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+        answer = {
+          compassHeading: this.clickDirection,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte wähle zuerst deine Position",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          compassHeading: undefined,
+          correct: isCorrect
+        }
       }
     }
 

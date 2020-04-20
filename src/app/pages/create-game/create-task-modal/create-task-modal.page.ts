@@ -113,6 +113,16 @@ export class CreateTaskModalPage implements OnInit {
   onTaskSelected(newValue) {
     this.task = newValue;
 
+    if (Object.keys(this.task.settings).length == 0) {
+      this.task.settings = {
+        feedback: true,
+        multipleTries: true,
+        confirmation: this.task.category.includes('theme'),
+        accuracy: 10,
+        showMarker: true,
+      }
+    }
+
     this.settingsChange()
 
     this.mapFeatures = this.task.mapFeatures
@@ -152,6 +162,10 @@ export class CreateTaskModalPage implements OnInit {
 
   feedbackChange() {
     this.task.settings.multipleTries = this.task.settings.feedback
+    if (this.task.category == 'nav' && !this.task.settings.confirmation) {
+      this.showMultipleTries = false;
+      this.task.settings.multipleTries = false;
+    }
   }
 
   settingsChange() {
@@ -159,10 +173,7 @@ export class CreateTaskModalPage implements OnInit {
     this.showMultipleTries = true;
 
     if (this.task.category == 'nav' && !this.task.settings.confirmation) {
-      this.showFeedback = false;
       this.showMultipleTries = false;
-
-      this.task.settings.feedback = false;
       this.task.settings.multipleTries = false;
     }
 
