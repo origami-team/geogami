@@ -337,7 +337,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.indicatedDirection = this.compassHeading - this.directionBearing;
       });
 
-    Plugins.CapacitorKeepScreenOn.enable()
+    if (Capacitor.isNative) {
+      Plugins.CapacitorKeepScreenOn.enable()
+    }
   }
 
   onMapClick(e, mapType) {
@@ -543,10 +545,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('viewDirectionClickGeolocate')
     }
 
-    this.zoomBounds()
 
     this._initMapFeatures();
     this.landmarkControl.removeQT();
+
+    this.zoomBounds()
 
     this.photo = '';
     this.photoURL = '';
@@ -726,9 +729,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
       if (Capacitor.isNative) {
         Plugins.Haptics.vibrate();
+        Plugins.CapacitorKeepScreenOn.disable()
       }
 
-      Plugins.CapacitorKeepScreenOn.disable()
       return;
     }
 
@@ -905,7 +908,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       } else {
         const toast = await this.toastController.create({
-          message: "Bitte wähle zuerst deine Position",
+          message: "Bitte setze zuerst deine Blickrichtung",
           color: "dark",
           // showCloseButton: true,
           duration: 2000
