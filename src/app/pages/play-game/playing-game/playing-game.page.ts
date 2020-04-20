@@ -71,7 +71,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   map: mapboxgl.Map;
   waypointMarker: mapboxgl.Marker;
   waypointMarkerDuplicate: mapboxgl.Marker;
-  zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
+  // zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
 
   // map features
   directionArrow: boolean = false;
@@ -346,6 +346,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   onMapClick(e, mapType) {
+    console.log(e)
     let clickDirection = undefined;
 
     if (this.task.answer.type == AnswerType.MAP_POINT) {
@@ -512,7 +513,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       type: "INIT_TASK"
     });
 
-
     if (this.task.settings?.accuracy) {
       this.triggerTreshold = this.task.settings.accuracy
     } else {
@@ -526,7 +526,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.map.getSource('marker-point')) {
       this.map.removeSource('marker-point')
     }
-
 
     if (this.waypointMarker) {
       this.waypointMarker.remove();
@@ -548,6 +547,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeLayer('viewDirectionClickGeolocate')
       this.map.removeSource('viewDirectionClickGeolocate')
     }
+
+    this.zoomBounds()
 
     this._initMapFeatures();
     this.landmarkControl.removeQT();
@@ -635,8 +636,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.task.question.type == QuestionType.MAP_FEATURE && this.task.answer.mode != TaskMode.NO_FEATURE) {
       this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0])
     }
-
-    this.zoomBounds()
   }
 
   onWaypointReached() {
@@ -1039,11 +1038,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           case "zoombar":
             if (mapFeatures[key]) {
               this.map.scrollZoom.enable();
+              this.map.boxZoom.enable();
               this.map.doubleClickZoom.enable();
               this.map.touchZoomRotate.enable();
-              this.map.addControl(this.zoomControl);
             } else {
+              console.log("disabling zoom")
               this.map.scrollZoom.disable();
+              this.map.boxZoom.disable();
               this.map.doubleClickZoom.disable();
               this.map.touchZoomRotate.disable();
             }
@@ -1101,7 +1102,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             if (mapFeatures[key] == "none") {
               this.geolocateControl.setType(GeolocateType.None)
             } else if (mapFeatures[key] == "true") {
-              this.geolocateControl.setType(GeolocateType.Continuous)
+              if (this.task.mapFeatures.direction != "true") {
+                // only show position marker when there is no direction marker
+                this.geolocateControl.setType(GeolocateType.Continuous)
+              }
             } else if (mapFeatures[key] == "button") {
               // TODO: implement
             } else if (mapFeatures[key] == "start") {

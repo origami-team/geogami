@@ -19,9 +19,9 @@ export class LandmarkControl {
         if (this.map.getLayer('landmarksLayerPolygon')) {
             this.map.removeLayer('landmarksLayerPolygon')
         }
-        if (this.map.getLayer('landmarksLayerLine')) {
-            this.map.removeLayer('landmarksLayerLine')
-        }
+        // if (this.map.getLayer('landmarksLayerLine')) {
+        //     this.map.removeLayer('landmarksLayerLine')
+        // }
         if (this.map.getSource('landmarksSource')) {
             this.map.removeSource('landmarksSource')
         }
@@ -40,16 +40,16 @@ export class LandmarkControl {
                 "fill-extrusion-height": 50,
             }
         });
-        this.map.addLayer({
-            id: "landmarksLayerLine",
-            type: "line",
-            source: 'landmarksSource',
-            paint: {
-                "line-color": this.dangerColor,
-                "line-opacity": 0.5,
-                "line-width": 5,
-            }
-        });
+        // this.map.addLayer({
+        //     id: "landmarksLayerLine",
+        //     type: "line",
+        //     source: 'landmarksSource',
+        //     paint: {
+        //         "line-color": this.dangerColor,
+        //         "line-opacity": 0.5,
+        //         "line-width": 5,
+        //     }
+        // });
     }
 
     setQTLandmark(landmark: any) {

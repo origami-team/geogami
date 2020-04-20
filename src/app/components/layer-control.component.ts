@@ -128,7 +128,7 @@ export class LayerControl {
                     id: "satellite",
                     source: 'satellite',
                     type: "raster"
-                });
+                }, 'building');
                 break;
             case LayerType.SatelliteButton:
                 // TODO: implement
@@ -137,8 +137,13 @@ export class LayerControl {
                 this.satMap = new MapboxMap({
                     container: this.swipeMapContainer.nativeElement,
                     style: "mapbox://styles/mapbox/satellite-v9",
-                    center: [8, 51.8],
-                    zoom: 2
+                    center: this.map.getCenter(),
+                    zoom: this.map.getZoom(),
+                    dragRotate: this.map.dragRotate.isEnabled(),
+                    dragPan: this.map.dragPan.isEnabled(),
+                    scrollZoom: this.map.scrollZoom.isEnabled(),
+                    doubleClickZoom: this.map.doubleClickZoom.isEnabled(),
+                    touchZoomRotate: this.map.touchZoomRotate.isEnabled(),
                 });
 
                 this.satMap.loadImage(
