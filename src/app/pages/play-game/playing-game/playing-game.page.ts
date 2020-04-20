@@ -18,7 +18,6 @@ import {
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
 import { Subscription, Observable, Subscriber } from "rxjs";
-import { Insomnia } from "@ionic-native/insomnia/ngx";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { RotationControl, RotationType } from './../../../components/rotation-control.component'
 import { ViewDirectionControl, ViewDirectionType } from './../../../components/view-direction-control.component';
@@ -152,7 +151,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private OSMService: OsmService,
     private trackerService: TrackerService,
-    private insomnia: Insomnia,
     public alertController: AlertController,
     public platform: Platform,
     public helperService: HelperService,
@@ -339,10 +337,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.indicatedDirection = this.compassHeading - this.directionBearing;
       });
 
-    this.insomnia.keepAwake().then(
-      () => console.log("insomnia keep awake success"),
-      () => console.log("insomnia keep awake error")
-    );
+    Plugins.CapacitorKeepScreenOn.enable()
   }
 
   onMapClick(e, mapType) {
@@ -732,10 +727,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (Capacitor.isNative) {
         Plugins.Haptics.vibrate();
       }
-      this.insomnia.allowSleepAgain().then(
-        () => console.log("insomnia allow sleep again success"),
-        () => console.log("insomnia allow sleep again error")
-      );
+
+      Plugins.CapacitorKeepScreenOn.disable()
       return;
     }
 
