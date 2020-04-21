@@ -1,5 +1,5 @@
 import { Map as MapboxMap } from "mapbox-gl";
-import { OsmService } from './../services/osm.service'
+import { OsmService } from '../services/osm.service'
 import osmtogeojson from "osmtogeojson";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Subscription } from 'rxjs';

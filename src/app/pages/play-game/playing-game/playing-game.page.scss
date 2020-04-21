@@ -84,6 +84,21 @@ ion-thumbnail {
   }
 }
 
+.ok-container {
+  > ion-button {
+    float: right
+  }
+}
+
+.accuracy {
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+  left: 50%;
+  font-size: x-small;
+  transform: translateX(-50%);
+}
+
 .overlay {
   // transition: all 0.3s ease-in;
   background: var(--ion-item-background);

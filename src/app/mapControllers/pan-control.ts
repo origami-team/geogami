@@ -38,26 +38,18 @@ export class PanControl {
     }
 
     private reset(): void {
-
+        this.map.dragPan.enable();
     }
 
     private update(): void {
         switch (this.panType) {
             case PanType.True:
-                this.reset()
-                this.map.dragPan.enable();
                 break;
             case PanType.Center:
                 this.map.dragPan.disable();
-                this.map.scrollZoom.disable();
-                this.map.doubleClickZoom.disable();
-                this.map.touchZoomRotate.disable();
                 break;
             case PanType.Static:
                 this.map.dragPan.disable();
-                this.map.scrollZoom.disable();
-                this.map.doubleClickZoom.disable();
-                this.map.touchZoomRotate.disable();
                 break;
         }
     }

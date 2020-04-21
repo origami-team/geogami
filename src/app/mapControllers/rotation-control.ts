@@ -54,6 +54,8 @@ export class RotationControl {
                 this.map.touchZoomRotate.enableRotation();
                 break;
             case RotationType.Auto:
+                this.map.dragRotate.disable();
+                this.map.touchZoomRotate.disableRotation();
                 this.deviceOrientationSubscription = this.deviceOrientation
                     .watchHeading({ frequency: 10 })
                     .subscribe((data: DeviceOrientationCompassHeading) => {
@@ -66,9 +68,11 @@ export class RotationControl {
 
                 break;
             case RotationType.North:
-                this.map.rotateTo(0);
-                this.map.dragRotate.disable();
-                this.map.touchZoomRotate.disableRotation();
+                setTimeout(() => {
+                    this.map.resetNorth({ duration: 50 });
+                    this.map.dragRotate.disable();
+                    this.map.touchZoomRotate.disableRotation();
+                }, 100)
                 break;
         }
     }

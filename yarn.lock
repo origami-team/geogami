@@ -1126,13 +1126,6 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/insomnia@^5.24.0":
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/insomnia/-/insomnia-5.24.0.tgz#7d6a0b72132b278f7c9707388127debe5134ab27"
-  integrity sha512-WPH9Qk7ZN7wHw8SKm8a+Tg7C4yVDp1QYLiXKr9Ua1zUARCmtXFJgLsXMlnH+ztdB7sGk72Qk1qtMnOiluMvskw==
-  dependencies:
-    "@types/cordova" latest
-
 "@ionic/angular-toolkit@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ionic/angular-toolkit/-/angular-toolkit-2.2.0.tgz#0960898113a6022d0736aaa734c05af2c02ae508"
@@ -2729,6 +2722,15 @@ canonical-path@1.0.0:
   resolved "https://registry.yarnpkg.com/canonical-path/-/canonical-path-1.0.0.tgz#fcb470c23958def85081856be7a86e904f180d1d"
   integrity sha512-feylzsbDxi1gPZ1IjystzIQZagYYLvfKrSuygUCgf7z6x790VEzze5QEkdSV1U58RA7Hi0+v6fv4K54atOzATg==
 
+capacitor-keep-screen-on@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/capacitor-keep-screen-on/-/capacitor-keep-screen-on-0.0.4.tgz#42811e70e407fd5a3cc84e8dbe16b9357c18d2b8"
+  integrity sha512-000gwq+Mc9ftE6sTXa0XXu79ajm+vRXb5jmGeuGkbBTBbb843oyav/qau2vP5lHjwo9WRrtIw/my5mZVKnqEmw==
+  dependencies:
+    "@capacitor/android" "^2.0.1"
+    "@capacitor/core" "^2.0.1"
+    "@capacitor/ios" "^2.0.1"
+
 cardinal@~0.4.2:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/cardinal/-/cardinal-0.4.4.tgz#ca5bb68a5b511b90fe93b9acea49bdee5c32bfe2"
@@ -3337,11 +3339,6 @@ cordova-plugin-file@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-6.0.2.tgz#f3911479f8357e9aacb5576674f8d95b31a1fb20"
   integrity sha512-m7cughw327CjONN/qjzsTpSesLaeybksQh420/gRuSXJX5Zt9NfgsSbqqKDon6jnQ9Mm7h7imgyO2uJ34XMBtA==
-
-cordova-plugin-insomnia@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-insomnia/-/cordova-plugin-insomnia-4.3.0.tgz#832a33f6d763f0b80273bdf761b35b678c43b957"
-  integrity sha1-gyoz9tdj8LgCc733YbNbZ4xDuVc=
 
 cordova-serve@^3.0.0:
   version "3.0.0"
@@ -5005,9 +5002,9 @@ gl-matrix@^2.6.1:
   integrity sha512-0YCjVpE3pS5XWlN3J4X7AiAx65+nqAI54LndtVFnQZB6G/FVLkZH8y8V6R3cIoOQR4pUdfwQGd1iwyoXHJ4Qfw==
 
 gl-matrix@^3.0.0:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.2.1.tgz#2d8e35125bf854f49abded8a0c8350b1a4907a26"
-  integrity sha512-YYVO8jUSf6+SakL4AJmx9Jc7zAZhkJQ+WhdtX3VQe5PJdCOX6/ybY4x1vk+h94ePnjRn6uml68+QxTAJneUpvA==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.3.0.tgz#232eef60b1c8b30a28cbbe75b2caf6c48fd6358b"
+  integrity sha512-COb7LDz+SXaHtl/h4LeaFcNdJdAQSDeVqjiIihSXNrkWObZLhDI4hIkZC11Aeqp7bcE72clzB0BnDXr2SmslRA==
 
 glob-parent@^3.1.0:
   version "3.1.0"
@@ -6485,19 +6482,6 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-leaflet.offline@^1.0.4:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/leaflet.offline/-/leaflet.offline-1.0.6.tgz#ca8f6cb5bbf32e9a60e8e693bcd75ee64ebf9bfd"
-  integrity sha512-UmVPXvlEqZk1bkYy8XGLA5BiIA0IAWrn3x6XVZm2mxzvGff8yKxt2tTUaq7f+aNiBzMzFR1nXo8Ew8fWNLmeHQ==
-  dependencies:
-    leaflet "^1.5.1"
-    localforage "^1.7.3"
-
-leaflet@^1.5.1:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.6.0.tgz#aecbb044b949ec29469eeb31c77a88e2f448f308"
-  integrity sha512-CPkhyqWUKZKFJ6K8umN5/D2wrJ2+/8UIpXppY7QDnUZW5bZL5+SEI2J7GBpwh4LIupOKqbNSQXgqmrEJopHVNQ==
-
 leek@0.0.24:
   version "0.0.24"
   resolved "https://registry.yarnpkg.com/leek/-/leek-0.0.24.tgz#e400e57f0e60d8ef2bd4d068dc428a54345dbcda"
@@ -6623,7 +6607,7 @@ localforage@1.7.1:
   dependencies:
     lie "3.1.1"
 
-localforage@>=1.5.0, localforage@^1.7.3:
+localforage@>=1.5.0:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.7.3.tgz#0082b3ca9734679e1bd534995bdd3b24cf10f204"
   integrity sha512-1TulyYfc4udS7ECSBT2vwJksWbkwwTX8BzeUIiq8Y07Riy7bDAAnxDaPU/tWyOVmQAcWJIEIFP9lPfBGqVoPgQ==

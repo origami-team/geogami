@@ -192,6 +192,9 @@
             </ion-button>
           </div>
 
+
+        </div>
+        <div class="ok-container">
           <ion-button slot="end" class="confirm" [disabled]="uploading"
             [color]="task.category.includes('nav') ? 'primary' : 'secondary'" (click)="onOkClicked()"
             *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
@@ -199,11 +202,12 @@
 
           <ion-button class="confirm" color=warning (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">OK
           </ion-button>
-
         </div>
       </ion-card>
     </div>
   </div>
+
+  <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy }} m</p>
 
   <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch!</h3>
