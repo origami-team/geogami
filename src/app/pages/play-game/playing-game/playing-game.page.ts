@@ -51,6 +51,7 @@ enum FeedbackType {
   Wrong,
   TryAgain,
   Saved,
+  Success
 }
 
 @Component({
@@ -667,8 +668,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         type = FeedbackType.Wrong;
       }
     } else {
-      type = FeedbackType.Saved
-
+      if (this.task.category == 'nav' && !this.task.settings.confirmation) {
+        type = FeedbackType.Success
+      } else {
+        type = FeedbackType.Saved
+      }
     }
 
     switch (type) {
@@ -688,6 +692,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       case FeedbackType.Saved:
         this.feedback.icon = ""
         this.feedback.text = "Deine Antwort wurde gespeichert!"
+        break;
+      case FeedbackType.Success:
+        this.feedback.icon = ""
+        this.feedback.text = "Ziel erreicht!"
         break;
     }
     this.showFeedback = true
