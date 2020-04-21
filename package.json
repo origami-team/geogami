@@ -46,7 +46,6 @@
     "cordova-plugin-file-transfer": "^1.7.1",
     "core-js": "^3.6.5",
     "jetifier": "^1.6.5",
-    "leaflet.offline": "^1.0.4",
     "lodash": "^4.17.15",
     "lottie-web": "^5.6.8",
     "mapbox-gl": "^1.9.1",

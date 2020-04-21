@@ -19,17 +19,17 @@ import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
 import { Subscription, Observable, Subscriber } from "rxjs";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
-import { RotationControl, RotationType } from './../../../components/rotation-control.component'
-import { ViewDirectionControl, ViewDirectionType } from './../../../components/view-direction-control.component';
-import { LandmarkControl } from 'src/app/components/landmark-control.component';
-import { StreetSectionControl, StreetSectionType } from './../../../components/street-section-control.component'
-import { LayerControl, LayerType } from 'src/app/components/layer-control.component';
+import { RotationControl, RotationType } from './../../../mapControllers/rotation-control'
+import { ViewDirectionControl, ViewDirectionType } from './../../../mapControllers/view-direction-control';
+import { LandmarkControl } from 'src/app/mapControllers/landmark-control';
+import { StreetSectionControl, StreetSectionType } from './../../../mapControllers/street-section-control'
+import { LayerControl, LayerType } from 'src/app/mapControllers/layer-control';
 import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { HelperService } from 'src/app/services/helper.service';
-import { TrackControl, TrackType } from 'src/app/components/track-control.component';
-import { GeolocateControl, GeolocateType } from 'src/app/components/geolocate-control.component';
-import { PanControl, PanType } from 'src/app/components/pan-control.component';
+import { TrackControl, TrackType } from 'src/app/mapControllers/track-control';
+import { GeolocateControl, GeolocateType } from 'src/app/mapControllers/geolocate-control';
+import { PanControl, PanType } from 'src/app/mapControllers/pan-control';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 // import { WebView } from '@ionic-native/ionic-webview/ngx';
@@ -498,10 +498,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   initTask() {
     this.panelMinimized = false;
 
-    if (Capacitor.isNative) {
-      Plugins.Haptics.vibrate();
-    }
-    this.audioPlayer.play()
     console.log("Current task: ", this.task);
 
     this.trackerService.setTask(this.task)
@@ -691,6 +687,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         break;
     }
     this.showFeedback = true
+
+    if (type != FeedbackType.TryAgain) {
+      if (Capacitor.isNative) {
+        Plugins.Haptics.vibrate();
+      }
+      this.audioPlayer.play()
+    }
 
     if (this.task.settings.multipleTries) {
       setTimeout(() => {
