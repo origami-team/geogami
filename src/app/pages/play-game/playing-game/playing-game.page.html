@@ -207,7 +207,7 @@
     </div>
   </div>
 
-  <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy }} m</p>
+  <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p>
 
   <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch!</h3>

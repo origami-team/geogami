@@ -456,6 +456,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         })
       }
 
+      if (task.question.direction) {
+        bounds.extend(task.question.direction.position.geometry.coordinates)
+      }
+
       if (task.mapFeatures?.landmarkFeatures) {
         task.mapFeatures.landmarkFeatures.features.forEach(f => {
           f.geometry.coordinates.forEach(c => {

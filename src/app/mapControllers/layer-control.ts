@@ -284,7 +284,6 @@ export class LayerControl {
     }
 
     private syncMaps(): void {
-
         if (this.satMap.loaded()) {
             const defaultMapSources = this.map.getStyle().sources
             const { mapbox, satellite, ...sources } = defaultMapSources
