@@ -51,7 +51,6 @@ enum FeedbackType {
   Wrong,
   TryAgain,
   Saved,
-  Success
 }
 
 @Component({
@@ -656,11 +655,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         type = FeedbackType.Wrong;
       }
     } else {
-      if (this.task.category == 'nav' && this.task.settings.confirmation) {
-        type = FeedbackType.Success
-      } else {
-        type = FeedbackType.Saved
-      }
+      type = FeedbackType.Saved
+
     }
 
     switch (type) {
@@ -680,10 +676,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       case FeedbackType.Saved:
         this.feedback.icon = ""
         this.feedback.text = "Deine Antwort wurde gespeichert!"
-        break;
-      case FeedbackType.Success:
-        this.feedback.icon = ""
-        this.feedback.text = "Geschafft!"
         break;
     }
     this.showFeedback = true
@@ -1041,7 +1033,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.map.doubleClickZoom.enable();
               this.map.touchZoomRotate.enable();
             } else {
-              console.log("disabling zoom")
               this.map.scrollZoom.disable();
               this.map.boxZoom.disable();
               this.map.doubleClickZoom.disable();
