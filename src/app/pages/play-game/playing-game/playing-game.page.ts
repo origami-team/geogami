@@ -462,9 +462,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       if (task.mapFeatures?.landmarkFeatures) {
         task.mapFeatures.landmarkFeatures.features.forEach(f => {
-          f.geometry.coordinates.forEach(c => {
-            c.forEach(coords => bounds.extend(coords))
-          })
+          if (f.geometry.type == "Polygon") {
+            f.geometry.coordinates.forEach(c => {
+              c.forEach(coords => bounds.extend(coords))
+            })
+          } else if (f.geometry.type == "LineString") {
+            f.geometry.coordinates.forEach(c => {
+              bounds.extend(c)
+            })
+          } else { // Point
+            bounds.extend(f.geometry.coordinates)
+          }
         })
       }
 

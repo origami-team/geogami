@@ -181,7 +181,12 @@ export class LayerControl {
                     })
 
 
-                this.satMap.on('load', () => this.syncMaps())
+                this.satMap.on('load', () => {
+                    if (!this.map.dragRotate.isEnabled()) {
+                        this.satMap.touchZoomRotate.disableRotation()
+                    }
+                    this.syncMaps()
+                })
                 this.map.on('styledata', () => this.syncMaps())
                 this.map.on('sourcedata', () => this.syncMaps())
 

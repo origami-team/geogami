@@ -95,6 +95,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
       controls: {
         line_string: true,
         polygon: true,
+        point: true,
         trash: true
       }
     });
