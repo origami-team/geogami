@@ -484,18 +484,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     console.log("zooming bounds ", panelHeight)
 
-    try {
-      this.map.fitBounds(bounds, {
-        padding: {
-          top: 80,
-          bottom: panelHeight < 250 ? 280 : panelHeight + 40,
-          left: 40,
-          right: 40
-        }, duration: 1000
-      });
-    } catch (e) {
-      console.log("Warning: Can not set bounds", bounds);
-    }
+
+    const prom = new Promise((resolve, reject) => {
+      this.map.once('moveend', () => resolve('ok'))
+
+      if (!bounds.isEmpty()) {
+        this.map.fitBounds(bounds, {
+          padding: {
+            top: 80,
+            bottom: panelHeight < 250 ? 280 : panelHeight + 40,
+            left: 40,
+            right: 40
+          }, duration: 1000
+        });
+      } else {
+        reject('not possible')
+      }
+    })
+
+    return prom;
   }
 
   async initGame() {
@@ -507,7 +514,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initTask();
   }
 
-  initTask() {
+  async initTask() {
     this.panelMinimized = false;
 
     console.log("Current task: ", this.task);
@@ -553,11 +560,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('viewDirectionClickGeolocate')
     }
 
+    try {
+      await this.zoomBounds()
+    } catch (e) {
+
+    }
 
     this._initMapFeatures();
     this.landmarkControl.removeQT();
 
-    this.zoomBounds()
 
     this.photo = '';
     this.photoURL = '';
