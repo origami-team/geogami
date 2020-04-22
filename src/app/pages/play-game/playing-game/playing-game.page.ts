@@ -934,7 +934,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
         }
         answer = {
-          compassHeading: this.clickDirection,
+          clickDirection: this.clickDirection,
           correct: isCorrect
         }
       } else {
