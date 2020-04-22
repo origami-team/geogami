@@ -114,7 +114,7 @@
           (click)="showPopover($event, 'Soll der Spieler seine Ankunft am Ziel mit OK bestätigen?')">
         </ion-icon>
       </ion-label>
-      <ion-toggle [(ngModel)]="task.settings.confirmation" (ngModelChange)="settingsChange()"></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.confirmation" (ngModelChange)="settingsChange($event)"></ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="task.type == 'nav-text'">
       <ion-label>Zielfahne anzeigen

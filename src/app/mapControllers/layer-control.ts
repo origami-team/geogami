@@ -144,6 +144,7 @@ export class LayerControl {
                     scrollZoom: this.map.scrollZoom.isEnabled(),
                     doubleClickZoom: this.map.doubleClickZoom.isEnabled(),
                     touchZoomRotate: this.map.touchZoomRotate.isEnabled(),
+                    maxZoom: this.map.getMaxZoom()
                 });
 
                 this.satMap.loadImage(
@@ -152,6 +153,7 @@ export class LayerControl {
                         if (error) throw error;
 
                         this.satMap.addImage("geolocate", image);
+                        this.satMap.addImage("view-direction-click-geolocate", image);
                     });
 
                 this.satMap.loadImage(
@@ -179,9 +181,14 @@ export class LayerControl {
                     })
 
 
+                this.satMap.on('load', () => {
+                    if (!this.map.dragRotate.isEnabled()) {
+                        this.satMap.touchZoomRotate.disableRotation()
+                    }
+                    this.syncMaps()
+                })
                 this.map.on('styledata', () => this.syncMaps())
                 this.map.on('sourcedata', () => this.syncMaps())
-                this.satMap.on('load', () => this.syncMaps())
 
                 this.swipeClickSubscription = fromEvent(this.satMap, "click")
 
@@ -284,7 +291,6 @@ export class LayerControl {
     }
 
     private syncMaps(): void {
-
         if (this.satMap.loaded()) {
             const defaultMapSources = this.map.getStyle().sources
             const { mapbox, satellite, ...sources } = defaultMapSources

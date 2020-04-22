@@ -457,11 +457,23 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         })
       }
 
+      if (task.question.direction) {
+        bounds.extend(task.question.direction.position.geometry.coordinates)
+      }
+
       if (task.mapFeatures?.landmarkFeatures) {
         task.mapFeatures.landmarkFeatures.features.forEach(f => {
-          f.geometry.coordinates.forEach(c => {
-            c.forEach(coords => bounds.extend(coords))
-          })
+          if (f.geometry.type == "Polygon") {
+            f.geometry.coordinates.forEach(c => {
+              c.forEach(coords => bounds.extend(coords))
+            })
+          } else if (f.geometry.type == "LineString") {
+            f.geometry.coordinates.forEach(c => {
+              bounds.extend(c)
+            })
+          } else { // Point
+            bounds.extend(f.geometry.coordinates)
+          }
         })
       }
 
@@ -472,18 +484,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     console.log("zooming bounds ", panelHeight)
 
-    try {
-      this.map.fitBounds(bounds, {
-        padding: {
-          top: 80,
-          bottom: panelHeight < 250 ? 280 : panelHeight + 40,
-          left: 40,
-          right: 40
-        }, duration: 1000
-      });
-    } catch (e) {
-      console.log("Warning: Can not set bounds", bounds);
-    }
+
+    const prom = new Promise((resolve, reject) => {
+      this.map.once('moveend', () => resolve('ok'))
+
+      if (!bounds.isEmpty()) {
+        this.map.fitBounds(bounds, {
+          padding: {
+            top: 80,
+            bottom: panelHeight < 250 ? 280 : panelHeight + 40,
+            left: 40,
+            right: 40
+          }, duration: 1000
+        });
+      } else {
+        reject('not possible')
+      }
+    })
+
+    return prom;
   }
 
   async initGame() {
@@ -495,7 +514,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initTask();
   }
 
-  initTask() {
+  async initTask() {
     this.panelMinimized = false;
 
     console.log("Current task: ", this.task);
@@ -541,11 +560,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('viewDirectionClickGeolocate')
     }
 
+    try {
+      await this.zoomBounds()
+    } catch (e) {
+
+    }
 
     this._initMapFeatures();
     this.landmarkControl.removeQT();
 
-    this.zoomBounds()
 
     this.photo = '';
     this.photoURL = '';
@@ -656,7 +679,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         type = FeedbackType.Wrong;
       }
     } else {
-      if (this.task.category == 'nav' && this.task.settings.confirmation) {
+      if (this.task.category == 'nav' && !this.task.settings.confirmation) {
         type = FeedbackType.Success
       } else {
         type = FeedbackType.Saved
@@ -683,7 +706,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         break;
       case FeedbackType.Success:
         this.feedback.icon = ""
-        this.feedback.text = "Geschafft!"
+        this.feedback.text = "Ziel erreicht!"
         break;
     }
     this.showFeedback = true
@@ -903,10 +926,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
       if (this.clickDirection != 0) {
-        this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
-        isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+        if (this.task.question.type == QuestionType.MAP_DIRECTION_PHOTO) {
+          this.initFeedback(this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45);
+          isCorrect = this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45;
+        } else {
+          this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
+          isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+        }
         answer = {
-          compassHeading: this.clickDirection,
+          clickDirection: this.clickDirection,
           correct: isCorrect
         }
       } else {
@@ -1041,7 +1069,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.map.doubleClickZoom.enable();
               this.map.touchZoomRotate.enable();
             } else {
-              console.log("disabling zoom")
               this.map.scrollZoom.disable();
               this.map.boxZoom.disable();
               this.map.doubleClickZoom.disable();

@@ -168,13 +168,18 @@ export class CreateTaskModalPage implements OnInit {
     }
   }
 
-  settingsChange() {
+  settingsChange(event: any = undefined) {
     this.showFeedback = true;
     this.showMultipleTries = true;
 
     if (this.task.category == 'nav' && !this.task.settings.confirmation) {
       this.showMultipleTries = false;
       this.task.settings.multipleTries = false;
+    }
+
+    if (this.task.category == 'nav' && event === true) {
+      this.showMultipleTries = true;
+      this.task.settings.multipleTries = true;
     }
 
     if (this.task.answer.type == AnswerType.PHOTO) {
