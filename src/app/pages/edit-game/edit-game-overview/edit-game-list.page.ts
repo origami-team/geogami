@@ -18,6 +18,7 @@ import { NavController } from "@ionic/angular";
 import { Game } from "src/app/models/game";
 import { GamesService } from 'src/app/services/games.service';
 import { ActivatedRoute } from '@angular/router';
+import { CreateFreeTaskModalComponent } from '../../create-game/create-free-task-modal/create-free-task-modal.component';
 
 @Component({
   selector: "app-edit-game-list",
@@ -99,14 +100,27 @@ export class EditGameListPage implements OnInit {
 
     console.log(task)
 
-    const modal = await this.modalController.create({
-      component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
-      backdropDismiss: false,
-      componentProps: {
-        type: type,
-        task: task
-      }
-    });
+    let modal: HTMLIonModalElement
+
+    if (type == 'free') {
+      modal = await this.modalController.create({
+        component: CreateFreeTaskModalComponent,
+        backdropDismiss: false,
+        componentProps: {
+          type: type,
+          task: task
+        }
+      });
+    } else {
+      modal = await this.modalController.create({
+        component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
+        backdropDismiss: false,
+        componentProps: {
+          type: type,
+          task: task
+        }
+      });
+    }
 
     await modal.present();
     const { data } = await modal.onWillDismiss();

@@ -16,7 +16,10 @@ export enum AnswerType {
     PHOTO = "PHOTO",
     DIRECTION = "DIRECTION",
     MAP_DIRECTION = "MAP_DIRECTION",
-    INFO = "INFO"
+    INFO = "INFO",
+    MULTIPLE_CHOICE_TEXT = "MULTIPLE_CHOICE_TEXT",
+    TEXT = "TEXT",
+    NUMBER = "NUMBER"
 }
 
 export enum TaskMode {

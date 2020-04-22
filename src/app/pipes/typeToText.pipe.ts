@@ -21,13 +21,28 @@ export class TypeToTextPipe implements PipeTransform {
         DIRECTION: "... durch Einnehmen der Blickrichtung"
     }
 
+    textMappingsFree: object = {
+        TEXT: "... mit Textanweisung",
+        PHOTO: "... mit Foto",
+        MAP_FEATURE: "... mit Kartenmarkierung",
+        MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
+    }
+
     transform(value: string, taskType: string, answer: boolean): string {
+        console.log(value, taskType, answer)
         if (taskType == "theme-object") {
             return this.textMappingsObject[value];
         }
 
         if (value == "MAP_DIRECTION" && answer) {
             return "... durch Markierung der Richtung auf der Karte"
+        }
+
+        if (taskType == "free") {
+            if (value === "PHOTO" && answer) {
+                return "... Aufnahme eines Fotos"
+            }
+            return this.textMappingsFree[value]
         }
 
         return this.textMappingsDirection[value];
