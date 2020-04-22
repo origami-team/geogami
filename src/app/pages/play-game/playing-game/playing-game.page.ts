@@ -926,8 +926,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
       if (this.clickDirection != 0) {
-        this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
-        isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+        if (this.task.question.type == QuestionType.MAP_DIRECTION_PHOTO) {
+          this.initFeedback(this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45);
+          isCorrect = this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45;
+        } else {
+          this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
+          isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+        }
         answer = {
           compassHeading: this.clickDirection,
           correct: isCorrect
