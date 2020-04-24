@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Storage } from '@ionic/storage';
 
 import { Game } from "./../models/game";
+import { Task } from "./../models/task";
 
 @Injectable({
   providedIn: "root"
@@ -20,7 +21,10 @@ export class GameFactoryService {
     this.storage.set('game', this.game);
   }
 
-  addTask(task: any) {
+  addTask(task: Task) {
+    if (!task.id) {
+      task.id = Math.floor(Date.now() / 1000)
+    }
     // console.log(task, index);
     if (this.game.hasOwnProperty("tasks")) {
       // const newTaskArr = this.game.tasks;
@@ -43,8 +47,11 @@ export class GameFactoryService {
     return this.game;
   }
 
-  updateTask(taskID: number, task) {
-    console.log(this.game.tasks)
+  updateTask(taskID: number, task: Task) {
+    console.log(task, taskID)
+    if (task.id == undefined) {
+      task.id = taskID
+    }
     this.game.tasks = this.game.tasks.map(t => {
       if (t.id == taskID) {
         return task

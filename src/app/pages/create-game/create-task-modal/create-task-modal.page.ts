@@ -239,6 +239,10 @@ export class CreateTaskModalPage implements OnInit {
       this.mapFeatures = cloneDeep(standardMapFeatures)
     }
 
+    if (this.task.settings.accuracy == 6) {
+      this.task.settings.accuracy = 5
+    }
+
     this.modalController.dismiss({
       dismissed: true,
       data: {

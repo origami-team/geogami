@@ -8,7 +8,8 @@ import {
   forwardRef,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  OnChanges
 } from "@angular/core";
 import { Plugins } from "@capacitor/core";
 
@@ -21,7 +22,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
   templateUrl: "./map.component.html",
   styleUrls: ["./map.component.scss"],
 })
-export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild("map") mapContainer;
   @ViewChild("hiddenInput") hiddenInput;
   @ViewChild("marker") directionMarker;
@@ -45,6 +46,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map.remove();
   }
   ngOnInit(): void { }
+
+  ngOnChanges(): void { }
 
   ngAfterViewInit(): void {
     this.initMap();

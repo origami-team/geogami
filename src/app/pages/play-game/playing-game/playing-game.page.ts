@@ -542,6 +542,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.waypointMarker) {
       this.waypointMarker.remove();
       this.waypointMarker = null;
+      this.waypointMarkerDuplicate.remove();
       this.waypointMarkerDuplicate = null;
     }
 
@@ -579,6 +580,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
         const el = document.createElement('div');
         el.className = 'waypoint-marker';
+
+        // remove maybe existing waypointMarker
+        if (this.waypointMarker) {
+          this.waypointMarker.remove();
+          this.waypointMarker = null;
+          this.waypointMarkerDuplicate.remove();
+          this.waypointMarkerDuplicate = null;
+        }
 
         this.waypointMarker = new mapboxgl.Marker(el, {
           anchor: 'bottom',

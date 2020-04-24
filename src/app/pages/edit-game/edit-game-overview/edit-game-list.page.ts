@@ -18,6 +18,7 @@ import { NavController } from "@ionic/angular";
 import { Game } from "src/app/models/game";
 import { GamesService } from 'src/app/services/games.service';
 import { ActivatedRoute } from '@angular/router';
+import { Task } from 'src/app/models/task';
 
 @Component({
   selector: "app-edit-game-list",
@@ -95,7 +96,7 @@ export class EditGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: any = null) {
+  async presentTaskModal(type: string = "nav", task: Task = null) {
 
     console.log(task)
 
@@ -113,6 +114,9 @@ export class EditGameListPage implements OnInit {
     console.log(data);
     if (data != undefined) {
       if (task != null) {
+        if (!task.id) {
+          task.id = Math.floor(Date.now() / 1000)
+        }
         this.updateTask(task.id, data.data)
       } else {
         this.addTaskToGame(data.data);
@@ -122,12 +126,8 @@ export class EditGameListPage implements OnInit {
     modal.remove();
   }
 
-  addTaskToGame(task) {
-    this.game = this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
-    // this.gameFactory.getGame().then(game => {
-    //   console.log(game)
-    //   this.game = game
-    // });
+  addTaskToGame(task: Task) {
+    this.game = this.gameFactory.addTask(task);
 
     console.log(this.game.tasks);
   }
@@ -179,5 +179,10 @@ export class EditGameListPage implements OnInit {
       }
     })
     // this.navCtrl.navigateForward("create-game/create-game-overview");
+  }
+
+  navigateBack() {
+    this.gameFactory.flushGame();
+    this.navCtrl.navigateBack('create-game');
   }
 }
