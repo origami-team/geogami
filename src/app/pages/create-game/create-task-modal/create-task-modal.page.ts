@@ -86,7 +86,7 @@ export class CreateTaskModalPage implements OnInit {
       this.settingsChange();
 
     } else {
-      if (this.task.type.includes('self')) {
+      if (this.task.type.includes('loc')) {
         this.selectedTaskType = this.taskTypes[0]
       }
       if (this.task.type.includes('object')) {
@@ -96,7 +96,8 @@ export class CreateTaskModalPage implements OnInit {
         this.selectedTaskType = this.taskTypes[2]
       }
     }
-    this.onTaskSelected(this.task);
+    // this.onTaskSelected(this.task);
+    this.onTaskSelected(cloneDeep(this.task));
   }
 
   onTaskTypeChange(taskType) {
@@ -239,7 +240,7 @@ export class CreateTaskModalPage implements OnInit {
       this.mapFeatures = cloneDeep(standardMapFeatures)
     }
 
-    if (this.task.settings.accuracy == 6) {
+    if (this.task.settings.accuracy > 5 && this.task.settings.accuracy < 10) {
       this.task.settings.accuracy = 5
     }
 

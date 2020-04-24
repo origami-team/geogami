@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, Input, OnChanges, SimpleChanges
+    Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter
 } from "@angular/core";
 
 import { AnswerType } from './../../../../models/types'
@@ -13,13 +13,14 @@ import { PopoverComponent } from 'src/app/popover/popover.component';
 })
 export class AnswerTypeComponent implements OnInit, OnChanges {
     @Input() answer: any;
+    @Output() answerChange: EventEmitter<any> = new EventEmitter<any>(true);
 
     answerTypeEnum = AnswerType
 
     constructor(public popoverController: PopoverController) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        // console.log(changes)
+        this.answerChange.emit(changes.answer.currentValue)
     }
 
     ngOnInit() {
