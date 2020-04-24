@@ -35,6 +35,7 @@
     "@mapbox/mapbox-gl-draw": "trygveaa/mapbox-gl-draw#dont-drag-with-multiple-fingers",
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
+    "@turf/bbox": "^6.0.1",
     "@turf/boolean-point-in-polygon": "^6.0.1",
     "angular-pipes": "^10.0.0",
     "capacitor-keep-screen-on": "^0.0.4",

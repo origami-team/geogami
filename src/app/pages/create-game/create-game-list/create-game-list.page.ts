@@ -102,6 +102,9 @@ export class CreateGameListPage implements OnInit {
     console.log(data);
     if (data != undefined) {
       if (task != null) {
+        if (!task.id) {
+          task.id = Math.floor(Date.now() / 1000)
+        }
         this.updateTask(task.id, data.data)
       } else {
         this.addTaskToGame(data.data);
@@ -112,7 +115,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   addTaskToGame(task) {
-    this.game = this.gameFactory.addTask({ ...task, id: Math.floor(Date.now() / 1000) });
+    this.game = this.gameFactory.addTask(task);
     // this.gameFactory.getGame().then(game => {
     //   console.log(game)
     //   this.game = game

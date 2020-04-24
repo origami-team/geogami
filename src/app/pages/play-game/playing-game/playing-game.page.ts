@@ -44,6 +44,7 @@ import { cloneDeep } from 'lodash';
 import { standardMapFeatures } from "./../../../models/mapFeatures"
 
 import { AnimationOptions } from 'ngx-lottie';
+import bbox from '@turf/bbox';
 
 
 enum FeedbackType {
@@ -446,15 +447,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     var bounds = new mapboxgl.LngLatBounds();
 
     this.game.tasks.forEach(task => {
-      if (task.answer.position)
+      if (task.answer.position) {
         bounds.extend(task.answer.position.geometry.coordinates);
+      }
 
       if (task.question.geometry) {
-        task.question.geometry.features.forEach(f => {
-          f.geometry.coordinates.forEach(c => {
-            c.forEach(coords => bounds.extend(coords))
-          })
-        })
+        bounds.extend(bbox(task.question.geometry))
       }
 
       if (task.question.direction) {
@@ -462,19 +460,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
 
       if (task.mapFeatures?.landmarkFeatures) {
-        task.mapFeatures.landmarkFeatures.features.forEach(f => {
-          if (f.geometry.type == "Polygon") {
-            f.geometry.coordinates.forEach(c => {
-              c.forEach(coords => bounds.extend(coords))
-            })
-          } else if (f.geometry.type == "LineString") {
-            f.geometry.coordinates.forEach(c => {
-              bounds.extend(c)
-            })
-          } else { // Point
-            bounds.extend(f.geometry.coordinates)
-          }
-        })
+        bounds.extend(bbox(task.mapFeatures.landmarkFeatures))
       }
 
     });
@@ -542,6 +528,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.waypointMarker) {
       this.waypointMarker.remove();
       this.waypointMarker = null;
+      this.waypointMarkerDuplicate.remove();
       this.waypointMarkerDuplicate = null;
     }
 
@@ -579,6 +566,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
         const el = document.createElement('div');
         el.className = 'waypoint-marker';
+
+        // remove maybe existing waypointMarker
+        if (this.waypointMarker) {
+          this.waypointMarker.remove();
+          this.waypointMarker = null;
+          this.waypointMarkerDuplicate.remove();
+          this.waypointMarkerDuplicate = null;
+        }
 
         this.waypointMarker = new mapboxgl.Marker(el, {
           anchor: 'bottom',

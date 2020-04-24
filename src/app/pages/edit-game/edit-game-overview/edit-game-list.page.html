@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="create-game"></ion-back-button>
+      <ion-back-button color=dark (click)="navigateBack()"></ion-back-button>
     </ion-buttons>
     <ion-title>Bearbeite <span *ngIf="game">{{game.name}}</span></ion-title>
     <ion-buttons slot="end">
