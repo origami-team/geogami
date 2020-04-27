@@ -29,6 +29,7 @@ import { AnswerTypeComponent } from './pages/create-game/form-elements/answer-ty
 import { MapComponent } from './pages/create-game/form-elements/map/map.component'
 import { PhotoUploadMultipleChoiceComponent } from './pages/create-game/form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component'
 import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-upload/photo-upload.component'
+import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component'
 
 import { TypeToTextPipe } from './pipes/typeToText.pipe';
 
@@ -50,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MapComponent,
     PhotoUploadMultipleChoiceComponent,
     PhotoUploadComponent,
+    MultipleChoiceTextComponent,
     QuestionTypeComponent,
     AnswerTypeComponent,
     TypeToTextPipe

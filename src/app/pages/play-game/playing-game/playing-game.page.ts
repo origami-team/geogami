@@ -131,6 +131,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   selectedPhoto: string;
   isCorrectPhotoSelected: boolean;
 
+  // multiple choice text
+  selectedChoice: string;
+  isCorrectChoiceSelected: boolean;
+
   primaryColor: string;
   secondaryColor: string;
 
@@ -770,7 +774,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initTask();
   }
 
-  async onMultipleChoiceSelected(item, event) {
+  async onMultipleChoicePhotoSelected(item, event) {
     this.selectedPhoto = item;
     this.isCorrectPhotoSelected = item.key === "0";
 
@@ -784,6 +788,24 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       answer: {
         photo: item.value,
         correct: this.isCorrectPhotoSelected,
+      }
+    });
+  }
+
+  onMultipleChoiceSelected(item, event) {
+    this.selectedChoice = item;
+    this.isCorrectChoiceSelected = item.key === "0";
+
+    Array.from(document.getElementsByClassName('choice')).forEach(elem => {
+      elem.classList.remove('selected')
+    })
+    event.target.classList.add('selected')
+
+    this.trackerService.addEvent({
+      type: "MULTIPLE_CHOICE_SELECTED",
+      answer: {
+        photo: item.value,
+        correct: this.isCorrectChoiceSelected,
       }
     });
   }
@@ -862,6 +884,34 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         isCorrect = false;
         answer = {
           selectedPhoto: null,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
+      if (this.selectedChoice != null) {
+        this.initFeedback(this.isCorrectChoiceSelected);
+        isCorrect = this.isCorrectChoiceSelected
+        answer = {
+          selectedChoice: this.selectedChoice,
+          correct: isCorrect
+        }
+        if (this.isCorrectChoiceSelected) {
+          this.isCorrectChoiceSelected = null;
+          this.selectedChoice = null;
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte wähle zuerst eine Antwort",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          selectedChoice: null,
           correct: isCorrect
         }
       }

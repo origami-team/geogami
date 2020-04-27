@@ -19,8 +19,6 @@ import { themetasks } from "./../../../models/theme-tasks";
 
 import { standardMapFeatures } from "./../../../models/mapFeatures"
 
-// import { FieldConfig } from "./../../../dynamic-form/models/field-config";
-// import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
 import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
 import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';
 import { PopoverController } from '@ionic/angular';
@@ -45,8 +43,8 @@ export class CreateFreeTaskModalComponent implements OnInit {
 
   selectedTaskType: any;
 
-  objectQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE]
-  objectAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO]
+  objectQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE, QuestionType.PHOTO]
+  objectAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT]
 
   constructor(public modalController: ModalController, public popoverController: PopoverController) { }
 

@@ -81,3 +81,12 @@
     </h5>
     <app-map featureType="direction" [(feature)]="question.direction"></app-map>
 </div>
+
+<div *ngIf="question.type == questionTypeEnum.PHOTO">
+    <h5>Foto zur Frage
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Das gewählte Foto wird dem Spieler bei Aufgabenstellung angezeigt')">
+        </ion-icon>
+    </h5>
+    <app-photo-upload [(photo)]="question.photo"></app-photo-upload>
+</div>

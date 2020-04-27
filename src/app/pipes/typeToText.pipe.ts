@@ -26,10 +26,10 @@ export class TypeToTextPipe implements PipeTransform {
         PHOTO: "... mit Foto",
         MAP_FEATURE: "... mit Kartenmarkierung",
         MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
+        MULTIPLE_CHOICE_TEXT: "... durch Wählen eines Textes",
     }
 
     transform(value: string, taskType: string, answer: boolean): string {
-        console.log(value, taskType, answer)
         if (taskType == "theme-object") {
             return this.textMappingsObject[value];
         }

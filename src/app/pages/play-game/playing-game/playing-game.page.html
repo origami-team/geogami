@@ -118,8 +118,16 @@
           <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE'" class="multiple-choice">
             <div *ngFor="let item of task.answer.photos | keyvalue | shuffle">
               <ion-thumbnail slot="start">
-                <img [src]=item.value class="multiple-choize-img" (click)='onMultipleChoiceSelected(item, $event)' />
+                <img [src]=item.value class="multiple-choize-img"
+                  (click)='onMultipleChoicePhotoSelected(item, $event)' />
               </ion-thumbnail>
+            </div>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
+            <div *ngFor="let item of task.answer.choices | keyvalue | shuffle"
+              (click)='onMultipleChoiceSelected(item, $event)' class="choice">
+              <p>{{item.value}}</p>
             </div>
           </div>
 
@@ -184,7 +192,7 @@
                     <ion-icon name="cube-outline"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_REDMARKED')" color="danger">rote Markierung 
+                <ion-text *ngIf="tag.includes('KEYWORD_REDMARKED')" color="danger">rote Markierung
                   <ion-chip color="danger">
                     <ion-icon name="cube-outline"></ion-icon>
                   </ion-chip>

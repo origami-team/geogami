@@ -15,3 +15,11 @@
     </h5>
     <app-photo-upload-multiple-choice [(photos)]="answer.photos"></app-photo-upload-multiple-choice>
 </div>
+
+<div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
+    <h5>Multiple Choice Text
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem Ipsum')">
+        </ion-icon>
+    </h5>
+    <app-multiple-choice-text [(answers)]="answer.choices"></app-multiple-choice-text>
+</div>
