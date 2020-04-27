@@ -54,5 +54,17 @@ export const mappings = [
     {
         text: "Track",
         tag: "KEYWORD_TRACK",
+    },
+    {
+        text: "rote Markierung",
+        tag: "KEYWORD_REDMARKED",
+    },
+    {
+        text: "markierte Garage",
+        tag: "KEYWORD_MARKEDGARAGE",
+    },
+    {
+        text: "markierten Bereich",
+        tag: "KEYWORD_MARKEDAREA",
     }
 ]
