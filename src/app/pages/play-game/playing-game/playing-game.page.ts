@@ -135,6 +135,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   selectedChoice: string;
   isCorrectChoiceSelected: boolean;
 
+  numberInput: number;
+  textInput: string;
+
   primaryColor: string;
   secondaryColor: string;
 
@@ -575,6 +578,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.photoURL = '';
     this.clickDirection = 0;
 
+    this.numberInput = undefined
+    this.textInput = undefined
+
 
     if (this.task.answer.type == AnswerType.POSITION) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
@@ -1003,6 +1009,54 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         isCorrect = false;
         answer = {
           compassHeading: undefined,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.NUMBER) {
+      if (this.numberInput != undefined) {
+        isCorrect = this.numberInput == this.task.answer.number
+        this.initFeedback(isCorrect);
+        answer = {
+          numberInput: this.numberInput,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte gebe erst eine Nummer ein",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          numberInput: undefined,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.TEXT) {
+      if (this.textInput != undefined) {
+        this.initFeedback(true);
+        isCorrect = true;
+        answer = {
+          text: this.textInput,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte gebe erst eine Antwort ein",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          text: undefined,
           correct: isCorrect
         }
       }

@@ -131,6 +131,14 @@
             </div>
           </div>
 
+          <div *ngIf="task.answer?.type == 'NUMBER'" class="number-input">
+            <ion-input type="number" [(ngModel)]="numberInput"></ion-input>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'TEXT'" class="text-input">
+            <ion-textarea [(ngModel)]="textInput"></ion-textarea>
+          </div>
+
           <div class="task-text">
             <!-- <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
               {{ task.settings["question-type"].settings["object-description"] }}

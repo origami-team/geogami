@@ -23,3 +23,11 @@
     </h5>
     <app-multiple-choice-text [(answers)]="answer.choices"></app-multiple-choice-text>
 </div>
+
+<div *ngIf="answer.type == answerTypeEnum.NUMBER">
+    <h5>Korrekte Antwort
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem Ipsum')">
+        </ion-icon>
+    </h5>
+    <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
+</div>

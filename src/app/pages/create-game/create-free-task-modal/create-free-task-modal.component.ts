@@ -44,7 +44,7 @@ export class CreateFreeTaskModalComponent implements OnInit {
   selectedTaskType: any;
 
   objectQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE, QuestionType.PHOTO]
-  objectAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT]
+  objectAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER]
 
   constructor(public modalController: ModalController, public popoverController: PopoverController) { }
 
