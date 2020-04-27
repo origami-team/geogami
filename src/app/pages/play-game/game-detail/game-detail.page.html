@@ -16,6 +16,11 @@
     </ion-card-header>
     <ion-card-content *ngIf="game">
       {{ game.tasks.length }} {{ game.tasks.length == 1 ? "Aufgabe" : "Aufgaben"}}
+      <div>
+        <span *ngFor="let task of game.tasks" class="dot" [class.nav]="task.category.includes('nav')"
+          [class.theme]="task.category.includes('theme')" [class.free]="task.category.includes('free')"
+          [class.info]="task.category.includes('info')"></span>
+      </div>
     </ion-card-content>
   </ion-card>
 
