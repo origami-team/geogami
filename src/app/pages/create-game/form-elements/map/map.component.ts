@@ -8,7 +8,9 @@ import {
   forwardRef,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  OnChanges,
+  SimpleChanges
 } from "@angular/core";
 import { Plugins } from "@capacitor/core";
 
@@ -16,19 +18,21 @@ import mapboxgl from "mapbox-gl";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
+import bbox from '@turf/bbox'
+
 @Component({
   selector: "app-map",
   templateUrl: "./map.component.html",
   styleUrls: ["./map.component.scss"],
 })
-export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild("map") mapContainer;
   @ViewChild("hiddenInput") hiddenInput;
   @ViewChild("marker") directionMarker;
 
   @Input() feature: any;
 
-  @Output() featureChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() featureChange: EventEmitter<any> = new EventEmitter<any>(true);
 
   @Input() featureType: string;
 
@@ -45,6 +49,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map.remove();
   }
   ngOnInit(): void { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
+      this.featureChange.emit(changes.feature.previousValue)
+    }
+  }
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -123,7 +133,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.map.on("click", e => {
-      console.log(this.featureType)
       if (this.featureType == 'point') {
         this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
         this.featureChange.emit(this.feature);
@@ -134,15 +143,39 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map.on("load", () => {
       this.map.resize();
 
-      Plugins.Geolocation.getCurrentPosition().then(position => {
-        if (this.featureType == 'direction' && (this.feature && this.feature.position) != undefined) {
+      if (this.feature) {
+        if (this.featureType == 'direction' && this.feature.position) {
           this.map.flyTo({
             center: this.feature.position.geometry.coordinates,
             zoom: 13,
             bearing: this.featureType == "direction" ? (this.feature && this.feature.bearing) ? this.feature.bearing : 0 : 0,
             speed: 3
           })
-        } else {
+        }
+        if (this.featureType == 'point' && this.feature.geometry) {
+          this.map.flyTo({
+            center: this.feature.geometry.coordinates,
+            zoom: 13,
+            bearing: 0,
+            speed: 3
+          })
+        }
+        if (this.featureType == 'geometry' && this.feature.features) {
+          this.map.fitBounds(bbox(this.feature), {
+            padding: 20,
+            speed: 3
+          })
+          // this.map.flyTo({
+          //   center: this.feature.geometry.coordinates,
+          //   zoom: 13,
+          //   bearing: 0,
+          //   speed: 3
+          // })
+        }
+      }
+
+      Plugins.Geolocation.getCurrentPosition().then(position => {
+        if (!this.feature) {
           this.map.flyTo({
             center: [position.coords.longitude, position.coords.latitude],
             zoom: 13,
@@ -150,6 +183,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
             speed: 3
           })
         }
+
         this.map.loadImage(
           "/assets/icons/position.png",
           (error, image) => {
@@ -176,6 +210,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           });
       })
+
+
 
       if (this.feature != undefined && this.featureType == 'point') {
         this._onChange(this.feature)
@@ -208,9 +244,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         if (this.feature != undefined) {
-          console.log('adding feature', this.feature)
           if (this.feature.type == "FeatureCollection") {
             this.feature.features.forEach(element => {
+              element.properties = {
+                ...element.properties
+              }
               this.draw.add(element)
             });
           }

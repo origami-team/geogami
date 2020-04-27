@@ -44,6 +44,7 @@ import { cloneDeep } from 'lodash';
 import { standardMapFeatures } from "./../../../models/mapFeatures"
 
 import { AnimationOptions } from 'ngx-lottie';
+import bbox from '@turf/bbox';
 
 
 enum FeedbackType {
@@ -446,44 +447,39 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     var bounds = new mapboxgl.LngLatBounds();
 
     this.game.tasks.forEach(task => {
-      if (task.answer.position)
-        bounds.extend(task.answer.position.geometry.coordinates);
+      if (task.answer.position) {
+        try {
+          bounds.extend(task.answer.position.geometry.coordinates);
+        } catch (e) {
+
+        }
+      }
 
       if (task.question.geometry) {
-        task.question.geometry.features.forEach(f => {
-          f.geometry.coordinates.forEach(c => {
-            c.forEach(coords => bounds.extend(coords))
-          })
-        })
+        try {
+          bounds.extend(bbox(task.question.geometry))
+        } catch (e) {
+
+        }
       }
 
       if (task.question.direction) {
-        bounds.extend(task.question.direction.position.geometry.coordinates)
+        try {
+          bounds.extend(task.question.direction.position.geometry.coordinates)
+        } catch (e) {
+
+        }
       }
 
-      if (task.mapFeatures?.landmarkFeatures) {
-        task.mapFeatures.landmarkFeatures.features.forEach(f => {
-          if (f.geometry.type == "Polygon") {
-            f.geometry.coordinates.forEach(c => {
-              c.forEach(coords => bounds.extend(coords))
-            })
-          } else if (f.geometry.type == "LineString") {
-            f.geometry.coordinates.forEach(c => {
-              bounds.extend(c)
-            })
-          } else { // Point
-            bounds.extend(f.geometry.coordinates)
-          }
-        })
+      if (task.mapFeatures?.landmarkFeatures && task.mapFeatures?.landmarkFeatures.features.length > 0) {
+        try {
+          bounds.extend(bbox(task.mapFeatures.landmarkFeatures))
+        } catch (e) {
+
+        }
       }
 
     });
-
-    this.changeDetectorRef.detectChanges()
-    const panelHeight = this.panel.nativeElement.children[0].offsetHeight;
-
-    console.log("zooming bounds ", panelHeight)
-
 
     const prom = new Promise((resolve, reject) => {
       this.map.once('moveend', () => resolve('ok'))
@@ -492,13 +488,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: panelHeight < 250 ? 280 : panelHeight + 40,
+            bottom: 280,
             left: 40,
             right: 40
           }, duration: 1000
         });
       } else {
-        reject('not possible')
+        reject('bounds are empty')
       }
     })
 
@@ -542,6 +538,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.waypointMarker) {
       this.waypointMarker.remove();
       this.waypointMarker = null;
+      this.waypointMarkerDuplicate.remove();
       this.waypointMarkerDuplicate = null;
     }
 
@@ -563,7 +560,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     try {
       await this.zoomBounds()
     } catch (e) {
-
+      console.log(e)
     }
 
     this._initMapFeatures();
@@ -579,6 +576,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
         const el = document.createElement('div');
         el.className = 'waypoint-marker';
+
+        // remove maybe existing waypointMarker
+        if (this.waypointMarker) {
+          this.waypointMarker.remove();
+          this.waypointMarker = null;
+          this.waypointMarkerDuplicate.remove();
+          this.waypointMarkerDuplicate = null;
+        }
 
         this.waypointMarker = new mapboxgl.Marker(el, {
           anchor: 'bottom',
@@ -934,7 +939,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
         }
         answer = {
-          compassHeading: this.clickDirection,
+          clickDirection: this.clickDirection,
           correct: isCorrect
         }
       } else {

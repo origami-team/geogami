@@ -41,7 +41,7 @@ export class LandmarkControl {
             paint: {
                 "fill-extrusion-color": this.dangerColor,
                 "fill-extrusion-opacity": 0.5,
-                "fill-extrusion-height": 50,
+                "fill-extrusion-height": 20,
             }
         });
         this.map.addLayer({
