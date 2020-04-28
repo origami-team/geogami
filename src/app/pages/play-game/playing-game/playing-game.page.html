@@ -252,7 +252,7 @@
     <h3>Herzlichen Glückwunsch!</h3>
     <p>Du hast das Spiel beendet</p>
     <div lottie [options]="lottieConfig"></div>
-    <ion-button color=warning (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
+    <ion-button color=primary (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
   </ion-card>
 
   <ion-card class="overlay feedback" *ngIf="showFeedback">

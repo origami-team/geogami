@@ -666,7 +666,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.question.type == QuestionType.MAP_FEATURE && this.task.answer.mode != TaskMode.NO_FEATURE) {
-      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0])
+      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0], this.task.category.includes('free'))
     }
   }
 
