@@ -31,6 +31,11 @@ jobs:
     - name: Copy Android
       run: npx cap sync android
 
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
     - name: Android Build
       run: ./android/gradlew -p ./android :app:assembleDebug
     

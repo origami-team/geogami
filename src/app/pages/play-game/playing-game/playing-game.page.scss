@@ -36,7 +36,6 @@ ion-thumbnail {
   bottom: 40px;
   left: 10px;
   right: 10px;
-  
 
   &.minimized {
     width: 50px;
@@ -75,7 +74,6 @@ ion-thumbnail {
         margin: 0;
       }
     }
-    
   }
 
   &.full {
@@ -86,7 +84,7 @@ ion-thumbnail {
 
 .ok-container {
   > ion-button {
-    float: right
+    float: right;
   }
 }
 
@@ -146,11 +144,6 @@ ion-thumbnail {
     }
   }
 
-  .selected {
-    outline: solid #0cd1e8 2px;
-    outline-offset: 1px;
-  }
-
   .multiple-choice {
     display: flex;
     width: 100%;
@@ -159,10 +152,60 @@ ion-thumbnail {
     > div > ion-thumbnail {
       --size: 65px;
 
-      &:active {
+      > .multiple-choize-img.selected {
         outline: solid #0cd1e8 2px;
         outline-offset: 1px;
       }
+    }
+  }
+
+  .multiple-choice-text {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    div {
+      cursor: pointer;
+      width: 100%;
+      background: #efefef73;
+      border-radius: 1rem;
+      text-align: center;
+      margin-left: 1rem;
+      margin-right: 1rem;
+      font-weight: bold;
+      font-size: larger;
+      border: solid 2px lightgrey;
+      box-sizing: border-box;
+
+      > p {
+        pointer-events: none;
+      }
+
+      &.selected {
+        border: solid 2px var(--ion-color-tertiary);
+      }
+    }
+  }
+
+  .number-input {
+    width: 100%;
+    text-align: center;
+
+    ion-input {
+      width: 5rem;
+      margin: auto;
+      font-weight: bold;
+      font-size: larger;
+    }
+  }
+
+  .text-input {
+    width: 100%;
+    text-align: center;
+
+    ion-textarea {
+      font-weight: bold;
+      font-size: larger;
     }
   }
 

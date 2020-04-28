@@ -132,6 +132,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   selectedPhoto: string;
   isCorrectPhotoSelected: boolean;
 
+  // multiple choice text
+  selectedChoice: string;
+  isCorrectChoiceSelected: boolean;
+
+  numberInput: number;
+  textInput: string;
+
   primaryColor: string;
   secondaryColor: string;
 
@@ -598,6 +605,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.photoURL = '';
     this.clickDirection = 0;
 
+    this.numberInput = undefined
+    this.textInput = undefined
+
 
     if (this.task.answer.type == AnswerType.POSITION) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
@@ -683,7 +693,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.question.type == QuestionType.MAP_FEATURE && this.task.answer.mode != TaskMode.NO_FEATURE) {
-      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0])
+      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0], this.task.category.includes('free'))
     }
   }
 
@@ -797,7 +807,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initTask();
   }
 
-  async onMultipleChoiceSelected(item, event) {
+  async onMultipleChoicePhotoSelected(item, event) {
     this.selectedPhoto = item;
     this.isCorrectPhotoSelected = item.key === "0";
 
@@ -811,6 +821,24 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       answer: {
         photo: item.value,
         correct: this.isCorrectPhotoSelected,
+      }
+    });
+  }
+
+  onMultipleChoiceSelected(item, event) {
+    this.selectedChoice = item;
+    this.isCorrectChoiceSelected = item.key === "0";
+
+    Array.from(document.getElementsByClassName('choice')).forEach(elem => {
+      elem.classList.remove('selected')
+    })
+    event.target.classList.add('selected')
+
+    this.trackerService.addEvent({
+      type: "MULTIPLE_CHOICE_SELECTED",
+      answer: {
+        photo: item.value,
+        correct: this.isCorrectChoiceSelected,
       }
     });
   }
@@ -889,6 +917,34 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         isCorrect = false;
         answer = {
           selectedPhoto: null,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
+      if (this.selectedChoice != null) {
+        this.initFeedback(this.isCorrectChoiceSelected);
+        isCorrect = this.isCorrectChoiceSelected
+        answer = {
+          selectedChoice: this.selectedChoice,
+          correct: isCorrect
+        }
+        if (this.isCorrectChoiceSelected) {
+          this.isCorrectChoiceSelected = null;
+          this.selectedChoice = null;
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte wähle zuerst eine Antwort",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          selectedChoice: null,
           correct: isCorrect
         }
       }
@@ -980,6 +1036,54 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         isCorrect = false;
         answer = {
           compassHeading: undefined,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.NUMBER) {
+      if (this.numberInput != undefined) {
+        isCorrect = this.numberInput == this.task.answer.number
+        this.initFeedback(isCorrect);
+        answer = {
+          numberInput: this.numberInput,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte gebe erst eine Nummer ein",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          numberInput: undefined,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.TEXT) {
+      if (this.textInput != undefined) {
+        this.initFeedback(true);
+        isCorrect = true;
+        answer = {
+          text: this.textInput,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte gebe erst eine Antwort ein",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          text: undefined,
           correct: isCorrect
         }
       }

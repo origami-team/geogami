@@ -7,7 +7,8 @@ export enum QuestionType {
     MAP_DIRECTION_MARKER = "MAP_DIRECTION_MARKER",
     MAP_FEATURE_PHOTO = "MAP_FEATURE_PHOTO",
     MAP_DIRECTION_PHOTO = "MAP_DIRECTION_PHOTO",
-    INFO = "INFO"
+    INFO = "INFO",
+    PHOTO = "PHOTO"
 }
 export enum AnswerType {
     POSITION = "POSITION",
@@ -16,7 +17,10 @@ export enum AnswerType {
     PHOTO = "PHOTO",
     DIRECTION = "DIRECTION",
     MAP_DIRECTION = "MAP_DIRECTION",
-    INFO = "INFO"
+    INFO = "INFO",
+    MULTIPLE_CHOICE_TEXT = "MULTIPLE_CHOICE_TEXT",
+    TEXT = "TEXT",
+    NUMBER = "NUMBER"
 }
 
 export enum TaskMode {

@@ -67,6 +67,10 @@
               <ion-icon name="clipboard"></ion-icon>
               &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
             </ion-chip>
+            <ion-chip color="tertiary" *ngIf="task.category.includes('free')">
+              <ion-icon name="rose"></ion-icon>
+              &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
+            </ion-chip>
             <ion-chip color="warning" *ngIf="task.category.includes('info')">
               <ion-icon name="information-circle-outline"></ion-icon>
               &nbsp;Info
@@ -114,9 +118,25 @@
           <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE'" class="multiple-choice">
             <div *ngFor="let item of task.answer.photos | keyvalue | shuffle">
               <ion-thumbnail slot="start">
-                <img [src]=item.value class="multiple-choize-img" (click)='onMultipleChoiceSelected(item, $event)' />
+                <img [src]=item.value class="multiple-choize-img"
+                  (click)='onMultipleChoicePhotoSelected(item, $event)' />
               </ion-thumbnail>
             </div>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
+            <div *ngFor="let item of task.answer.choices | keyvalue | shuffle"
+              (click)='onMultipleChoiceSelected(item, $event)' class="choice">
+              <p>{{item.value}}</p>
+            </div>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'NUMBER'" class="number-input">
+            <ion-input type="number" [(ngModel)]="numberInput"></ion-input>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'TEXT'" class="text-input">
+            <ion-textarea [(ngModel)]="textInput"></ion-textarea>
           </div>
 
           <div class="task-text">
@@ -180,7 +200,7 @@
                     <ion-icon name="cube-outline"></ion-icon>
                   </ion-chip>
                 </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_REDMARKED')" color="danger">rote Markierung 
+                <ion-text *ngIf="tag.includes('KEYWORD_REDMARKED')" color="danger">rote Markierung
                   <ion-chip color="danger">
                     <ion-icon name="cube-outline"></ion-icon>
                   </ion-chip>
@@ -202,7 +222,8 @@
             <ion-thumbnail slot="start" *ngIf="photo">
               <img [src]="photo" />
             </ion-thumbnail>
-            <ion-button color="secondary" size="default" (click)=capturePhoto()>
+            <ion-button color="secondary" size="default"
+              [color]="task.category.includes('free') ? 'tertiary' : 'secondary'" (click)=capturePhoto()>
               <ion-icon slot="icon-only" name="camera"></ion-icon>
             </ion-button>
           </div>
@@ -217,6 +238,9 @@
 
           <ion-button class="confirm" color=warning (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">OK
           </ion-button>
+
+          <ion-button class="confirm" color=tertiary (click)="onOkClicked()" *ngIf="task?.category?.includes('free')">OK
+          </ion-button>
         </div>
       </ion-card>
     </div>
@@ -228,7 +252,7 @@
     <h3>Herzlichen Glückwunsch!</h3>
     <p>Du hast das Spiel beendet</p>
     <div lottie [options]="lottieConfig"></div>
-    <ion-button color=warning (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
+    <ion-button color=primary (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
   </ion-card>
 
   <ion-card class="overlay feedback" *ngIf="showFeedback">

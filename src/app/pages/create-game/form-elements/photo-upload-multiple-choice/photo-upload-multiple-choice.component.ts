@@ -15,6 +15,7 @@ import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 export class PhotoUploadMultipleChoiceComponent implements OnInit {
 
   @Input() photos: SafeResourceUrl[] = ["", "", "", ""];
+  @Input() taskType: string = "";
 
   @Output() photosChange: EventEmitter<any> = new EventEmitter<any>();
 
