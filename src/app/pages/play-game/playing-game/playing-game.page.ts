@@ -479,14 +479,22 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     }
 
+    if (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.type == "theme-loc") {
+      try {
+        bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
+      } catch (e) {
+
+      }
+    }
+
     return bounds
   }
 
   zoomBounds() {
     let bounds = new mapboxgl.LngLatBounds();
 
-    if (this.task.mapFeatures.zoombar == "task") {
-      bounds = this.calcBounds(this.task)
+    if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
+      bounds = this.calcBounds(this.task);
 
       if (bounds.isEmpty()) {
         this.game.tasks.forEach(task => {
@@ -506,7 +514,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: 280,
+            bottom: 480,
             left: 40,
             right: 40
           }, duration: 3000,
