@@ -100,8 +100,8 @@
   </div>
 
   <div>
-    <question-type [(question)]="task.question"></question-type>
-    <answer-type [(answer)]="task.answer"></answer-type>
+    <question-type [(question)]="task.question" [taskType]="task.category"></question-type>
+    <answer-type [(answer)]="task.answer" [taskType]="task.category"></answer-type>
   </div>
 
   <div *ngIf="task.settings">

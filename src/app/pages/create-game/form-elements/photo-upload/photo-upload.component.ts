@@ -15,6 +15,8 @@ import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 export class PhotoUploadComponent implements OnInit {
 
   @Input() photo: SafeResourceUrl = '';
+  @Input() taskType: string = "";
+
   @Output() photoChange: EventEmitter<any> = new EventEmitter<any>();
 
   uploading: boolean = false

@@ -11,10 +11,12 @@
         filter: 'blur(' + ((100 - uploadingProgress) / 10) + 'px)'
       }">
     </ion-thumbnail>
-    <ion-button color="secondary" size="default" (click)=capturePhoto(false)>
+    <ion-button [color]="taskType.includes('free') ? 'tertiary' : 'secondary'" size="default"
+      (click)=capturePhoto(false)>
       <ion-icon slot="icon-only" name="camera"></ion-icon>
     </ion-button>
-    <ion-button color="secondary" size="default" (click)=capturePhoto(true)>
+    <ion-button [color]="taskType.includes('free') ? 'tertiary' : 'secondary'" size="default"
+      (click)=capturePhoto(true)>
       <ion-icon slot="icon-only" name="images"></ion-icon>
     </ion-button>
   </div>

@@ -40,7 +40,7 @@
             (click)="showPopover($event, 'Füge ein Foto vom gesuchten Objekt ein. Es wird im Spiel angezeigt.')">
         </ion-icon>
     </h5>
-    <app-photo-upload [(photo)]="question.photo"></app-photo-upload>
+    <app-photo-upload [(photo)]="question.photo" [taskType]="taskType"></app-photo-upload>
     <h5>Objektposition
         <ion-icon name="information-circle"
             (click)="showPopover($event, 'Markiere das gesuchte Objekt auf der Karte. Klicke dazu auf das kleine Quadrat, umrande dann das Objekt mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.')">
@@ -73,7 +73,7 @@
             (click)="showPopover($event, 'Wähle ein Foto, das die gesuchte Blickrichtung zeigt.')">
         </ion-icon>
     </h5>
-    <app-photo-upload [(photo)]="question.photo"></app-photo-upload>
+    <app-photo-upload [(photo)]="question.photo" [taskType]="taskType"></app-photo-upload>
     <h5>Richtung auf der Karte
         <ion-icon name="information-circle"
             (click)="showPopover($event, 'Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt.')">
@@ -88,5 +88,5 @@
             (click)="showPopover($event, 'Das gewählte Foto wird dem Spieler bei Aufgabenstellung angezeigt')">
         </ion-icon>
     </h5>
-    <app-photo-upload [(photo)]="question.photo"></app-photo-upload>
+    <app-photo-upload [(photo)]="question.photo" [taskType]="taskType"></app-photo-upload>
 </div>

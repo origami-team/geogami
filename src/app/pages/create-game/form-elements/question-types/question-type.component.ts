@@ -13,6 +13,7 @@ import { PopoverController } from '@ionic/angular';
 })
 export class QuestionTypeComponent implements OnInit, OnChanges {
     @Input() question: any;
+    @Input() taskType: string;
 
     questionTypeEnum = QuestionType
     taskModeEnum = TaskMode
