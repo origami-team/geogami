@@ -45,6 +45,7 @@ import { standardMapFeatures } from "./../../../models/mapFeatures"
 
 import { AnimationOptions } from 'ngx-lottie';
 import bbox from '@turf/bbox';
+import { Task } from 'src/app/models/task';
 
 
 enum FeedbackType {
@@ -443,43 +444,60 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
   }
 
+  calcBounds(task: any): mapboxgl.LngLatBounds {
+    let bounds = new mapboxgl.LngLatBounds();
+
+    if (task.answer.position) {
+      try {
+        bounds.extend(task.answer.position.geometry.coordinates);
+      } catch (e) {
+
+      }
+    }
+
+    if (task.question.geometry) {
+      try {
+        bounds.extend(bbox(task.question.geometry))
+      } catch (e) {
+
+      }
+    }
+
+    if (task.question.direction) {
+      try {
+        bounds.extend(task.question.direction.position.geometry.coordinates)
+      } catch (e) {
+
+      }
+    }
+
+    if (task.mapFeatures?.landmarkFeatures && task.mapFeatures?.landmarkFeatures.features.length > 0) {
+      try {
+        bounds.extend(bbox(task.mapFeatures.landmarkFeatures))
+      } catch (e) {
+
+      }
+    }
+
+    return bounds
+  }
+
   zoomBounds() {
-    var bounds = new mapboxgl.LngLatBounds();
+    let bounds = new mapboxgl.LngLatBounds();
 
-    this.game.tasks.forEach(task => {
-      if (task.answer.position) {
-        try {
-          bounds.extend(task.answer.position.geometry.coordinates);
-        } catch (e) {
+    if (this.task.mapFeatures.zoombar == "task") {
+      bounds = this.calcBounds(this.task)
 
-        }
+      if (bounds.isEmpty()) {
+        this.game.tasks.forEach(task => {
+          bounds = bounds.extend(this.calcBounds(task))
+        });
       }
-
-      if (task.question.geometry) {
-        try {
-          bounds.extend(bbox(task.question.geometry))
-        } catch (e) {
-
-        }
-      }
-
-      if (task.question.direction) {
-        try {
-          bounds.extend(task.question.direction.position.geometry.coordinates)
-        } catch (e) {
-
-        }
-      }
-
-      if (task.mapFeatures?.landmarkFeatures && task.mapFeatures?.landmarkFeatures.features.length > 0) {
-        try {
-          bounds.extend(bbox(task.mapFeatures.landmarkFeatures))
-        } catch (e) {
-
-        }
-      }
-
-    });
+    } else {
+      this.game.tasks.forEach(task => {
+        bounds = bounds.extend(this.calcBounds(task))
+      });
+    }
 
     const prom = new Promise((resolve, reject) => {
       this.map.once('moveend', () => resolve('ok'))
@@ -491,7 +509,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             bottom: 280,
             left: 40,
             right: 40
-          }, duration: 1000
+          }, duration: 3000,
+          maxZoom: 16
         });
       } else {
         reject('bounds are empty')
@@ -1068,16 +1087,21 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (mapFeatures.hasOwnProperty(key)) {
         switch (key) {
           case "zoombar":
-            if (mapFeatures[key]) {
+            if (mapFeatures[key] == "true") {
               this.map.scrollZoom.enable();
               this.map.boxZoom.enable();
               this.map.doubleClickZoom.enable();
               this.map.touchZoomRotate.enable();
-            } else {
+            } else if (mapFeatures[key] == "false") {
               this.map.scrollZoom.disable();
               this.map.boxZoom.disable();
               this.map.doubleClickZoom.disable();
               this.map.touchZoomRotate.disable();
+            } else { // zoom zur Aufgabe
+              this.map.scrollZoom.enable();
+              this.map.boxZoom.enable();
+              this.map.doubleClickZoom.enable();
+              this.map.touchZoomRotate.enable();
             }
             break;
           case "pan":

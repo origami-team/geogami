@@ -19,9 +19,17 @@
 <ion-content class="ion-padding">
   <ion-list>
     <h5>Karteneinstellungen</h5>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>Zoom</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.zoombar"></ion-toggle>
+    </ion-item> -->
+    <ion-item>
+      <ion-label>Zoom</ion-label>
+      <select [(ngModel)]="features.zoombar" interface="popover">
+        <option value="false">aus</option>
+        <option value="true">manuell</option>
+        <option value="task">Zoom zur Aufgabe</option>
+      </select>
     </ion-item>
     <ion-item>
       <ion-label>Kartenbereich</ion-label>
