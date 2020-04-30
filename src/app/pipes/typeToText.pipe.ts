@@ -27,7 +27,7 @@ export class TypeToTextPipe implements PipeTransform {
         MAP_FEATURE: "... mit Kartenmarkierung",
         MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
         MULTIPLE_CHOICE_TEXT: "... durch Wählen eines Textes",
-        NUMBER: "Eingabe einer Zahl"
+        NUMBER: "... durch Eingabe einer Zahl"
     }
 
     transform(value: string, taskType: string, answer: boolean): string {
@@ -44,7 +44,7 @@ export class TypeToTextPipe implements PipeTransform {
                 return "... Aufnahme eines Fotos"
             }
             if (value === "TEXT" && answer) {
-                return "Eingabe von Text"
+                return "... durch Eingabe von Text"
             }
             return this.textMappingsFree[value]
         }

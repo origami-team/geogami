@@ -89,28 +89,14 @@ export class CreateGameListPage implements OnInit {
 
     console.log(task)
 
-    let modal: HTMLIonModalElement
-
-    if (type == 'free') {
-      modal = await this.modalController.create({
-        component: CreateFreeTaskModalComponent,
-        backdropDismiss: false,
-        componentProps: {
-          type: type,
-          task: task
-        }
-      });
-    } else {
-      modal = await this.modalController.create({
-        component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
-        backdropDismiss: false,
-        componentProps: {
-          type: type,
-          task: task
-        }
-      });
-    }
-
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
+      backdropDismiss: false,
+      componentProps: {
+        type: type,
+        task: task
+      }
+    });
 
     await modal.present();
     const { data } = await modal.onWillDismiss();

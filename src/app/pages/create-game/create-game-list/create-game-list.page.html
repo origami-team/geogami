@@ -121,12 +121,12 @@
                 <ion-icon name="clipboard"></ion-icon> {{ task.name }}
               </ion-label>
             </ion-chip>
-            <ion-chip *ngIf="task.category.includes('free')" color="tertiary"
+            <!-- <ion-chip *ngIf="task.category.includes('free')" color="tertiary"
               (click)="presentTaskModal('free', task)">
               <ion-label>
                 <ion-icon name="rose"></ion-icon> {{ task.name }}
               </ion-label>
-            </ion-chip>
+            </ion-chip> -->
             <ion-chip *ngIf="task.category.includes('info')" color="warning" (click)="presentTaskModal('info', task)">
               <ion-label>
                 <ion-icon name="information-circle-outline"></ion-icon> Information
@@ -150,9 +150,9 @@
         <ion-chip color="secondary" (click)="presentTaskModal('theme')">
           + <ion-icon name="clipboard"></ion-icon>
         </ion-chip>
-        <ion-chip color="tertiary" (click)="presentTaskModal('free')">
+        <!-- <ion-chip color="tertiary" (click)="presentTaskModal('free')">
           + <ion-icon name="rose"></ion-icon>
-        </ion-chip>
+        </ion-chip> -->
         <ion-chip color="warning" (click)="presentTaskModal('info')">
           + <ion-icon name="information-circle-outline"></ion-icon>
         </ion-chip>

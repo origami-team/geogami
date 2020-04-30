@@ -67,10 +67,10 @@
               <ion-icon name="clipboard"></ion-icon>
               &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
             </ion-chip>
-            <ion-chip color="tertiary" *ngIf="task.category.includes('free')">
+            <!-- <ion-chip color="tertiary" *ngIf="task.category.includes('free')">
               <ion-icon name="rose"></ion-icon>
               &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
-            </ion-chip>
+            </ion-chip> -->
             <ion-chip color="warning" *ngIf="task.category.includes('info')">
               <ion-icon name="information-circle-outline"></ion-icon>
               &nbsp;Info
@@ -222,8 +222,7 @@
             <ion-thumbnail slot="start" *ngIf="photo">
               <img [src]="photo" />
             </ion-thumbnail>
-            <ion-button color="secondary" size="default"
-              [color]="task.category.includes('free') ? 'tertiary' : 'secondary'" (click)=capturePhoto()>
+            <ion-button color="secondary" size="default" color="secondary" (click)=capturePhoto()>
               <ion-icon slot="icon-only" name="camera"></ion-icon>
             </ion-button>
           </div>
@@ -239,8 +238,8 @@
           <ion-button class="confirm" color=warning (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">OK
           </ion-button>
 
-          <ion-button class="confirm" color=tertiary (click)="onOkClicked()" *ngIf="task?.category?.includes('free')">OK
-          </ion-button>
+          <!-- <ion-button class="confirm" color=tertiary (click)="onOkClicked()" *ngIf="task?.category?.includes('free')">OK
+          </ion-button> -->
         </div>
       </ion-card>
     </div>

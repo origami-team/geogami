@@ -73,6 +73,9 @@
         Bei der <b>"Richtungsbestimmung"</b> muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in
         Verbindung bringen.
       </ion-text>
+      <ion-text *ngIf="task.type == 'free'">
+        In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden.
+      </ion-text>
     </ion-card-content>
   </ion-card>
 
@@ -91,6 +94,28 @@
     <div>
       <ion-text>
         <h5>Der Spieler antwortet ...</h5>
+      </ion-text>
+      <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
+        <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+          {{ option.text | typeToText: task.type : true }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="task.type == 'free'">
+    <div>
+      <ion-text>
+        <h5>Fragetyp</h5>
+      </ion-text>
+      <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
+        interface="popover">
+        <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
+          {{ option.text | typeToText: task.type : false }}</option>
+      </select>
+    </div>
+    <div>
+      <ion-text>
+        <h5>Der Spieler Antwortet...</h5>
       </ion-text>
       <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
         <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
