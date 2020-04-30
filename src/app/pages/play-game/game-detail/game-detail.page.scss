@@ -2,3 +2,24 @@
     height: 15rem;
     width: 100%;
 }
+
+.dot {
+    height: 9px;
+    width: 9px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5.5px;
+
+    &.nav {
+        background-color: var(--ion-color-primary);
+    }
+    &.theme {
+        background-color: var(--ion-color-secondary);
+    }
+    &.free {
+        background-color: var(--ion-color-tertiary);
+    }
+    &.info {
+        background-color: var(--ion-color-warning);
+    }
+}

@@ -13,6 +13,8 @@ import { PopoverComponent } from 'src/app/popover/popover.component';
 })
 export class AnswerTypeComponent implements OnInit, OnChanges {
     @Input() answer: any;
+    @Input() taskType: any;
+
     @Output() answerChange: EventEmitter<any> = new EventEmitter<any>(true);
 
     answerTypeEnum = AnswerType
@@ -24,7 +26,6 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        // console.log(this.answer)
     }
 
     async showPopover(ev: any, text: string) {

@@ -6,6 +6,7 @@ export class LandmarkControl {
     private warningColor: string;
     private secondaryColor: string;
     private dangerColor: string;
+    private tertiaryColor: string;
 
 
     constructor(map: MapboxMap) {
@@ -13,6 +14,7 @@ export class LandmarkControl {
         this.warningColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning');
         this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
         this.dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
+        this.tertiaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-tertiary');
     }
 
     public setLandmark(landmark: any) {
@@ -67,7 +69,7 @@ export class LandmarkControl {
         });
     }
 
-    setQTLandmark(landmark: any) {
+    setQTLandmark(landmark: any, freeTask: boolean = false) {
         if (this.map.getLayer('landmarks-qt-map-layer')) {
             this.map.removeLayer('landmarks-qt-map-layer')
         }
@@ -84,7 +86,7 @@ export class LandmarkControl {
             type: "fill-extrusion",
             source: 'landmarks-qt-map-source',
             paint: {
-                "fill-extrusion-color": this.secondaryColor,
+                "fill-extrusion-color": freeTask ? this.tertiaryColor : this.secondaryColor,
                 "fill-extrusion-opacity": 0.5,
                 "fill-extrusion-height": 20
             }

@@ -45,6 +45,9 @@ export class CreateTaskModalPage implements OnInit {
   objectQuestionSelect: any[] = []
   objectAnswerSelect: any[] = []
 
+  freeQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE, QuestionType.PHOTO]
+  freeAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER]
+
   taskTypes: any[] = [
     {
       type: 1,
@@ -55,6 +58,9 @@ export class CreateTaskModalPage implements OnInit {
     }, {
       type: 3,
       text: "Richtungsbestimmung"
+    }, {
+      type: 4,
+      text: "Freie Aufgabe"
     }
   ]
 
@@ -105,8 +111,21 @@ export class CreateTaskModalPage implements OnInit {
       this.task = this.tasks[0]
     } else if (taskType.type == 2) {
       this.task = this.tasks[1]
-    } else {
+    } else if (taskType.type == 3) {
       this.task = this.tasks[7]
+    } else {
+      this.task = {
+        name: "Freie Aufgabe",
+        type: "free",
+        category: "theme",
+        question: {
+          type: QuestionType.TEXT,
+          text: ""
+        },
+        answer: {
+          type: AnswerType.MULTIPLE_CHOICE,
+        }
+      }
     }
     this.onTaskSelected(this.task)
   }
@@ -114,7 +133,7 @@ export class CreateTaskModalPage implements OnInit {
   onTaskSelected(newValue) {
     this.task = newValue;
 
-    if (Object.keys(this.task.settings).length == 0) {
+    if (!this.task.settings || Object.keys(this.task.settings).length == 0) {
       this.task.settings = {
         feedback: true,
         multipleTries: true,
@@ -128,33 +147,43 @@ export class CreateTaskModalPage implements OnInit {
 
     this.mapFeatures = this.task.mapFeatures
 
-    this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
-      .map(t => ({ type: t as QuestionType, text: t }))
-      .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)))
+    if (this.task.type == "free") {
+      this.objectQuestionSelect = this.freeQuestionSelect.map(t => ({ type: t as QuestionType, text: t }))
+      this.objectAnswerSelect = this.freeAnswerSelect.map(t => ({ type: t as AnswerType, text: t }))
+    } else {
+      this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
+        .map(t => ({ type: t as QuestionType, text: t }))
+        .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)))
 
-    const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
+      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
 
-    this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
+      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
+    }
+
   }
 
   onObjectQuestionSelectChange() {
-    const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+    if (this.task.type != 'free') {
+      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
+      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
 
-    this.onTaskSelected(similarQ[0])
+      this.onTaskSelected(similarQ[0])
 
-    this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
+      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
+    }
   }
 
   onObjectAnswerSelectChange() {
-    const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+    if (this.task.type != 'free') {
+      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
 
-    const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type)
+      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type)
 
-    this.onTaskSelected(similarQ[0])
+      this.onTaskSelected(similarQ[0])
+    }
   }
 
   rangeChange() {

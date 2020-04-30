@@ -13,5 +13,22 @@
             (click)="showPopover($event, 'Füge ein Foto vom dem zu suchenden Objekt ein sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.')">
         </ion-icon>
     </h5>
-    <app-photo-upload-multiple-choice [(photos)]="answer.photos"></app-photo-upload-multiple-choice>
+    <app-photo-upload-multiple-choice [(photos)]="answer.photos" [taskType]="taskType">
+    </app-photo-upload-multiple-choice>
+</div>
+
+<div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
+    <h5>Multiple Choice Text
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem Ipsum')">
+        </ion-icon>
+    </h5>
+    <app-multiple-choice-text [(answers)]="answer.choices"></app-multiple-choice-text>
+</div>
+
+<div *ngIf="answer.type == answerTypeEnum.NUMBER">
+    <h5>Korrekte Antwort
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem Ipsum')">
+        </ion-icon>
+    </h5>
+    <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
 </div>

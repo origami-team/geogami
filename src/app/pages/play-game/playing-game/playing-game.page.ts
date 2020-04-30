@@ -45,6 +45,7 @@ import { standardMapFeatures } from "./../../../models/mapFeatures"
 
 import { AnimationOptions } from 'ngx-lottie';
 import bbox from '@turf/bbox';
+import { Task } from 'src/app/models/task';
 
 
 enum FeedbackType {
@@ -130,6 +131,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // multiple choice
   selectedPhoto: string;
   isCorrectPhotoSelected: boolean;
+
+  // multiple choice text
+  selectedChoice: string;
+  isCorrectChoiceSelected: boolean;
+
+  numberInput: number;
+  textInput: string;
 
   primaryColor: string;
   secondaryColor: string;
@@ -443,43 +451,68 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
   }
 
+  calcBounds(task: any): mapboxgl.LngLatBounds {
+    let bounds = new mapboxgl.LngLatBounds();
+
+    if (task.answer.position) {
+      try {
+        bounds.extend(task.answer.position.geometry.coordinates);
+      } catch (e) {
+
+      }
+    }
+
+    if (task.question.geometry) {
+      try {
+        bounds.extend(bbox(task.question.geometry))
+      } catch (e) {
+
+      }
+    }
+
+    if (task.question.direction) {
+      try {
+        bounds.extend(task.question.direction.position.geometry.coordinates)
+      } catch (e) {
+
+      }
+    }
+
+    if (task.mapFeatures?.landmarkFeatures && task.mapFeatures?.landmarkFeatures.features.length > 0) {
+      try {
+        bounds.extend(bbox(task.mapFeatures.landmarkFeatures))
+      } catch (e) {
+
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.type == "theme-loc") {
+      try {
+        bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
+      } catch (e) {
+
+      }
+    }
+
+    return bounds
+  }
+
   zoomBounds() {
-    var bounds = new mapboxgl.LngLatBounds();
+    let bounds = new mapboxgl.LngLatBounds();
 
-    this.game.tasks.forEach(task => {
-      if (task.answer.position) {
-        try {
-          bounds.extend(task.answer.position.geometry.coordinates);
-        } catch (e) {
+    if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
+      bounds = this.calcBounds(this.task);
 
-        }
+      if (bounds.isEmpty()) {
+        this.game.tasks.forEach(task => {
+          bounds = bounds.extend(this.calcBounds(task))
+        });
       }
-
-      if (task.question.geometry) {
-        try {
-          bounds.extend(bbox(task.question.geometry))
-        } catch (e) {
-
-        }
-      }
-
-      if (task.question.direction) {
-        try {
-          bounds.extend(task.question.direction.position.geometry.coordinates)
-        } catch (e) {
-
-        }
-      }
-
-      if (task.mapFeatures?.landmarkFeatures && task.mapFeatures?.landmarkFeatures.features.length > 0) {
-        try {
-          bounds.extend(bbox(task.mapFeatures.landmarkFeatures))
-        } catch (e) {
-
-        }
-      }
-
-    });
+    } else {
+      this.game.tasks.forEach(task => {
+        bounds = bounds.extend(this.calcBounds(task))
+      });
+    }
 
     const prom = new Promise((resolve, reject) => {
       this.map.once('moveend', () => resolve('ok'))
@@ -488,10 +521,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: 280,
+            bottom: 480,
             left: 40,
             right: 40
-          }, duration: 1000
+          }, duration: 3000,
+          maxZoom: 16
         });
       } else {
         reject('bounds are empty')
@@ -570,6 +604,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.photo = '';
     this.photoURL = '';
     this.clickDirection = 0;
+
+    this.numberInput = undefined
+    this.textInput = undefined
 
 
     if (this.task.answer.type == AnswerType.POSITION) {
@@ -656,7 +693,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.question.type == QuestionType.MAP_FEATURE && this.task.answer.mode != TaskMode.NO_FEATURE) {
-      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0])
+      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0], this.task.category.includes('free'))
     }
   }
 
@@ -770,7 +807,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initTask();
   }
 
-  async onMultipleChoiceSelected(item, event) {
+  async onMultipleChoicePhotoSelected(item, event) {
     this.selectedPhoto = item;
     this.isCorrectPhotoSelected = item.key === "0";
 
@@ -784,6 +821,24 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       answer: {
         photo: item.value,
         correct: this.isCorrectPhotoSelected,
+      }
+    });
+  }
+
+  onMultipleChoiceSelected(item, event) {
+    this.selectedChoice = item;
+    this.isCorrectChoiceSelected = item.key === "0";
+
+    Array.from(document.getElementsByClassName('choice')).forEach(elem => {
+      elem.classList.remove('selected')
+    })
+    event.target.classList.add('selected')
+
+    this.trackerService.addEvent({
+      type: "MULTIPLE_CHOICE_SELECTED",
+      answer: {
+        photo: item.value,
+        correct: this.isCorrectChoiceSelected,
       }
     });
   }
@@ -862,6 +917,34 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         isCorrect = false;
         answer = {
           selectedPhoto: null,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
+      if (this.selectedChoice != null) {
+        this.initFeedback(this.isCorrectChoiceSelected);
+        isCorrect = this.isCorrectChoiceSelected
+        answer = {
+          selectedChoice: this.selectedChoice,
+          correct: isCorrect
+        }
+        if (this.isCorrectChoiceSelected) {
+          this.isCorrectChoiceSelected = null;
+          this.selectedChoice = null;
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte wähle zuerst eine Antwort",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          selectedChoice: null,
           correct: isCorrect
         }
       }
@@ -953,6 +1036,54 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         isCorrect = false;
         answer = {
           compassHeading: undefined,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.NUMBER) {
+      if (this.numberInput != undefined) {
+        isCorrect = this.numberInput == this.task.answer.number
+        this.initFeedback(isCorrect);
+        answer = {
+          numberInput: this.numberInput,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte gebe erst eine Nummer ein",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          numberInput: undefined,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.TEXT) {
+      if (this.textInput != undefined) {
+        this.initFeedback(true);
+        isCorrect = true;
+        answer = {
+          text: this.textInput,
+          correct: isCorrect
+        }
+      } else {
+        const toast = await this.toastController.create({
+          message: "Bitte gebe erst eine Antwort ein",
+          color: "dark",
+          // showCloseButton: true,
+          duration: 2000
+        });
+        toast.present();
+        isCorrect = false;
+        answer = {
+          text: undefined,
           correct: isCorrect
         }
       }
@@ -1068,16 +1199,21 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (mapFeatures.hasOwnProperty(key)) {
         switch (key) {
           case "zoombar":
-            if (mapFeatures[key]) {
+            if (mapFeatures[key] == "true") {
               this.map.scrollZoom.enable();
               this.map.boxZoom.enable();
               this.map.doubleClickZoom.enable();
               this.map.touchZoomRotate.enable();
-            } else {
+            } else if (mapFeatures[key] == "false") {
               this.map.scrollZoom.disable();
               this.map.boxZoom.disable();
               this.map.doubleClickZoom.disable();
               this.map.touchZoomRotate.disable();
+            } else { // zoom zur Aufgabe
+              this.map.scrollZoom.enable();
+              this.map.boxZoom.enable();
+              this.map.doubleClickZoom.enable();
+              this.map.touchZoomRotate.enable();
             }
             break;
           case "pan":

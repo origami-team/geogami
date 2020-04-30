@@ -40,6 +40,8 @@ export class StreetSectionControl {
     if (this.positionSubscription) {
       this.positionSubscription.unsubscribe();
     }
+    if (this.map.getLayer('section'))
+      this.map.removeLayer('section');
   }
 
   private update(): void {
