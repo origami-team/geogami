@@ -101,6 +101,9 @@ export class CreateTaskModalPage implements OnInit {
       if (this.task.type.includes('direction')) {
         this.selectedTaskType = this.taskTypes[2]
       }
+      if (this.task.type.includes('free')) {
+        this.selectedTaskType = this.taskTypes[3]
+      }
     }
     // this.onTaskSelected(this.task);
     this.onTaskSelected(cloneDeep(this.task));
