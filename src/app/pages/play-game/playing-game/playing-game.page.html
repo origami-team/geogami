@@ -124,20 +124,7 @@
             </div>
           </div>
 
-          <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
-            <div *ngFor="let item of task.answer.choices | keyvalue | shuffle"
-              (click)='onMultipleChoiceSelected(item, $event)' class="choice">
-              <p>{{item.value}}</p>
-            </div>
-          </div>
 
-          <div *ngIf="task.answer?.type == 'NUMBER'" class="number-input">
-            <ion-input type="number" [(ngModel)]="numberInput"></ion-input>
-          </div>
-
-          <div *ngIf="task.answer?.type == 'TEXT'" class="text-input">
-            <ion-textarea [(ngModel)]="textInput"></ion-textarea>
-          </div>
 
           <div class="task-text">
             <!-- <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
@@ -216,6 +203,21 @@
             <p *ngIf="task?.settings?.confirmation">
               Drücke OK!
             </p>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
+            <div *ngFor="let item of task.answer.choices | keyvalue | shuffle"
+              (click)='onMultipleChoiceSelected(item, $event)' class="choice">
+              <p>{{item.value}}</p>
+            </div>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'NUMBER'" class="number-input">
+            <ion-input type="number" pattern="\d*" [(ngModel)]="numberInput"></ion-input>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'TEXT'" class="text-input">
+            <ion-textarea [(ngModel)]="textInput"></ion-textarea>
           </div>
 
           <div *ngIf="task.answer?.type == 'PHOTO'">

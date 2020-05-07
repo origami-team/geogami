@@ -1,18 +1,18 @@
 // App Styles
 // ----------------------------------------------------------------------------
-// Put style rules here that you want to apply to the entire application. These 
-// styles are for the entire app and not just one component. Additionally, this 
-// file can hold Sass mixins, functions, and placeholder classes to be imported 
+// Put style rules here that you want to apply to the entire application. These
+// styles are for the entire app and not just one component. Additionally, this
+// file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
 
-@import '~@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+@import "~@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 .invisible {
     opacity: 0;
 }
 
 .mymarker {
-    background-image: url('/assets/icons/marker-editor.svg');
+    background-image: url("/assets/icons/marker-editor.svg");
     background-size: cover;
     width: 32px;
     height: 32px;
@@ -30,8 +30,9 @@
     > p.list {
         padding-top: 5px;
     }
-  }
+}
 
-  .sc-ion-select-popover-md, .sc-ion-select-popover-ios  {
+.sc-ion-select-popover-md,
+.sc-ion-select-popover-ios {
     white-space: normal !important;
 }

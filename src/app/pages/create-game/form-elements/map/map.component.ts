@@ -160,7 +160,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
             speed: 3
           })
         }
-        if (this.featureType == 'geometry' && this.feature.features) {
+        if ((this.featureType == 'geometry' || this.featureType == 'geometry-free') && this.feature.features) {
           this.map.fitBounds(bbox(this.feature), {
             padding: 20,
             speed: 3
@@ -222,6 +222,46 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
           displayControlsDefault: false,
           controls: {
             polygon: true,
+            trash: true
+          }
+        });
+
+        this.map.addControl(this.draw, "top-left");
+
+        this.map.on("draw.create", e => {
+          this.feature = this.draw.getAll();
+          this.featureChange.emit(this.draw.getAll());
+        });
+
+        this.map.on("draw.delete", e => {
+          this.feature = this.draw.getAll();
+          this.featureChange.emit(this.draw.getAll());
+        });
+
+        this.map.on("draw.update", e => {
+          this.feature = this.draw.getAll();
+          this.featureChange.emit(this.draw.getAll());
+        });
+
+        if (this.feature != undefined) {
+          if (this.feature.type == "FeatureCollection") {
+            this.feature.features.forEach(element => {
+              element.properties = {
+                ...element.properties
+              }
+              this.draw.add(element)
+            });
+          }
+        }
+      }
+
+      if (this.featureType == "geometry-free") {
+        this.draw = new MapboxDraw({
+          displayControlsDefault: false,
+          controls: {
+            polygon: true,
+            line_string: true,
+            point: true,
             trash: true
           }
         });

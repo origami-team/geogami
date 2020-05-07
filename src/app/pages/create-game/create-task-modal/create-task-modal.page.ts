@@ -45,7 +45,7 @@ export class CreateTaskModalPage implements OnInit {
   objectQuestionSelect: any[] = []
   objectAnswerSelect: any[] = []
 
-  freeQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE, QuestionType.PHOTO]
+  freeQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE_FREE, QuestionType.PHOTO]
   freeAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER]
 
   taskTypes: any[] = [
@@ -186,6 +186,21 @@ export class CreateTaskModalPage implements OnInit {
       const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type)
 
       this.onTaskSelected(similarQ[0])
+    }
+
+    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
+      this.task.settings.feedback = false;
+      this.task.settings.multipleTries = false;
+    } else if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
+      this.task.settings.feedback = false;
+      this.task.settings.multipleTries = false;
+      this.showFeedback = false;
+      this.showMultipleTries = false;
+    } else {
+      this.task.settings.feedback = true;
+      this.task.settings.multipleTries = true;
+      this.showFeedback = true;
+      this.showMultipleTries = true;
     }
   }
 
