@@ -111,7 +111,7 @@
           </div>
 
           <div class="photo-container"
-            *ngIf="task.question?.type == 'MAP_FEATURE_PHOTO' || task.question?.type == 'MAP_DIRECTION_PHOTO' || task.question?.type == 'INFO'">
+            *ngIf="task.question?.type == 'MAP_FEATURE_PHOTO' || task.question?.type == 'MAP_DIRECTION_PHOTO' || task.question?.type == 'INFO' || task.question?.type == 'PHOTO'">
             <img *ngIf="task.question.photo" [src]="task.question.photo" />
           </div>
 
@@ -124,20 +124,7 @@
             </div>
           </div>
 
-          <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
-            <div *ngFor="let item of task.answer.choices | keyvalue | shuffle"
-              (click)='onMultipleChoiceSelected(item, $event)' class="choice">
-              <p>{{item.value}}</p>
-            </div>
-          </div>
 
-          <div *ngIf="task.answer?.type == 'NUMBER'" class="number-input">
-            <ion-input type="number" [(ngModel)]="numberInput"></ion-input>
-          </div>
-
-          <div *ngIf="task.answer?.type == 'TEXT'" class="text-input">
-            <ion-textarea [(ngModel)]="textInput"></ion-textarea>
-          </div>
 
           <div class="task-text">
             <!-- <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
@@ -213,9 +200,27 @@
                 <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
               </span>
             </p>
-            <p *ngIf="task?.settings?.confirmation">
+            <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
+              Drücke OK, wenn du da bist!
+            </p>
+            <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
               Drücke OK!
             </p>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
+            <div *ngFor="let item of task.answer.choices | keyvalue | shuffle"
+              (click)='onMultipleChoiceSelected(item, $event)' class="choice">
+              <p>{{item.value}}</p>
+            </div>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'NUMBER'" class="number-input">
+            <ion-input type="number" pattern="\d*" [(ngModel)]="numberInput"></ion-input>
+          </div>
+
+          <div *ngIf="task.answer?.type == 'TEXT'" class="text-input">
+            <ion-textarea [(ngModel)]="textInput"></ion-textarea>
           </div>
 
           <div *ngIf="task.answer?.type == 'PHOTO'">

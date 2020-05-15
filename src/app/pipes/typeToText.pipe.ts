@@ -22,11 +22,11 @@ export class TypeToTextPipe implements PipeTransform {
     }
 
     textMappingsFree: object = {
-        TEXT: "... mit Textanweisung",
-        PHOTO: "... mit Foto",
-        MAP_FEATURE: "... mit Kartenmarkierung",
+        TEXT: "Text",
+        PHOTO: "Text und Foto",
+        MAP_FEATURE_FREE: "Text und Kartenmarkierung",
         MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
-        MULTIPLE_CHOICE_TEXT: "... durch Wählen eines Textes",
+        MULTIPLE_CHOICE_TEXT: "... durch Wählen einer Textantwort",
         NUMBER: "... durch Eingabe einer Zahl"
     }
 
@@ -41,10 +41,10 @@ export class TypeToTextPipe implements PipeTransform {
 
         if (taskType == "free") {
             if (value === "PHOTO" && answer) {
-                return "... Aufnahme eines Fotos"
+                return "... mit der Aufnahme eines Fotos"
             }
             if (value === "TEXT" && answer) {
-                return "... durch Eingabe von Text"
+                return "... durch Texteingabe"
             }
             return this.textMappingsFree[value]
         }

@@ -28,6 +28,10 @@ export class TrackerService {
 
   private task: any;
 
+  private panCounter: number = 0;
+  private zoomCounter: number = 0;
+  private rotationCounter: number = 0;
+
   constructor(
     private http: HttpClient,
     private geolocateService: OrigamiGeolocationService,
@@ -42,10 +46,25 @@ export class TrackerService {
     this.deviceOrientationSubscription = this.deviceOrientation
       .watchHeading()
       .subscribe((data: DeviceOrientationCompassHeading) => {
+        let diff = Math.abs(this.compassHeading - data.magneticHeading)
+        diff = (diff + 180) % 360 - 180
+        if (diff > 10) {
+          this.rotationCounter += diff
+        }
+
         this.compassHeading = data.magneticHeading;
       });
 
     this.map = map;
+    this.map.on('moveend', moveEvent => {
+      if (moveEvent.type == "moveend")
+        this.panCounter++
+    })
+
+    this.map.on('zoomend', zoomEvent => {
+      if (zoomEvent.type == "zoomend")
+        this.zoomCounter++
+    })
 
     this.game = gameID;
     this.gameName = name;
@@ -57,6 +76,9 @@ export class TrackerService {
 
   setTask(task) {
     this.task = task;
+    this.panCounter = 0;
+    this.zoomCounter = 0;
+    this.rotationCounter = 0;
   }
 
   addWaypoint(waypoint) {
@@ -72,7 +94,12 @@ export class TrackerService {
           bearing: this.map.getBearing(),
           pitch: this.map.getPitch()
         },
-        compassHeading: this.compassHeading
+        compassHeading: this.compassHeading,
+        interaction: {
+          panCount: this.panCounter,
+          zoomCount: this.zoomCounter,
+          rotation: this.rotationCounter
+        }
       });
     }
   }
@@ -90,7 +117,12 @@ export class TrackerService {
         pitch: this.map.getPitch()
       },
       compassHeading: this.compassHeading,
-      task: this.task
+      task: this.task,
+      interaction: {
+        panCount: this.panCounter,
+        zoomCount: this.zoomCounter,
+        rotationCount: this.rotationCounter
+      }
     });
     console.log(this.events)
   }

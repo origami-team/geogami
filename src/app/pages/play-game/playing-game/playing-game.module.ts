@@ -15,6 +15,7 @@ import { KeywordPipe } from 'src/app/pipes/keyword.pipe';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
 
+
 // Note we need a separate function as it's required
 // by the AOT compiler.
 export function playerFactory() {
@@ -35,7 +36,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     LottieModule.forRoot({ player: playerFactory }),
-    NgShufflePipeModule
+    NgShufflePipeModule,
   ],
   declarations: [PlayingGamePage, KeywordPipe],
   providers: [

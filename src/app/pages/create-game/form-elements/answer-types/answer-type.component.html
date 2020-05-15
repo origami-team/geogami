@@ -10,7 +10,7 @@
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
     <h5>Multiple Choice
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'Füge ein Foto vom dem zu suchenden Objekt ein sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.')">
+            (click)="showPopover($event, 'Füge ein Foto der korrekten Lösung ein sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.')">
         </ion-icon>
     </h5>
     <app-photo-upload-multiple-choice [(photos)]="answer.photos" [taskType]="taskType">
@@ -19,15 +19,15 @@
 
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
     <h5>Multiple Choice Text
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem Ipsum')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder.')">
         </ion-icon>
     </h5>
     <app-multiple-choice-text [(answers)]="answer.choices"></app-multiple-choice-text>
 </div>
 
 <div *ngIf="answer.type == answerTypeEnum.NUMBER">
-    <h5>Korrekte Antwort
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Lorem Ipsum')">
+    <h5>Korrekte Antwort (Zahl)
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Schreibe die richtige Aufgabenlösung in das Feld.')">
         </ion-icon>
     </h5>
     <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
