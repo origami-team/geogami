@@ -166,7 +166,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private transfer: FileTransfer,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService,
-    private screenOrientation: ScreenOrientation
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",

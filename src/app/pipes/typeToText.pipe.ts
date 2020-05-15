@@ -24,7 +24,7 @@ export class TypeToTextPipe implements PipeTransform {
     textMappingsFree: object = {
         TEXT: "Text",
         PHOTO: "Text und Foto",
-        MAP_FEATURE: "Text und Kartenmarkierung",
+        MAP_FEATURE_FREE: "Text und Kartenmarkierung",
         MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
         MULTIPLE_CHOICE_TEXT: "... durch Wählen einer Textantwort",
         NUMBER: "... durch Eingabe einer Zahl"

@@ -26,9 +26,9 @@
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE_FREE">
-    <h5>Objektposition
+    <h5>Kartenmarkierung
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'Markiere das Objekt, das der Spieler in seiner Nähe finden soll. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen. Die Markierung wird im Spiel angezeigt.')">
+            (click)="showPopover($event, 'Die gewählte Kartenmarkierung wird dem Spieler bei der Aufgabenstellung angezeigt.')">
         </ion-icon>
     </h5>
     <app-map featureType="geometry-free" [(feature)]="question.geometry"></app-map>
