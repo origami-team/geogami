@@ -200,7 +200,10 @@
                 <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
               </span>
             </p>
-            <p *ngIf="task?.settings?.confirmation">
+            <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
+              Drücke OK, wenn du da bist!
+            </p>
+            <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
               Drücke OK!
             </p>
           </div>
