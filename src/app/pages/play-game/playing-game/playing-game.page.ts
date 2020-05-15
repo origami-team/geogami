@@ -512,6 +512,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   zoomBounds() {
     let bounds = new mapboxgl.LngLatBounds();
 
+    if(this.taskIndex != 0 && this.task.mapFeatures.zoombar == "true") {
+      return;
+    }
+
     if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
       bounds = this.calcBounds(this.task);
 
