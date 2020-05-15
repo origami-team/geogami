@@ -48,12 +48,13 @@ export class LandmarkControl {
         });
         this.map.addLayer({
             id: "landmarksLayerPoint",
-            type: "circle",
             source: 'landmarksSource',
             filter: ['all', ["==", ["geometry-type"], "Point"]],
-            paint: {
-                "circle-color": this.dangerColor,
-                "circle-radius": 5,
+            type: 'symbol',
+            layout: {
+                "icon-image": "landmark-marker",
+                "icon-size": 1,
+                "icon-anchor": 'bottom'
             }
         });
     }

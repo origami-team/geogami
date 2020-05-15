@@ -307,6 +307,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
           this.map.addImage("view-direction-click-geolocate", image);
         })
+      this.map.loadImage(
+        "/assets/icons/landmark-marker.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("landmark-marker", image);
+        })
 
       this.game = null;
       this.game = new Game(0, "Loading...", false, []);
