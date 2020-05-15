@@ -36,6 +36,8 @@ export class LayerControl {
     private interval: NodeJS.Timeout;
     private satMap: MapboxMap;
 
+    private isIosTiltRequested: boolean = false;
+
     private tilt = (e: DeviceOrientationEvent) => {
         if (e.beta <= 60 && e.beta >= 0) {
             requestAnimationFrame(() => {
@@ -197,7 +199,7 @@ export class LayerControl {
             case LayerType.ThreeDimension:
                 this._add3DBuildingsLayer()
 
-                if (this.platform.is('ios')) {
+                if (this.platform.is('ios') && !this.isIosTiltRequested) {
                     const alert = await this.alertController.create({
                         header: 'Neigungssensor nutzen?',
                         message: 'Bitte Bestätige die Nutzung des Neigungssensors',
@@ -205,6 +207,7 @@ export class LayerControl {
                             {
                                 text: 'Okay',
                                 handler: () => {
+                                    this.isIosTiltRequested = true
                                     if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
                                         (DeviceOrientationEvent as any).requestPermission()
                                             .then(permissionState => {
