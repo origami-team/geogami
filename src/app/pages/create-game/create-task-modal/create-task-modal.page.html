@@ -168,7 +168,7 @@
         [disabled]="!task.settings.feedback" (ngModelChange)="settingsChange()">
       </ion-toggle>
     </ion-item>
-    <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction'">
+    <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction' && task.type != 'free'">
       <ion-label>Genauigkeit
         <ion-icon name="information-circle"
           (click)="showPopover($event, 'Setze die Genauigkeit auf >10m, wenn der markierte Punkt an einem Ort ist, an dem sich hohe Gebäude oder dichte Baumkronen befinden, oder wenn du ein größeres Gebiet als korrekte Lösung zulassen möchtest.')">

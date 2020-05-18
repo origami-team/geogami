@@ -167,7 +167,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     public helperService: HelperService,
     private transfer: FileTransfer,
     private sanitizer: DomSanitizer,
-    private geolocationService: OrigamiGeolocationService
+    private geolocationService: OrigamiGeolocationService,
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -180,7 +180,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    Plugins.Keyboard.addListener('keyboardDidHide', async () => {
+      this.map.resize();
+      await this.zoomBounds()
+    });
+  }
 
   ionViewWillEnter() {
     mapboxgl.accessToken = environment.mapboxAccessToken;
@@ -304,6 +309,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           if (error) throw error;
 
           this.map.addImage("view-direction-click-geolocate", image);
+        })
+      this.map.loadImage(
+        "/assets/icons/landmark-marker.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("landmark-marker", image);
         })
 
       this.game = null;
@@ -503,6 +515,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   zoomBounds() {
     let bounds = new mapboxgl.LngLatBounds();
 
+    if(this.taskIndex != 0 && this.task.mapFeatures.zoombar == "true") {
+      return;
+    }
+
     if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
       bounds = this.calcBounds(this.task);
 
@@ -527,7 +543,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             bottom: 480,
             left: 40,
             right: 40
-          }, duration: 3000,
+          }, duration: 1000,
           maxZoom: 16
         });
       } else {
@@ -594,6 +610,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('viewDirectionClickGeolocate')
     }
 
+    this.photo = '';
+    this.photoURL = '';
+    this.clickDirection = 0;
+
+    this.numberInput = undefined
+    this.textInput = undefined
+
     try {
       await this.zoomBounds()
     } catch (e) {
@@ -602,15 +625,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this._initMapFeatures();
     this.landmarkControl.removeQT();
-
-
-    this.photo = '';
-    this.photoURL = '';
-    this.clickDirection = 0;
-
-    this.numberInput = undefined
-    this.textInput = undefined
-
 
     if (this.task.answer.type == AnswerType.POSITION) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
@@ -695,8 +709,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     }
 
-    if (this.task.question.type == QuestionType.MAP_FEATURE && this.task.answer.mode != TaskMode.NO_FEATURE) {
-      this.landmarkControl.setQTLandmark(this.task.question.geometry.features[0], this.task.category.includes('free'))
+    if ((this.task.question.type == QuestionType.MAP_FEATURE || this.task.question.type == QuestionType.MAP_FEATURE_FREE) && this.task.answer.mode != TaskMode.NO_FEATURE) {
+      this.landmarkControl.setQTLandmark(this.task.question.geometry)
     }
   }
 

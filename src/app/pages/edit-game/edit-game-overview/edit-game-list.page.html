@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark (click)="navigateBack()"></ion-back-button>
     </ion-buttons>
-    <ion-title>Bearbeite <span *ngIf="game">{{game.name}}</span></ion-title>
+    <ion-title>Bearbeite "<span *ngIf="game">{{game.name}}</span>"</ion-title>
     <ion-buttons slot="end">
       <ion-button color=dark (click)="uploadGame()">
         <ion-icon name="save"></ion-icon>
