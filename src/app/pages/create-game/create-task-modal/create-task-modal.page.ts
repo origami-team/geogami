@@ -153,6 +153,14 @@ export class CreateTaskModalPage implements OnInit {
     if (this.task.type == "free") {
       this.objectQuestionSelect = this.freeQuestionSelect.map(t => ({ type: t as QuestionType, text: t }))
       this.objectAnswerSelect = this.freeAnswerSelect.map(t => ({ type: t as AnswerType, text: t }))
+
+      if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      }
+
     } else {
       this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
         .map(t => ({ type: t as QuestionType, text: t }))
@@ -188,10 +196,7 @@ export class CreateTaskModalPage implements OnInit {
       this.onTaskSelected(similarQ[0])
     }
 
-    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
-      this.task.settings.feedback = false;
-      this.task.settings.multipleTries = false;
-    } else if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
+    if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
       this.task.settings.feedback = false;
       this.task.settings.multipleTries = false;
       this.showFeedback = false;

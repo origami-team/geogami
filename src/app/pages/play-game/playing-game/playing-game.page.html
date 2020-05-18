@@ -227,14 +227,14 @@
           </div>
 
         </div>
-            <div class="task-text">
-              <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
-                Drücke OK, wenn du da bist!
-              </p>
-              <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
-                Drücke OK!
-              </p>
-            </div>
+        <div class="task-text">
+          <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
+            Drücke OK, wenn du da bist!
+          </p>
+          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
+            Drücke OK!
+          </p>
+        </div>
         <div class="ok-container">
           <ion-button slot="end" class="confirm" [disabled]="uploading"
             [color]="task.category.includes('nav') ? 'primary' : 'secondary'" (click)="onOkClicked()"
