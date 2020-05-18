@@ -1144,6 +1144,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.trackControl.remove()
     this.geolocateControl.remove()
     this.panControl.remove();
+    this.maskControl.remove();
 
     // this.map.remove();
     this.navCtrl.navigateRoot("/");
