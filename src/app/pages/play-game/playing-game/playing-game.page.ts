@@ -29,6 +29,7 @@ import { Platform } from '@ionic/angular';
 import { HelperService } from 'src/app/services/helper.service';
 import { TrackControl, TrackType } from 'src/app/mapControllers/track-control';
 import { GeolocateControl, GeolocateType } from 'src/app/mapControllers/geolocate-control';
+import { MaskControl, MaskType } from 'src/app/mapControllers/mask-control';
 import { PanControl, PanType } from 'src/app/mapControllers/pan-control';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
@@ -88,6 +89,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   trackControl: TrackControl
   geolocateControl: GeolocateControl
   panControl: PanControl
+  maskControl: MaskControl
 
   // tasks
   task: any;
@@ -283,6 +285,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.trackControl = new TrackControl(this.map, this.geolocationService)
       this.geolocateControl = new GeolocateControl(this.map, this.geolocationService)
       this.panControl = new PanControl(this.map, this.geolocationService)
+      this.maskControl = new MaskControl(this.map, this.geolocationService)
 
       this.map.loadImage(
         "/assets/icons/directionv2-richtung.png",
@@ -1324,6 +1327,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.landmarkControl.setLandmark(mapFeatures.landmarkFeatures)
             } else {
               this.landmarkControl.remove()
+            }
+            break;
+          case "reducedInformation":
+            if (!mapFeatures[key]) {
+              this.maskControl.setType(MaskType.Disabled)
+            } else {
+              this.maskControl.setType(MaskType.Enabled)
             }
             break;
         }
