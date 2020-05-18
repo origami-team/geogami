@@ -17,7 +17,7 @@ import { cloneDeep } from 'lodash';
 import { navtasks } from "../../../models/navigation-tasks";
 import { themetasks } from "./../../../models/theme-tasks";
 
-import { standardMapFeatures } from "./../../../models/mapFeatures"
+import { standardMapFeatures } from "../../../models/standardMapFeatures"
 
 import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
 import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';

@@ -13,7 +13,7 @@ import { cloneDeep } from 'lodash';
 import { navtasks } from "../../../models/navigation-tasks";
 import { themetasks } from "./../../../models/theme-tasks";
 
-import { standardMapFeatures } from "./../../../models/mapFeatures"
+import { standardMapFeatures } from "../../../models/standardMapFeatures"
 
 // import { FieldConfig } from "./../../../dynamic-form/models/field-config";
 // import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";

@@ -42,7 +42,7 @@ import { OrigamiGeolocationService } from './../../../services/origami-geolocati
 import { AnswerType, TaskMode, QuestionType } from 'src/app/models/types';
 
 import { cloneDeep } from 'lodash';
-import { standardMapFeatures } from "./../../../models/mapFeatures"
+import { standardMapFeatures } from "../../../models/standardMapFeatures"
 
 import { AnimationOptions } from 'ngx-lottie';
 import bbox from '@turf/bbox';
@@ -92,7 +92,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   maskControl: MaskControl
 
   // tasks
-  task: any;
+  task: Task;
   taskIndex: number = 0;
 
 
@@ -519,14 +519,22 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return;
     }
 
+    // zoom to task
     if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
       bounds = this.calcBounds(this.task);
 
+      // include position into bounds
+      if(this.task.mapFeatures.position == "true") {
+        bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
+      }
+
+      // use default bounds when there are no bounds to identify in task
       if (bounds.isEmpty()) {
         this.game.tasks.forEach(task => {
           bounds = bounds.extend(this.calcBounds(task))
         });
       }
+
     } else {
       this.game.tasks.forEach(task => {
         bounds = bounds.extend(this.calcBounds(task))
