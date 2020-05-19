@@ -862,7 +862,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.trackerService.addEvent({
       type: "MULTIPLE_CHOICE_SELECTED",
       answer: {
-        photo: item.value,
+        item: item.value,
         correct: this.isCorrectChoiceSelected,
       }
     });

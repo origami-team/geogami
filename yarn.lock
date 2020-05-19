@@ -1112,10 +1112,10 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/device-orientation@^5.24.0":
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/device-orientation/-/device-orientation-5.24.0.tgz#403b59362185b8675330552573028b22eac1707e"
-  integrity sha512-yHBrEcYYKlLC6LCvmwnRKEAif5IxirpgIgTMcOc7QMl7Rq9X2Q7/m7G7c/5Es3F7+kUln7TjtverPoio2yykkQ==
+"@ionic-native/device-orientation@^5.26.0":
+  version "5.26.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/device-orientation/-/device-orientation-5.26.0.tgz#3a0324cdac6b3769374dca740930e6de3d7f73dd"
+  integrity sha512-nWFDIqjeggD36fuP8pU+W8ay53+vRWmOfw/zNBLJhiAeTVMYn+IkagVrJPS06d9Tt3cdpHCIdqPjXZWZGYehUQ==
   dependencies:
     "@types/cordova" latest
 
