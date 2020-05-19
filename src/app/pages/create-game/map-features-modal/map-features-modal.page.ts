@@ -17,7 +17,7 @@ import { environment } from "src/environments/environment";
 import { Plugins } from '@capacitor/core'
 
 import { cloneDeep } from 'lodash';
-import { standardMapFeatures } from "./../../../models/mapFeatures"
+import { standardMapFeatures } from "../../../models/standardMapFeatures"
 
 @Component({
   selector: "app-map-features-modal",

@@ -90,12 +90,13 @@ export class LandmarkControl {
         });
         this.map.addLayer({
             id: "qtLayerPoint",
-            type: "circle",
             source: 'qtSource',
             filter: ['all', ["==", ["geometry-type"], "Point"]],
-            paint: {
-                "circle-color": this.secondaryColor,
-                "circle-radius": 5,
+            type: 'symbol',
+            layout: {
+                "icon-image": "marker-editor",
+                "icon-size": .65,
+                "icon-anchor": 'bottom'
             }
         });
     }
