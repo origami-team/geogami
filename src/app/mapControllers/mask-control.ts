@@ -29,7 +29,6 @@ export class MaskControl {
                 });
             }
         });
-        //this.map.setStyle('mapbox://styles/mapbox/streets-v7');
 
         this.map.addSource("circle-mask", {
             type: "geojson",
@@ -49,10 +48,9 @@ export class MaskControl {
                 'visibility': 'visible'
             },
             'paint': {
-                'circle-radius': 60/*  {
-                    stops: [[8, 10], [11, 6], [16, 40]]
-                } */,
-                //'circle-color': 'rgba(55,148,179,1)',
+                'circle-radius': {
+                    stops: [[8, 1], [10, 5], [12, 10], [14, 15], [16, 45], [18, 210]]
+                },
                 'circle-stroke-width': 800,
                 'circle-stroke-color': "#808080",
                 'circle-stroke-opacity': 0.5,
@@ -67,7 +65,6 @@ export class MaskControl {
 
     public setType(type: MaskType): void {
         if (this.map != undefined) {
-            console.log("test_maskControl_setType::::::inn")
             this.maskType = type
             this.reset();
             this.update();

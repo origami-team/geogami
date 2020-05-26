@@ -296,6 +296,10 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings.accuracy = 5
     }
 
+    if (this.task.question.area?.features?.length <= 0) {
+      this.task.question.area = undefined
+    }
+
     this.modalController.dismiss({
       dismissed: true,
       data: {

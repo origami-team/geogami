@@ -124,8 +124,22 @@
     </div>
   </div>
 
+
   <div>
     <question-type [(question)]="task.question" [taskType]="task.category"></question-type>
+    <!-- Search Area -->
+    <div *ngIf="task.type == 'theme-loc' || task.type == 'theme-object'">
+      <ion-text>
+        <h5>Suchgebiet
+          <ion-label>
+            <ion-icon name="information-circle"
+              (click)="showPopover($event, 'Setze ein Suchgebiet welches dem Spieler als Hilfe angezeigt werden soll')">
+            </ion-icon>
+          </ion-label>
+        </h5>
+      </ion-text>
+      <app-map featureType="geometry" [(feature)]="task.question.area"></app-map>
+    </div>
     <answer-type [(answer)]="task.answer" [taskType]="task.category"></answer-type>
   </div>
 

@@ -66,5 +66,9 @@ export const mappings = [
     {
         text: "markierten Bereich",
         tag: "KEYWORD_MARKEDAREA",
+    },
+    {
+        text: "umrandeten",
+        tag: "KEYWORD_SEARCH_AREA",
     }
 ]

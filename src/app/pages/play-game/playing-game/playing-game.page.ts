@@ -455,6 +455,143 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       );
     }
 
+
+    // -------
+    // Feedback in Map Click (needs to be in seperate function later on)
+    // -------
+    let answer = undefined;
+    const clickPosition = [e.lngLat.lng, e.lngLat.lat];
+
+    if (this.task.answer.type == AnswerType.POSITION) {
+      const waypoint = this.task.answer.position.geometry.coordinates;
+      const arrived = this.userDidArrive(waypoint);
+      answer = {
+        target: waypoint,
+        position: this.lastKnownPosition,
+        distance: this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude),
+        correct: arrived
+      }
+    }
+
+    if (this.task.type == "theme-loc") {
+      if (this.map.getSource('marker-point')) {
+        const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+        answer = {
+          clickPosition: clickPosition,
+          distance: distance,
+          correct: distance < this.triggerTreshold
+        }
+      } else {
+        answer = {
+          clickPosition: undefined,
+          distance: undefined,
+          correct: false
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
+      if (this.selectedPhoto != null) {
+        answer = {
+          selectedPhoto: this.selectedPhoto,
+          correct: this.isCorrectPhotoSelected
+        }
+      } else {
+        answer = {
+          selectedPhoto: null,
+          correct: false
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
+      if (this.selectedChoice != null) {
+        answer = {
+          selectedChoice: this.selectedChoice,
+          correct: this.isCorrectChoiceSelected
+        }
+      } else {
+        answer = {
+          selectedChoice: null,
+          correct: false
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.PHOTO) {
+      if (this.photo == "") {
+        answer = {
+          photo: null,
+          correct: false
+        }
+      } else {
+        answer = {
+          photo: this.photo,
+          correct: true
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
+      if (this.map.getSource('marker-point')) {
+        const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
+        answer = {
+          clickPosition: clickPosition,
+          correct: isInPolygon
+        }
+      } else {
+        answer = {
+          clickPosition: undefined,
+          correct: false
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.DIRECTION) {
+      answer = {
+        compassHeading: this.compassHeading,
+        correct: this.Math.abs(this.directionBearing - this.compassHeading) <= 45
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+      let isCorrect = false;
+      if (this.clickDirection != 0) {
+        if (this.task.question.type == QuestionType.MAP_DIRECTION_PHOTO) {
+          isCorrect = this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45;
+        } else {
+          isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
+        }
+        answer = {
+          clickDirection: this.clickDirection,
+          correct: isCorrect
+        }
+      } else {
+        answer = {
+          compassHeading: undefined,
+          correct: isCorrect
+        }
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.NUMBER) {
+      answer = {
+        numberInput: this.numberInput,
+        correct: this.numberInput == this.task.answer.number
+      }
+    }
+
+    if (this.task.answer.type == AnswerType.TEXT) {
+      answer = {
+        text: this.textInput,
+        correct: this.textInput != undefined
+      }
+    }
+
+    // -------
+    // End of Feedback in Map Click (needs to be in seperate function later on)
+    // -------
+
     this.trackerService.addEvent({
       type: "ON_MAP_CLICKED",
       clickPosition: {
@@ -462,7 +599,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         longitude: e.lngLat.lng
       },
       clickDirection: clickDirection,
-      map: mapType
+      map: mapType,
+      answer: answer
     });
   }
 
@@ -480,6 +618,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (task.question.geometry) {
       try {
         bounds.extend(bbox(task.question.geometry))
+      } catch (e) {
+
+      }
+    }
+
+    if (task.question.area) {
+      try {
+        bounds.extend(bbox(task.question.area))
       } catch (e) {
 
       }
@@ -515,7 +661,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   zoomBounds() {
     let bounds = new mapboxgl.LngLatBounds();
 
-    if(this.taskIndex != 0 && this.task.mapFeatures.zoombar == "true") {
+    if (this.taskIndex != 0 && this.task.mapFeatures.zoombar == "true") {
       return;
     }
 
@@ -524,7 +670,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       bounds = this.calcBounds(this.task);
 
       // include position into bounds
-      if(this.task.mapFeatures.position == "true") {
+      if (this.task.mapFeatures.position == "true") {
         bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
       }
 
@@ -633,6 +779,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this._initMapFeatures();
     this.landmarkControl.removeQT();
+    this.landmarkControl.removeSearchArea();
 
     if (this.task.answer.type == AnswerType.POSITION) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
@@ -719,6 +866,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if ((this.task.question.type == QuestionType.MAP_FEATURE || this.task.question.type == QuestionType.MAP_FEATURE_FREE) && this.task.answer.mode != TaskMode.NO_FEATURE) {
       this.landmarkControl.setQTLandmark(this.task.question.geometry)
+    }
+
+    if (this.task.question.area?.features?.length > 0) {
+      this.task.question.text = this.task.question.text += " Suche im umrandeten Gebiet."
+      this.landmarkControl.setSearchArea(this.task.question.area)
     }
   }
 
