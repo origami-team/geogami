@@ -461,7 +461,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // -------
     let answer = undefined;
     const clickPosition = [e.lngLat.lng, e.lngLat.lat];
-    
+
     if (this.task.answer.type == AnswerType.POSITION) {
       const waypoint = this.task.answer.position.geometry.coordinates;
       const arrived = this.userDidArrive(waypoint);
@@ -575,17 +575,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.NUMBER) {
-        answer = {
-          numberInput: this.numberInput,
-          correct: this.numberInput == this.task.answer.number
-        }
+      answer = {
+        numberInput: this.numberInput,
+        correct: this.numberInput == this.task.answer.number
+      }
     }
 
     if (this.task.answer.type == AnswerType.TEXT) {
-        answer = {
-          text: this.textInput,
-          correct: this.textInput != undefined
-        }
+      answer = {
+        text: this.textInput,
+        correct: this.textInput != undefined
+      }
     }
 
     // -------
@@ -623,6 +623,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     }
 
+    if (task.question.area) {
+      try {
+        bounds.extend(bbox(task.question.area))
+      } catch (e) {
+
+      }
+    }
+
     if (task.question.direction) {
       try {
         bounds.extend(task.question.direction.position.geometry.coordinates)
@@ -653,7 +661,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   zoomBounds() {
     let bounds = new mapboxgl.LngLatBounds();
 
-    if(this.taskIndex != 0 && this.task.mapFeatures.zoombar == "true") {
+    if (this.taskIndex != 0 && this.task.mapFeatures.zoombar == "true") {
       return;
     }
 
@@ -662,7 +670,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       bounds = this.calcBounds(this.task);
 
       // include position into bounds
-      if(this.task.mapFeatures.position == "true") {
+      if (this.task.mapFeatures.position == "true") {
         bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
       }
 
@@ -771,6 +779,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this._initMapFeatures();
     this.landmarkControl.removeQT();
+    this.landmarkControl.removeSearchArea();
 
     if (this.task.answer.type == AnswerType.POSITION) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
@@ -857,6 +866,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if ((this.task.question.type == QuestionType.MAP_FEATURE || this.task.question.type == QuestionType.MAP_FEATURE_FREE) && this.task.answer.mode != TaskMode.NO_FEATURE) {
       this.landmarkControl.setQTLandmark(this.task.question.geometry)
+    }
+
+    if (this.task.question.area?.features?.length > 0) {
+      this.task.question.text = this.task.question.text += " Suche im umrandeten Gebiet."
+      this.landmarkControl.setSearchArea(this.task.question.area)
     }
   }
 

@@ -101,6 +101,26 @@ export class LandmarkControl {
         });
     }
 
+    setSearchArea(landmark: any) {
+        this.removeSearchArea();
+
+        this.map.addSource('searchAreaSource', {
+            type: "geojson",
+            data: landmark
+        })
+        this.map.addLayer({
+            id: "searchAreaLayerPolygon",
+            type: "line",
+            source: 'searchAreaSource',
+            filter: ['all', ["==", ["geometry-type"], "Polygon"]],
+            paint: {
+                "line-color": this.secondaryColor,
+                "line-opacity": 0.5,
+                "line-width": 5,
+            }
+        });
+    }
+
     public removeQT(): void {
         if (this.map.getLayer('qtLayerPolygon')) {
             this.map.removeLayer('qtLayerPolygon')
@@ -113,6 +133,15 @@ export class LandmarkControl {
         }
         if (this.map.getSource('qtSource')) {
             this.map.removeSource('qtSource')
+        }
+    }
+
+    public removeSearchArea() {
+        if (this.map.getLayer('searchAreaLayerPolygon')) {
+            this.map.removeLayer('searchAreaLayerPolygon')
+        }
+        if (this.map.getSource('searchAreaSource')) {
+            this.map.removeSource('searchAreaSource')
         }
     }
 

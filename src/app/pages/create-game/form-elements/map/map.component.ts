@@ -161,10 +161,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
           })
         }
         if ((this.featureType == 'geometry' || this.featureType == 'geometry-free') && this.feature.features) {
-          this.map.fitBounds(bbox(this.feature), {
-            padding: 20,
-            speed: 3
-          })
+          if (this.feature.features.length > 0) {
+            this.map.fitBounds(bbox(this.feature), {
+              padding: 20,
+              speed: 3
+            })
+          }
           // this.map.flyTo({
           //   center: this.feature.geometry.coordinates,
           //   zoom: 13,
