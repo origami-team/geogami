@@ -119,7 +119,9 @@ export class LayerControl {
     update = async () => {
         switch (this.layerType) {
             case LayerType.Standard:
-                this.map.resetNorthPitch();
+                setTimeout(() => {
+                    this.map.resetNorthPitch();
+                }, 100)
                 break;
             case LayerType.Selection:
                 this.map.addControl(this.styleSwitcherControl);

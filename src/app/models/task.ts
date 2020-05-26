@@ -1,13 +1,15 @@
+import { MapFeatures } from './mapFeatures';
+
 export class Task {
   constructor(
-    public answer: object,
+    public answer: any,
     public category: string,
     public evaluate: string,
     public id: number,
-    public mapFeatures: object,
+    public mapFeatures: MapFeatures,
     public name: string,
-    public question: object,
-    public settings: object,
+    public question: any,
+    public settings: any,
     public type: string
   ) { }
 }

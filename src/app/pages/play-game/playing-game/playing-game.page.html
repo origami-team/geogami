@@ -200,12 +200,6 @@
                 <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
               </span>
             </p>
-            <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
-              Drücke OK, wenn du da bist!
-            </p>
-            <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
-              Drücke OK!
-            </p>
           </div>
 
           <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
@@ -232,7 +226,14 @@
             </ion-button>
           </div>
 
-
+        </div>
+        <div class="task-text">
+          <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
+            Drücke OK, wenn du da bist!
+          </p>
+          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
+            Drücke OK!
+          </p>
         </div>
         <div class="ok-container">
           <ion-button slot="end" class="confirm" [disabled]="uploading"
