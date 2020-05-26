@@ -6,6 +6,9 @@ import { environment } from 'src/environments/environment';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { QuestionType, AnswerType } from 'src/app/models/types';
+import { standardMapFeatures } from 'src/app/models/standardMapFeatures';
+import { cloneDeep } from 'lodash';
+
 
 
 @Component({
@@ -93,6 +96,10 @@ export class CreateInfoModalComponent implements OnInit {
     if (dismissType == "close") {
       this.modalController.dismiss();
       return;
+    }
+
+    if (this.task.mapFeatures == undefined) {
+      this.task.mapFeatures = cloneDeep(standardMapFeatures)
     }
 
     this.modalController.dismiss({
