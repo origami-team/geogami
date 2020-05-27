@@ -19,6 +19,8 @@ export class TrackerService {
 
   private start: String;
 
+  private players: string[]
+
   private position: GeolocationPosition
   private positionWatch: Subscription;
   private deviceOrientationSubscription: Subscription
@@ -38,7 +40,7 @@ export class TrackerService {
     private deviceOrientation: DeviceOrientation
   ) { }
 
-  async init(gameID, name, map: any) {
+  async init(gameID, name, map: any, players: string[]) {
     this.positionWatch = this.geolocateService.geolocationSubscription.subscribe(position => {
       this.position = position
     })
@@ -72,6 +74,7 @@ export class TrackerService {
     this.waypoints = [];
     this.events = [];
     this.start = new Date().toISOString()
+    this.players = players
   }
 
   setTask(task) {
@@ -136,7 +139,9 @@ export class TrackerService {
       device: this.device,
       waypoints: this.waypoints,
       events: this.events,
-      answers: null
+      answers: null,
+      players: this.players,
+      playersCount: this.players.length
     };
 
     console.log(data);

@@ -69,6 +69,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   @ViewChild('panel') panel;
 
   game: Game;
+  playersNames: string[] = [""];
+  showPlayersNames: boolean = true;
 
   map: mapboxgl.Map;
   waypointMarker: mapboxgl.Marker;
@@ -326,9 +328,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           .then(games => {
             this.game = games[0];
           })
-          .finally(async () => {
-            await this.initGame();
-          });
       });
     });
 
@@ -710,7 +709,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async initGame() {
     this.task = this.game.tasks[this.taskIndex];
-    await this.trackerService.init(this.game._id, this.game.name, this.map);
+    await this.trackerService.init(this.game._id, this.game.name, this.map, this.playersNames);
     this.trackerService.addEvent({
       type: "INIT_GAME"
     });
@@ -1500,6 +1499,24 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  addPlayer() {
+    this.playersNames.push("")
+  }
+
+  removePlayer(index: number) {
+    this.playersNames.splice(index, 1)
+  }
+
+  indexTracker(index: number, value: any) {
+    return index;
+  }
+
+  startGame() {
+    console.log(this.playersNames)
+    this.initGame();
+    this.showPlayersNames = false;
   }
 
   /**
