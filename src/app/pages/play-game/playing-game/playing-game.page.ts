@@ -1252,7 +1252,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       } else {
         const toast = await this.toastController.create({
-          message: "Bitte gib erst eine Antwort ein",
+          message: "Bitte gib zuerst eine Antwort ein",
           color: "dark",
           // showCloseButton: true,
           duration: 2000
