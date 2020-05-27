@@ -25,7 +25,7 @@
     </ion-item> -->
     <ion-item>
       <ion-label>Zoom</ion-label>
-      <select [(ngModel)]="features.zoombar" interface="popover">
+      <select [(ngModel)]="features.zoombar" (change)="onZoomChange()" interface="popover">
         <option value="true">manuell</option>
         <option value="task">Zoom zur Aufgabe</option>
         <option value="false">aus</option>
@@ -35,7 +35,7 @@
       <ion-label>Kartenbereich</ion-label>
       <select [(ngModel)]="features.pan" interface="popover">
         <option value="true">verschiebbar</option>
-        <option value="center">automatisch-zentriert</option>
+        <option value="center" [disabled]="features.zoombar == 'task'">automatisch-zentriert</option>
         <option value="static">statisch</option>
       </select>
     </ion-item>
