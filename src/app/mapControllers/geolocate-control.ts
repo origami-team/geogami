@@ -102,7 +102,12 @@ export class GeolocateControl {
                 // TODO: implement
                 break;
             case GeolocateType.TaskStart:
-                // TODO: implement
+                if (this.map.getLayoutProperty("geolocate", "visibility") == 'none')
+                    this.map.setLayoutProperty('geolocate', 'visibility', 'visible');
+
+                setTimeout(() => {
+                    this.map.setLayoutProperty('geolocate', 'visibility', 'none');
+                }, 5000)
                 break;
         }
     }

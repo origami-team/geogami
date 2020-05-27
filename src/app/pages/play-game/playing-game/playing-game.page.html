@@ -254,6 +254,22 @@
 
   <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p>
 
+  <ion-card class="overlay player-name" *ngIf="showPlayersNames">
+    <h3>Wer Spielt?</h3>
+    <ion-item lines="none" *ngFor="let name of playersNames; let i = index; trackBy:indexTracker">
+      <ion-label slot="start">Spieler {{i + 1}}</ion-label>
+      <ion-input type="text" [(ngModel)]="playersNames[i]"></ion-input>
+      <ion-icon slot="end" name="trash" (click)="removePlayer(i)"></ion-icon>
+    </ion-item>
+
+    <ion-button (click)="addPlayer()" size="small">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
+    <ion-item lines="none">
+      <ion-button slot="end" size="default" (click)="startGame()">Fertig</ion-button>
+    </ion-item>
+  </ion-card>
+
   <ion-card class="overlay success" *ngIf="showSuccess">
     <h3>Herzlichen Glückwunsch!</h3>
     <p>Du hast das Spiel beendet</p>
