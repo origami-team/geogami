@@ -156,7 +156,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   }
 
   onZoomChange() {
-    if (this.features.pan == 'center' && this.features.zoombar == 'task') {
+    if (this.features.pan == 'center' && (this.features.zoombar == 'task' || this.features.zoombar == 'game')) {
       this.features.pan = 'true'
     }
   }
