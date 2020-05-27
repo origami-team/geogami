@@ -1454,7 +1454,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             } else if (mapFeatures[key] == "button") {
               // TODO: implement
             } else if (mapFeatures[key] == "start") {
-              // TODO: implement
+              this.geolocateControl.setType(GeolocateType.TaskStart)
             }
             break;
           case "direction":
@@ -1466,7 +1466,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             } else if (mapFeatures[key] == "button") {
               // TODO: implement
             } else if (mapFeatures[key] == "start") {
-              // TODO: implement
+              this.viewDirectionControl.setType(ViewDirectionType.TaskStart)
             }
             break;
           case "track":
