@@ -3,6 +3,7 @@ export class Game {
     public _id: number,
     public name: string,
     public tracking: boolean,
-    public tasks: any[]
-  ) {}
+    public tasks: any[],
+    public bbox: any = undefined
+  ) { }
 }
