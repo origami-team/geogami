@@ -280,12 +280,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.map.on("load", () => {
       this.rotationControl = new RotationControl(this.map)
-      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
       this.landmarkControl = new LandmarkControl(this.map)
       this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService, this.geolocationService);
       this.layerControl = new LayerControl(this.map, this.mapWrapper, this.deviceOrientation, this.alertController, this.platform)
       this.trackControl = new TrackControl(this.map, this.geolocationService)
       this.geolocateControl = new GeolocateControl(this.map, this.geolocationService)
+      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
       this.panControl = new PanControl(this.map, this.geolocationService)
       this.maskControl = new MaskControl(this.map, this.geolocationService)
 
