@@ -116,11 +116,11 @@ export class CreateGameOverviewPage implements AfterViewInit {
 
     this.map.on('load', () => {
       this.draw = new MapboxDraw({
-        displayControlsDefault: false,
-        controls: {
-          polygon: true,
-          trash: true
-        },
+        // displayControlsDefault: false,
+        // controls: {
+        //   polygon: true,
+        //   trash: true
+        // },
         styles: [// ACTIVE (being drawn)
           // line stroke
           {

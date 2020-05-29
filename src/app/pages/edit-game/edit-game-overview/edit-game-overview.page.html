@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="edit-game/"></ion-back-button>
+      <ion-back-button color=dark defaultHref="edit-game"></ion-back-button>
     </ion-buttons>
     <ion-title>Speichere dein OriGami</ion-title>
   </ion-toolbar>
@@ -29,7 +29,7 @@
           <ion-toggle [(ngModel)]="mapSection" (ngModelChange)="mapSectionToggleChange($event)"></ion-toggle>
         </ion-item>
 
-        <div #boundingMap class="map" *ngIf="mapSection"></div>
+        <div #boundingMap class="map" [style.visibility]="!mapSection ? 'hidden' : 'visible'"></div>
       </ion-card-content>
     </ion-card>
 

@@ -61,6 +61,119 @@ export class EditGameOverviewPage implements AfterViewInit {
       autoplay: true,
       loop: true
     };
+
+    this.draw = new MapboxDraw({
+      // displayControlsDefault: false,
+      // controls: {
+      //   polygon: true,
+      //   trash: true
+      // },
+      styles: [// ACTIVE (being drawn)
+        // line stroke
+        {
+          "id": "gl-draw-line",
+          "type": "line",
+          "filter": ["all", ["==", "$type", "LineString"], ["!=", "mode", "static"]],
+          "layout": {
+            "line-cap": "round",
+            "line-join": "round"
+          },
+          "paint": {
+            "line-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
+            "line-dasharray": [3, 2],
+            "line-width": 5
+          }
+        },
+        // polygon fill
+        {
+          "id": "gl-draw-polygon-fill",
+          "type": "fill",
+          "filter": ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
+          "paint": {
+            "fill-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
+            "fill-outline-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
+            "fill-opacity": 0.5
+          }
+        },
+        // polygon outline stroke
+        // This doesn't style the first edge of the polygon, which uses the line stroke styling instead
+        {
+          "id": "gl-draw-polygon-stroke-active",
+          "type": "line",
+          "filter": ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
+          "layout": {
+            "line-cap": "round",
+            "line-join": "round"
+          },
+          "paint": {
+            "line-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
+            "line-dasharray": [3, 2],
+            "line-width": 5
+          }
+        },
+        // vertex point halos
+        {
+          "id": "gl-draw-polygon-and-line-vertex-halo-active",
+          "type": "circle",
+          "filter": ["all", ["==", "meta", "vertex"], ["==", "$type", "Point"], ["!=", "mode", "static"]],
+          "paint": {
+            "circle-radius": 5,
+            "circle-color": "#FFF"
+          }
+        },
+        // vertex points
+        {
+          "id": "gl-draw-polygon-and-line-vertex-active",
+          "type": "circle",
+          "filter": ["all", ["==", "meta", "vertex"], ["==", "$type", "Point"], ["!=", "mode", "static"]],
+          "paint": {
+            "circle-radius": 3,
+            "circle-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
+          }
+        },
+
+        // INACTIVE (static, already drawn)
+        // line stroke
+        {
+          "id": "gl-draw-line-static",
+          "type": "line",
+          "filter": ["all", ["==", "$type", "LineString"], ["==", "mode", "static"]],
+          "layout": {
+            "line-cap": "round",
+            "line-join": "round"
+          },
+          "paint": {
+            "line-color": "#000",
+            "line-width": 3
+          }
+        },
+        // polygon fill
+        {
+          "id": "gl-draw-polygon-fill-static",
+          "type": "fill",
+          "filter": ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
+          "paint": {
+            "fill-color": "#000",
+            "fill-outline-color": "#000",
+            "fill-opacity": 0.5
+          }
+        },
+        // polygon outline
+        {
+          "id": "gl-draw-polygon-stroke-static",
+          "type": "line",
+          "filter": ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
+          "layout": {
+            "line-cap": "round",
+            "line-join": "round"
+          },
+          "paint": {
+            "line-color": "#000",
+            "line-width": 3
+          }
+        }
+      ]
+    });
   }
 
   ngAfterViewInit(): void {
@@ -129,122 +242,11 @@ export class EditGameOverviewPage implements AfterViewInit {
       zoom: 2
     });
 
+
+    this.map.addControl(this.draw, "top-left");
+
+
     this.map.on('load', () => {
-      this.draw = new MapboxDraw({
-        displayControlsDefault: false,
-        controls: {
-          polygon: true,
-          trash: true
-        },
-        styles: [// ACTIVE (being drawn)
-          // line stroke
-          {
-            "id": "gl-draw-line",
-            "type": "line",
-            "filter": ["all", ["==", "$type", "LineString"], ["!=", "mode", "static"]],
-            "layout": {
-              "line-cap": "round",
-              "line-join": "round"
-            },
-            "paint": {
-              "line-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
-              "line-dasharray": [3, 2],
-              "line-width": 5
-            }
-          },
-          // polygon fill
-          {
-            "id": "gl-draw-polygon-fill",
-            "type": "fill",
-            "filter": ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
-            "paint": {
-              "fill-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
-              "fill-outline-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
-              "fill-opacity": 0.5
-            }
-          },
-          // polygon outline stroke
-          // This doesn't style the first edge of the polygon, which uses the line stroke styling instead
-          {
-            "id": "gl-draw-polygon-stroke-active",
-            "type": "line",
-            "filter": ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
-            "layout": {
-              "line-cap": "round",
-              "line-join": "round"
-            },
-            "paint": {
-              "line-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
-              "line-dasharray": [3, 2],
-              "line-width": 5
-            }
-          },
-          // vertex point halos
-          {
-            "id": "gl-draw-polygon-and-line-vertex-halo-active",
-            "type": "circle",
-            "filter": ["all", ["==", "meta", "vertex"], ["==", "$type", "Point"], ["!=", "mode", "static"]],
-            "paint": {
-              "circle-radius": 5,
-              "circle-color": "#FFF"
-            }
-          },
-          // vertex points
-          {
-            "id": "gl-draw-polygon-and-line-vertex-active",
-            "type": "circle",
-            "filter": ["all", ["==", "meta", "vertex"], ["==", "$type", "Point"], ["!=", "mode", "static"]],
-            "paint": {
-              "circle-radius": 3,
-              "circle-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
-            }
-          },
-
-          // INACTIVE (static, already drawn)
-          // line stroke
-          {
-            "id": "gl-draw-line-static",
-            "type": "line",
-            "filter": ["all", ["==", "$type", "LineString"], ["==", "mode", "static"]],
-            "layout": {
-              "line-cap": "round",
-              "line-join": "round"
-            },
-            "paint": {
-              "line-color": "#000",
-              "line-width": 3
-            }
-          },
-          // polygon fill
-          {
-            "id": "gl-draw-polygon-fill-static",
-            "type": "fill",
-            "filter": ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
-            "paint": {
-              "fill-color": "#000",
-              "fill-outline-color": "#000",
-              "fill-opacity": 0.5
-            }
-          },
-          // polygon outline
-          {
-            "id": "gl-draw-polygon-stroke-static",
-            "type": "line",
-            "filter": ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
-            "layout": {
-              "line-cap": "round",
-              "line-join": "round"
-            },
-            "paint": {
-              "line-color": "#000",
-              "line-width": 3
-            }
-          }
-        ]
-      });
-
-      this.map.addControl(this.draw, "top-left");
-
       if (this.game.bbox != undefined) {
         if (this.game.bbox.type == "FeatureCollection") {
           this.game.bbox.features.forEach(element => {
@@ -262,7 +264,7 @@ export class EditGameOverviewPage implements AfterViewInit {
         bounds = bounds.extend(calcBounds(task))
       });
 
-      this.map.resize()
+      // this.map.resize()
 
       if (!bounds.isEmpty()) {
         this.map.fitBounds(bounds, {
@@ -343,9 +345,9 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   mapSectionToggleChange(event) {
     if (this.mapSection) {
-      this.changeDetectorRef.detectChanges();
+      // this.changeDetectorRef.detectChanges();
 
-      this.initMap();
+      // this.initMap();
     }
   }
 
