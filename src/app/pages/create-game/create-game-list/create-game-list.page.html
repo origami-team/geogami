@@ -136,11 +136,9 @@
 
   <ion-card color="light">
     <ion-card-content>
-      <ion-text>Wähle aus den folgenden Aufgabentypen</ion-text>
-      <ion-text>
-        <ion-icon name="information-circle"
+      <ion-text>Wähle aus den folgenden Aufgabentypen <ion-icon name="information-circle"
           (click)="showPopover($event, 'Klicke die Felder an, um mehr über die Aufgabentypen zu erfahren.')">
-        </ion-icon>:
+        </ion-icon>
       </ion-text>
       <ion-item color="light" lines="none" *ngIf="game">
         <ion-chip color="primary" (click)="presentTaskModal('nav')">
