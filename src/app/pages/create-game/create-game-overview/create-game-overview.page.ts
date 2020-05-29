@@ -347,6 +347,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
 
     const draw = new MapboxDraw({
       modes: modes,
+      displayControlsDefault: false
     });
     map.addControl(draw);
 
