@@ -41,6 +41,8 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
     if (this.features == undefined) {
       this.features = cloneDeep(standardMapFeatures);
     }
+    this.onZoomChange()
+
     this.changeDetectorRef.detectChanges();
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
@@ -151,6 +153,12 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.map.resize()
+  }
+
+  onZoomChange() {
+    if (this.features.pan == 'center' && (this.features.zoombar == 'task' || this.features.zoombar == 'game')) {
+      this.features.pan = 'true'
+    }
   }
 
   dismissModal(dismissType: string = "null") {

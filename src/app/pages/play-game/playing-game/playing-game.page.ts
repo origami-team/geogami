@@ -46,6 +46,7 @@ import { standardMapFeatures } from "../../../models/standardMapFeatures"
 
 import { AnimationOptions } from 'ngx-lottie';
 import bbox from '@turf/bbox';
+import buffer from '@turf/buffer';
 import { Task } from 'src/app/models/task';
 
 
@@ -280,12 +281,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.map.on("load", () => {
       this.rotationControl = new RotationControl(this.map)
-      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
       this.landmarkControl = new LandmarkControl(this.map)
       this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService, this.geolocationService);
       this.layerControl = new LayerControl(this.map, this.mapWrapper, this.deviceOrientation, this.alertController, this.platform)
       this.trackControl = new TrackControl(this.map, this.geolocationService)
       this.geolocateControl = new GeolocateControl(this.map, this.geolocationService)
+      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
       this.panControl = new PanControl(this.map, this.geolocationService)
       this.maskControl = new MaskControl(this.map, this.geolocationService)
 
@@ -710,6 +711,30 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initGame() {
     this.task = this.game.tasks[this.taskIndex];
     await this.trackerService.init(this.game._id, this.game.name, this.map, this.playersNames);
+    if (this.game.bbox != undefined) {
+      const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
+      this.map.setMaxBounds(bboxBuffer)
+
+      console.log(this.game.bbox)
+
+      this.map.addSource('bbox', {
+        'type': 'geojson',
+        'data': this.game.bbox
+      });
+
+      this.map.addLayer({
+        id: "bbox",
+        type: "line",
+        source: 'bbox',
+        filter: ['all', ["==", ["geometry-type"], "Polygon"]],
+        paint: {
+          "line-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
+          "line-opacity": 0.5,
+          "line-width": 10,
+          "line-dasharray": [2, 1]
+        }
+      });
+    }
     this.trackerService.addEvent({
       type: "INIT_GAME"
     });

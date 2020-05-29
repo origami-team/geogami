@@ -18,6 +18,9 @@ import { NavController } from "@ionic/angular";
 import { Game } from "src/app/models/game";
 import { CreateFreeTaskModalComponent } from '../create-free-task-modal/create-free-task-modal.component';
 
+import { PopoverController } from '@ionic/angular';
+import { PopoverComponent } from 'src/app/popover/popover.component';
+
 @Component({
   selector: "app-create-game-list",
   templateUrl: "./create-game-list.page.html",
@@ -40,9 +43,9 @@ export class CreateGameListPage implements OnInit {
   constructor(
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    public popoverController: PopoverController
   ) { }
-
 
   ngOnInit() {
     this.gameFactory.getGame().then(game => this.game = game);
@@ -167,5 +170,15 @@ export class CreateGameListPage implements OnInit {
   navigateToOverview() {
     console.log("navigate")
     this.navCtrl.navigateForward("create-game/create-game-overview");
+  }
+
+  async showPopover(ev: any, text: string) {
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 }

@@ -12,7 +12,8 @@ const routes: Routes = [
   { path: 'create-game/create-game-list', loadChildren: () => import('./pages/create-game/create-game-list/create-game-list.module').then(m => m.CreateGameListPageModule) },
   { path: 'create-game/create-game-map', loadChildren: () => import('./pages/create-game/create-game-map/create-game-map.module').then(m => m.CreateGameMapPageModule) },
   { path: 'edit-game', loadChildren: () => import('./pages/edit-game/edit-game-list/edit-game-list.module').then(m => m.EditGameListPageModule) },
-  { path: 'edit-game/:id', loadChildren: () => import('./pages/edit-game/edit-game-overview/edit-game-list.module').then(m => m.EditGameListPageModule) },
+  { path: 'edit-game/:id', loadChildren: () => import('./pages/edit-game/edit-game-tasks/edit-game-list.module').then(m => m.EditGameListPageModule) },
+  { path: 'edit-game/edit-game-overview/:id', loadChildren: () => import('./pages/edit-game/edit-game-overview/edit-game-overview.module').then(m => m.EditGameOverviewPageModule) },
   { path: 'analyze', loadChildren: () => import('./pages/analyze-game/analyze-game-list/analyze-game-list.module').then(m => m.AnalyzeGameListPageModule) },
   // older stuff
   // { path: 'map-swipe', loadChildren: './map-swipe/map-swipe.module#MapSwipePageModule' },

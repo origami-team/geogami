@@ -126,7 +126,7 @@ export class ViewDirectionControl {
                     this.map.setLayoutProperty('viewDirection', 'visibility', 'visible');
                 setInterval(() => {
                     this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
-                }, 5000)
+                }, 10000)
                 break;
         }
     }
