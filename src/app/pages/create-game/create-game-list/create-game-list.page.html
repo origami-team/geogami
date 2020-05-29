@@ -93,7 +93,7 @@
   <!-- New reorder list style -->
   <ion-card color="light">
     <ion-card-content>
-      <ion-text>Stelle eine Aufgabenabfolge zusammen</ion-text>
+      <ion-text>Stelle dein Spiel zusammen</ion-text>
       <ion-list mode="ios" *ngIf="game">
         <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!reorder">
           <ion-item color="light" class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
@@ -121,12 +121,6 @@
                 <ion-icon name="clipboard"></ion-icon> {{ task.name }}
               </ion-label>
             </ion-chip>
-            <!-- <ion-chip *ngIf="task.category.includes('free')" color="tertiary"
-              (click)="presentTaskModal('free', task)">
-              <ion-label>
-                <ion-icon name="rose"></ion-icon> {{ task.name }}
-              </ion-label>
-            </ion-chip> -->
             <ion-chip *ngIf="task.category.includes('info')" color="warning" (click)="presentTaskModal('info', task)">
               <ion-label>
                 <ion-icon name="information-circle-outline"></ion-icon> Information
@@ -142,7 +136,12 @@
 
   <ion-card color="light">
     <ion-card-content>
-      <ion-text>Wähle aus den folgenden Bausteinen</ion-text>
+      <ion-text>Wähle aus den folgenden Aufgabentypen</ion-text>
+      <ion-text>
+        <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Klicke die Felder an, um mehr über die Aufgabentypen zu erfahren.')">
+        </ion-icon>:
+      </ion-text>
       <ion-item color="light" lines="none" *ngIf="game">
         <ion-chip color="primary" (click)="presentTaskModal('nav')">
           + <ion-icon name="navigate"></ion-icon>
@@ -150,16 +149,9 @@
         <ion-chip color="secondary" (click)="presentTaskModal('theme')">
           + <ion-icon name="clipboard"></ion-icon>
         </ion-chip>
-        <!-- <ion-chip color="tertiary" (click)="presentTaskModal('free')">
-          + <ion-icon name="rose"></ion-icon>
-        </ion-chip> -->
         <ion-chip color="warning" (click)="presentTaskModal('info')">
           + <ion-icon name="information-circle-outline"></ion-icon>
         </ion-chip>
-        <ion-chip color="medium">
-          + <ion-icon name="list"></ion-icon>
-        </ion-chip>
-
         <ng-container *ngIf="game.tasks && game.tasks.length > 1">
           <ion-chip color="dark" slot="end" *ngIf="!reorder" (click)="toggleReorder()">
             <ion-icon name="reorder-three"></ion-icon>
