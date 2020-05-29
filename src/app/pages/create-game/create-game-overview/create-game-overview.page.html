@@ -9,14 +9,14 @@
 
 <ion-content>
   <div [className]="showUpload ? 'blur' : ''">
-    <ion-card color="light" *ngIf="model">
+    <ion-card color="light" *ngIf="game">
       <ion-card-content>
         Gib deinem Spiel einen aussagekräftigen Namen
         <ion-list lines="full" class="ion-no-margin ion-no-padding">
           <ion-item color="light">
             <ion-label position="stacked">Spiel-Name:<ion-text color="danger">*</ion-text>
             </ion-label>
-            <ion-input color="primary" required type="text" [(ngModel)]="model.name" name="name"></ion-input>
+            <ion-input color="primary" required type="text" [(ngModel)]="game.name" name="name"></ion-input>
           </ion-item>
         </ion-list>
       </ion-card-content>
@@ -24,9 +24,12 @@
 
     <ion-card color="light">
       <ion-card-content>
-        Kartenausschnitt
+        <ion-item lines="none" color="light">
+          <ion-label>Kartenausschnitt</ion-label>
+          <ion-toggle [(ngModel)]="mapSection" (ngModelChange)="mapSectionToggleChange($event)"></ion-toggle>
+        </ion-item>
 
-        <div #boundingMap class="map"></div>
+        <div #boundingMap class="map" *ngIf="mapSection"></div>
       </ion-card-content>
     </ion-card>
 

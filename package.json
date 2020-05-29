@@ -38,6 +38,7 @@
     "@turf/bbox": "^6.0.1",
     "@turf/boolean-point-in-polygon": "^6.0.1",
     "@turf/buffer": "^5.1.5",
+    "@turf/helpers": "^6.1.4",
     "angular-pipes": "^10.0.0",
     "capacitor-keep-screen-on": "^0.0.4",
     "cordova-android": "^8.1.0",
