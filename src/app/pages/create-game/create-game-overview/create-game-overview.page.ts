@@ -17,6 +17,8 @@ import { AnimationOptions } from 'ngx-lottie';
 
 import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import DrawRectangle from 'mapbox-gl-draw-rectangle-mode';
+import bboxT from '@turf/bbox'
 
 import { environment } from 'src/environments/environment';
 import { calcBounds } from './../../../helpers/bounds'
@@ -33,6 +35,8 @@ import { featureCollection } from '@turf/helpers'
 })
 export class CreateGameOverviewPage implements AfterViewInit {
   @ViewChild("boundingMap") mapContainer;
+  @ViewChild("map") fixedMapContainer;
+
 
   public game: Game;
   public lottieConfig: AnimationOptions;
@@ -44,6 +48,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
   mapSection: boolean = true;
   landmarkControl: LandmarkControl;
 
+  fixedMapSection: boolean = false;
+  selectedBBox: any[];
 
   constructor(
     public popoverController: PopoverController,
@@ -326,6 +332,54 @@ export class CreateGameOverviewPage implements AfterViewInit {
     });
   }
 
+  initFixedMap() {
+    mapboxgl.accessToken = environment.mapboxAccessToken;
+    var map = new mapboxgl.Map({
+      container: this.fixedMapContainer.nativeElement,
+      style: 'mapbox://styles/mapbox/streets-v9',
+      center: [7.63, 51.960],
+      zoom: 12
+    });
+
+    var modes = MapboxDraw.modes;
+
+    modes.draw_rectangle = DrawRectangle;
+
+    const draw = new MapboxDraw({
+      modes: modes,
+    });
+    map.addControl(draw);
+
+    //Disable user from drawing a rectangle
+    //draw.changeMode('draw_rectangle');
+
+    // Muenster area
+    map.on('load', function () {
+      draw.add({
+        id: "rectangle",
+        type: 'Polygon',
+        coordinates: [
+          [
+            [7.615923767072189, 51.97052374606713],
+            [7.6353215026622365, 51.97052374606713],
+            [7.6353215026622365, 51.953493976593194],
+            [7.615923767072189, 51.953493976593194],
+            [7.615923767072189, 51.97052374606713]
+          ]
+        ]
+      });
+    });
+
+    map.on('draw.update', feature => {
+      this.selectedBBox = bboxT((feature['features'][0])['geometry']);
+    });
+  }
+
+  fixedMapToggleChange() {
+    console.log(this.fixedMapSection)
+    this.initFixedMap();
+  }
+
   mapSectionToggleChange(event) {
     if (this.mapSection) {
       this.changeDetectorRef.detectChanges();
@@ -346,6 +400,10 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
 
   uploadGame() {
+    if (this.selectedBBox) {
+      this.game.tasks[0].mapFeatures.slectedMapSection = this.selectedBBox;
+    }
+    
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : undefined

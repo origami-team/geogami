@@ -665,32 +665,45 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return;
     }
 
-    // zoom to task
-    if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
-      bounds = this.calcBounds(this.task);
+    // Zoom to selected map section
+    if (this.task.mapFeatures.slectedMapSection) {
+      console.log("Zoom to selected bBox"+ this.task.mapFeatures.slectedMapSection)
+      bounds.extend(this.task.mapFeatures.slectedMapSection)
+    }
+    else {
+      // zoom to task
+      if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
+        bounds = this.calcBounds(this.task);
 
-      // include position into bounds
-      if (this.task.mapFeatures.position == "true") {
-        bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
-      }
+        // include position into bounds
+        if (this.task.mapFeatures.position == "true") {
+          bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
+        }
 
-      // use default bounds when there are no bounds to identify in task
-      if (bounds.isEmpty()) {
+        // use default bounds when there are no bounds to identify in task
+        if (bounds.isEmpty()) {
+          this.game.tasks.forEach(task => {
+            bounds = bounds.extend(this.calcBounds(task))
+          });
+        }
+
+      } else {
         this.game.tasks.forEach(task => {
           bounds = bounds.extend(this.calcBounds(task))
         });
       }
-
-    } else {
-      this.game.tasks.forEach(task => {
-        bounds = bounds.extend(this.calcBounds(task))
-      });
     }
 
     const prom = new Promise((resolve, reject) => {
       this.map.once('moveend', () => resolve('ok'))
 
-      if (!bounds.isEmpty()) {
+      if (this.task.mapFeatures.slectedMapSection) {
+        this.map.fitBounds(bounds, {
+          duration: 1000,
+          maxZoom: 16
+        });
+      }
+      else if (!bounds.isEmpty()) {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,

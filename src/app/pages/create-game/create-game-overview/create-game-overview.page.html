@@ -33,6 +33,17 @@
       </ion-card-content>
     </ion-card>
 
+    <ion-card color="light">
+      <ion-card-content>
+        <ion-item lines="none" color="light">
+          <ion-label>Fester Kartenausschnitt</ion-label>
+          <ion-toggle [(ngModel)]="fixedMapSection" (ngModelChange)="fixedMapToggleChange()">
+          </ion-toggle>
+        </ion-item>
+  
+        <div #map class="map" [style.display]="fixedMapSection ? 'block' : 'none'"></div>
+      </ion-card-content>
+    </ion-card>
 
     <ion-card color="light">
       <ion-card-content>

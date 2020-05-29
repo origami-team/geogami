@@ -10,7 +10,8 @@ export class MapFeatures {
         public streetSection: boolean,
         public landmarks: boolean,
         public landmarkFeatures: any,
-        public reducedInformation: boolean
+        public reducedInformation: boolean,
+        public slectedMapSection: any[]
     ) { }
 }
 
