@@ -74,7 +74,7 @@
         Verbindung bringen.
       </ion-text>
       <ion-text *ngIf="task.type == 'free'">
-        In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden.
+        In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise können zum Beispiel Quiz- und Sachaufgaben gestellt werden.
       </ion-text>
     </ion-card-content>
   </ion-card>
@@ -130,10 +130,10 @@
     <!-- Search Area -->
     <div *ngIf="task.type == 'theme-loc' || task.type == 'theme-object'">
       <ion-text>
-        <h5>Suchgebiet
+        <h5>Suchgebiet <i>(optional) </i>
           <ion-label>
             <ion-icon name="information-circle"
-              (click)="showPopover($event, 'Setze ein Suchgebiet welches dem Spieler als Hilfe angezeigt werden soll')">
+              (click)="showPopover($event, 'Markiere ein Suchgebiet, das dem Spieler als Hilfe angezeigt werden soll.')">
             </ion-icon>
           </ion-label>
         </h5>
@@ -175,7 +175,7 @@
     <ion-item lines="none" *ngIf="showMultipleTries">
       <ion-label>Mehrere Versuche
         <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Darf der Spieler sich verbessern, wenn er die Aufgabe falsch gelöst hat?')">
+          (click)="showPopover($event, 'Darf der Spieler probieren, sich zu verbessern, wenn er die Aufgabe falsch gelöst hat?')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
