@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color=dark defaultHref="edit-game/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Speichere dein OriGami</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div [className]="showUpload ? 'blur' : ''">
+    <ion-card color="light" *ngIf="game">
+      <ion-card-content>
+        Gib deinem Spiel einen aussagekräftigen Namen
+        <ion-list lines="full" class="ion-no-margin ion-no-padding">
+          <ion-item color="light">
+            <ion-label position="stacked">Spiel-Name:<ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input color="primary" required type="text" [(ngModel)]="game.name" name="name"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card color="light">
+      <ion-card-content>
+        <ion-item lines="none" color="light">
+          <ion-label>Kartenausschnitt</ion-label>
+          <ion-toggle [(ngModel)]="mapSection" (ngModelChange)="mapSectionToggleChange($event)"></ion-toggle>
+        </ion-item>
+
+        <div #boundingMap class="map" *ngIf="mapSection"></div>
+      </ion-card-content>
+    </ion-card>
+
+
+    <ion-card color="light">
+      <ion-card-content>
+        <div class="ion-padding">
+          <ion-button expand="block" type="submit" class="ion-no-margin" (click)="uploadGame()">Spiel speichern
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+
+  <div class="overlay success" *ngIf="showUpload">
+    <h3 *ngIf="!showSuccess">Übertrage Daten...</h3>
+    <h3 *ngIf="showSuccess">Dein Spiel wurde gespeichert</h3>
+    <div lottie [options]="lottieConfig"></div>
+    <ion-button (click)="navigateHome()" [disabled]="!showSuccess">Fertig</ion-button>
+  </div>
+</ion-content>
