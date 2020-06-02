@@ -373,7 +373,31 @@ export class CreateGameOverviewPage implements AfterViewInit {
 
     map.on('draw.update', feature => {
       this.selectedBBox = bboxT((feature['features'][0])['geometry']);
+      updateBbox(this.selectedBBox);
     });
+
+    function updateBbox(bbox) {
+      draw.set({
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [bbox[0], bbox[3]],
+                [bbox[2], bbox[3]],
+                [bbox[2], bbox[1]],
+                [bbox[0], bbox[1]],
+                [bbox[0], bbox[3]]
+              ]
+            ]
+          }
+        }]
+      });
+    }
+
   }
 
   fixedMapToggleChange() {
