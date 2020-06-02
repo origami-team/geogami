@@ -428,7 +428,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     if (this.selectedBBox) {
       this.game.tasks[0].mapFeatures.slectedMapSection = this.selectedBBox;
     }
-    
+
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : undefined
@@ -449,5 +449,15 @@ export class CreateGameOverviewPage implements AfterViewInit {
 
   navigateHome() {
     this.navCtrl.navigateRoot("/");
+  }
+
+  async showPopover(ev: any, text: string) {
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 }

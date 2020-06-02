@@ -33,14 +33,19 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Fester Kartenausschnitt -->
     <ion-card color="light">
       <ion-card-content>
         <ion-item lines="none" color="light">
-          <ion-label>Fester Kartenausschnitt</ion-label>
+          <ion-label>Fester Kartenausschnitt
+            <ion-icon *ngIf="fixedMapSection" name="information-circle"
+              (click)="showPopover($event, 'Ein Klick auf das Rechteck zu bewegen und zweimal Update Größe.')">
+            </ion-icon>
+          </ion-label>
           <ion-toggle [(ngModel)]="fixedMapSection" (ngModelChange)="fixedMapToggleChange()">
           </ion-toggle>
         </ion-item>
-  
+
         <div #map class="map" [style.display]="fixedMapSection ? 'block' : 'none'"></div>
       </ion-card-content>
     </ion-card>
