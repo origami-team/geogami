@@ -42,7 +42,7 @@ export class EditGameOverviewPage implements AfterViewInit {
   map: mapboxgl.Map;
   draw: MapboxDraw
 
-  mapSection: boolean = true;
+  mapSection: boolean = false;
   landmarkControl: LandmarkControl;
 
 
@@ -184,7 +184,15 @@ export class EditGameOverviewPage implements AfterViewInit {
           this.game = games[0];
           this.gameFactory.flushGame();
           this.gameFactory.addGameInformation(this.game)
-          this.initMap()
+
+          if (this.game.bbox?.features?.length > 0) {
+            this.mapSection = true
+          }
+
+          if (this.mapSection) {
+            this.changeDetectorRef.detectChanges();
+            this.initMap()
+          }
         })
     });
 
@@ -345,9 +353,9 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   mapSectionToggleChange(event) {
     if (this.mapSection) {
-      // this.changeDetectorRef.detectChanges();
+      this.changeDetectorRef.detectChanges();
 
-      // this.initMap();
+      this.initMap();
     }
   }
 
@@ -391,5 +399,16 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   navigateHome() {
     this.navCtrl.navigateRoot("/");
+  }
+
+  async showPopover(ev: any, text: string) {
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 }

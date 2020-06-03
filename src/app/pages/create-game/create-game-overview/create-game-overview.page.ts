@@ -45,7 +45,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   map: mapboxgl.Map;
   draw: MapboxDraw
 
-  mapSection: boolean = true;
+  mapSection: boolean = false;
   landmarkControl: LandmarkControl;
 
   fixedMapSection: boolean = false;
@@ -67,7 +67,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.gameFactory.getGame().then(game => { this.game = game }).finally(() => {
-      this.initMap()
+      if (this.mapSection) {
+        this.initMap()
+      }
     })
   }
 
