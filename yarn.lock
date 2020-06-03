@@ -6983,6 +6983,11 @@ mapbox-gl-compare@^0.4.0:
   dependencies:
     "@mapbox/mapbox-gl-sync-move" "^0.3.0"
 
+mapbox-gl-draw-rectangle-mode@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/mapbox-gl-draw-rectangle-mode/-/mapbox-gl-draw-rectangle-mode-1.0.4.tgz#42987d68872a5fb5cc5d76d3375ee20cd8bab8f7"
+  integrity sha512-BdF6nwEK2p8n9LQoMPzBO8LhddW1fe+d5vK8HQIei+4VcRnUbKNsEj7Z15FsJxCHzsc2BQKXbESx5GaE8x0imQ==
+
 mapbox-gl-style-switcher@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/mapbox-gl-style-switcher/-/mapbox-gl-style-switcher-1.0.3.tgz#e47c5749661b39ee2e9182f865ffdabfd4793664"
