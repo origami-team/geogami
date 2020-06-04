@@ -284,4 +284,9 @@
     <ion-button *ngIf="!task.settings.multipleTries && task.settings.feedback"
       (click)="feedbackRetry ? dismissFeedback() : nextTask()" color="danger">Weiter</ion-button>
   </ion-card>
+
+
+  <ion-card class="overlay feedback" *ngIf="showCorrectPositionModal">
+    <h4>Stehst du genau richtig? Dann drücke OK!</h4>
+  </ion-card>
 </ion-content>
