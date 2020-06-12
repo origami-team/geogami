@@ -33,6 +33,7 @@ export class TrackerService {
   private panCounter: number = 0;
   private zoomCounter: number = 0;
   private rotationCounter: number = 0;
+  private lastHeading: number = undefined;
 
   constructor(
     private http: HttpClient,
@@ -48,10 +49,15 @@ export class TrackerService {
     this.deviceOrientationSubscription = this.deviceOrientation
       .watchHeading()
       .subscribe((data: DeviceOrientationCompassHeading) => {
-        let diff = Math.abs(this.compassHeading - data.magneticHeading)
-        diff = (diff + 180) % 360 - 180
-        if (diff > 10) {
+        if(this.lastHeading === undefined) {
+          this.lastHeading = data.magneticHeading
+        }
+
+        let diff = Math.abs(this.lastHeading - data.magneticHeading)
+        diff = Math.abs((diff + 180) % 360 - 180)
+        if (diff > 15) {
           this.rotationCounter += diff
+          this.lastHeading = data.magneticHeading
         }
 
         this.compassHeading = data.magneticHeading;
