@@ -157,6 +157,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   private audioPlayer: HTMLAudioElement = new Audio();
 
   uploading: boolean = false;
+  loaded: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -331,6 +332,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           .getGame(params.id)
           .then(games => {
             this.game = games[0];
+            this.loaded = true;
           })
       });
     });
@@ -409,7 +411,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.isZoomedToTaskMapPoint = true;
         this.map.flyTo({
           center: [e.lngLat.lng, e.lngLat.lat],
-          zoom: 18
+          zoom: 18,
+          padding: {
+            top: 80,
+            bottom: 620,
+            left: 40,
+            right: 40
+          }
         })
       }
 
@@ -475,9 +483,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         );
       } else {
         this.isZoomedToTaskMapPoint = true;
+        const center = 
+          this.task.question.direction?.position ? 
+          this.task.question.direction.position.geometry.coordinates : 
+          [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
         this.map.flyTo({
-          center: this.task.question.direction.position.geometry.coordinates,
-          zoom: 18
+          center: center,
+          zoom: 18,
+          padding: {
+            top: 80,
+            bottom: 620,
+            left: 40,
+            right: 40
+          }
         })
       }
     }
@@ -725,7 +743,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: 480,
+            bottom: 620,
             left: 40,
             right: 40
           }, duration: 1000,
@@ -1084,7 +1102,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isZoomedToTaskMapPoint = true;
       this.map.flyTo({
         center: this.task.answer.position.geometry.coordinates,
-        zoom: 18
+        zoom: 18,
+        padding: {
+          top: 80,
+          bottom: 620,
+          left: 40,
+          right: 40
+        }
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {
@@ -1097,7 +1121,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isZoomedToTaskMapPoint = true;
       this.map.flyTo({
         center: this.task.question.direction.position.geometry.coordinates,
-        zoom: 18
+        zoom: 18,
+        padding: {
+          top: 80,
+          bottom: 620,
+          left: 40,
+          right: 40
+        }
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {

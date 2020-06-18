@@ -138,6 +138,18 @@ ion-thumbnail {
     margin: 0;
   }
 
+  &.correct-position {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-right: -50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    text-align: center;
+    padding: 1rem;
+    margin: 0;
+  }
+
   &.feedback {
     position: absolute;
     top: 50%;

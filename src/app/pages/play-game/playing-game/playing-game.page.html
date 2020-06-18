@@ -266,7 +266,7 @@
       <ion-icon name="add"></ion-icon>
     </ion-button>
     <ion-item lines="none">
-      <ion-button slot="end" size="default" (click)="startGame()">Fertig</ion-button>
+      <ion-button slot="end" size="default" [disabled]="!loaded" (click)="startGame()">Fertig</ion-button>
     </ion-item>
   </ion-card>
 
@@ -286,7 +286,7 @@
   </ion-card>
 
 
-  <ion-card class="overlay feedback" *ngIf="showCorrectPositionModal">
+  <ion-card class="overlay correct-position" *ngIf="showCorrectPositionModal">
     <h4>Stehst du genau richtig? Dann drücke OK!</h4>
   </ion-card>
 </ion-content>
