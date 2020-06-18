@@ -41,7 +41,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   map: mapboxgl.Map;
   draw: MapboxDraw
 
-  mapSection: boolean = true;
+  mapSection: boolean = false;
   landmarkControl: LandmarkControl;
 
 
@@ -61,7 +61,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.gameFactory.getGame().then(game => { this.game = game }).finally(() => {
-      this.initMap()
+      if (this.mapSection) {
+        this.initMap()
+      }
     })
   }
 
@@ -366,5 +368,16 @@ export class CreateGameOverviewPage implements AfterViewInit {
 
   navigateHome() {
     this.navCtrl.navigateRoot("/");
+  }
+
+  async showPopover(ev: any, text: string) {
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 }

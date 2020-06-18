@@ -141,6 +141,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   selectedChoice: string;
   isCorrectChoiceSelected: boolean;
 
+  isZoomedToTaskMapPoint: boolean = false;
+  showCorrectPositionModal: boolean = false
+
   numberInput: number;
   textInput: string;
 
@@ -154,6 +157,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   private audioPlayer: HTMLAudioElement = new Audio();
 
   uploading: boolean = false;
+  loaded: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -328,6 +332,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           .getGame(params.id)
           .then(games => {
             this.game = games[0];
+            this.loaded = true;
           })
       });
     });
@@ -352,6 +357,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     })
 
+    // reset zoomtotaskmapmpoint if zoomend is a user event (and no animation event)
+    this.map.on('zoomend', ({ originalEvent }) => {
+      if (originalEvent) {
+        this.isZoomedToTaskMapPoint = false;
+      }
+    });
+
     // rotation
     this.deviceOrientationSubscription = this.deviceOrientation
       .watchHeading()
@@ -371,88 +383,121 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     let clickDirection = undefined;
 
     if (this.task.answer.type == AnswerType.MAP_POINT) {
-      const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+      if (this.isZoomedToTaskMapPoint || this.task.mapFeatures.zoombar != "task") {
+        const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
 
-      if (this.map.getSource('marker-point')) {
-        this.map.getSource('marker-point').setData(pointFeature)
+        if (this.map.getSource('marker-point')) {
+          this.map.getSource('marker-point').setData(pointFeature)
+        } else {
+          this.map.addSource('marker-point', {
+            'type': 'geojson',
+            'data': pointFeature
+          });
+        }
+
+        if (!this.map.getLayer('marker-point')) {
+          this.map.addLayer({
+            'id': 'marker-point',
+            'type': 'symbol',
+            'source': 'marker-point',
+            'layout': {
+              "icon-image": "marker-editor",
+              "icon-size": 0.65,
+              "icon-anchor": 'bottom'
+            }
+          });
+        }
       } else {
-        this.map.addSource('marker-point', {
-          'type': 'geojson',
-          'data': pointFeature
-        });
+        this.isZoomedToTaskMapPoint = true;
+        this.map.flyTo({
+          center: [e.lngLat.lng, e.lngLat.lat],
+          zoom: 18,
+          padding: {
+            top: 80,
+            bottom: 620,
+            left: 40,
+            right: 40
+          }
+        })
       }
 
-      if (!this.map.getLayer('marker-point')) {
-        this.map.addLayer({
-          'id': 'marker-point',
-          'type': 'symbol',
-          'source': 'marker-point',
-          'layout': {
-            "icon-image": "marker-editor",
-            "icon-size": 0.65,
-            "icon-anchor": 'bottom'
-          }
-        });
-      }
     }
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      if (this.task.question.direction?.position) {
-        this.clickDirection = this.helperService.bearing(
-          this.task.question.direction.position.geometry.coordinates[1],
-          this.task.question.direction.position.geometry.coordinates[0],
-          e.lngLat.lat,
-          e.lngLat.lng
-        )
-      } else {
-        this.clickDirection = this.helperService.bearing(
-          this.lastKnownPosition.coords.latitude,
-          this.lastKnownPosition.coords.longitude,
-          e.lngLat.lat,
-          e.lngLat.lng
-        )
-      }
-      clickDirection = this.clickDirection;
-      if (!this.map.getLayer('viewDirectionClick')) {
+      if (this.isZoomedToTaskMapPoint || this.task.mapFeatures.zoombar != "task") {
         if (this.task.question.direction?.position) {
-          this.map.addSource("viewDirectionClick", {
-            type: "geojson",
-            data: {
-              type: "Point",
-              coordinates: this.task.question.direction.position.geometry.coordinates
-            }
-          });
+          this.clickDirection = this.helperService.bearing(
+            this.task.question.direction.position.geometry.coordinates[1],
+            this.task.question.direction.position.geometry.coordinates[0],
+            e.lngLat.lat,
+            e.lngLat.lng
+          )
         } else {
-          this.map.addSource("viewDirectionClick", {
-            type: "geojson",
-            data: {
-              type: "Point",
-              coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
-            }
-          });
+          this.clickDirection = this.helperService.bearing(
+            this.lastKnownPosition.coords.latitude,
+            this.lastKnownPosition.coords.longitude,
+            e.lngLat.lat,
+            e.lngLat.lng
+          )
         }
-        this.map.addLayer({
-          id: "viewDirectionClick",
-          source: "viewDirectionClick",
-          type: "symbol",
-          layout: {
-            "icon-image": "view-direction-task",
-            "icon-size": 0.65,
-            "icon-offset": [0, -8]
+        clickDirection = this.clickDirection;
+        if (!this.map.getLayer('viewDirectionClick')) {
+          if (this.task.question.direction?.position) {
+            this.map.addSource("viewDirectionClick", {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: this.task.question.direction.position.geometry.coordinates
+              }
+            });
+          } else {
+            this.map.addSource("viewDirectionClick", {
+              type: "geojson",
+              data: {
+                type: "Point",
+                coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+              }
+            });
           }
-        });
-        if (this.map.getLayer('viewDirectionClickGeolocate')) {
-          this.map.removeLayer('viewDirectionClickGeolocate')
-          this.map.removeSource('viewDirectionClickGeolocate')
-        } else {
-          this.geolocateControl.setType(GeolocateType.None)
+          this.map.addLayer({
+            id: "viewDirectionClick",
+            source: "viewDirectionClick",
+            type: "symbol",
+            layout: {
+              "icon-image": "view-direction-task",
+              "icon-size": 0.65,
+              "icon-offset": [0, -8]
+            }
+          });
+          if (this.map.getLayer('viewDirectionClickGeolocate')) {
+            this.map.removeLayer('viewDirectionClickGeolocate')
+            this.map.removeSource('viewDirectionClickGeolocate')
+          } else {
+            this.geolocateControl.setType(GeolocateType.None)
+          }
         }
+        this.map.setLayoutProperty(
+          "viewDirectionClick",
+          "icon-rotate",
+          this.clickDirection - this.map.getBearing()
+        );
+      } else {
+        this.isZoomedToTaskMapPoint = true;
+        const center = 
+          this.task.question.direction?.position ? 
+          this.task.question.direction.position.geometry.coordinates : 
+          [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+        this.map.flyTo({
+          center: center,
+          zoom: 18,
+          padding: {
+            top: 80,
+            bottom: 620,
+            left: 40,
+            right: 40
+          }
+        })
       }
-      this.map.setLayoutProperty(
-        "viewDirectionClick",
-        "icon-rotate",
-        this.clickDirection - this.map.getBearing()
-      );
     }
 
 
@@ -665,6 +710,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.task.mapFeatures.zoombar == "task" && this.task.answer.type == AnswerType.MAP_POINT && this.taskIndex != 0) {
+      return;
+    }
+
     // zoom to task
     if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
       bounds = this.calcBounds(this.task);
@@ -694,7 +743,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: 480,
+            bottom: 620,
             left: 40,
             right: 40
           }, duration: 1000,
@@ -711,11 +760,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initGame() {
     this.task = this.game.tasks[this.taskIndex];
     await this.trackerService.init(this.game._id, this.game.name, this.map, this.playersNames);
-    if (this.game.bbox != undefined) {
+    console.log(this.game)
+    if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
       const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
       this.map.setMaxBounds(bboxBuffer)
-
-      console.log(this.game.bbox)
 
       this.map.addSource('bbox', {
         'type': 'geojson',
@@ -794,6 +842,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.numberInput = undefined
     this.textInput = undefined
+
+    this.isZoomedToTaskMapPoint = false;
 
     try {
       await this.zoomBounds()
@@ -1047,6 +1097,44 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async onOkClicked() {
     let isCorrect: boolean = true;
     let answer: any = {}
+
+    if (this.task.type == "nav-flag" && this.task.settings.confirmation && this.task.mapFeatures.zoombar == "task" && !this.isZoomedToTaskMapPoint) {
+      this.isZoomedToTaskMapPoint = true;
+      this.map.flyTo({
+        center: this.task.answer.position.geometry.coordinates,
+        zoom: 18,
+        padding: {
+          top: 80,
+          bottom: 620,
+          left: 40,
+          right: 40
+        }
+      })
+      this.showCorrectPositionModal = true;
+      setTimeout(() => {
+        this.showCorrectPositionModal = false;
+      }, 3000)
+      return;
+    }
+
+    if (this.task.type == "theme-direction" && this.task.answer.type == AnswerType.DIRECTION && this.task.settings.confirmation && this.task.mapFeatures.zoombar == "task" && !this.isZoomedToTaskMapPoint) {
+      this.isZoomedToTaskMapPoint = true;
+      this.map.flyTo({
+        center: this.task.question.direction.position.geometry.coordinates,
+        zoom: 18,
+        padding: {
+          top: 80,
+          bottom: 620,
+          left: 40,
+          right: 40
+        }
+      })
+      this.showCorrectPositionModal = true;
+      setTimeout(() => {
+        this.showCorrectPositionModal = false;
+      }, 3000)
+      return;
+    }
 
     if (this.task.answer.type == AnswerType.POSITION) {
       const waypoint = this.task.answer.position.geometry.coordinates;

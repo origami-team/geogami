@@ -25,7 +25,10 @@
     <ion-card color="light">
       <ion-card-content>
         <ion-item lines="none" color="light">
-          <ion-label>Kartenausschnitt</ion-label>
+          <ion-label>Fester Kartenausschnitt <ion-icon name="information-circle"
+              (click)="showPopover($event, 'Soll der Spieler Feedback darüber erhalten, ob er die Aufgabe korrekt gelöst hat?')">
+            </ion-icon>
+          </ion-label>
           <ion-toggle [(ngModel)]="mapSection" (ngModelChange)="mapSectionToggleChange($event)"></ion-toggle>
         </ion-item>
 
