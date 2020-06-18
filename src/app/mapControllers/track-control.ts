@@ -28,12 +28,15 @@ export class TrackControl {
         };
         this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
             position => {
-                this.path.geometry.coordinates.push([
-                    position.coords.longitude,
-                    position.coords.latitude
-                ]);
-                if (this.map && this.map.getSource("track")) {
-                    this.map.getSource("track").setData(this.path);
+                // only add corrdinate to track when accuracy <= 15m
+                if(position.coords.accuracy <= 15) {
+                    this.path.geometry.coordinates.push([
+                        position.coords.longitude,
+                        position.coords.latitude
+                    ]);
+                    if (this.map && this.map.getSource("track")) {
+                        this.map.getSource("track").setData(this.path);
+                    }
                 }
             }
         );
