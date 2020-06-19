@@ -87,6 +87,7 @@ export class CreateTaskModalPage implements OnInit {
         confirmation: this.task.category.includes('theme'),
         accuracy: 10,
         showMarker: true,
+        keepMarker: false
       }
 
       this.settingsChange();
@@ -143,6 +144,7 @@ export class CreateTaskModalPage implements OnInit {
         confirmation: this.task.category.includes('theme'),
         accuracy: 10,
         showMarker: true,
+        keepMarker: false
       }
     }
 
@@ -228,6 +230,10 @@ export class CreateTaskModalPage implements OnInit {
     if (this.task.category == 'nav' && !this.task.settings.confirmation) {
       this.showMultipleTries = false;
       this.task.settings.multipleTries = false;
+    }
+
+    if(this.task.type == 'nav-text' && !this.task.settings.showMarker) {
+      this.task.settings.keepMarker = false
     }
 
     if (this.task.category == 'nav' && event === true) {

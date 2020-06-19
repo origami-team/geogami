@@ -372,7 +372,6 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   uploadGame() {
     this.gameFactory.addGameInformation({
-      ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : undefined
     });
     console.log(this.gameFactory.game);
