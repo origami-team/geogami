@@ -328,6 +328,8 @@ export class LayerControl {
         if (this.layerType == LayerType.Swipe) {
             const { waypointMarker } = markers
             waypointMarker.addTo(this.satMap)
+            const { waypointMarkerDuplicate } = markers
+            waypointMarkerDuplicate.addTo(this.satMap)
         }
     }
 

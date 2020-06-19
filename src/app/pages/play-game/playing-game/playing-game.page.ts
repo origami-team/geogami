@@ -483,10 +483,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         );
       } else {
         this.isZoomedToTaskMapPoint = true;
-        const center = 
-          this.task.question.direction?.position ? 
-          this.task.question.direction.position.geometry.coordinates : 
-          [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+        const center =
+          this.task.question.direction?.position ?
+            this.task.question.direction.position.geometry.coordinates :
+            [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
         this.map.flyTo({
           center: center,
           zoom: 18,
@@ -815,9 +815,31 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.waypointMarker) {
+      if (this.game.tasks[this.taskIndex - 1]?.settings?.keepMarker) {
+        const el = document.createElement('div');
+        el.className = 'waypoint-marker-disabled';
+
+        new mapboxgl.Marker(el, {
+          anchor: 'bottom',
+          offset: [15, 0]
+        })
+          .setLngLat(this.game.tasks[this.taskIndex - 1].answer.position.geometry.coordinates)
+          .addTo(this.map);
+
+        const elDuplicate = document.createElement('div');
+        elDuplicate.className = 'waypoint-marker-disabled';
+
+        this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
+          anchor: 'bottom',
+          offset: [15, 0]
+        })
+          .setLngLat(this.game.tasks[this.taskIndex - 1].answer.position.geometry.coordinates)
+
+        this.layerControl.passMarkers({ waypointMarkerDuplicate: this.waypointMarkerDuplicate })
+      }
       this.waypointMarker.remove();
-      this.waypointMarker = null;
       this.waypointMarkerDuplicate.remove();
+      this.waypointMarker = null;
       this.waypointMarkerDuplicate = null;
     }
 
