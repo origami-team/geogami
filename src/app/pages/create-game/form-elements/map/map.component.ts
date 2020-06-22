@@ -20,6 +20,9 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
 import bbox from '@turf/bbox'
 
+import { searchArea } from './drawThemes'
+
+
 @Component({
   selector: "app-map",
   templateUrl: "./map.component.html",
@@ -35,6 +38,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   @Output() featureChange: EventEmitter<any> = new EventEmitter<any>(true);
 
   @Input() featureType: string;
+
+  @Input() drawTheme: string;
 
   showDirectionMarker: boolean = false;
 
@@ -64,7 +69,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   _onChange = (feature: any) => {
     if (feature != null) {
       if (!this.marker) {
-        this.marker = new mapboxgl.Marker({
+        const el = document.createElement('div');
+        el.className = 'waypoint-marker';
+
+        this.marker = new mapboxgl.Marker(el, {
+          anchor: 'bottom',
+          offset: [15, 0],
           draggable: true
         })
           .setLngLat(feature.geometry.coordinates)
@@ -220,13 +230,27 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       }
 
       if (this.featureType == "geometry") {
-        this.draw = new MapboxDraw({
-          displayControlsDefault: false,
-          controls: {
-            polygon: true,
-            trash: true
-          }
-        });
+
+
+        if (!this.drawTheme) {
+          this.draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              polygon: true,
+              trash: true
+            }
+          });
+        }
+        if (this.drawTheme == "searchArea") {
+          this.draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              polygon: true,
+              trash: true
+            },
+            styles: searchArea
+          });
+        }
 
         this.map.addControl(this.draw, "top-left");
 
