@@ -36,6 +36,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
   @Input() featureType: string;
 
+  @Input() taskType: string;
+
   showDirectionMarker: boolean = false;
 
   marker: mapboxgl.Marker;
@@ -64,7 +66,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   _onChange = (feature: any) => {
     if (feature != null) {
       if (!this.marker) {
-        this.marker = new mapboxgl.Marker({
+        const el = document.createElement('div');
+        el.className = 'waypoint-marker';
+
+        this.marker = new mapboxgl.Marker(el, {
+          anchor: 'bottom',
+          offset: [15, 0],
           draggable: true
         })
           .setLngLat(feature.geometry.coordinates)
