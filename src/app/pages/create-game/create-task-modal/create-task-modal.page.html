@@ -74,7 +74,8 @@
         Verbindung bringen.
       </ion-text>
       <ion-text *ngIf="task.type == 'free'">
-        In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise können zum Beispiel Quiz- und Sachaufgaben gestellt werden.
+        In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise
+        können zum Beispiel Quiz- und Sachaufgaben gestellt werden.
       </ion-text>
     </ion-card-content>
   </ion-card>
@@ -138,7 +139,7 @@
           </ion-label>
         </h5>
       </ion-text>
-      <app-map featureType="geometry" [(feature)]="task.question.area"></app-map>
+      <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="task.question.area"></app-map>
     </div>
     <answer-type [(answer)]="task.answer" [taskType]="task.category"></answer-type>
   </div>
@@ -175,13 +176,13 @@
     <ion-item lines="none" *ngIf="showMultipleTries">
       <ion-label>Mehrere Versuche
         <ion-icon name="information-circle"
-        (click)="showPopover($event, 'Darf der Spieler probieren, sich zu verbessern, wenn er die Aufgabe falsch gelöst hat?')">
-      </ion-icon>
-    </ion-label>
-    <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
-    [disabled]="!task.settings.feedback" (ngModelChange)="settingsChange()">
-  </ion-toggle>
-</ion-item>
+          (click)="showPopover($event, 'Darf der Spieler probieren, sich zu verbessern, wenn er die Aufgabe falsch gelöst hat?')">
+        </ion-icon>
+      </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+        [disabled]="!task.settings.feedback" (ngModelChange)="settingsChange()">
+      </ion-toggle>
+    </ion-item>
     <ion-item lines="none" *ngIf="task.category == 'nav' && task.settings.showMarker && task.type != 'nav-arrow'">
       <ion-label>Fahne auf der Karte behalten
         <ion-icon name="information-circle"

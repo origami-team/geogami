@@ -20,6 +20,9 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
 import bbox from '@turf/bbox'
 
+import { searchArea } from './drawThemes'
+
+
 @Component({
   selector: "app-map",
   templateUrl: "./map.component.html",
@@ -36,7 +39,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
   @Input() featureType: string;
 
-  @Input() taskType: string;
+  @Input() drawTheme: string;
 
   showDirectionMarker: boolean = false;
 
@@ -227,13 +230,27 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       }
 
       if (this.featureType == "geometry") {
-        this.draw = new MapboxDraw({
-          displayControlsDefault: false,
-          controls: {
-            polygon: true,
-            trash: true
-          }
-        });
+
+
+        if (!this.drawTheme) {
+          this.draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              polygon: true,
+              trash: true
+            }
+          });
+        }
+        if (this.drawTheme == "searchArea") {
+          this.draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              polygon: true,
+              trash: true
+            },
+            styles: searchArea
+          });
+        }
 
         this.map.addControl(this.draw, "top-left");
 
