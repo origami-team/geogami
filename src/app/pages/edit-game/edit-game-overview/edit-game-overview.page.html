@@ -9,16 +9,24 @@
 
 <ion-content>
   <div [className]="showUpload ? 'blur' : ''">
+
+    <ion-card color="danger" *ngIf="showNameError">
+      <ion-card-content>
+        Ein Spiel mit diesem Namen existiert bereits
+      </ion-card-content>
+    </ion-card>
+
     <ion-card color="light" *ngIf="game">
       <ion-card-content>
         Gib deinem Spiel einen aussagekräftigen Namen
-        <ion-list lines="full" class="ion-no-margin ion-no-padding">
-          <ion-item color="light">
-            <ion-label position="stacked">Spiel-Name:<ion-text color="danger">*</ion-text>
-            </ion-label>
-            <ion-input color="primary" required type="text" [(ngModel)]="game.name" name="name"></ion-input>
-          </ion-item>
-        </ion-list>
+        <ion-item color="light">
+          <ion-label position="stacked">Spielname</ion-label>
+          <ion-input type="text" [(ngModel)]="game.name" name="name"></ion-input>
+        </ion-item>
+        <ion-item color="light">
+          <ion-label position="stacked">Spielort</ion-label>
+          <ion-input type="text" [(ngModel)]="game.place" name="name"></ion-input>
+        </ion-item>
       </ion-card-content>
     </ion-card>
 

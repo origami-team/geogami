@@ -326,7 +326,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         })
 
       this.game = null;
-      this.game = new Game(0, "Loading...", false, [], false, false);
+      this.game = new Game(0, "Loading...", "", false, [], false, false);
       this.route.params.subscribe(params => {
         this.gamesService
           .getGame(params.id)
