@@ -43,6 +43,7 @@ export class EditGameOverviewPage implements AfterViewInit {
   draw: MapboxDraw
 
   mapSection: boolean = false;
+  mapSectionVisible: boolean = true;
   landmarkControl: LandmarkControl;
 
 
@@ -188,6 +189,8 @@ export class EditGameOverviewPage implements AfterViewInit {
           if (this.game.bbox?.features?.length > 0) {
             this.mapSection = true
           }
+
+          this.mapSectionVisible = this.game.mapSectionVisible
 
           if (this.mapSection) {
             this.changeDetectorRef.detectChanges();
@@ -359,6 +362,13 @@ export class EditGameOverviewPage implements AfterViewInit {
     }
   }
 
+  mapSectionVisibleChange(visible: boolean) {
+    if (this.mapSectionVisible != visible) {
+      this.draw.deleteAll()
+      this.mapSectionVisible = visible
+    }
+  }
+
   async showTrackingInfo(ev: any, text: string) {
     console.log(ev);
     const popover = await this.popoverController.create({
@@ -372,7 +382,8 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   uploadGame() {
     this.gameFactory.addGameInformation({
-      bbox: this.mapSection ? this.draw.getAll() : undefined
+      bbox: this.mapSection ? this.draw.getAll() : undefined,
+      mapSectionVisible: this.mapSectionVisible
     });
     console.log(this.gameFactory.game);
 

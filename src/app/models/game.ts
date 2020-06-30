@@ -6,6 +6,7 @@ export class Game {
     public name: string,
     public tracking: boolean,
     public tasks: Task[],
-    public bbox: any = undefined
+    public bbox: any = undefined,
+    public mapSectionVisible: boolean
   ) { }
 }
