@@ -75,7 +75,7 @@ export class GameFactoryService {
       if (val != undefined) {
         this.game = val
       } else if (!this.game) {
-        this.game = new Game(Math.floor(Date.now() / 1000), "", true, [], undefined, false);
+        this.game = new Game(Math.floor(Date.now() / 1000), "", "", true, [], undefined, false);
         this.storage.set('game', this.game);
       }
       return this.game;

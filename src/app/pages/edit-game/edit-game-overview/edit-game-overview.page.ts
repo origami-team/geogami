@@ -39,6 +39,7 @@ export class EditGameOverviewPage implements AfterViewInit {
   public lottieConfig: AnimationOptions;
   showSuccess: boolean = false;
   showUpload: boolean = false;
+  showNameError: boolean = false
   map: mapboxgl.Map;
   draw: MapboxDraw
 
@@ -383,7 +384,9 @@ export class EditGameOverviewPage implements AfterViewInit {
   uploadGame() {
     this.gameFactory.addGameInformation({
       bbox: this.mapSection ? this.draw.getAll() : undefined,
-      mapSectionVisible: this.mapSectionVisible
+      mapSectionVisible: this.mapSectionVisible,
+      name: this.game.name,
+      place: this.game.place
     });
     console.log(this.gameFactory.game);
 
@@ -394,7 +397,11 @@ export class EditGameOverviewPage implements AfterViewInit {
         this.showSuccess = true;
         this.gameFactory.flushGame();
       }
-    }).catch(e => console.error(e));
+    }).catch(e => {
+      console.error(e)
+      this.showUpload = false;
+      this.showNameError = true;
+    });
 
     // this.gamesService
     //   .postGame(this.gameFactory.game)

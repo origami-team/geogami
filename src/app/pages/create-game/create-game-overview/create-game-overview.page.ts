@@ -38,6 +38,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   public lottieConfig: AnimationOptions;
   showSuccess: boolean = false;
   showUpload: boolean = false;
+  showNameError: boolean = false;
   map: mapboxgl.Map;
   draw: MapboxDraw
 
@@ -359,7 +360,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : undefined,
-      mapSectionVisible: this.mapSectionVisible
+      mapSectionVisible: this.mapSectionVisible,
+      place: this.game.place
     });
     console.log(this.gameFactory.game);
 
@@ -372,7 +374,11 @@ export class CreateGameOverviewPage implements AfterViewInit {
           this.gameFactory.flushGame();
         }
       })
-      .catch(e => console.error(e));
+      .catch(e => {
+        console.error(e)
+        this.showUpload = false;
+        this.showNameError = true;
+      });
   }
 
   navigateHome() {

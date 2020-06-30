@@ -19,7 +19,7 @@
   <ion-list>
     <ion-item *ngFor="let game of games" (click)="gameClick(game)" detail>
       <ion-label>
-        <h2>{{ game.name }}</h2>
+        <h2><span *ngIf="game.place">{{ game.place }} - </span>{{ game.name }}</h2>
         <p>{{ game.description }}</p>
       </ion-label>
     </ion-item>
