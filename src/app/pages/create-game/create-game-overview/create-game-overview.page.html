@@ -25,12 +25,26 @@
     <ion-card color="light">
       <ion-card-content>
         <ion-item lines="none" color="light">
-          <ion-label>Fester Kartenausschnitt <ion-icon name="information-circle"
+          <ion-label>Kartenausschnitt <ion-icon name="information-circle"
               (click)="showPopover($event, 'Soll der Spieler Feedback darüber erhalten, ob er die Aufgabe korrekt gelöst hat?')">
             </ion-icon>
           </ion-label>
           <ion-toggle [(ngModel)]="mapSection" (ngModelChange)="mapSectionToggleChange($event)"></ion-toggle>
         </ion-item>
+
+        <div class="flex-radio-group" *ngIf="mapSection">
+          <div>
+            <input id="rd-visible" name="map-section" type="radio" value="visible" [checked]="mapSectionVisible"
+              (click)="mapSectionVisibleChange(true)">
+            <label for="rd-visible"> Umrandet</label>
+          </div>
+
+          <div>
+            <input id="rd-invisible" name="map-section" type="radio" value="invisible" [checked]="!mapSectionVisible"
+              (click)="mapSectionVisibleChange(false)">
+            <label for="rd-invisible"> Unsichtbar</label>
+          </div>
+        </div>
 
         <div #boundingMap class="map" *ngIf="mapSection"></div>
       </ion-card-content>

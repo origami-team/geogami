@@ -1,6 +1,7 @@
 import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 export enum TrackType {
     Enabled,
@@ -26,20 +27,17 @@ export class TrackControl {
                 coordinates: []
             }
         };
-        this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
-            position => {
-                // only add corrdinate to track when accuracy <= 15m
-                if(position.coords.accuracy <= 15) {
-                    this.path.geometry.coordinates.push([
-                        position.coords.longitude,
-                        position.coords.latitude
-                    ]);
-                    if (this.map && this.map.getSource("track")) {
-                        this.map.getSource("track").setData(this.path);
-                    }
+        this.positionSubscription = this.geolocationService.geolocationSubscription
+            .pipe(filter(p => p.coords.accuracy <= 5))
+            .subscribe(position => {
+                this.path.geometry.coordinates.push([
+                    position.coords.longitude,
+                    position.coords.latitude
+                ]);
+                if (this.map && this.map.getSource("track")) {
+                    this.map.getSource("track").setData(this.path);
                 }
-            }
-        );
+            });
 
         this.map.addSource("track", { type: "geojson", data: this.path });
         this.map.addLayer({
