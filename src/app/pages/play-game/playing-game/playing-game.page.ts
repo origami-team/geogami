@@ -765,23 +765,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
       this.map.setMaxBounds(bboxBuffer)
 
-      this.map.addSource('bbox', {
-        'type': 'geojson',
-        'data': this.game.bbox
-      });
+      if (this.game.mapSectionVisible === true || this.game.mapSectionVisible == undefined) {
+        this.map.addSource('bbox', {
+          'type': 'geojson',
+          'data': this.game.bbox
+        });
 
-      this.map.addLayer({
-        id: "bbox",
-        type: "line",
-        source: 'bbox',
-        filter: ['all', ["==", ["geometry-type"], "Polygon"]],
-        paint: {
-          "line-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
-          "line-opacity": 0.5,
-          "line-width": 10,
-          "line-dasharray": [2, 1]
-        }
-      });
+        this.map.addLayer({
+          id: "bbox",
+          type: "line",
+          source: 'bbox',
+          filter: ['all', ["==", ["geometry-type"], "Polygon"]],
+          paint: {
+            "line-color": getComputedStyle(document.documentElement).getPropertyValue('--ion-color-warning'),
+            "line-opacity": 0.5,
+            "line-width": 10,
+            "line-dasharray": [2, 1]
+          }
+        });
+      }
     }
     this.trackerService.addEvent({
       type: "INIT_GAME"

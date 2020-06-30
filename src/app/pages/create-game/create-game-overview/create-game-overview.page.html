@@ -36,13 +36,19 @@
           <div>
             <input id="rd-visible" name="map-section" type="radio" value="visible" [checked]="mapSectionVisible"
               (click)="mapSectionVisibleChange(true)">
-            <label for="rd-visible"> Umrandet</label>
+            <label for="rd-visible"> Umrandet </label>
+            <ion-icon name="information-circle"
+              (click)="showPopover($event, 'Der Kartenausschnitt wird umrandet im Spiel dargestellt')">
+            </ion-icon>
           </div>
 
           <div>
             <input id="rd-invisible" name="map-section" type="radio" value="invisible" [checked]="!mapSectionVisible"
               (click)="mapSectionVisibleChange(false)">
-            <label for="rd-invisible"> Unsichtbar</label>
+            <label for="rd-invisible"> Unsichtbar </label>
+            <ion-icon name="information-circle"
+              (click)="showPopover($event, 'Der Kartenausschnitt wird im Spiel nicht visualisiert')">
+            </ion-icon>
           </div>
         </div>
 
