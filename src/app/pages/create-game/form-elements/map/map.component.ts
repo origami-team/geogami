@@ -21,6 +21,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import bbox from '@turf/bbox'
 
 import { searchArea } from './drawThemes'
+import { HelperService } from 'src/app/services/helper.service';
 
 
 @Component({
@@ -31,7 +32,7 @@ import { searchArea } from './drawThemes'
 export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild("map") mapContainer;
   @ViewChild("hiddenInput") hiddenInput;
-  @ViewChild("marker") directionMarker;
+  // @ViewChild("marker") directionMarker;
 
   @Input() feature: any;
 
@@ -42,13 +43,14 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   @Input() drawTheme: string;
 
   showDirectionMarker: boolean = false;
+  directionMarkerPosition: any;
 
   marker: mapboxgl.Marker;
   map: mapboxgl.Map;
   draw: MapboxDraw;
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
 
   ngOnDestroy(): void {
     this.map.remove();
@@ -148,43 +150,118 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         this.featureChange.emit(this.feature);
         this._onChange(this.feature);
       }
+
+      if (this.featureType == "direction") {
+
+        if (!this.showDirectionMarker) {
+          this.directionMarkerPosition = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat)
+          this.map.addSource("viewDirectionClick", {
+            type: "geojson",
+            data: this.directionMarkerPosition
+          });
+          this.map.addLayer({
+            id: "viewDirectionClick",
+            source: "viewDirectionClick",
+            type: "symbol",
+            layout: {
+              "icon-image": "view-direction-task",
+              "icon-size": 0.65,
+              "icon-offset": [0, -8],
+              "icon-allow-overlap": true
+            }
+          });
+          this.showDirectionMarker = true
+
+          this.featureChange.emit({ bearing: 0, position: this.directionMarkerPosition });
+        } else {
+          let clickDirection = this.helperService.bearing(
+            this.directionMarkerPosition.geometry.coordinates[1],
+            this.directionMarkerPosition.geometry.coordinates[0],
+            e.lngLat.lat,
+            e.lngLat.lng
+          )
+          this.map.setLayoutProperty(
+            "viewDirectionClick",
+            "icon-rotate",
+            clickDirection - this.map.getBearing()
+          );
+          while (clickDirection > 360) {
+            clickDirection = clickDirection - 360;
+          }
+          while (clickDirection < 0) {
+            clickDirection = clickDirection + 360;
+          }
+          this.featureChange.emit({ bearing: clickDirection, position: this.directionMarkerPosition });
+
+        }
+      }
     });
 
     this.map.on("load", () => {
       this.map.resize();
 
-      if (this.feature) {
-        if (this.featureType == 'direction' && this.feature.position) {
-          this.map.flyTo({
-            center: this.feature.position.geometry.coordinates,
-            zoom: 13,
-            bearing: this.featureType == "direction" ? (this.feature && this.feature.bearing) ? this.feature.bearing : 0 : 0,
-            speed: 3
-          })
-        }
-        if (this.featureType == 'point' && this.feature.geometry) {
-          this.map.flyTo({
-            center: this.feature.geometry.coordinates,
-            zoom: 13,
-            bearing: 0,
-            speed: 3
-          })
-        }
-        if ((this.featureType == 'geometry' || this.featureType == 'geometry-free') && this.feature.features) {
-          if (this.feature.features.length > 0) {
-            this.map.fitBounds(bbox(this.feature), {
-              padding: 20,
-              speed: 3
-            })
+      this.map.loadImage(
+        "/assets/icons/directionv2-richtung.png",
+        (error, image) => {
+          if (error) throw error;
+
+          this.map.addImage("view-direction-task", image);
+
+
+
+          if (this.feature) {
+            if (this.featureType == 'direction' && this.feature.position) {
+              this.map.flyTo({
+                center: this.feature.position.geometry.coordinates,
+                zoom: 13,
+                speed: 3
+              })
+
+              this.map.addSource("viewDirectionClick", {
+                type: "geojson",
+                data: this.feature.position
+              });
+              this.map.addLayer({
+                id: "viewDirectionClick",
+                source: "viewDirectionClick",
+                type: "symbol",
+                layout: {
+                  "icon-image": "view-direction-task",
+                  "icon-size": 0.65,
+                  "icon-offset": [0, -8],
+                  "icon-rotate": this.feature.bearing,
+                  "icon-allow-overlap": true
+                }
+              });
+
+              this.directionMarkerPosition = this.feature.position
+              this.showDirectionMarker = true
+            }
+            if (this.featureType == 'point' && this.feature.geometry) {
+              this.map.flyTo({
+                center: this.feature.geometry.coordinates,
+                zoom: 13,
+                bearing: 0,
+                speed: 3
+              })
+            }
+            if ((this.featureType == 'geometry' || this.featureType == 'geometry-free') && this.feature.features) {
+              if (this.feature.features.length > 0) {
+                this.map.fitBounds(bbox(this.feature), {
+                  padding: 20,
+                  speed: 3
+                })
+              }
+              // this.map.flyTo({
+              //   center: this.feature.geometry.coordinates,
+              //   zoom: 13,
+              //   bearing: 0,
+              //   speed: 3
+              // })
+            }
           }
-          // this.map.flyTo({
-          //   center: this.feature.geometry.coordinates,
-          //   zoom: 13,
-          //   bearing: 0,
-          //   speed: 3
-          // })
-        }
-      }
+
+        })
 
       Plugins.Geolocation.getCurrentPosition().then(position => {
         if (!this.feature) {
@@ -319,55 +396,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
             });
           }
         }
-      }
-
-      this.map.on("move", e => {
-        if (e.cancelable) {
-          e.preventDefault();
-        }
-        if (this.featureType == "direction" && this.marker) {
-          this.marker.setLngLat(this.map.getCenter());
-
-          let bearing = this.map.getBearing();
-
-          while (bearing > 360) {
-            bearing = bearing - 360;
-          }
-          while (bearing < 0) {
-            bearing = bearing + 360;
-          }
-
-          this.featureChange.emit({ bearing: bearing, position: this._toGeoJSONPoint(this.map.getCenter().lng, this.map.getCenter().lat) });
-        }
-      });
-
-      if (this.featureType == "direction") {
-        this.showDirectionMarker = true;
-        this.changeDetectorRef.detectChanges();
-
-        this.marker = new mapboxgl.Marker(this.directionMarker.nativeElement, {
-          offset: [0, -30]
-        })
-          .setLngLat(this.map.getCenter())
-          .addTo(this.map);
-      }
-    });
-
-    this.map.on("rotate", e => {
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-      if (this.featureType == "direction") {
-        let bearing = this.map.getBearing();
-
-        while (bearing > 360) {
-          bearing = bearing - 360;
-        }
-        while (bearing < 0) {
-          bearing = bearing + 360;
-        }
-
-        this.featureChange.emit({ bearing: bearing, position: this._toGeoJSONPoint(this.map.getCenter().lng, this.map.getCenter().lat) });
       }
     });
   }
