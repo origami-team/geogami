@@ -10,5 +10,7 @@
     </h5>
   </ion-text> -->
   <div #map class="map"></div>
+  <ion-button size="small" expand="block" *ngIf="directionMarkerPosition" (click)="resetViewDirectionMarker()">
+    Zurücksetzen</ion-button>
   <!-- <div #marker class="marker" *ngIf="showDirectionMarker"></div> -->
 </ng-container>
