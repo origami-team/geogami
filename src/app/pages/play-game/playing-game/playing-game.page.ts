@@ -417,7 +417,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             bottom: 620,
             left: 40,
             right: 40
-          }
+          },
+          duration: 1000
         })
       }
 
@@ -495,7 +496,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             bottom: 620,
             left: 40,
             right: 40
-          }
+          },
+          duration: 1000
         })
       }
     }
@@ -710,12 +712,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.task.mapFeatures.zoombar == "task" && this.task.answer.type == AnswerType.MAP_POINT && this.taskIndex != 0) {
-      return;
-    }
+    if (this.task.mapFeatures.zoombar == "task" &&
+      this.task.answer.mode != TaskMode.NAV_ARROW &&
+      this.task.answer.mode != TaskMode.DIRECTION_ARROW &&
+      this.task.answer.type !== AnswerType.MAP_POINT) {
 
-    // zoom to task
-    if (this.task.mapFeatures.zoombar == "task" && this.task.answer.mode != TaskMode.NAV_ARROW && this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
+      // zoom to task
       bounds = this.calcBounds(this.task);
 
       // include position into bounds
@@ -730,6 +732,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
       }
 
+    } else if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
+      const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
+      bounds = bounds.extend(bboxBuffer)
     } else {
       this.game.tasks.forEach(task => {
         bounds = bounds.extend(this.calcBounds(task))
@@ -743,10 +748,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: 620,
+            bottom: 80,
             left: 40,
             right: 40
-          }, duration: 1000,
+          },
+          duration: 1000,
           maxZoom: 16
         });
       } else {
@@ -1132,7 +1138,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           bottom: 620,
           left: 40,
           right: 40
-        }
+        },
+        duration: 1000
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {
@@ -1151,7 +1158,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           bottom: 620,
           left: 40,
           right: 40
-        }
+        },
+        duration: 1000
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {

@@ -67,6 +67,14 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.initMap();
   }
 
+  resetViewDirectionMarker() {
+    this.directionMarkerPosition = undefined
+    this.map.removeLayer("viewDirectionClick");
+    this.map.removeSource("viewDirectionClick");
+    this.showDirectionMarker = false
+    this.featureChange.emit({ bearing: 0, position: undefined });
+  }
+
   // _onChange = (feature: GeoJSON.Feature<GeoJSON.Point>) => {
   _onChange = (feature: any) => {
     if (feature != null) {
@@ -201,7 +209,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       this.map.resize();
 
       this.map.loadImage(
-        "/assets/icons/directionv2-richtung.png",
+        "/assets/icons/directionv2-richtung-settings.png",
         (error, image) => {
           if (error) throw error;
 
