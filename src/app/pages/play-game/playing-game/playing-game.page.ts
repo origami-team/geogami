@@ -732,6 +732,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
       }
 
+    } else if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
+      const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
+      bounds = bounds.extend(bboxBuffer)
     } else {
       this.game.tasks.forEach(task => {
         bounds = bounds.extend(this.calcBounds(task))
