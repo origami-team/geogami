@@ -54,7 +54,6 @@
     "lottie-web": "^5.6.8",
     "mapbox-gl": "^1.9.1",
     "mapbox-gl-compare": "^0.4.0",
-    "mapbox-gl-draw-rectangle-mode": "^1.0.4",
     "mapbox-gl-style-switcher": "^1.0.3",
     "ngx-json-viewer": "^2.4.0",
     "ngx-lottie": "^5.4.0",
