@@ -748,7 +748,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: 80,
+            bottom: 600,
             left: 40,
             right: 40
           },
