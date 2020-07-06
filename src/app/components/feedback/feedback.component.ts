@@ -10,6 +10,7 @@ import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { TrackerService } from '../../services/tracker.service';
 import { Component } from '@angular/core';
 import { Plugins, Capacitor, GeolocationPosition } from '@capacitor/core';
+import { DeviceOrientationCompassHeading, DeviceOrientation } from '@ionic-native/device-orientation/ngx';
 
 
 enum FeedbackType {
@@ -47,16 +48,42 @@ export class FeedbackComponent {
     private trackerService: TrackerService
     private playingGamePage: PlayingGamePage
 
+    private feedbackDuration: number = 2000;
+    deviceOrientationSubscription: any;
+    private deviceOrientation: DeviceOrientation;
+    private direction: number;
+    successColor: string;
+
     constructor() { }
 
-    init(map: any, geolocationService: OrigamiGeolocationService, helperService: HelperService, toastController: ToastController, trackerService: TrackerService, playingGamePage: PlayingGamePage) {
+    init(map: any, geolocationService: OrigamiGeolocationService, deviceOrientation: DeviceOrientation, helperService: HelperService, toastController: ToastController, trackerService: TrackerService, playingGamePage: PlayingGamePage) {
         this.map = map
         this.geolocationService = geolocationService
         this.helperService = helperService
         this.toastController = toastController
         this.trackerService = trackerService
         this.playingGamePage = playingGamePage
+        this.deviceOrientation = deviceOrientation
 
+        this.successColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-success');
+
+
+
+        this.map.loadImage(
+            "/assets/icons/position-solution.png",
+            (error, image) => {
+                if (error) throw error;
+
+                this.map.addImage("geolocate-solution", image);
+            })
+
+        this.map.loadImage(
+            "/assets/icons/directionv2-solution.png",
+            (error, image) => {
+                if (error) throw error;
+
+                this.map.addImage("direction-solution", image);
+            })
 
         this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
 
@@ -74,6 +101,15 @@ export class FeedbackComponent {
                 }
             }
         });
+
+        this.deviceOrientationSubscription = this.deviceOrientation
+            .watchHeading({
+                frequency: 300
+            })
+            .subscribe((data: DeviceOrientationCompassHeading) => {
+                this.direction = data.magneticHeading
+                console.log(this.direction)
+            })
     }
 
     public setTask(task: Task) {
@@ -394,6 +430,11 @@ export class FeedbackComponent {
         }
         this.showFeedback = true
 
+        if (this.task.settings.feedback && !this.task.settings.multipleTries) {
+            this.showSolution()
+            // setTimeout(() => this.removeSolution(), this.feedbackDuration)
+        }
+
         if (type != FeedbackType.TryAgain) {
             if (Capacitor.isNative) {
                 Plugins.Haptics.vibrate();
@@ -407,7 +448,7 @@ export class FeedbackComponent {
                 if (type !== FeedbackType.TryAgain) {
                     this.playingGamePage.nextTask()
                 }
-            }, 2000)
+            }, this.feedbackDuration)
         }
 
         if (!this.task.settings.feedback) {
@@ -416,6 +457,124 @@ export class FeedbackComponent {
                 this.playingGamePage.nextTask()
             }, 2000)
         }
+    }
+
+    public showSolution() {
+        if (this.task.answer.type == AnswerType.POSITION) {
+
+        }
+
+        if (this.task.type == "theme-loc") {
+            this.map.addSource("geolocate-solution", {
+                type: "geojson",
+                data: {
+                    type: "Point",
+                    coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+                }
+            });
+            this.map.addLayer({
+                id: "geolocate-solution",
+                source: "geolocate-solution",
+                type: "symbol",
+                layout: {
+                    "icon-image": "geolocate-solution",
+                    "icon-size": 0.4,
+                    "icon-offset": [0, 0],
+                    "icon-allow-overlap": true
+                }
+            });
+        }
+
+        if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
+
+        }
+
+        if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
+
+        }
+
+        if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
+            this.showSolutionLandmark(this.task.question.geometry)
+        }
+
+        if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+            let position
+            let direction
+
+            if (this.task.question.direction?.position) {
+                position = this.task.question.direction.position.geometry.coordinates
+            } else {
+                position = [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+            }
+
+            if (this.task.question.direction?.bearing) {
+                direction = this.task.question.direction.bearing
+            } else {
+                direction = this.direction || 0
+            }
+
+            this.map.addSource("direction-solution", {
+                type: "geojson",
+                data: {
+                    type: "Point",
+                    coordinates: position
+                }
+            });
+            this.map.addLayer({
+                id: "direction-solution",
+                source: "direction-solution",
+                type: "symbol",
+                layout: {
+                    "icon-image": "direction-solution",
+                    "icon-size": 0.65,
+                    "icon-offset": [0, -8],
+                    "icon-rotate": direction
+                }
+            });
+        }
+
+        if (this.task.answer.type == AnswerType.NUMBER) {
+
+        }
+
+        if (this.task.answer.type == AnswerType.TEXT) {
+
+        }
+    }
+
+    public removeSolution() {
+        if (this.map.getLayer('geolocate-solution')) {
+            this.map.removeLayer('geolocate-solution')
+            this.map.removeSource('geolocate-solution')
+        }
+        if (this.map.getLayer('direction-solution')) {
+            this.map.removeLayer('direction-solution')
+            this.map.removeSource('direction-solution')
+        }
+        if (this.map.getLayer('solution-polygon')) {
+            this.map.removeLayer('solution-polygon')
+            this.map.removeSource('solution-source')
+        }
+    }
+
+    public showSolutionLandmark(landmark: any) {
+        this.removeSolution();
+
+        this.map.addSource('solution-source', {
+            type: "geojson",
+            data: landmark
+        })
+        this.map.addLayer({
+            id: "solution-polygon",
+            type: "fill-extrusion",
+            source: 'solution-source',
+            filter: ['all', ["==", ["geometry-type"], "Polygon"]],
+            paint: {
+                "fill-extrusion-color": this.successColor,
+                "fill-extrusion-opacity": 0.5,
+                "fill-extrusion-height": 20,
+            }
+        });
     }
 
     public dismissFeedback() {

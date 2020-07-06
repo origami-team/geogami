@@ -280,7 +280,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.panControl = new PanControl(this.map, this.geolocationService)
       this.maskControl = new MaskControl(this.map, this.geolocationService)
 
-      this.feedbackControl.init(this.map, this.geolocationService, this.helperService, this.toastController, this.trackerService, this)
+      this.feedbackControl.init(this.map, this.geolocationService, this.deviceOrientation, this.helperService, this.toastController, this.trackerService, this)
 
       this.map.loadImage(
         "/assets/icons/directionv2-richtung.png",
