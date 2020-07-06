@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content forceOverscroll="false">
-  <div class="wrapper" [class.blur]="showSuccess || showFeedback">
+  <div class="wrapper">
     <div #mapWrapper>
       <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div>
       <div *ngIf="swipe" #swipeMap class="map"></div>
@@ -270,21 +270,14 @@
     </ion-item>
   </ion-card>
 
-  <ion-card class="overlay success" *ngIf="showSuccess">
+  <app-feedback #feedback></app-feedback>
+
+  <ion-card class="overlay success" *ngIf="staticShowSuccess">
     <h3>Herzlichen Glückwunsch!</h3>
     <p>Du hast das Spiel beendet</p>
     <div lottie [options]="lottieConfig"></div>
     <ion-button color=primary (click)="navigateHome()" [disabled]="!uploadDone">Fertig</ion-button>
   </ion-card>
-
-  <ion-card class="overlay feedback" *ngIf="showFeedback">
-    <h1 class="feedback-icon">{{ feedback.icon }}</h1>
-    <h4>{{ feedback.text }}</h4>
-
-    <ion-button *ngIf="!task.settings.multipleTries && task.settings.feedback"
-      (click)="feedbackRetry ? dismissFeedback() : nextTask()" color="danger">Weiter</ion-button>
-  </ion-card>
-
 
   <ion-card class="overlay correct-position" *ngIf="showCorrectPositionModal">
     <h4>Stehst du genau richtig? Dann drücke OK!</h4>

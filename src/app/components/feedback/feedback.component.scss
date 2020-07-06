@@ -1,0 +1,19 @@
+.overlay {
+    background: var(--ion-item-background);
+
+    &.feedback {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        text-align: center;
+        padding: 1rem;
+        margin: 0;
+
+        .feedback-icon {
+            font-size: 65px;
+        }
+    }
+}
