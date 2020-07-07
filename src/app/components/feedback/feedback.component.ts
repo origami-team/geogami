@@ -11,6 +11,9 @@ import { TrackerService } from '../../services/tracker.service';
 import { Component } from '@angular/core';
 import { Plugins, Capacitor, GeolocationPosition } from '@capacitor/core';
 import { DeviceOrientationCompassHeading, DeviceOrientation } from '@ionic-native/device-orientation/ngx';
+import { env } from 'process';
+import { environment } from 'src/environments/environment';
+import centroid from '@turf/centroid'
 
 
 enum FeedbackType {
@@ -39,7 +42,8 @@ export class FeedbackComponent {
         text: '',
         icon: '',
         solution: '',
-        img: ''
+        img: '',
+        hint: ''
     }
     private feedbackRetry: boolean = false;
 
@@ -55,6 +59,8 @@ export class FeedbackComponent {
     private deviceOrientation: DeviceOrientation;
     private direction: number;
     successColor: string;
+
+    private DIRECTION_TRESHOLD: number = 22.5
 
     constructor() { }
 
@@ -162,7 +168,7 @@ export class FeedbackComponent {
                     correct: isCorrect
                 }
 
-                this.initFeedback(distance < PlayingGamePage.triggerTreshold)
+                this.initFeedback(distance < PlayingGamePage.triggerTreshold, { distance: distance })
             } else {
                 const toast = await this.toastController.create({
                     message: "Bitte setze zuerst deine Position",
@@ -268,7 +274,7 @@ export class FeedbackComponent {
             if (this.map.getSource('marker-point')) {
                 const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
                 const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
-                this.initFeedback(isInPolygon);
+                this.initFeedback(isInPolygon, { clickPosition: clickPosition });
                 isCorrect = isInPolygon;
                 answer = {
                     clickPosition: clickPosition,
@@ -291,8 +297,8 @@ export class FeedbackComponent {
         }
 
         if (this.task.answer.type == AnswerType.DIRECTION) {
-            this.initFeedback(this.Math.abs(directionBearing - compassHeading) <= 45);
-            isCorrect = this.Math.abs(directionBearing - compassHeading) <= 45;
+            this.initFeedback(this.Math.abs(directionBearing - compassHeading) <= this.DIRECTION_TRESHOLD);
+            isCorrect = this.Math.abs(directionBearing - compassHeading) <= this.DIRECTION_TRESHOLD;
             answer = {
                 compassHeading: compassHeading,
                 correct: isCorrect
@@ -302,11 +308,11 @@ export class FeedbackComponent {
         if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
             if (clickDirection != 0) {
                 if (this.task.question.type == QuestionType.MAP_DIRECTION_PHOTO) {
-                    this.initFeedback(this.Math.abs(clickDirection - this.task.question.direction.bearing) <= 45);
-                    isCorrect = this.Math.abs(clickDirection - this.task.question.direction.bearing) <= 45;
+                    this.initFeedback(this.Math.abs(clickDirection - this.task.question.direction.bearing) <= this.DIRECTION_TRESHOLD, { clickDirection: clickDirection });
+                    isCorrect = this.Math.abs(clickDirection - this.task.question.direction.bearing) <= this.DIRECTION_TRESHOLD;
                 } else {
-                    this.initFeedback(this.Math.abs(clickDirection - compassHeading) <= 45);
-                    isCorrect = this.Math.abs(clickDirection - compassHeading) <= 45;
+                    this.initFeedback(this.Math.abs(clickDirection - compassHeading) <= this.DIRECTION_TRESHOLD, { clickDirection: clickDirection });
+                    isCorrect = this.Math.abs(clickDirection - compassHeading) <= this.DIRECTION_TRESHOLD;
                 }
                 answer = {
                     clickDirection: clickDirection,
@@ -383,7 +389,7 @@ export class FeedbackComponent {
         });
     }
 
-    public initFeedback(correct: boolean) {
+    public initFeedback(correct: boolean, options: any = undefined) {
         // feedback is already showing. 
         if (this.showFeedback) {
             return;
@@ -430,9 +436,17 @@ export class FeedbackComponent {
                 this.feedback.text = "Ziel erreicht!"
                 break;
         }
+
+        this.feedback.hint = ""
+        this.feedback.solution = ""
+
         if (this.task.settings.feedback && !this.task.settings.multipleTries && !correct) {
             this.showSolution()
-            // setTimeout(() => this.removeSolution(), this.feedbackDuration)
+        }
+
+        if (this.task.settings.feedback && this.task.settings.multipleTries && type === FeedbackType.TryAgain && !correct) {
+
+            this.showHint(options)
         }
 
         this.showFeedback = true
@@ -465,6 +479,73 @@ export class FeedbackComponent {
     nextTask() {
         this.dismissFeedback()
         this.playingGamePage.nextTask()
+    }
+
+    public showHint(options: any = undefined) {
+        if (this.task.answer.type == AnswerType.POSITION) {
+            const waypoint = this.task.answer.position.geometry.coordinates;
+            const distance = this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+            const evalDistance = distance - (PlayingGamePage.triggerTreshold as number)
+            if (evalDistance > 10) {
+                this.feedback.hint = `Du bist ${distance.toFixed(1)} m vom Ziel entfernt.`
+            } else {
+                this.feedback.hint = `Du bist sehr nah am Ziel.`
+            }
+        }
+
+        if (this.task.type == "theme-loc") {
+            const waypoint = options.clickPosition;
+            const distance = this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+            const evalDistance = distance - (PlayingGamePage.triggerTreshold as number)
+            if (evalDistance > 10) {
+                this.feedback.hint = `Du liegst ${distance.toFixed(1)} m daneben.`
+            } else {
+                this.feedback.hint = `Du bist sehr nah dran.`
+            }
+        }
+
+        if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
+
+        }
+
+        if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
+
+        }
+
+        if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
+            const center = centroid(this.task.question.geometry.features[0]);
+            console.log(center)
+            const waypoint = options.clickPosition;
+            const distance = this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], center.geometry.coordinates[1], center.geometry.coordinates[0])
+            const evalDistance = distance - (PlayingGamePage.triggerTreshold as number)
+            if (evalDistance > 10) {
+                this.feedback.hint = `Du liegst ${distance.toFixed(1)} m daneben.`
+            } else {
+                this.feedback.hint = `Du bist sehr nah dran.`
+            }
+
+        }
+
+        if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+            console.log(this.Math.abs(options.clickDirection - this.task.question.direction.bearing))
+
+
+            if (this.Math.abs(options.clickDirection - this.task.question.direction.bearing) <= 45) {
+                this.feedback.hint = `Das ist fast richtig.`
+            } else if (this.Math.abs(options.clickDirection - this.task.question.direction.bearing) <= 135) {
+                this.feedback.hint = `Die Richtung stimmt nicht.`
+            } else {
+                this.feedback.hint = `Die Richtung stimmt nicht. Schau noch einmal nach, was auf deiner linken und deiner rechten Seite zu sehen ist.`
+            }
+        }
+
+        if (this.task.answer.type == AnswerType.NUMBER) {
+
+        }
+
+        if (this.task.answer.type == AnswerType.TEXT) {
+
+        }
     }
 
     public showSolution() {
@@ -742,7 +823,7 @@ export class FeedbackComponent {
         if (this.task.answer.type == AnswerType.DIRECTION) {
             answer = {
                 compassHeading: compassHeading,
-                correct: this.Math.abs(directionBearing - compassHeading) <= 45
+                correct: this.Math.abs(directionBearing - compassHeading) <= 22.5
             }
         }
 
@@ -750,9 +831,9 @@ export class FeedbackComponent {
             let isCorrect = false;
             if (clickDirection != 0) {
                 if (this.task.question.type == QuestionType.MAP_DIRECTION_PHOTO) {
-                    isCorrect = this.Math.abs(clickDirection - this.task.question.direction.bearing) <= 45;
+                    isCorrect = this.Math.abs(clickDirection - this.task.question.direction.bearing) <= this.DIRECTION_TRESHOLD;
                 } else {
-                    isCorrect = this.Math.abs(clickDirection - compassHeading) <= 45;
+                    isCorrect = this.Math.abs(clickDirection - compassHeading) <= this.DIRECTION_TRESHOLD;
                 }
                 answer = {
                     clickDirection: clickDirection,

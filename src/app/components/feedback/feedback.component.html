@@ -2,10 +2,16 @@
     <h1 class="feedback-icon">{{ feedback.icon }}</h1>
     <h4>{{ feedback.text }}</h4>
 
-    <ion-card color="success" *ngIf="feedback.solution">
+    <ion-card color="success" *ngIf="feedback.solution != ''">
         <ion-card-content>
             {{ feedback.solution }}
             <ion-img [src]="feedback.img" *ngIf="feedback.img"></ion-img>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card color="medium" *ngIf="feedback.hint != ''">
+        <ion-card-content>
+            {{ feedback.hint }}
         </ion-card-content>
     </ion-card>
 
