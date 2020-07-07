@@ -2,6 +2,13 @@
     <h1 class="feedback-icon">{{ feedback.icon }}</h1>
     <h4>{{ feedback.text }}</h4>
 
-    <ion-button *ngIf="!task.settings.multipleTries && task.settings.feedback"
+    <ion-card color="success" *ngIf="feedback.solution">
+        <ion-card-content>
+            {{ feedback.solution }}
+            <ion-img [src]="feedback.img" *ngIf="feedback.img"></ion-img>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-button *ngIf=" !task.settings.multipleTries && task.settings.feedback"
         (click)="feedbackRetry ? dismissFeedback() : nextTask()" color="danger">Weiter</ion-button>
 </ion-card>

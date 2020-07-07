@@ -37,7 +37,9 @@ export class FeedbackComponent {
     showFeedback: boolean = false;
     private feedback: any = {
         text: '',
-        icon: ''
+        icon: '',
+        solution: '',
+        img: ''
     }
     private feedbackRetry: boolean = false;
 
@@ -412,7 +414,7 @@ export class FeedbackComponent {
                 break;
             case FeedbackType.Wrong:
                 this.feedback.icon = "😕"
-                this.feedback.text = "Da ist etwas schief gegangen! Weiter geht es mit der nächsten Aufgabe!"
+                this.feedback.text = "Das stimmt leider nicht. Die richtige Lösung wird in Grün angezeigt."
                 break;
             case FeedbackType.TryAgain:
                 this.feedback.icon = "😕"
@@ -428,12 +430,13 @@ export class FeedbackComponent {
                 this.feedback.text = "Ziel erreicht!"
                 break;
         }
-        this.showFeedback = true
-
-        if (this.task.settings.feedback && !this.task.settings.multipleTries) {
+        if (this.task.settings.feedback && !this.task.settings.multipleTries && !correct) {
             this.showSolution()
             // setTimeout(() => this.removeSolution(), this.feedbackDuration)
         }
+
+        this.showFeedback = true
+
 
         if (type != FeedbackType.TryAgain) {
             if (Capacitor.isNative) {
@@ -459,9 +462,33 @@ export class FeedbackComponent {
         }
     }
 
-    public showSolution() {
-        if (this.task.answer.type == AnswerType.POSITION) {
+    nextTask() {
+        this.dismissFeedback()
+        this.playingGamePage.nextTask()
+    }
 
+    public showSolution() {
+        this.feedback.solution = ""
+
+        if (this.task.answer.type == AnswerType.POSITION) {
+            this.map.addSource("geolocate-solution", {
+                type: "geojson",
+                data: {
+                    type: "Point",
+                    coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+                }
+            });
+            this.map.addLayer({
+                id: "geolocate-solution",
+                source: "geolocate-solution",
+                type: "symbol",
+                layout: {
+                    "icon-image": "geolocate-solution",
+                    "icon-size": 0.4,
+                    "icon-offset": [0, 0],
+                    "icon-allow-overlap": true
+                }
+            });
         }
 
         if (this.task.type == "theme-loc") {
@@ -486,11 +513,12 @@ export class FeedbackComponent {
         }
 
         if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
-
+            this.feedback.solution = `Die korrekte Lösung ist`
+            this.feedback.img = this.task.answer.photos[0]
         }
 
         if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
-
+            this.feedback.solution = `Die korrekte Lösung ist ${this.task.answer.choices[0]}`
         }
 
         if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
@@ -534,7 +562,7 @@ export class FeedbackComponent {
         }
 
         if (this.task.answer.type == AnswerType.NUMBER) {
-
+            this.feedback.solution = `Die korrekte Lösung ist ${this.task.answer.number}`
         }
 
         if (this.task.answer.type == AnswerType.TEXT) {
@@ -580,6 +608,7 @@ export class FeedbackComponent {
     public dismissFeedback() {
         this.showFeedback = false;
         this.feedbackRetry = false;
+        this.removeSolution();
     }
 
     public remove(): void {
