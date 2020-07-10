@@ -7,7 +7,7 @@
   "server": {
     "iosScheme": "https",
     "androidScheme": "https",
-    "url": "http://192.168.0.111:8100"
+    "url": "http://192.168.0.102:8100"
   },
   "ios": {
     "hideLogs": true

@@ -710,6 +710,7 @@ export class FeedbackComponent {
             this.lastKnownPosition.coords.latitude,
             this.lastKnownPosition.coords.longitude
         );
+        this.playingGamePage.targetDistance = targetDistance
         return targetDistance < PlayingGamePage.triggerTreshold;
     }
 
