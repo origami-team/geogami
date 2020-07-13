@@ -731,9 +731,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // include position into bounds (only if position is in bbox bounds)
       if (this.task.mapFeatures.position == "true" || this.task.mapFeatures.direction == "true") {
         const position = point([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]);
+        const bbox = this.game.bbox.features[0]
 
         if (this.game.bbox?.features?.length > 0) {
-          const bbox = this.game.bbox?.features[0]
           if (booleanWithin(position, bbox)) {
             bounds.extend(position.geometry.coordinates)
           }
