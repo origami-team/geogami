@@ -11,7 +11,7 @@ export class MapFeatures {
         public landmarks: boolean,
         public landmarkFeatures: any,
         public reducedInformation: boolean,
-        public reducedMapSectiondiameter: number
+        public reducedMapSectionDiameter: number
     ) { }
 }
 

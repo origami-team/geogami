@@ -12,5 +12,5 @@ export const standardMapFeatures: MapFeatures = {
     reducedInformation: false,
     landmarks: false,
     landmarkFeatures: undefined,
-    reducedMapSectiondiameter: 20
+    reducedMapSectionDiameter: 20
 }
