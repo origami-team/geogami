@@ -1662,6 +1662,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             if (!mapFeatures[key]) {
               this.maskControl.setType(MaskType.Disabled)
             } else {
+              this.maskControl.addLayer(this.task.mapFeatures.reducedMapSectionDiameter);
               this.maskControl.setType(MaskType.Enabled)
             }
             break;
