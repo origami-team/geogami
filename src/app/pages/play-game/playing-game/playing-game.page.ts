@@ -48,6 +48,8 @@ import { AnimationOptions } from 'ngx-lottie';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
 import { Task } from 'src/app/models/task';
+import { point } from '@turf/helpers';
+import booleanWithin from '@turf/boolean-within'
 
 
 enum FeedbackType {
@@ -695,10 +697,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.type == "theme-loc") {
-      try {
-        bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
-      } catch (e) {
+      const position = point([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]);
+      if (this.game.bbox?.features?.length > 0) {
+        const bbox = this.game.bbox?.features[0]
+        if (booleanWithin(position, bbox)) {
+          try {
+            bounds.extend(position)
+          } catch (e) {
 
+          }
+        }
       }
     }
 
@@ -720,9 +728,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // zoom to task
       bounds = this.calcBounds(this.task);
 
-      // include position into bounds
-      if (this.task.mapFeatures.position == "true") {
-        bounds.extend([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude])
+      // include position into bounds (only if position is in bbox bounds)
+      if (this.task.mapFeatures.position == "true" || this.task.mapFeatures.direction == "true") {
+        const position = point([this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]);
+        const bbox = this.game.bbox.features[0]
+
+        if (this.game.bbox?.features?.length > 0) {
+          if (booleanWithin(position, bbox)) {
+            bounds.extend(position.geometry.coordinates)
+          }
+        } else {
+          bounds.extend(position.geometry.coordinates)
+        }
       }
 
       // use default bounds when there are no bounds to identify in task
@@ -732,9 +749,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
       }
 
-    } else if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
-      const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
+    } else if (this.game.bbox?.features?.length > 0) {
+      const bboxBuffer = bbox(buffer(this.game.bbox, 0.4))
       bounds = bounds.extend(bboxBuffer)
+    } else if (this.task.question.area?.features?.length > 0) {
+      const searchAreaBuffer = bbox(buffer(this.task.question.area, 0.5))
+      bounds = bounds.extend(searchAreaBuffer)
     } else {
       this.game.tasks.forEach(task => {
         bounds = bounds.extend(this.calcBounds(task))
@@ -748,7 +768,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.fitBounds(bounds, {
           padding: {
             top: 80,
-            bottom: 80,
+            bottom: 500,
             left: 40,
             right: 40
           },
@@ -767,6 +787,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.task = this.game.tasks[this.taskIndex];
     await this.trackerService.init(this.game._id, this.game.name, this.map, this.playersNames);
     console.log(this.game)
+
+    this.trackerService.addEvent({
+      type: "INIT_GAME"
+    });
+    await this.initTask();
+
+
     if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
       const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
       this.map.setMaxBounds(bboxBuffer)
@@ -791,10 +818,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
       }
     }
-    this.trackerService.addEvent({
-      type: "INIT_GAME"
-    });
-    this.initTask();
+
   }
 
   async initTask() {
@@ -1638,6 +1662,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             if (!mapFeatures[key]) {
               this.maskControl.setType(MaskType.Disabled)
             } else {
+              this.maskControl.addLayer(this.task.mapFeatures.reducedMapSectionDiameter);
               this.maskControl.setType(MaskType.Enabled)
             }
             break;

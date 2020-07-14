@@ -65,11 +65,11 @@ export class EditGameOverviewPage implements AfterViewInit {
     };
 
     this.draw = new MapboxDraw({
-      // displayControlsDefault: false,
-      // controls: {
-      //   polygon: true,
-      //   trash: true
-      // },
+      displayControlsDefault: false,
+      controls: {
+        polygon: true,
+        trash: true
+      },
       styles: [// ACTIVE (being drawn)
         // line stroke
         {
@@ -383,7 +383,7 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   uploadGame() {
     this.gameFactory.addGameInformation({
-      bbox: this.mapSection ? this.draw.getAll() : undefined,
+      bbox: this.mapSection ? this.draw.getAll() : null,
       mapSectionVisible: this.mapSectionVisible,
       name: this.game.name,
       place: this.game.place

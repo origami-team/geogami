@@ -2,6 +2,8 @@ import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Plugins, GeolocationPosition } from '@capacitor/core';
 import { Subscription } from 'rxjs';
+import circle from '@turf/circle'
+import mask from '@turf/mask'
 
 
 export enum MaskType {
@@ -18,49 +20,13 @@ export class MaskControl {
 
     private isInitalized = false;
 
+    private coords: number[];
+
     constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
         this.map = map;
-
         this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
-            if (this.map && this.map.getLayer('circle-mask')) {
-                this.map.getSource('circle-mask').setData({
-                    type: "Point",
-                    coordinates: [position.coords.longitude, position.coords.latitude]
-                });
-            }
+            this.coords = [position.coords.longitude, position.coords.latitude];
         });
-
-        this.map.addSource("circle-mask", {
-            type: "geojson",
-            data: {
-                type: "Point",
-                coordinates: [
-                    7.626, 51.960
-                ]
-            }
-        });
-
-        this.map.addLayer({
-            id: "circle-mask",
-            source: "circle-mask",
-            type: "circle",
-            layout: {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'circle-radius': {
-                    stops: [[8, 1], [10, 5], [12, 10], [14, 15], [16, 45], [18, 210]]
-                },
-                'circle-stroke-width': 800,
-                'circle-stroke-color': "#808080",
-                'circle-stroke-opacity': 0.5,
-                'circle-opacity': 0
-            }
-        });
-
-        this.map.setLayoutProperty('circle-mask', 'visibility', 'none');
-        this.isInitalized = true;
-        this.update()
     }
 
     public setType(type: MaskType): void {
@@ -69,6 +35,41 @@ export class MaskControl {
             this.reset();
             this.update();
         }
+    }
+
+    public addLayer(val: number) {
+        // outer circle
+        var ocCenter = [this.coords[0], this.coords[1]];
+        var ocRadius = 1500;
+        var ocPptions = { steps: 30, units: 'kilometers'};
+        var outerCircle = circle(ocCenter, ocRadius, ocPptions);
+
+        // inner circle
+        var icCenter = [this.coords[0], this.coords[1]];
+        var icRadius = val/1000; // to get it in meter
+        var icOptions = { steps: 30, units: 'kilometers' };
+        var innerCircle = circle(icCenter, icRadius, icOptions);
+
+        var masked = mask(innerCircle, outerCircle);
+
+        this.map.addSource("circle-mask", {
+            type: "geojson",
+            data: masked
+        });
+
+        this.map.addLayer({
+            id: "circle-mask",
+            source: "circle-mask",
+            type: "fill",
+            'paint': {
+                'fill-color': "#808080",
+                'fill-opacity': 0.8
+            }
+        });
+
+        this.map.setLayoutProperty('circle-mask', 'visibility', 'none');
+        this.isInitalized = true;
+        this.update()
     }
 
     toggle() {
@@ -95,9 +96,9 @@ export class MaskControl {
                 this.reset()
                 break;
             case MaskType.Enabled:
-                if (this.map.getLayoutProperty("circle-mask", "visibility") == 'none')
+                if (this.map.getLayoutProperty("circle-mask", "visibility") == 'none'){
                     this.map.setLayoutProperty('circle-mask', 'visibility', 'visible');
-
+                }
                 break;
         }
     }

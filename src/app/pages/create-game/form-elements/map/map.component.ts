@@ -208,6 +208,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.on("load", () => {
       this.map.resize();
 
+      // disable map rotation using right click + drag
+      this.map.dragRotate.disable();
+
+      // disable map rotation using touch rotation gesture
+      this.map.touchZoomRotate.disableRotation();
+
       this.map.loadImage(
         "/assets/icons/directionv2-richtung-settings.png",
         (error, image) => {
