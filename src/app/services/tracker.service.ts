@@ -49,7 +49,7 @@ export class TrackerService {
     this.deviceOrientationSubscription = this.deviceOrientation
       .watchHeading()
       .subscribe((data: DeviceOrientationCompassHeading) => {
-        if(this.lastHeading === undefined) {
+        if (this.lastHeading === undefined) {
           this.lastHeading = data.magneticHeading
         }
 
@@ -81,6 +81,7 @@ export class TrackerService {
     this.events = [];
     this.start = new Date().toISOString()
     this.players = players
+    this.task = undefined;
   }
 
   setTask(task) {
