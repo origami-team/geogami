@@ -1,13 +1,11 @@
 import {
-    Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter
+    Component, OnInit, Input, Output, EventEmitter
 } from "@angular/core";
 
-import { QuestionType, TaskMode } from './../../../../models/types'
 import { PopoverComponent } from 'src/app/popover/popover.component';
 import { PopoverController } from '@ionic/angular';
 import { AudioRecorderService } from 'src/app/services/audio-recorder.service';
 import { environment } from 'src/environments/environment';
-import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions, CaptureAudioOptions } from '@ionic-native/media-capture/ngx';
 
 
 @Component({
