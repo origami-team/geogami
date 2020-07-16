@@ -1,0 +1,10 @@
+<div>
+    <ion-button color="light" (click)="playPause()" [disabled]="audioSource == undefined">
+        <ion-icon *ngIf="!playing" name="play-outline"></ion-icon>
+        <ion-icon *ngIf="playing" name="pause-outline"></ion-icon>
+    </ion-button>
+    <audio #audio>
+        <source [src]="audioSource">
+        Your browser does not support the audio tag.
+    </audio>
+</div>

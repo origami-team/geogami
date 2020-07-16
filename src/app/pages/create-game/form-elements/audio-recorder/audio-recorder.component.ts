@@ -19,17 +19,12 @@ export class AudioRecorderComponent implements OnInit {
     @Input() audioSource: string;
 
     @Output() audioSourceChange: EventEmitter<any> = new EventEmitter<any>();
-
-    @ViewChild('audio') audio;
-
     recording: boolean = false
 
     constructor(public popoverController: PopoverController, private audioRecorder: AudioRecorderService) { }
 
     ngOnInit() {
-        if (this.audioSource != undefined) {
-            this.audio.nativeElement.load()
-        }
+
     }
 
     startStopRec() {
@@ -49,9 +44,13 @@ export class AudioRecorderComponent implements OnInit {
         this.recording = false
         this.audioRecorder.stop().then(({ filename }) => {
             this.audioSource = `${environment.apiURL}/audio/${filename}`
-            this.audio.nativeElement.load()
             this.audioSourceChange.emit(this.audioSource)
         })
+    }
+
+    deleteAudio() {
+        this.audioSource = undefined;
+        this.audioSourceChange.emit(this.audioSource)
     }
 
     async showPopover(ev: any, text: string) {

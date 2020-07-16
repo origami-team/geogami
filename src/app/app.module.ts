@@ -34,6 +34,8 @@ import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/m
 import { TypeToTextPipe } from './pipes/typeToText.pipe';
 import { MediaCapture } from '@ionic-native/media-capture/ngx';
 import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-recorder/audio-recorder.component';
+import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
+import { AudioPlayerModule } from './components/audio-player/audio-player.module';
 
 
 // AoT requires an exported function for factories
@@ -71,6 +73,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateInfoModalComponent
   ],
   imports: [
+    AudioPlayerModule,
     FormsModule,
     BrowserModule,
     HttpClientModule,

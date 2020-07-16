@@ -32,6 +32,10 @@
     <ion-textarea placeholder=" (optional)" *ngIf="task" [(ngModel)]="task.question.text"></ion-textarea>
   </ion-item>
 
+  <h5>Audiobotschaft</h5>
+
+  <app-audio-recorder [(audioSource)]="task.question.audio"></app-audio-recorder>
+
   <h5>Fotos und Grafiken</h5>
 
   <div class="photo-wrapper">

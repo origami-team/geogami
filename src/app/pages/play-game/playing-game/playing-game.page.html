@@ -201,10 +201,13 @@
                 <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
               </span>
             </p>
-            <audio controls *ngIf="task.question.audio">
+            <app-audio-recorder></app-audio-recorder>
+            <app-audio-player *ngIf="task.question.audio != undefined" [audioSource]="task.question.audio">
+            </app-audio-player>
+            <!-- <audio controls *ngIf="task.question.audio != undefined">
               <source [src]="task.question.audio">
               Your browser does not support the audio tag.
-            </audio>
+            </audio> -->
           </div>
 
           <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
