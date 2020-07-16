@@ -5,6 +5,7 @@
         </ion-icon>
     </h5>
     <ion-textarea [(ngModel)]="question.text"></ion-textarea>
+    <app-audio-recorder [(audioSource)]="question.audio"></app-audio-recorder>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION">

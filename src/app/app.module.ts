@@ -32,6 +32,8 @@ import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-up
 import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component'
 
 import { TypeToTextPipe } from './pipes/typeToText.pipe';
+import { MediaCapture } from '@ionic-native/media-capture/ngx';
+import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-recorder/audio-recorder.component';
 
 
 // AoT requires an exported function for factories
@@ -52,6 +54,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PhotoUploadMultipleChoiceComponent,
     PhotoUploadComponent,
     MultipleChoiceTextComponent,
+    AudioRecorderComponent,
     QuestionTypeComponent,
     AnswerTypeComponent,
     TypeToTextPipe
@@ -93,6 +96,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DeviceOrientation,
+    MediaCapture
   ],
   bootstrap: [AppComponent]
 })

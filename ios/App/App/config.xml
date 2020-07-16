@@ -15,5 +15,9 @@
     <param name="ios-package" value="CDVFileTransfer"/>
   </feature>
 
+  <feature name="Capture">
+    <param name="ios-package" value="CDVCapture"/>
+  </feature>
+
   
 </widget>
