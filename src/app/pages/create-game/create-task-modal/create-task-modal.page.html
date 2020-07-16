@@ -141,6 +141,20 @@
       </ion-text>
       <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="task.question.area"></app-map>
     </div>
+    <div *ngIf="task.type == 'theme-direction' && task.question.type == 'TEXT' && task.answer.type == 'MAP_DIRECTION'">
+      <ion-item lines="none">
+        <ion-label>Ort festlegen
+          <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Tippe auf die Karte um einen Ort festzulegen.')">
+          </ion-icon>
+        </ion-label>
+        <ion-toggle color="secondary" [(ngModel)]="viewDirectionSetPosition">
+        </ion-toggle>
+      </ion-item>
+      <app-map featureType="point" markerType="circle" [(feature)]="task.question.direction.position"
+        *ngIf="viewDirectionSetPosition">
+      </app-map>
+    </div>
     <answer-type [(answer)]="task.answer" [taskType]="task.category"></answer-type>
   </div>
 

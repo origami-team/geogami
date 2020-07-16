@@ -68,6 +68,8 @@ export class CreateTaskModalPage implements OnInit {
 
   objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT]
 
+  viewDirectionSetPosition: boolean = false;
+
   constructor(public modalController: ModalController, public popoverController: PopoverController) { }
 
   ngOnInit() {
@@ -175,6 +177,17 @@ export class CreateTaskModalPage implements OnInit {
       this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
     }
 
+    if (this.task.type == 'theme-direction' && this.task.question.type == 'TEXT' && this.task.answer.type == 'MAP_DIRECTION') {
+      if (this.task.question.direction == undefined) {
+        this.task.question.direction = {}
+      }
+      if (this.task.question.direction.position != undefined) {
+        this.viewDirectionSetPosition = true;
+      } else {
+        this.viewDirectionSetPosition = false
+      }
+    }
+
   }
 
   onObjectQuestionSelectChange() {
@@ -232,7 +245,7 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings.multipleTries = false;
     }
 
-    if(this.task.type == 'nav-text' && !this.task.settings.showMarker) {
+    if (this.task.type == 'nav-text' && !this.task.settings.showMarker) {
       this.task.settings.keepMarker = false
     }
 
@@ -304,6 +317,12 @@ export class CreateTaskModalPage implements OnInit {
 
     if (this.task.question.area?.features?.length <= 0) {
       this.task.question.area = undefined
+    }
+
+    if (this.task.type == 'theme-direction' && this.task.question.type == 'TEXT' && this.task.answer.type == 'MAP_DIRECTION') {
+      if (this.viewDirectionSetPosition == false) {
+        this.task.question.direction.position = undefined;
+      }
     }
 
     this.modalController.dismiss({

@@ -40,6 +40,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
   @Input() featureType: string;
 
+  @Input() markerType: string;
+
   @Input() drawTheme: string;
 
   showDirectionMarker: boolean = false;
@@ -80,11 +82,15 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     if (feature != null) {
       if (!this.marker) {
         const el = document.createElement('div');
-        el.className = 'waypoint-marker';
+        if (this.markerType != "circle") {
+          el.className = 'waypoint-marker';
+        } else {
+          el.className = 'circle-marker'
+        }
 
         this.marker = new mapboxgl.Marker(el, {
           anchor: 'bottom',
-          offset: [15, 0],
+          offset: [0, 15],
           draggable: true
         })
           .setLngLat(feature.geometry.coordinates)
