@@ -783,6 +783,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     return prom;
   }
 
+  zoomBbox() {
+    if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
+      const bboxBuffer = bbox(this.game.bbox)
+      this.map.fitBounds(bboxBuffer, {
+        padding: {
+          top: 80,
+          bottom: 500,
+          left: 40,
+          right: 40
+        }
+      })
+    }
+  }
+
   async initGame() {
     this.task = this.game.tasks[this.taskIndex];
     await this.trackerService.init(this.game._id, this.game.name, this.map, this.playersNames);
@@ -796,7 +810,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
       const bboxBuffer = bbox(buffer(this.game.bbox, 0.5))
-      this.map.setMaxBounds(bboxBuffer)
+      // this.map.setMaxBounds(bboxBuffer)
 
       if (this.game.mapSectionVisible === true || this.game.mapSectionVisible == undefined) {
         this.map.addSource('bbox', {
