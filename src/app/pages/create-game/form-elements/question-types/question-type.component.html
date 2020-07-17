@@ -16,6 +16,15 @@
     <ion-textarea [(ngModel)]="question.text"></ion-textarea>
 </div>
 
+<div>
+    <h5>Audiobotschaft
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Die Aufgabenstellung kann auch als Audiobotschaft abgespielt werden. Klicke auf den Record Button um eine Audiobotschaft aufzunehmen.')">
+        </ion-icon>
+    </h5>
+    <app-audio-recorder [(audioSource)]="question.audio"></app-audio-recorder>
+</div>
+
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE">
     <h5>Objektposition
         <ion-icon name="information-circle"

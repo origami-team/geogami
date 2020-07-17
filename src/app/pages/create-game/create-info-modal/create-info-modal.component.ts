@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { ModalController } from "@ionic/angular";
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
@@ -9,16 +9,16 @@ import { QuestionType, AnswerType } from 'src/app/models/types';
 import { standardMapFeatures } from 'src/app/models/standardMapFeatures';
 import { cloneDeep } from 'lodash';
 
-
-
 @Component({
   selector: 'app-create-info-modal',
   templateUrl: './create-info-modal.component.html',
   styleUrls: ['./create-info-modal.component.scss'],
 })
-export class CreateInfoModalComponent implements OnInit {
+export class CreateInfoModalComponent implements OnInit, OnChanges {
 
   @Input() task: any;
+
+  @Output() taskChange: EventEmitter<any> = new EventEmitter<any>(true);
 
   uploading: boolean = false;
 
@@ -36,6 +36,7 @@ export class CreateInfoModalComponent implements OnInit {
           type: QuestionType.INFO,
           text: '',
           photo: '',
+          audio: undefined
         },
         answer: {
           type: AnswerType.INFO,
@@ -46,6 +47,10 @@ export class CreateInfoModalComponent implements OnInit {
         mapFeatures: null,
       }
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.taskChange.emit(this.task)
   }
 
   async capturePhoto(library: boolean = false) {

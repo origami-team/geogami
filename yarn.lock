@@ -1100,6 +1100,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@capacitor/core@latest":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-2.2.1.tgz#20f07d35c4af3650eed90cbfd0d5c260cbb59ba5"
+  integrity sha512-Qbx+4woY24Ixb74zizaKAJur/gpFDwdZAZbZtXIc5yNhyaD13XLyqwLm5LTI1CKw7Vc7xoENUaWLqNQYtr6v2g==
+  dependencies:
+    tslib "^1.9.0"
+
 "@capacitor/ios@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-2.0.1.tgz#1f1cd3736dcf00373e3303d89a0164f2f168d24e"
@@ -1640,6 +1647,11 @@
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-0.0.34.tgz#ea7addf74ecec3d7629827a0c39e2c9addc73d04"
   integrity sha1-6nrd907Ow9dimCegw54smt3HPQQ=
+
+"@types/dom-mediacapture-record@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.7.tgz#08bacca4296ef521d59049f43e65cf971bbf6be1"
+  integrity sha512-ddDIRTO1ajtbxaNo2o7fPJggpN54PZf1ZUJKOjto2ENMJE/9GKUvaw3ZRuQzlS/p0E+PnIcssxfoqYJ4yiXSBw==
 
 "@types/events@*":
   version "3.0.0"
@@ -2877,6 +2889,13 @@ capacitor-keep-screen-on@^0.0.4:
     "@capacitor/android" "^2.0.1"
     "@capacitor/core" "^2.0.1"
     "@capacitor/ios" "^2.0.1"
+
+capacitor-voice-recorder@^0.0.91:
+  version "0.0.91"
+  resolved "https://registry.yarnpkg.com/capacitor-voice-recorder/-/capacitor-voice-recorder-0.0.91.tgz#e241797f1e30c1e23b55db742c47f1ac90ab98d3"
+  integrity sha512-1zp5A8H3Q95BRRHMxBxShNDr0u988/dal9wzz2baiSioT6F6Synm63zDr9koyA9uROVRXbb4i3Fo2T7H8RYB9Q==
+  dependencies:
+    "@capacitor/core" latest
 
 cardinal@~0.4.2:
   version "0.4.4"

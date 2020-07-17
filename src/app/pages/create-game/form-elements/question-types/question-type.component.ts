@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, Input, OnChanges, SimpleChanges
+    Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter
 } from "@angular/core";
 
 import { QuestionType, TaskMode } from './../../../../models/types'
@@ -15,17 +15,20 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     @Input() question: any;
     @Input() taskType: string;
 
+    @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
+
     questionTypeEnum = QuestionType
     taskModeEnum = TaskMode
 
     constructor(public popoverController: PopoverController) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        // console.log(changes)
+        console.log(changes)
+        this.questionChange.emit(changes.question.currentValue)
     }
 
     ngOnInit() {
-        // console.log(this.question)
+
     }
 
     async showPopover(ev: any, text: string) {

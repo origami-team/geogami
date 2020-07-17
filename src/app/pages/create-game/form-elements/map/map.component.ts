@@ -90,7 +90,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
         this.marker = new mapboxgl.Marker(el, {
           anchor: 'bottom',
-          offset: [0, 15],
+          offset: this.markerType == "circle" ? [0, 15] : [15, 0],
           draggable: true
         })
           .setLngLat(feature.geometry.coordinates)

@@ -20,6 +20,11 @@
   height: 50px;
   padding: 0;
 
+  &.reset-viewport {
+    position: absolute;
+    right: 0;
+  }
+
   > ion-button {
     width: 100%;
     height: 100%;
@@ -83,6 +88,8 @@ ion-thumbnail {
 }
 
 .ok-container {
+  display: flex;
+  place-content: flex-end;
   > ion-button {
     float: right;
   }

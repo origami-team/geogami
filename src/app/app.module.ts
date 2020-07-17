@@ -32,6 +32,9 @@ import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-up
 import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component'
 
 import { TypeToTextPipe } from './pipes/typeToText.pipe';
+import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-recorder/audio-recorder.component';
+import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
+import { AudioPlayerModule } from './components/audio-player/audio-player.module';
 
 
 // AoT requires an exported function for factories
@@ -52,6 +55,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PhotoUploadMultipleChoiceComponent,
     PhotoUploadComponent,
     MultipleChoiceTextComponent,
+    AudioRecorderComponent,
     QuestionTypeComponent,
     AnswerTypeComponent,
     TypeToTextPipe
@@ -68,6 +72,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateInfoModalComponent
   ],
   imports: [
+    AudioPlayerModule,
     FormsModule,
     BrowserModule,
     HttpClientModule,

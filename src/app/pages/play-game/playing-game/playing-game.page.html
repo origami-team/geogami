@@ -21,6 +21,13 @@
       <div *ngIf="swipe" #swipeMap class="map"></div>
     </div>
 
+    <ion-card class="overlay feature-button reset-viewport" (click)="zoomBbox()"
+      *ngIf="game?.bbox?.features?.length > 0 && task?.type != 'nav-arrow'">
+      <ion-button fill="clear">
+        <ion-icon name="scan-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-card>
+
     <ion-card class="overlay feature-button" *ngIf="task?.mapFeatures?.rotation == 'button'" (click)="toggleRotate()">
       <ion-button fill="clear">
         <ion-icon name="refresh" size="large"></ion-icon>
@@ -237,6 +244,8 @@
           </p>
         </div>
         <div class="ok-container">
+          <app-audio-player *ngIf="task.question.audio != undefined" [audioSource]="task.question.audio">
+          </app-audio-player>
           <ion-button slot="end" class="confirm" [disabled]="uploading"
             [color]="task.category.includes('nav') ? 'primary' : 'secondary'" (click)="onOkClicked()"
             *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
