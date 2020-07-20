@@ -722,8 +722,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (this.task.mapFeatures.zoombar == "task" &&
       this.task.answer.mode != TaskMode.NAV_ARROW &&
-      this.task.answer.mode != TaskMode.DIRECTION_ARROW &&
-      this.task.answer.type !== AnswerType.MAP_POINT) {
+      this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
 
       // zoom to task
       bounds = this.calcBounds(this.task);
