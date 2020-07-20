@@ -65,13 +65,15 @@ export class TrackerService {
 
     this.map = map;
     this.map.on('moveend', moveEvent => {
-      if (moveEvent.type == "moveend")
+      if (moveEvent.type == "moveend" && moveEvent.originalEvent) {
         this.panCounter++
+      }
     })
 
     this.map.on('zoomend', zoomEvent => {
-      if (zoomEvent.type == "zoomend")
+      if (zoomEvent.type == "zoomend" && zoomEvent.originalEvent) {
         this.zoomCounter++
+      }
     })
 
     this.game = gameID;
