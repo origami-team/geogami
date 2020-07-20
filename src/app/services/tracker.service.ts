@@ -109,7 +109,7 @@ export class TrackerService {
         compassHeading: this.compassHeading,
         interaction: {
           panCount: this.panCounter,
-          zoomCount: this.zoomCounter,
+          zoomCount: this.zoomCounter / 2,
           rotation: this.rotationCounter
         }
       });
@@ -132,7 +132,7 @@ export class TrackerService {
       task: this.task,
       interaction: {
         panCount: this.panCounter,
-        zoomCount: this.zoomCounter,
+        zoomCount: this.zoomCounter / 2,
         rotationCount: this.rotationCounter
       }
     });
