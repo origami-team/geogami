@@ -7,6 +7,8 @@ import { OrigamiGeolocationService } from './origami-geolocation.service';
 import { Subscription } from 'rxjs';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
+import { FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+
 @Injectable({
   providedIn: "root"
 })
@@ -139,7 +141,7 @@ export class TrackerService {
     console.log(this.events)
   }
 
-  uploadTrack() {
+  async uploadTrack() {
     const data = {
       game: this.game,
       name: this.gameName,
@@ -158,6 +160,31 @@ export class TrackerService {
     // Plugins.Geolocation.clearWatch({ id: this.positionWatch });
     this.deviceOrientationSubscription.unsubscribe();
     this.positionWatch.unsubscribe();
+
+    try {
+      let ret = await Plugins.Filesystem.mkdir({
+        path: 'origami/tracks',
+        directory: FilesystemDirectory.Documents,
+        recursive: true // like mkdir -p
+      });
+      console.log('Created dir', ret);
+    } catch (e) {
+      console.error('Unable to make directory', e);
+    }
+
+    try {
+      const result = await Plugins.Filesystem.writeFile({
+        path: `origami/tracks/${this.gameName.replace(/ /g, '_')}-${this.start}.json`,
+        data: JSON.stringify(data),
+        directory: FilesystemDirectory.Documents,
+        encoding: FilesystemEncoding.UTF8
+      })
+      console.log('Wrote file', result);
+    } catch (e) {
+      console.error('Unable to write file', e);
+    }
+
+    // return new Promise(() => { })
 
     return this.http
       .post(`${environment.apiURL}/track`, data, { observe: "response" })
