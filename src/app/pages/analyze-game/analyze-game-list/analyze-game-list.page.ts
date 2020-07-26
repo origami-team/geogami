@@ -27,6 +27,10 @@ export class AnalyzeGameListPage implements OnInit {
     // this.gamesService.getTracks().then(tracks => {
     //   this.tracks = tracks
     // });
+    await this.getTracks();
+  }
+
+  async getTracks() {
     try {
       let ret = await Plugins.Filesystem.readdir({
         path: 'origami/tracks',
@@ -48,5 +52,25 @@ export class AnalyzeGameListPage implements OnInit {
 
     this.http.post(`${environment.apiURL}/track`, JSON.parse(contents.data), { observe: "response" })
       .subscribe(response => alert(response.status + " " + response.statusText))
+  }
+
+  async remove(track) {
+    this.confirmDialog(`Willst du die Datei ${track} wirklich löschen?`)
+      .then(async () => {
+        await Plugins.Filesystem.deleteFile({
+          path: `origami/tracks/${track}`,
+          directory: FilesystemDirectory.Documents,
+        })
+      })
+      .catch(err => console.log("User aborted delete"))
+      .finally(async () => await this.getTracks())
+  }
+
+  private confirmDialog(msg: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let confirmed = window.confirm(msg);
+
+      return confirmed ? resolve(true) : reject(false);
+    });
   }
 }
