@@ -22,6 +22,22 @@ const routes: Routes = [
   { path: 'info', loadChildren: () => import('./pages/info/info.module').then(m => m.InfoPageModule) },
   { path: 'showroom', loadChildren: () => import('./pages/showroom/showroom/showroom.module').then(m => m.ShowroomPageModule) },
   { path: 'task-showroom', loadChildren: () => import('./pages/showroom/task-showroom/task-showroom.module').then(m => m.TaskShowroomPageModule) },
+  {
+    path: 'add-beacon',
+    loadChildren: () => import('./pages/ibeacon/beacon-settings/add-beacon/add-beacon.module').then( m => m.AddBeaconPageModule)
+  },
+  {
+    path: 'stored-beacons',
+    loadChildren: () => import('./pages/ibeacon/beacon-settings/stored-beacons/stored-beacons.module').then( m => m.StoredBeaconsPageModule)
+  },
+  {
+    path: 'beacon-settings-tabs',
+    loadChildren: () => import('./pages/ibeacon/beacon-settings/beacon-settings-tabs/beacon-settings-tabs.module').then( m => m.BeaconSettingsTabsPageModule)
+  },
+  {
+    path: 'scan-nearby',
+    loadChildren: () => import('./pages/ibeacon/scan-nearby/scan-nearby.module').then( m => m.ScanNearbyPageModule)
+  },
 ];
 @NgModule({
   imports: [

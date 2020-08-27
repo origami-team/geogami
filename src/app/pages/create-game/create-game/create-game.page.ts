@@ -23,6 +23,14 @@ export class CreateGamePage implements OnInit {
 
   navigateEditGame() {
     this.navCtrl.navigateForward('edit-game');
+  }  
+  
+  navigateBeaconSettings() {
+    this.navCtrl.navigateForward('beacon-settings-tabs');
+  }  
+  
+  navigateScanNearBy() {
+    this.navCtrl.navigateForward('scan-nearby');
   }
 
 }

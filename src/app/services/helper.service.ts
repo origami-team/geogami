@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { BeaconInfo } from '../models/ibeacon/beaconInfo';
+import { BeaconGame } from '../models/ibeacon/beaconGame';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
 
-  constructor() { }
+  constructor(private toastController: ToastController) { }
 
   getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
@@ -55,4 +59,45 @@ export class HelperService {
       "coordinates": [${lng}, ${lat}]
     }
   }`);
+
+  /**************************/
+  /* ibeacon services start */
+  // Pass minor to update beacon loaction
+  private minorNoSource = new BehaviorSubject(undefined);
+
+  serviceMinorNo = this.minorNoSource.asObservable();
+
+  changeMinorNo(minorNo: number) {
+    this.minorNoSource.next(minorNo);
+  }
+
+  // Pass beaconData to update beacon loaction
+  private beaconData = new BehaviorSubject(undefined);
+
+  serviceBeaconData = this.beaconData.asObservable();
+
+  changebeaconData(beaconData: BeaconInfo) {
+    this.beaconData.next(beaconData);
+  }
+
+  // Pass selected game
+  private selectedGame = new BehaviorSubject(undefined);
+
+  serviceSelectedGame = this.selectedGame.asObservable();
+
+  ChangeGame(game: BeaconGame) {
+    this.selectedGame.next(game);
+  }
+
+  // Dispaly toast
+  async presentToast(msg: string, color = 'success') {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000,
+      color: color
+    });
+    toast.present();
+  }
+  /* ibeacon services end */
+
 }
