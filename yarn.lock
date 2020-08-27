@@ -1133,6 +1133,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/ibeacon@^5.28.0":
+  version "5.28.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/ibeacon/-/ibeacon-5.28.0.tgz#1f1b32d9c066d68d9fb92391a47591d4c4b53e37"
+  integrity sha512-Sdc7sWytk7nUNMAxbJdhe91lOB2DUiDOxcs/A6YNXndOUSHTdLH7pkGe+SI9641LoB0hvvPzbDRneYVZ5u34HA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic/angular-toolkit@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ionic/angular-toolkit/-/angular-toolkit-2.2.0.tgz#0960898113a6022d0736aaa734c05af2c02ae508"
@@ -3496,6 +3503,11 @@ cordova-plugin-device-orientation@^2.0.1:
   resolved "https://registry.yarnpkg.com/cordova-plugin-device-orientation/-/cordova-plugin-device-orientation-2.0.1.tgz#149d51250defc309f0d03d306fe28e89881ba84d"
   integrity sha1-FJ1RJQ3vwwnw0D0wb+KOiYgbqE0=
 
+cordova-plugin-device@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz#c2b41b7efd0455dd097f89356d85bfdd5dadeb0f"
+  integrity sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw==
+
 cordova-plugin-file-transfer@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.1.tgz#a75d8be2ebc3bb9b23c5b1bbd199214ec267586b"
@@ -3505,6 +3517,11 @@ cordova-plugin-file@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-6.0.2.tgz#f3911479f8357e9aacb5576674f8d95b31a1fb20"
   integrity sha512-m7cughw327CjONN/qjzsTpSesLaeybksQh420/gRuSXJX5Zt9NfgsSbqqKDon6jnQ9Mm7h7imgyO2uJ34XMBtA==
+
+cordova-plugin-ibeacon@^3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-ibeacon/-/cordova-plugin-ibeacon-3.8.1.tgz#c2f0efd1f53c0e85b40d97852539b89b39826ad3"
+  integrity sha512-tWA8eSDTrkVZsJYtBl6svKcCYwjLEVU4RPbTRtsnnn+1eBMqFwXsxWJsOd6o8q4s8RdU7WRTJyv6KoAsP+fX/A==
 
 cordova-serve@^3.0.0:
   version "3.0.0"
