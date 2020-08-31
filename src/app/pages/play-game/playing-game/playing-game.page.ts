@@ -50,6 +50,7 @@ import buffer from '@turf/buffer';
 import { Task } from 'src/app/models/task';
 import { point } from '@turf/helpers';
 import booleanWithin from '@turf/boolean-within'
+import { IBeacon, IBeaconPluginResult, Beacon } from '@ionic-native/ibeacon/ngx';
 
 
 enum FeedbackType {
@@ -161,6 +162,21 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   uploading: boolean = false;
   loaded: boolean = false;
 
+  /* iBeacon */
+  uuid = 'b9407f30-f5f8-466e-aff9-25556b57fe6d'; // etiomte
+  scanStatus: boolean = false;
+  private delegate: any = null;
+  public beaconRegion: any = null;
+  beaconData = [];
+  reachedUsingBeacon: boolean = false;
+  reachedUsingGPS: boolean = false;
+  reachedBeaconDistance: Number
+  reachedBeaconTime: String
+  reachedGPSDistance: Number
+  reachedGPSTime: String
+  /*  */
+
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -177,6 +193,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private transfer: FileTransfer,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService,
+    private readonly ibeacon: IBeacon
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -194,6 +211,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.resize();
       await this.zoomBounds()
     });
+  }
+
+  ionViewWillLeave() {
+    this.stopScannning();
   }
 
   ionViewWillEnter() {
@@ -268,6 +289,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           const waypoint = this.task.answer.position.geometry.coordinates;
 
           if (this.userDidArrive(waypoint) && !this.task.settings.confirmation && !this.showFeedback) {
+            this.reachedUsingGPS = true;
+            this.reachedGPSTime = new Date().toISOString();
+            //this.helperService.presentToast("Found using GPS: dis = "+ this.reachedGPSDistance+", time: "+this.reachedGPSTime);
+
             this.onWaypointReached();
           }
 
@@ -836,6 +861,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   async initTask() {
+    /* iBeacon */
+    if(this.task.iBeacon){
+      this.startScanning();
+    }
+
     this.panelMinimized = false;
 
     console.log("Current task: ", this.task);
@@ -1017,8 +1047,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   onWaypointReached() {
+    /* iBeacon */
+    if(this.task.iBeacon && !(this.reachedUsingBeacon && this.reachedUsingGPS)){
+      return
+    }
+
     this.trackerService.addEvent({
-      type: "WAYPOINT_REACHED"
+      type: "WAYPOINT_REACHED",
+      reachedBeaconDistance: this.reachedBeaconDistance,
+      reachedBeaconTime: this.reachedBeaconTime,
+      reachedGPSDistance: this.reachedGPSDistance,
+      reachedGPSTime: this.reachedGPSTime,
+
     });
     this.initFeedback(true);
   }
@@ -1102,6 +1142,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   nextTask() {
+    // (iBeacon) Allow searching for beacon again
+    this.reachedUsingBeacon = false;
+    this.reachedUsingGPS = false;
+
     this.showFeedback = false;
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
@@ -1219,6 +1263,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (!arrived) {
         this.initFeedback(false)
       } else {
+        this.reachedUsingGPS = true;
         this.onWaypointReached();
       }
     }
@@ -1466,6 +1511,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.lastKnownPosition.coords.latitude,
       this.lastKnownPosition.coords.longitude
     );
+    this.reachedGPSDistance = this.targetDistance;
     return this.targetDistance < this.triggerTreshold;
   }
 
@@ -1723,5 +1769,123 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return key.includes(m.tag)
     }).length > 0
   }
+
+  /* iBeacon */
+  public onScanClicked(): void {
+    console.log('∆∆∆∆ onScanClicked');
+    if (!this.scanStatus) {
+      this.startScanning();
+      this.scanStatus = true;
+    } else {
+      this.scanStatus = false;
+      this.stopScannning();
+    }
+  }
+
+  public stopScannning(): void {
+    this.scanStatus = false; // Change scan state Y.Q
+    // stop ranging
+    this.ibeacon.stopRangingBeaconsInRegion(this.beaconRegion)
+      .then(async () => {
+        console.log(`Stopped ranging beacon region:`, this.beaconRegion);
+      })
+      .catch((error: any) => {
+        console.log(`Failed to stop ranging beacon region: `, this.beaconRegion);
+      });
+  }
+
+  startScanning() {
+    console.log('On startScanning');
+
+    // create a new delegate and register it with the native layer
+    this.delegate = this.ibeacon.Delegate();
+
+    this.ibeacon.setDelegate(this.delegate);
+
+    //this.beaconUuid = this.uuid;
+
+    // Check bluetooth status Y.Q
+    /*     this.ibeacon.isBluetoothEnabled()
+          .then(
+            (data) => console.log('-------=== Enabled', data),
+            (error: any) => console.error('-------=== Disabled', error)
+          ); */
+
+    // Subscribe to some of the delegate's event handlers
+    this.delegate.didRangeBeaconsInRegion()
+      .subscribe(
+        async (pluginResult: IBeaconPluginResult) => {
+          console.log('didRangeBeaconsInRegion: ', pluginResult)
+          console.log('found beacons size: ' + pluginResult.beacons.length)
+          if (pluginResult.beacons.length > 0) {
+            this.beaconData = pluginResult.beacons;
+            this.onBeaconFound(this.beaconData);  // check received beacons to trigger an event
+            //this.changeRef.detectChanges(); // Check for data change to update view Y.Q
+            
+            //this.helperService.presentToast("Minor: "+pluginResult.beacons[0].minor+"Dis: "+pluginResult.beacons[0].accuracy);
+          } else {
+            console.log('no beacons nearby')
+          }
+        },
+        (error: any) => console.error(`Failure during ranging: `, error)
+      );
+
+    this.delegate.didStartMonitoringForRegion()
+      .subscribe(
+        (pluginResult: IBeaconPluginResult) =>
+          console.log('didStartMonitoringForRegion: ', pluginResult)
+        ,
+        (error: any) => console.error(`Failure during starting of monitoring: `, error)
+      );
+
+    console.log(`Creating BeaconRegion with UUID of: `, this.uuid);
+
+    // uuid is required, identifier and range are optional.
+    this.beaconRegion = this.ibeacon.BeaconRegion('EST3', this.uuid);
+
+    this.ibeacon.startMonitoringForRegion(this.beaconRegion).
+      then(
+        () => console.log('Native layer recieved the request to monitoring'),
+        (error: any) => console.error('Native layer failed to begin monitoring: ', error)
+      );
+
+    this.ibeacon.startRangingBeaconsInRegion(this.beaconRegion)
+      .then(() => {
+        console.log(`Started ranging beacon region: `, this.beaconRegion);
+      })
+      .catch((error: any) => {
+        console.error(`Failed to start ranging beacon region: `, this.beaconRegion);
+      });
+  }
+
+  onBeaconFound(receivedData: Beacon[]): void {
+    //Ingnore it if beacon is allready found and waiting for GPS
+    if (!this.reachedUsingBeacon) {
+      //to compare with one beacon at a time
+      for (let i = 0; i < receivedData.length; i++) {
+        //console.log('◊ look for Beacon: 56411');
+        console.log(' receivedData[i].minor == this.task.beaconInfo.minor):', receivedData[i].minor, ' == ', this.task.beaconInfo.minor);
+        console.log(' receivedData[i].tx == this.task.settings.accuracy:', receivedData[i].accuracy, '<=', this.task.settings.accuracy);
+        //this.helperService.presentToast("Minor: "+this.task.beaconInfo.minor+"Dis: "+this.task.settings.accuracy);
+
+        /* if (this.beaconsStoredList) { */
+          if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor && receivedData[i].accuracy <= this.task.settings.accuracy) { // Check minor and distance
+            this.reachedBeaconDistance = receivedData[i].accuracy;
+            this.reachedBeaconTime = new Date().toISOString();
+            //this.helperService.presentToast("Found using beacon: dis = "+ this.reachedBeaconDistance+", time: "+this.reachedBeaconTime);
+
+            //this.beaconAudio.play();
+            this.reachedUsingBeacon = true;
+
+            this.onWaypointReached();
+
+            // Stop scanning for beacons
+            this.stopScannning();
+          /* } */
+        }
+      }
+    }
+  }
+  /*  */
 }
 
