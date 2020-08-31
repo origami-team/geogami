@@ -15,7 +15,11 @@ export const navtasks: ReadonlyArray<any> = [
             position: undefined
         },
         evaluate: "distanceToPoint",
-        settings: {}
+        settings: {},
+        iBeacon: false,
+        beaconInfo: {
+            minor: undefined
+        }
     }, {
         category: "nav",
         type: "nav-arrow",
@@ -30,7 +34,11 @@ export const navtasks: ReadonlyArray<any> = [
             position: undefined
         },
         evaluate: "distanceToPoint",
-        settings: {}
+        settings: {},
+        iBeacon: false,
+        beaconInfo: {
+            minor: undefined
+        }
     }, {
         category: "nav",
         type: "nav-text",
@@ -44,6 +52,10 @@ export const navtasks: ReadonlyArray<any> = [
             position: undefined
         },
         evaluate: "distanceToPoint",
-        settings: {}
+        settings: {},
+        iBeacon: false,
+        beaconInfo: {
+            minor: undefined
+        }
     }
 ]

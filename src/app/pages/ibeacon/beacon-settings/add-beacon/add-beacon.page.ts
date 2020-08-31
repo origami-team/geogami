@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController, Platform, ModalController } from '@ionic/angular';
 import { IBeacon, IBeaconPluginResult, Beacon } from '@ionic-native/ibeacon/ngx';
 import { BeaconInfo } from 'src/app/models/ibeacon/beaconInfo';
 import { BeaconFullInfo } from 'src/app/models/ibeacon/beaconFullInfo';
@@ -28,7 +28,7 @@ export class AddBeaconPage implements OnInit {
   public scanResultList: BeaconFullInfo[] = [];
 
 
-  constructor( private helperService: HelperService,  public storage: Storage, public navCtrl: NavController, private readonly ibeacon: IBeacon, private readonly platform: Platform, private changeRef: ChangeDetectorRef,  private apiService: GamesService,) {
+  constructor( private helperService: HelperService,  public storage: Storage, public navCtrl: NavController, private readonly ibeacon: IBeacon, private readonly platform: Platform, private changeRef: ChangeDetectorRef,  private apiService: GamesService, public modalController: ModalController) {
   this.platform.ready().then(() => {
       this.requestLocPermissoin();
       this.enableDebugLogs();
@@ -288,6 +288,13 @@ export class AddBeaconPage implements OnInit {
 
   // Back button
   onBackButton() {
-    this.navCtrl.navigateRoot('menu');
+    this.navCtrl.navigateRoot('start');
+  }
+
+  dismissModal(dismissType: string = "null") {
+    if (dismissType == "close") {
+      this.modalController.dismiss();
+      return;
+    }
   }
 }

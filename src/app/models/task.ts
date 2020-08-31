@@ -1,4 +1,5 @@
 import { MapFeatures } from './mapFeatures';
+import { BeaconInfo } from './ibeacon/beaconInfo';
 
 export class Task {
   constructor(
@@ -10,6 +11,8 @@ export class Task {
     public name: string,
     public question: any,
     public settings: any,
-    public type: string
+    public type: string,
+    public iBeacon: boolean,
+    public beaconInfo: BeaconInfo
   ) { }
 }
