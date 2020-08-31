@@ -227,4 +227,24 @@
       Kartenfeatures
     </ion-label>
   </ion-item>
+
+  <!-- iBeacon -->
+  <ion-item style="--border-style: none;">
+    <ion-label>iBeacon Verwendung </ion-label>
+    <ion-toggle [(ngModel)]="task.iBeacon" (ngModelChange)="onBeaconSelected()"></ion-toggle>
+  </ion-item>
+
+  <ion-item [disabled]="!task.iBeacon" style="margin-left: 10px; margin-right: 10px;">
+    <ion-label>Wählen oder einen neuen hinzufügen </ion-label>
+
+    <select [(ngModel)]="task.beaconInfo" (ngModelChange)="onBeaconInfoSelectChange($event)" interface="popover" *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompareBeacon">
+      <option [ngValue]="braconInfo" *ngFor="let braconInfo of beaconsStoredList; let i = index">Beacon {{ i+1 }}</option>
+    </select>
+
+    <ion-button (click)="presentAddBeaconInfo()">
+      <ion-icon name="add-circle-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <!--  -->
+
 </ion-content>

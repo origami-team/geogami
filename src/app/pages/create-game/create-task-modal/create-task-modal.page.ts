@@ -21,6 +21,9 @@ import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal
 import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
+import { AddBeaconPage } from '../../ibeacon/beacon-settings/add-beacon/add-beacon.page';
+import { GamesService } from 'src/app/services/games.service';
+import { BeaconInfo } from 'src/app/models/ibeacon/beaconInfo';
 
 
 @Component({
@@ -69,8 +72,13 @@ export class CreateTaskModalPage implements OnInit {
   objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT]
 
   viewDirectionSetPosition: boolean = false;
+  /*  */
+  beaconsStoredList: BeaconInfo[];
+  beaconInfoSelected: any
+  /*  */
 
-  constructor(public modalController: ModalController, public popoverController: PopoverController) { }
+
+  constructor(public modalController: ModalController, public popoverController: PopoverController, private gameService: GamesService) { }
 
   ngOnInit() {
     if (this.type == "nav") {
@@ -343,4 +351,60 @@ export class CreateTaskModalPage implements OnInit {
     });
     return await popover.present();
   }
+
+  /* iBeacon */
+  async presentAddBeaconInfo() {
+    const modal = await this.modalController.create({
+      component: AddBeaconPage,
+      backdropDismiss: false,
+      componentProps: {
+        //features: this.mapFeatures
+      }
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+
+    this.getBeaconInfoFromServer();
+
+    //if (data != undefined) {
+      //this.mapFeatures = data.data;
+
+    //}
+    return;
+  }
+
+  onBeaconSelected() {
+    if (this.task.iBeacon) {
+      this.getBeaconInfoFromServer()
+
+    }
+  }
+
+  onBeaconInfoSelectChange(event){
+    console.log('this.task.beaconMinorNo55', this.task.beaconInfo.minor)
+      console.log('.this.beaconInfoSelected55', this.beaconInfoSelected)
+  }
+
+  selectCompareBeacon(task1, task2) {
+    return task1 && task2 ? task1.id == task2.id : task1 == task2;
+  }
+
+  getBeaconInfoFromServer() {
+    console.info('getBeaconInfoFromServer');
+    // Retrieve beacon info from server
+    this.gameService.getBeaconInfo()
+      .then(data => {
+        console.log('data: length ', data.length)
+        console.log('data ', data)
+
+
+        if (data != null && data.length > 0) {
+          this.beaconsStoredList = data;
+          this.task.beaconInfo.minor = this.beaconInfoSelected
+        }
+      }).catch(e => {
+        console.error('(strored-beacons-page), ', e['error'].message);
+      });
+  }
+  /*  */
 }
