@@ -163,7 +163,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   loaded: boolean = false;
 
   /* iBeacon */
-  uuid = 'b9407f30-f5f8-466e-aff9-25556b57fe6d'; // etiomte
+  uuid = 'b9407f30-f5f8-466e-aff9-25556b57fe6d'; // etiomte beacon
   scanStatus: boolean = false;
   private delegate: any = null;
   public beaconRegion: any = null;
@@ -863,6 +863,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initTask() {
     /* iBeacon */
     if(this.task.iBeacon){
+      this.uuid = this.task.beaconInfo.uuid
       this.startScanning();
     }
 

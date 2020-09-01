@@ -28,8 +28,17 @@ export class AddBeaconPage implements OnInit {
   public scanResultList: BeaconFullInfo[] = [];
 
 
-  constructor( private helperService: HelperService,  public storage: Storage, public navCtrl: NavController, private readonly ibeacon: IBeacon, private readonly platform: Platform, private changeRef: ChangeDetectorRef,  private apiService: GamesService, public modalController: ModalController) {
-  this.platform.ready().then(() => {
+  constructor(
+    private helperService: HelperService,
+    public storage: Storage,
+    public navCtrl: NavController,
+    private readonly ibeacon: IBeacon,
+    private readonly platform: Platform,
+    private changeRef: ChangeDetectorRef,
+    private apiService: GamesService,
+    public modalController: ModalController,
+  ) {
+    this.platform.ready().then(() => {
       this.requestLocPermissoin();
       this.enableDebugLogs();
     });
@@ -262,7 +271,7 @@ export class AddBeaconPage implements OnInit {
     for (let i = 0; i < this.scanResultList.length; i++) {
       if (this.scanResultList[i].minor == bMinorNo) {
         //this.beaconsStoredList.push(new BeaconInfo(this.scanResultList[i].major, this.scanResultList[i].minor, 0, 0));
-        return new BeaconInfo(this.scanResultList[i].major, this.scanResultList[i].minor, 0, 0);
+        return new BeaconInfo(this.scanResultList[i].uuid ,this.scanResultList[i].major, this.scanResultList[i].minor, 0, 0);
       }
     }
   }

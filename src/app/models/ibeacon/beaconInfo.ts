@@ -1,6 +1,6 @@
 export class BeaconInfo {
     constructor(
-      //public _uuid: number,
+      public uuid: string,
       public major: number,
       public minor: number,
       public lng: number,

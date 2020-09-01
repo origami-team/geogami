@@ -18,6 +18,7 @@ export const navtasks: ReadonlyArray<any> = [
         settings: {},
         iBeacon: false,
         beaconInfo: {
+            uuid: undefined,
             minor: undefined
         }
     }, {
@@ -37,6 +38,7 @@ export const navtasks: ReadonlyArray<any> = [
         settings: {},
         iBeacon: false,
         beaconInfo: {
+            uuid: undefined,
             minor: undefined
         }
     }, {
@@ -55,6 +57,7 @@ export const navtasks: ReadonlyArray<any> = [
         settings: {},
         iBeacon: false,
         beaconInfo: {
+            uuid: undefined,
             minor: undefined
         }
     }

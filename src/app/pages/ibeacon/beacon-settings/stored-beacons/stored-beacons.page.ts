@@ -86,7 +86,7 @@ export class StoredBeaconsPage implements OnInit {
     console.log("Button: ", beaconMinor, "lng ", beaconLng, beaconLat);
 
     // Store info in service, zero to indicate that this is sent from create-game page , ToDo: improve this impl.
-    this.helperService.changebeaconData(new BeaconInfo(0, beaconMinor, beaconLng, beaconLat));
+    this.helperService.changebeaconData(new BeaconInfo("0" , 0, beaconMinor, beaconLng, beaconLat));
 
     // update MinorNo service to minor number 
     //this.gameServ.changeMinorNo(beaconMinor);

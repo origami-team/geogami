@@ -24,6 +24,7 @@ import { PopoverComponent } from 'src/app/popover/popover.component';
 import { AddBeaconPage } from '../../ibeacon/beacon-settings/add-beacon/add-beacon.page';
 import { GamesService } from 'src/app/services/games.service';
 import { BeaconInfo } from 'src/app/models/ibeacon/beaconInfo';
+import { Storage } from '@ionic/storage';
 
 
 @Component({
@@ -78,7 +79,12 @@ export class CreateTaskModalPage implements OnInit {
   /*  */
 
 
-  constructor(public modalController: ModalController, public popoverController: PopoverController, private gameService: GamesService) { }
+  constructor(
+    public modalController: ModalController, 
+    public popoverController: PopoverController, 
+    private gameService: GamesService,
+    public storage: Storage
+    ) { }
 
   ngOnInit() {
     if (this.type == "nav") {
@@ -401,6 +407,8 @@ export class CreateTaskModalPage implements OnInit {
         if (data != null && data.length > 0) {
           this.beaconsStoredList = data;
           this.task.beaconInfo.minor = this.beaconInfoSelected
+          // Store in local storage
+          this.storage.set('beacon_info_list', this.beaconsStoredList);
         }
       }).catch(e => {
         console.error('(strored-beacons-page), ', e['error'].message);
