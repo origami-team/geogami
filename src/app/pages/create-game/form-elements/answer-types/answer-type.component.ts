@@ -14,6 +14,7 @@ import { PopoverComponent } from 'src/app/popover/popover.component';
 export class AnswerTypeComponent implements OnInit, OnChanges {
     @Input() answer: any;
     @Input() taskType: any;
+    @Input() iBeaconStatus: any;
 
     @Output() answerChange: EventEmitter<any> = new EventEmitter<any>(true);
 
@@ -22,7 +23,7 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
     constructor(public popoverController: PopoverController) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.answerChange.emit(changes.answer.currentValue)
+        //this.answerChange.emit(changes.answer.currentValue) // ToDo: find out what is it for
     }
 
     ngOnInit() {

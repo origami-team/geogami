@@ -1,5 +1,5 @@
 <div *ngIf="answer.type == answerTypeEnum.POSITION">
-    <h5>Zielort
+    <h5>{{iBeaconStatus?"Zielort (setzen die iBeacon in ausgewählten Ort)":"Zielort"}}
         <ion-icon name="information-circle"
             (click)="showPopover($event, 'Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.')">
         </ion-icon>
