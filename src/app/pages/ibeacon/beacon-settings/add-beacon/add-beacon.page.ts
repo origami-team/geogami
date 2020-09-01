@@ -72,6 +72,11 @@ export class AddBeaconPage implements OnInit {
     }
   }
 
+  ionViewDidEnter() {
+    // Start scanning
+    this.startScanning()
+  }
+
   requestLocPermissoin(): void {
     // Request permission to use location on iOS
     if (this.platform.is('ios')) {
@@ -85,15 +90,15 @@ export class AddBeaconPage implements OnInit {
     this.ibeacon.enableDebugNotifications();
   }
 
-  public onScanClicked(): void {
-    if (!this.scanStatus) {
-      this.startScanning();
-      this.scanStatus = true;
-    } else {
-      this.scanStatus = false;
-      this.stopScannning();
-    }
-  }
+  /*   public onScanClicked(): void {
+      if (!this.scanStatus) {
+        this.startScanning();
+        this.scanStatus = true;
+      } else {
+        this.scanStatus = false;
+        this.stopScannning();
+      }
+    } */
 
   public stopScannning(): void {
     this.scanStatus = false; // Change scan state Y.Q
@@ -172,14 +177,26 @@ export class AddBeaconPage implements OnInit {
 
     if (this.scanResultList.length == 0) {
       for (let i = 0; i < receivedData.length; i++) {
+        let answer = this.beaconsStoredList.filter(t => t.minor == receivedData[i].minor); // Check if the task is already in the list
+
+        if(answer.length > 0){
+          continue;
+        }
+
         this.scanResultList.push(new BeaconFullInfo(receivedData[i].uuid, receivedData[i].major, receivedData[i].minor, receivedData[i].proximity, receivedData[i].tx, receivedData[i].rssi, receivedData[i].accuracy, true));
       }
     } else {
       for (let i = 0; i < receivedData.length; i++) {
-        let answer = this.scanResultList.filter(t => t.minor == receivedData[i].minor); // Check if the task is already in the list
-        console.log("answer is: ", answer, ", length: ", answer.length);
-        if (answer.length == 0) {
-          this.scanResultList.push(new BeaconFullInfo(receivedData[i].uuid, receivedData[i].major, receivedData[i].minor, receivedData[i].proximity, receivedData[i].tx, receivedData[i].rssi, receivedData[i].accuracy, true)); // add task
+        let answer = this.beaconsStoredList.filter(t => t.minor == receivedData[i].minor); // Check if the task is already in the list
+
+        if(answer.length > 0){
+          continue;
+        }
+
+        let visibility = this.scanResultList.filter(t => t.minor == receivedData[i].minor); // Check if the task is already in the list
+        console.log("visibility is: ", visibility, ", length: ", visibility.length);
+        if (visibility.length == 0) {
+          this.scanResultList.push(new BeaconFullInfo(receivedData[i].uuid, receivedData[i].major, receivedData[i].minor, receivedData[i].proximity, receivedData[i].tx, receivedData[i].rssi, receivedData[i].accuracy, true)); // add beacon
         }
       }
     }
@@ -188,6 +205,9 @@ export class AddBeaconPage implements OnInit {
     if (this.beaconsStoredList.length > 0) {
       this.compareFoundWithStoredBeacons();
     }
+
+    this.changeRef.detectChanges(); // Check for data change to update view Y.Q
+
   }
 
 
@@ -271,29 +291,28 @@ export class AddBeaconPage implements OnInit {
     for (let i = 0; i < this.scanResultList.length; i++) {
       if (this.scanResultList[i].minor == bMinorNo) {
         //this.beaconsStoredList.push(new BeaconInfo(this.scanResultList[i].major, this.scanResultList[i].minor, 0, 0));
-        return new BeaconInfo(this.scanResultList[i].uuid ,this.scanResultList[i].major, this.scanResultList[i].minor, 0, 0);
+        return new BeaconInfo(this.scanResultList[i].uuid, this.scanResultList[i].major, this.scanResultList[i].minor, 0, 0);
       }
     }
   }
 
-  onclearClicked(): void {
-    this.storage.remove('beacon_info_list');
-    this.beaconsStoredList = []
-
-    console.log(' Beacon info deleted successfully');
-
-    // Refresh add button of inserted beacon
-    this.compareFoundWithStoredBeacons();
-
-    //this.changeRef.detectChanges(); // Check for data change to update view Y.Q
-
-
-    // get stored beaconinfo to be update selected beacon location
-    this.storage.get('beacon_info_list')
-      .then((data) => {
-      });
-
-  }
+  /*   onclearClicked(): void {
+      this.storage.remove('beacon_info_list');
+      this.beaconsStoredList = []
+  
+      console.log(' Beacon info deleted successfully');
+  
+      // Refresh add button of inserted beacon
+      this.compareFoundWithStoredBeacons();
+  
+      //this.changeRef.detectChanges(); // Check for data change to update view Y.Q
+  
+  
+      // get stored beaconinfo to update selected beacon location
+      this.storage.get('beacon_info_list')
+        .then((data) => {
+        });
+    } */
 
   // Back button
   onBackButton() {
@@ -305,5 +324,15 @@ export class AddBeaconPage implements OnInit {
       this.modalController.dismiss();
       return;
     }
+  }
+
+  onUUIDSelected() {
+
+    this.stopScannning();
+    this.scanResultList = []
+    this.startScanning();
+    console.log("onUUIDSelected,,,,,,,,,,,")
+
+
   }
 }
