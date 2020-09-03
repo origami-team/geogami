@@ -172,7 +172,7 @@
 
       <select [(ngModel)]="task.beaconInfo" (ngModelChange)="onBeaconInfoSelectChange($event)" interface="popover"
         *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompareBeacon">
-        <option [ngValue]="braconInfo" *ngFor="let braconInfo of beaconsStoredList; let i = index">Beacon {{ i+1 }} (m:{{braconInfo.minor}})
+        <option [ngValue]="beaconInfo" *ngFor="let beaconInfo of beaconsStoredList; let i = index">{{beaconInfo.minor}}
         </option>
       </select>
 

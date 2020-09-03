@@ -4,7 +4,8 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
-  AfterViewInit
+  AfterViewInit,
+  ChangeDetectorRef
 } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { cloneDeep } from 'lodash';
@@ -82,7 +83,9 @@ export class CreateTaskModalPage implements OnInit {
     public modalController: ModalController,
     public popoverController: PopoverController,
     private gameService: GamesService,
-    public storage: Storage
+    public storage: Storage,
+    private changeDetectorRef: ChangeDetectorRef
+
   ) { }
 
   ngOnInit() {
@@ -123,8 +126,10 @@ export class CreateTaskModalPage implements OnInit {
     }
     // this.onTaskSelected(this.task);
     this.onTaskSelected(cloneDeep(this.task));
+  }
 
-    // Get beacons info from server
+  ionViewWillEnter() {
+    // Update beacon list
     this.getBeaconInfoFromServer();
   }
 
@@ -381,9 +386,9 @@ export class CreateTaskModalPage implements OnInit {
   }
 
   onBeaconSelected() {
-/*     if (this.task.iBeacon) {
+    if (this.task.iBeacon) {
       this.getBeaconInfoFromServer()
-    } */
+    }
   }
 
   onBeaconInfoSelectChange(event) {
@@ -400,7 +405,6 @@ export class CreateTaskModalPage implements OnInit {
     this.gameService.getBeaconInfo()
       .then(data => {
         console.log('data: length ', data.length)
-
         if (data != null && data.length > 0) {
           this.beaconsStoredList = data;
 
@@ -410,11 +414,15 @@ export class CreateTaskModalPage implements OnInit {
       }).catch(e => {
         console.error('(strored-beacons-page), ', e['error'].message);
       }).finally(() => {
-        if (this.beaconsStoredList.length > 0) {
-          this.task.beaconInfo = this.beaconsStoredList[0]
-          console.log("this.task.beaconInfo: ", this.task.beaconInfo)
 
-        }
+        if (this.task.beaconInfo.minor != undefined) {
+          // Make selected beacon info first 
+          let temp = this.beaconsStoredList.find(i => (i.minor == this.task.beaconInfo.minor))
+          this.beaconsStoredList.splice(this.beaconsStoredList.indexOf(temp), 1)
+          this.beaconsStoredList.unshift(temp)
+        } else if (this.beaconsStoredList.length > 0) {
+            this.task.beaconInfo = this.beaconsStoredList[0]
+          }
       });
   }
   /*  */
