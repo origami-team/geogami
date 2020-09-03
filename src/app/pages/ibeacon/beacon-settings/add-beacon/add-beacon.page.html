@@ -32,10 +32,10 @@
     <ion-card-content style="padding: 2px;">
       <ion-item>
         <ion-label>
-          <h2>iBeacon</h2>
+          <h1>iBeacon</h1>
         </ion-label>
         <ion-label style="text-align: right;">
-          <h2>No. {{i+1}}</h2>
+          <h1>No. {{i+1}}</h1>
         </ion-label>
       </ion-item>
 
@@ -46,8 +46,8 @@
         <ion-label style="text-align: right; margin-right: 5%;"><b>Minor</b><br> {{beacon.minor}}</ion-label>
 
       </ion-item>
-        <ion-button expand="full" *ngIf="beacon.visibility" (click)="addBeaconInfo(beacon.minor)">
-          <ion-icon name="add-circle"></ion-icon>
+        <ion-button expand="full" *ngIf="beacon.visibility" (click)="addBeaconInfo(beacon.minor)"> ADD
+          <!-- <ion-icon name="add-circle"></ion-icon> -->
         </ion-button>
         <ion-label *ngIf="!beacon.visibility"><b>* This beacon info is saved.</b></ion-label>
 
