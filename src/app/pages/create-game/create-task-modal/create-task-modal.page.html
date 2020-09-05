@@ -127,6 +127,31 @@
 
 
   <div>
+    <!-- iBeacon -->
+    <ion-item lines="none" class="ion-no-padding" style="width:100%">
+      <ion-label><b>iBeacon Verwendung</b>
+        <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.')">
+        </ion-icon>
+      </ion-label>
+      <ion-toggle style="margin-left: 50%;" [(ngModel)]="task.iBeacon" (ngModelChange)="onBeaconSelected()">
+      </ion-toggle>
+    </ion-item>
+
+    <ion-item lines="none" [disabled]="!task.iBeacon">
+      <ion-label>Wählen oder einen neuen hinzufügen </ion-label>
+
+      <select [(ngModel)]="task.beaconInfo" (ngModelChange)="onBeaconInfoSelectChange($event)" interface="popover" placeholder="Auswählen" [compareWith]="selectCompareBeacon">
+        <option [ngValue]="beaconInfo" *ngFor="let beaconInfo of beaconsStoredList; let i = index">{{beaconInfo.minor}}
+        </option>
+      </select>
+
+      <ion-button (click)="presentAddBeaconInfo()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <!--  -->
+    
     <question-type [(question)]="task.question" [taskType]="task.category"></question-type>
     <!-- Search Area -->
     <div *ngIf="task.type == 'theme-loc' || task.type == 'theme-object'">
@@ -155,33 +180,6 @@
         *ngIf="viewDirectionSetPosition">
       </app-map>
     </div>
-
-    <!-- iBeacon -->
-    <ion-item lines="none" class="ion-no-padding" style="width:100%">
-      <ion-label><b>iBeacon Verwendung</b>
-        <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.')">
-        </ion-icon>
-      </ion-label>
-      <ion-toggle style="margin-left: 50%;" [(ngModel)]="task.iBeacon" (ngModelChange)="onBeaconSelected()">
-      </ion-toggle>
-    </ion-item>
-
-    <ion-item lines="none" [disabled]="!task.iBeacon">
-      <ion-label>Wählen oder einen neuen hinzufügen </ion-label>
-
-      <select [(ngModel)]="task.beaconInfo" (ngModelChange)="onBeaconInfoSelectChange($event)" interface="popover"
-        *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompareBeacon">
-        <option [ngValue]="beaconInfo" *ngFor="let beaconInfo of beaconsStoredList; let i = index">{{beaconInfo.minor}}
-        </option>
-      </select>
-
-      <ion-button (click)="presentAddBeaconInfo()">
-        <ion-icon name="add-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-    <!--  -->
-
     <answer-type [(answer)]="task.answer" [taskType]="task.category" [(iBeaconStatus)]="task.iBeacon"></answer-type>
   </div>
 

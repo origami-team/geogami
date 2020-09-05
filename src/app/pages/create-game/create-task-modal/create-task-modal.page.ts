@@ -420,7 +420,7 @@ export class CreateTaskModalPage implements OnInit {
           let temp = this.beaconsStoredList.find(i => (i.minor == this.task.beaconInfo.minor))
           this.beaconsStoredList.splice(this.beaconsStoredList.indexOf(temp), 1)
           this.beaconsStoredList.unshift(temp)
-        } else if (this.beaconsStoredList.length > 0) {
+        } else if (this.beaconsStoredList.length > 0 ) {
             this.task.beaconInfo = this.beaconsStoredList[0]
           }
       });
