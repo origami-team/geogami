@@ -157,6 +157,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   viewDirectionTaskGeolocateSubscription: Subscription;
 
   private audioPlayer: HTMLAudioElement = new Audio();
+  private audioPlayerBeacon: HTMLAudioElement = new Audio();
 
   uploading: boolean = false;
   loaded: boolean = false;
@@ -205,6 +206,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       loop: true
     };
     this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
+    this.audioPlayerBeacon.src = 'assets/sounds/little_robot_sound_factory_Jingle_Win_Synth_04.mp3'
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
@@ -304,6 +306,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.gpsToTargetDis = this.calculateDistance(waypoint)
             this.userArrived = this.userDidArrive(waypoint)
 
+            this.audioPlayer.play()
 
             if (this.task.type != "nav-flag-with-answer") {
               this.onWaypointReached();
@@ -1132,7 +1135,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (Capacitor.isNative) {
         Plugins.Haptics.vibrate();
       }
-      this.audioPlayer.play()
+      if (this.task.answer.type != AnswerType.POSITION && this.task.type != "nav-flag-with-answer") {
+        this.audioPlayer.play()
+      }
     }
 
     if (this.task.settings.multipleTries) {
@@ -1150,7 +1155,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.task.iBeacon) {
         this.stopScannning();
       }
-      
+
       setTimeout(() => {
         this.dismissFeedback()
         this.nextTask()
@@ -1911,9 +1916,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         if (receivedData[i].accuracy <= this.task.settings.accuracy && !this.reachedUsingBeacon) { // Check minor and distance
           this.beaconToTargetDis = receivedData[i].accuracy;
           this.beaconToTartgetTime = new Date().toISOString();
-
           this.reachedUsingBeacon = true;
           this.helperService.presentToast("reached using beacon")
+          this.audioPlayerBeacon.play()
 
           if (this.task.answer.type == AnswerType.POSITION) {
             this.onWaypointReached();
