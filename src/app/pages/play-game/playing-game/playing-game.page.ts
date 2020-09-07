@@ -172,13 +172,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   beaconToTargetDis: Number
   beaconToTartgetTime: String
   gpsToTargetTime: String
-  gpsToTargetDis: number = 0;
+  gpsToTargetDis: number
   userArrived: boolean
-  onClickGPSDis: number = 0;
-  onClickBeaconDis: number = 0;
-
-
-
+  onClickGPSDis: number
+  onClickBeaconDis: number
 
   /*  */
 
@@ -299,7 +296,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         if (this.task.answer.type == AnswerType.POSITION || this.task.type == "nav-flag-with-answer" && !this.reachedUsingGPS) {
           this.userArrived = this.userDidArrive(waypoint)
 
-          if (this.userArrived && (!this.task.settings.confirmation || this.task.type == "nav-flag-with-answer") && !this.showFeedback ) {
+          if (this.userArrived && (!this.task.settings.confirmation || this.task.type == "nav-flag-with-answer") && !this.showFeedback) {
             this.helperService.presentToast("reached using gps")
 
             this.reachedUsingGPS = true;
@@ -1090,6 +1087,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     let type: FeedbackType;
 
     if (this.task.settings.feedback) {
+
       if (correct) {
         type = FeedbackType.Correct;
       } else if (this.task.settings.multipleTries) {
@@ -1147,6 +1145,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (!this.task.settings.feedback) {
+      this.helperService.presentToast("correct")
+
+      if (this.task.iBeacon) {
+        this.stopScannning();
+      }
+      
       setTimeout(() => {
         this.dismissFeedback()
         this.nextTask()
@@ -1396,6 +1400,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           correct: isCorrect
         }
       } else {
+        /* // Stop beacon scanning when user click 
+        if (this.task.iBeacon) {
+          this.stopScannning();
+        } */
         this.initFeedback(true);
         isCorrect = true;
         answer = {
@@ -1892,35 +1900,29 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   onBeaconFound(receivedData: Beacon[]): void {
     //Ingnore it if beacon is allready found and waiting for GPS
     //if (!this.reachedUsingBeacon) {
-      //to compare with one beacon at a time
-      for (let i = 0; i < receivedData.length; i++) {
-        //console.log('◊ look for Beacon: 56411');
-        console.log(' receivedData[i].minor == this.task.beaconInfo.minor):', receivedData[i].minor, ' == ', this.task.beaconInfo.minor);
-        console.log(' receivedData[i].tx == this.task.settings.accuracy:', receivedData[i].accuracy, '<=', this.task.settings.accuracy);
-        //this.helperService.presentToast("Minor: "+this.task.beaconInfo.minor+"Dis: "+this.task.settings.accuracy);
+    //to compare with one beacon at a time
+    for (let i = 0; i < receivedData.length; i++) {
+      if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor) {
 
-        if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor) {
+        if (this.task.type == "nav-flag-with-answer") {
+          this.onClickBeaconDis = receivedData[i].accuracy;
+        }
 
-          if (this.task.type == "nav-flag-with-answer") {
-            this.onClickBeaconDis = receivedData[i].accuracy;
-          }
+        if (receivedData[i].accuracy <= this.task.settings.accuracy && !this.reachedUsingBeacon) { // Check minor and distance
+          this.beaconToTargetDis = receivedData[i].accuracy;
+          this.beaconToTartgetTime = new Date().toISOString();
 
-          if (receivedData[i].accuracy <= this.task.settings.accuracy && !this.reachedUsingBeacon) { // Check minor and distance
-            this.beaconToTargetDis = receivedData[i].accuracy;
-            this.beaconToTartgetTime = new Date().toISOString();
+          this.reachedUsingBeacon = true;
+          this.helperService.presentToast("reached using beacon")
 
-            //this.beaconAudio.play();
-            this.reachedUsingBeacon = true;
-            this.helperService.presentToast("reached using beacon")
-
-            if (this.task.answer.type == AnswerType.POSITION) {
-              this.onWaypointReached();
-              // Stop scanning for beacons
-              this.stopScannning();
-            }
+          if (this.task.answer.type == AnswerType.POSITION) {
+            this.onWaypointReached();
+            // Stop scanning for beacons
+            this.stopScannning();
           }
         }
       }
+    }
     //}
   }
   /*  */
