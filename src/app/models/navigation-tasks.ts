@@ -60,5 +60,44 @@ export const navtasks: ReadonlyArray<any> = [
             uuid: undefined,
             minor: undefined
         }
+    },
+    {
+        category: "nav",
+        type: "nav-flag-with-answer",
+        name: "Navigation zur Zielfahne mit Antwort",
+        // category: "themeobjectLocalization",
+        question: {
+            type: QuestionType.MAP_FEATURE,
+            text: "Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.",
+        },
+        answer: {
+            type: AnswerType.MULTIPLE_CHOICE
+        },
+        evaluate: "evalMultipleChoice",
+        settings: {},
+        iBeacon: false,
+        beaconInfo: {
+            uuid: undefined,
+            minor: undefined
+        }
+    },
+    {
+        category: "nav",
+        type: "nav-flag-with-answer",
+        name: "Navigation zur Zielfahne mit Antwort",
+        question: {
+            type: QuestionType.MAP_FEATURE,
+            text: "Finde das markierte Haus in deiner Nähe. Mache ein Foto.",
+        },
+        answer: {
+            type: AnswerType.PHOTO
+        },
+        evaluate: "evalNone",
+        settings: {},
+        iBeacon: false,
+        beaconInfo: {
+            uuid: undefined,
+            minor: undefined
+        }
     }
 ]

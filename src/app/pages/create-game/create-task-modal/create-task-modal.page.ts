@@ -70,14 +70,32 @@ export class CreateTaskModalPage implements OnInit {
   ]
 
   selectedTaskType: any;
-
   objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT]
 
   viewDirectionSetPosition: boolean = false;
   /*  */
-  beaconsStoredList: BeaconInfo[];
-  /*  */
+  navTaskTypes: any[] = [
+    {
+      type: 1,
+      text: "Navigation zur Zielfahne"
+    }, {
+      type: 2,
+      text: "Navigation mit Richtungspfeil"
+    }, {
+      type: 3,
+      text: "Navigation mit Textanweisung"
+    }, {
+      type: 4,
+      text: "Navigation zur Zielfahne mit Antwort"
+    }
+  ]
 
+  selectedNavTaskType: any;
+
+  beaconsStoredList: BeaconInfo[];
+
+  taskModelType : any;
+  /*  */
 
   constructor(
     public modalController: ModalController,
@@ -98,6 +116,7 @@ export class CreateTaskModalPage implements OnInit {
     if (this.task == null) {
       this.task = this.tasks[0]
       this.selectedTaskType = this.taskTypes[0]
+      this.selectedNavTaskType = this.navTaskTypes[0]
 
       this.task.settings = {
         feedback: true,
@@ -124,6 +143,7 @@ export class CreateTaskModalPage implements OnInit {
         this.selectedTaskType = this.taskTypes[3]
       }
     }
+
     // this.onTaskSelected(this.task);
     this.onTaskSelected(cloneDeep(this.task));
   }
@@ -157,14 +177,34 @@ export class CreateTaskModalPage implements OnInit {
     this.onTaskSelected(this.task)
   }
 
+  onNavTaskTypeChange(NavTaskType) {
+    if (NavTaskType.type == 1) {
+      this.task = this.tasks[0]
+    } else if (NavTaskType.type == 2) {
+      this.task = this.tasks[1]
+    } else if (NavTaskType.type == 3) {
+      this.task = this.tasks[2]
+    } else {
+      this.task = this.tasks[3]
+    }
+
+    this.onTaskSelected(this.task)
+  }
+
   onTaskSelected(newValue) {
     this.task = newValue;
+
+    if(this.task.type == "nav-flag-with-answer"){
+      this.taskModelType = navtasks
+    }else{
+      this.taskModelType = themetasks
+    }
 
     if (!this.task.settings || Object.keys(this.task.settings).length == 0) {
       this.task.settings = {
         feedback: true,
         multipleTries: true,
-        confirmation: this.task.category.includes('theme'),
+        confirmation: this.task.category.includes('theme') || this.task.type.includes('nav-flag-with-answer'),
         accuracy: 10,
         showMarker: true,
         keepMarker: false
@@ -187,13 +227,15 @@ export class CreateTaskModalPage implements OnInit {
       }
 
     } else {
+
       this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
         .map(t => ({ type: t as QuestionType, text: t }))
         .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)))
 
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+      const similarTypes = cloneDeep(this.taskModelType).filter(t => t.type == this.task.type)
 
       const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
+
 
       this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
     }
@@ -225,7 +267,7 @@ export class CreateTaskModalPage implements OnInit {
 
   onObjectAnswerSelectChange() {
     if (this.task.type != 'free') {
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+      const similarTypes = cloneDeep(this.taskModelType).filter(t => t.type == this.task.type)
 
       const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type)
 
@@ -414,15 +456,15 @@ export class CreateTaskModalPage implements OnInit {
       }).catch(e => {
         console.error('(strored-beacons-page), ', e['error'].message);
       }).finally(() => {
-
-        if (this.task.beaconInfo.minor != undefined) {
+        console.log("this.task.name: ", this.task.name)
+        if (this.type == "nav" && this.task.beaconInfo.minor != undefined) {
           // Make selected beacon info first 
           let temp = this.beaconsStoredList.find(i => (i.minor == this.task.beaconInfo.minor))
           this.beaconsStoredList.splice(this.beaconsStoredList.indexOf(temp), 1)
           this.beaconsStoredList.unshift(temp)
-        } else if (this.beaconsStoredList.length > 0 ) {
-            this.task.beaconInfo = this.beaconsStoredList[0]
-          }
+        } else if (this.beaconsStoredList.length > 0) {
+          this.task.beaconInfo = this.beaconsStoredList[0]
+        }
       });
   }
   /*  */

@@ -25,7 +25,7 @@
     <app-audio-recorder [(audioSource)]="question.audio"></app-audio-recorder>
 </div>
 
-<div *ngIf="question.type == questionTypeEnum.MAP_FEATURE">
+<div *ngIf="question.type == questionTypeEnum.MAP_FEATURE && taskType != 'nav'">
     <h5>Objektposition
         <ion-icon name="information-circle"
             (click)="showPopover($event, 'Markiere das Objekt, das der Spieler in seiner Nähe finden soll. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen. Die Markierung wird im Spiel angezeigt.')">
