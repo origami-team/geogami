@@ -112,7 +112,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   heading: number = 0;
   compassHeading: number = 0;
   targetHeading: number = 0;
-  targetDistance: number = 0;
   directionBearing: number = 0;
   indicatedDirection: number = 0;
 
@@ -170,10 +169,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   beaconData = [];
   reachedUsingBeacon: boolean = false;
   reachedUsingGPS: boolean = false;
-  reachedBeaconDistance: Number
-  reachedBeaconTime: String
-  reachedGPSDistance: Number
-  reachedGPSTime: String
+  beaconToTargetDis: Number
+  beaconToTartgetTime: String
+  gpsToTargetTime: String
+  gpsToTargetDis: number = 0;
+  userArrived: boolean
+  onClickGPSDis: number = 0;
+  onClickBeaconDis: number = 0;
+
+
+
+
   /*  */
 
 
@@ -283,17 +289,28 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       this.lastKnownPosition = position;
 
+      console.log("lastKnownPosition: ", this.lastKnownPosition)
+      //console.log("waypoint: ", waypoint)
+
       if (this.task && !this.showSuccess) {
-        if (this.task.answer.type == AnswerType.POSITION) {
+        const waypoint = this.task.answer.position.geometry.coordinates;
+        this.onClickGPSDis = this.calculateDistance(waypoint)
 
-          const waypoint = this.task.answer.position.geometry.coordinates;
+        if (this.task.answer.type == AnswerType.POSITION || this.task.type == "nav-flag-with-answer" && !this.reachedUsingGPS) {
+          this.userArrived = this.userDidArrive(waypoint)
 
-          if (this.userDidArrive(waypoint) && !this.task.settings.confirmation && !this.showFeedback) {
+          if (this.userArrived && (!this.task.settings.confirmation || this.task.type == "nav-flag-with-answer") && !this.showFeedback ) {
+            this.helperService.presentToast("reached using gps")
+
             this.reachedUsingGPS = true;
-            this.reachedGPSTime = new Date().toISOString();
-            //this.helperService.presentToast("Found using GPS: dis = "+ this.reachedGPSDistance+", time: "+this.reachedGPSTime);
+            this.gpsToTargetTime = new Date().toISOString();
+            this.gpsToTargetDis = this.calculateDistance(waypoint)
+            this.userArrived = this.userDidArrive(waypoint)
 
-            this.onWaypointReached();
+
+            if (this.task.type != "nav-flag-with-answer") {
+              this.onWaypointReached();
+            }
           }
 
           if (this.task.answer.mode == TaskMode.NAV_ARROW) {
@@ -862,7 +879,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async initTask() {
     /* iBeacon */
-    if(this.task.iBeacon){
+    if (this.task.iBeacon) {
       this.uuid = this.task.beaconInfo.uuid
       this.startScanning();
     }
@@ -954,7 +971,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.landmarkControl.removeQT();
     this.landmarkControl.removeSearchArea();
 
-    if (this.task.answer.type == AnswerType.POSITION) {
+    if (this.task.answer.type == AnswerType.POSITION || this.task.type == "nav-flag-with-answer") {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
         const el = document.createElement('div');
         el.className = 'waypoint-marker';
@@ -1049,16 +1066,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   onWaypointReached() {
     /* iBeacon */
-    if(this.task.iBeacon && !(this.reachedUsingBeacon && this.reachedUsingGPS)){
+    if (this.task.iBeacon && !this.reachedUsingBeacon) {
       return
     }
 
     this.trackerService.addEvent({
       type: "WAYPOINT_REACHED",
-      reachedBeaconDistance: this.reachedBeaconDistance,
-      reachedBeaconTime: this.reachedBeaconTime,
-      reachedGPSDistance: this.reachedGPSDistance,
-      reachedGPSTime: this.reachedGPSTime,
+      beaconToTargetDis: this.beaconToTargetDis,
+      beaconToTartgetTime: this.beaconToTartgetTime,
+      gpsToTargetDis: this.gpsToTargetDis,
+      gpsToTargetTime: this.gpsToTargetTime,
 
     });
     this.initFeedback(true);
@@ -1272,8 +1289,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.task.type == "theme-loc") {
       if (this.map.getSource('marker-point')) {
         const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-        const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-        isCorrect = distance < this.triggerTreshold;
+        let distance
+
+        /* iBeacon */
+        if (this.task.iBeacon) {
+          distance = this.beaconToTargetDis
+        } else {
+          distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
+        }
+
+        isCorrect = distance <= this.triggerTreshold;
         answer = {
           clickPosition: clickPosition,
           distance: distance,
@@ -1497,7 +1522,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.trackerService.addEvent({
       type: "ON_OK_CLICKED",
       correct: isCorrect,
-      answer: answer
+      answer: answer,
+      onClickBeaconDis: this.onClickBeaconDis,
+      onClickGPSDis: this.onClickGPSDis,
+      beaconToTargetDis: this.beaconToTargetDis,
+      beaconToTartgetTime: this.beaconToTartgetTime,
+      gpsToTargetDis: this.gpsToTargetDis,
+      gpsToTargetTime: this.gpsToTargetTime
     });
 
     if (this.task.category == "info") {
@@ -1506,14 +1537,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   userDidArrive(waypoint) {
-    this.targetDistance = this.helperService.getDistanceFromLatLonInM(
+    return this.calculateDistance(waypoint) <= this.triggerTreshold;
+  }
+
+  calculateDistance(waypoint): number {
+    return this.helperService.getDistanceFromLatLonInM(
       waypoint[1],
       waypoint[0],
       this.lastKnownPosition.coords.latitude,
       this.lastKnownPosition.coords.longitude
     );
-    this.reachedGPSDistance = this.targetDistance;
-    return this.targetDistance < this.triggerTreshold;
   }
 
   ngOnDestroy() {
@@ -1821,9 +1854,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           if (pluginResult.beacons.length > 0) {
             this.beaconData = pluginResult.beacons;
             this.onBeaconFound(this.beaconData);  // check received beacons to trigger an event
-            //this.changeRef.detectChanges(); // Check for data change to update view Y.Q
-            
-            //this.helperService.presentToast("Minor: "+pluginResult.beacons[0].minor+"Dis: "+pluginResult.beacons[0].accuracy);
           } else {
             console.log('no beacons nearby')
           }
@@ -1861,7 +1891,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   onBeaconFound(receivedData: Beacon[]): void {
     //Ingnore it if beacon is allready found and waiting for GPS
-    if (!this.reachedUsingBeacon) {
+    //if (!this.reachedUsingBeacon) {
       //to compare with one beacon at a time
       for (let i = 0; i < receivedData.length; i++) {
         //console.log('◊ look for Beacon: 56411');
@@ -1869,23 +1899,29 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         console.log(' receivedData[i].tx == this.task.settings.accuracy:', receivedData[i].accuracy, '<=', this.task.settings.accuracy);
         //this.helperService.presentToast("Minor: "+this.task.beaconInfo.minor+"Dis: "+this.task.settings.accuracy);
 
-        /* if (this.beaconsStoredList) { */
-          if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor && receivedData[i].accuracy <= this.task.settings.accuracy) { // Check minor and distance
-            this.reachedBeaconDistance = receivedData[i].accuracy;
-            this.reachedBeaconTime = new Date().toISOString();
-            //this.helperService.presentToast("Found using beacon: dis = "+ this.reachedBeaconDistance+", time: "+this.reachedBeaconTime);
+        if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor) {
+
+          if (this.task.type == "nav-flag-with-answer") {
+            this.onClickBeaconDis = receivedData[i].accuracy;
+          }
+
+          if (receivedData[i].accuracy <= this.task.settings.accuracy && !this.reachedUsingBeacon) { // Check minor and distance
+            this.beaconToTargetDis = receivedData[i].accuracy;
+            this.beaconToTartgetTime = new Date().toISOString();
 
             //this.beaconAudio.play();
             this.reachedUsingBeacon = true;
+            this.helperService.presentToast("reached using beacon")
 
-            this.onWaypointReached();
-
-            // Stop scanning for beacons
-            this.stopScannning();
-          /* } */
+            if (this.task.answer.type == AnswerType.POSITION) {
+              this.onWaypointReached();
+              // Stop scanning for beacons
+              this.stopScannning();
+            }
+          }
         }
       }
-    }
+    //}
   }
   /*  */
 }

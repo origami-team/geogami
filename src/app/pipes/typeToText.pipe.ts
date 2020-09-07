@@ -32,12 +32,8 @@ export class TypeToTextPipe implements PipeTransform {
 
     transform(value: string, taskType: string, answer: boolean): string {
         if (taskType == "theme-object" || taskType == "nav-flag-with-answer") {
-            console.log("∆∆∆∆∆∆∆transform")
             return this.textMappingsObject[value];
         }
-
-
-        console.log(":::::::::::")
 
         if (value == "MAP_DIRECTION" && answer) {
             return "... durch Markierung der Richtung auf der Karte"
