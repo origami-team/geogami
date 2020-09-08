@@ -1,4 +1,4 @@
-<div *ngIf="answer.type == answerTypeEnum.POSITION || (answer.type == answerTypeEnum.PHOTO && taskType == 'nav') || (answer.type == answerTypeEnum.MULTIPLE_CHOICE && taskType == 'nav')">
+<div *ngIf="answer.type == answerTypeEnum.POSITION || (answer.type == answerTypeEnum.PHOTO && taskType == 'nav') || (answer.type == answerTypeEnum.MULTIPLE_CHOICE && taskType == 'nav') || (answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT && taskType == 'nav')">
     <h5>{{iBeaconStatus?"Zielort (setzen die iBeacon in ausgewählten Ort)":"Zielort"}}
         <ion-icon name="information-circle"
             (click)="showPopover($event, 'Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.')">

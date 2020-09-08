@@ -236,7 +236,6 @@ export class CreateTaskModalPage implements OnInit {
 
       const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
 
-
       this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
     }
 

@@ -1135,7 +1135,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (Capacitor.isNative) {
         Plugins.Haptics.vibrate();
       }
-      if (this.task.answer.type != AnswerType.POSITION && this.task.type != "nav-flag-with-answer") {
+      if (this.task.answer.type != AnswerType.POSITION) {
         this.audioPlayer.play()
       }
     }
@@ -1907,7 +1907,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     //if (!this.reachedUsingBeacon) {
     //to compare with one beacon at a time
     for (let i = 0; i < receivedData.length; i++) {
-      if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor) {
+      if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor  && !this.showSuccess) {
 
         if (this.task.type == "nav-flag-with-answer") {
           this.onClickBeaconDis = receivedData[i].accuracy;

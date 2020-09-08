@@ -10,6 +10,7 @@ export class TypeToTextPipe implements PipeTransform {
         MULTIPLE_CHOICE: "... durch Wählen eines Fotos",
         MAP_POINT: "... durch Markierung des Objekts auf der Karte",
         PHOTO: "... mit der Aufnahme eines Fotos",
+        MULTIPLE_CHOICE_TEXT: "... durch Wählen einer Textantwort",
     }
 
     textMappingsDirection: object = {

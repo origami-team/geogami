@@ -99,5 +99,24 @@ export const navtasks: ReadonlyArray<any> = [
             uuid: undefined,
             minor: undefined
         }
+    },
+    {
+        category: "nav",
+        type: "nav-flag-with-answer",
+        name: "Navigation zur Zielfahne mit Antwort",
+        question: {
+            type: QuestionType.MAP_FEATURE,
+            text: "Finde das,,,.",
+        },
+        answer: {
+            type: AnswerType.MULTIPLE_CHOICE_TEXT
+        },
+        evaluate: "evalNone",
+        settings: {},
+        iBeacon: false,
+        beaconInfo: {
+            uuid: undefined,
+            minor: undefined
+        }
     }
 ]
