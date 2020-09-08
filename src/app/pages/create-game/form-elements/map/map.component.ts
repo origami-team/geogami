@@ -22,6 +22,7 @@ import bbox from '@turf/bbox'
 
 import { searchArea } from './drawThemes'
 import { HelperService } from 'src/app/services/helper.service';
+import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher';
 
 
 @Component({
@@ -129,7 +130,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
             'tileSize': 256,
           },
           "mapbox": {
-            "url": "mapbox://mapbox.mapbox-streets-v7",
+            //"url": "mapbox://mapbox.mapbox-streets-v7",
+            "url": "mapbox://styles/mapbox/satellite-v9",
             "type": "vector"
           }
         },
@@ -157,6 +159,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       center: [8, 51.8],
       zoom: 2,
     });
+
+    this.map.addControl(new MapboxStyleSwitcherControl());
 
     this.map.on("click", e => {
       if (this.featureType == 'point') {
