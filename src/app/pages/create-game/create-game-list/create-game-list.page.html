@@ -115,8 +115,7 @@
                 <ion-icon name="navigate"></ion-icon> {{ task.name }}
               </ion-label>
             </ion-chip>
-            <ion-chip *ngIf="task.category.includes('theme')" color="secondary"
-              (click)="presentTaskModal('theme', task)">
+            <ion-chip *ngIf="task.category.includes('theme')" color="secondary" (click)="presentTaskModal('theme', task)">
               <ion-label>
                 <ion-icon name="clipboard"></ion-icon> {{ task.name }}
               </ion-label>

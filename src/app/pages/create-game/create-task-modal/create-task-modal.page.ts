@@ -142,6 +142,18 @@ export class CreateTaskModalPage implements OnInit {
       if (this.task.type.includes('free')) {
         this.selectedTaskType = this.taskTypes[3]
       }
+      if (this.task.type.includes('flag')) {
+        this.selectedNavTaskType = this.navTaskTypes[0]
+      }
+      if (this.task.type.includes('arrow')) {
+        this.selectedNavTaskType = this.navTaskTypes[1]
+      }
+      if (this.task.type.includes('text')) {
+        this.selectedNavTaskType = this.navTaskTypes[2]
+      }
+      if (this.task.type.includes('answer')) {
+        this.selectedNavTaskType = this.navTaskTypes[3]
+      }
     }
 
     // this.onTaskSelected(this.task);
