@@ -168,7 +168,7 @@ export class FeedbackComponent {
                     correct: isCorrect
                 }
 
-                this.initFeedback(distance < PlayingGamePage.triggerTreshold, { distance: distance })
+                this.initFeedback(distance < PlayingGamePage.triggerTreshold, { distance: distance, clickPosition: clickPosition })
             } else {
                 const toast = await this.toastController.create({
                     message: "Bitte setze zuerst deine Position",
@@ -482,6 +482,7 @@ export class FeedbackComponent {
     }
 
     public showHint(options: any = undefined) {
+        console.log(options)
         if (this.task.answer.type == AnswerType.POSITION) {
             const waypoint = this.task.answer.position.geometry.coordinates;
             const distance = this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
@@ -494,11 +495,9 @@ export class FeedbackComponent {
         }
 
         if (this.task.type == "theme-loc") {
-            const waypoint = options.clickPosition;
-            const distance = this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-            const evalDistance = distance - (PlayingGamePage.triggerTreshold as number)
+            const evalDistance = options.distance - (PlayingGamePage.triggerTreshold as number)
             if (evalDistance > 10) {
-                this.feedback.hint = `Du liegst ${distance.toFixed(1)} m daneben.`
+                this.feedback.hint = `Du liegst ${options.distance.toFixed(1)} m daneben.`
             } else {
                 this.feedback.hint = `Du bist sehr nah dran.`
             }
