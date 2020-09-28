@@ -15,6 +15,7 @@ import { KeywordPipe } from 'src/app/pipes/keyword.pipe';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
 import { FeedbackComponent } from 'src/app/components/feedback/feedback.component';
+import { AudioPlayerModule } from 'src/app/components/audio-player/audio-player.module';
 
 
 // Note we need a separate function as it's required
@@ -32,6 +33,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    AudioPlayerModule,
     CommonModule,
     FormsModule,
     IonicModule,

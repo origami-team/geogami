@@ -93,10 +93,20 @@
       <ion-toggle color="danger" [(ngModel)]="features.streetSection"></ion-toggle>
     </ion-item>
 
-    <ion-item>
+    <ion-item style="--border-style: none;">
       <ion-label>Reduzierter Kartenausschnitt</ion-label>
       <ion-toggle [(ngModel)]="features.reducedInformation"></ion-toggle>
     </ion-item>
+
+    <ion-item>
+    <ion-range [(ngModel)]="features.reducedMapSectionDiameter" style="padding-top: 22px;" min="20" max="100" snaps ticks pin step="5" [disabled]="! features.reducedInformation">
+      <ion-label slot="start">20m</ion-label>
+      <ion-icon slot="start" size="small"  name="locate">
+      </ion-icon>
+      <ion-icon slot="end"  name="locate"></ion-icon>
+      <ion-label slot="end">100m</ion-label>
+    </ion-range>
+  </ion-item>
 
     <ion-item>
       <ion-label>Hervorhebung von Landmarken</ion-label>
