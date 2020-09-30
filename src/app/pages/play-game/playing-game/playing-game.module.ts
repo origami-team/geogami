@@ -14,6 +14,7 @@ import { KeywordPipe } from 'src/app/pipes/keyword.pipe';
 
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
+import { FeedbackComponent } from 'src/app/components/feedback/feedback.component';
 import { AudioPlayerModule } from 'src/app/components/audio-player/audio-player.module';
 
 
@@ -40,7 +41,7 @@ const routes: Routes = [
     LottieModule.forRoot({ player: playerFactory }),
     NgShufflePipeModule,
   ],
-  declarations: [PlayingGamePage, KeywordPipe],
+  declarations: [PlayingGamePage, KeywordPipe, FeedbackComponent],
   providers: [
     FileTransfer,
     // WebView

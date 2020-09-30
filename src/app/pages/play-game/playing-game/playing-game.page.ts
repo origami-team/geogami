@@ -48,6 +48,7 @@ import { AnimationOptions } from 'ngx-lottie';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
 import { Task } from 'src/app/models/task';
+import { FeedbackComponent } from 'src/app/components/feedback/feedback.component';
 import { point } from '@turf/helpers';
 import booleanWithin from '@turf/boolean-within'
 
@@ -70,6 +71,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   @ViewChild("map") mapContainer;
   @ViewChild("swipeMap") swipeMapContainer;
   @ViewChild('panel') panel;
+  @ViewChild('feedback') feedbackControl;
 
   game: Game;
   playersNames: string[] = [""];
@@ -105,7 +107,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   lastKnownPosition: GeolocationPosition;
 
   // treshold to trigger location arrive
-  triggerTreshold: Number = 20;
+  public static triggerTreshold: Number = 20;
 
   // degree for nav-arrow
   heading: number = 0;
@@ -115,15 +117,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   directionBearing: number = 0;
   indicatedDirection: number = 0;
 
-  showSuccess: boolean = false;
+  public static showSuccess: boolean = false;
   public lottieConfig: AnimationOptions;
 
-  showFeedback: boolean = false;
-  feedback: any = {
-    text: '',
-    icon: ''
-  }
-  feedbackRetry: boolean = false;
+  // showFeedback: boolean = false;
+  // feedback: any = {
+  //   text: '',
+  //   icon: ''
+  // }
+  // feedbackRetry: boolean = false;
 
   Math: Math = Math;
 
@@ -156,7 +158,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   viewDirectionTaskGeolocateSubscription: Subscription;
 
-  private audioPlayer: HTMLAudioElement = new Audio();
+  // private audioPlayer: HTMLAudioElement = new Audio();
 
   uploading: boolean = false;
   loaded: boolean = false;
@@ -184,7 +186,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       autoplay: true,
       loop: true
     };
-    this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
+    // this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
   }
@@ -262,15 +264,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       this.lastKnownPosition = position;
 
-      if (this.task && !this.showSuccess) {
+      if (this.task && !PlayingGamePage.showSuccess) {
         if (this.task.answer.type == AnswerType.POSITION) {
-
-          const waypoint = this.task.answer.position.geometry.coordinates;
-
-          if (this.userDidArrive(waypoint) && !this.task.settings.confirmation && !this.showFeedback) {
-            this.onWaypointReached();
-          }
-
           if (this.task.answer.mode == TaskMode.NAV_ARROW) {
             const destCoords = this.task.answer.position.geometry.coordinates;
             const bearing = this.helperService.bearing(
@@ -295,6 +290,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
       this.panControl = new PanControl(this.map, this.geolocationService)
       this.maskControl = new MaskControl(this.map, this.geolocationService)
+
+      this.feedbackControl.init(this.map, this.geolocationService, this.deviceOrientation, this.helperService, this.toastController, this.trackerService, this)
 
       this.map.loadImage(
         "/assets/icons/directionv2-richtung.png",
@@ -414,13 +411,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.flyTo({
           center: [e.lngLat.lng, e.lngLat.lat],
           zoom: 18,
-          padding: {
-            top: 80,
-            bottom: 620,
-            left: 40,
-            right: 40
-          },
-          duration: 1000
+          // padding: {
+          //   top: 80,
+          //   bottom: 620,
+          //   left: 40,
+          //   right: 40
+          // },
+          // duration: 1000
         })
       }
 
@@ -493,153 +490,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.flyTo({
           center: center,
           zoom: 18,
-          padding: {
-            top: 80,
-            bottom: 620,
-            left: 40,
-            right: 40
-          },
-          duration: 1000
+          // padding: {
+          //   top: 80,
+          //   bottom: 620,
+          //   left: 40,
+          //   right: 40
+          // },
+          // duration: 1000
         })
       }
     }
-
-
-    // -------
-    // Feedback in Map Click (needs to be in seperate function later on)
-    // -------
-    let answer = undefined;
-    const clickPosition = [e.lngLat.lng, e.lngLat.lat];
-
-    if (this.task.answer.type == AnswerType.POSITION) {
-      const waypoint = this.task.answer.position.geometry.coordinates;
-      const arrived = this.userDidArrive(waypoint);
-      answer = {
-        target: waypoint,
-        position: this.lastKnownPosition,
-        distance: this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude),
-        correct: arrived
-      }
-    }
-
-    if (this.task.type == "theme-loc") {
-      if (this.map.getSource('marker-point')) {
-        const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-        answer = {
-          clickPosition: clickPosition,
-          distance: distance,
-          correct: distance < this.triggerTreshold
-        }
-      } else {
-        answer = {
-          clickPosition: undefined,
-          distance: undefined,
-          correct: false
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
-      if (this.selectedPhoto != null) {
-        answer = {
-          selectedPhoto: this.selectedPhoto,
-          correct: this.isCorrectPhotoSelected
-        }
-      } else {
-        answer = {
-          selectedPhoto: null,
-          correct: false
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
-      if (this.selectedChoice != null) {
-        answer = {
-          selectedChoice: this.selectedChoice,
-          correct: this.isCorrectChoiceSelected
-        }
-      } else {
-        answer = {
-          selectedChoice: null,
-          correct: false
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.PHOTO) {
-      if (this.photo == "") {
-        answer = {
-          photo: null,
-          correct: false
-        }
-      } else {
-        answer = {
-          photo: this.photo,
-          correct: true
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
-      if (this.map.getSource('marker-point')) {
-        const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
-        answer = {
-          clickPosition: clickPosition,
-          correct: isInPolygon
-        }
-      } else {
-        answer = {
-          clickPosition: undefined,
-          correct: false
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.DIRECTION) {
-      answer = {
-        compassHeading: this.compassHeading,
-        correct: this.Math.abs(this.directionBearing - this.compassHeading) <= 45
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      let isCorrect = false;
-      if (this.clickDirection != 0) {
-        if (this.task.question.type == QuestionType.MAP_DIRECTION_PHOTO) {
-          isCorrect = this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45;
-        } else {
-          isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
-        }
-        answer = {
-          clickDirection: this.clickDirection,
-          correct: isCorrect
-        }
-      } else {
-        answer = {
-          compassHeading: undefined,
-          correct: isCorrect
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.NUMBER) {
-      answer = {
-        numberInput: this.numberInput,
-        correct: this.numberInput == this.task.answer.number
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.TEXT) {
-      answer = {
-        text: this.textInput,
-        correct: this.textInput != undefined
-      }
-    }
-
-    // -------
-    // End of Feedback in Map Click (needs to be in seperate function later on)
-    // -------
 
     this.trackerService.addEvent({
       type: "ON_MAP_CLICKED",
@@ -649,7 +509,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       },
       clickDirection: clickDirection,
       map: mapType,
-      answer: answer
+      answer: this.feedbackControl.getMapClickAnswer({
+        selectedPhoto: this.selectedPhoto,
+        isCorrectPhotoSelected: this.isCorrectPhotoSelected,
+        selectedChoice: this.selectedChoice,
+        isCorrectChoiceSelected: this.isCorrectChoiceSelected,
+        photo: this.photo,
+        photoURL: this.photoURL,
+        directionBearing: this.directionBearing,
+        compassHeading: this.compassHeading,
+        clickDirection: this.clickDirection,
+        numberInput: this.numberInput,
+        textInput: this.textInput
+      }, [e.lngLat.lng, e.lngLat.lat])
     });
   }
 
@@ -722,8 +594,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (this.task.mapFeatures.zoombar == "task" &&
       this.task.answer.mode != TaskMode.NAV_ARROW &&
-      this.task.answer.mode != TaskMode.DIRECTION_ARROW &&
-      this.task.answer.type !== AnswerType.MAP_POINT) {
+      this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
 
       // zoom to task
       bounds = this.calcBounds(this.task);
@@ -794,11 +665,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           right: 40
         }
       })
+      this.isZoomedToTaskMapPoint = false;
     }
   }
 
   async initGame() {
     this.task = this.game.tasks[this.taskIndex];
+    this.feedbackControl.setTask(this.task);
     await this.trackerService.init(this.game._id, this.game.name, this.map, this.playersNames);
     console.log(this.game)
 
@@ -847,9 +720,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     if (this.task.settings?.accuracy) {
-      this.triggerTreshold = this.task.settings.accuracy
+      PlayingGamePage.triggerTreshold = this.task.settings.accuracy
     } else {
-      this.triggerTreshold = 10;
+      PlayingGamePage.triggerTreshold = 10;
     }
 
     if (this.map.getLayer('marker-point')) {
@@ -1016,96 +889,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
   }
 
-  onWaypointReached() {
-    this.trackerService.addEvent({
-      type: "WAYPOINT_REACHED"
-    });
-    this.initFeedback(true);
-  }
-
-  initFeedback(correct: boolean) {
-    // feedback is already showing. 
-    if (this.showFeedback) {
-      return;
-    }
-
-    let type: FeedbackType;
-
-    if (this.task.settings.feedback) {
-      if (correct) {
-        type = FeedbackType.Correct;
-      } else if (this.task.settings.multipleTries) {
-        type = FeedbackType.TryAgain;
-      } else {
-        type = FeedbackType.Wrong;
-      }
-    } else {
-      if (this.task.category == 'nav' && !this.task.settings.confirmation) {
-        type = FeedbackType.Success
-      } else {
-        type = FeedbackType.Saved
-      }
-    }
-
-    switch (type) {
-      case FeedbackType.Correct:
-        this.feedback.icon = "😊"
-        this.feedback.text = "Du hast die Aufgabe richtig gelöst!"
-        break;
-      case FeedbackType.Wrong:
-        this.feedback.icon = "😕"
-        this.feedback.text = "Da ist etwas schief gegangen! Weiter geht es mit der nächsten Aufgabe!"
-        break;
-      case FeedbackType.TryAgain:
-        this.feedback.icon = "😕"
-        this.feedback.text = "Probiere es noch einmal!"
-        this.feedbackRetry = true;
-        break;
-      case FeedbackType.Saved:
-        this.feedback.icon = ""
-        this.feedback.text = "Deine Antwort wurde gespeichert!"
-        break;
-      case FeedbackType.Success:
-        this.feedback.icon = ""
-        this.feedback.text = "Ziel erreicht!"
-        break;
-    }
-    this.showFeedback = true
-
-    if (type != FeedbackType.TryAgain) {
-      if (Capacitor.isNative) {
-        Plugins.Haptics.vibrate();
-      }
-      this.audioPlayer.play()
-    }
-
-    if (this.task.settings.multipleTries) {
-      setTimeout(() => {
-        this.dismissFeedback()
-        if (type !== FeedbackType.TryAgain) {
-          this.nextTask()
-        }
-      }, 2000)
-    }
-
-    if (!this.task.settings.feedback) {
-      setTimeout(() => {
-        this.dismissFeedback()
-        this.nextTask()
-      }, 2000)
-    }
-  }
-
-  dismissFeedback() {
-    this.showFeedback = false;
-    this.feedbackRetry = false;
-  }
-
   nextTask() {
-    this.showFeedback = false;
+    // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
-      this.showSuccess = true;
+      PlayingGamePage.showSuccess = true;
       this.trackerService.addEvent({
         type: "FINISHED_GAME"
       });
@@ -1123,6 +911,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     this.task = this.game.tasks[this.taskIndex];
+    this.feedbackControl.setTask(this.task);
     this.initTask();
   }
 
@@ -1171,13 +960,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.flyTo({
         center: this.task.answer.position.geometry.coordinates,
         zoom: 18,
-        padding: {
-          top: 80,
-          bottom: 620,
-          left: 40,
-          right: 40
-        },
-        duration: 1000
+        // padding: {
+        //   top: 80,
+        //   bottom: 620,
+        //   left: 40,
+        //   right: 40
+        // },
+        // duration: 1000
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {
@@ -1191,13 +980,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.flyTo({
         center: this.task.question.direction.position.geometry.coordinates,
         zoom: 18,
-        padding: {
-          top: 80,
-          bottom: 620,
-          left: 40,
-          right: 40
-        },
-        duration: 1000
+        // padding: {
+        //   top: 80,
+        //   bottom: 620,
+        //   left: 40,
+        //   right: 40
+        // },
+        // duration: 1000
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {
@@ -1206,257 +995,24 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.task.answer.type == AnswerType.POSITION) {
-      const waypoint = this.task.answer.position.geometry.coordinates;
-      const arrived = this.userDidArrive(waypoint);
-      answer = {
-        target: waypoint,
-        position: this.lastKnownPosition,
-        distance: this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude),
-        correct: arrived
-      }
-      isCorrect = arrived
-      if (!arrived) {
-        this.initFeedback(false)
-      } else {
-        this.onWaypointReached();
-      }
-    }
-
-    if (this.task.type == "theme-loc") {
-      if (this.map.getSource('marker-point')) {
-        const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-        const distance = this.helperService.getDistanceFromLatLonInM(clickPosition[1], clickPosition[0], this.lastKnownPosition.coords.latitude, this.lastKnownPosition.coords.longitude)
-        isCorrect = distance < this.triggerTreshold;
-        answer = {
-          clickPosition: clickPosition,
-          distance: distance,
-          correct: isCorrect
-        }
-
-        this.initFeedback(distance < this.triggerTreshold)
-      } else {
-        const toast = await this.toastController.create({
-          message: "Bitte setze zuerst deine Position",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-
-        isCorrect = false;
-        answer = {
-          clickPosition: undefined,
-          distance: undefined,
-          correct: isCorrect
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
-      if (this.selectedPhoto != null) {
-        this.initFeedback(this.isCorrectPhotoSelected);
-        isCorrect = this.isCorrectPhotoSelected
-        answer = {
-          selectedPhoto: this.selectedPhoto,
-          correct: isCorrect
-        }
-        if (this.isCorrectPhotoSelected) {
-          this.isCorrectPhotoSelected = null;
-          this.selectedPhoto = null;
-        }
-      } else {
-        const toast = await this.toastController.create({
-          message: "Bitte wähle zuerst ein Foto",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-        isCorrect = false;
-        answer = {
-          selectedPhoto: null,
-          correct: isCorrect
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
-      if (this.selectedChoice != null) {
-        this.initFeedback(this.isCorrectChoiceSelected);
-        isCorrect = this.isCorrectChoiceSelected
-        answer = {
-          selectedChoice: this.selectedChoice,
-          correct: isCorrect
-        }
-        if (this.isCorrectChoiceSelected) {
-          this.isCorrectChoiceSelected = null;
-          this.selectedChoice = null;
-        }
-      } else {
-        const toast = await this.toastController.create({
-          message: "Bitte wähle zuerst eine Antwort",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-        isCorrect = false;
-        answer = {
-          selectedChoice: null,
-          correct: isCorrect
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.PHOTO) {
-      if (this.photo == "") {
-        const toast = await this.toastController.create({
-          message: "Bitte mache ein Foto",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-
-        isCorrect = false;
-        answer = {
-          photo: null,
-          correct: isCorrect
-        }
-      } else {
-        this.initFeedback(true);
-        isCorrect = true;
-        answer = {
-          photo: this.photo,
-          correct: isCorrect
-        }
-        this.photo = "";
-        this.photoURL = "";
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != "theme-loc") {
-      if (this.map.getSource('marker-point')) {
-        const clickPosition = this.map.getSource('marker-point')._data.geometry.coordinates;
-        const isInPolygon = booleanPointInPolygon(clickPosition, this.task.question.geometry.features[0])
-        this.initFeedback(isInPolygon);
-        isCorrect = isInPolygon;
-        answer = {
-          clickPosition: clickPosition,
-          correct: isCorrect
-        }
-      } else {
-        const toast = await this.toastController.create({
-          message: "Bitte setze zuerst einen Punkt auf der Karte",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-        isCorrect = false;
-        answer = {
-          clickPosition: undefined,
-          correct: isCorrect
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.DIRECTION) {
-      this.initFeedback(this.Math.abs(this.directionBearing - this.compassHeading) <= 45);
-      isCorrect = this.Math.abs(this.directionBearing - this.compassHeading) <= 45;
-      answer = {
-        compassHeading: this.compassHeading,
-        correct: isCorrect
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      if (this.clickDirection != 0) {
-        if (this.task.question.type == QuestionType.MAP_DIRECTION_PHOTO) {
-          this.initFeedback(this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45);
-          isCorrect = this.Math.abs(this.clickDirection - this.task.question.direction.bearing) <= 45;
-        } else {
-          this.initFeedback(this.Math.abs(this.clickDirection - this.compassHeading) <= 45);
-          isCorrect = this.Math.abs(this.clickDirection - this.compassHeading) <= 45;
-        }
-        answer = {
-          clickDirection: this.clickDirection,
-          correct: isCorrect
-        }
-      } else {
-        const toast = await this.toastController.create({
-          message: "Bitte setze zuerst deine Blickrichtung",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-        isCorrect = false;
-        answer = {
-          compassHeading: undefined,
-          correct: isCorrect
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.NUMBER) {
-      if (this.numberInput != undefined) {
-        isCorrect = this.numberInput == this.task.answer.number
-        this.initFeedback(isCorrect);
-        answer = {
-          numberInput: this.numberInput,
-          correct: isCorrect
-        }
-      } else {
-        const toast = await this.toastController.create({
-          message: "Bitte gib zuerst eine Zahl ein",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-        isCorrect = false;
-        answer = {
-          numberInput: undefined,
-          correct: isCorrect
-        }
-      }
-    }
-
-    if (this.task.answer.type == AnswerType.TEXT) {
-      if (this.textInput != undefined) {
-        this.initFeedback(true);
-        isCorrect = true;
-        answer = {
-          text: this.textInput,
-          correct: isCorrect
-        }
-      } else {
-        const toast = await this.toastController.create({
-          message: "Bitte gib zuerst eine Antwort ein",
-          color: "dark",
-          // showCloseButton: true,
-          duration: 2000
-        });
-        toast.present();
-        isCorrect = false;
-        answer = {
-          text: undefined,
-          correct: isCorrect
-        }
-      }
-    }
-
-    this.trackerService.addEvent({
-      type: "ON_OK_CLICKED",
-      correct: isCorrect,
-      answer: answer
-    });
+    await this.feedbackControl.setAnswer({
+      selectedPhoto: this.selectedPhoto,
+      isCorrectPhotoSelected: this.isCorrectPhotoSelected,
+      selectedChoice: this.selectedChoice,
+      isCorrectChoiceSelected: this.isCorrectChoiceSelected,
+      photo: this.photo,
+      photoURL: this.photoURL,
+      directionBearing: this.directionBearing,
+      compassHeading: this.compassHeading,
+      clickDirection: this.clickDirection,
+      numberInput: this.numberInput,
+      textInput: this.textInput
+    })
 
     if (this.task.category == "info") {
       this.nextTask()
     }
+
   }
 
   userDidArrive(waypoint) {
@@ -1466,7 +1022,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.lastKnownPosition.coords.latitude,
       this.lastKnownPosition.coords.longitude
     );
-    return this.targetDistance < this.triggerTreshold;
+    return this.targetDistance < PlayingGamePage.triggerTreshold;
   }
 
   ngOnDestroy() {
@@ -1487,6 +1043,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.geolocateControl.remove()
     this.panControl.remove();
     this.maskControl.remove();
+
+    this.feedbackControl.remove();
 
     // this.map.remove();
     this.navCtrl.navigateRoot("/");
@@ -1701,6 +1259,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     console.log(this.playersNames)
     this.initGame();
     this.showPlayersNames = false;
+  }
+
+  get staticShowSuccess() {
+    return PlayingGamePage.showSuccess
   }
 
   /**
