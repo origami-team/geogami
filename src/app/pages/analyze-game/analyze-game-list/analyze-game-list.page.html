@@ -10,7 +10,15 @@
 
 <ion-content>
 
-  <ngx-json-viewer [json]="tracks" [expanded]="false"></ngx-json-viewer>
+  <!-- <ngx-json-viewer [json]="tracks" [expanded]="false"></ngx-json-viewer> -->
+
+  <ion-list *ngFor="let track of tracks">
+    <ion-item>
+      <ion-label>{{ track }}</ion-label>
+      <ion-icon slot="end" name="trash-outline" (click)="remove(track)"></ion-icon>
+      <ion-icon slot="end" name="cloud-upload-outline" (click)="upload(track)"></ion-icon>
+    </ion-item>
+  </ion-list>
 
 
 </ion-content>

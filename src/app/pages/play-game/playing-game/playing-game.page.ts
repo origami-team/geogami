@@ -411,13 +411,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.flyTo({
           center: [e.lngLat.lng, e.lngLat.lat],
           zoom: 18,
-          padding: {
-            top: 80,
-            bottom: 620,
-            left: 40,
-            right: 40
-          },
-          duration: 1000
+          // padding: {
+          //   top: 80,
+          //   bottom: 620,
+          //   left: 40,
+          //   right: 40
+          // },
+          // duration: 1000
         })
       }
 
@@ -490,13 +490,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.map.flyTo({
           center: center,
           zoom: 18,
-          padding: {
-            top: 80,
-            bottom: 620,
-            left: 40,
-            right: 40
-          },
-          duration: 1000
+          // padding: {
+          //   top: 80,
+          //   bottom: 620,
+          //   left: 40,
+          //   right: 40
+          // },
+          // duration: 1000
         })
       }
     }
@@ -594,8 +594,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (this.task.mapFeatures.zoombar == "task" &&
       this.task.answer.mode != TaskMode.NAV_ARROW &&
-      this.task.answer.mode != TaskMode.DIRECTION_ARROW &&
-      this.task.answer.type !== AnswerType.MAP_POINT) {
+      this.task.answer.mode != TaskMode.DIRECTION_ARROW) {
 
       // zoom to task
       bounds = this.calcBounds(this.task);
@@ -666,6 +665,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           right: 40
         }
       })
+      this.isZoomedToTaskMapPoint = false;
     }
   }
 
@@ -960,13 +960,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.flyTo({
         center: this.task.answer.position.geometry.coordinates,
         zoom: 18,
-        padding: {
-          top: 80,
-          bottom: 620,
-          left: 40,
-          right: 40
-        },
-        duration: 1000
+        // padding: {
+        //   top: 80,
+        //   bottom: 620,
+        //   left: 40,
+        //   right: 40
+        // },
+        // duration: 1000
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {
@@ -980,13 +980,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.flyTo({
         center: this.task.question.direction.position.geometry.coordinates,
         zoom: 18,
-        padding: {
-          top: 80,
-          bottom: 620,
-          left: 40,
-          right: 40
-        },
-        duration: 1000
+        // padding: {
+        //   top: 80,
+        //   bottom: 620,
+        //   left: 40,
+        //   right: 40
+        // },
+        // duration: 1000
       })
       this.showCorrectPositionModal = true;
       setTimeout(() => {

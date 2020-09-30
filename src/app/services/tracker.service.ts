@@ -7,6 +7,8 @@ import { OrigamiGeolocationService } from './origami-geolocation.service';
 import { Subscription } from 'rxjs';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
+import { FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+
 @Injectable({
   providedIn: "root"
 })
@@ -65,13 +67,15 @@ export class TrackerService {
 
     this.map = map;
     this.map.on('moveend', moveEvent => {
-      if (moveEvent.type == "moveend")
+      if (moveEvent.type == "moveend" && moveEvent.originalEvent) {
         this.panCounter++
+      }
     })
 
     this.map.on('zoomend', zoomEvent => {
-      if (zoomEvent.type == "zoomend")
+      if (zoomEvent.type == "zoomend" && zoomEvent.originalEvent) {
         this.zoomCounter++
+      }
     })
 
     this.game = gameID;
@@ -107,7 +111,7 @@ export class TrackerService {
         compassHeading: this.compassHeading,
         interaction: {
           panCount: this.panCounter,
-          zoomCount: this.zoomCounter,
+          zoomCount: this.zoomCounter / 2,
           rotation: this.rotationCounter
         }
       });
@@ -130,14 +134,14 @@ export class TrackerService {
       task: this.task,
       interaction: {
         panCount: this.panCounter,
-        zoomCount: this.zoomCounter,
+        zoomCount: this.zoomCounter / 2,
         rotationCount: this.rotationCounter
       }
     });
     console.log(this.events)
   }
 
-  uploadTrack() {
+  async uploadTrack() {
     const data = {
       game: this.game,
       name: this.gameName,
@@ -156,6 +160,31 @@ export class TrackerService {
     // Plugins.Geolocation.clearWatch({ id: this.positionWatch });
     this.deviceOrientationSubscription.unsubscribe();
     this.positionWatch.unsubscribe();
+
+    try {
+      let ret = await Plugins.Filesystem.mkdir({
+        path: 'origami/tracks',
+        directory: FilesystemDirectory.Documents,
+        recursive: true // like mkdir -p
+      });
+      console.log('Created dir', ret);
+    } catch (e) {
+      console.error('Unable to make directory', e);
+    }
+
+    try {
+      const result = await Plugins.Filesystem.writeFile({
+        path: `origami/tracks/${this.gameName.replace(/ /g, '_')}-${this.start}.json`,
+        data: JSON.stringify(data),
+        directory: FilesystemDirectory.Documents,
+        encoding: FilesystemEncoding.UTF8
+      })
+      console.log('Wrote file', result);
+    } catch (e) {
+      console.error('Unable to write file', e);
+    }
+
+    // return new Promise(() => { })
 
     return this.http
       .post(`${environment.apiURL}/track`, data, { observe: "response" })
