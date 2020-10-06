@@ -100,6 +100,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // tasks
   task: Task;
   taskIndex: number = 0;
+  taskCount: number = 0;
 
 
   positionSubscription: Subscription;
@@ -377,6 +378,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           .then(games => {
             this.game = games[0];
             this.loaded = true;
+            this.taskCount = this.game.tasks.length;
           })
       });
     });
@@ -1907,7 +1909,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     //if (!this.reachedUsingBeacon) {
     //to compare with one beacon at a time
     for (let i = 0; i < receivedData.length; i++) {
-      if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor  && !this.showSuccess) {
+      if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor && !this.showSuccess) {
 
         if (this.task.type == "nav-flag-with-answer") {
           this.onClickBeaconDis = receivedData[i].accuracy;

@@ -15,6 +15,26 @@
 </ion-header>
 
 <ion-content forceOverscroll="false">
+
+  <!-- Progressbar for task pregress -->
+  <ion-card class="taskBar" *ngIf="task">
+
+    <ion-row>
+      <ion-col size="10">
+        <ion-item>
+          <ion-progress-bar [value]="taskIndex/taskCount"></ion-progress-bar>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="2">
+        <ion-item>
+          <ion-label>{{taskIndex}}/{{taskCount}}</ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
   <div class="wrapper" [class.blur]="showSuccess || showFeedback">
     <div #mapWrapper>
       <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div>
@@ -246,7 +266,8 @@
         <div class="ok-container">
           <app-audio-player *ngIf="task.question.audio != undefined" [audioSource]="task.question.audio">
           </app-audio-player>
-          <ion-button slot="end" class="confirm" [disabled]="uploading"
+          <ion-button slot="end" class="confirm"
+            [disabled]="uploading || (task?.type?.includes('nav-flag-with-answer') && !reachedUsingBeacon && task?.iBeacon) || (task?.type?.includes('nav-flag-with-answer') && !reachedUsingGPS && !task?.iBeacon)"
             [color]="task.category.includes('nav') ? 'primary' : 'secondary'" (click)="onOkClicked()"
             *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">OK
           </ion-button>
