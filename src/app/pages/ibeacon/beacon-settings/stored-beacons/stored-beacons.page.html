@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button color="dark" (click)="dismissModal('close')">
+        <ion-button color="dark" (click)="onBackButton()">
           <ion-icon name="close"></ion-icon>
         </ion-button>
     </ion-buttons>
@@ -50,7 +50,7 @@
         <ion-icon name="pencil-outline"></ion-icon>
       </ion-button>
 
-      <!-- No need for delete beacon info
+      <!-- No need to delete beacon info
                 <ion-button (click)="onDeleteBeacon(beacon.minor)">
                 <ion-icon name="trash-outline"></ion-icon>
               </ion-button> -->

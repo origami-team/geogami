@@ -179,7 +179,7 @@ export class AddBeaconPage implements OnInit {
       for (let i = 0; i < receivedData.length; i++) {
         let answer = this.beaconsStoredList.filter(t => t.minor == receivedData[i].minor); // Check if the task is already in the list
 
-        if(answer.length > 0){
+        if (answer.length > 0) {
           continue;
         }
 
@@ -189,7 +189,7 @@ export class AddBeaconPage implements OnInit {
       for (let i = 0; i < receivedData.length; i++) {
         let answer = this.beaconsStoredList.filter(t => t.minor == receivedData[i].minor); // Check if the task is already in the list
 
-        if(answer.length > 0){
+        if (answer.length > 0) {
           continue;
         }
 
@@ -316,8 +316,9 @@ export class AddBeaconPage implements OnInit {
 
   // Back button
   onBackButton() {
-    this.navCtrl.navigateRoot('start');
+    this.navCtrl.navigateBack("create-game");
   }
+
 
   dismissModal(dismissType: string = "null") {
     if (dismissType == "close") {

@@ -112,14 +112,7 @@ export class StoredBeaconsPage implements OnInit {
 
   // Back button
   onBackButton() {
-    this.navCtrl.back()
-  }
-
-  dismissModal(dismissType: string = "null") {
-    if (dismissType == "close") {
-      this.modalController.dismiss();
-      return;
-    }
+    this.navCtrl.navigateBack("create-game");
   }
 
 }
