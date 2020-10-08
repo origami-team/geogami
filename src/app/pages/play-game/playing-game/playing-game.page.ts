@@ -113,6 +113,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   heading: number = 0;
   compassHeading: number = 0;
   targetHeading: number = 0;
+  targetDistance: number = 0;
   directionBearing: number = 0;
   indicatedDirection: number = 0;
 
@@ -178,7 +179,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   userArrived: boolean
   onClickGPSDis: number
   onClickBeaconDis: number
-
+  beaconTargetDistance: number = 0;
   /*  */
 
 
@@ -1556,12 +1557,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   calculateDistance(waypoint): number {
-    return this.helperService.getDistanceFromLatLonInM(
+    this.targetDistance = this.helperService.getDistanceFromLatLonInM(
       waypoint[1],
       waypoint[0],
       this.lastKnownPosition.coords.latitude,
       this.lastKnownPosition.coords.longitude
     );
+
+    return this.targetDistance;
   }
 
   ngOnDestroy() {

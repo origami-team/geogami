@@ -114,7 +114,7 @@
             <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
             }" />
-            <p>Zum Ziel: <br><b>{{ Math.round(targetDistance) }}</b> m</p>
+            <p>Zum Ziel: <br><b>{{ (task.iBeacon?beaconTargetDistance:Math.round(targetDistance)) }}</b> m</p>
           </div>
 
           <div class="task-wrapper" [ngStyle]="{
