@@ -51,6 +51,7 @@ import { Task } from 'src/app/models/task';
 import { point } from '@turf/helpers';
 import booleanWithin from '@turf/boolean-within'
 import { IBeacon, IBeaconPluginResult, Beacon } from '@ionic-native/ibeacon/ngx';
+import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher';
 
 
 enum FeedbackType {
@@ -179,6 +180,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   userArrived: boolean
   onClickGPSDis: number
   onClickBeaconDis: number
+  styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
   beaconTargetDistance: number = 0;
   /*  */
 
@@ -283,6 +285,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       maxZoom: 18
     });
 
+    this.map.addControl(this.styleSwitcherControl);
+
     this.geolocationService.init();
 
     this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
@@ -308,7 +312,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.gpsToTargetDis = this.calculateDistance(waypoint)
             this.userArrived = this.userDidArrive(waypoint)
 
-            this.audioPlayer.play()
+            if (!this.task.iBeacon) {
+              this.audioPlayer.play()
+            }
 
             if (this.task.type != "nav-flag-with-answer") {
               this.onWaypointReached();
@@ -1138,7 +1144,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (Capacitor.isNative) {
         Plugins.Haptics.vibrate();
       }
-      if (this.task.answer.type != AnswerType.POSITION) {
+      if (this.task.answer.type != AnswerType.POSITION && !this.task.iBeacon) {
         this.audioPlayer.play()
       }
     }
@@ -1914,6 +1920,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     for (let i = 0; i < receivedData.length; i++) {
       if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor && !this.showSuccess) {
 
+        this.beaconTargetDistance = receivedData[i].accuracy;
         if (this.task.type == "nav-flag-with-answer") {
           this.onClickBeaconDis = receivedData[i].accuracy;
         }

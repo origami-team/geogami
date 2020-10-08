@@ -52,6 +52,14 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   map: mapboxgl.Map;
   draw: MapboxDraw;
 
+  styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
+  geolocateControl: mapboxgl.GeolocateControl = new mapboxgl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true
+    },
+    trackUserLocation: true
+  })
+
 
   constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
 
@@ -160,7 +168,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       zoom: 2,
     });
 
-    this.map.addControl(new MapboxStyleSwitcherControl());
+    this.map.addControl(this.styleSwitcherControl);
+    this.map.addControl(this.geolocateControl)
+    setTimeout(() => this.geolocateControl.trigger(), 100)
 
     this.map.on("click", e => {
       if (this.featureType == 'point') {
