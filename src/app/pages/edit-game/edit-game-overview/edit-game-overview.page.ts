@@ -47,6 +47,7 @@ export class EditGameOverviewPage implements AfterViewInit {
   mapSectionVisible: boolean = true;
   landmarkControl: LandmarkControl;
 
+  newGameSaveMood: boolean = false;
 
   constructor(
     public popoverController: PopoverController,
@@ -392,16 +393,42 @@ export class EditGameOverviewPage implements AfterViewInit {
 
     this.showUpload = true;
 
-    this.gamesService.updateGame(this.gameFactory.game).then(res => {
-      if (res.status == 200) {
-        this.showSuccess = true;
-        this.gameFactory.flushGame();
-      }
-    }).catch(e => {
-      console.error(e)
-      this.showUpload = false;
-      this.showNameError = true;
-    });
+    if(! this.newGameSaveMood){
+      this.gamesService.updateGame(this.gameFactory.game).then(res => {
+        if (res.status == 200) {
+          this.showSuccess = true;
+          this.gameFactory.flushGame();
+        }
+      }).catch(e => {
+        console.error(e)
+        this.showUpload = false;
+        this.showNameError = true;
+      });
+    } else{
+/*       this.gameFactory.addGameInformation({
+        ...this.game,
+        bbox: this.mapSection ? this.draw.getAll() : null,
+        mapSectionVisible: this.mapSectionVisible,
+        place: this.game.place
+      });
+      console.log(this.gameFactory.game); 
+  
+      this.showUpload = true;*/
+      this.gamesService
+        .postGame(this.gameFactory.game)
+        .then(res => {
+          if (res.status == 200) {
+            this.showSuccess = true;
+            this.gameFactory.flushGame();
+          }
+        })
+        .catch(e => {
+          console.error(e)
+          this.showUpload = false;
+          this.showNameError = true;
+        });
+
+    }
 
     // this.gamesService
     //   .postGame(this.gameFactory.game)

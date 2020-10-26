@@ -56,6 +56,17 @@
       <div #boundingMap class="map" *ngIf="mapSection"></div>
     </div>
 
+    <!--  -->
+    <div class="map-section-container">
+    <ion-item lines="none" color="light">
+      <ion-label>Neu Spiel speichern
+        <ion-icon name="information-circle"
+        (click)="showPopover($event, 'Als neues Spiel speichern')">
+        </ion-icon>
+      </ion-label>
+      <ion-toggle [(ngModel)]="newGameSaveMood"></ion-toggle>
+    </ion-item>
+  </div>
 
     <ion-card color="light">
       <ion-card-content>
