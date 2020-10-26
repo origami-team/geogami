@@ -181,7 +181,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   onClickGPSDis: number
   onClickBeaconDis: number
   styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
-  beaconTargetDistance: number = 0;
+  beaconTargetDistance: String ="0";
   /*  */
 
 
@@ -1920,7 +1920,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     for (let i = 0; i < receivedData.length; i++) {
       if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor && !this.showSuccess) {
 
-        this.beaconTargetDistance = receivedData[i].accuracy;
+        //if(receivedData[i].rssi == 0){
+          //this.beaconTargetDistance = receivedData[i].proximity.toString();
+        //}else{
+          this.beaconTargetDistance = receivedData[i].accuracy.toString();
+        //}
+
         if (this.task.type == "nav-flag-with-answer") {
           this.onClickBeaconDis = receivedData[i].accuracy;
         }
