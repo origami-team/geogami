@@ -1181,6 +1181,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.feedbackRetry = false;
   }
 
+  skipTask(){
+    this.trackerService.addEvent({
+      type: "On_SkipTask_Clicked",
+      onClickBeaconDis: this.onClickBeaconDis,
+      onClickGPSDis: this.onClickGPSDis,
+      beaconToTargetDis: this.beaconToTargetDis,
+      beaconToTartgetTime: this.beaconToTartgetTime,
+      gpsToTargetDis: this.gpsToTargetDis,
+      gpsToTargetTime: this.gpsToTargetTime
+    });
+    
+    this.nextTask()
+  }
+
   nextTask() {
     // (iBeacon) Allow searching for beacon again
     this.reachedUsingBeacon = false;
@@ -1924,15 +1938,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     for (let i = 0; i < receivedData.length; i++) {
       if (receivedData[i].accuracy != -1 && receivedData[i].minor == this.task.beaconInfo.minor && !this.showSuccess) {
 
+        this.onClickBeaconDis = receivedData[i].accuracy;
+
         //if(receivedData[i].rssi == 0){
           //this.beaconTargetDistance = receivedData[i].proximity.toString();
         //}else{
           this.beaconTargetDistance = receivedData[i].accuracy.toString();
         //}
 
-        if (this.task.type == "nav-flag-with-answer") {
-          this.onClickBeaconDis = receivedData[i].accuracy;
-        }
+        //if (this.task.type == "nav-flag-with-answer") {
+        //}
 
         if (receivedData[i].accuracy <= this.task.settings.accuracy && !this.reachedUsingBeacon) { // Check minor and distance
           this.beaconToTargetDis = receivedData[i].accuracy;

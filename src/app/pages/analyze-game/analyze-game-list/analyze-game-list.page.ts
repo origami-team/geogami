@@ -32,7 +32,8 @@ export class AnalyzeGameListPage implements OnInit {
           this.players = element["players"]
 
           this.track.forEach(event => {
-            if ((event["type"] == "ON_OK_CLICKED" && event["correct"] == true) || event["type"] == "WAYPOINT_REACHED") {
+            if ((event["type"] == "ON_OK_CLICKED" && event["correct"] == true) || event["type"] == "WAYPOINT_REACHED" 
+            || event["type"] == "On_SkipTask_Clicked") {
               this.events.push(event)
             }
           });
