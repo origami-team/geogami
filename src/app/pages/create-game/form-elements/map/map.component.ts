@@ -23,6 +23,7 @@ import bbox from '@turf/bbox'
 import { searchArea } from './drawThemes'
 import { HelperService } from 'src/app/services/helper.service';
 import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher';
+import { RotationControl, RotationType } from './../../../../mapControllers/rotation-control'
 
 
 @Component({
@@ -59,6 +60,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     },
     trackUserLocation: true
   })
+
+  // rotation
+  rotationControl: RotationControl;
 
 
   constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
@@ -227,6 +231,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     this.map.on("load", () => {
       this.map.resize();
+
+      // rotation
+      this.rotationControl = new RotationControl(this.map)
 
       // disable map rotation using right click + drag
       this.map.dragRotate.disable();

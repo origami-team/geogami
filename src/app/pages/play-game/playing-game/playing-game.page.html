@@ -104,13 +104,13 @@
             </ion-chip>
           </div>
           <ion-button color=dark fill="clear" (click)="togglePanel()"
-            *ngIf="task.category?.includes('theme') || task.answer.mode != 'NAV_ARROW'">
+            *ngIf="task.category?.includes('theme') || (task.answer.mode != 'NAV_ARROW' &&  task.answer?.type != 'PHOTO')">
             <ion-icon slot="end" name="chevron-down" size="large" *ngIf="!panelMinimized"></ion-icon>
             <ion-icon slot="end" name="chevron-up" size="large" *ngIf="panelMinimized"></ion-icon>
           </ion-button>
         </div>
         <div class="task-wrapper" *ngIf="!panelMinimized">
-          <div class="compass large" *ngIf="task.type == 'nav-arrow'">
+          <div class="compass large" *ngIf="task.type == 'nav-arrow' || (task.type == 'nav-flag-with-answer' && task.answer?.type == 'PHOTO')">
             <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
             }" />
@@ -282,7 +282,9 @@
     </div>
   </div>
 
-  <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p>
+<!--   <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p> -->  
+
+<p class="accuracy"> Beacon: {{beaconTargetDistance}}, &nbsp;&nbsp;GPS: {{Math.round(targetDistance)}}, &nbsp;&nbsp; GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p>
 
   <ion-card class="overlay player-name" *ngIf="showPlayersNames">
     <h3>Wer Spielt?</h3>

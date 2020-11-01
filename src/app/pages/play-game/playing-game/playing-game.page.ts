@@ -209,7 +209,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       autoplay: true,
       loop: true
     };
-    this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
+    this.audioPlayer.src = 'assets/sounds/cartoon_success_fanfair.mp3'
     this.audioPlayerBeacon.src = 'assets/sounds/little_robot_sound_factory_Jingle_Win_Synth_04.mp3'
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-secondary');
@@ -305,19 +305,23 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.userArrived = this.userDidArrive(waypoint)
 
           if (this.userArrived && (!this.task.settings.confirmation || this.task.type == "nav-flag-with-answer") && !this.showFeedback) {
-            this.helperService.presentToast("reached using gps")
+            //this.helperService.presentToast("reached using gps")
 
             this.reachedUsingGPS = true;
             this.gpsToTargetTime = new Date().toISOString();
             this.gpsToTargetDis = this.calculateDistance(waypoint)
             this.userArrived = this.userDidArrive(waypoint)
 
-            if (!this.task.iBeacon) {
+            //if (!this.task.iBeacon) {
               this.audioPlayer.play()
-            }
+            //}
 
             if (this.task.type != "nav-flag-with-answer") {
-              this.onWaypointReached();
+              if(!this.task.iBeacon){
+                this.onWaypointReached();
+              } else if(this.reachedUsingBeacon){
+                this.onWaypointReached();
+              }
             }
           }
 
@@ -888,7 +892,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async initTask() {
     /* iBeacon */
-    if (this.task.iBeacon) {
+    if (this.task.iBeacon && this.task.category == "nav") {  //TODO: Add <&& this.task.category == "nav">
       this.uuid = this.task.beaconInfo.uuid
       this.startScanning();
     }
@@ -1934,13 +1938,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.beaconToTargetDis = receivedData[i].accuracy;
           this.beaconToTartgetTime = new Date().toISOString();
           this.reachedUsingBeacon = true;
-          this.helperService.presentToast("reached using beacon")
+          //this.helperService.presentToast("reached using beacon")
           this.audioPlayerBeacon.play()
+          this.stopScannning();
 
-          if (this.task.answer.type == AnswerType.POSITION) {
+          if (this.task.answer.type == AnswerType.POSITION && this.reachedUsingGPS) {
             this.onWaypointReached();
             // Stop scanning for beacons
-            this.stopScannning();
           }
         }
       }

@@ -14,6 +14,7 @@ export class AnalyzeGameListPage implements OnInit {
   taskName: String = ""
   game: any[] = []
   AllGames: any[] = []
+  players: any[] = []
 
 
   constructor(
@@ -28,6 +29,7 @@ export class AnalyzeGameListPage implements OnInit {
         tracks.forEach(element => {
           this.taskName = element["name"]
           this.track = element["events"]
+          this.players = element["players"]
 
           this.track.forEach(event => {
             if ((event["type"] == "ON_OK_CLICKED" && event["correct"] == true) || event["type"] == "WAYPOINT_REACHED") {
@@ -35,7 +37,7 @@ export class AnalyzeGameListPage implements OnInit {
             }
           });
 
-          this.tracks.push([this.taskName, this.events])
+          this.tracks.push([this.players, this.taskName, this.events])
           this.events = []
         });
 

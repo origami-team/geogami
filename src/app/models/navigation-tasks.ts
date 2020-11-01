@@ -68,7 +68,7 @@ export const navtasks: ReadonlyArray<any> = [
         // category: "themeobjectLocalization",
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: "Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.",
+            text: "(Gehe zur Fahne und beantworte die Frage) \nWelche der folgenden Aussagen ist Studentenblumen ?",
         },
         answer: {
             type: AnswerType.MULTIPLE_CHOICE
@@ -87,7 +87,7 @@ export const navtasks: ReadonlyArray<any> = [
         name: "Navigation zur Zielfahne mit Antwort",
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: "Finde das markierte Haus in deiner Nähe. Mache ein Foto.",
+            text: "Folge dem Pfeil bis zum Ziel und Mache ein Foto für die Tagetes Pflanze.",
         },
         answer: {
             type: AnswerType.PHOTO
@@ -106,7 +106,7 @@ export const navtasks: ReadonlyArray<any> = [
         name: "Navigation zur Zielfahne mit Antwort",
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: "Finde das,,,.",
+            text: "(Gehe zur Fahne und beantworte die Frage) \nStudentenblumen gehören zu welchen Pflanzenfamilien ?",
         },
         answer: {
             type: AnswerType.MULTIPLE_CHOICE_TEXT
