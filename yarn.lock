@@ -1076,6 +1076,11 @@
   resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-2.0.1.tgz#551c87703b8f798120769e7a6a04d3a0ee5bce5e"
   integrity sha512-UKjeY34BlLGvRzDdPLk3/u0j9Ufmyy1gtHGKP6uZ3Qh0ciHFFKnL7PVw5Tf+H19HHPfZIal4rGTndvAWQsCMeA==
 
+"@capacitor/android@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-2.4.2.tgz#ddc55bf0ea78214a0a760330a439916093792d00"
+  integrity sha512-0OpOmsno6yFyN0tOEhE9LkAqQrnTGUxz49+ZdivieI3axFe3CpxbFhcfIsJtr96q9jhkspkYPMqGNZm3gPKjaA==
+
 "@capacitor/cli@~2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-2.0.1.tgz#db820e192f94d3bb70a238e98591a6d9f73dfb90"
@@ -1100,6 +1105,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@capacitor/core@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-2.4.2.tgz#f11d943febad2bb70f042ac87e354e9602250b82"
+  integrity sha512-xQyJSZo50+aAvX3ZsX5h2xJDjz1LQxGT0A6/qD1pqJVEUeDhzdfYMbxCPWbmqSONZXddHtwrTiIsjq1Wd+ukuQ==
+  dependencies:
+    tslib "^1.9.0"
+
 "@capacitor/core@latest":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-2.2.1.tgz#20f07d35c4af3650eed90cbfd0d5c260cbb59ba5"
@@ -1111,6 +1123,11 @@
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-2.0.1.tgz#1f1cd3736dcf00373e3303d89a0164f2f168d24e"
   integrity sha512-KzrWZAfLYe+eyJjvj1IjueIr0goigEREi4GkidKkGQdlP2EM4gHvzpkspD2L+HUP5c6dkReU5qkTzL2857TZ4w==
+
+"@capacitor/ios@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-2.4.2.tgz#cb608c8009a4609f2c654d78bf21967ecf3b0724"
+  integrity sha512-DqfDBrbaVKV2nkjMF7uL58G5QbJHoQVu/qdw/Uh5QSVkHqsY0lBKyi5nxhH3+cqBBMl+oGNB9EMBHovRVdR0EQ==
 
 "@ionic-native/core@^5.24.0":
   version "5.24.0"
@@ -2898,10 +2915,10 @@ capacitor-keep-screen-on@^0.0.4:
     "@capacitor/core" "^2.0.1"
     "@capacitor/ios" "^2.0.1"
 
-capacitor-voice-recorder@^0.0.91:
-  version "0.0.91"
-  resolved "https://registry.yarnpkg.com/capacitor-voice-recorder/-/capacitor-voice-recorder-0.0.91.tgz#e241797f1e30c1e23b55db742c47f1ac90ab98d3"
-  integrity sha512-1zp5A8H3Q95BRRHMxBxShNDr0u988/dal9wzz2baiSioT6F6Synm63zDr9koyA9uROVRXbb4i3Fo2T7H8RYB9Q==
+capacitor-voice-recorder@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/capacitor-voice-recorder/-/capacitor-voice-recorder-0.1.1.tgz#75e1692c9a813dd967e23b5d126f05a6aecc7fae"
+  integrity sha512-ypX5lIiDmbn0p9P0bRkJPIUmzhYfZtPm77OgZqntz9CFQOcJcdBpxsA8533fb6Rxz8Yj6//WtSK0d0mCTNQfpg==
   dependencies:
     "@capacitor/core" latest
 
