@@ -45,5 +45,19 @@ export const navtasks: ReadonlyArray<any> = [
         },
         evaluate: "distanceToPoint",
         settings: {}
+    }, {
+        category: "nav",
+        type: "nav-photo",
+        name: "Navigation mit Foto",
+        question: {
+            type: QuestionType.NAV_INSTRUCTION_PHOTO,
+            text: "Gehe zu dem Ort, den man auf dem Foto sieht."
+        },
+        answer: {
+            type: AnswerType.POSITION,
+            position: undefined
+        },
+        evaluate: "distanceToPoint",
+        settings: {}
     }
 ]

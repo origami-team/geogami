@@ -245,7 +245,7 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings.multipleTries = false;
     }
 
-    if (this.task.type == 'nav-text' && !this.task.settings.showMarker) {
+    if ((this.task.type == 'nav-text' || this.task.type == 'nav-photo') && !this.task.settings.showMarker) {
       this.task.settings.keepMarker = false
     }
 
@@ -263,6 +263,7 @@ export class CreateTaskModalPage implements OnInit {
 
     if (this.task.answer.mode == TaskMode.NAV_ARROW ||
       this.task.question.type == QuestionType.NAV_INSTRUCTION ||
+      this.task.question.type == QuestionType.NAV_INSTRUCTION_PHOTO ||
       this.task.answer.type == AnswerType.PHOTO ||
       this.task.type == 'nav-flag' && !this.task.settings.confirmation) {
       this.task.settings.multipleTries = false;

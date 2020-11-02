@@ -109,6 +109,7 @@ export class CreateFreeTaskModalComponent implements OnInit {
 
     if (this.task.answer.mode == TaskMode.NAV_ARROW ||
       this.task.question.type == QuestionType.NAV_INSTRUCTION ||
+      this.task.question.type == QuestionType.NAV_INSTRUCTION_PHOTO ||
       this.task.answer.type == AnswerType.PHOTO ||
       this.task.type == 'nav-flag' && !this.task.settings.confirmation) {
       this.task.settings.multipleTries = false;

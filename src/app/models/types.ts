@@ -9,7 +9,8 @@ export enum QuestionType {
     MAP_FEATURE_PHOTO = "MAP_FEATURE_PHOTO",
     MAP_DIRECTION_PHOTO = "MAP_DIRECTION_PHOTO",
     INFO = "INFO",
-    PHOTO = "PHOTO"
+    PHOTO = "PHOTO",
+    NAV_INSTRUCTION_PHOTO = "NAV_INSTRUCTION_PHOTO"
 }
 export enum AnswerType {
     POSITION = "POSITION",
