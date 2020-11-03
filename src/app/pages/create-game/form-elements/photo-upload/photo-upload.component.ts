@@ -4,6 +4,9 @@ import { PopoverController } from "@ionic/angular";
 import { environment } from 'src/environments/environment';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ChangeDetectorRef } from '@angular/core'
+
+
 
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 
@@ -13,9 +16,9 @@ import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
   styleUrls: ["./photo-upload.component.scss"]
 })
 export class PhotoUploadComponent implements OnInit {
-
   @Input() photo: SafeResourceUrl = '';
   @Input() taskType: string = "";
+  @Input() theme: string = "secondary";
 
   @Output() photoChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -25,7 +28,8 @@ export class PhotoUploadComponent implements OnInit {
   constructor(
     public popoverController: PopoverController,
     private transfer: FileTransfer,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private changeRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +46,7 @@ export class PhotoUploadComponent implements OnInit {
     });
 
     this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+    this.changeRef.detectChanges();
 
     this.uploading = true;
 
@@ -55,6 +60,7 @@ export class PhotoUploadComponent implements OnInit {
       console.log(JSON.parse(res.response))
       const filename = JSON.parse(res.response).filename
       this.photo = `${environment.apiURL}/file/${filename}`
+      this.changeRef.detectChanges();
       this.photoChange.emit(this.photo)
       this.uploading = false;
     })

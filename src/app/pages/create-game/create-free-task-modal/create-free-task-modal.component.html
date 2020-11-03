@@ -21,7 +21,8 @@
   <ion-card color="tertiary">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
-      In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise können zum Beispiel Quiz- und Sachaufgaben gestellt werden.
+      In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise
+      können zum Beispiel Quiz- und Sachaufgaben gestellt werden.
     </ion-card-content>
   </ion-card>
 
@@ -63,7 +64,7 @@
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.confirmation" (ngModelChange)="settingsChange($event)"></ion-toggle>
     </ion-item>
-    <ion-item lines="none" *ngIf="task.type == 'nav-text'">
+    <ion-item lines="none" *ngIf="task.type == 'nav-text' || task.type == 'nav-photo'">
       <ion-label>Zielfahne anzeigen
         <ion-icon name="information-circle"
           (click)="showPopover($event, 'Soll eine Zielfahne auf der Karte angezeigt werden?')">

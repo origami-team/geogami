@@ -1,9 +1,7 @@
-// / <reference types="@types/dom-mediacapture-record" />
-import { Plugins } from "@capacitor/core"
+/// <reference types="@types/dom-mediacapture-record" />
+
+import { Capacitor, Plugins } from "@capacitor/core"
 import { RecordingData, GenericResponse } from 'capacitor-voice-recorder'
-
-
-
 import { Injectable } from '@angular/core';
 import { Observable, interval } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,44 +10,48 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AudioRecorderService {
-  // private stream: MediaStream;
-  // private mediaRecorder: MediaRecorder;
-  // private audioChunks: BlobPart[] = [];
+  private mediaRecorder: MediaRecorder;
+  private audioChunks: BlobPart[] = [];
 
   constructor() {
-    Plugins.VoiceRecorder.requestAudioRecordingPermission().then((result: GenericResponse) => console.log(result.value))
-    // navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-    //   this.stream = stream
-    //   this.mediaRecorder = new MediaRecorder(this.stream);
-    //   this.mediaRecorder.addEventListener("dataavailable", event => {
-    //     this.audioChunks.push(event.data);
-    //   });
-    // })
+    if (Capacitor.platform == "web") {
+
+    } else {
+      Plugins.VoiceRecorder.requestAudioRecordingPermission().then((result: GenericResponse) => console.log(result.value))
+    }
   }
 
   start() {
-    // this.mediaRecorder.start()
-    Plugins.VoiceRecorder.startRecording()
-      .then((result: GenericResponse) => console.log(result.value))
-      .catch(error => console.log(error))
+    if (Capacitor.platform == "web") {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        this.mediaRecorder = new MediaRecorder(stream);
+        this.mediaRecorder.ondataavailable = event => {
+          this.audioChunks.push(event.data);
+        };
+
+        this.mediaRecorder.start()
+      })
+    } else {
+      Plugins.VoiceRecorder.startRecording()
+        .then((result: GenericResponse) => console.log(result.value))
+        .catch(error => console.log(error))
+    }
   }
 
   stop(): Promise<any> {
     return new Promise(resolve => {
+      if (Capacitor.platform == "web") {
 
-      Plugins.VoiceRecorder.stopRecording()
-        .then(async (result: RecordingData) => {
-          console.log(result.value)
 
-          const audio = new Audio(`data:audio/aac;base64,${result.value.recordDataBase64}`)
+        this.mediaRecorder.onstop = event => {
+          let audioBlob = new Blob(this.audioChunks, { type: 'audio/aac' })
+          this.audioChunks = []
 
-          // resolve(audio.src)
-
-          const audioBlob = convertBase64ToBlob(`data:audio/aac;base64,${result.value.recordDataBase64}`)
           // : Blob = new Blob([buffer], { 'type': result.value.mimeType });
+
           const audioUrl: string = URL.createObjectURL(audioBlob);
           // const audio: HTMLAudioElement = new Audio(audioUrl);
-          const play: Function = (): Promise<void> => audio.play();
+          // const play: Function = (): Promise<void> => audio.play();
 
           console.log(audioBlob, audioUrl)
 
@@ -58,11 +60,40 @@ export class AudioRecorderService {
           fetch(`${environment.apiURL}/upload`, { method: "POST", body: formData })
             .then(res => res.json())
             .then(body => {
+              console.log("data upload done")
               resolve(body);
             })
-        })
-        .catch(error => console.log(error))
-    });
+        }
+
+        this.mediaRecorder.stop()
+
+      } else {
+        Plugins.VoiceRecorder.stopRecording()
+          .then(async (result: RecordingData) => {
+            console.log(result.value)
+
+            const audio = new Audio(`data:audio/aac;base64,${result.value.recordDataBase64}`)
+
+            // resolve(audio.src)
+
+            const audioBlob = convertBase64ToBlob(`data:audio/aac;base64,${result.value.recordDataBase64}`)
+            // : Blob = new Blob([buffer], { 'type': result.value.mimeType });
+            const audioUrl: string = URL.createObjectURL(audioBlob);
+            // const audio: HTMLAudioElement = new Audio(audioUrl);
+            const play: Function = (): Promise<void> => audio.play();
+
+            console.log(audioBlob, audioUrl)
+
+            let formData = new FormData();
+            formData.append("file", audioBlob);
+            fetch(`${environment.apiURL}/upload`, { method: "POST", body: formData })
+              .then(res => res.json())
+              .then(body => {
+                resolve(body);
+              })
+          })
+      }
+    }).catch(error => console.log(error))
   };
 
 
