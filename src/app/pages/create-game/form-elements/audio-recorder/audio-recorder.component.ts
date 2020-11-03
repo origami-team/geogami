@@ -42,6 +42,7 @@ export class AudioRecorderComponent implements OnInit {
         this.recording = false
         this.audioRecorder.stop().then(({ filename }) => {
             this.audioSource = `${environment.apiURL}/audio/${filename}`
+            console.log(this.audioSource)
             this.audioSourceChange.emit(this.audioSource)
         })
     }
