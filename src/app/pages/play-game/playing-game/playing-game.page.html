@@ -118,7 +118,7 @@
           </div>
 
           <div class="photo-container"
-            *ngIf="task.question?.type == 'MAP_FEATURE_PHOTO' || task.question?.type == 'MAP_DIRECTION_PHOTO' || task.question?.type == 'INFO' || task.question?.type == 'PHOTO'">
+            *ngIf="task.question?.type == 'MAP_FEATURE_PHOTO' || task.question?.type == 'NAV_INSTRUCTION_PHOTO' || task.question?.type == 'MAP_DIRECTION_PHOTO' || task.question?.type == 'INFO' || task.question?.type == 'PHOTO'">
             <img *ngIf="task.question.photo" [src]="task.question.photo" />
           </div>
 

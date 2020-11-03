@@ -62,6 +62,9 @@
         Bei der <b>"Navigation mit Textanweisung"</b> bekommt der Spieler eine genaue Navigationsanweisung zum nächsten
         Zielort.
       </ion-text>
+      <ion-text *ngIf="task.type == 'nav-photo'">
+        Bei der <b>"Navigation mit Foto"</b> bekommt der Spieler neben einer Navigationsanweisung ein Foto angezeigt.
+      </ion-text>
       <ion-text *ngIf="task.type == 'theme-loc'">
         Bei der <b>"Selbst-Lokalisation"</b> muss der Spieler seine aktuelle Position auf der Karte finden.
       </ion-text>
@@ -170,7 +173,7 @@
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.confirmation" (ngModelChange)="settingsChange($event)"></ion-toggle>
     </ion-item>
-    <ion-item lines="none" *ngIf="task.type == 'nav-text'">
+    <ion-item lines="none" *ngIf="task.type == 'nav-text' || task.type == 'nav-photo'">
       <ion-label>Zielfahne anzeigen
         <ion-icon name="information-circle"
           (click)="showPopover($event, 'Soll eine Zielfahne auf der Karte angezeigt werden?')">

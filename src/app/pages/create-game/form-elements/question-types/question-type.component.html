@@ -1,4 +1,5 @@
-<div *ngIf="question.type != questionTypeEnum.NAV_INSTRUCTION">
+<div
+    *ngIf="question.type != questionTypeEnum.NAV_INSTRUCTION && question.type != questionTypeEnum.NAV_INSTRUCTION_PHOTO">
     <h5>Aufgabenstellung
         <ion-icon name="information-circle"
             (click)="showPopover($event, 'Diese Aufgabenstellung wird im Spiel angezeigt.')">
@@ -8,6 +9,19 @@
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION">
+    <h5>Navigationsanweisung
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.')">
+        </ion-icon>
+    </h5>
+    <ion-textarea [(ngModel)]="question.text"></ion-textarea>
+</div>
+
+<div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION_PHOTO">
+    <h5>Foto <ion-icon name="information-circle" (click)="showPopover($event, 'Dieses Foto wird im Spiel angezeigt.')">
+        </ion-icon>
+    </h5>
+    <app-photo-upload [(photo)]="question.photo" [taskType]="taskType" theme="primary"></app-photo-upload>
     <h5>Navigationsanweisung
         <ion-icon name="information-circle"
             (click)="showPopover($event, 'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.')">

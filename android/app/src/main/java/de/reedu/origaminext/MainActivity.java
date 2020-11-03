@@ -8,6 +8,8 @@ import com.getcapacitor.Plugin;
 import java.util.ArrayList;
 
 import com.go.capacitor.keepscreenon.CapacitorKeepScreenOn;
+import com.tchvu3.capvoicerecorder.VoiceRecorder;
+
 
 
 public class MainActivity extends BridgeActivity {
@@ -20,6 +22,7 @@ public class MainActivity extends BridgeActivity {
       // Additional plugins you've installed go here
       // Ex: add(TotallyAwesomePlugin.class);
       add(CapacitorKeepScreenOn.class);
+      add(VoiceRecorder.class); // Add this line
     }});
   }
 }
