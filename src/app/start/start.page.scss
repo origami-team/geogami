@@ -1,10 +1,24 @@
 .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .logo {
   margin-top: 30px;
-  max-width: 280px; 
+  max-width: 280px;
+}
+
+ion-card {
+  text-align: center;
+}
+
+@media only screen and (min-width: 575px) {
+  ion-icon {
+    position: absolute;
+    left: 0;
+    top: -15px;
+    font-size: 6rem;
+    transform: rotate(-10deg);
+  }
 }
