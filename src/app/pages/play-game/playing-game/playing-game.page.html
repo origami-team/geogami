@@ -264,7 +264,7 @@
   <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p>
 
   <ion-card class="overlay player-name" *ngIf="showPlayersNames">
-    <h3>Wer Spielt?</h3>
+    <h3>Wer spielt?</h3>
     <ion-item lines="none" *ngFor="let name of playersNames; let i = index; trackBy:indexTracker">
       <ion-label slot="start">Spieler {{i + 1}}</ion-label>
       <ion-input type="text" [(ngModel)]="playersNames[i]"></ion-input>
