@@ -16,14 +16,11 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list>
-    <ion-item *ngFor="let game of games" (click)="gameClick(game)" detail>
+  <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
+    <ion-card-header>
       <ion-label>
         <h2><span *ngIf="game.place">{{ game.place }} - </span>{{ game.name }}</h2>
-        <p>{{ game.description }}</p>
       </ion-label>
-    </ion-item>
-  </ion-list>
-
-
+    </ion-card-header>
+  </ion-card>
 </ion-content>
