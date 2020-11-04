@@ -3,12 +3,12 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="start"></ion-back-button>
     </ion-buttons>
-    <ion-title>Entwickle dein OriGami</ion-title>
+    <ion-title>Stelle dein Spiel zusammen</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card id="create_card_create" (click)=navigateCreateGamePage()>
+  <ion-card id="create_card_create" (click)=navigateCreateGamePage() color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="add-circle"></ion-icon> Erstellen
@@ -19,7 +19,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card id="create_card_edit" (click)=navigateEditGame()>
+  <ion-card id="create_card_edit" (click)=navigateEditGame() color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="construct"></ion-icon> Bearbeiten

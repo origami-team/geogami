@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card id="create_card_create" (click)=navigateMapShowroom()>
+  <ion-card id="create_card_create" (click)=navigateMapShowroom() color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="map"></ion-icon> Kartenfeatures
@@ -19,10 +19,11 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card id="create_card_edit" (click)=navigateTaskShowroom()>
+  <ion-card id="create_card_edit" (click)=navigateTaskShowroom() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="navigate"></ion-icon><ion-icon name="clipboard"></ion-icon> Aufgabentypen
+        <ion-icon name="navigate"></ion-icon>
+        <ion-icon name="clipboard"></ion-icon> Aufgabentypen
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
