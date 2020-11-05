@@ -1224,10 +1224,10 @@
     tslib "^1.9.0"
     ws "^7.0.0"
 
-"@ionic/pwa-elements@^1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@ionic/pwa-elements/-/pwa-elements-1.5.2.tgz#fa09df335edac62b48f350c38b12647310f1b967"
-  integrity sha512-OMa+el4XjnAx22P6S8CN2GGEfDgMkuwOxE5x5Cd/6ZDfcZKRuP//l4+JLF4YBvfvyPPHvaQLI+Ies7H2OTmAuA==
+"@ionic/pwa-elements@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@ionic/pwa-elements/-/pwa-elements-3.0.1.tgz#269d4fa1703b80f2af748ce05061be5f9cad5a19"
+  integrity sha512-X3wQmiNBx3umAjIZTkDEouOLE907ZhPm/qD844BrQe47/Qf++r35DyedbPODl5cODrgY05xBiOQiScGliS2k9Q==
 
 "@ionic/storage@^2.2.0":
   version "2.2.0"
