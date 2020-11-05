@@ -30,7 +30,7 @@
     "@ionic-native/device-orientation": "^5.26.0",
     "@ionic-native/file-transfer": "^5.24.0",
     "@ionic/angular": "^5.0.7",
-    "@ionic/pwa-elements": "^1.5.2",
+    "@ionic/pwa-elements": "^3.0.1",
     "@ionic/storage": "^2.2.0",
     "@mapbox/mapbox-gl-draw": "trygveaa/mapbox-gl-draw#dont-drag-with-multiple-fingers",
     "@ngx-translate/core": "^12.1.2",

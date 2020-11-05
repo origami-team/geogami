@@ -196,6 +196,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.resize();
       await this.zoomBounds()
     });
+
+    PlayingGamePage.showSuccess = false;
   }
 
   ionViewWillEnter() {
