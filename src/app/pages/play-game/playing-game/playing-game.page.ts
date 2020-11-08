@@ -181,7 +181,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   onClickGPSDis: number
   onClickBeaconDis: number
   styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
-  beaconTargetDistance: String ="0";
+  conBeaconTargetDistance: String = "0";
   /*  */
 
 
@@ -289,55 +289,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.geolocationService.init();
 
-    this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
-      this.trackerService.addWaypoint({});
+    this.subscripePosition();
 
-      this.lastKnownPosition = position;
 
-      console.log("lastKnownPosition: ", this.lastKnownPosition)
-      //console.log("waypoint: ", waypoint)
-
-      if (this.task && !this.showSuccess) {
-        const waypoint = this.task.answer.position.geometry.coordinates;
-        this.onClickGPSDis = this.calculateDistance(waypoint)
-
-        if (this.task.answer.type == AnswerType.POSITION || this.task.type == "nav-flag-with-answer" && !this.reachedUsingGPS) {
-          this.userArrived = this.userDidArrive(waypoint)
-
-          if (this.userArrived && (!this.task.settings.confirmation || this.task.type == "nav-flag-with-answer") && !this.showFeedback) {
-            //this.helperService.presentToast("reached using gps")
-
-            this.reachedUsingGPS = true;
-            this.gpsToTargetTime = new Date().toISOString();
-            this.gpsToTargetDis = this.calculateDistance(waypoint)
-            this.userArrived = this.userDidArrive(waypoint)
-
-            //if (!this.task.iBeacon) {
-              this.audioPlayer.play()
-            //}
-
-            if (this.task.type != "nav-flag-with-answer") {
-              if(!this.task.iBeacon){
-                this.onWaypointReached();
-              } else if(this.reachedUsingBeacon){
-                this.onWaypointReached();
-              }
-            }
-          }
-
-          if (this.task.answer.mode == TaskMode.NAV_ARROW) {
-            const destCoords = this.task.answer.position.geometry.coordinates;
-            const bearing = this.helperService.bearing(
-              position.coords.latitude,
-              position.coords.longitude,
-              destCoords[1],
-              destCoords[0]
-            );
-            this.heading = bearing;
-          }
-        }
-      }
-    });
 
     this.map.on("load", () => {
       this.rotationControl = new RotationControl(this.map)
@@ -434,6 +388,67 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       Plugins.CapacitorKeepScreenOn.enable()
     }
   }
+
+  subscripePosition() {
+    this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
+      this.trackerService.addWaypoint({});
+
+      this.lastKnownPosition = position;
+
+      console.log("lastKnownPosition1: ", this.lastKnownPosition)
+      //console.log("waypoint: ", waypoint)
+      //this.helperService.presentToast("lastKnownPosition: " + this.lastKnownPosition)
+
+      if (this.task && !this.showSuccess) {
+        const waypoint = this.task.answer.position.geometry.coordinates;
+        this.onClickGPSDis = this.calculateDistance(waypoint)
+        //this.helperService.presentToast("lastKnownPosition2: " + this.lastKnownPosition)
+
+
+        if ((this.task.answer.type == AnswerType.POSITION || this.task.type == "nav-flag-with-answer") && !this.reachedUsingGPS) {
+          this.userArrived = this.userDidArrive(waypoint)
+
+          if (this.userArrived && (!this.task.settings.confirmation || this.task.type == "nav-flag-with-answer") && !this.showFeedback) {
+
+            this.reachedUsingGPS = true;
+            this.gpsToTargetTime = new Date().toISOString();
+            this.gpsToTargetDis = this.calculateDistance(waypoint)
+            this.userArrived = this.userDidArrive(waypoint)
+
+            //if (!this.task.iBeacon) {
+            this.audioPlayer.play()
+
+            // Y.Q To solve GPS disabled after theme task
+            //this.positionSubscription.unsubscribe();
+
+
+            //}
+
+            // YQ nav-flag-with-answer
+            //if (this.task.type != "nav-flag-with-answer") {
+            if (!this.task.iBeacon) {
+              this.onWaypointReached();
+            } else if (this.reachedUsingBeacon) {
+              this.onWaypointReached();
+            }
+            //}
+          }
+
+          if (this.task.answer.mode == TaskMode.NAV_ARROW) {
+            const destCoords = this.task.answer.position.geometry.coordinates;
+            const bearing = this.helperService.bearing(
+              position.coords.latitude,
+              position.coords.longitude,
+              destCoords[1],
+              destCoords[0]
+            );
+            this.heading = bearing;
+          }
+        }
+      }
+    });
+  }
+
 
   onMapClick(e, mapType) {
     console.log(e)
@@ -1181,7 +1196,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.feedbackRetry = false;
   }
 
-  skipTask(){
+  skipTask() {
     this.trackerService.addEvent({
       type: "On_SkipTask_Clicked",
       onClickBeaconDis: this.onClickBeaconDis,
@@ -1191,7 +1206,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       gpsToTargetDis: this.gpsToTargetDis,
       gpsToTargetTime: this.gpsToTargetTime
     });
-    
+
     this.nextTask()
   }
 
@@ -1199,6 +1214,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // (iBeacon) Allow searching for beacon again
     this.reachedUsingBeacon = false;
     this.reachedUsingGPS = false;
+    //this.beaconToTargetDis = null;
+    //this.gpsToTargetDis = null;
+    this.onClickBeaconDis = 0;
+    this.onClickGPSDis = 0;
+    this.gpsToTargetDis = 0;
+    this.beaconToTargetDis = 0;
+    this.conBeaconTargetDistance = "0";
+    this.targetDistance = 0;
 
     this.showFeedback = false;
     this.taskIndex++;
@@ -1222,6 +1245,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.task = this.game.tasks[this.taskIndex];
     this.initTask();
+
+    // Y.Q To solve GPS disabled after theme task
+    //this.positionSubscription.unsubscribe();
+    if (this.task.category == "nav" && this.positionSubscription.closed) {
+      this.subscripePosition();
+    }
   }
 
   async onMultipleChoicePhotoSelected(item, event) {
@@ -1941,9 +1970,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.onClickBeaconDis = receivedData[i].accuracy;
 
         //if(receivedData[i].rssi == 0){
-          //this.beaconTargetDistance = receivedData[i].proximity.toString();
+        //this.beaconTargetDistance = receivedData[i].proximity.toString();
         //}else{
-          this.beaconTargetDistance = receivedData[i].accuracy.toString();
+        this.conBeaconTargetDistance = receivedData[i].accuracy.toString();
         //}
 
         //if (this.task.type == "nav-flag-with-answer") {

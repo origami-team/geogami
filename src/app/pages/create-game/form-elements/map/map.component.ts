@@ -12,7 +12,7 @@ import {
   OnChanges,
   SimpleChanges
 } from "@angular/core";
-import { Plugins } from "@capacitor/core";
+import { GeolocationPosition, Plugins } from "@capacitor/core";
 
 import mapboxgl from "mapbox-gl";
 
@@ -24,6 +24,8 @@ import { searchArea } from './drawThemes'
 import { HelperService } from 'src/app/services/helper.service';
 import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher';
 import { RotationControl, RotationType } from './../../../../mapControllers/rotation-control'
+import { Subscription } from 'rxjs';
+import { OrigamiGeolocationService } from 'src/app/services/origami-geolocation.service';
 
 
 @Component({
@@ -65,7 +67,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   rotationControl: RotationControl;
 
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
+  positionSubscription: Subscription;
+  lastKnownPosition: GeolocationPosition;
+
+  constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService,
+    private geolocationService: OrigamiGeolocationService) { }
 
   ngOnDestroy(): void {
     this.map.remove();
@@ -236,10 +242,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       this.rotationControl = new RotationControl(this.map)
 
       // disable map rotation using right click + drag
-      this.map.dragRotate.disable();
+      //this.map.dragRotate.disable();
 
       // disable map rotation using touch rotation gesture
-      this.map.touchZoomRotate.disableRotation();
+      //this.map.touchZoomRotate.disableRotation();
 
       this.map.loadImage(
         "/assets/icons/directionv2-richtung-settings.png",
@@ -341,6 +347,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
           });
       })
 
+      // Track user location Y.Q
+      Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
+        this.map.getSource('geolocate').setData({
+          type: "Point",
+          coordinates: [position.coords.longitude, position.coords.latitude]
+        });
+      })
 
 
       if (this.feature != undefined && this.featureType == 'point') {

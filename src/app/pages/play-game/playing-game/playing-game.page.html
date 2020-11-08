@@ -114,7 +114,7 @@
             <img src="/assets/icons/compass.svg" [ngStyle]="{
               transform: 'rotate(' + targetHeading + 'deg)'
             }" />
-            <p>Zum Ziel: <br><b>{{ (task.iBeacon?beaconTargetDistance:Math.round(targetDistance)) }}</b> m</p>
+            <p>Zum Ziel: <br><b>{{ (task.iBeacon?conBeaconTargetDistance:targetDistance.toFixed(2)) }}</b> m</p>
           </div>
 
           <div class="task-wrapper" [ngStyle]="{
@@ -284,7 +284,7 @@
 
 <!--   <p class="accuracy">GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p> -->  
 
-<p class="accuracy"> Beacon: {{beaconTargetDistance}}, &nbsp;&nbsp;GPS: {{Math.round(targetDistance)}}, &nbsp;&nbsp; GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p>
+<p class="accuracy"> 1: {{conBeaconTargetDistance}}, &nbsp;&nbsp; 2: {{ targetDistance.toFixed(2) }}, &nbsp;&nbsp; GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m</p>
 
   <ion-card class="overlay player-name" *ngIf="showPlayersNames">
     <h3>Wer Spielt?</h3>
