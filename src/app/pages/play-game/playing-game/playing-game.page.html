@@ -225,8 +225,8 @@
             <ion-textarea [(ngModel)]="textInput"></ion-textarea>
           </div>
 
-          <div *ngIf="task.answer?.type == 'PHOTO'">
-            <ion-thumbnail slot="start" *ngIf="photo">
+          <div *ngIf="task.answer?.type == 'PHOTO'" class="take-photo-wrapper">
+            <ion-thumbnail slot="start" *ngIf="photo" class="photo-container">
               <img [src]="photo" />
             </ion-thumbnail>
             <ion-button color="secondary" size="default" color="secondary" (click)=capturePhoto()>
