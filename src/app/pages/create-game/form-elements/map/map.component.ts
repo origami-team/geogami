@@ -22,6 +22,7 @@ import bbox from '@turf/bbox'
 
 import { searchArea } from './drawThemes'
 import { HelperService } from 'src/app/services/helper.service';
+import { SatControl } from './SatControl/SatControl';
 
 
 @Component({
@@ -157,6 +158,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       center: [8, 51.8],
       zoom: 2,
     });
+
+    this.map.addControl(new SatControl())
+    this.map.addControl(new mapboxgl.NavigationControl());
 
     this.map.on("click", e => {
       if (this.featureType == 'point') {
