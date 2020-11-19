@@ -36,6 +36,8 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
 
+    implementation 'com.android.support:design:23.2.1'
+
     implementation 'com.google.android.material:material:1.0.0'
 }
 

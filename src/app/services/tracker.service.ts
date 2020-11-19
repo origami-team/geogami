@@ -88,6 +88,11 @@ export class TrackerService {
     this.task = undefined;
   }
 
+  clear() {
+    this.deviceOrientationSubscription.unsubscribe();
+    this.positionWatch.unsubscribe();
+  }
+
   setTask(task) {
     this.task = task;
     this.panCounter = 0;

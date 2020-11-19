@@ -123,12 +123,9 @@
           </div>
 
           <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE'" class="multiple-choice">
-            <div *ngFor="let item of task.answer.photos | keyvalue | shuffle">
-              <ion-thumbnail slot="start">
-                <img [src]=item.value class="multiple-choize-img"
-                  (click)='onMultipleChoicePhotoSelected(item, $event)' />
-              </ion-thumbnail>
-            </div>
+            <ion-thumbnail slot="start" *ngFor="let item of task.answer.photos | keyvalue | shuffle">
+              <img [src]=item.value class="multiple-choize-img" (click)='onMultipleChoicePhotoSelected(item, $event)' />
+            </ion-thumbnail>
           </div>
 
 
