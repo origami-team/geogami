@@ -735,35 +735,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('marker-point')
     }
 
-    if (this.waypointMarker) {
-      if (this.game.tasks[this.taskIndex - 1]?.settings?.keepMarker) {
-        const el = document.createElement('div');
-        el.className = 'waypoint-marker-disabled';
-
-        new mapboxgl.Marker(el, {
-          anchor: 'bottom',
-          offset: [15, 0]
-        })
-          .setLngLat(this.game.tasks[this.taskIndex - 1].answer.position.geometry.coordinates)
-          .addTo(this.map);
-
-        const elDuplicate = document.createElement('div');
-        elDuplicate.className = 'waypoint-marker-disabled';
-
-        this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
-          anchor: 'bottom',
-          offset: [15, 0]
-        })
-          .setLngLat(this.game.tasks[this.taskIndex - 1].answer.position.geometry.coordinates)
-
-        this.layerControl.passMarkers({ waypointMarkerDuplicate: this.waypointMarkerDuplicate })
-      }
-      this.waypointMarker.remove();
-      this.waypointMarkerDuplicate.remove();
-      this.waypointMarker = null;
-      this.waypointMarkerDuplicate = null;
-    }
-
     if (this.map.getLayer('viewDirectionTask')) {
       this.map.removeLayer('viewDirectionTask');
       this.map.removeSource('viewDirectionTask');
@@ -797,6 +768,35 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this._initMapFeatures();
     this.landmarkControl.removeQT();
     this.landmarkControl.removeSearchArea();
+
+    if (this.waypointMarker) {
+      if (this.game.tasks[this.taskIndex - 1]?.settings?.keepMarker) {
+        const el = document.createElement('div');
+        el.className = 'waypoint-marker-disabled';
+
+        new mapboxgl.Marker(el, {
+          anchor: 'bottom',
+          offset: [15, 0]
+        })
+          .setLngLat(this.game.tasks[this.taskIndex - 1].answer.position.geometry.coordinates)
+          .addTo(this.map);
+
+        const elDuplicate = document.createElement('div');
+        elDuplicate.className = 'waypoint-marker-disabled';
+
+        this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
+          anchor: 'bottom',
+          offset: [15, 0]
+        })
+          .setLngLat(this.game.tasks[this.taskIndex - 1].answer.position.geometry.coordinates)
+
+        this.layerControl.passMarkers({ waypointMarkerDuplicate: this.waypointMarkerDuplicate })
+      }
+      this.waypointMarker.remove();
+      this.waypointMarkerDuplicate.remove();
+      this.waypointMarker = null;
+      this.waypointMarkerDuplicate = null;
+    }
 
     if (this.task.answer.type == AnswerType.POSITION) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {

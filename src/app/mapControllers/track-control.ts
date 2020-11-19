@@ -65,7 +65,14 @@ export class TrackControl {
     }
 
     private reset(): void {
-
+        this.path = {
+            type: "Feature",
+            properties: {},
+            geometry: {
+                type: "LineString",
+                coordinates: []
+            }
+        };
     }
 
     private update(): void {
@@ -84,6 +91,14 @@ export class TrackControl {
         if (this.map.getLayer('track')) {
             this.map.removeLayer('track')
         }
+        this.path = {
+            type: "Feature",
+            properties: {},
+            geometry: {
+                type: "LineString",
+                coordinates: []
+            }
+        };
         this.positionSubscription.unsubscribe();
         // window.navigator.geolocation.clearWatch(this.trackPositionWatch);
     }

@@ -53,7 +53,18 @@ ion-thumbnail {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    flex-direction: column;
     width: 100%;
+  }
+
+  .take-photo-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > ion-thumbnail {
+      margin-right: 1rem;
+    }
   }
 
   .top-info {
@@ -116,7 +127,7 @@ ion-thumbnail {
     font-size: 20px;
     text-align: center;
 
-    ion-icon {
+    ::ng-deep ion-icon {
       margin: 0;
     }
   }
@@ -269,6 +280,7 @@ ion-thumbnail {
   .photo-container {
     display: inline;
     max-height: 200px;
+    width: 100%;
     overflow: hidden;
     display: block;
     margin-left: auto;
