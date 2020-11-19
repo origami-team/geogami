@@ -2920,10 +2920,10 @@ capacitor-keep-screen-on@^0.0.4:
     "@capacitor/core" "^2.0.1"
     "@capacitor/ios" "^2.0.1"
 
-capacitor-voice-recorder@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/capacitor-voice-recorder/-/capacitor-voice-recorder-0.1.1.tgz#75e1692c9a813dd967e23b5d126f05a6aecc7fae"
-  integrity sha512-ypX5lIiDmbn0p9P0bRkJPIUmzhYfZtPm77OgZqntz9CFQOcJcdBpxsA8533fb6Rxz8Yj6//WtSK0d0mCTNQfpg==
+capacitor-voice-recorder@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/capacitor-voice-recorder/-/capacitor-voice-recorder-0.1.4.tgz#6006f9f5bb5bc47a77bd42f70709f0ab25e3aad3"
+  integrity sha512-NVeeTShyV9Xx64Bd+i+lD/mptThEmwU1lt7Ve6Cvl4TxhvNrrgdLmr71MK+7Ig4cEhA3K2SJ4syrk2q2DzV1/A==
   dependencies:
     "@capacitor/core" latest
 

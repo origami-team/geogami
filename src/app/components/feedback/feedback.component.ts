@@ -121,6 +121,7 @@ export class FeedbackComponent {
     }
 
     public setTask(task: Task) {
+        this.dismissFeedback()
         this.task = task
     }
 
