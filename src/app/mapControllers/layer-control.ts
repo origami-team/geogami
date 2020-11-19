@@ -1,4 +1,4 @@
-import { Map as MapboxMap } from "mapbox-gl";
+import { Marker, Map as MapboxMap } from "mapbox-gl";
 import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 import MapboxCompare from "mapbox-gl-compare";
 import { ElementRef, Injectable, ViewChild } from '@angular/core';
@@ -327,9 +327,22 @@ export class LayerControl {
     public passMarkers(markers) {
         if (this.layerType == LayerType.Swipe) {
             const { waypointMarker } = markers
-            waypointMarker.addTo(this.satMap)
+            if (waypointMarker) {
+                waypointMarker.addTo(this.satMap)
+            }
             const { waypointMarkerDuplicate } = markers
-            waypointMarkerDuplicate.addTo(this.satMap)
+            if (waypointMarkerDuplicate) {
+                // waypointMarkerDuplicate.addTo(this.satMap)
+                const elDuplicate = document.createElement('div');
+                elDuplicate.className = 'waypoint-marker-disabled';
+
+                new Marker(elDuplicate, {
+                    anchor: 'bottom',
+                    offset: [15, 0]
+                })
+                    .setLngLat(waypointMarkerDuplicate._lngLat).addTo(this.satMap)
+            }
+
         }
     }
 

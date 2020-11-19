@@ -16,7 +16,6 @@ export class KeywordPipe implements PipeTransform {
             const re = new RegExp(e.text, 'ig')
             text = text.replace(re, e.tag)
         });
-        console.log(text)
         return this._sanitizer.bypassSecurityTrustHtml(text);;
     }
 }
