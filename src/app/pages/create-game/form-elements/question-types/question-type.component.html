@@ -5,7 +5,7 @@
             (click)="showPopover($event, 'Diese Aufgabenstellung wird im Spiel angezeigt.')">
         </ion-icon>
     </h5>
-    <ion-textarea [(ngModel)]="question.text"></ion-textarea>
+    <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION">
@@ -14,7 +14,7 @@
             (click)="showPopover($event, 'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.')">
         </ion-icon>
     </h5>
-    <ion-textarea [(ngModel)]="question.text"></ion-textarea>
+    <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION_PHOTO">
@@ -27,7 +27,7 @@
             (click)="showPopover($event, 'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.')">
         </ion-icon>
     </h5>
-    <ion-textarea [(ngModel)]="question.text"></ion-textarea>
+    <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
 </div>
 
 <div>

@@ -36,6 +36,7 @@ import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-
 import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { AudioPlayerModule } from './components/audio-player/audio-player.module';
 
+import { MarkdownModule } from 'ngx-markdown';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -93,7 +94,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     IonicStorageModule.forRoot({
       driverOrder: ['localstorage', 'indexeddb']
-    })
+    }),
+    MarkdownModule.forRoot(),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

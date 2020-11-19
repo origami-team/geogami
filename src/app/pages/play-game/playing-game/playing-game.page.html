@@ -133,81 +133,10 @@
 
 
 
-          <div class="task-text">
+          <div class="task-text" *ngIf="task.question?.text" [innerHTML]="task.question.text | markdown | keyword">
             <!-- <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
               {{ task.settings["question-type"].settings["object-description"] }}
             </p> -->
-            <p *ngIf="task.question?.text">
-              <span *ngFor="let tag of (task.question.text | keyword).split(' ')">
-                <ion-text *ngIf="tag.includes('KEYWORD_FLAG')" color="primary">Fahne
-                  <ion-chip color="primary">
-                    <ion-icon name="flag"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_HERE')" color="danger">Du bist hier
-                  <ion-chip color="danger">
-                    <ion-icon name="radio-button-on"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKER')" color="secondary">Marker
-                  <ion-chip color="secondary">
-                    <ion-icon name="location-sharp"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_MAP')" color="secondary">Tippe auf die Karte
-                  <ion-chip color="secondary">
-                    <ion-icon name="location-sharp"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_TAP_ON_IT')" color="secondary">Tippe es an
-                  <ion-chip color="secondary">
-                    <ion-icon name="location-sharp"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_VIEW_DIRECTION')" color="secondary">Blickrichtung
-                  <ion-chip color="secondary">
-                    <ion-icon name="caret-forward"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDHOUSE')" color="secondary">markierte Haus
-                  <ion-chip color="secondary">
-                    <ion-icon name="cube-outline"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDBUILDING')" color="secondary">markierte Gebäude
-                  <ion-chip color="secondary">
-                    <ion-icon name="cube-outline"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDPLACE')" color="secondary">markierten Platz
-                  <ion-chip color="secondary">
-                    <ion-icon name="cube-outline"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDGARAGE')" color="secondary">markierte Garage
-                  <ion-chip color="secondary">
-                    <ion-icon name="cube-outline"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_MARKEDAREA')" color="secondary">markierten Bereich
-                  <ion-chip color="secondary">
-                    <ion-icon name="cube-outline"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_REDMARKED')" color="danger">rote Markierung
-                  <ion-chip color="danger">
-                    <ion-icon name="cube-outline"></ion-icon>
-                  </ion-chip>
-                </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_STREETSECTION')" color="danger">Straßenabschnitt </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_STREETPART')" color="danger">Straßenteil </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_ROUTESECTION')" color="danger">Wegstück </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_WALKEDROUTE')" color="danger">zurückgelegter Weg </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_TRACK')" color="danger">Track </ion-text>
-                <ion-text *ngIf="tag.includes('KEYWORD_SEARCH_AREA')" color="secondary">umrandeten </ion-text>
-                <ion-text *ngIf="!isKey(tag)">{{ tag }} </ion-text>
-              </span>
-            </p>
           </div>
 
           <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
@@ -222,7 +151,7 @@
           </div>
 
           <div *ngIf="task.answer?.type == 'TEXT'" class="text-input">
-            <ion-textarea [(ngModel)]="textInput"></ion-textarea>
+            <ion-textarea autoGrow [(ngModel)]="textInput"></ion-textarea>
           </div>
 
           <div *ngIf="task.answer?.type == 'PHOTO'" class="take-photo-wrapper">

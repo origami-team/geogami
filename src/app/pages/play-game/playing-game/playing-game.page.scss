@@ -127,7 +127,7 @@ ion-thumbnail {
     font-size: 20px;
     text-align: center;
 
-    ion-icon {
+    ::ng-deep ion-icon {
       margin: 0;
     }
   }

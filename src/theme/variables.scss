@@ -13,6 +13,14 @@
     padding-right: 1rem;
   }
 
+  ion-textarea {
+    min-height: 57px !important;
+
+    textarea {
+      min-height: 39px !important;
+    }
+  }
+
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;

@@ -17,6 +17,8 @@ import player from 'lottie-web';
 import { FeedbackComponent } from 'src/app/components/feedback/feedback.component';
 import { AudioPlayerModule } from 'src/app/components/audio-player/audio-player.module';
 
+import { MarkdownModule } from 'ngx-markdown';
+
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -40,6 +42,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     LottieModule.forRoot({ player: playerFactory }),
     NgShufflePipeModule,
+    MarkdownModule.forRoot(),
   ],
   declarations: [PlayingGamePage, KeywordPipe, FeedbackComponent],
   providers: [
