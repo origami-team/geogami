@@ -280,16 +280,15 @@ ion-thumbnail {
   .photo-container {
     display: inline;
     max-height: 200px;
-    width: 100%;
     overflow: hidden;
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 1rem;
-    border-radius: 1rem;
 
     > img {
       max-height: 200px;
+      border-radius: 1rem;
       width: auto;
     }
   }
