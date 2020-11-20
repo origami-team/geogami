@@ -33,7 +33,7 @@
 }
 
 ion-thumbnail {
-  --size: 150px !important;
+  --size: 150px;
 }
 
 .task-control {
@@ -154,6 +154,10 @@ ion-thumbnail {
     text-align: center;
     padding: 1rem;
     margin: 0;
+
+    @media (max-width: 576px) {
+      width: 90%;
+    }
   }
 
   &.correct-position {
@@ -188,11 +192,29 @@ ion-thumbnail {
 
   .multiple-choice {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     justify-content: space-between;
 
-    > div > ion-thumbnail {
-      --size: 65px;
+    > ion-thumbnail {
+      margin-bottom: 0.5rem;
+
+      > img {
+        border-radius: 1rem;
+      }
+
+      @media screen and (max-width: 575px) {
+        --size: 75px !important;
+        flex: 0 50%;
+        text-align: center;
+
+        > img {
+          width: auto;
+          border: 0;
+          border-radius: 0.5rem;
+          margin: auto;
+        }
+      }
 
       > .multiple-choize-img.selected {
         outline: solid #0cd1e8 2px;
@@ -256,6 +278,7 @@ ion-thumbnail {
     font-size: 18px;
     flex: 0 0 100%;
     position: relative;
+    width: 100%;
 
     &.bearing {
       min-height: 150px;
@@ -266,9 +289,9 @@ ion-thumbnail {
       }
     }
 
-    &.large {
-      margin-top: 50%;
-    }
+    // &.large {
+    // margin-top: 50%;
+    // }
 
     > img {
       height: 100%;

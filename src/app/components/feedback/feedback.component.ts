@@ -116,7 +116,6 @@ export class FeedbackComponent {
             })
             .subscribe((data: DeviceOrientationCompassHeading) => {
                 this.direction = data.magneticHeading
-                console.log(this.direction)
             })
     }
 
@@ -694,6 +693,7 @@ export class FeedbackComponent {
 
     public remove(): void {
         this.positionSubscription.unsubscribe();
+        this.deviceOrientationSubscription.unsubscribe();
     }
 
     public onWaypointReached() {

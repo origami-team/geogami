@@ -1036,6 +1036,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.geolocationService.clear()
     this.deviceOrientationSubscription.unsubscribe();
 
+    this.trackerService.clear();
+
     this.rotationControl.remove();
     this.viewDirectionControl.remove()
     this.landmarkControl.remove()
