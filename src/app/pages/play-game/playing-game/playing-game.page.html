@@ -132,8 +132,8 @@
 
           <div class="task-text" *ngIf="task.question?.text" [innerHTML]="task.question.text | markdown | keyword">
             <!-- <p *ngIf='task.settings["question-type"]?.settings["object-description"]'>
-              {{ task.settings["question-type"].settings["object-description"] }}
-            </p> -->
+                {{ task.settings["question-type"].settings["object-description"] }}
+              </p> -->
           </div>
 
           <div *ngIf="task.answer?.type == 'MULTIPLE_CHOICE_TEXT'" class="multiple-choice-text">
@@ -192,7 +192,7 @@
   <ion-card class="overlay player-name" *ngIf="showPlayersNames">
     <h3>Wer spielt?</h3>
     <ion-item lines="none" *ngFor="let name of playersNames; let i = index; trackBy:indexTracker">
-      <ion-label slot="start">Spieler {{i + 1}}</ion-label>
+      <ion-label class="player-counter" slot="start">{{i + 1}}</ion-label>
       <ion-input type="text" [(ngModel)]="playersNames[i]"></ion-input>
       <ion-icon slot="end" name="trash" (click)="removePlayer(i)"></ion-icon>
     </ion-item>

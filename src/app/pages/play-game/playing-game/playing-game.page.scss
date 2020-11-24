@@ -42,6 +42,10 @@ ion-thumbnail {
   left: 10px;
   right: 10px;
 
+  @media screen and (max-width: 568px) {
+    margin: 0;
+  }
+
   &.minimized {
     width: 50px;
     height: 50px;
@@ -126,6 +130,15 @@ ion-thumbnail {
     flex-grow: 1;
     font-size: 20px;
     text-align: center;
+
+    @media screen and (max-width: 767px) {
+      p {
+        margin: 0;
+      }
+      max-height: 33vh;
+      overflow: scroll;
+      font-size: inherit;
+    }
 
     ::ng-deep ion-icon {
       margin: 0;
@@ -297,6 +310,10 @@ ion-thumbnail {
       height: 100%;
       width: fit-content;
       display: initial;
+
+      @media screen and (max-width: 568px) {
+        max-height: 100px;
+      }
     }
   }
 
@@ -311,8 +328,21 @@ ion-thumbnail {
 
     > img {
       max-height: 200px;
+
+      @media screen and (max-width: 568px) {
+        max-height: 150px;
+      }
+
       border-radius: 1rem;
       width: auto;
     }
   }
+}
+
+ion-label.player-counter {
+  border: 2px solid var(--ion-color-primary-shade);
+  pointer-events: none;
+  border-radius: 50%;
+  width: 24px;
+  text-align: center;
 }

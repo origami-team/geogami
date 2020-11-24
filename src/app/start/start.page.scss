@@ -7,6 +7,10 @@
 .logo {
   margin-top: 30px;
   max-width: 280px;
+
+  @media only screen and (max-width: 575px) {
+    max-width: 180px;
+  }
 }
 
 ion-card {
