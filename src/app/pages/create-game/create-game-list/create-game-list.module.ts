@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { CreateGameListPage } from './create-game-list.page';
 
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 const routes: Routes = [
   {
@@ -24,9 +23,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [CreateGameListPage],
-  providers: [
-    FileTransfer,
-    // WebView
-  ]
+  providers: []
 })
 export class CreateGameListPageModule { }

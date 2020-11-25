@@ -6,7 +6,7 @@ android {
         applicationId "de.reedu.origaminext"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode 3
         versionName "0.21"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

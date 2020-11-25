@@ -2,12 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { PopoverController } from "@ionic/angular";
 import { environment } from 'src/environments/environment';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core'
-
-
-
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 
 @Component({
@@ -27,47 +23,57 @@ export class PhotoUploadComponent implements OnInit {
 
   constructor(
     public popoverController: PopoverController,
-    private transfer: FileTransfer,
     private sanitizer: DomSanitizer,
     private changeRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    // throw new Error("Method not implemented.");
+
+  }
+
+  deletePhoto() {
+    this.photo = ""
+    this.changeRef.detectChanges();
+    this.photoChange.emit(this.photo)
   }
 
   async capturePhoto(library: boolean = false) {
-    const image = await Plugins.Camera.getPhoto({
+    const cameraOptions = {
       quality: 50,
       allowEditing: false,
       resultType: CameraResultType.Uri,
       source: library ? CameraSource.Photos : CameraSource.Camera,
       width: 500
-    });
+    }
+
+    const image = await Plugins.Camera.getPhoto(cameraOptions);
 
     this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
     this.changeRef.detectChanges();
 
     this.uploading = true;
 
-    const fileTransfer: FileTransferObject = this.transfer.create();
+    let blob = await fetch(image.webPath).then(r => r.blob());
+    let formData = new FormData();
+    formData.append("file", blob);
 
-    fileTransfer.onProgress(e => {
-      this.uploadingProgress = e.loaded / e.total * 100
-    })
+    const options = {
+      method: 'POST',
+      body: formData
+    };
 
-    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
-      console.log(JSON.parse(res.response))
-      const filename = JSON.parse(res.response).filename
-      this.photo = `${environment.apiURL}/file/${filename}`
-      this.changeRef.detectChanges();
-      this.photoChange.emit(this.photo)
-      this.uploading = false;
-    })
-      .catch(err => {
-        console.log(err)
-        this.uploading = false;
-      })
+    const postResponse = await fetch(`${environment.apiURL}/upload`, options)
+
+    if (!postResponse.ok) {
+      throw Error("File upload failed")
+    }
+    this.uploading = false;
+
+    const postResponseText = await postResponse.json()
+    const filename = postResponseText.filename
+    this.photo = `${environment.apiURL}/file/${filename}`
+    this.changeRef.detectChanges();
+    this.photoChange.emit(this.photo)
   }
 
   async showPopover(ev: any, text: string) {

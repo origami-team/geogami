@@ -5,9 +5,9 @@ import { Plugins, DeviceInfo, GeolocationPosition } from "@capacitor/core";
 import { environment } from "../../environments/environment";
 import { OrigamiGeolocationService } from './origami-geolocation.service';
 import { Subscription } from 'rxjs';
-import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
 import { FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+import { OrigamiOrientationService } from './origami-orientation.service';
 
 @Injectable({
   providedIn: "root"
@@ -40,7 +40,7 @@ export class TrackerService {
   constructor(
     private http: HttpClient,
     private geolocateService: OrigamiGeolocationService,
-    private deviceOrientation: DeviceOrientation
+    private orientationService: OrigamiOrientationService
   ) { }
 
   async init(gameID, name, map: any, players: string[]) {
@@ -48,22 +48,20 @@ export class TrackerService {
       this.position = position
     })
 
-    this.deviceOrientationSubscription = this.deviceOrientation
-      .watchHeading()
-      .subscribe((data: DeviceOrientationCompassHeading) => {
-        if (this.lastHeading === undefined) {
-          this.lastHeading = data.magneticHeading
-        }
+    this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
+      if (this.lastHeading === undefined) {
+        this.lastHeading = heading
+      }
 
-        let diff = Math.abs(this.lastHeading - data.magneticHeading)
-        diff = Math.abs((diff + 180) % 360 - 180)
-        if (diff > 15) {
-          this.rotationCounter += diff
-          this.lastHeading = data.magneticHeading
-        }
+      let diff = Math.abs(this.lastHeading - heading)
+      diff = Math.abs((diff + 180) % 360 - 180)
+      if (diff > 15) {
+        this.rotationCounter += diff
+        this.lastHeading = heading
+      }
 
-        this.compassHeading = data.magneticHeading;
-      });
+      this.compassHeading = heading
+    })
 
     this.map = map;
     this.map.on('moveend', moveEvent => {

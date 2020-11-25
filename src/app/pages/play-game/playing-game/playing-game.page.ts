@@ -5,11 +5,6 @@ import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import mapboxgl from "mapbox-gl";
 import { Plugins, GeolocationPosition, Capacitor, CameraResultType, CameraSource } from '@capacitor/core';
-
-import {
-  DeviceOrientation,
-  DeviceOrientationCompassHeading
-} from "@ionic-native/device-orientation/ngx";
 import {
   ModalController,
   NavController,
@@ -17,8 +12,7 @@ import {
 } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
-import { Subscription, Observable, Subscriber } from "rxjs";
-import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
+import { Subscription } from "rxjs";
 import { RotationControl, RotationType } from './../../../mapControllers/rotation-control'
 import { ViewDirectionControl, ViewDirectionType } from './../../../mapControllers/view-direction-control';
 import { LandmarkControl } from 'src/app/mapControllers/landmark-control';
@@ -31,35 +25,19 @@ import { TrackControl, TrackType } from 'src/app/mapControllers/track-control';
 import { GeolocateControl, GeolocateType } from 'src/app/mapControllers/geolocate-control';
 import { MaskControl, MaskType } from 'src/app/mapControllers/mask-control';
 import { PanControl, PanType } from 'src/app/mapControllers/pan-control';
-
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-// import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
 import { mappings } from './../../../pipes/keywords.js'
-
 import { OrigamiGeolocationService } from './../../../services/origami-geolocation.service';
 import { AnswerType, TaskMode, QuestionType } from 'src/app/models/types';
-
 import { cloneDeep } from 'lodash';
 import { standardMapFeatures } from "../../../models/standardMapFeatures"
-
 import { AnimationOptions } from 'ngx-lottie';
 import bbox from '@turf/bbox';
 import buffer from '@turf/buffer';
 import { Task } from 'src/app/models/task';
-import { FeedbackComponent } from 'src/app/components/feedback/feedback.component';
 import { point } from '@turf/helpers';
 import booleanWithin from '@turf/boolean-within'
-
-
-enum FeedbackType {
-  Correct,
-  Wrong,
-  TryAgain,
-  Saved,
-  Success
-}
+import { OrigamiOrientationService } from 'src/app/services/origami-orientation.service';
 
 @Component({
   selector: "app-playing-game",
@@ -80,7 +58,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   map: mapboxgl.Map;
   waypointMarker: mapboxgl.Marker;
   waypointMarkerDuplicate: mapboxgl.Marker;
-  // zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
 
   // map features
   directionArrow: boolean = false;
@@ -119,13 +96,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   public static showSuccess: boolean = false;
   public lottieConfig: AnimationOptions;
-
-  // showFeedback: boolean = false;
-  // feedback: any = {
-  //   text: '',
-  //   icon: ''
-  // }
-  // feedbackRetry: boolean = false;
 
   Math: Math = Math;
 
@@ -169,16 +139,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     public toastController: ToastController,
     private gamesService: GamesService,
     public navCtrl: NavController,
-    private deviceOrientation: DeviceOrientation,
     private changeDetectorRef: ChangeDetectorRef,
     private OSMService: OsmService,
     private trackerService: TrackerService,
     public alertController: AlertController,
     public platform: Platform,
     public helperService: HelperService,
-    private transfer: FileTransfer,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService,
+    private orientationService: OrigamiOrientationService
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -260,6 +229,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     this.geolocationService.init();
+    this.orientationService.init();
 
     this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
       this.trackerService.addWaypoint({});
@@ -283,17 +253,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     this.map.on("load", () => {
-      this.rotationControl = new RotationControl(this.map)
+      this.rotationControl = new RotationControl(this.map, this.orientationService)
       this.landmarkControl = new LandmarkControl(this.map)
       this.streetSectionControl = new StreetSectionControl(this.map, this.OSMService, this.geolocationService);
-      this.layerControl = new LayerControl(this.map, this.mapWrapper, this.deviceOrientation, this.alertController, this.platform)
+      this.layerControl = new LayerControl(this.map, this.mapWrapper, this.alertController, this.platform)
       this.trackControl = new TrackControl(this.map, this.geolocationService)
       this.geolocateControl = new GeolocateControl(this.map, this.geolocationService)
-      this.viewDirectionControl = new ViewDirectionControl(this.map, this.deviceOrientation, this.geolocationService)
+      this.viewDirectionControl = new ViewDirectionControl(this.map, this.geolocationService, this.orientationService)
       this.panControl = new PanControl(this.map, this.geolocationService)
       this.maskControl = new MaskControl(this.map, this.geolocationService)
 
-      this.feedbackControl.init(this.map, this.geolocationService, this.deviceOrientation, this.helperService, this.toastController, this.trackerService, this)
+      this.feedbackControl.init(this.map, this.geolocationService, this.helperService, this.toastController, this.trackerService, this)
 
       this.map.loadImage(
         "/assets/icons/directionv2-richtung.png",
@@ -366,13 +336,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     // rotation
-    this.deviceOrientationSubscription = this.deviceOrientation
-      .watchHeading()
-      .subscribe((data: DeviceOrientationCompassHeading) => {
-        this.compassHeading = data.magneticHeading;
-        this.targetHeading = 360 - (this.compassHeading - this.heading);
-        this.indicatedDirection = this.compassHeading - this.directionBearing;
-      });
+    this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
+      this.compassHeading = heading;
+      this.targetHeading = 360 - (this.compassHeading - this.heading);
+      this.indicatedDirection = this.compassHeading - this.directionBearing;
+    })
 
     if (Capacitor.isNative) {
       Plugins.CapacitorKeepScreenOn.enable()
@@ -1034,6 +1002,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   navigateHome() {
     this.positionSubscription.unsubscribe();
     this.geolocationService.clear()
+
     this.deviceOrientationSubscription.unsubscribe();
 
     this.trackerService.clear();
@@ -1049,6 +1018,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.maskControl.remove();
 
     this.feedbackControl.remove();
+
+    this.orientationService.clear()
 
     // this.map.remove();
     this.navCtrl.navigateRoot("/");
@@ -1075,21 +1046,26 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.uploading = true;
 
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
-      const filename = JSON.parse(res.response).filename
-      this.photoURL = `${environment.apiURL}/file/${filename}`
-      this.uploading = false;
+    let blob = await fetch(image.webPath).then(r => r.blob());
+    let formData = new FormData();
+    formData.append("file", blob);
 
-      this.trackerService.addEvent({
-        type: "PHOTO_TAKEN",
-        photo: `${environment.apiURL}/file/${filename}`
-      })
-    })
-      .catch(err => {
-        console.log(err)
-        this.uploading = false;
-      })
+    const options = {
+      method: 'POST',
+      body: formData
+    };
+
+    const postResponse = await fetch(`${environment.apiURL}/upload`, options)
+
+    if (!postResponse.ok) {
+      throw Error("File upload failed")
+    }
+    this.uploading = false;
+
+    const postResponseText = await postResponse.json()
+    const filename = postResponseText.filename
+    this.photoURL = `${environment.apiURL}/file/${filename}`
+    this.changeDetectorRef.detectChanges()
   }
 
   toggleRotate() {

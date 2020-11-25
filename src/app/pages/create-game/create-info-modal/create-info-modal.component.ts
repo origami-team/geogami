@@ -1,10 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { ModalController } from "@ionic/angular";
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
-import { environment } from 'src/environments/environment';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { QuestionType, AnswerType } from 'src/app/models/types';
 import { standardMapFeatures } from 'src/app/models/standardMapFeatures';
 import { cloneDeep } from 'lodash';
@@ -24,8 +20,6 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
 
   constructor(
     public modalController: ModalController,
-    private transfer: FileTransfer,
-    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -51,33 +45,6 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.taskChange.emit(this.task)
-  }
-
-  async capturePhoto(library: boolean = false) {
-
-    const image = await Plugins.Camera.getPhoto({
-      quality: 50,
-      allowEditing: false,
-      resultType: CameraResultType.Uri,
-      source: library ? CameraSource.Photos : CameraSource.Camera,
-      width: 500
-    });
-
-    this.task.question.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
-
-    this.uploading = true;
-
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
-      console.log(JSON.parse(res.response))
-      const filename = JSON.parse(res.response).filename
-      this.task.question.photo = `${environment.apiURL}/file/${filename}`
-      this.uploading = false;
-    })
-      .catch(err => {
-        console.log(err)
-        this.uploading = false;
-      })
   }
 
   async presentMapFeaturesModal() {

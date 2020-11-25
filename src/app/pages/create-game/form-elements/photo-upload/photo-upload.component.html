@@ -17,6 +17,9 @@
     <ion-button [color]="theme" size="default" (click)=capturePhoto(true)>
       <ion-icon slot="icon-only" name="images"></ion-icon>
     </ion-button>
+    <ion-button *ngIf="photo" color="danger" size="default" (click)=deletePhoto()>
+      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    </ion-button>
   </div>
 
 
