@@ -10,10 +10,8 @@ import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { TrackerService } from '../../services/tracker.service';
 import { Component } from '@angular/core';
 import { Plugins, Capacitor, GeolocationPosition } from '@capacitor/core';
-import { DeviceOrientationCompassHeading, DeviceOrientation } from '@ionic-native/device-orientation/ngx';
-import { env } from 'process';
-import { environment } from 'src/environments/environment';
 import centroid from '@turf/centroid'
+import { OrigamiOrientationService } from 'src/app/services/origami-orientation.service';
 
 
 enum FeedbackType {
@@ -56,22 +54,20 @@ export class FeedbackComponent {
 
     private feedbackDuration: number = 2000;
     deviceOrientationSubscription: any;
-    private deviceOrientation: DeviceOrientation;
     private direction: number;
     successColor: string;
 
     private DIRECTION_TRESHOLD: number = 22.5
 
-    constructor() { }
+    constructor(private orientationService: OrigamiOrientationService) { }
 
-    init(map: any, geolocationService: OrigamiGeolocationService, deviceOrientation: DeviceOrientation, helperService: HelperService, toastController: ToastController, trackerService: TrackerService, playingGamePage: PlayingGamePage) {
+    init(map: any, geolocationService: OrigamiGeolocationService, helperService: HelperService, toastController: ToastController, trackerService: TrackerService, playingGamePage: PlayingGamePage) {
         this.map = map
         this.geolocationService = geolocationService
         this.helperService = helperService
         this.toastController = toastController
         this.trackerService = trackerService
         this.playingGamePage = playingGamePage
-        this.deviceOrientation = deviceOrientation
 
         this.successColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-success');
 
@@ -109,14 +105,9 @@ export class FeedbackComponent {
                 }
             }
         });
-
-        this.deviceOrientationSubscription = this.deviceOrientation
-            .watchHeading({
-                frequency: 300
-            })
-            .subscribe((data: DeviceOrientationCompassHeading) => {
-                this.direction = data.magneticHeading
-            })
+        this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
+            this.direction = heading
+        })
     }
 
     public setTask(task: Task) {

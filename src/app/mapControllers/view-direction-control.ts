@@ -1,10 +1,7 @@
 import { Map as MapboxMap } from "mapbox-gl";
-import {
-    DeviceOrientation,
-    DeviceOrientationCompassHeading
-} from "@ionic-native/device-orientation/ngx";
 import { Subscription } from 'rxjs';
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
+import { OrigamiOrientationService } from '../services/origami-orientation.service';
 
 export enum ViewDirectionType {
     None,
@@ -15,7 +12,6 @@ export enum ViewDirectionType {
 
 export class ViewDirectionControl {
     private deviceOrientationSubscription: Subscription;
-    private deviceOrientation: DeviceOrientation
     private positionSubscription: Subscription;
     private viewDirectionType: ViewDirectionType = ViewDirectionType.None
 
@@ -23,10 +19,8 @@ export class ViewDirectionControl {
 
     private isInitalized = false;
 
-    constructor(map: MapboxMap, deviceOrientation: DeviceOrientation, private geolocationService: OrigamiGeolocationService) {
+    constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService, private orientationService: OrigamiOrientationService) {
         this.map = map;
-
-        this.deviceOrientation = deviceOrientation;
 
         this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
             position => {
@@ -38,17 +32,14 @@ export class ViewDirectionControl {
                 }
             }
         );
-        this.deviceOrientationSubscription = this.deviceOrientation
-            .watchHeading({
-                frequency: 300
-            })
-            .subscribe((data: DeviceOrientationCompassHeading) => {
-                this.map.setLayoutProperty(
-                    "viewDirection",
-                    "icon-rotate",
-                    data.magneticHeading - this.map.getBearing()
-                );
-            })
+        this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
+            this.map.setLayoutProperty(
+                "viewDirection",
+                "icon-rotate",
+                heading - this.map.getBearing()
+            );
+        })
+
         this.map.loadImage(
             "/assets/icons/directionv2.png",
             (error, image) => {
@@ -137,6 +128,5 @@ export class ViewDirectionControl {
         if (this.deviceOrientationSubscription != undefined) {
             this.deviceOrientationSubscription.unsubscribe();
         }
-        // navigator.geolocation.clearWatch(this.positionWatch);
     }
 }

@@ -38,17 +38,7 @@
 
   <h5>Fotos und Grafiken</h5>
 
-  <div class="photo-wrapper">
-    <ion-thumbnail slot="start" *ngIf="task?.question?.photo">
-      <img [src]="task.question.photo">
-    </ion-thumbnail>
-    <ion-button color="warning" size="default" (click)=capturePhoto(false)>
-      <ion-icon slot="icon-only" name="camera"></ion-icon>
-    </ion-button>
-    <ion-button color="warning" size="default" (click)=capturePhoto(true)>
-      <ion-icon slot="icon-only" name="images"></ion-icon>
-    </ion-button>
-  </div>
+  <app-photo-upload theme="warning" [(photo)]="task.question.photo"></app-photo-upload>
 
   <h5>Weitere Einstellungen</h5>
 

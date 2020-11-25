@@ -7,9 +7,6 @@ import { IonicModule } from "@ionic/angular";
 
 import { PlayingGamePage } from "./playing-game.page";
 import { NgShufflePipeModule } from "angular-pipes";
-
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-// import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { KeywordPipe } from 'src/app/pipes/keyword.pipe';
 
 import { LottieModule } from 'ngx-lottie';
@@ -45,9 +42,6 @@ const routes: Routes = [
     MarkdownModule.forRoot(),
   ],
   declarations: [PlayingGamePage, KeywordPipe, FeedbackComponent],
-  providers: [
-    FileTransfer,
-    // WebView
-  ]
+  providers: []
 })
 export class PlayingGamePageModule { }

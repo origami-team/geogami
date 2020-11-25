@@ -7,9 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { EditGameListPage } from './edit-game-list.page';
 
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-// import { WebView } from '@ionic-native/ionic-webview/ngx';
-
 const routes: Routes = [
   {
     path: '',
@@ -25,9 +22,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [EditGameListPage],
-  providers: [
-    FileTransfer,
-    // WebView
-  ]
+  providers: []
 })
 export class EditGameListPageModule { }

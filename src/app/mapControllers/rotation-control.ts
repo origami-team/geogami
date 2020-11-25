@@ -1,9 +1,6 @@
-import { IControl, Map as MapboxMap } from "mapbox-gl";
-import {
-    DeviceOrientation,
-    DeviceOrientationCompassHeading
-} from "@ionic-native/device-orientation/ngx";
+import { Map as MapboxMap } from "mapbox-gl";
 import { Subscription } from 'rxjs';
+import { OrigamiOrientationService } from '../services/origami-orientation.service';
 
 export enum RotationType {
     Manual,
@@ -14,14 +11,11 @@ export enum RotationType {
 
 export class RotationControl {
     private deviceOrientationSubscription: Subscription;
-    private deviceOrientation: DeviceOrientation
     private rotationType: RotationType = RotationType.Manual
 
     private map: MapboxMap;
 
-    constructor(map: MapboxMap) {
-        this.deviceOrientation = new DeviceOrientation()
-
+    constructor(map: MapboxMap, private orientationService: OrigamiOrientationService) {
         this.map = map;
         this.rotate();
     }
@@ -56,13 +50,12 @@ export class RotationControl {
             case RotationType.Auto:
                 this.map.dragRotate.disable();
                 this.map.touchZoomRotate.disableRotation();
-                this.deviceOrientationSubscription = this.deviceOrientation
-                    .watchHeading({ frequency: 10 })
-                    .subscribe((data: DeviceOrientationCompassHeading) => {
-                        requestAnimationFrame(() => {
-                            this.map.rotateTo(data.magneticHeading, { duration: 20 });
-                        })
+
+                this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
+                    requestAnimationFrame(() => {
+                        this.map.rotateTo(heading, { duration: 20 });
                     })
+                })
                 break;
             case RotationType.Button:
 

@@ -1,14 +1,9 @@
 import { Marker, Map as MapboxMap } from "mapbox-gl";
 import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
 import MapboxCompare from "mapbox-gl-compare";
-import { ElementRef, Injectable, ViewChild } from '@angular/core';
-import {
-    DeviceOrientation,
-    DeviceOrientationCompassHeading
-} from "@ionic-native/device-orientation/ngx";
-import { Subscription, Observable, Subscriber, fromEvent } from 'rxjs';
+import { ElementRef } from '@angular/core';
+import { Subscription, Observable, fromEvent } from 'rxjs';
 import { AlertController, Platform } from '@ionic/angular';
-import { shareReplay } from 'rxjs/operators';
 
 
 export enum LayerType {
@@ -48,7 +43,7 @@ export class LayerControl {
 
     public swipeClickSubscription: Observable<any> = null;
 
-    constructor(map: MapboxMap, mapWrapper: ElementRef, private deviceOrientation: DeviceOrientation, alertController: AlertController, platform: Platform) {
+    constructor(map: MapboxMap, mapWrapper: ElementRef, alertController: AlertController, platform: Platform) {
         this.map = map;
         this.alertController = alertController;
         this.platform = platform;

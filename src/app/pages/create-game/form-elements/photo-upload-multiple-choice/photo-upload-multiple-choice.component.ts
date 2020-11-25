@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { environment } from 'src/environments/environment';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
@@ -24,8 +23,8 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
 
   constructor(
     public popoverController: PopoverController,
-    private transfer: FileTransfer,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private changeRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -47,21 +46,27 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
 
     this.uploading[photoNumber] = true;
 
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer.onProgress(e => {
-      this.uploadingProgress[photoNumber] = e.loaded / e.total * 100
-    })
-    fileTransfer.upload(image.path, `${environment.apiURL}/upload`).then(res => {
-      console.log(JSON.parse(res.response))
-      const filename = JSON.parse(res.response).filename
-      this.photos[photoNumber] = `${environment.apiURL}/file/${filename}`
-      this.photosChange.emit(this.photos)
-      this.uploading[photoNumber] = false;
-    })
-      .catch(err => {
-        console.log(err)
-        this.uploading[photoNumber] = false;
-      })
+    let blob = await fetch(image.webPath).then(r => r.blob());
+    let formData = new FormData();
+    formData.append("file", blob);
+
+    const options = {
+      method: 'POST',
+      body: formData
+    };
+
+    const postResponse = await fetch(`${environment.apiURL}/upload`, options)
+
+    if (!postResponse.ok) {
+      throw Error("File upload failed")
+    }
+    this.uploading[photoNumber] = false;
+
+    const postResponseText = await postResponse.json()
+    const filename = postResponseText.filename
+    this.photos[photoNumber] = `${environment.apiURL}/file/${filename}`
+    this.changeRef.detectChanges();
+    this.photosChange.emit(this.photos)
   }
 
   async showPopover(ev: any, text: string) {
