@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
-import { NavController } from "@ionic/angular";
+import { NavController } from '@ionic/angular';
 
-import { GamesService } from "../../../services/games.service";
+import { GamesService } from '../../../services/games.service';
 
 @Component({
-  selector: "app-edit-game-list",
-  templateUrl: "./edit-game-list.page.html",
-  styleUrls: ["./edit-game-list.page.scss"]
+  selector: 'app-edit-game-list',
+  templateUrl: './edit-game-list.page.html',
+  styleUrls: ['./edit-game-list.page.scss']
 })
 export class EditGameListPage implements OnInit {
   games: any;

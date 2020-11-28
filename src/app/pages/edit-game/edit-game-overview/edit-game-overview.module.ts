@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { EditGameOverviewPage } from './edit-game-overview.page';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { environment } from 'src/environments/environment';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -28,7 +30,10 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LottieModule.forRoot({ player: playerFactory })
+    LottieModule.forRoot({ player: playerFactory }),
+    NgxMapboxGLModule.withConfig({
+      accessToken: environment.mapboxAccessToken,
+    }),
   ],
   declarations: [EditGameOverviewPage]
 })

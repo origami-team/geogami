@@ -1,9 +1,9 @@
-import { Map as MapboxMap } from "mapbox-gl";
+import { Map as MapboxMap } from 'mapbox-gl';
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Plugins, GeolocationPosition } from '@capacitor/core';
 import { Subscription } from 'rxjs';
-import circle from '@turf/circle'
-import mask from '@turf/mask'
+import circle from '@turf/circle';
+import mask from '@turf/mask';
 
 
 export enum MaskType {
@@ -14,7 +14,7 @@ export enum MaskType {
 
 export class MaskControl {
     private positionSubscription: Subscription;
-    private maskType: MaskType = MaskType.Disabled
+    private maskType: MaskType = MaskType.Disabled;
 
     private map: MapboxMap;
 
@@ -31,7 +31,7 @@ export class MaskControl {
 
     public setType(type: MaskType): void {
         if (this.map != undefined) {
-            this.maskType = type
+            this.maskType = type;
             this.reset();
             this.update();
         }
@@ -39,41 +39,41 @@ export class MaskControl {
 
     public addLayer(val: number) {
         // outer circle
-        var ocCenter = [this.coords[0], this.coords[1]];
-        var ocRadius = 1500;
-        var ocPptions = { steps: 30, units: 'kilometers'};
-        var outerCircle = circle(ocCenter, ocRadius, ocPptions);
+        let ocCenter = [this.coords[0], this.coords[1]];
+        let ocRadius = 1500;
+        let ocPptions = { steps: 30, units: 'kilometers' };
+        let outerCircle = circle(ocCenter, ocRadius, ocPptions);
 
         // inner circle
-        var icCenter = [this.coords[0], this.coords[1]];
-        var icRadius = val/1000; // to get it in meter
-        var icOptions = { steps: 30, units: 'kilometers' };
-        var innerCircle = circle(icCenter, icRadius, icOptions);
+        let icCenter = [this.coords[0], this.coords[1]];
+        let icRadius = val / 1000; // to get it in meter
+        let icOptions = { steps: 30, units: 'kilometers' };
+        let innerCircle = circle(icCenter, icRadius, icOptions);
 
-        var masked = mask(innerCircle, outerCircle);
+        let masked = mask(innerCircle, outerCircle);
 
-        this.map.addSource("circle-mask", {
-            type: "geojson",
+        this.map.addSource('circle-mask', {
+            type: 'geojson',
             data: masked
         });
 
         this.map.addLayer({
-            id: "circle-mask",
-            source: "circle-mask",
-            type: "fill",
-            'paint': {
-                'fill-color': "#808080",
+            id: 'circle-mask',
+            source: 'circle-mask',
+            type: 'fill',
+            paint: {
+                'fill-color': '#808080',
                 'fill-opacity': 0.8
             }
         });
 
         this.map.setLayoutProperty('circle-mask', 'visibility', 'none');
         this.isInitalized = true;
-        this.update()
+        this.update();
     }
 
     toggle() {
-        if (this.map.getLayoutProperty("circle-mask", "visibility") == 'none') {
+        if (this.map.getLayoutProperty('circle-mask', 'visibility') == 'none') {
             this.map.setLayoutProperty('circle-mask', 'visibility', 'visible');
         } else {
             this.map.setLayoutProperty('circle-mask', 'visibility', 'none');
@@ -82,21 +82,21 @@ export class MaskControl {
     }
 
     private reset(): void {
-        if (this.map.getLayer('circle-mask') && this.map.getLayoutProperty("circle-mask", "visibility") == 'visible') {
+        if (this.map.getLayer('circle-mask') && this.map.getLayoutProperty('circle-mask', 'visibility') == 'visible') {
             this.map.setLayoutProperty('circle-mask', 'visibility', 'none');
         }
     }
 
     private update(): void {
         if (!this.isInitalized) {
-            return
+            return;
         }
         switch (this.maskType) {
             case MaskType.Disabled:
-                this.reset()
+                this.reset();
                 break;
             case MaskType.Enabled:
-                if (this.map.getLayoutProperty("circle-mask", "visibility") == 'none'){
+                if (this.map.getLayoutProperty('circle-mask', 'visibility') == 'none') {
                     this.map.setLayoutProperty('circle-mask', 'visibility', 'visible');
                 }
                 break;

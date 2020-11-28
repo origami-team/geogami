@@ -1,10 +1,10 @@
 import {
     Component, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges
-} from "@angular/core";
+} from '@angular/core';
 
 @Component({
-    selector: "app-audio-player",
-    templateUrl: "./audio-player.component.html",
+    selector: 'app-audio-player',
+    templateUrl: './audio-player.component.html',
 
 })
 export class AudioPlayerComponent implements AfterViewInit, OnChanges {
@@ -13,36 +13,36 @@ export class AudioPlayerComponent implements AfterViewInit, OnChanges {
 
     @ViewChild('audio') audio;
 
-    public playing: boolean = false;
+    public playing = false;
 
     constructor() { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.audio != undefined) {
-            this.loadAudio()
+            this.loadAudio();
         }
     }
 
     ngAfterViewInit(): void {
-        this.loadAudio()
+        this.loadAudio();
 
         this.audio.nativeElement.addEventListener('ended', () => {
-            this.loadAudio()
-            this.playing = false
-        })
+            this.loadAudio();
+            this.playing = false;
+        });
     }
 
     loadAudio() {
-        (this.audio.nativeElement as HTMLAudioElement).load()
+        (this.audio.nativeElement as HTMLAudioElement).load();
     }
 
     playPause() {
         if (this.playing) {
-            (this.audio.nativeElement as HTMLAudioElement).pause()
-            this.playing = false
+            (this.audio.nativeElement as HTMLAudioElement).pause();
+            this.playing = false;
         } else {
-            (this.audio.nativeElement as HTMLAudioElement).play()
-            this.playing = true
+            (this.audio.nativeElement as HTMLAudioElement).play();
+            this.playing = true;
         }
     }
 }

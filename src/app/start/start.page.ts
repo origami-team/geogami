@@ -14,12 +14,12 @@ import { Plugins } from '@capacitor/core';
 })
 export class StartPage implements OnInit {
 
-  playerMode: String
-  playerModeDescription: String
-  developerMode: String
-  developerModeDescription: String
-  evaluateMode: String
-  evaluateModeDescription: String
+  playerMode: String;
+  playerModeDescription: String;
+  developerMode: String;
+  developerModeDescription: String;
+  evaluateMode: String;
+  evaluateModeDescription: String;
 
   device: any;
 
@@ -27,9 +27,9 @@ export class StartPage implements OnInit {
 
   async ngOnInit() {
     this._translate.setDefaultLang('de');
-    this._initialiseTranslation()
+    this._initialiseTranslation();
 
-    Plugins.Device.getInfo().then(device => this.device = device)
+    Plugins.Device.getInfo().then(device => this.device = device);
   }
 
   _initialiseTranslation(): void {
@@ -54,7 +54,7 @@ export class StartPage implements OnInit {
   }
 
   handleCardClick(e) {
-    console.log(e)
+    console.log(e);
   }
 
   navigateGamesOverviewPage() {
@@ -70,16 +70,16 @@ export class StartPage implements OnInit {
   }
 
   navigateInfoPage() {
-    this.navCtrl.navigateForward('info')
+    this.navCtrl.navigateForward('info');
   }
 
   navigateAnalyzePage() {
-    this.navCtrl.navigateForward('analyze')
+    this.navCtrl.navigateForward('analyze');
   }
 
   async setLanguage(e) {
     this._translate.use(e.target.dataset.value);
-    this._initialiseTranslation()
+    this._initialiseTranslation();
   }
 
 }

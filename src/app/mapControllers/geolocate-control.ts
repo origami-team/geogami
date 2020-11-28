@@ -1,119 +1,59 @@
-import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
-import { Plugins, GeolocationPosition } from '@capacitor/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+@Component({
+    selector: 'app-geolocate-control',
+    template: `
+        <mgl-geojson-source id="geolocateSource" [data]="geolocateGeometry">
+        </mgl-geojson-source>
+        <mgl-layer
+            id="geolocateLayer"
+            type="symbol"
+            source="geolocateSource"
+            [layout]="geolocateLayout"
+        ></mgl-layer>
+    `,
+})
+export class GeolocateControlComponent implements OnDestroy, OnChanges {
+    @Input() visible = true;
 
-export enum GeolocateType {
-    None,
-    Continuous,
-    Button,
-    TaskStart
-}
-
-export class GeolocateControl {
     private positionSubscription: Subscription;
-    private geolocateType: GeolocateType = GeolocateType.None
 
-    private map: MapboxMap;
+    geolocateLayout = {
+        'icon-image': 'geolocate',
+        'icon-size': 0.4,
+        'icon-offset': [0, 0],
+        visibility: 'visible'
+    };
 
-    private isInitalized = false;
+    geolocateGeometry: GeoJSON.Point = {
+        type: 'Point',
+        coordinates: [
+            0, 0
+        ]
+    };
 
-    constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
-        this.map = map;
+    constructor(private geolocationService: OrigamiGeolocationService) {
 
         this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
-            if (this.map && this.map.getLayer('geolocate')) {
-                this.map.getSource('geolocate').setData({
-                    type: "Point",
+            {
+                this.geolocateGeometry = {
+                    ...this.geolocateGeometry,
                     coordinates: [position.coords.longitude, position.coords.latitude]
-                });
+                };
             }
         });
-        this.map.loadImage(
-            "/assets/icons/position.png",
-            (error, image) => {
-                if (error) throw error;
-
-                this.map.addImage("geolocate", image);
-
-                this.map.addSource("geolocate", {
-                    type: "geojson",
-                    data: {
-                        type: "Point",
-                        coordinates: [
-                            0, 0
-                        ]
-                    }
-                });
-                this.map.addLayer({
-                    id: "geolocate",
-                    source: "geolocate",
-                    type: "symbol",
-                    layout: {
-                        "icon-image": "geolocate",
-                        "icon-size": 0.4,
-                        "icon-offset": [0, 0]
-                    }
-                });
-                this.map.setLayoutProperty('geolocate', 'visibility', 'none');
-                this.isInitalized = true;
-                this.update()
-            });
     }
 
-    public setType(type: GeolocateType): void {
-        if (this.map != undefined) {
-            this.geolocateType = type
-            this.reset();
-            this.update();
-        }
-    }
-
-    toggle() {
-        if (this.map.getLayoutProperty("geolocate", "visibility") == 'none') {
-            this.map.setLayoutProperty('geolocate', 'visibility', 'visible');
-        } else {
-            this.map.setLayoutProperty('geolocate', 'visibility', 'none');
-        }
-
-    }
-
-    private reset(): void {
-        if (this.map.getLayer('geolocate') && this.map.getLayoutProperty("geolocate", "visibility") == 'visible')
-            this.map.setLayoutProperty('geolocate', 'visibility', 'none');
-
-    }
-
-    private update(): void {
-        if (!this.isInitalized) {
-            return
-        }
-        switch (this.geolocateType) {
-            case GeolocateType.None:
-                this.reset()
-                break;
-            case GeolocateType.Continuous:
-                if (this.map.getLayoutProperty("geolocate", "visibility") == 'none')
-                    this.map.setLayoutProperty('geolocate', 'visibility', 'visible');
-
-                break;
-            case GeolocateType.Button:
-                // TODO: implement
-                break;
-            case GeolocateType.TaskStart:
-                if (this.map.getLayoutProperty("geolocate", "visibility") == 'none')
-                    this.map.setLayoutProperty('geolocate', 'visibility', 'visible');
-
-                setTimeout(() => {
-                    this.map.setLayoutProperty('geolocate', 'visibility', 'none');
-                }, 10000)
-                break;
-        }
-    }
-
-    public remove(): void {
-        this.reset();
+    ngOnDestroy(): void {
         this.positionSubscription.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.geolocateLayout = {
+            ...this.geolocateLayout,
+            visibility: changes.visible.currentValue ? 'visible' : 'none'
+        };
     }
 }

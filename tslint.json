@@ -70,7 +70,12 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "one-variable-per-declaration": false,
-    "component-class-suffix": [true, "Page", "Component"],
-    "directive-class-suffix": true
+    "component-class-suffix": [
+      true,
+      "Page",
+      "Component"
+    ],
+    "directive-class-suffix": true,
+    "semicolon": [true, "always"]
   }
 }

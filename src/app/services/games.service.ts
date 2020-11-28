@@ -1,15 +1,15 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Game } from "./../models/game";
+import { Game } from './../models/game';
 
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class GamesService {
   constructor(private http: HttpClient) { }
@@ -32,13 +32,13 @@ export class GamesService {
 
   postGame(game: Game): Promise<any> {
     return this.http
-      .post(`${environment.apiURL}/game`, game, { observe: "response" })
+      .post(`${environment.apiURL}/game`, game, { observe: 'response' })
       .toPromise();
   }
 
   updateGame(game: Game): Promise<any> {
     return this.http
-      .put(`${environment.apiURL}/game`, game, { observe: "response" })
+      .put(`${environment.apiURL}/game`, game, { observe: 'response' })
       .toPromise();
   }
 }

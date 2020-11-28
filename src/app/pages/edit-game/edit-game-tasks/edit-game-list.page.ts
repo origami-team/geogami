@@ -1,30 +1,30 @@
-import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { IonReorderGroup } from '@ionic/angular';
 
 
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
-import { ModalController } from "@ionic/angular";
+import { ModalController } from '@ionic/angular';
 
-import { GameFactoryService } from "../../../services/game-factory.service";
+import { GameFactoryService } from '../../../services/game-factory.service';
 
-import { CreateTaskModalPage } from "../../create-game/create-task-modal/create-task-modal.page";
-import { CreateModuleModalPage } from "../../create-game/create-module-modal/create-module-modal.page";
-import { CreateInfoModalComponent } from "../../create-game/create-info-modal/create-info-modal.component";
+import { CreateTaskModalPage } from '../../create-game/create-task-modal/create-task-modal.page';
+import { CreateModuleModalPage } from '../../create-game/create-module-modal/create-module-modal.page';
+import { CreateInfoModalComponent } from '../../create-game/create-info-modal/create-info-modal.component';
 
-import { NavController } from "@ionic/angular";
+import { NavController } from '@ionic/angular';
 
 
-import { Game } from "src/app/models/game";
+import { Game } from 'src/app/models/game';
 import { GamesService } from 'src/app/services/games.service';
 import { ActivatedRoute } from '@angular/router';
 import { CreateFreeTaskModalComponent } from '../../create-game/create-free-task-modal/create-free-task-modal.component';
 import { Task } from 'src/app/models/task';
 
 @Component({
-  selector: "app-edit-game-list",
-  templateUrl: "./edit-game-list.page.html",
-  styleUrls: ["./edit-game-list.page.scss"]
+  selector: 'app-edit-game-list',
+  templateUrl: './edit-game-list.page.html',
+  styleUrls: ['./edit-game-list.page.scss']
 })
 export class EditGameListPage implements OnInit {
   // name: String;
@@ -57,8 +57,8 @@ export class EditGameListPage implements OnInit {
         .then(games => {
           this.game = games[0];
           this.gameFactory.flushGame();
-          this.gameFactory.addGameInformation(this.game)
-        })
+          this.gameFactory.addGameInformation(this.game);
+        });
     });
 
   }
@@ -97,16 +97,16 @@ export class EditGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null) {
+  async presentTaskModal(type: string = 'nav', task: Task = null) {
 
-    console.log(task)
+    console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
       backdropDismiss: false,
       componentProps: {
-        type: type,
-        task: task
+        type,
+        task
       }
     });
 
@@ -116,9 +116,9 @@ export class EditGameListPage implements OnInit {
     if (data != undefined) {
       if (task != null) {
         if (!task.id) {
-          task.id = Math.floor(Date.now() / 1000)
+          task.id = Math.floor(Date.now() / 1000);
         }
-        this.updateTask(task.id, data.data)
+        this.updateTask(task.id, data.data);
       } else {
         this.addTaskToGame(data.data);
       }
@@ -134,14 +134,14 @@ export class EditGameListPage implements OnInit {
   }
 
   deleteTask(taskID) {
-    console.log("deleting", taskID);
+    console.log('deleting', taskID);
     this.game = this.gameFactory.removeTask(taskID);
   }
 
   updateTask(taskID, task) {
-    console.log("updating", taskID);
+    console.log('updating', taskID);
     this.game = this.gameFactory.updateTask(taskID, task);
-    console.log(this.game)
+    console.log(this.game);
   }
 
   doReorder(ev: any) {
@@ -158,9 +158,9 @@ export class EditGameListPage implements OnInit {
     // new order of items
     this.game.tasks = ev.detail.complete(this.game.tasks);
 
-    this.gameFactory.applyReorder(this.game.tasks)
+    this.gameFactory.applyReorder(this.game.tasks);
 
-    console.log(this.game.tasks)
+    console.log(this.game.tasks);
 
     ev.detail.complete(true);
 
@@ -169,7 +169,7 @@ export class EditGameListPage implements OnInit {
   }
 
   toggleReorder() {
-    this.reorder = !this.reorder
+    this.reorder = !this.reorder;
   }
 
   uploadGame() {
@@ -178,7 +178,7 @@ export class EditGameListPage implements OnInit {
         this.navCtrl.navigateForward(`edit-game/edit-game-overview/${this.game._id}`);
         // this.gameFactory.flushGame();
       }
-    })
+    });
   }
 
   navigateBack() {

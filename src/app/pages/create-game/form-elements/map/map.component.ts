@@ -14,7 +14,7 @@ import {
 } from "@angular/core";
 import { Plugins } from "@capacitor/core";
 
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
@@ -98,7 +98,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
           .addTo(this.map);
 
         this.marker.on("dragend", () => {
-          const lngLat = this.marker._lngLat;
+          const lngLat = this.marker.getLngLat();
           const pointFeature = this._toGeoJSONPoint(lngLat.lng, lngLat.lat);
           this.featureChange.emit(pointFeature)
           this._onChange(pointFeature);
@@ -271,7 +271,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
             }
             if ((this.featureType == 'geometry' || this.featureType == 'geometry-free') && this.feature.features) {
               if (this.feature.features.length > 0) {
-                this.map.fitBounds(bbox(this.feature), {
+                this.map.fitBounds((bbox(this.feature) as LngLatBoundsLike), {
                   padding: 20,
                   speed: 3
                 })
@@ -297,31 +297,32 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
           })
         }
 
-        this.map.loadImage(
-          "/assets/icons/position.png",
-          (error, image) => {
-            if (error) throw error;
+        // this.map.loadImage(
+        //   "/assets/icons/position.png",
+        //   (error, image) => {
+        //     if (error) throw error;
 
-            this.map.addImage("geolocate", image);
+        //     this.map.addImage("geolocate", image);
 
-            this.map.addSource("geolocate", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates: [position.coords.longitude, position.coords.latitude]
-              }
-            });
-            this.map.addLayer({
-              id: "geolocate",
-              source: "geolocate",
-              type: "symbol",
-              layout: {
-                "icon-image": "geolocate",
-                "icon-size": 0.4,
-                "icon-offset": [0, 0]
-              }
-            });
-          });
+
+        //     this.map.addSource("geolocate", {
+        //       type: "geojson",
+        //       data: {
+        //         type: "Point",
+        //         coordinates: [position.coords.longitude, position.coords.latitude]
+        //       }
+        //     });
+        //     this.map.addLayer({
+        //       id: "geolocate",
+        //       source: "geolocate",
+        //       type: "symbol",
+        //       layout: {
+        //         "icon-image": "geolocate",
+        //         "icon-size": 0.4,
+        //         "icon-offset": [0, 0]
+        //       }
+        //     });
+        //   });
       })
 
 

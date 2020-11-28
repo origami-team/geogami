@@ -1,4 +1,4 @@
-import { Map as MapboxMap } from "mapbox-gl";
+import { Map as MapboxMap } from 'mapbox-gl';
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -20,10 +20,10 @@ export class TrackControl {
         const dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
 
         this.path = {
-            type: "Feature",
+            type: 'Feature',
             properties: {},
             geometry: {
-                type: "LineString",
+                type: 'LineString',
                 coordinates: []
             }
         };
@@ -34,23 +34,23 @@ export class TrackControl {
                     position.coords.longitude,
                     position.coords.latitude
                 ]);
-                if (this.map && this.map.getSource("track")) {
-                    this.map.getSource("track").setData(this.path);
+                if (this.map && this.map.getSource('track')) {
+                    // this.map.getSource("track").setData(this.path);
                 }
             });
 
-        this.map.addSource("track", { type: "geojson", data: this.path });
+        this.map.addSource('track', { type: 'geojson', data: this.path });
         this.map.addLayer({
-            id: "track",
-            type: "line",
-            source: "track",
+            id: 'track',
+            type: 'line',
+            source: 'track',
             paint: {
-                "line-color": dangerColor,
-                "line-opacity": 0.5,
-                "line-width": 5
+                'line-color': dangerColor,
+                'line-opacity': 0.5,
+                'line-width': 5
             },
             layout: {
-                "line-cap": "round"
+                'line-cap': 'round'
             }
         });
         this.map.setLayoutProperty('track', 'visibility', 'none');
@@ -58,7 +58,7 @@ export class TrackControl {
 
     public setType(type: TrackType): void {
         if (this.map != undefined) {
-            this.trackType = type
+            this.trackType = type;
             this.reset();
             this.update();
         }
@@ -66,10 +66,10 @@ export class TrackControl {
 
     private reset(): void {
         this.path = {
-            type: "Feature",
+            type: 'Feature',
             properties: {},
             geometry: {
-                type: "LineString",
+                type: 'LineString',
                 coordinates: []
             }
         };
@@ -89,13 +89,13 @@ export class TrackControl {
 
     public remove(): void {
         if (this.map.getLayer('track')) {
-            this.map.removeLayer('track')
+            this.map.removeLayer('track');
         }
         this.path = {
-            type: "Feature",
+            type: 'Feature',
             properties: {},
             geometry: {
-                type: "LineString",
+                type: 'LineString',
                 coordinates: []
             }
         };
