@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import mapboxgl from 'mapbox-gl';
 
-import { GamesService } from '../../../services/games.service'
+import { GamesService } from '../../../services/games.service';
 
 
 
@@ -14,7 +14,7 @@ import { GamesService } from '../../../services/games.service'
 })
 export class GamesOverviewPage implements OnInit {
 
-  selectGame: String
+  selectGame: String;
 
   constructor(private _translate: TranslateService, private gamesService: GamesService) { }
 
@@ -22,7 +22,7 @@ export class GamesOverviewPage implements OnInit {
   }
 
   ionViewDidEnter(): void {
-    this._initialiseTranslation()
+    this._initialiseTranslation();
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
 
@@ -38,15 +38,15 @@ export class GamesOverviewPage implements OnInit {
           .setHTML(`
             <h3>${game.name}</h3>
             <p>${game.description}</p>
-            <ion-button (click)="playGame()">Play</ion-button>`)
+            <ion-button (click)="playGame()">Play</ion-button>`);
 
         new mapboxgl.Marker()
           .setLngLat([game.waypoints[0].lng, game.waypoints[0].lat])
           .setPopup(popup)
-          .addTo(map)
+          .addTo(map);
       });
 
-      const coordinates = games.map(game => [game.waypoints[0].lng, game.waypoints[0].lat])
+      const coordinates = games.map(game => [game.waypoints[0].lng, game.waypoints[0].lat]);
 
       const bounds = coordinates.reduce(function (bounds, coord) {
         return bounds.extend(coord);
@@ -57,11 +57,11 @@ export class GamesOverviewPage implements OnInit {
         duration: 1000,
         zoom: 15
       });
-    })
+    });
   }
 
   playGame(game) {
-    console.log("Playing ", game)
+    console.log('Playing ', game);
   }
 
 

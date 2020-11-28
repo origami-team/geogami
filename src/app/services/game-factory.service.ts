@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
-import { Game } from "./../models/game";
-import { Task } from "./../models/task";
+import { Game } from './../models/game';
+import { Task } from './../models/task';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class GameFactoryService {
   public game: Game;
@@ -17,16 +17,16 @@ export class GameFactoryService {
       ...this.game,
       ...data
     };
-    console.log("New Game: ", this.game);
+    console.log('New Game: ', this.game);
     this.storage.set('game', this.game);
   }
 
   addTask(task: Task) {
     if (!task.id) {
-      task.id = Math.floor(Date.now() / 1000)
+      task.id = Math.floor(Date.now() / 1000);
     }
     // console.log(task, index);
-    if (this.game.hasOwnProperty("tasks")) {
+    if (this.game.hasOwnProperty('tasks')) {
       // const newTaskArr = this.game.tasks;
       // newTaskArr.splice(index, 0, task);
       // console.log(newTaskArr);
@@ -48,34 +48,34 @@ export class GameFactoryService {
   }
 
   updateTask(taskID: number, task: Task) {
-    console.log(task, taskID)
+    console.log(task, taskID);
     if (task.id == undefined) {
-      task.id = taskID
+      task.id = taskID;
     }
     this.game.tasks = this.game.tasks.map(t => {
       if (t.id == taskID) {
-        return task
+        return task;
       }
 
-      return t
+      return t;
     });
-    console.log(this.game.tasks)
+    console.log(this.game.tasks);
     this.storage.set('game', this.game);
     return this.game;
   }
 
   applyReorder(tasks) {
-    this.game.tasks = tasks
+    this.game.tasks = tasks;
     this.storage.set('game', this.game);
   }
 
   async getGame(): Promise<Game> {
     return this.storage.get('game').then((val) => {
-      console.log(val)
+      console.log(val);
       if (val != undefined) {
-        this.game = val
+        this.game = val;
       } else if (!this.game) {
-        this.game = new Game(Math.floor(Date.now() / 1000), "", "", true, [], undefined, false);
+        this.game = new Game(Math.floor(Date.now() / 1000), '', '', true, [], undefined, false);
         this.storage.set('game', this.game);
       }
       return this.game;

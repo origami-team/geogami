@@ -38,6 +38,9 @@ import { AudioPlayerModule } from './components/audio-player/audio-player.module
 
 import { MarkdownModule } from 'ngx-markdown';
 
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -96,6 +99,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       driverOrder: ['localstorage', 'indexeddb']
     }),
     MarkdownModule.forRoot(),
+    NgxMapboxGLModule.withConfig({
+      accessToken: environment.mapboxAccessToken
+    })
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

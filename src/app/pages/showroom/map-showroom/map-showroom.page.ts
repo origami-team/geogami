@@ -407,12 +407,12 @@ export class MapShowroomPage implements OnInit {
 
       window.addEventListener("deviceorientation", this._orientTo, false);
 
-      // Add 3D buildungs 
+      // Add 3D buildungs
       // Insert the layer beneath any symbol layer.
-      var layers = this.map.getStyle().layers;
+      let layers = this.map.getStyle().layers;
 
-      var labelLayerId;
-      for (var i = 0; i < layers.length; i++) {
+      let labelLayerId;
+      for (let i = 0; i < layers.length; i++) {
         if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
           labelLayerId = layers[i].id;
           break;
