@@ -9,7 +9,6 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    implementation project(':byteowls-capacitor-oauth2')
     implementation project(':capacitor-keep-screen-on')
     implementation project(':capacitor-voice-recorder')
 

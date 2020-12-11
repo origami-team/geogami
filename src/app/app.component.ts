@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 
 import { Platform } from "@ionic/angular";
-import { Plugins, StatusBarStyle, registerWebPlugin } from "@capacitor/core";
-import { OAuth2Client } from "@byteowls/capacitor-oauth2";
+import { Plugins, StatusBarStyle } from "@capacitor/core";
 import { AuthService } from "./services/auth-service.service";
 
 @Component({
@@ -27,8 +26,6 @@ export class AppComponent {
       if (this.platform.is("android")) {
         Plugins.StatusBar.setBackgroundColor({ color: "white" });
       }
-
-      registerWebPlugin(OAuth2Client);
     });
   }
 }
