@@ -18,7 +18,7 @@ ion-card {
 }
 
 @media only screen and (min-width: 575px) {
-  ion-icon {
+  ion-card-title > ion-icon {
     position: absolute;
     left: 0;
     top: -15px;

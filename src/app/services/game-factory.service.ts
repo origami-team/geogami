@@ -1,29 +1,29 @@
 import { Injectable } from "@angular/core";
-import { Storage } from '@ionic/storage';
+import { Storage } from "@ionic/storage";
 
 import { Game } from "./../models/game";
 import { Task } from "./../models/task";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class GameFactoryService {
   public game: Game;
 
-  constructor(private storage: Storage) { }
+  constructor(private storage: Storage) {}
 
   addGameInformation(data: any) {
     this.game = {
       ...this.game,
-      ...data
+      ...data,
     };
     console.log("New Game: ", this.game);
-    this.storage.set('game', this.game);
+    this.storage.set("game", this.game);
   }
 
   addTask(task: Task) {
     if (!task.id) {
-      task.id = Math.floor(Date.now() / 1000)
+      task.id = Math.floor(Date.now() / 1000);
     }
     // console.log(task, index);
     if (this.game.hasOwnProperty("tasks")) {
@@ -34,49 +34,49 @@ export class GameFactoryService {
     } else {
       this.game = {
         ...this.game,
-        tasks: [task]
+        tasks: [task],
       };
     }
-    this.storage.set('game', this.game);
+    this.storage.set("game", this.game);
     return this.game;
   }
 
   removeTask(taskID: number) {
-    this.game.tasks = this.game.tasks.filter(t => t.id != taskID);
-    this.storage.set('game', this.game);
+    this.game.tasks = this.game.tasks.filter((t) => t.id != taskID);
+    this.storage.set("game", this.game);
     return this.game;
   }
 
   updateTask(taskID: number, task: Task) {
-    console.log(task, taskID)
+    console.log(task, taskID);
     if (task.id == undefined) {
-      task.id = taskID
+      task.id = taskID;
     }
-    this.game.tasks = this.game.tasks.map(t => {
+    this.game.tasks = this.game.tasks.map((t) => {
       if (t.id == taskID) {
-        return task
+        return task;
       }
 
-      return t
+      return t;
     });
-    console.log(this.game.tasks)
-    this.storage.set('game', this.game);
+    console.log(this.game.tasks);
+    this.storage.set("game", this.game);
     return this.game;
   }
 
   applyReorder(tasks) {
-    this.game.tasks = tasks
-    this.storage.set('game', this.game);
+    this.game.tasks = tasks;
+    this.storage.set("game", this.game);
   }
 
   async getGame(): Promise<Game> {
-    return this.storage.get('game').then((val) => {
-      console.log(val)
+    return this.storage.get("game").then((val) => {
+      console.log(val);
       if (val != undefined) {
-        this.game = val
+        this.game = val;
       } else if (!this.game) {
-        this.game = new Game(Math.floor(Date.now() / 1000), "", "", true, [], undefined, false);
-        this.storage.set('game', this.game);
+        this.game = new Game(0, "", "", true, [], undefined, false);
+        this.storage.set("game", this.game);
       }
       return this.game;
     });
@@ -84,6 +84,6 @@ export class GameFactoryService {
 
   flushGame() {
     this.game = undefined;
-    this.storage.remove('game');
+    this.storage.remove("game");
   }
 }

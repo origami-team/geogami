@@ -57,7 +57,7 @@ export class AudioRecorderService {
 
           let formData = new FormData();
           formData.append("file", audioBlob);
-          fetch(`${environment.apiURL}/upload`, { method: "POST", body: formData })
+          fetch(`${environment.apiURL}/file/upload`, { method: "POST", body: formData })
             .then(res => res.json())
             .then(body => {
               console.log("data upload done")
@@ -86,7 +86,7 @@ export class AudioRecorderService {
 
             let formData = new FormData();
             formData.append("file", audioBlob);
-            fetch(`${environment.apiURL}/upload`, { method: "POST", body: formData })
+            fetch(`${environment.apiURL}/file/upload`, { method: "POST", body: formData })
               .then(res => res.json())
               .then(body => {
                 resolve(body);

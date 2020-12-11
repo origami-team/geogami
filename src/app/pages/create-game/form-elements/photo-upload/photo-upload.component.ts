@@ -1,25 +1,25 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { PopoverComponent } from "src/app/popover/popover.component";
-import { PopoverController } from "@ionic/angular";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PopoverComponent } from 'src/app/popover/popover.component';
+import { PopoverController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core'
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 
 @Component({
-  selector: "app-photo-upload",
-  templateUrl: "./photo-upload.component.html",
-  styleUrls: ["./photo-upload.component.scss"]
+  selector: 'app-photo-upload',
+  templateUrl: './photo-upload.component.html',
+  styleUrls: ['./photo-upload.component.scss']
 })
 export class PhotoUploadComponent implements OnInit {
   @Input() photo: SafeResourceUrl = '';
-  @Input() taskType: string = "";
-  @Input() theme: string = "secondary";
+  @Input() taskType = '';
+  @Input() theme = 'secondary';
 
   @Output() photoChange: EventEmitter<any> = new EventEmitter<any>();
 
-  uploading: boolean = false
-  uploadingProgress: number = 100;
+  uploading = false
+  uploadingProgress = 100;
 
   constructor(
     public popoverController: PopoverController,
@@ -32,7 +32,7 @@ export class PhotoUploadComponent implements OnInit {
   }
 
   deletePhoto() {
-    this.photo = ""
+    this.photo = ''
     this.changeRef.detectChanges();
     this.photoChange.emit(this.photo)
   }
@@ -53,25 +53,25 @@ export class PhotoUploadComponent implements OnInit {
 
     this.uploading = true;
 
-    let blob = await fetch(image.webPath).then(r => r.blob());
-    let formData = new FormData();
-    formData.append("file", blob);
+    const blob = await fetch(image.webPath).then(r => r.blob());
+    const formData = new FormData();
+    formData.append('file', blob);
 
     const options = {
       method: 'POST',
       body: formData
     };
 
-    const postResponse = await fetch(`${environment.apiURL}/upload`, options)
+    const postResponse = await fetch(`${environment.apiURL}/file/upload`, options)
 
     if (!postResponse.ok) {
-      throw Error("File upload failed")
+      throw Error('File upload failed')
     }
     this.uploading = false;
 
     const postResponseText = await postResponse.json()
     const filename = postResponseText.filename
-    this.photo = `${environment.apiURL}/file/${filename}`
+    this.photo = `${environment.apiURL}/file/image/${filename}`
     this.changeRef.detectChanges();
     this.photoChange.emit(this.photo)
   }
