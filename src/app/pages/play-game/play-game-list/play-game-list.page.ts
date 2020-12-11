@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
-import { NavController } from "@ionic/angular";
+import { NavController } from '@ionic/angular';
 
-import { GamesService } from "../../../services/games.service";
+import { GamesService } from '../../../services/games.service';
 
 @Component({
-  selector: "app-play-game-list",
-  templateUrl: "./play-game-list.page.html",
-  styleUrls: ["./play-game-list.page.scss"]
+  selector: 'app-play-game-list',
+  templateUrl: './play-game-list.page.html',
+  styleUrls: ['./play-game-list.page.scss']
 })
 export class PlayGameListPage implements OnInit {
   games: any;
@@ -18,19 +18,19 @@ export class PlayGameListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.gamesService.getGames(true).then(games => (this.games = games.reverse()));
+    this.gamesService.getGames(true).then(res => res.content).then(games => (this.games = games.reverse()));
   }
 
   doRefresh(event) {
     this.gamesService
-      .getGames(true)
+      .getGames(true).then(res => res.content)
       .then(games => (this.games = games.reverse()))
       .finally(() => event.target.complete());
   }
 
   filterList(event) {
     this.gamesService
-      .getGames(true)
+      .getGames(true).then(res => res.content)
       .then(
         games =>
           (this.games = games.filter(game =>

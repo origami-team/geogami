@@ -32,7 +32,7 @@ export class GamesOverviewPage implements OnInit {
       style: 'mapbox://styles/mapbox/streets-v9',
     });
 
-    this.gamesService.getGames().then(games => {
+    this.gamesService.getGames().then(res => res.content).then(games => {
       games.forEach(game => {
         const popup = new mapboxgl.Popup({ offset: 25 })
           .setHTML(`
@@ -61,7 +61,7 @@ export class GamesOverviewPage implements OnInit {
   }
 
   playGame(game) {
-    console.log("Playing ", game)
+    console.log('Playing ', game)
   }
 
 

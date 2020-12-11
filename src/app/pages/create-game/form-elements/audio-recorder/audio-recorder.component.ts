@@ -1,6 +1,6 @@
 import {
     Component, OnInit, Input, Output, EventEmitter
-} from "@angular/core";
+} from '@angular/core';
 
 import { PopoverComponent } from 'src/app/popover/popover.component';
 import { PopoverController } from '@ionic/angular';
@@ -9,15 +9,15 @@ import { environment } from 'src/environments/environment';
 
 
 @Component({
-    selector: "app-audio-recorder",
-    templateUrl: "./audio-recorder.component.html",
-    styleUrls: ["./audio-recorder.component.scss"]
+    selector: 'app-audio-recorder',
+    templateUrl: './audio-recorder.component.html',
+    styleUrls: ['./audio-recorder.component.scss']
 })
 export class AudioRecorderComponent implements OnInit {
     @Input() audioSource: string;
 
     @Output() audioSourceChange: EventEmitter<any> = new EventEmitter<any>();
-    recording: boolean = false
+    recording = false
 
     constructor(public popoverController: PopoverController, private audioRecorder: AudioRecorderService) { }
 
@@ -41,7 +41,7 @@ export class AudioRecorderComponent implements OnInit {
     stopRecord() {
         this.recording = false
         this.audioRecorder.stop().then(({ filename }) => {
-            this.audioSource = `${environment.apiURL}/audio/${filename}`
+            this.audioSource = `${environment.apiURL}/file/audio/${filename}`
             console.log(this.audioSource)
             this.audioSourceChange.emit(this.audioSource)
         })

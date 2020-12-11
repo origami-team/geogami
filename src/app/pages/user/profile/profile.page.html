@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Profil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div>
+    <h1>Profil bearbeiten</h1>
+    <form (ngSubmit)="updateUser()" [formGroup]="loginForm">
+      <!-- <ion-input
+        placeholder="E-Mail"
+        [id]="'email'"
+        formControlName="email"
+      ></ion-input>
+      <br />
+      <ion-input
+        placeholder="Benutzername"
+        [id]="'username'"
+        formControlName="username"
+      ></ion-input>
+      <br />
+      <ion-button expand="block" type="submit" [disabled]="loginForm.invalid"
+        >Speichern</ion-button
+      >
+      <br /> -->
+      <ion-button expand="block" fill="outline" (click)="logout()"
+        >Logout</ion-button
+      >
+    </form>
+  </div>
+</ion-content>

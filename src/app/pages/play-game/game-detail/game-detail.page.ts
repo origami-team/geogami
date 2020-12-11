@@ -27,8 +27,9 @@ export class GameDetailPage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.gamesService.getGame(params.id)
-        .then(games => {
-          this.game = games[0]
+        .then(res => res.content)
+        .then(game => {
+          this.game = game
         })
         .finally(() => {
           console.log(this.game)

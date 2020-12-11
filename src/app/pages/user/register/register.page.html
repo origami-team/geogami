@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="dark" defaultHref="/user/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registrieren</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div>
+    <h1>Nutzer registrieren</h1>
+    <ion-card color="danger" *ngIf="error">
+      <ion-card-content> {{error}} </ion-card-content>
+    </ion-card>
+    <br />
+    <form (ngSubmit)="login()" [formGroup]="loginForm">
+      <ion-input
+        placeholder="E-Mail"
+        [id]="'email'"
+        formControlName="email"
+      ></ion-input>
+      <br />
+      <ion-input
+        placeholder="Benutzername"
+        [id]="'username'"
+        formControlName="username"
+      ></ion-input>
+      <br />
+      <ion-input
+        type="password"
+        placeholder="Password"
+        [id]="'password'"
+        formControlName="password"
+      ></ion-input>
+      <br />
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="loginForm.invalid || loading"
+        ><ion-spinner *ngIf="loading"></ion-spinner> Registrieren</ion-button
+      >
+    </form>
+    <br />
+  </div>
+</ion-content>
