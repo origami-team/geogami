@@ -1,64 +1,88 @@
 <ion-content fullscreen>
   <img src="assets/icons/icon.png" class="logo center" />
-  <ion-card id="start_card_play" (click)=navigateGamesOverviewPage() color="secondary">
+  <ion-card
+    id="start_card_play"
+    (click)="navigateGamesOverviewPage()"
+    color="secondary"
+  >
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="game-controller"></ion-icon> Spielen
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      Wähle ein Spiel aus der Spieleliste.
-    </ion-card-content>
+    <ion-card-content> Wähle ein Spiel aus der Spieleliste. </ion-card-content>
   </ion-card>
 
-  <ion-card id="start_card_create" (click)=navigateCreatePage() color="secondary">
+  <ion-card
+    *ngIf="(user | async)?.username"
+    id="start_card_create"
+    (click)="navigateCreatePage()"
+    color="secondary"
+  >
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="construct"></ion-icon> Entwickeln
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      Erstelle oder bearbeite ein Spiel.
-    </ion-card-content>
+    <ion-card-content> Erstelle oder bearbeite ein Spiel. </ion-card-content>
   </ion-card>
 
-  <ion-card id="start_card_analyze" (click)=navigateAnalyzePage() color="secondary">
+  <ion-card
+    id="start_card_analyze"
+    (click)="navigateAnalyzePage()"
+    color="secondary"
+  >
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="ribbon"></ion-icon> Auswerten
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      Sieh dir die Spielergebnisse an.
-    </ion-card-content>
+    <ion-card-content> Sieh dir die Spielergebnisse an. </ion-card-content>
   </ion-card>
 
-  <ion-card id="start_showroom" (click)=navigateShowroomPage() color="secondary">
+  <ion-card
+    id="start_showroom"
+    (click)="navigateShowroomPage()"
+    color="secondary"
+  >
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="bulb"></ion-icon> Lernen
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      Erfahre mehr über die Funktionen.
-    </ion-card-content>
+    <ion-card-content> Erfahre mehr über die Funktionen. </ion-card-content>
   </ion-card>
 
-  <ion-card id="start_info" (click)=navigateInfoPage() color="secondary">
+  <ion-card id="start_info" (click)="navigateInfoPage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="information-circle"></ion-icon> ...über <b>OriGami</b>
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      Erfahre mehr über die App.
-    </ion-card-content>
+    <ion-card-content> Erfahre mehr über die App. </ion-card-content>
   </ion-card>
 
-  <div class="ion-text-center" *ngIf="device">
-    <p>
-      {{device.appVersion}} ({{device.appBuild}})
-    </p>
+  <ion-card (click)="login()" *ngIf="!(user | async)?.username">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="person-outline"></ion-icon> Login
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content> Logge dich ein um Spiele zu erstellen </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="(user | async)?.username" (click)="navigateProfile()">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="person-outline"></ion-icon> Hallo {{ (user |
+        async)?.username }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content> Benutzereinstellungen </ion-card-content>
+  </ion-card>
+
+  <div class="ion-text-center" *ngIf="device && device.appBuild">
+    <p>{{device.appVersion}} ({{device.appBuild}})</p>
   </div>
 
   <!-- <ion-footer translucent>

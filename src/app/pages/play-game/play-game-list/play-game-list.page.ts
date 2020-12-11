@@ -18,19 +18,19 @@ export class PlayGameListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.gamesService.getGames(true).then(games => (this.games = games.reverse()));
+    this.gamesService.getGames(true).then(res => res.content).then(games => (this.games = games.reverse()));
   }
 
   doRefresh(event) {
     this.gamesService
-      .getGames(true)
+      .getGames(true).then(res => res.content)
       .then(games => (this.games = games.reverse()))
       .finally(() => event.target.complete());
   }
 
   filterList(event) {
     this.gamesService
-      .getGames(true)
+      .getGames(true).then(res => res.content)
       .then(
         games =>
           (this.games = games.filter(game =>

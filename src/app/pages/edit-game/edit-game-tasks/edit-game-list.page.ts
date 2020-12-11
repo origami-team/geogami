@@ -54,8 +54,9 @@ export class EditGameListPage implements OnInit {
     this.route.params.subscribe(params => {
       this.gamesService
         .getGame(params.id)
-        .then(games => {
-          this.game = games[0];
+        .then(res => res.content)
+        .then(game => {
+          this.game = game;
           this.gameFactory.flushGame();
           this.gameFactory.addGameInformation(this.game);
         });

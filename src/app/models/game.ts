@@ -1,4 +1,4 @@
-import { Task } from './task';
+import { Task } from "./task";
 
 export class Game {
   constructor(
@@ -9,5 +9,5 @@ export class Game {
     public tasks: Task[],
     public bbox: any,
     public mapSectionVisible: boolean
-  ) { }
+  ) {}
 }
