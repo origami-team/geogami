@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  // apiURL: 'http://192.168.0.87:3000',
+  // apiURL: "http://192.168.0.87:3000",
   // apiURL: 'http://192.168.0.102:3000',
   apiURL: "https://api.origami.felixerdmann.com",
   // apiURL: 'http://localhost:3000',
