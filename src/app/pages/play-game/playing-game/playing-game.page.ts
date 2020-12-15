@@ -813,16 +813,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.isZoomedToTaskMapPoint = false;
 
-    try {
-      await this.zoomBounds();
-    } catch (e) {
-      console.log(e);
-    }
-
-    this._initMapFeatures();
-    this.landmarkControl.removeQT();
-    this.landmarkControl.removeSearchArea();
-
     if (this.waypointMarker) {
       if (this.game.tasks[this.taskIndex - 1]?.settings?.keepMarker) {
         const el = document.createElement("div");
@@ -859,18 +849,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.waypointMarkerDuplicate = null;
     }
 
-    if (this.task.answer.type == AnswerType.POSITION) {
+    await this._initMapFeatures();
+    this.landmarkControl.removeQT();
+    this.landmarkControl.removeSearchArea();
+
+    try {
+      await this.zoomBounds();
+    } catch (e) {
+      console.log(e);
+    }
+
+    if (
+      this.task.answer.type == AnswerType.POSITION &&
+      this.task.answer.mode != TaskMode.NAV_ARROW
+    ) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
+        console.log("create nav marker");
+
         const el = document.createElement("div");
         el.className = "waypoint-marker";
-
-        // remove maybe existing waypointMarker
-        if (this.waypointMarker) {
-          this.waypointMarker.remove();
-          this.waypointMarker = null;
-          this.waypointMarkerDuplicate.remove();
-          this.waypointMarkerDuplicate = null;
-        }
 
         this.waypointMarker = new mapboxgl.Marker(el, {
           anchor: "bottom",
@@ -1196,147 +1193,152 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.geolocateControl.toggle();
   }
 
-  _initMapFeatures() {
-    let mapFeatures = this.task.mapFeatures;
-    if (mapFeatures == undefined) {
-      mapFeatures = cloneDeep(standardMapFeatures);
-    }
-    for (const key in mapFeatures) {
-      if (mapFeatures.hasOwnProperty(key)) {
-        switch (key) {
-          case "zoombar":
-            if (mapFeatures[key] == "true") {
-              this.map.scrollZoom.enable();
-              this.map.boxZoom.enable();
-              this.map.doubleClickZoom.enable();
-              this.map.touchZoomRotate.enable();
-            } else if (mapFeatures[key] == "false") {
-              this.map.scrollZoom.disable();
-              this.map.boxZoom.disable();
-              this.map.doubleClickZoom.disable();
-              this.map.touchZoomRotate.disable();
-            } else {
-              // zoom zur Aufgabe
-              this.map.scrollZoom.enable();
-              this.map.boxZoom.enable();
-              this.map.doubleClickZoom.enable();
-              this.map.touchZoomRotate.enable();
-            }
-            break;
-          case "pan":
-            if (mapFeatures[key] == "true") {
-              this.panControl.setType(PanType.True);
-            } else if (mapFeatures[key] == "center") {
-              this.panControl.setType(PanType.Center);
-            } else if (mapFeatures[key] == "static") {
-              this.panControl.setType(PanType.Static);
-            }
-            break;
-          case "rotation":
-            if (mapFeatures[key] == "manual") {
-              this.rotationControl.setType(RotationType.Manual);
-            } else if (mapFeatures[key] == "auto") {
-              this.rotationControl.setType(RotationType.Auto);
-            } else if (mapFeatures[key] == "button") {
-              this.rotationControl.setType(RotationType.Button);
-            } else if (mapFeatures[key] == "north") {
-              this.rotationControl.setType(RotationType.North);
-            }
-            break;
-          case "material":
-            this.swipe = false;
-            if (this.map.getLayer("satellite")) {
-              this.map.removeLayer("satellite");
-            }
-
-            const elem = document.getElementsByClassName("mapboxgl-compare");
-            while (elem.length > 0) elem[0].remove();
-
-            if (mapFeatures[key] == "standard") {
-              this.layerControl.setType(LayerType.Standard);
-            } else if (mapFeatures[key] == "selection") {
-              this.layerControl.setType(LayerType.Selection);
-            } else if (mapFeatures[key] == "sat") {
-              this.layerControl.setType(LayerType.Satellite);
-            } else if (mapFeatures[key] == "sat-button") {
-              // TODO: implememt
-              this.layerControl.setType(LayerType.SatelliteButton);
-            } else if (mapFeatures[key] == "sat-swipe") {
-              this.swipe = true;
-              this.changeDetectorRef.detectChanges();
-              this.layerControl.setType(
-                LayerType.Swipe,
-                this.swipeMapContainer
-              );
-              this.layerControl.swipeClickSubscription.subscribe((e) =>
-                this.onMapClick(e, "swipe")
-              );
-            } else if (mapFeatures[key] == "3D") {
-              this.layerControl.setType(LayerType.ThreeDimension);
-            } else if (mapFeatures[key] == "3D-button") {
-              this.layerControl.setType(LayerType.ThreeDimensionButton);
-            }
-            break;
-          case "position":
-            if (mapFeatures[key] == "none") {
-              this.geolocateControl.setType(GeolocateType.None);
-            } else if (mapFeatures[key] == "true") {
-              if (this.task.mapFeatures.direction != "true") {
-                // only show position marker when there is no direction marker
-                this.geolocateControl.setType(GeolocateType.Continuous);
+  async _initMapFeatures() {
+    return new Promise((resolve, reject) => {
+      let mapFeatures = this.task.mapFeatures;
+      if (mapFeatures == undefined) {
+        mapFeatures = cloneDeep(standardMapFeatures);
+      }
+      for (const key in mapFeatures) {
+        if (mapFeatures.hasOwnProperty(key)) {
+          switch (key) {
+            case "zoombar":
+              if (mapFeatures[key] == "true") {
+                this.map.scrollZoom.enable();
+                this.map.boxZoom.enable();
+                this.map.doubleClickZoom.enable();
+                this.map.touchZoomRotate.enable();
+              } else if (mapFeatures[key] == "false") {
+                this.map.scrollZoom.disable();
+                this.map.boxZoom.disable();
+                this.map.doubleClickZoom.disable();
+                this.map.touchZoomRotate.disable();
+              } else {
+                // zoom zur Aufgabe
+                this.map.scrollZoom.enable();
+                this.map.boxZoom.enable();
+                this.map.doubleClickZoom.enable();
+                this.map.touchZoomRotate.enable();
               }
-            } else if (mapFeatures[key] == "button") {
-              // TODO: implement
-            } else if (mapFeatures[key] == "start") {
-              this.geolocateControl.setType(GeolocateType.TaskStart);
-            }
-            break;
-          case "direction":
-            this.directionArrow = false;
-            if (mapFeatures[key] == "none") {
-              this.viewDirectionControl.setType(ViewDirectionType.None);
-            } else if (mapFeatures[key] == "true") {
-              this.viewDirectionControl.setType(ViewDirectionType.Continuous);
-            } else if (mapFeatures[key] == "button") {
-              // TODO: implement
-            } else if (mapFeatures[key] == "start") {
-              this.viewDirectionControl.setType(ViewDirectionType.TaskStart);
-            }
-            break;
-          case "track":
-            if (mapFeatures[key]) {
-              this.trackControl.setType(TrackType.Enabled);
-            } else {
-              this.trackControl.setType(TrackType.Disabled);
-            }
-            break;
-          case "streetSection":
-            if (mapFeatures[key]) {
-              this.streetSectionControl.setType(StreetSectionType.Enabled);
-            } else {
-              this.streetSectionControl.setType(StreetSectionType.Disabled);
-            }
-            break;
-          case "landmarks":
-            if (mapFeatures[key]) {
-              this.landmarkControl.setLandmark(mapFeatures.landmarkFeatures);
-            } else {
-              this.landmarkControl.remove();
-            }
-            break;
-          case "reducedInformation":
-            if (!mapFeatures[key]) {
-              this.maskControl.setType(MaskType.Disabled);
-            } else {
-              this.maskControl.addLayer(
-                this.task.mapFeatures.reducedMapSectionDiameter
-              );
-              this.maskControl.setType(MaskType.Enabled);
-            }
-            break;
+              break;
+            case "pan":
+              if (mapFeatures[key] == "true") {
+                this.panControl.setType(PanType.True);
+              } else if (mapFeatures[key] == "center") {
+                this.panControl.setType(PanType.Center);
+              } else if (mapFeatures[key] == "static") {
+                this.panControl.setType(PanType.Static);
+              }
+              break;
+            case "rotation":
+              if (mapFeatures[key] == "manual") {
+                this.rotationControl.setType(RotationType.Manual);
+              } else if (mapFeatures[key] == "auto") {
+                this.rotationControl.setType(RotationType.Auto);
+              } else if (mapFeatures[key] == "button") {
+                this.rotationControl.setType(RotationType.Button);
+              } else if (mapFeatures[key] == "north") {
+                this.rotationControl.setType(RotationType.North);
+              }
+              break;
+            case "material":
+              this.swipe = false;
+              if (this.map.getLayer("satellite")) {
+                this.map.removeLayer("satellite");
+              }
+
+              const elem = document.getElementsByClassName("mapboxgl-compare");
+              while (elem.length > 0) elem[0].remove();
+
+              if (mapFeatures[key] == "standard") {
+                this.layerControl.setType(LayerType.Standard);
+              } else if (mapFeatures[key] == "selection") {
+                this.layerControl.setType(LayerType.Selection);
+              } else if (mapFeatures[key] == "sat") {
+                this.layerControl.setType(LayerType.Satellite);
+              } else if (mapFeatures[key] == "sat-button") {
+                // TODO: implememt
+                this.layerControl.setType(LayerType.SatelliteButton);
+              } else if (mapFeatures[key] == "sat-swipe") {
+                this.swipe = true;
+                this.changeDetectorRef.detectChanges();
+                this.layerControl.setType(
+                  LayerType.Swipe,
+                  this.swipeMapContainer
+                );
+                this.layerControl.swipeClickSubscription.subscribe((e) =>
+                  this.onMapClick(e, "swipe")
+                );
+              } else if (mapFeatures[key] == "3D") {
+                this.layerControl.setType(LayerType.ThreeDimension);
+              } else if (mapFeatures[key] == "3D-button") {
+                this.layerControl.setType(LayerType.ThreeDimensionButton);
+              }
+              break;
+            case "position":
+              if (mapFeatures[key] == "none") {
+                this.geolocateControl.setType(GeolocateType.None);
+              } else if (mapFeatures[key] == "true") {
+                if (this.task.mapFeatures.direction != "true") {
+                  // only show position marker when there is no direction marker
+                  this.geolocateControl.setType(GeolocateType.Continuous);
+                }
+              } else if (mapFeatures[key] == "button") {
+                // TODO: implement
+              } else if (mapFeatures[key] == "start") {
+                this.geolocateControl.setType(GeolocateType.TaskStart);
+              }
+              break;
+            case "direction":
+              this.directionArrow = false;
+              if (mapFeatures[key] == "none") {
+                this.viewDirectionControl.setType(ViewDirectionType.None);
+              } else if (mapFeatures[key] == "true") {
+                this.viewDirectionControl.setType(ViewDirectionType.Continuous);
+              } else if (mapFeatures[key] == "button") {
+                // TODO: implement
+              } else if (mapFeatures[key] == "start") {
+                this.viewDirectionControl.setType(ViewDirectionType.TaskStart);
+              }
+              break;
+            case "track":
+              if (mapFeatures[key]) {
+                this.trackControl.setType(TrackType.Enabled);
+              } else {
+                this.trackControl.setType(TrackType.Disabled);
+              }
+              break;
+            case "streetSection":
+              if (mapFeatures[key]) {
+                this.streetSectionControl.setType(StreetSectionType.Enabled);
+              } else {
+                this.streetSectionControl.setType(StreetSectionType.Disabled);
+              }
+              break;
+            case "landmarks":
+              if (mapFeatures[key]) {
+                this.landmarkControl.setLandmark(mapFeatures.landmarkFeatures);
+              } else {
+                this.landmarkControl.remove();
+              }
+              break;
+            case "reducedInformation":
+              if (!mapFeatures[key]) {
+                this.maskControl.setType(MaskType.Disabled);
+              } else {
+                this.maskControl.addLayer(
+                  this.task.mapFeatures.reducedMapSectionDiameter
+                );
+                this.maskControl.setType(MaskType.Enabled);
+              }
+              break;
+          }
         }
       }
-    }
+      setTimeout(() => {
+        resolve("ok");
+      }, 250);
+    });
   }
 
   addPlayer() {
