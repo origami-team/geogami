@@ -30,10 +30,6 @@ import {
   RotationControl,
   RotationType,
 } from './../../../mapControllers/rotation-control';
-import {
-  StreetSectionControl,
-  StreetSectionType,
-} from './../../../mapControllers/street-section-control';
 import { LayerControl, LayerType } from 'src/app/mapControllers/layer-control';
 import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
@@ -157,6 +153,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   viewDirectionVisible = false;
   geolocateVisible = false;
   trackVisible = false;
+  streetSectionVisible = false;
 
   landmarks: any = {
     landmark: undefined,
@@ -180,7 +177,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   clickDirection = 0;
 
   rotationControl: RotationControl;
-  streetSectionControl: StreetSectionControl;
   layerControl: LayerControl;
   panControl: PanControl;
   maskControl: MaskControl;
@@ -252,11 +248,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.rotationControl = new RotationControl(
       this.map,
       this.orientationService
-    );
-    this.streetSectionControl = new StreetSectionControl(
-      this.map,
-      this.OSMService,
-      this.geolocationService
     );
     this.layerControl = new LayerControl(
       this.map,
@@ -519,25 +510,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (task.answer.position) {
       try {
         bounds.extend(task.answer.position.geometry.coordinates);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (task.question.geometry) {
       try {
         bounds.extend(bbox(task.question.geometry) as LngLatBoundsLike);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (task.question.area) {
       try {
         bounds.extend(bbox(task.question.area) as LngLatBoundsLike);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (task.question.direction) {
       try {
         bounds.extend(task.question.direction.position.geometry.coordinates);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (
@@ -548,7 +539,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         bounds.extend(
           bbox(task.mapFeatures.landmarkFeatures) as LngLatBoundsLike
         );
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (
@@ -564,7 +555,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         if (booleanWithin(position, bbox)) {
           try {
             bounds.extend(position.bbox as LngLatBoundsLike);
-          } catch (e) {}
+          } catch (e) { }
         }
       }
     }
@@ -1002,7 +993,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     return this.targetDistance < PlayingGamePage.triggerTreshold;
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   navigateHome() {
     this.positionSubscription.unsubscribe();
@@ -1013,7 +1004,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.trackerService.clear();
 
     this.rotationControl.remove();
-    this.streetSectionControl.remove();
     this.layerControl.remove();
     this.panControl.remove();
     this.maskControl.remove();
@@ -1023,7 +1013,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.orientationService.clear();
 
     // this.map.remove();
-    this.streetSectionControl.remove();
     this.navCtrl.navigateRoot('/');
   }
 
@@ -1210,9 +1199,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             break;
           case 'streetSection':
             if (mapFeatures[key]) {
-              this.streetSectionControl.setType(StreetSectionType.Enabled);
+              this.streetSectionVisible = true;
             } else {
-              this.streetSectionControl.setType(StreetSectionType.Disabled);
+              this.streetSectionVisible = false;
             }
             break;
           case 'landmarks':
