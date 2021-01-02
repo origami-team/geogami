@@ -26,6 +26,7 @@
         [maxZoom]="18"
         [(bearing)]="mapBearing"
         (load)="onMapLoad($event)"
+        (click)="onMapClick($event)"
         [fitBounds]="mapBounds"
         [fitBoundsOptions]="{
           padding: {
@@ -67,6 +68,7 @@
         [zoom]="[mapZoom]"
         [center]="mapCenter"
         (load)="onSwipeMapLoad($event)"
+        (click)='onMapClick($event, "swipe")'
       ></mgl-map>
       <!-- <div  #swipeMap class="map"></div> -->
     </div>

@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GamesService } from '../../../services/games.service';
 import { OsmService } from '../../../services/osm.service';
 import { TrackerService } from '../../../services/tracker.service';
-import mapboxgl, { LngLatBounds, LngLatBoundsLike } from 'mapbox-gl';
+import mapboxgl, { LngLatBounds, LngLatBoundsLike, MapMouseEvent } from 'mapbox-gl';
 import {
   Plugins,
   GeolocationPosition,
@@ -244,6 +244,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   onMapLoad(map: mapboxgl.Map) {
     this.map = map;
+    this.map.resize();
 
     this.rotationControl = new RotationControl(
       this.map,
@@ -315,8 +316,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     );
 
-    // this.map.on("click", e => this.onMapClick(e, "standard"));
-
     // this.map.on('rotate', () => {
     //   if (this.map.getLayer('viewDirectionTask')) {
     //     this.map.setLayoutProperty(
@@ -356,153 +355,153 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
   }
 
-  // onMapClick(e, mapType = "standard") {
-  //   console.log(e)
-  //   let clickDirection = undefined;
+  onMapClick(e: MapMouseEvent, mapType = 'standard') {
+    console.log(e);
+    const clickDirection = 0;
 
-  //   if (this.task.answer.type === AnswerType.MAP_POINT) {
-  //     if (this.isZoomedToTaskMapPoint || this.task.mapFeatures.zoombar !== "task") {
-  //       const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+    // if (this.task.answer.type === AnswerType.MAP_POINT) {
+    //   if (this.isZoomedToTaskMapPoint || this.task.mapFeatures.zoombar !== "task") {
+    //     const pointFeature = this.helperService._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
 
-  //       if (this.map.getSource('marker-point')) {
-  //         this.map.getSource('marker-point').setData(pointFeature)
-  //       } else {
-  //         this.map.addSource('marker-point', {
-  //           'type': 'geojson',
-  //           'data': pointFeature
-  //         });
-  //       }
+    //     if (this.map.getSource('marker-point')) {
+    //       this.map.getSource('marker-point').setData(pointFeature)
+    //     } else {
+    //       this.map.addSource('marker-point', {
+    //         'type': 'geojson',
+    //         'data': pointFeature
+    //       });
+    //     }
 
-  //       if (!this.map.getLayer('marker-point')) {
-  //         this.map.addLayer({
-  //           'id': 'marker-point',
-  //           'type': 'symbol',
-  //           'source': 'marker-point',
-  //           'layout': {
-  //             "icon-image": "marker-editor",
-  //             "icon-size": 0.65,
-  //             "icon-anchor": 'bottom'
-  //           }
-  //         });
-  //       }
-  //     } else {
-  //       this.isZoomedToTaskMapPoint = true;
-  //       this.map.flyTo({
-  //         center: [e.lngLat.lng, e.lngLat.lat],
-  //         zoom: 18,
-  //         // padding: {
-  //         //   top: 80,
-  //         //   bottom: 620,
-  //         //   left: 40,
-  //         //   right: 40
-  //         // },
-  //         // duration: 1000
-  //       })
-  //     }
+    //     if (!this.map.getLayer('marker-point')) {
+    //       this.map.addLayer({
+    //         'id': 'marker-point',
+    //         'type': 'symbol',
+    //         'source': 'marker-point',
+    //         'layout': {
+    //           "icon-image": "marker-editor",
+    //           "icon-size": 0.65,
+    //           "icon-anchor": 'bottom'
+    //         }
+    //       });
+    //     }
+    //   } else {
+    //     this.isZoomedToTaskMapPoint = true;
+    //     this.map.flyTo({
+    //       center: [e.lngLat.lng, e.lngLat.lat],
+    //       zoom: 18,
+    //       // padding: {
+    //       //   top: 80,
+    //       //   bottom: 620,
+    //       //   left: 40,
+    //       //   right: 40
+    //       // },
+    //       // duration: 1000
+    //     })
+    //   }
 
-  //   }
+    // }
 
-  //   if (this.task.answer.type === AnswerType.MAP_DIRECTION) {
-  //     if (this.isZoomedToTaskMapPoint || this.task.mapFeatures.zoombar !== "task") {
-  //       if (this.task.question.direction?.position) {
-  //         this.clickDirection = this.helperService.bearing(
-  //           this.task.question.direction.position.geometry.coordinates[1],
-  //           this.task.question.direction.position.geometry.coordinates[0],
-  //           e.lngLat.lat,
-  //           e.lngLat.lng
-  //         )
-  //       } else {
-  //         this.clickDirection = this.helperService.bearing(
-  //           this.lastKnownPosition.coords.latitude,
-  //           this.lastKnownPosition.coords.longitude,
-  //           e.lngLat.lat,
-  //           e.lngLat.lng
-  //         )
-  //       }
-  //       clickDirection = this.clickDirection;
-  //       if (!this.map.getLayer('viewDirectionClick')) {
-  //         if (this.task.question.direction?.position) {
-  //           this.map.addSource("viewDirectionClick", {
-  //             type: "geojson",
-  //             data: {
-  //               type: "Point",
-  //               coordinates: this.task.question.direction.position.geometry.coordinates
-  //             }
-  //           });
-  //         } else {
-  //           this.map.addSource("viewDirectionClick", {
-  //             type: "geojson",
-  //             data: {
-  //               type: "Point",
-  //               coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
-  //             }
-  //           });
-  //         }
-  //         this.map.addLayer({
-  //           id: "viewDirectionClick",
-  //           source: "viewDirectionClick",
-  //           type: "symbol",
-  //           layout: {
-  //             "icon-image": "view-direction-task",
-  //             "icon-size": 0.65,
-  //             "icon-offset": [0, -8]
-  //           }
-  //         });
-  //         if (this.map.getLayer('viewDirectionClickGeolocate')) {
-  //           this.map.removeLayer('viewDirectionClickGeolocate')
-  //           this.map.removeSource('viewDirectionClickGeolocate')
-  //         } else {
-  //           this.geolocateControl.setType(GeolocateType.None)
-  //         }
-  //       }
-  //       this.map.setLayoutProperty(
-  //         "viewDirectionClick",
-  //         "icon-rotate",
-  //         this.clickDirection - this.map.getBearing()
-  //       );
-  //     } else {
-  //       this.isZoomedToTaskMapPoint = true;
-  //       const center =
-  //         this.task.question.direction?.position ?
-  //           this.task.question.direction.position.geometry.coordinates :
-  //           [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
-  //       this.map.flyTo({
-  //         center: center,
-  //         zoom: 18,
-  //         // padding: {
-  //         //   top: 80,
-  //         //   bottom: 620,
-  //         //   left: 40,
-  //         //   right: 40
-  //         // },
-  //         // duration: 1000
-  //       })
-  //     }
-  //   }
+    // if (this.task.answer.type === AnswerType.MAP_DIRECTION) {
+    //   if (this.isZoomedToTaskMapPoint || this.task.mapFeatures.zoombar !== "task") {
+    //     if (this.task.question.direction?.position) {
+    //       this.clickDirection = this.helperService.bearing(
+    //         this.task.question.direction.position.geometry.coordinates[1],
+    //         this.task.question.direction.position.geometry.coordinates[0],
+    //         e.lngLat.lat,
+    //         e.lngLat.lng
+    //       )
+    //     } else {
+    //       this.clickDirection = this.helperService.bearing(
+    //         this.lastKnownPosition.coords.latitude,
+    //         this.lastKnownPosition.coords.longitude,
+    //         e.lngLat.lat,
+    //         e.lngLat.lng
+    //       )
+    //     }
+    //     clickDirection = this.clickDirection;
+    //     if (!this.map.getLayer('viewDirectionClick')) {
+    //       if (this.task.question.direction?.position) {
+    //         this.map.addSource("viewDirectionClick", {
+    //           type: "geojson",
+    //           data: {
+    //             type: "Point",
+    //             coordinates: this.task.question.direction.position.geometry.coordinates
+    //           }
+    //         });
+    //       } else {
+    //         this.map.addSource("viewDirectionClick", {
+    //           type: "geojson",
+    //           data: {
+    //             type: "Point",
+    //             coordinates: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+    //           }
+    //         });
+    //       }
+    //       this.map.addLayer({
+    //         id: "viewDirectionClick",
+    //         source: "viewDirectionClick",
+    //         type: "symbol",
+    //         layout: {
+    //           "icon-image": "view-direction-task",
+    //           "icon-size": 0.65,
+    //           "icon-offset": [0, -8]
+    //         }
+    //       });
+    //       if (this.map.getLayer('viewDirectionClickGeolocate')) {
+    //         this.map.removeLayer('viewDirectionClickGeolocate')
+    //         this.map.removeSource('viewDirectionClickGeolocate')
+    //       } else {
+    //         this.geolocateControl.setType(GeolocateType.None)
+    //       }
+    //     }
+    //     this.map.setLayoutProperty(
+    //       "viewDirectionClick",
+    //       "icon-rotate",
+    //       this.clickDirection - this.map.getBearing()
+    //     );
+    //   } else {
+    //     this.isZoomedToTaskMapPoint = true;
+    //     const center =
+    //       this.task.question.direction?.position ?
+    //         this.task.question.direction.position.geometry.coordinates :
+    //         [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude]
+    //     this.map.flyTo({
+    //       center: center,
+    //       zoom: 18,
+    //       // padding: {
+    //       //   top: 80,
+    //       //   bottom: 620,
+    //       //   left: 40,
+    //       //   right: 40
+    //       // },
+    //       // duration: 1000
+    //     })
+    //   }
+    // }
 
-  //   this.trackerService.addEvent({
-  //     type: "ON_MAP_CLICKED",
-  //     clickPosition: {
-  //       latitude: e.lngLat.lat,
-  //       longitude: e.lngLat.lng
-  //     },
-  //     clickDirection: clickDirection,
-  //     map: mapType,
-  //     answer: this.feedbackControl.getMapClickAnswer({
-  //       selectedPhoto: this.selectedPhoto,
-  //       isCorrectPhotoSelected: this.isCorrectPhotoSelected,
-  //       selectedChoice: this.selectedChoice,
-  //       isCorrectChoiceSelected: this.isCorrectChoiceSelected,
-  //       photo: this.photo,
-  //       photoURL: this.photoURL,
-  //       directionBearing: this.directionBearing,
-  //       compassHeading: this.compassHeading,
-  //       clickDirection: this.clickDirection,
-  //       numberInput: this.numberInput,
-  //       textInput: this.textInput
-  //     }, [e.lngLat.lng, e.lngLat.lat])
-  //   });
-  // }
+    this.trackerService.addEvent({
+      type: 'ON_MAP_CLICKED',
+      clickPosition: {
+        latitude: e.lngLat.lat,
+        longitude: e.lngLat.lng
+      },
+      clickDirection,
+      map: mapType,
+      answer: this.feedbackControl.getMapClickAnswer({
+        selectedPhoto: this.selectedPhoto,
+        isCorrectPhotoSelected: this.isCorrectPhotoSelected,
+        selectedChoice: this.selectedChoice,
+        isCorrectChoiceSelected: this.isCorrectChoiceSelected,
+        photo: this.photo,
+        photoURL: this.photoURL,
+        directionBearing: this.directionBearing,
+        compassHeading: this.compassHeading,
+        clickDirection: this.clickDirection,
+        numberInput: this.numberInput,
+        textInput: this.textInput
+      }, [e.lngLat.lng, e.lngLat.lat])
+    });
+  }
 
   calcBounds(task: any): mapboxgl.LngLatBounds {
     const bounds = new mapboxgl.LngLatBounds();
@@ -713,7 +712,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       searchArea: undefined,
     };
 
-    this.zoomBounds();
     try {
       await this.zoomBounds();
     } catch (e) {
@@ -857,6 +855,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         qtLandmark: this.task.question.geometry,
       };
     }
+
+
+    this.changeDetectorRef.detectChanges();
   }
 
   nextTask() {
@@ -1225,6 +1226,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       }
     }
+
+    this.changeDetectorRef.detectChanges();
   }
 
   addPlayer() {
