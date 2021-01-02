@@ -14,28 +14,28 @@ import {
 })
 export class InfoPage implements OnInit {
 
-  dark: boolean = false
+  dark = false;
 
   constructor(private platform: Platform) {
   }
 
   ngOnInit() {
-    this.dark = document.body.classList.contains('dark')
+    this.dark = document.body.classList.contains('dark');
   }
 
   onDarkThemeChange() {
-    document.body.classList.toggle('dark')
-    this.dark = !this.dark
+    document.body.classList.toggle('dark');
+    this.dark = !this.dark;
 
     // change status bar
     if (this.dark) {
-      Plugins.StatusBar.setStyle({ style: StatusBarStyle.Dark })
-      if (this.platform.is("android")) {
+      Plugins.StatusBar.setStyle({ style: StatusBarStyle.Dark });
+      if (this.platform.is('android')) {
         Plugins.StatusBar.setBackgroundColor({ color: 'black' });
       }
     } else {
-      Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light })
-      if (this.platform.is("android")) {
+      Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light });
+      if (this.platform.is('android')) {
         Plugins.StatusBar.setBackgroundColor({ color: 'white' });
       }
     }

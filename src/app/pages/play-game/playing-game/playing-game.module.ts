@@ -22,6 +22,7 @@ import { ViewDirectionControlComponent } from 'src/app/mapControllers/view-direc
 import { GeolocateControlComponent } from 'src/app/mapControllers/geolocate-control';
 import { LandmarkControlComponent } from 'src/app/mapControllers/landmark-control';
 import { BBoxControlComponent } from 'src/app/mapControllers/bbox-control';
+import { TrackControlComponent } from 'src/app/mapControllers/track-control';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -58,7 +59,8 @@ const routes: Routes = [
     ViewDirectionControlComponent,
     GeolocateControlComponent,
     LandmarkControlComponent,
-    BBoxControlComponent
+    BBoxControlComponent,
+    TrackControlComponent
   ],
   providers: [],
 })

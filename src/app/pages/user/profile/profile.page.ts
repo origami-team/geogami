@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { AuthService } from "src/app/services/auth-service.service";
-import { Validators, FormBuilder } from "@angular/forms";
-import { NavController } from "@ionic/angular";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth-service.service';
+import { Validators, FormBuilder } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 @Component({
-  selector: "app-profile",
-  templateUrl: "./profile.page.html",
-  styleUrls: ["./profile.page.scss"],
+  selector: 'app-profile',
+  templateUrl: './profile.page.html',
+  styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
   loginForm;
@@ -41,6 +41,6 @@ export class ProfilePage implements OnInit {
   }
 
   navigateRegister() {
-    this.navCtrl.navigateForward("user/register");
+    this.navCtrl.navigateForward('user/register');
   }
 }

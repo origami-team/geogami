@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Plugins, DeviceInfo, GeolocationPosition } from "@capacitor/core";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Plugins, DeviceInfo, GeolocationPosition } from '@capacitor/core';
 
-import { environment } from "../../environments/environment";
-import { OrigamiGeolocationService } from "./origami-geolocation.service";
-import { Subscription } from "rxjs";
+import { environment } from '../../environments/environment';
+import { OrigamiGeolocationService } from './origami-geolocation.service';
+import { Subscription } from 'rxjs';
 
-import { FilesystemDirectory, FilesystemEncoding } from "@capacitor/core";
-import { OrigamiOrientationService } from "./origami-orientation.service";
+import { FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
+import { OrigamiOrientationService } from './origami-orientation.service';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class TrackerService {
   private game: string;
@@ -68,14 +68,14 @@ export class TrackerService {
     );
 
     this.map = map;
-    this.map.on("moveend", (moveEvent) => {
-      if (moveEvent.type == "moveend" && moveEvent.originalEvent) {
+    this.map.on('moveend', (moveEvent) => {
+      if (moveEvent.type == 'moveend' && moveEvent.originalEvent) {
         this.panCounter++;
       }
     });
 
-    this.map.on("zoomend", (zoomEvent) => {
-      if (zoomEvent.type == "zoomend" && zoomEvent.originalEvent) {
+    this.map.on('zoomend', (zoomEvent) => {
+      if (zoomEvent.type == 'zoomend' && zoomEvent.originalEvent) {
         this.zoomCounter++;
       }
     });
@@ -150,11 +150,11 @@ export class TrackerService {
 
   createHeaders() {
     let headers = new HttpHeaders();
-    let token = window.localStorage.getItem("bg_accesstoken");
+    const token = window.localStorage.getItem('bg_accesstoken');
     if (token) {
-      headers = headers.append("Authorization", "Bearer " + token);
+      headers = headers.append('Authorization', 'Bearer ' + token);
     }
-    headers = headers.append("Content-Type", "application/json");
+    headers = headers.append('Content-Type', 'application/json');
     return headers;
   }
 
@@ -179,28 +179,28 @@ export class TrackerService {
     this.positionWatch.unsubscribe();
 
     try {
-      let ret = await Plugins.Filesystem.mkdir({
-        path: "origami/tracks",
+      const ret = await Plugins.Filesystem.mkdir({
+        path: 'origami/tracks',
         directory: FilesystemDirectory.Documents,
         recursive: true, // like mkdir -p
       });
-      console.log("Created dir", ret);
+      console.log('Created dir', ret);
     } catch (e) {
-      console.log("Unable to make directory", e);
+      console.log('Unable to make directory', e);
     }
 
     try {
       const result = await Plugins.Filesystem.writeFile({
-        path: `origami/tracks/${this.gameName.replace(/ /g, "_")}-${
+        path: `origami/tracks/${this.gameName.replace(/ /g, '_')}-${
           this.start
         }.json`,
         data: JSON.stringify(data),
         directory: FilesystemDirectory.Documents,
         encoding: FilesystemEncoding.UTF8,
       });
-      console.log("Wrote file", result);
+      console.log('Wrote file', result);
     } catch (e) {
-      console.error("Unable to write file", e);
+      console.error('Unable to write file', e);
     }
 
     // return new Promise(() => { })
@@ -208,7 +208,7 @@ export class TrackerService {
     return this.http
       .post(`${environment.apiURL}/track`, data, {
         headers: this.createHeaders(),
-        observe: "response",
+        observe: 'response',
       })
       .toPromise();
   }

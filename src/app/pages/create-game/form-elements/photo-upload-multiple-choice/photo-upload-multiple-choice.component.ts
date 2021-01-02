@@ -55,18 +55,18 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
       body: formData
     };
 
-    const postResponse = await fetch(`${environment.apiURL}/file/upload`, options)
+    const postResponse = await fetch(`${environment.apiURL}/file/upload`, options);
 
     if (!postResponse.ok) {
-      throw Error('File upload failed')
+      throw Error('File upload failed');
     }
     this.uploading[photoNumber] = false;
 
-    const postResponseText = await postResponse.json()
-    const filename = postResponseText.filename
-    this.photos[photoNumber] = `${environment.apiURL}/file/image/${filename}`
+    const postResponseText = await postResponse.json();
+    const filename = postResponseText.filename;
+    this.photos[photoNumber] = `${environment.apiURL}/file/image/${filename}`;
     this.changeRef.detectChanges();
-    this.photosChange.emit(this.photos)
+    this.photosChange.emit(this.photos);
   }
 
   async showPopover(ev: any, text: string) {

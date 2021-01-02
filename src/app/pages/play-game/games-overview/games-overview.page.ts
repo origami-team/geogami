@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
+import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
-import { GamesService } from "../../../services/games.service";
+import { GamesService } from '../../../services/games.service';
 
 @Component({
-  selector: "app-games-overview",
-  templateUrl: "./games-overview.page.html",
-  styleUrls: ["./games-overview.page.scss"],
+  selector: 'app-games-overview',
+  templateUrl: './games-overview.page.html',
+  styleUrls: ['./games-overview.page.scss'],
 })
 export class GamesOverviewPage implements OnInit {
   selectGame: String;
@@ -24,11 +24,11 @@ export class GamesOverviewPage implements OnInit {
     this._initialiseTranslation();
 
     mapboxgl.accessToken =
-      "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA";
+      'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
 
     const map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/streets-v9",
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v9',
     });
 
     this.gamesService
@@ -65,11 +65,11 @@ export class GamesOverviewPage implements OnInit {
   }
 
   playGame(game) {
-    console.log("Playing ", game);
+    console.log('Playing ', game);
   }
 
   _initialiseTranslation(): void {
-    this._translate.get("selectGame").subscribe((res: string) => {
+    this._translate.get('selectGame').subscribe((res: string) => {
       this.selectGame = res;
     });
   }

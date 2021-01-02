@@ -1,19 +1,19 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
-import { GamesService } from "../../../services/games.service";
-import { environment } from "src/environments/environment";
+import { GamesService } from '../../../services/games.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: "app-game-detail",
-  templateUrl: "./game-detail.page.html",
-  styleUrls: ["./game-detail.page.scss"],
+  selector: 'app-game-detail',
+  templateUrl: './game-detail.page.html',
+  styleUrls: ['./game-detail.page.scss'],
 })
 export class GameDetailPage implements OnInit {
-  @ViewChild("map") mapContainer;
+  @ViewChild('map') mapContainer;
 
   game: any;
   activities: any[];

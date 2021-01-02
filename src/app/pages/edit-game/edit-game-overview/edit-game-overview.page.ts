@@ -4,38 +4,38 @@ import {
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
-} from "@angular/core";
+} from '@angular/core';
 
-import { PopoverController } from "@ionic/angular";
+import { PopoverController } from '@ionic/angular';
 
-import { NavController } from "@ionic/angular";
+import { NavController } from '@ionic/angular';
 
-import { Game } from "../../../models/game";
-import { Storage } from "@ionic/storage";
+import { Game } from '../../../models/game';
+import { Storage } from '@ionic/storage';
 
-import { GameFactoryService } from "../../../services/game-factory.service";
+import { GameFactoryService } from '../../../services/game-factory.service';
 
-import { PopoverComponent } from "../../../popover/popover.component";
-import { GamesService } from "src/app/services/games.service";
+import { PopoverComponent } from '../../../popover/popover.component';
+import { GamesService } from 'src/app/services/games.service';
 
-import { AnimationOptions } from "ngx-lottie";
+import { AnimationOptions } from 'ngx-lottie';
 
-import mapboxgl from "mapbox-gl";
-import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import mapboxgl from 'mapbox-gl';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
-import { environment } from "src/environments/environment";
-import { calcBounds } from "../../../helpers/bounds";
-import { AnswerType, QuestionType } from "src/app/models/types";
-import { featureCollection } from "@turf/helpers";
-import { ActivatedRoute } from "@angular/router";
+import { environment } from 'src/environments/environment';
+import { calcBounds } from '../../../helpers/bounds';
+import { AnswerType, QuestionType } from 'src/app/models/types';
+import { featureCollection } from '@turf/helpers';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: "app-edit-game-overview",
-  templateUrl: "./edit-game-overview.page.html",
-  styleUrls: ["./edit-game-overview.page.scss"],
+  selector: 'app-edit-game-overview',
+  templateUrl: './edit-game-overview.page.html',
+  styleUrls: ['./edit-game-overview.page.scss'],
 })
 export class EditGameOverviewPage implements AfterViewInit {
-  @ViewChild("boundingMap") mapContainer;
+  @ViewChild('boundingMap') mapContainer;
 
   public game: Game;
   public lottieConfig: AnimationOptions;
@@ -59,8 +59,8 @@ export class EditGameOverviewPage implements AfterViewInit {
     private route: ActivatedRoute
   ) {
     this.lottieConfig = {
-      path: "assets/lottie/astronaut.json",
-      renderer: "canvas",
+      path: 'assets/lottie/astronaut.json',
+      renderer: 'canvas',
       autoplay: true,
       loop: true,
     };
@@ -75,133 +75,133 @@ export class EditGameOverviewPage implements AfterViewInit {
         // ACTIVE (being drawn)
         // line stroke
         {
-          id: "gl-draw-line",
-          type: "line",
+          id: 'gl-draw-line',
+          type: 'line',
           filter: [
-            "all",
-            ["==", "$type", "LineString"],
-            ["!=", "mode", "static"],
+            'all',
+            ['==', '$type', 'LineString'],
+            ['!=', 'mode', 'static'],
           ],
           layout: {
-            "line-cap": "round",
-            "line-join": "round",
+            'line-cap': 'round',
+            'line-join': 'round',
           },
           paint: {
-            "line-color": getComputedStyle(
+            'line-color': getComputedStyle(
               document.documentElement
-            ).getPropertyValue("--ion-color-warning"),
-            "line-dasharray": [3, 2],
-            "line-width": 5,
+            ).getPropertyValue('--ion-color-warning'),
+            'line-dasharray': [3, 2],
+            'line-width': 5,
           },
         },
         // polygon fill
         {
-          id: "gl-draw-polygon-fill",
-          type: "fill",
-          filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
+          id: 'gl-draw-polygon-fill',
+          type: 'fill',
+          filter: ['all', ['==', '$type', 'Polygon'], ['!=', 'mode', 'static']],
           paint: {
-            "fill-color": getComputedStyle(
+            'fill-color': getComputedStyle(
               document.documentElement
-            ).getPropertyValue("--ion-color-warning"),
-            "fill-outline-color": getComputedStyle(
+            ).getPropertyValue('--ion-color-warning'),
+            'fill-outline-color': getComputedStyle(
               document.documentElement
-            ).getPropertyValue("--ion-color-warning"),
-            "fill-opacity": 0.5,
+            ).getPropertyValue('--ion-color-warning'),
+            'fill-opacity': 0.5,
           },
         },
         // polygon outline stroke
         // This doesn't style the first edge of the polygon, which uses the line stroke styling instead
         {
-          id: "gl-draw-polygon-stroke-active",
-          type: "line",
-          filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
+          id: 'gl-draw-polygon-stroke-active',
+          type: 'line',
+          filter: ['all', ['==', '$type', 'Polygon'], ['!=', 'mode', 'static']],
           layout: {
-            "line-cap": "round",
-            "line-join": "round",
+            'line-cap': 'round',
+            'line-join': 'round',
           },
           paint: {
-            "line-color": getComputedStyle(
+            'line-color': getComputedStyle(
               document.documentElement
-            ).getPropertyValue("--ion-color-warning"),
-            "line-dasharray": [3, 2],
-            "line-width": 5,
+            ).getPropertyValue('--ion-color-warning'),
+            'line-dasharray': [3, 2],
+            'line-width': 5,
           },
         },
         // vertex point halos
         {
-          id: "gl-draw-polygon-and-line-vertex-halo-active",
-          type: "circle",
+          id: 'gl-draw-polygon-and-line-vertex-halo-active',
+          type: 'circle',
           filter: [
-            "all",
-            ["==", "meta", "vertex"],
-            ["==", "$type", "Point"],
-            ["!=", "mode", "static"],
+            'all',
+            ['==', 'meta', 'vertex'],
+            ['==', '$type', 'Point'],
+            ['!=', 'mode', 'static'],
           ],
           paint: {
-            "circle-radius": 5,
-            "circle-color": "#FFF",
+            'circle-radius': 5,
+            'circle-color': '#FFF',
           },
         },
         // vertex points
         {
-          id: "gl-draw-polygon-and-line-vertex-active",
-          type: "circle",
+          id: 'gl-draw-polygon-and-line-vertex-active',
+          type: 'circle',
           filter: [
-            "all",
-            ["==", "meta", "vertex"],
-            ["==", "$type", "Point"],
-            ["!=", "mode", "static"],
+            'all',
+            ['==', 'meta', 'vertex'],
+            ['==', '$type', 'Point'],
+            ['!=', 'mode', 'static'],
           ],
           paint: {
-            "circle-radius": 3,
-            "circle-color": getComputedStyle(
+            'circle-radius': 3,
+            'circle-color': getComputedStyle(
               document.documentElement
-            ).getPropertyValue("--ion-color-warning"),
+            ).getPropertyValue('--ion-color-warning'),
           },
         },
 
         // INACTIVE (static, already drawn)
         // line stroke
         {
-          id: "gl-draw-line-static",
-          type: "line",
+          id: 'gl-draw-line-static',
+          type: 'line',
           filter: [
-            "all",
-            ["==", "$type", "LineString"],
-            ["==", "mode", "static"],
+            'all',
+            ['==', '$type', 'LineString'],
+            ['==', 'mode', 'static'],
           ],
           layout: {
-            "line-cap": "round",
-            "line-join": "round",
+            'line-cap': 'round',
+            'line-join': 'round',
           },
           paint: {
-            "line-color": "#000",
-            "line-width": 3,
+            'line-color': '#000',
+            'line-width': 3,
           },
         },
         // polygon fill
         {
-          id: "gl-draw-polygon-fill-static",
-          type: "fill",
-          filter: ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
+          id: 'gl-draw-polygon-fill-static',
+          type: 'fill',
+          filter: ['all', ['==', '$type', 'Polygon'], ['==', 'mode', 'static']],
           paint: {
-            "fill-color": "#000",
-            "fill-outline-color": "#000",
-            "fill-opacity": 0.5,
+            'fill-color': '#000',
+            'fill-outline-color': '#000',
+            'fill-opacity': 0.5,
           },
         },
         // polygon outline
         {
-          id: "gl-draw-polygon-stroke-static",
-          type: "line",
-          filter: ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
+          id: 'gl-draw-polygon-stroke-static',
+          type: 'line',
+          filter: ['all', ['==', '$type', 'Polygon'], ['==', 'mode', 'static']],
           layout: {
-            "line-cap": "round",
-            "line-join": "round",
+            'line-cap': 'round',
+            'line-join': 'round',
           },
           paint: {
-            "line-color": "#000",
-            "line-width": 3,
+            'line-color': '#000',
+            'line-width': 3,
           },
         },
       ],
@@ -230,10 +230,10 @@ export class EditGameOverviewPage implements AfterViewInit {
   onMapLoad(map: mapboxgl.Map) {
     this.map = map;
 
-    this.map.addControl(this.draw, "top-left");
+    this.map.addControl(this.draw, 'top-left');
 
     if (this.game.bbox != undefined) {
-      if (this.game.bbox.type == "FeatureCollection") {
+      if (this.game.bbox.type == 'FeatureCollection') {
         this.game.bbox.features.forEach((element) => {
           element.properties = {
             ...element.properties,
@@ -259,11 +259,11 @@ export class EditGameOverviewPage implements AfterViewInit {
         task.answer.type == AnswerType.POSITION &&
         task.answer.position?.geometry?.coordinates
       ) {
-        const el = document.createElement("div");
-        el.className = "waypoint-marker";
+        const el = document.createElement('div');
+        el.className = 'waypoint-marker';
 
         new mapboxgl.Marker(el, {
-          anchor: "bottom",
+          anchor: 'bottom',
           offset: [15, 0],
         })
           .setLngLat(task.answer.position.geometry.coordinates)
@@ -302,18 +302,18 @@ export class EditGameOverviewPage implements AfterViewInit {
         const directionBearing = task.question.direction.bearing || 0;
 
         this.map.addSource(`viewDirectionTask${i}`, {
-          type: "geojson",
+          type: 'geojson',
           data: task.question.direction.position.geometry,
         });
         this.map.addLayer({
           id: `viewDirectionTask${i}`,
           source: `viewDirectionTask${i}`,
-          type: "symbol",
+          type: 'symbol',
           layout: {
-            "icon-image": "view-direction-task",
-            "icon-size": 0.65,
-            "icon-offset": [0, -8],
-            "icon-rotate": directionBearing - this.map.getBearing(),
+            'icon-image': 'view-direction-task',
+            'icon-size': 0.65,
+            'icon-offset': [0, -8],
+            'icon-rotate': directionBearing - this.map.getBearing(),
           },
         });
       }
@@ -370,7 +370,7 @@ export class EditGameOverviewPage implements AfterViewInit {
   }
 
   navigateHome() {
-    this.navCtrl.navigateRoot("/");
+    this.navCtrl.navigateRoot('/');
   }
 
   async showPopover(ev: any, text: string) {

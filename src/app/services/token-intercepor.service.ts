@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
   HttpInterceptor,
   HttpErrorResponse,
-} from "@angular/common/http";
-import { AuthService } from "./auth-service.service";
-import { Observable, BehaviorSubject } from "rxjs";
-import { catchError, switchMap, filter, take } from "rxjs/operators";
-import { throwError } from "rxjs";
+} from '@angular/common/http';
+import { AuthService } from './auth-service.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { catchError, switchMap, filter, take } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -28,12 +28,12 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (
-          request.url.includes("refresh-auth") ||
-          request.url.includes("authenticate")
+          request.url.includes('refresh-auth') ||
+          request.url.includes('authenticate')
         ) {
-          if (request.url.includes("refresh-auth")) {
+          if (request.url.includes('refresh-auth')) {
             this.auth.logout();
-            //maybe redirect somewhere or open login modal?
+            // maybe redirect somewhere or open login modal?
           }
           return throwError(error);
         }
@@ -42,7 +42,7 @@ export class TokenInterceptor implements HttpInterceptor {
         }
 
         if (this.refreshTokenInProgress) {
-          //TODO: Check if we need something like this
+          // TODO: Check if we need something like this
           return this.refreshTokenSubject
             .pipe(filter((result) => result !== null))
             .pipe(take(1))
