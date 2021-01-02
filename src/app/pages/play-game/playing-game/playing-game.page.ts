@@ -50,6 +50,7 @@ import { point } from '@turf/helpers';
 import booleanWithin from '@turf/boolean-within';
 import { OrigamiOrientationService } from 'src/app/services/origami-orientation.service';
 import MapboxCompare from 'mapbox-gl-compare';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-playing-game',
@@ -62,6 +63,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     public modalController: ModalController,
     public toastController: ToastController,
     private gamesService: GamesService,
+    private taskService: TaskService,
     public navCtrl: NavController,
     private changeDetectorRef: ChangeDetectorRef,
     private OSMService: OsmService,
@@ -275,6 +277,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.game = games.content;
         this.loaded = true;
       });
+    });
+
+    this.taskService.taskSubscription.subscribe(task => {
+      if (task != null) {
+        this.task = task;
+        this.feedbackControl.setTask(this.task);
+        this.initTask();
+      }
     });
   }
 
@@ -628,8 +638,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   async initGame() {
-    this.task = this.game.tasks[this.taskIndex];
-    this.feedbackControl.setTask(this.task);
+    // this.task = this.game.tasks[this.taskIndex];
+    this.taskService.loadGame(this.game);
+    // this.feedbackControl.setTask(this.task);
     await this.trackerService.init(
       this.game._id,
       this.game.name,
@@ -881,9 +892,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return;
     }
 
-    this.task = this.game.tasks[this.taskIndex];
-    this.feedbackControl.setTask(this.task);
-    this.initTask();
+    this.taskService.nextTask();
+    // this.task = this.game.tasks[this.taskIndex];
+
   }
 
   async onMultipleChoicePhotoSelected(item, event) {

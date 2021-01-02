@@ -59,7 +59,7 @@ export class ViewDirectionControlComponent implements OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         this.viewDirectionLayout = {
             ...this.viewDirectionLayout,
-            visibility: changes.visible.currentValue ? 'visible' : 'none'
+            visibility: changes.visible?.currentValue ? 'visible' : 'none'
         };
     }
 
