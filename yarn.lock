@@ -7993,10 +7993,10 @@ ngx-lottie@^5.4.0:
   resolved "https://registry.yarnpkg.com/ngx-lottie/-/ngx-lottie-5.4.0.tgz#44c3ef02e16c96fbb766a92a681ba5b9a66f2746"
   integrity sha512-dAfiSB8uclQ2/cBsRR40+ZM9J8YcRh+1Dl8wcQw6xQQF4sw7dNRQMCHpOOH/bSG1+txc1KTh1i6menJsB3g3sw==
 
-ngx-mapbox-gl@^4.8.1:
-  version "4.8.1"
-  resolved "https://registry.yarnpkg.com/ngx-mapbox-gl/-/ngx-mapbox-gl-4.8.1.tgz#1e3427dff2c18d7c4520a3085a5f9828ff64d7aa"
-  integrity sha512-clfOpoCPH2ktRY5YjfxgM91jRbZaK5fTnoSjEFE/sfqqtt9rP3M4BTZ/mOmOrrl6Lmhw2OOVggrBbMWo8IOgFg==
+ngx-mapbox-gl@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-mapbox-gl/-/ngx-mapbox-gl-5.0.0.tgz#fa4aa6dba026e05343fbebfbf58899440fdd3a0e"
+  integrity sha512-WPiZYvfvUC0earHX3EqQU0o9I67bHTLBXucxvrzmjQdf8CTBQn72+YdzqQzMbwKhTsLyON3tkaEN0+/jUITLqw==
   dependencies:
     "@mapbox/mapbox-gl-geocoder" "^3.0.1"
     tslib "^2.0.0"

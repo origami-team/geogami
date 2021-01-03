@@ -109,6 +109,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   swipeMap: mapboxgl.Map;
   mapCenter: number[] = [8, 51.8];
   mapZoom = 2;
+  mapZoomEnabled = true;
+  mapPanEnabled = true;
   mapBearing: number[] = [0];
   mapStyle: mapboxgl.Style = {
     version: 8,
@@ -297,6 +299,33 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.mapWrapper.nativeElement
     );
     console.log(compare);
+
+    if (this.swipeMap.loaded()) {
+      const defaultMapSources = this.map.getStyle().sources;
+      const { mapbox, satellite, ...sources } = defaultMapSources;
+      delete sources['raster-tiles'];
+
+      const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building');
+
+      Object.entries(sources).forEach(s => {
+        if (this.swipeMap.getSource(s[0])) {
+          // this.satMap.getSource(s[0]).setData(s[1]['data'])
+        } else {
+          this.swipeMap.addSource(s[0], s[1]);
+        }
+      });
+
+      layers.forEach(l => {
+        if (this.swipeMap.getLayer(l.id)) {
+          if (l.id === 'viewDirection' || l.id === 'viewDirectionTask' || l.id === 'viewDirectionClick') {
+            const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate');
+            this.swipeMap.setLayoutProperty(l.id, 'icon-rotate', bearing);
+          }
+        } else {
+          this.swipeMap.addLayer(l);
+        }
+      });
+    }
   }
 
   ionViewWillEnter() {
@@ -1102,56 +1131,43 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (mapFeatures.hasOwnProperty(key)) {
         switch (key) {
           case 'zoombar':
-            if (mapFeatures[key] === 'true') {
-              this.map.scrollZoom.enable();
-              this.map.boxZoom.enable();
-              this.map.doubleClickZoom.enable();
-              this.map.touchZoomRotate.enable();
-            } else if (mapFeatures[key] === 'false') {
-              this.map.scrollZoom.disable();
-              this.map.boxZoom.disable();
-              this.map.doubleClickZoom.disable();
-              this.map.touchZoomRotate.disable();
+            if (mapFeatures[key] === 'false') {
+              this.mapZoomEnabled = false;
             } else {
-              // zoom zur Aufgabe
-              this.map.scrollZoom.enable();
-              this.map.boxZoom.enable();
-              this.map.doubleClickZoom.enable();
-              this.map.touchZoomRotate.enable();
+              this.mapZoomEnabled = true;
             }
             break;
           case 'pan':
             if (mapFeatures[key] === 'true') {
-              this.panControl.setType(PanType.True);
-            } else if (mapFeatures[key] === 'center') {
-              this.panControl.setType(PanType.Center);
-            } else if (mapFeatures[key] === 'static') {
-              this.panControl.setType(PanType.Static);
+              this.mapPanEnabled = true;
+            } else {
+              this.mapPanEnabled = false;
+              // TODO: keep map centered position
             }
             break;
-          case 'rotation':
-            if (mapFeatures[key] === 'manual') {
-              this.rotationControl.setType(RotationType.Manual);
-            } else if (mapFeatures[key] === 'auto') {
-              this.rotationControl.setType(RotationType.Auto);
-            } else if (mapFeatures[key] === 'button') {
-              this.rotationControl.setType(RotationType.Button);
-            } else if (mapFeatures[key] === 'north') {
-              this.rotationControl.setType(RotationType.North);
-            }
-            break;
+          // case 'rotation':
+          //   if (mapFeatures[key] === 'manual') {
+          //     this.rotationControl.setType(RotationType.Manual);
+          //   } else if (mapFeatures[key] === 'auto') {
+          //     this.rotationControl.setType(RotationType.Auto);
+          //   } else if (mapFeatures[key] === 'button') {
+          //     this.rotationControl.setType(RotationType.Button);
+          //   } else if (mapFeatures[key] === 'north') {
+          //     this.rotationControl.setType(RotationType.North);
+          //   }
+          //   break;
           case 'material':
-            this.swipe = false;
-            this.map.getContainer().parentElement.style.clip = 'unset';
-            if (this.map.getLayer('satellite')) {
-              this.map.removeLayer('satellite');
-            }
+            // this.swipe = false;
+            // this.map.getContainer().parentElement.style.clip = 'unset';
+            // if (this.map.getLayer('satellite')) {
+            //   this.map.removeLayer('satellite');
+            // }
 
-            const elem = document.getElementsByClassName('mapboxgl-compare');
-            while (elem.length > 0) elem[0].remove();
+            // const elem = document.getElementsByClassName('mapboxgl-compare');
+            // while (elem.length > 0) elem[0].remove();
 
             if (mapFeatures[key] === 'standard') {
-              this.layerControl.setType(LayerType.Standard);
+              // this.layerControl.setType(LayerType.Standard);
             } else if (mapFeatures[key] === 'selection') {
               this.layerControl.setType(LayerType.Selection);
             } else if (mapFeatures[key] === 'sat') {

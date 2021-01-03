@@ -25,8 +25,12 @@
         [center]="mapCenter"
         [maxZoom]="18"
         [(bearing)]="mapBearing"
-        (load)="onMapLoad($event)"
-        (click)="onMapClick($event)"
+        (mapLoad)="onMapLoad($event)"
+        (mapClick)="onMapClick($event)"
+        [scrollZoom]="mapZoomEnabled"
+        [doubleClickZoom]="mapZoomEnabled"
+        [boxZoom]="mapZoomEnabled"
+        [dragPan]="mapPanEnabled"
         [fitBounds]="mapBounds"
         [fitBoundsOptions]="{
           padding: {
@@ -67,8 +71,8 @@
         [style]="'mapbox://styles/mapbox/satellite-v9'"
         [zoom]="[mapZoom]"
         [center]="mapCenter"
-        (load)="onSwipeMapLoad($event)"
-        (click)='onMapClick($event, "swipe")'
+        (mapLoad)="onSwipeMapLoad($event)"
+        (mapClick)='onMapClick($event, "swipe")'
       ></mgl-map>
       <!-- <div  #swipeMap class="map"></div> -->
     </div>
