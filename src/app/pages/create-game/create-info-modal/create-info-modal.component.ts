@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { QuestionType, AnswerType } from 'src/app/models/types';
 import { standardMapFeatures } from 'src/app/models/standardMapFeatures';
 import { cloneDeep } from 'lodash';
+import { PopoverComponent } from 'src/app/popover/popover.component';
 
 @Component({
   selector: 'app-create-info-modal',
@@ -20,6 +21,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
 
   constructor(
     public modalController: ModalController,
+    public popoverController: PopoverController
   ) { }
 
   ngOnInit() {
@@ -78,6 +80,17 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       dismissed: true,
       data: this.task
     });
+  }
+
+  async showPopover(ev: any, text: string) {
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 
 }

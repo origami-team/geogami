@@ -298,7 +298,7 @@ export class LayerControl {
 
             const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building');
 
-            Object.entries(sources).forEach(s => {
+            Object.entries(sources).forEach((s: any) => {
                 if (this.satMap.getSource(s[0])) {
                     this.satMap.getSource(s[0]).setData(s[1].data);
                 } else {
