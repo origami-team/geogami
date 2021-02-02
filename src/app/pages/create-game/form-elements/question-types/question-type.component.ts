@@ -1,15 +1,15 @@
 import {
     Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter
-} from "@angular/core";
+} from '@angular/core';
 
-import { QuestionType, TaskMode } from './../../../../models/types'
+import { QuestionType, TaskMode } from './../../../../models/types';
 import { PopoverComponent } from 'src/app/popover/popover.component';
 import { PopoverController } from '@ionic/angular';
 
 
 @Component({
-    selector: "question-type",
-    templateUrl: "./question-type.component.html",
+    selector: 'question-type',
+    templateUrl: './question-type.component.html',
 })
 export class QuestionTypeComponent implements OnInit, OnChanges {
     @Input() question: any;
@@ -17,14 +17,14 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
 
-    questionTypeEnum = QuestionType
-    taskModeEnum = TaskMode
+    questionTypeEnum = QuestionType;
+    taskModeEnum = TaskMode;
 
     constructor(public popoverController: PopoverController) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes)
-        this.questionChange.emit(changes.question.currentValue)
+        console.log(changes);
+        this.questionChange.emit(changes.question.currentValue);
     }
 
     ngOnInit() {

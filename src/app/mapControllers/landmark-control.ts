@@ -1,4 +1,4 @@
-import { Map as MapboxMap } from "mapbox-gl";
+import { Map as MapboxMap } from 'mapbox-gl';
 
 
 export class LandmarkControl {
@@ -21,40 +21,40 @@ export class LandmarkControl {
         this.remove();
 
         this.map.addSource('landmarksSource', {
-            type: "geojson",
+            type: 'geojson',
             data: landmark
-        })
+        });
         this.map.addLayer({
-            id: "landmarksLayerPolygon",
-            type: "fill-extrusion",
+            id: 'landmarksLayerPolygon',
+            type: 'fill-extrusion',
             source: 'landmarksSource',
-            filter: ['all', ["==", ["geometry-type"], "Polygon"]],
+            filter: ['all', ['==', ['geometry-type'], 'Polygon']],
             paint: {
-                "fill-extrusion-color": this.dangerColor,
-                "fill-extrusion-opacity": 0.5,
-                "fill-extrusion-height": 20,
+                'fill-extrusion-color': this.dangerColor,
+                'fill-extrusion-opacity': 0.5,
+                'fill-extrusion-height': 20,
             }
         });
         this.map.addLayer({
-            id: "landmarksLayerLine",
-            type: "line",
+            id: 'landmarksLayerLine',
+            type: 'line',
             source: 'landmarksSource',
-            filter: ['all', ["==", ["geometry-type"], "LineString"]],
+            filter: ['all', ['==', ['geometry-type'], 'LineString']],
             paint: {
-                "line-color": this.dangerColor,
-                "line-opacity": 0.5,
-                "line-width": 5,
+                'line-color': this.dangerColor,
+                'line-opacity': 0.5,
+                'line-width': 5,
             }
         });
         this.map.addLayer({
-            id: "landmarksLayerPoint",
+            id: 'landmarksLayerPoint',
             source: 'landmarksSource',
-            filter: ['all', ["==", ["geometry-type"], "Point"]],
+            filter: ['all', ['==', ['geometry-type'], 'Point']],
             type: 'symbol',
             layout: {
-                "icon-image": "landmark-marker",
-                "icon-size": 1,
-                "icon-anchor": 'bottom'
+                'icon-image': 'landmark-marker',
+                'icon-size': 1,
+                'icon-anchor': 'bottom'
             }
         });
     }
@@ -63,40 +63,40 @@ export class LandmarkControl {
         this.removeQT();
 
         this.map.addSource('qtSource', {
-            type: "geojson",
+            type: 'geojson',
             data: landmark
-        })
+        });
         this.map.addLayer({
-            id: "qtLayerPolygon",
-            type: "fill-extrusion",
+            id: 'qtLayerPolygon',
+            type: 'fill-extrusion',
             source: 'qtSource',
-            filter: ['all', ["==", ["geometry-type"], "Polygon"]],
+            filter: ['all', ['==', ['geometry-type'], 'Polygon']],
             paint: {
-                "fill-extrusion-color": this.secondaryColor,
-                "fill-extrusion-opacity": 0.5,
-                "fill-extrusion-height": 20,
+                'fill-extrusion-color': this.secondaryColor,
+                'fill-extrusion-opacity': 0.5,
+                'fill-extrusion-height': 20,
             }
         });
         this.map.addLayer({
-            id: "qtLayerLine",
-            type: "line",
+            id: 'qtLayerLine',
+            type: 'line',
             source: 'qtSource',
-            filter: ['all', ["==", ["geometry-type"], "LineString"]],
+            filter: ['all', ['==', ['geometry-type'], 'LineString']],
             paint: {
-                "line-color": this.secondaryColor,
-                "line-opacity": 0.5,
-                "line-width": 5,
+                'line-color': this.secondaryColor,
+                'line-opacity': 0.5,
+                'line-width': 5,
             }
         });
         this.map.addLayer({
-            id: "qtLayerPoint",
+            id: 'qtLayerPoint',
             source: 'qtSource',
-            filter: ['all', ["==", ["geometry-type"], "Point"]],
+            filter: ['all', ['==', ['geometry-type'], 'Point']],
             type: 'symbol',
             layout: {
-                "icon-image": "marker-editor",
-                "icon-size": .65,
-                "icon-anchor": 'bottom'
+                'icon-image': 'marker-editor',
+                'icon-size': .65,
+                'icon-anchor': 'bottom'
             }
         });
     }
@@ -105,58 +105,58 @@ export class LandmarkControl {
         this.removeSearchArea();
 
         this.map.addSource('searchAreaSource', {
-            type: "geojson",
+            type: 'geojson',
             data: landmark
-        })
+        });
         this.map.addLayer({
-            id: "searchAreaLayerPolygon",
-            type: "line",
+            id: 'searchAreaLayerPolygon',
+            type: 'line',
             source: 'searchAreaSource',
-            filter: ['all', ["==", ["geometry-type"], "Polygon"]],
+            filter: ['all', ['==', ['geometry-type'], 'Polygon']],
             paint: {
-                "line-color": this.secondaryColor,
-                "line-opacity": 0.5,
-                "line-width": 5,
+                'line-color': this.secondaryColor,
+                'line-opacity': 0.5,
+                'line-width': 5,
             }
         });
     }
 
     public removeQT(): void {
         if (this.map.getLayer('qtLayerPolygon')) {
-            this.map.removeLayer('qtLayerPolygon')
+            this.map.removeLayer('qtLayerPolygon');
         }
         if (this.map.getLayer('qtLayerLine')) {
-            this.map.removeLayer('qtLayerLine')
+            this.map.removeLayer('qtLayerLine');
         }
         if (this.map.getLayer('qtLayerPoint')) {
-            this.map.removeLayer('qtLayerPoint')
+            this.map.removeLayer('qtLayerPoint');
         }
         if (this.map.getSource('qtSource')) {
-            this.map.removeSource('qtSource')
+            this.map.removeSource('qtSource');
         }
     }
 
     public removeSearchArea() {
         if (this.map.getLayer('searchAreaLayerPolygon')) {
-            this.map.removeLayer('searchAreaLayerPolygon')
+            this.map.removeLayer('searchAreaLayerPolygon');
         }
         if (this.map.getSource('searchAreaSource')) {
-            this.map.removeSource('searchAreaSource')
+            this.map.removeSource('searchAreaSource');
         }
     }
 
     public remove(): void {
         if (this.map.getLayer('landmarksLayerPolygon')) {
-            this.map.removeLayer('landmarksLayerPolygon')
+            this.map.removeLayer('landmarksLayerPolygon');
         }
         if (this.map.getLayer('landmarksLayerLine')) {
-            this.map.removeLayer('landmarksLayerLine')
+            this.map.removeLayer('landmarksLayerLine');
         }
         if (this.map.getLayer('landmarksLayerPoint')) {
-            this.map.removeLayer('landmarksLayerPoint')
+            this.map.removeLayer('landmarksLayerPoint');
         }
         if (this.map.getSource('landmarksSource')) {
-            this.map.removeSource('landmarksSource')
+            this.map.removeSource('landmarksSource');
         }
     }
 }

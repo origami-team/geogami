@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { ModalController } from "@ionic/angular";
+import { ModalController, PopoverController } from '@ionic/angular';
 import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { QuestionType, AnswerType } from 'src/app/models/types';
 import { standardMapFeatures } from 'src/app/models/standardMapFeatures';
 import { cloneDeep } from 'lodash';
+import { PopoverComponent } from 'src/app/popover/popover.component';
 
 @Component({
   selector: 'app-create-info-modal',
@@ -16,10 +17,11 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
 
   @Output() taskChange: EventEmitter<any> = new EventEmitter<any>(true);
 
-  uploading: boolean = false;
+  uploading = false;
 
   constructor(
     public modalController: ModalController,
+    public popoverController: PopoverController
   ) { }
 
   ngOnInit() {
@@ -39,12 +41,12 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
           confirmation: true
         },
         mapFeatures: null,
-      }
+      };
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.taskChange.emit(this.task)
+    this.taskChange.emit(this.task);
   }
 
   async presentMapFeaturesModal() {
@@ -57,7 +59,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    this.task.mapFeatures = data.data
+    this.task.mapFeatures = data.data;
     return;
   }
 
@@ -65,19 +67,30 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     if (this.uploading) {
       return;
     }
-    if (dismissType == "close") {
+    if (dismissType == 'close') {
       this.modalController.dismiss();
       return;
     }
 
     if (this.task.mapFeatures == undefined) {
-      this.task.mapFeatures = cloneDeep(standardMapFeatures)
+      this.task.mapFeatures = cloneDeep(standardMapFeatures);
     }
 
     this.modalController.dismiss({
       dismissed: true,
       data: this.task
     });
+  }
+
+  async showPopover(ev: any, text: string) {
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 
 }

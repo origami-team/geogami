@@ -58,8 +58,8 @@ export class EditGameListPage implements OnInit {
         .then(game => {
           this.game = game;
           this.gameFactory.flushGame();
-          this.gameFactory.addGameInformation(this.game)
-        })
+          this.gameFactory.addGameInformation(this.game);
+        });
     });
 
   }
@@ -100,7 +100,7 @@ export class EditGameListPage implements OnInit {
 
   async presentTaskModal(type: string = 'nav', task: Task = null) {
 
-    console.log(task)
+    console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component: type == 'info' ? CreateInfoModalComponent : CreateTaskModalPage,
@@ -117,9 +117,9 @@ export class EditGameListPage implements OnInit {
     if (data != undefined) {
       if (task != null) {
         if (!task.id) {
-          task.id = Math.floor(Date.now() / 1000)
+          task.id = Math.floor(Date.now() / 1000);
         }
-        this.updateTask(task.id, data.data)
+        this.updateTask(task.id, data.data);
       } else {
         this.addTaskToGame(data.data);
       }
@@ -142,7 +142,7 @@ export class EditGameListPage implements OnInit {
   updateTask(taskID, task) {
     console.log('updating', taskID);
     this.game = this.gameFactory.updateTask(taskID, task);
-    console.log(this.game)
+    console.log(this.game);
   }
 
   doReorder(ev: any) {
@@ -159,9 +159,9 @@ export class EditGameListPage implements OnInit {
     // new order of items
     this.game.tasks = ev.detail.complete(this.game.tasks);
 
-    this.gameFactory.applyReorder(this.game.tasks)
+    this.gameFactory.applyReorder(this.game.tasks);
 
-    console.log(this.game.tasks)
+    console.log(this.game.tasks);
 
     ev.detail.complete(true);
 
@@ -170,7 +170,7 @@ export class EditGameListPage implements OnInit {
   }
 
   toggleReorder() {
-    this.reorder = !this.reorder
+    this.reorder = !this.reorder;
   }
 
   uploadGame() {
@@ -179,7 +179,7 @@ export class EditGameListPage implements OnInit {
         this.navCtrl.navigateForward(`edit-game/edit-game-overview/${this.game._id}`);
         // this.gameFactory.flushGame();
       }
-    })
+    });
   }
 
   navigateBack() {

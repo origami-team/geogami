@@ -7,7 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
 })
 export class MultipleChoiceTextComponent implements OnInit {
 
-  @Input() answers: String[] = ["", "", "", ""];
+  @Input() answers: String[] = ['', '', '', ''];
 
   @Output() answersChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -15,11 +15,11 @@ export class MultipleChoiceTextComponent implements OnInit {
 
   ngOnInit() {
     if (this.answers == undefined) {
-      this.answers = ["", "", "", ""];
+      this.answers = ['', '', '', ''];
     }
   }
 
   onChange() {
-    this.answersChange.emit(this.answers)
+    this.answersChange.emit(this.answers);
   }
 }

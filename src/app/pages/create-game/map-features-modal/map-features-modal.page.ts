@@ -6,26 +6,26 @@ import {
   ChangeDetectorRef,
   AfterViewInit,
   Input
-} from "@angular/core";
-import { ModalController } from "@ionic/angular";
+} from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
-import mapboxgl from "mapbox-gl";
-import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import mapboxgl from 'mapbox-gl';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
-import { environment } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 
-import { Plugins } from '@capacitor/core'
+import { Plugins } from '@capacitor/core';
 
 import { cloneDeep } from 'lodash';
-import { standardMapFeatures } from "../../../models/standardMapFeatures"
+import { standardMapFeatures } from '../../../models/standardMapFeatures';
 
 @Component({
-  selector: "app-map-features-modal",
-  templateUrl: "./map-features-modal.page.html",
-  styleUrls: ["./map-features-modal.page.scss"]
+  selector: 'app-map-features-modal',
+  templateUrl: './map-features-modal.page.html',
+  styleUrls: ['./map-features-modal.page.scss']
 })
 export class MapFeaturesModalPage implements OnInit, AfterViewInit {
-  @ViewChild("map") mapContainer;
+  @ViewChild('map') mapContainer;
 
   private draw: MapboxDraw;
   private map: mapboxgl.Map;
@@ -41,7 +41,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
     if (this.features == undefined) {
       this.features = cloneDeep(standardMapFeatures);
     }
-    this.onZoomChange()
+    this.onZoomChange();
 
     this.changeDetectorRef.detectChanges();
     mapboxgl.accessToken = environment.mapboxAccessToken;
@@ -49,42 +49,42 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: {
-        'version': 8,
-        "metadata": {
-          "mapbox:autocomposite": true,
-          "mapbox:type": "template"
+        version: 8,
+        metadata: {
+          'mapbox:autocomposite': true,
+          'mapbox:type': 'template'
         },
-        'sources': {
+        sources: {
           'raster-tiles': {
-            'type': 'raster',
-            'tiles': [
+            type: 'raster',
+            tiles: [
               'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
             ],
-            'tileSize': 256,
+            tileSize: 256,
           },
-          "mapbox": {
-            "url": "mapbox://mapbox.mapbox-streets-v7",
-            "type": "vector"
+          mapbox: {
+            url: 'mapbox://mapbox.mapbox-streets-v7',
+            type: 'vector'
           }
         },
-        'layers': [
+        layers: [
           {
-            'id': 'simple-tiles',
-            'type': 'raster',
-            'source': 'raster-tiles',
-            'minzoom': 0,
-            'maxzoom': 22
+            id: 'simple-tiles',
+            type: 'raster',
+            source: 'raster-tiles',
+            minzoom: 0,
+            maxzoom: 22
           },
           {
-            "id": "building",
-            "type": "fill",
-            "source": "mapbox",
-            "source-layer": "building",
-            "paint": {
-              "fill-color": "#d6d6d6",
-              "fill-opacity": 0,
+            id: 'building',
+            type: 'fill',
+            source: 'mapbox',
+            'source-layer': 'building',
+            paint: {
+              'fill-color': '#d6d6d6',
+              'fill-opacity': 0,
             },
-            "interactive": true
+            interactive: true
           },
         ]
       },
@@ -104,280 +104,280 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
       },
       styles: [
         {
-          'id': 'gl-draw-polygon-fill-inactive',
-          'type': 'fill',
-          'filter': ['all',
+          id: 'gl-draw-polygon-fill-inactive',
+          type: 'fill',
+          filter: ['all',
             ['==', 'active', 'false'],
             ['==', '$type', 'Polygon'],
             ['!=', 'mode', 'static']
           ],
-          'paint': {
+          paint: {
             'fill-color': dangerColor,
             'fill-outline-color': dangerColor,
             'fill-opacity': 0.1
           }
         },
         {
-          'id': 'gl-draw-polygon-fill-active',
-          'type': 'fill',
-          'filter': ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']],
-          'paint': {
+          id: 'gl-draw-polygon-fill-active',
+          type: 'fill',
+          filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']],
+          paint: {
             'fill-color': dangerColor,
             'fill-outline-color': dangerColor,
             'fill-opacity': 0.1
           }
         },
         {
-          'id': 'gl-draw-polygon-midpoint',
-          'type': 'circle',
-          'filter': ['all',
+          id: 'gl-draw-polygon-midpoint',
+          type: 'circle',
+          filter: ['all',
             ['==', '$type', 'Point'],
             ['==', 'meta', 'midpoint']],
-          'paint': {
+          paint: {
             'circle-radius': 3,
             'circle-color': dangerColor
           }
         },
         {
-          'id': 'gl-draw-polygon-stroke-inactive',
-          'type': 'line',
-          'filter': ['all',
+          id: 'gl-draw-polygon-stroke-inactive',
+          type: 'line',
+          filter: ['all',
             ['==', 'active', 'false'],
             ['==', '$type', 'Polygon'],
             ['!=', 'mode', 'static']
           ],
-          'layout': {
+          layout: {
             'line-cap': 'round',
             'line-join': 'round'
           },
-          'paint': {
+          paint: {
             'line-color': dangerColor,
             'line-width': 2
           }
         },
         {
-          'id': 'gl-draw-polygon-stroke-active',
-          'type': 'line',
-          'filter': ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']],
-          'layout': {
+          id: 'gl-draw-polygon-stroke-active',
+          type: 'line',
+          filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']],
+          layout: {
             'line-cap': 'round',
             'line-join': 'round'
           },
-          'paint': {
+          paint: {
             'line-color': dangerColor,
             'line-dasharray': [0.2, 2],
             'line-width': 2
           }
         },
         {
-          'id': 'gl-draw-line-inactive',
-          'type': 'line',
-          'filter': ['all',
+          id: 'gl-draw-line-inactive',
+          type: 'line',
+          filter: ['all',
             ['==', 'active', 'false'],
             ['==', '$type', 'LineString'],
             ['!=', 'mode', 'static']
           ],
-          'layout': {
+          layout: {
             'line-cap': 'round',
             'line-join': 'round'
           },
-          'paint': {
+          paint: {
             'line-color': dangerColor,
             'line-width': 2
           }
         },
         {
-          'id': 'gl-draw-line-active',
-          'type': 'line',
-          'filter': ['all',
+          id: 'gl-draw-line-active',
+          type: 'line',
+          filter: ['all',
             ['==', '$type', 'LineString'],
             ['==', 'active', 'true']
           ],
-          'layout': {
+          layout: {
             'line-cap': 'round',
             'line-join': 'round'
           },
-          'paint': {
+          paint: {
             'line-color': dangerColor,
             'line-dasharray': [0.2, 2],
             'line-width': 2
           }
         },
         {
-          'id': 'gl-draw-polygon-and-line-vertex-stroke-inactive',
-          'type': 'circle',
-          'filter': ['all',
+          id: 'gl-draw-polygon-and-line-vertex-stroke-inactive',
+          type: 'circle',
+          filter: ['all',
             ['==', 'meta', 'vertex'],
             ['==', '$type', 'Point'],
             ['!=', 'mode', 'static']
           ],
-          'paint': {
+          paint: {
             'circle-radius': 5,
             'circle-color': '#fff'
           }
         },
         {
-          'id': 'gl-draw-polygon-and-line-vertex-inactive',
-          'type': 'circle',
-          'filter': ['all',
+          id: 'gl-draw-polygon-and-line-vertex-inactive',
+          type: 'circle',
+          filter: ['all',
             ['==', 'meta', 'vertex'],
             ['==', '$type', 'Point'],
             ['!=', 'mode', 'static']
           ],
-          'paint': {
+          paint: {
             'circle-radius': 3,
             'circle-color': dangerColor
           }
         },
         {
-          'id': 'gl-draw-point-inactive',
-          'type': 'symbol',
-          'filter': ['all',
+          id: 'gl-draw-point-inactive',
+          type: 'symbol',
+          filter: ['all',
             ['==', 'active', 'false'],
             ['==', '$type', 'Point'],
             ['==', 'meta', 'feature'],
             ['!=', 'mode', 'static']
           ],
-          'layout': {
-            "icon-image": "landmark-marker",
-            "icon-size": 1,
-            "icon-anchor": 'bottom',
-            "icon-allow-overlap": true
+          layout: {
+            'icon-image': 'landmark-marker',
+            'icon-size': 1,
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
           }
         },
         {
-          'id': 'gl-draw-point-active',
-          'type': 'symbol',
-          'filter': ['all',
+          id: 'gl-draw-point-active',
+          type: 'symbol',
+          filter: ['all',
             ['==', '$type', 'Point'],
             ['!=', 'meta', 'midpoint'],
             ['==', 'active', 'true']],
-          'layout': {
-            "icon-image": "landmark-marker",
-            "icon-size": 1.1,
-            "icon-anchor": 'bottom',
-            "icon-allow-overlap": true
+          layout: {
+            'icon-image': 'landmark-marker',
+            'icon-size': 1.1,
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
           }
         },
         {
-          'id': 'gl-draw-polygon-fill-static',
-          'type': 'fill',
-          'filter': ['all', ['==', 'mode', 'static'], ['==', '$type', 'Polygon']],
-          'paint': {
+          id: 'gl-draw-polygon-fill-static',
+          type: 'fill',
+          filter: ['all', ['==', 'mode', 'static'], ['==', '$type', 'Polygon']],
+          paint: {
             'fill-color': dangerColor,
             'fill-outline-color': dangerColor,
             'fill-opacity': 0.1
           }
         },
         {
-          'id': 'gl-draw-polygon-stroke-static',
-          'type': 'line',
-          'filter': ['all', ['==', 'mode', 'static'], ['==', '$type', 'Polygon']],
-          'layout': {
+          id: 'gl-draw-polygon-stroke-static',
+          type: 'line',
+          filter: ['all', ['==', 'mode', 'static'], ['==', '$type', 'Polygon']],
+          layout: {
             'line-cap': 'round',
             'line-join': 'round'
           },
-          'paint': {
+          paint: {
             'line-color': dangerColor,
             'line-width': 2
           }
         },
         {
-          'id': 'gl-draw-line-static',
-          'type': 'line',
-          'filter': ['all', ['==', 'mode', 'static'], ['==', '$type', 'LineString']],
-          'layout': {
+          id: 'gl-draw-line-static',
+          type: 'line',
+          filter: ['all', ['==', 'mode', 'static'], ['==', '$type', 'LineString']],
+          layout: {
             'line-cap': 'round',
             'line-join': 'round'
           },
-          'paint': {
+          paint: {
             'line-color': dangerColor,
             'line-width': 2
           }
         },
         {
-          'id': 'gl-draw-point-static',
-          'type': 'symbol',
-          'filter': ['all', ['==', 'mode', 'static'], ['==', '$type', 'Point']],
-          'layout': {
-            "icon-image": "landmark-marker",
-            "icon-size": 1,
-            "icon-anchor": 'bottom',
-            "icon-allow-overlap": true
+          id: 'gl-draw-point-static',
+          type: 'symbol',
+          filter: ['all', ['==', 'mode', 'static'], ['==', '$type', 'Point']],
+          layout: {
+            'icon-image': 'landmark-marker',
+            'icon-size': 1,
+            'icon-anchor': 'bottom',
+            'icon-allow-overlap': true
           }
         }
       ]
     });
-    this.map.addControl(this.draw, "top-left");
+    this.map.addControl(this.draw, 'top-left');
 
     this.map.on('load', () => {
       this.map.resize();
 
       this.map.loadImage(
-        "/assets/icons/landmark-marker.png",
+        '/assets/icons/landmark-marker.png',
         (error, image) => {
           if (error) throw error;
 
-          this.map.addImage("landmark-marker", image);
-        })
+          this.map.addImage('landmark-marker', image);
+        });
 
       Plugins.Geolocation.getCurrentPosition().then(position => {
         this.map.flyTo({
           center: [position.coords.longitude, position.coords.latitude],
           zoom: 13,
           speed: 3
-        })
+        });
 
         this.map.loadImage(
-          "/assets/icons/position.png",
+          '/assets/icons/position.png',
           (error, image) => {
             if (error) throw error;
 
-            this.map.addImage("geolocate", image);
+            this.map.addImage('geolocate', image);
 
-            this.map.addSource("geolocate", {
-              type: "geojson",
+            this.map.addSource('geolocate', {
+              type: 'geojson',
               data: {
-                type: "Point",
+                type: 'Point',
                 coordinates: [position.coords.longitude, position.coords.latitude]
               }
             });
             this.map.addLayer({
-              id: "geolocate",
-              source: "geolocate",
-              type: "symbol",
+              id: 'geolocate',
+              source: 'geolocate',
+              type: 'symbol',
               layout: {
-                "icon-image": "geolocate",
-                "icon-size": 0.4,
-                "icon-offset": [0, 0]
+                'icon-image': 'geolocate',
+                'icon-size': 0.4,
+                'icon-offset': [0, 0]
               }
             });
           });
-      })
+      });
 
       if (this.features.landmarkFeatures != undefined) {
-        console.log('adding feature', this.features.landmarkFeatures)
-        if (this.features.landmarkFeatures.type == "FeatureCollection") {
+        console.log('adding feature', this.features.landmarkFeatures);
+        if (this.features.landmarkFeatures.type == 'FeatureCollection') {
           this.features.landmarkFeatures.features.forEach(element => {
-            this.draw.add({ properties: {}, ...element })
+            this.draw.add({ properties: {}, ...element });
           });
         }
       }
-    })
+    });
   }
 
   ngAfterViewInit() {
-    this.map.resize()
+    this.map.resize();
   }
 
   onZoomChange() {
     if (this.features.pan == 'center' && (this.features.zoombar == 'task' || this.features.zoombar == 'game')) {
-      this.features.pan = 'true'
+      this.features.pan = 'true';
     }
   }
 
-  dismissModal(dismissType: string = "null") {
-    if (dismissType == "close") {
+  dismissModal(dismissType: string = 'null') {
+    if (dismissType == 'close') {
       this.modalController.dismiss();
       return;
     }

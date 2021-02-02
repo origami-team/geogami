@@ -1,12 +1,12 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Routes, RouterModule } from '@angular/router';
 
-import { IonicModule } from "@ionic/angular";
+import { IonicModule } from '@ionic/angular';
 
-import { PlayingGamePage } from "./playing-game.page";
-import { NgShufflePipeModule } from "angular-pipes";
+import { PlayingGamePage } from './playing-game.page';
+import { NgShufflePipeModule } from 'angular-pipes';
 import { KeywordPipe } from 'src/app/pipes/keyword.pipe';
 
 import { LottieModule } from 'ngx-lottie';
@@ -25,7 +25,7 @@ export function playerFactory() {
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: PlayingGamePage
   }
 ];

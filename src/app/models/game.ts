@@ -1,4 +1,4 @@
-import { Task } from "./task";
+import { Task } from './task';
 
 export class Game {
   constructor(

@@ -17,7 +17,7 @@ export class AudioRecorderComponent implements OnInit {
     @Input() audioSource: string;
 
     @Output() audioSourceChange: EventEmitter<any> = new EventEmitter<any>();
-    recording = false
+    recording = false;
 
     constructor(public popoverController: PopoverController, private audioRecorder: AudioRecorderService) { }
 
@@ -27,29 +27,29 @@ export class AudioRecorderComponent implements OnInit {
 
     startStopRec() {
         if (this.recording) {
-            this.stopRecord()
+            this.stopRecord();
         } else {
-            this.startRecord()
+            this.startRecord();
         }
     }
 
     startRecord() {
-        this.audioRecorder.start()
+        this.audioRecorder.start();
         this.recording = true;
     }
 
     stopRecord() {
-        this.recording = false
+        this.recording = false;
         this.audioRecorder.stop().then(({ filename }) => {
-            this.audioSource = `${environment.apiURL}/file/audio/${filename}`
-            console.log(this.audioSource)
-            this.audioSourceChange.emit(this.audioSource)
-        })
+            this.audioSource = `${environment.apiURL}/file/audio/${filename}`;
+            console.log(this.audioSource);
+            this.audioSourceChange.emit(this.audioSource);
+        });
     }
 
     deleteAudio() {
         this.audioSource = undefined;
-        this.audioSourceChange.emit(this.audioSource)
+        this.audioSourceChange.emit(this.audioSource);
     }
 
     async showPopover(ev: any, text: string) {

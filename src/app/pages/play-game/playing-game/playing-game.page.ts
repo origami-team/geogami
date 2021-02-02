@@ -25,7 +25,7 @@ import {
 } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Game } from 'src/app/models/game';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import {
   RotationControl,
   RotationType,
@@ -63,6 +63,7 @@ import { Task } from 'src/app/models/task';
 import { point } from '@turf/helpers';
 import booleanWithin from '@turf/boolean-within';
 import { OrigamiOrientationService } from 'src/app/services/origami-orientation.service';
+import { throttle } from 'rxjs/operators';
 
 @Component({
   selector: 'app-playing-game',
@@ -155,6 +156,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   directionBearing = 0;
   indicatedDirection = 0;
   public lottieConfig: AnimationOptions;
+
+  lastPointInBboxDirection: number = undefined;
 
   Math: Math = Math;
 
@@ -738,10 +741,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const bboxBuffer = bbox(buffer(this.game.bbox, 0.5));
       // this.map.setMaxBounds(bboxBuffer)
 
-      if (this.game.geofence && this.game.mapSectionVisible === true) {
+      // you are leaving the game area warning
+      if (this.game.geofence) {
+        console.log('creating the subscription');
         this.geolocationService.initGeofence(this.game.bbox.features[0]).subscribe((inGameBbox) => {
-          this.geofenceAlert = !inGameBbox
-        })
+          this.geofenceAlert = !inGameBbox;
+        });
+        // subscribe to the direction the user has to go
+        this.geolocationService.lastPointInBboxDirection.subscribe(lastPointInBboxDirection => {
+          this.lastPointInBboxDirection = lastPointInBboxDirection;
+        });
       }
 
       if (
@@ -955,7 +964,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.landmarkControl.setSearchArea(this.task.question.area);
     }
 
-    this.changeDetectorRef.detectChanges()
+    this.changeDetectorRef.detectChanges();
   }
 
   nextTask() {
@@ -1095,7 +1104,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.nextTask();
     }
 
-    this.changeDetectorRef.detectChanges()
+    this.changeDetectorRef.detectChanges();
   }
 
   userDidArrive(waypoint) {

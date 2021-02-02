@@ -1,4 +1,4 @@
-import { Map as MapboxMap } from "mapbox-gl";
+import { Map as MapboxMap } from 'mapbox-gl';
 import { Subscription } from 'rxjs';
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { OrigamiOrientationService } from '../services/origami-orientation.service';
@@ -13,7 +13,7 @@ export enum ViewDirectionType {
 export class ViewDirectionControl {
     private deviceOrientationSubscription: Subscription;
     private positionSubscription: Subscription;
-    private viewDirectionType: ViewDirectionType = ViewDirectionType.None
+    private viewDirectionType: ViewDirectionType = ViewDirectionType.None;
 
     private map: MapboxMap;
 
@@ -26,7 +26,7 @@ export class ViewDirectionControl {
             position => {
                 if (this.map != undefined && this.isInitalized) {
                     this.map.getSource('viewDirection').setData({
-                        type: "Point",
+                        type: 'Point',
                         coordinates: [position.coords.longitude, position.coords.latitude]
                     });
                 }
@@ -34,63 +34,63 @@ export class ViewDirectionControl {
         );
         this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
             this.map.setLayoutProperty(
-                "viewDirection",
-                "icon-rotate",
+                'viewDirection',
+                'icon-rotate',
                 heading - this.map.getBearing()
             );
-        })
+        });
 
         this.map.loadImage(
-            "/assets/icons/directionv2.png",
+            '/assets/icons/directionv2.png',
             (error, image) => {
                 if (error) throw error;
 
-                this.map.addImage("view-direction", image);
+                this.map.addImage('view-direction', image);
 
-                this.map.addSource("viewDirection", {
-                    type: "geojson",
+                this.map.addSource('viewDirection', {
+                    type: 'geojson',
                     data: {
-                        type: "Point",
+                        type: 'Point',
                         coordinates: [
                             0, 0
                         ]
                     }
                 });
                 this.map.addLayer({
-                    id: "viewDirection",
-                    source: "viewDirection",
-                    type: "symbol",
+                    id: 'viewDirection',
+                    source: 'viewDirection',
+                    type: 'symbol',
                     layout: {
-                        "icon-image": "view-direction",
-                        "icon-size": 0.65,
-                        "icon-offset": [0, -8]
+                        'icon-image': 'view-direction',
+                        'icon-size': 0.65,
+                        'icon-offset': [0, -8]
                     }
                 });
                 this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
                 this.isInitalized = true;
-                this.update()
+                this.update();
             });
     }
 
     public setType(type: ViewDirectionType): void {
         if (this.map != undefined) {
-            this.viewDirectionType = type
+            this.viewDirectionType = type;
             this.reset();
             this.update();
         }
     }
 
     public toggle() {
-        if (this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
-            this.setType(ViewDirectionType.None)
+        if (this.map.getLayoutProperty('viewDirection', 'visibility') == 'visible') {
+            this.setType(ViewDirectionType.None);
         } else {
-            this.setType(ViewDirectionType.Continuous)
+            this.setType(ViewDirectionType.Continuous);
         }
     }
 
 
     private reset(): void {
-        if (this.map.getLayer('viewDirection') && this.map.getLayoutProperty("viewDirection", "visibility") == 'visible') {
+        if (this.map.getLayer('viewDirection') && this.map.getLayoutProperty('viewDirection', 'visibility') == 'visible') {
             this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
         }
 
@@ -98,14 +98,14 @@ export class ViewDirectionControl {
 
     private update(): void {
         if (!this.isInitalized) {
-            return
+            return;
         }
         switch (this.viewDirectionType) {
             case ViewDirectionType.None:
-                this.reset()
+                this.reset();
                 break;
             case ViewDirectionType.Continuous:
-                if (this.map.getLayoutProperty("viewDirection", "visibility") == 'none')
+                if (this.map.getLayoutProperty('viewDirection', 'visibility') == 'none')
                     this.map.setLayoutProperty('viewDirection', 'visibility', 'visible');
 
                 break;
@@ -113,11 +113,11 @@ export class ViewDirectionControl {
                 // TODO: implement
                 break;
             case ViewDirectionType.TaskStart:
-                if (this.map.getLayoutProperty("viewDirection", "visibility") == 'none')
+                if (this.map.getLayoutProperty('viewDirection', 'visibility') == 'none')
                     this.map.setLayoutProperty('viewDirection', 'visibility', 'visible');
                 setInterval(() => {
                     this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
-                }, 10000)
+                }, 10000);
                 break;
         }
     }

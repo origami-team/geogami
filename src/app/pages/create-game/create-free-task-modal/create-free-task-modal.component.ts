@@ -9,17 +9,17 @@ import {
   SimpleChanges,
   ViewChild,
   AfterViewInit
-} from "@angular/core";
-import { ModalController } from "@ionic/angular";
+} from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { cloneDeep } from 'lodash';
 
 
-import { navtasks } from "../../../models/navigation-tasks";
-import { themetasks } from "./../../../models/theme-tasks";
+import { navtasks } from '../../../models/navigation-tasks';
+import { themetasks } from './../../../models/theme-tasks';
 
-import { standardMapFeatures } from "../../../models/standardMapFeatures"
+import { standardMapFeatures } from '../../../models/standardMapFeatures';
 
-import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
+import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
@@ -31,37 +31,37 @@ import { PopoverComponent } from 'src/app/popover/popover.component';
   styleUrls: ['./create-free-task-modal.component.scss'],
 })
 export class CreateFreeTaskModalComponent implements OnInit {
-  @Input() gameName: string = "";
+  @Input() gameName = '';
   @Input() task: any = {};
 
   tasks: any[] = [];
 
   mapFeatures: any = this.task.mapFeatures;
 
-  showFeedback: boolean = true;
-  showMultipleTries: boolean = true;
+  showFeedback = true;
+  showMultipleTries = true;
 
   selectedTaskType: any;
 
-  objectQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE, QuestionType.PHOTO]
-  objectAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER]
+  objectQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE, QuestionType.PHOTO];
+  objectAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER];
 
   constructor(public modalController: ModalController, public popoverController: PopoverController) { }
 
   ngOnInit() {
     if (this.task == null) {
       this.task = {
-        name: "Freie Aufgabe",
-        type: "free",
-        category: "free",
+        name: 'Freie Aufgabe',
+        type: 'free',
+        category: 'free',
         question: {
           type: QuestionType.TEXT,
-          text: ""
+          text: ''
         },
         answer: {
           type: AnswerType.MULTIPLE_CHOICE,
         }
-      }
+      };
 
       this.task.settings = {
         feedback: true,
@@ -69,9 +69,9 @@ export class CreateFreeTaskModalComponent implements OnInit {
         confirmation: this.task.category.includes('theme'),
         accuracy: 10,
         showMarker: true,
-      }
+      };
 
-      console.log(this.task)
+      console.log(this.task);
 
       // this.settingsChange();
 
@@ -79,7 +79,7 @@ export class CreateFreeTaskModalComponent implements OnInit {
   }
 
   feedbackChange() {
-    this.task.settings.multipleTries = this.task.settings.feedback
+    this.task.settings.multipleTries = this.task.settings.feedback;
     if (this.task.category == 'nav' && !this.task.settings.confirmation) {
       this.showMultipleTries = false;
       this.task.settings.multipleTries = false;
@@ -120,16 +120,16 @@ export class CreateFreeTaskModalComponent implements OnInit {
 
   selectCompare(task1, task2) {
     if (task1 == null || task2 == null) {
-      return false
+      return false;
     }
-    return task1.type == task2.type
+    return task1.type == task2.type;
   }
 
   taskTypeCompare(task1, task2) {
     if (task1 == null || task2 == null) {
-      return false
+      return false;
     }
-    return task1.type == task2.type
+    return task1.type == task2.type;
   }
 
   async presentMapFeaturesModal() {
@@ -148,14 +148,14 @@ export class CreateFreeTaskModalComponent implements OnInit {
     return;
   }
 
-  dismissModal(dismissType: string = "null") {
-    if (dismissType == "close") {
+  dismissModal(dismissType: string = 'null') {
+    if (dismissType == 'close') {
       this.modalController.dismiss();
       return;
     }
 
     if (this.mapFeatures == undefined) {
-      this.mapFeatures = cloneDeep(standardMapFeatures)
+      this.mapFeatures = cloneDeep(standardMapFeatures);
     }
 
     this.modalController.dismiss({
@@ -164,7 +164,7 @@ export class CreateFreeTaskModalComponent implements OnInit {
         ...this.task,
         mapFeatures: this.mapFeatures
       }
-    })
+    });
   }
 
   async showPopover(ev: any, text: string) {

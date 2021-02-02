@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { IUser } from "../interfaces/iUser";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment";
-import { Router } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { IUser } from '../interfaces/iUser';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
   AUTH_API_URL = environment.apiURL;
@@ -80,10 +80,10 @@ export class AuthService {
 
   register(creds) {
     this.loading$.next(true);
-    this.http.post(this.AUTH_API_URL + "/user/register", creds).subscribe(
+    this.http.post(this.AUTH_API_URL + '/user/register', creds).subscribe(
       (res: any) => {
         this.registerMessage$.next(res.success);
-        this.router.navigate(["/user/login"]);
+        this.router.navigate(['/user/login']);
       },
       (err) => {
         console.log(err);
@@ -96,14 +96,14 @@ export class AuthService {
   login(creds) {
     this.registerMessage$.next(false);
     this.loading$.next(true);
-    this.http.post(this.AUTH_API_URL + "/user/login", creds).subscribe(
+    this.http.post(this.AUTH_API_URL + '/user/login', creds).subscribe(
       (res: any) => {
         this.user$.next(res.user);
-        window.localStorage.setItem("bg_accesstoken", res.token);
-        window.localStorage.setItem("bg_refreshtoken", res.refreshToken);
+        window.localStorage.setItem('bg_accesstoken', res.token);
+        window.localStorage.setItem('bg_refreshtoken', res.refreshToken);
         this.loading$.next(false);
         this.setLoginPageOpen(false);
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       },
       (err) => {
         this.errorMessage$.next(err.error.message);
@@ -114,11 +114,11 @@ export class AuthService {
 
   requestResetPassword(email) {
     this.http
-      .post(this.AUTH_API_URL + "/user/request-password-reset", { email })
+      .post(this.AUTH_API_URL + '/user/request-password-reset', { email })
       .subscribe(
         (res: any) => {
           this.registerMessage$.next(res.success);
-          this.router.navigate(["/"]);
+          this.router.navigate(['/']);
         },
         (err) => {
           this.errorMessage$.next(err.error.message);
@@ -128,13 +128,13 @@ export class AuthService {
 
   resetPassword(newPassword, token) {
     this.http
-      .post(this.AUTH_API_URL + "/user/password-reset", {
+      .post(this.AUTH_API_URL + '/user/password-reset', {
         ...newPassword,
         token,
       })
       .subscribe(
         (res: any) => {
-          this.router.navigate(["/"]);
+          this.router.navigate(['/']);
         },
         (err) => {
           this.errorMessage$.next(err.error.message);
@@ -143,15 +143,15 @@ export class AuthService {
   }
 
   recoverSession(token) {
-    console.log("RECOVER");
+    console.log('RECOVER');
     this.refreshTokenInProgress$.next(true);
     this.http
-      .post(this.AUTH_API_URL + "/user/refresh-auth", { token: token })
+      .post(this.AUTH_API_URL + '/user/refresh-auth', { token })
       .subscribe(
         (res: any) => {
           this.user$.next(res.data.user);
-          window.localStorage.setItem("bg_accesstoken", res.token);
-          window.localStorage.setItem("bg_refreshtoken", res.refreshToken);
+          window.localStorage.setItem('bg_accesstoken', res.token);
+          window.localStorage.setItem('bg_refreshtoken', res.refreshToken);
           this.loading$.next(false);
           this.setLoginPageOpen(false);
         },
@@ -165,15 +165,15 @@ export class AuthService {
   refreshAccessToken() {
     return new Observable((observer) => {
       return this.http
-        .post(this.AUTH_API_URL + "/user/refresh-auth", {
-          token: window.localStorage.getItem("bg_refreshtoken"),
+        .post(this.AUTH_API_URL + '/user/refresh-auth', {
+          token: window.localStorage.getItem('bg_refreshtoken'),
         })
         .subscribe(
           (response: any) => {
             this.user$.next(response.user);
-            window.localStorage.setItem("bg_accesstoken", response.token);
+            window.localStorage.setItem('bg_accesstoken', response.token);
             window.localStorage.setItem(
-              "bg_refreshtoken",
+              'bg_refreshtoken',
               response.refreshToken
             );
             this.loading$.next(false);
@@ -182,7 +182,7 @@ export class AuthService {
             observer.complete();
           },
           (err) => {
-            const error = err && err.errorMessage ? err.errorMessage : "Error";
+            const error = err && err.errorMessage ? err.errorMessage : 'Error';
             observer.error({ error });
           }
         );
@@ -190,13 +190,13 @@ export class AuthService {
   }
 
   logout() {
-    window.localStorage.removeItem("bg_accesstoken");
-    window.localStorage.removeItem("bg_refreshtoken");
+    window.localStorage.removeItem('bg_accesstoken');
+    window.localStorage.removeItem('bg_refreshtoken');
     this.user$.next(undefined);
-    this.router.navigate(["/"]);
+    this.router.navigate(['/']);
   }
 
   getAccessToken() {
-    return window.localStorage.getItem("bg_accesstoken");
+    return window.localStorage.getItem('bg_accesstoken');
   }
 }

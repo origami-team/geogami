@@ -19,10 +19,10 @@ import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
 import { environment } from 'src/environments/environment';
-import { calcBounds } from '../../../helpers/bounds'
+import { calcBounds } from '../../../helpers/bounds';
 import { AnswerType, QuestionType } from 'src/app/models/types';
 import { LandmarkControl } from 'src/app/mapControllers/landmark-control';
-import { featureCollection } from '@turf/helpers'
+import { featureCollection } from '@turf/helpers';
 import { ActivatedRoute } from '@angular/router';
 
 
@@ -39,9 +39,9 @@ export class EditGameOverviewPage implements AfterViewInit {
   public lottieConfig: AnimationOptions;
   showSuccess = false;
   showUpload = false;
-  showNameError = false
+  showNameError = false;
   map: mapboxgl.Map;
-  draw: MapboxDraw
+  draw: MapboxDraw;
 
   mapSection = false;
   mapSectionVisible = true;
@@ -187,22 +187,22 @@ export class EditGameOverviewPage implements AfterViewInit {
         .getGame(params.id)
         .then(res => res.content)
         .then(game => {
-          this.game = game
+          this.game = game;
           this.gameFactory.flushGame();
-          this.gameFactory.addGameInformation(this.game)
+          this.gameFactory.addGameInformation(this.game);
 
           if (this.game.bbox?.features?.length > 0) {
-            this.mapSection = true
+            this.mapSection = true;
           }
 
-          this.mapSectionVisible = this.game.mapSectionVisible
-          this.geofence = this.game.geofence
+          this.mapSectionVisible = this.game.mapSectionVisible;
+          this.geofence = this.game.geofence;
 
           if (this.mapSection) {
             this.changeDetectorRef.detectChanges();
-            this.initMap()
+            this.initMap();
           }
-        })
+        });
     });
 
     // this.gameFactory.getGame().then(game => { this.game = game }).finally(() => {
@@ -269,8 +269,8 @@ export class EditGameOverviewPage implements AfterViewInit {
           this.game.bbox.features.forEach(element => {
             element.properties = {
               ...element.properties
-            }
-            this.draw.add(element)
+            };
+            this.draw.add(element);
           });
         }
       }
@@ -278,7 +278,7 @@ export class EditGameOverviewPage implements AfterViewInit {
       let bounds = new mapboxgl.LngLatBounds();
 
       this.game.tasks.forEach(task => {
-        bounds = bounds.extend(calcBounds(task))
+        bounds = bounds.extend(calcBounds(task));
       });
 
       // this.map.resize()
@@ -301,13 +301,13 @@ export class EditGameOverviewPage implements AfterViewInit {
           if (error) throw error;
 
           this.map.addImage('view-direction-task', image);
-        })
+        });
 
-      this.landmarkControl = new LandmarkControl(this.map)
+      this.landmarkControl = new LandmarkControl(this.map);
 
-      let qtlandmarks = featureCollection([])
-      let searchareas = featureCollection([])
-      let landmarks = featureCollection([])
+      let qtlandmarks = featureCollection([]);
+      let searchareas = featureCollection([]);
+      let landmarks = featureCollection([]);
 
       for (const [i, task] of this.game.tasks.entries()) {
         if (task.answer.type == AnswerType.POSITION && task.answer.position?.geometry?.coordinates) {
@@ -322,19 +322,19 @@ export class EditGameOverviewPage implements AfterViewInit {
         }
 
         if (task.question.type == QuestionType.MAP_FEATURE || task.question.type == QuestionType.MAP_FEATURE_FREE || task.question.type == QuestionType.MAP_FEATURE_PHOTO) {
-          qtlandmarks = featureCollection([...qtlandmarks.features, ...task.question.geometry.features])
+          qtlandmarks = featureCollection([...qtlandmarks.features, ...task.question.geometry.features]);
         }
 
         if (task.question.area?.features?.length > 0) {
-          searchareas = featureCollection([...searchareas.features, ...task.question.area.features])
+          searchareas = featureCollection([...searchareas.features, ...task.question.area.features]);
         }
 
         if (task.mapFeatures.landmarks) {
-          landmarks = featureCollection([...landmarks.features, ...task.mapFeatures.landmarkFeatures.features])
+          landmarks = featureCollection([...landmarks.features, ...task.mapFeatures.landmarkFeatures.features]);
         }
 
         if (task.question.type == QuestionType.MAP_DIRECTION_MARKER || task.question.type == QuestionType.MAP_DIRECTION) {
-          const directionBearing = task.question.direction.bearing || 0
+          const directionBearing = task.question.direction.bearing || 0;
 
           this.map.addSource(`viewDirectionTask${i}`, {
             type: 'geojson',
@@ -353,9 +353,9 @@ export class EditGameOverviewPage implements AfterViewInit {
           });
         }
       }
-      this.landmarkControl.setQTLandmark(qtlandmarks)
-      this.landmarkControl.setSearchArea(searchareas)
-      this.landmarkControl.setLandmark(landmarks)
+      this.landmarkControl.setQTLandmark(qtlandmarks);
+      this.landmarkControl.setSearchArea(searchareas);
+      this.landmarkControl.setLandmark(landmarks);
 
     });
   }
@@ -372,8 +372,8 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   mapSectionVisibleChange(visible: boolean) {
     if (this.mapSectionVisible != visible) {
-      this.draw.deleteAll()
-      this.mapSectionVisible = visible
+      this.draw.deleteAll();
+      this.mapSectionVisible = visible;
     }
   }
 
@@ -406,7 +406,7 @@ export class EditGameOverviewPage implements AfterViewInit {
         this.gameFactory.flushGame();
       }
     }).catch(e => {
-      console.error(e)
+      console.error(e);
       this.showUpload = false;
       this.showNameError = true;
     });
