@@ -738,7 +738,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const bboxBuffer = bbox(buffer(this.game.bbox, 0.5));
       // this.map.setMaxBounds(bboxBuffer)
 
-      if (this.game.geofence && this.game.mapSectionVisible === true) {
+      // you are leaving the game area warning
+      if (this.game.geofence) {
         this.geolocationService.initGeofence(this.game.bbox.features[0]).subscribe((inGameBbox) => {
           this.geofenceAlert = !inGameBbox
         })
