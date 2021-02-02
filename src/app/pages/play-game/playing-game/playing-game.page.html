@@ -330,12 +330,22 @@
   </ion-card>
 
   <ion-card class="overlay success" *ngIf="geofenceAlert">
-    <h3 *ngIf="game.mapSectionVisible; else mapSectionNotVisible">
+    <h3 *ngIf="game.mapSectionVisible">
       Du hast das
       <ion-text color="warning">markierte Gebiet</ion-text> verlassen. Kehre
       zurück!
     </h3>
-    <h3 #mapSectionNotVisible>Du verlässt den Spielbereich. Kehre zurück!</h3>
+    <h3 *ngIf="!game.mapSectionVisible">
+      Du verlässt den Spielbereich. Kehre zurück!
+    </h3>
+    <!-- <div class="compass bearing" *ngIf="lastPointInBboxDirection !== undefined">
+      <img
+        src="/assets/icons/compass.svg"
+        [ngStyle]="{
+                  transform: 'translateX(-50%) rotate(' + lastPointInBboxDirection + 'deg)'
+                }"
+      />
+    </div> -->
   </ion-card>
 
   <ion-card class="overlay correct-position" *ngIf="showCorrectPositionModal">

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, BehaviorSubject, Subscriber } from 'rxjs';
 import { filter, shareReplay } from 'rxjs/operators';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 
 import { Plugins, GeolocationPosition } from '@capacitor/core';
 import { Feature, MultiPolygon, Polygon } from '@turf/helpers';
+import { HelperService } from './helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,11 @@ export class OrigamiGeolocationService {
 
   private watchID: string;
 
-  constructor() {
+  public lastPointInBbox: BehaviorSubject<number[]> = new BehaviorSubject<number[]>(undefined);
+  public lastPointInBboxDirection: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+
+
+  constructor(private helperService: HelperService) {
 
   }
 
@@ -49,11 +54,27 @@ export class OrigamiGeolocationService {
 
   initGeofence(bbox: Feature<Polygon, MultiPolygon>) {
     return new Observable<boolean>((subscriber) => {
-      this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
+      // this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
+      this.geolocationSubscription.subscribe((position) => {
         const point = [position.coords.longitude, position.coords.latitude]
-        subscriber.next(booleanPointInPolygon(point, bbox));
+        const inside = booleanPointInPolygon(point, bbox)
+        if (inside) {
+          this.lastPointInBbox.next(point)
+        } else {
+          if (this.lastPointInBbox.getValue() !== undefined) {
+            const direction = this.helperService.bearing(
+              point[1],
+              point[0],
+              this.lastPointInBbox[1],
+              this.lastPointInBbox[0],
+            );
+            this.lastPointInBboxDirection.next(direction)
+          } else {
+            this.lastPointInBboxDirection.next(undefined)
+          }
+        }
+        subscriber.next(inside);
       })
-
     })
   }
 
