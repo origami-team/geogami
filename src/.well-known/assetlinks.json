@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "de.reedu.origaminext",
+      "sha256_cert_fingerprints": [
+        "12:A3:BC:D4:56:E7:89:F0:12:34:5A:B6:78:90:C1:23:45:DE:67:FA:89:01:2B:C3:45:67:8D:9E:0F:1A:2B:C3"
+      ]
+    }
+  }
+]

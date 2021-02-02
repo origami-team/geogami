@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="play-game/play-game-list"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="play-game/play-game-list"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
     <ion-buttons slot="primary"></ion-buttons>
@@ -15,16 +18,34 @@
       <ion-card-title *ngIf="game">{{ game.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content *ngIf="game">
-      {{ game.tasks.length }} {{ game.tasks.length == 1 ? "Aufgabe" : "Aufgaben"}}
+      {{ game.tasks.length }} {{ game.tasks.length == 1 ? "Aufgabe" :
+      "Aufgaben"}}
       <div>
-        <span *ngFor="let task of game.tasks" class="dot" [class.nav]="task.category.includes('nav')"
-          [class.theme]="task.category.includes('theme')" [class.free]="task.category.includes('free')"
-          [class.info]="task.category.includes('info')"></span>
+        <span
+          *ngFor="let task of game.tasks"
+          class="dot"
+          [class.nav]="task.category.includes('nav')"
+          [class.theme]="task.category.includes('theme')"
+          [class.free]="task.category.includes('free')"
+          [class.info]="task.category.includes('info')"
+        ></span>
       </div>
     </ion-card-content>
   </ion-card>
 
-
+  <ion-card>
+    <!-- <div #map class="map"></div> -->
+    <ion-card-header>
+      <ion-card-title>Spiel teilen</ion-card-title>
+    </ion-card-header>
+    <ion-card-content *ngIf="game">
+      <qrcode
+        [qrdata]="gameQrData"
+        width="256"
+        errorCorrectionLevel="'M'"
+      ></qrcode>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 <ion-footer>

@@ -7,6 +7,7 @@ import mapboxgl from 'mapbox-gl';
 
 import { GamesService } from '../../../services/games.service'
 import { environment } from 'src/environments/environment';
+import { Game } from 'src/app/models/game';
 
 
 @Component({
@@ -18,9 +19,11 @@ export class GameDetailPage implements OnInit {
 
   @ViewChild('map') mapContainer;
 
-  game: any;
+  game: Game;
   activities: any[]
   points: any[]
+
+  gameQrData = ''
 
   constructor(public navCtrl: NavController, private route: ActivatedRoute, private gamesService: GamesService) { }
 
@@ -28,8 +31,10 @@ export class GameDetailPage implements OnInit {
     this.route.params.subscribe(params => {
       this.gamesService.getGame(params.id)
         .then(res => res.content)
-        .then(game => {
+        .then((game: Game) => {
           this.game = game
+
+          this.gameQrData = `${window.location.origin}/play-game/playing-game/${game._id}`
         })
         .finally(() => {
           console.log(this.game)

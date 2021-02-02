@@ -6,5 +6,9 @@
     <param name="ios-package" value="CDVCompass"/>
   </feature>
 
+  <feature name="IonicDeeplinkPlugin">
+    <param name="ios-package" value="IonicDeeplinkPlugin" onload="true"/>
+  </feature>
+
   
 </widget>

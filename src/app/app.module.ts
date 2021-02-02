@@ -1,49 +1,54 @@
-import { NgModule, APP_INITIALIZER } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { RouteReuseStrategy } from "@angular/router";
-import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import {
   HttpClientModule,
   HttpClient,
   HTTP_INTERCEPTORS,
-} from "@angular/common/http";
-import { ServiceWorkerModule } from "@angular/service-worker";
-import { environment } from "../environments/environment";
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { PopoverComponent } from "./popover/popover.component";
-import { FormsModule } from "@angular/forms";
+} from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { PopoverComponent } from './popover/popover.component';
+import { FormsModule } from '@angular/forms';
 
 // Modals
-import { CreateTaskModalPage } from "./pages/create-game/create-task-modal/create-task-modal.page";
-import { CreateFreeTaskModalComponent } from "./pages/create-game/create-free-task-modal/create-free-task-modal.component";
-import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/create-module-modal.page";
-import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
-import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
+import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page';
+import { CreateFreeTaskModalComponent } from './pages/create-game/create-free-task-modal/create-free-task-modal.component';
+import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page';
+import { MapFeaturesModalPage } from './pages/create-game/map-features-modal/map-features-modal.page';
+import { CreateInfoModalComponent } from './pages/create-game/create-info-modal/create-info-modal.component';
 
-import { DeviceOrientation } from "@ionic-native/device-orientation/ngx";
+import { DeviceOrientation } from '@ionic-native/device-orientation/ngx';
 
-import { IonicStorageModule } from "@ionic/storage";
-import { QuestionTypeComponent } from "./pages/create-game/form-elements/question-types/question-type.component";
-import { AnswerTypeComponent } from "./pages/create-game/form-elements/answer-types/answer-type.component";
-import { MapComponent } from "./pages/create-game/form-elements/map/map.component";
-import { PhotoUploadMultipleChoiceComponent } from "./pages/create-game/form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component";
-import { PhotoUploadComponent } from "./pages/create-game/form-elements/photo-upload/photo-upload.component";
-import { MultipleChoiceTextComponent } from "./pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component";
+import { IonicStorageModule } from '@ionic/storage';
+import { QuestionTypeComponent } from './pages/create-game/form-elements/question-types/question-type.component';
+import { AnswerTypeComponent } from './pages/create-game/form-elements/answer-types/answer-type.component';
+import { MapComponent } from './pages/create-game/form-elements/map/map.component';
+import { PhotoUploadMultipleChoiceComponent } from './pages/create-game/form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component';
+import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-upload/photo-upload.component';
+import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component';
 
-import { TypeToTextPipe } from "./pipes/typeToText.pipe";
-import { AudioRecorderComponent } from "./pages/create-game/form-elements/audio-recorder/audio-recorder.component";
-import { AudioPlayerComponent } from "./components/audio-player/audio-player.component";
-import { AudioPlayerModule } from "./components/audio-player/audio-player.module";
+import { TypeToTextPipe } from './pipes/typeToText.pipe';
+import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-recorder/audio-recorder.component';
+import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
+import { AudioPlayerModule } from './components/audio-player/audio-player.module';
 
-import { MarkdownModule } from "ngx-markdown";
-import { TokenInterceptor } from "./services/token-intercepor.service";
+import { MarkdownModule } from 'ngx-markdown';
+import { TokenInterceptor } from './services/token-intercepor.service';
+
+import { QRCodeModule } from 'angularx-qrcode';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+
+
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -86,17 +91,18 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
     IonicModule.forRoot({
-      backButtonText: "Zurück",
+      backButtonText: 'Zurück',
     }),
     AppRoutingModule,
     HttpClientModule,
-    ServiceWorkerModule.register("ngsw-worker.js", {
+    ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
     IonicStorageModule.forRoot({
-      driverOrder: ["localstorage", "indexeddb"],
+      driverOrder: ['localstorage', 'indexeddb'],
     }),
     MarkdownModule.forRoot(),
+    QRCodeModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -106,7 +112,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: TokenInterceptor,
       multi: true,
     },
+    Deeplinks
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

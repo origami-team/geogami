@@ -27,6 +27,7 @@
     "@capacitor/core": "^2.4.2",
     "@capacitor/ios": "^2.4.2",
     "@ionic-native/core": "^5.24.0",
+    "@ionic-native/deeplinks": "^5.31.1",
     "@ionic-native/device-orientation": "^5.26.0",
     "@ionic/angular": "^5.0.7",
     "@ionic/pwa-elements": "^3.0.1",
@@ -44,6 +45,7 @@
     "@turf/mask": "^5.1.5",
     "@types/dom-mediacapture-record": "^1.0.7",
     "angular-pipes": "^10.0.0",
+    "angularx-qrcode": "~2.3.5",
     "capacitor-keep-screen-on": "^0.0.4",
     "capacitor-voice-recorder": "^0.1.4",
     "cordova-android": "^8.1.0",
@@ -52,6 +54,7 @@
     "cordova-plugin-device-orientation": "^2.0.1",
     "core-js": "^3.6.5",
     "es6-promise-plugin": "^4.2.2",
+    "ionic-plugin-deeplinks": "^1.0.22",
     "jetifier": "^1.6.5",
     "keycloak-js": "^11.0.3",
     "lodash": "^4.17.19",
@@ -100,7 +103,11 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-device-orientation": {}
+      "cordova-plugin-device-orientation": {},
+      "ionic-plugin-deeplinks": {
+        "DEEPLINK_SCHEME": "https",
+        "DEEPLINK_HOST": "app.origami.ifgi.de"
+      }
     },
     "platforms": [
       "android",

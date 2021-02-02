@@ -6,5 +6,10 @@
     <param name="android-package" value="org.apache.cordova.deviceorientation.CompassListener"/>
   </feature>
 
+  <feature name="IonicDeeplinkPlugin">
+    <param name="android-package" value="io.ionic.links.IonicDeeplink"/>
+    <param name="onload" value="true"/>
+  </feature>
+
   
 </widget>
