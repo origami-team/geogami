@@ -338,14 +338,14 @@
     <h3 *ngIf="!game.mapSectionVisible">
       Du verlässt den Spielbereich. Kehre zurück!
     </h3>
-    <!-- <div class="compass bearing" *ngIf="lastPointInBboxDirection !== undefined">
+    <div class="compass bearing" *ngIf="lastPointInBboxDirection !== undefined">
       <img
-        src="/assets/icons/compass.svg"
+        src="/assets/icons/compass_yellow.svg"
         [ngStyle]="{
                   transform: 'translateX(-50%) rotate(' + lastPointInBboxDirection + 'deg)'
                 }"
       />
-    </div> -->
+    </div>
   </ion-card>
 
   <ion-card class="overlay correct-position" *ngIf="showCorrectPositionModal">

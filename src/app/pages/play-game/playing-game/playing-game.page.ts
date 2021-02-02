@@ -25,7 +25,7 @@ import {
 } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Game } from 'src/app/models/game';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import {
   RotationControl,
   RotationType,
@@ -63,6 +63,7 @@ import { Task } from 'src/app/models/task';
 import { point } from '@turf/helpers';
 import booleanWithin from '@turf/boolean-within';
 import { OrigamiOrientationService } from 'src/app/services/origami-orientation.service';
+import { throttle } from 'rxjs/operators';
 
 @Component({
   selector: 'app-playing-game',
@@ -745,14 +746,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         console.log('creating the subscription');
         this.geolocationService.initGeofence(this.game.bbox.features[0]).subscribe((inGameBbox) => {
           this.geofenceAlert = !inGameBbox;
-          console.log(inGameBbox);
         });
-        // this.geolocationService.lastPointInBbox.subscribe(lastPointInBbox => {
-        //   // console.log(lastPointInBbox)
-        // })
-        // this.geolocationService.lastPointInBboxDirection.subscribe(lastPointInBboxDirection => {
-        //   this.lastPointInBboxDirection = 360 - (this.compassHeading - lastPointInBboxDirection);
-        // })
+        // subscribe to the direction the user has to go
+        this.geolocationService.lastPointInBboxDirection.subscribe(lastPointInBboxDirection => {
+          this.lastPointInBboxDirection = lastPointInBboxDirection;
+        });
       }
 
       if (
