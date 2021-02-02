@@ -1,9 +1,9 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 import bbox from '@turf/bbox';
 
 
 const calcBounds = (task: any): mapboxgl.LngLatBounds => {
-    let bounds = new mapboxgl.LngLatBounds();
+    const bounds = new mapboxgl.LngLatBounds();
 
     if (task.answer.position) {
         try {
@@ -15,7 +15,7 @@ const calcBounds = (task: any): mapboxgl.LngLatBounds => {
 
     if (task.question.geometry) {
         try {
-            bounds.extend(bbox(task.question.geometry))
+            bounds.extend(bbox(task.question.geometry));
         } catch (e) {
 
         }
@@ -23,7 +23,7 @@ const calcBounds = (task: any): mapboxgl.LngLatBounds => {
 
     if (task.question.area) {
         try {
-            bounds.extend(bbox(task.question.area))
+            bounds.extend(bbox(task.question.area));
         } catch (e) {
 
         }
@@ -31,7 +31,7 @@ const calcBounds = (task: any): mapboxgl.LngLatBounds => {
 
     if (task.question.direction) {
         try {
-            bounds.extend(task.question.direction.position.geometry.coordinates)
+            bounds.extend(task.question.direction.position.geometry.coordinates);
         } catch (e) {
 
         }
@@ -39,13 +39,13 @@ const calcBounds = (task: any): mapboxgl.LngLatBounds => {
 
     if (task.mapFeatures?.landmarkFeatures && task.mapFeatures?.landmarkFeatures.features.length > 0) {
         try {
-            bounds.extend(bbox(task.mapFeatures.landmarkFeatures))
+            bounds.extend(bbox(task.mapFeatures.landmarkFeatures));
         } catch (e) {
 
         }
     }
 
-    return bounds
-}
+    return bounds;
+};
 
-export { calcBounds }
+export { calcBounds };

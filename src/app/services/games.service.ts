@@ -1,32 +1,32 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Game } from "./../models/game";
+import { Game } from './../models/game';
 
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class GamesService {
   constructor(private http: HttpClient) {}
 
   createHeaders() {
     let headers = new HttpHeaders();
-    let token = window.localStorage.getItem("bg_accesstoken");
+    const token = window.localStorage.getItem('bg_accesstoken');
     if (token) {
-      headers = headers.append("Authorization", "Bearer " + token);
+      headers = headers.append('Authorization', 'Bearer ' + token);
     }
-    headers = headers.append("Content-Type", "application/json");
+    headers = headers.append('Content-Type', 'application/json');
     return headers;
   }
 
   getGames(minimal: boolean = false): Promise<any> {
     return this.http
-      .get(`${environment.apiURL}/game/all/?${minimal ? "minimal" : ""}`)
+      .get(`${environment.apiURL}/game/all/?${minimal ? 'minimal' : ''}`)
       .toPromise();
   }
 
@@ -47,7 +47,7 @@ export class GamesService {
     return this.http
       .post(`${environment.apiURL}/game`, game, {
         headers: this.createHeaders(),
-        observe: "response",
+        observe: 'response',
       })
       .toPromise();
   }
@@ -56,7 +56,7 @@ export class GamesService {
     return this.http
       .put(`${environment.apiURL}/game`, game, {
         headers: this.createHeaders(),
-        observe: "response",
+        observe: 'response',
       })
       .toPromise();
   }

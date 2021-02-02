@@ -3,7 +3,7 @@ import { PopoverComponent } from 'src/app/popover/popover.component';
 import { PopoverController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ChangeDetectorRef } from '@angular/core'
+import { ChangeDetectorRef } from '@angular/core';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 
 @Component({
@@ -18,7 +18,7 @@ export class PhotoUploadComponent implements OnInit {
 
   @Output() photoChange: EventEmitter<any> = new EventEmitter<any>();
 
-  uploading = false
+  uploading = false;
   uploadingProgress = 100;
 
   constructor(
@@ -32,9 +32,9 @@ export class PhotoUploadComponent implements OnInit {
   }
 
   deletePhoto() {
-    this.photo = ''
+    this.photo = '';
     this.changeRef.detectChanges();
-    this.photoChange.emit(this.photo)
+    this.photoChange.emit(this.photo);
   }
 
   async capturePhoto(library: boolean = false) {
@@ -44,7 +44,7 @@ export class PhotoUploadComponent implements OnInit {
       resultType: CameraResultType.Uri,
       source: library ? CameraSource.Photos : CameraSource.Camera,
       width: 500
-    }
+    };
 
     const image = await Plugins.Camera.getPhoto(cameraOptions);
 
@@ -62,18 +62,18 @@ export class PhotoUploadComponent implements OnInit {
       body: formData
     };
 
-    const postResponse = await fetch(`${environment.apiURL}/file/upload`, options)
+    const postResponse = await fetch(`${environment.apiURL}/file/upload`, options);
 
     if (!postResponse.ok) {
-      throw Error('File upload failed')
+      throw Error('File upload failed');
     }
     this.uploading = false;
 
-    const postResponseText = await postResponse.json()
-    const filename = postResponseText.filename
-    this.photo = `${environment.apiURL}/file/image/${filename}`
+    const postResponseText = await postResponse.json();
+    const filename = postResponseText.filename;
+    this.photo = `${environment.apiURL}/file/image/${filename}`;
     this.changeRef.detectChanges();
-    this.photoChange.emit(this.photo)
+    this.photoChange.emit(this.photo);
   }
 
   async showPopover(ev: any, text: string) {

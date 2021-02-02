@@ -1,6 +1,6 @@
-import { Marker, Map as MapboxMap } from "mapbox-gl";
-import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
-import MapboxCompare from "mapbox-gl-compare";
+import { Marker, Map as MapboxMap } from 'mapbox-gl';
+import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher';
+import MapboxCompare from 'mapbox-gl-compare';
 import { ElementRef } from '@angular/core';
 import { Subscription, Observable, fromEvent } from 'rxjs';
 import { AlertController, Platform } from '@ionic/angular';
@@ -17,6 +17,19 @@ export enum LayerType {
 }
 
 export class LayerControl {
+
+    constructor(map: MapboxMap, mapWrapper: ElementRef, alertController: AlertController, platform: Platform) {
+        this.map = map;
+        this.alertController = alertController;
+        this.platform = platform;
+        this.mapWrapper = mapWrapper;
+
+        this.map.addSource('satellite', {
+            type: 'raster',
+            url: 'mapbox://mapbox.satellite',
+            tileSize: 256
+        });
+    }
     private map: MapboxMap;
     private alertController: AlertController;
     private platform: Platform;
@@ -31,29 +44,16 @@ export class LayerControl {
     private interval: NodeJS.Timeout;
     private satMap: MapboxMap;
 
-    private isIosTiltRequested: boolean = false;
+    private isIosTiltRequested = false;
+
+    public swipeClickSubscription: Observable<any> = null;
 
     private tilt = (e: DeviceOrientationEvent) => {
         if (e.beta <= 60 && e.beta >= 0) {
             requestAnimationFrame(() => {
                 this.map.setPitch(e.beta);
-            })
+            });
         }
-    }
-
-    public swipeClickSubscription: Observable<any> = null;
-
-    constructor(map: MapboxMap, mapWrapper: ElementRef, alertController: AlertController, platform: Platform) {
-        this.map = map;
-        this.alertController = alertController;
-        this.platform = platform;
-        this.mapWrapper = mapWrapper;
-
-        this.map.addSource('satellite', {
-            type: "raster",
-            url: "mapbox://mapbox.satellite",
-            tileSize: 256
-        })
     }
 
     public setType(type: LayerType, swipeMapContainer: ElementRef = undefined): void {
@@ -62,53 +62,53 @@ export class LayerControl {
                 this.satMap.remove();
                 this.satMap = null;
             }
-            this.layerType = type
+            this.layerType = type;
             this.reset();
-            this.swipeMapContainer = swipeMapContainer
+            this.swipeMapContainer = swipeMapContainer;
             this.update();
         }
     }
 
     public toggleSat() {
         if (this.map.getLayer('satellite')) {
-            this.map.removeLayer('satellite')
+            this.map.removeLayer('satellite');
         } else {
             this.map.addLayer({
-                id: "satellite",
+                id: 'satellite',
                 source: 'satellite',
-                type: "raster"
+                type: 'raster'
             }, 'country-label-lg');
         }
     }
 
     public toggle3D() {
         if (this.layerType != LayerType.ThreeDimension) {
-            this.setType(LayerType.ThreeDimension)
+            this.setType(LayerType.ThreeDimension);
         } else {
-            this.setType(LayerType.Standard)
+            this.setType(LayerType.Standard);
         }
     }
 
     private reset(): void {
         if (this.deviceOrientationSubscription != undefined)
             this.deviceOrientationSubscription.unsubscribe();
-        removeEventListener('deviceorientation', this.tilt)
+        removeEventListener('deviceorientation', this.tilt);
         if (this.map.getLayer('satellite')) {
-            this.map.removeLayer('satellite')
+            this.map.removeLayer('satellite');
         }
         if (this.map.getLayer('3d-buildings')) {
-            this.map.removeLayer('3d-buildings')
+            this.map.removeLayer('3d-buildings');
         }
         try {
-            this.map.removeControl(this.styleSwitcherControl)
+            this.map.removeControl(this.styleSwitcherControl);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
         if (this.compare != null) {
-            this.compare.remove()
+            this.compare.remove();
             this.compare = null;
         }
-        clearInterval(this.interval)
+        clearInterval(this.interval);
     }
 
     update = async () => {
@@ -116,17 +116,17 @@ export class LayerControl {
             case LayerType.Standard:
                 setTimeout(() => {
                     this.map.resetNorthPitch();
-                }, 100)
+                }, 100);
                 break;
             case LayerType.Selection:
                 this.map.addControl(this.styleSwitcherControl);
                 break;
             case LayerType.Satellite:
-                //this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
+                // this.map.setStyle("mapbox://styles/mapbox/satellite-v9");
                 this.map.addLayer({
-                    id: "satellite",
+                    id: 'satellite',
                     source: 'satellite',
-                    type: "raster"
+                    type: 'raster'
                 }, 'building');
                 break;
             case LayerType.SatelliteButton:
@@ -135,7 +135,7 @@ export class LayerControl {
             case LayerType.Swipe:
                 this.satMap = new MapboxMap({
                     container: this.swipeMapContainer.nativeElement,
-                    style: "mapbox://styles/mapbox/satellite-v9",
+                    style: 'mapbox://styles/mapbox/satellite-v9',
                     center: this.map.getCenter(),
                     zoom: this.map.getZoom(),
                     dragRotate: this.map.dragRotate.isEnabled(),
@@ -147,54 +147,54 @@ export class LayerControl {
                 });
 
                 this.satMap.loadImage(
-                    "/assets/icons/position.png",
+                    '/assets/icons/position.png',
                     (error, image) => {
                         if (error) throw error;
 
-                        this.satMap.addImage("geolocate", image);
-                        this.satMap.addImage("view-direction-click-geolocate", image);
+                        this.satMap.addImage('geolocate', image);
+                        this.satMap.addImage('view-direction-click-geolocate', image);
                     });
 
                 this.satMap.loadImage(
-                    "/assets/icons/directionv2.png",
+                    '/assets/icons/directionv2.png',
                     (error, image) => {
                         if (error) throw error;
 
-                        this.satMap.addImage("view-direction", image);
+                        this.satMap.addImage('view-direction', image);
                     });
 
                 this.satMap.loadImage(
-                    "/assets/icons/directionv2-richtung.png",
+                    '/assets/icons/directionv2-richtung.png',
                     (error, image) => {
                         if (error) throw error;
 
-                        this.satMap.addImage("view-direction-task", image);
-                    })
+                        this.satMap.addImage('view-direction-task', image);
+                    });
 
                 this.satMap.loadImage(
-                    "/assets/icons/marker-editor.png",
+                    '/assets/icons/marker-editor.png',
                     (error, image) => {
                         if (error) throw error;
 
-                        this.satMap.addImage("marker-editor", image);
-                    })
+                        this.satMap.addImage('marker-editor', image);
+                    });
 
 
                 this.satMap.on('load', () => {
                     if (!this.map.dragRotate.isEnabled()) {
-                        this.satMap.touchZoomRotate.disableRotation()
+                        this.satMap.touchZoomRotate.disableRotation();
                     }
-                    this.syncMaps()
-                })
-                this.map.on('styledata', () => this.syncMaps())
-                this.map.on('sourcedata', () => this.syncMaps())
+                    this.syncMaps();
+                });
+                this.map.on('styledata', () => this.syncMaps());
+                this.map.on('sourcedata', () => this.syncMaps());
 
-                this.swipeClickSubscription = fromEvent(this.satMap, "click")
+                this.swipeClickSubscription = fromEvent(this.satMap, 'click');
 
                 this.compare = new MapboxCompare(this.map, this.satMap, this.mapWrapper.nativeElement);
                 break;
             case LayerType.ThreeDimension:
-                this._add3DBuildingsLayer()
+                this._add3DBuildingsLayer();
 
                 if (this.platform.is('ios') && !this.isIosTiltRequested) {
                     const alert = await this.alertController.create({
@@ -204,7 +204,7 @@ export class LayerControl {
                             {
                                 text: 'Okay',
                                 handler: () => {
-                                    this.isIosTiltRequested = true
+                                    this.isIosTiltRequested = true;
                                     if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
                                         (DeviceOrientationEvent as any).requestPermission()
                                             .then(permissionState => {
@@ -214,7 +214,7 @@ export class LayerControl {
                                             })
                                             .catch(console.error);
                                     } else {
-                                        addEventListener("deviceorientation", this.tilt, false);
+                                        addEventListener('deviceorientation', this.tilt, false);
                                     }
                                 }
                             }
@@ -222,7 +222,7 @@ export class LayerControl {
                     });
                     alert.present();
                 } else {
-                    addEventListener("deviceorientation", this.tilt, false);
+                    addEventListener('deviceorientation', this.tilt, false);
                 }
                 break;
             case LayerType.ThreeDimensionButton:
@@ -246,36 +246,36 @@ export class LayerControl {
 
         this.map.addLayer(
             {
-                id: "3d-buildings",
-                source: "mapbox",
-                "source-layer": "building",
-                filter: ["==", "extrude", "true"],
-                type: "fill-extrusion",
+                id: '3d-buildings',
+                source: 'mapbox',
+                'source-layer': 'building',
+                filter: ['==', 'extrude', 'true'],
+                type: 'fill-extrusion',
                 minzoom: 15,
                 paint: {
-                    "fill-extrusion-color": "#aaa",
+                    'fill-extrusion-color': '#aaa',
 
                     // use an 'interpolate' expression to add a smooth transition effect to the
                     // buildings as the user zooms in
-                    "fill-extrusion-height": [
-                        "interpolate",
-                        ["linear"],
-                        ["zoom"],
+                    'fill-extrusion-height': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
                         15,
                         0,
                         15.05,
-                        ["get", "height"]
+                        ['get', 'height']
                     ],
-                    "fill-extrusion-base": [
-                        "interpolate",
-                        ["linear"],
-                        ["zoom"],
+                    'fill-extrusion-base': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
                         15,
                         0,
                         15.05,
-                        ["get", "min_height"]
+                        ['get', 'min_height']
                     ],
-                    "fill-extrusion-opacity": 0.6
+                    'fill-extrusion-opacity': 0.6
                 }
             },
             // labelLayerId
@@ -292,40 +292,40 @@ export class LayerControl {
 
     private syncMaps(): void {
         if (this.satMap.loaded()) {
-            const defaultMapSources = this.map.getStyle().sources
-            const { mapbox, satellite, ...sources } = defaultMapSources
-            delete sources['raster-tiles']
+            const defaultMapSources = this.map.getStyle().sources;
+            const { mapbox, satellite, ...sources } = defaultMapSources;
+            delete sources['raster-tiles'];
 
-            const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building')
+            const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building');
 
             Object.entries(sources).forEach(s => {
                 if (this.satMap.getSource(s[0])) {
-                    this.satMap.getSource(s[0]).setData(s[1]['data'])
+                    this.satMap.getSource(s[0]).setData(s[1].data);
                 } else {
-                    this.satMap.addSource(s[0], s[1])
+                    this.satMap.addSource(s[0], s[1]);
                 }
-            })
+            });
 
             layers.forEach(l => {
                 if (this.satMap.getLayer(l.id)) {
                     if (l.id == 'viewDirection' || l.id == 'viewDirectionTask' || l.id == 'viewDirectionClick') {
-                        const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate')
-                        this.satMap.setLayoutProperty(l.id, 'icon-rotate', bearing)
+                        const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate');
+                        this.satMap.setLayoutProperty(l.id, 'icon-rotate', bearing);
                     }
                 } else {
-                    this.satMap.addLayer(l)
+                    this.satMap.addLayer(l);
                 }
-            })
+            });
         }
     }
 
     public passMarkers(markers) {
         if (this.layerType == LayerType.Swipe) {
-            const { waypointMarker } = markers
+            const { waypointMarker } = markers;
             if (waypointMarker) {
-                waypointMarker.addTo(this.satMap)
+                waypointMarker.addTo(this.satMap);
             }
-            const { waypointMarkerDuplicate } = markers
+            const { waypointMarkerDuplicate } = markers;
             if (waypointMarkerDuplicate) {
                 // waypointMarkerDuplicate.addTo(this.satMap)
                 const elDuplicate = document.createElement('div');
@@ -335,7 +335,7 @@ export class LayerControl {
                     anchor: 'bottom',
                     offset: [15, 0]
                 })
-                    .setLngLat(waypointMarkerDuplicate._lngLat).addTo(this.satMap)
+                    .setLngLat(waypointMarkerDuplicate._lngLat).addTo(this.satMap);
             }
 
         }
@@ -349,5 +349,5 @@ export class LayerControl {
       "type": "Point",
       "coordinates": [${lng}, ${lat}]
     }
-  }`);
+  }`)
 }

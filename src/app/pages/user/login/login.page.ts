@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { AuthService } from "src/app/services/auth-service.service";
-import { Validators, FormBuilder } from "@angular/forms";
-import { NavController } from "@ionic/angular";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth-service.service';
+import { Validators, FormBuilder } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.page.html",
-  styleUrls: ["./login.page.scss"],
+  selector: 'app-login',
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
   loginForm;
@@ -22,8 +22,8 @@ export class LoginPage implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ["", [Validators.required]],
-      password: ["", [Validators.required]],
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]],
     });
 
     this.authService.getErrorMessage().subscribe((e) => {
@@ -45,10 +45,10 @@ export class LoginPage implements OnInit {
   }
 
   navigateRegister() {
-    this.navCtrl.navigateForward("user/register");
+    this.navCtrl.navigateForward('user/register');
   }
 
   navigateForgotPassword() {
-    this.navCtrl.navigateForward("user/forgot-password");
+    this.navCtrl.navigateForward('user/forgot-password');
   }
 }

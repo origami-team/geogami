@@ -742,11 +742,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       // you are leaving the game area warning
       if (this.game.geofence) {
-        console.log('creating the subscription')
+        console.log('creating the subscription');
         this.geolocationService.initGeofence(this.game.bbox.features[0]).subscribe((inGameBbox) => {
-          this.geofenceAlert = !inGameBbox
-          console.log(inGameBbox)
-        })
+          this.geofenceAlert = !inGameBbox;
+          console.log(inGameBbox);
+        });
         // this.geolocationService.lastPointInBbox.subscribe(lastPointInBbox => {
         //   // console.log(lastPointInBbox)
         // })
@@ -966,7 +966,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.landmarkControl.setSearchArea(this.task.question.area);
     }
 
-    this.changeDetectorRef.detectChanges()
+    this.changeDetectorRef.detectChanges();
   }
 
   nextTask() {
@@ -1106,7 +1106,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.nextTask();
     }
 
-    this.changeDetectorRef.detectChanges()
+    this.changeDetectorRef.detectChanges();
   }
 
   userDidArrive(waypoint) {

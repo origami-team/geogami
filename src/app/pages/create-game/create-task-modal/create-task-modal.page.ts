@@ -5,83 +5,83 @@ import {
   SimpleChanges,
   ViewChild,
   AfterViewInit
-} from "@angular/core";
-import { ModalController } from "@ionic/angular";
+} from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { cloneDeep } from 'lodash';
 
 
-import { navtasks } from "../../../models/navigation-tasks";
-import { themetasks } from "./../../../models/theme-tasks";
+import { navtasks } from '../../../models/navigation-tasks';
+import { themetasks } from './../../../models/theme-tasks';
 
-import { standardMapFeatures } from "../../../models/standardMapFeatures"
+import { standardMapFeatures } from '../../../models/standardMapFeatures';
 
 // import { FieldConfig } from "./../../../dynamic-form/models/field-config";
 // import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
-import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
+import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
 import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
 
 
 @Component({
-  selector: "app-create-task-modal",
-  templateUrl: "./create-task-modal.page.html",
-  styleUrls: ["./create-task-modal.page.scss"]
+  selector: 'app-create-task-modal',
+  templateUrl: './create-task-modal.page.html',
+  styleUrls: ['./create-task-modal.page.scss']
 })
 export class CreateTaskModalPage implements OnInit {
-  @Input() gameName: string = "";
-  @Input() type: string = "nav";
+  @Input() gameName = '';
+  @Input() type = 'nav';
   @Input() task: any = {};
 
   tasks: any[] = [];
 
   mapFeatures: any = this.task.mapFeatures;
 
-  showFeedback: boolean = true;
-  showMultipleTries: boolean = true;
+  showFeedback = true;
+  showMultipleTries = true;
 
-  step: number = 5;
+  step = 5;
 
-  objectQuestionSelect: any[] = []
-  objectAnswerSelect: any[] = []
+  objectQuestionSelect: any[] = [];
+  objectAnswerSelect: any[] = [];
 
-  freeQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE_FREE, QuestionType.PHOTO]
-  freeAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER]
+  freeQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE_FREE, QuestionType.PHOTO];
+  freeAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER];
 
   taskTypes: any[] = [
     {
       type: 1,
-      text: "Selbst-Lokalisation"
+      text: 'Selbst-Lokalisation'
     }, {
       type: 2,
-      text: "Objekt-Lokalisation"
+      text: 'Objekt-Lokalisation'
     }, {
       type: 3,
-      text: "Richtungsbestimmung"
+      text: 'Richtungsbestimmung'
     }, {
       type: 4,
-      text: "Freie Aufgabe"
+      text: 'Freie Aufgabe'
     }
-  ]
+  ];
 
   selectedTaskType: any;
 
-  objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT]
+  objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT];
 
-  viewDirectionSetPosition: boolean = false;
+  viewDirectionSetPosition = false;
 
   constructor(public modalController: ModalController, public popoverController: PopoverController) { }
 
   ngOnInit() {
-    if (this.type == "nav") {
-      this.tasks = cloneDeep(navtasks)
+    if (this.type == 'nav') {
+      this.tasks = cloneDeep(navtasks);
     } else {
-      this.tasks = cloneDeep(themetasks)
+      this.tasks = cloneDeep(themetasks);
     }
 
     if (this.task == null) {
-      this.task = this.tasks[0]
-      this.selectedTaskType = this.taskTypes[0]
+      this.task = this.tasks[0];
+      this.selectedTaskType = this.taskTypes[0];
 
       this.task.settings = {
         feedback: true,
@@ -90,22 +90,22 @@ export class CreateTaskModalPage implements OnInit {
         accuracy: 10,
         showMarker: true,
         keepMarker: false
-      }
+      };
 
       this.settingsChange();
 
     } else {
       if (this.task.type.includes('loc')) {
-        this.selectedTaskType = this.taskTypes[0]
+        this.selectedTaskType = this.taskTypes[0];
       }
       if (this.task.type.includes('object')) {
-        this.selectedTaskType = this.taskTypes[1]
+        this.selectedTaskType = this.taskTypes[1];
       }
       if (this.task.type.includes('direction')) {
-        this.selectedTaskType = this.taskTypes[2]
+        this.selectedTaskType = this.taskTypes[2];
       }
       if (this.task.type.includes('free')) {
-        this.selectedTaskType = this.taskTypes[3]
+        this.selectedTaskType = this.taskTypes[3];
       }
     }
     // this.onTaskSelected(this.task);
@@ -114,26 +114,26 @@ export class CreateTaskModalPage implements OnInit {
 
   onTaskTypeChange(taskType) {
     if (taskType.type == 1) {
-      this.task = this.tasks[0]
+      this.task = this.tasks[0];
     } else if (taskType.type == 2) {
-      this.task = this.tasks[1]
+      this.task = this.tasks[1];
     } else if (taskType.type == 3) {
-      this.task = this.tasks[7]
+      this.task = this.tasks[7];
     } else {
       this.task = {
-        name: "Freie Aufgabe",
-        type: "free",
-        category: "theme",
+        name: 'Freie Aufgabe',
+        type: 'free',
+        category: 'theme',
         question: {
           type: QuestionType.TEXT,
-          text: ""
+          text: ''
         },
         answer: {
           type: AnswerType.MULTIPLE_CHOICE,
         }
-      }
+      };
     }
-    this.onTaskSelected(this.task)
+    this.onTaskSelected(this.task);
   }
 
   onTaskSelected(newValue) {
@@ -147,16 +147,16 @@ export class CreateTaskModalPage implements OnInit {
         accuracy: 10,
         showMarker: true,
         keepMarker: false
-      }
+      };
     }
 
-    this.settingsChange()
+    this.settingsChange();
 
-    this.mapFeatures = this.task.mapFeatures
+    this.mapFeatures = this.task.mapFeatures;
 
-    if (this.task.type == "free") {
-      this.objectQuestionSelect = this.freeQuestionSelect.map(t => ({ type: t as QuestionType, text: t }))
-      this.objectAnswerSelect = this.freeAnswerSelect.map(t => ({ type: t as AnswerType, text: t }))
+    if (this.task.type == 'free') {
+      this.objectQuestionSelect = this.freeQuestionSelect.map(t => ({ type: t as QuestionType, text: t }));
+      this.objectAnswerSelect = this.freeAnswerSelect.map(t => ({ type: t as AnswerType, text: t }));
 
       if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
         this.task.settings.feedback = false;
@@ -168,23 +168,23 @@ export class CreateTaskModalPage implements OnInit {
     } else {
       this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
         .map(t => ({ type: t as QuestionType, text: t }))
-        .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)))
+        .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)));
 
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type);
 
-      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
+      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type);
 
-      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
+      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))));
     }
 
     if (this.task.type == 'theme-direction' && this.task.question.type == 'TEXT' && this.task.answer.type == 'MAP_DIRECTION') {
       if (this.task.question.direction == undefined) {
-        this.task.question.direction = {}
+        this.task.question.direction = {};
       }
       if (this.task.question.direction.position != undefined) {
         this.viewDirectionSetPosition = true;
       } else {
-        this.viewDirectionSetPosition = false
+        this.viewDirectionSetPosition = false;
       }
     }
 
@@ -192,23 +192,23 @@ export class CreateTaskModalPage implements OnInit {
 
   onObjectQuestionSelectChange() {
     if (this.task.type != 'free') {
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type);
 
-      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type)
+      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type);
 
-      this.onTaskSelected(similarQ[0])
+      this.onTaskSelected(similarQ[0]);
 
-      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))))
+      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))));
     }
   }
 
   onObjectAnswerSelectChange() {
     if (this.task.type != 'free') {
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type)
+      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type);
 
-      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type)
+      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type);
 
-      this.onTaskSelected(similarQ[0])
+      this.onTaskSelected(similarQ[0]);
     }
 
     if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
@@ -229,7 +229,7 @@ export class CreateTaskModalPage implements OnInit {
   }
 
   feedbackChange() {
-    this.task.settings.multipleTries = this.task.settings.feedback
+    this.task.settings.multipleTries = this.task.settings.feedback;
     if (this.task.category == 'nav' && !this.task.settings.confirmation) {
       this.showMultipleTries = false;
       this.task.settings.multipleTries = false;
@@ -246,7 +246,7 @@ export class CreateTaskModalPage implements OnInit {
     }
 
     if ((this.task.type == 'nav-text' || this.task.type == 'nav-photo') && !this.task.settings.showMarker) {
-      this.task.settings.keepMarker = false
+      this.task.settings.keepMarker = false;
     }
 
     if (this.task.category == 'nav' && event === true) {
@@ -274,16 +274,16 @@ export class CreateTaskModalPage implements OnInit {
 
   selectCompare(task1, task2) {
     if (task1 == null || task2 == null) {
-      return false
+      return false;
     }
-    return task1.type == task2.type
+    return task1.type == task2.type;
   }
 
   taskTypeCompare(task1, task2) {
     if (task1 == null || task2 == null) {
-      return false
+      return false;
     }
-    return task1.type == task2.type
+    return task1.type == task2.type;
   }
 
   async presentMapFeaturesModal() {
@@ -302,22 +302,22 @@ export class CreateTaskModalPage implements OnInit {
     return;
   }
 
-  dismissModal(dismissType: string = "null") {
-    if (dismissType == "close") {
+  dismissModal(dismissType: string = 'null') {
+    if (dismissType == 'close') {
       this.modalController.dismiss();
       return;
     }
 
     if (this.mapFeatures == undefined) {
-      this.mapFeatures = cloneDeep(standardMapFeatures)
+      this.mapFeatures = cloneDeep(standardMapFeatures);
     }
 
     if (this.task.settings.accuracy > 5 && this.task.settings.accuracy < 10) {
-      this.task.settings.accuracy = 5
+      this.task.settings.accuracy = 5;
     }
 
     if (this.task.question.area?.features?.length <= 0) {
-      this.task.question.area = undefined
+      this.task.question.area = undefined;
     }
 
     if (this.task.type == 'theme-direction' && this.task.question.type == 'TEXT' && this.task.answer.type == 'MAP_DIRECTION') {
@@ -332,7 +332,7 @@ export class CreateTaskModalPage implements OnInit {
         ...this.task,
         mapFeatures: this.mapFeatures
       }
-    })
+    });
   }
 
   async showPopover(ev: any, text: string) {

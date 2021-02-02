@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { AuthService } from "src/app/services/auth-service.service";
-import { Validators, FormBuilder } from "@angular/forms";
-import { NavController } from "@ionic/angular";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth-service.service';
+import { Validators, FormBuilder } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 @Component({
-  selector: "app-forgot-password",
-  templateUrl: "./forgot-password.page.html",
-  styleUrls: ["./forgot-password.page.scss"],
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.page.html',
+  styleUrls: ['./forgot-password.page.scss'],
 })
 export class ForgotPasswordPage implements OnInit {
   loginForm;
@@ -21,7 +21,7 @@ export class ForgotPasswordPage implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ["", Validators.required],
+      email: ['', Validators.required],
     });
   }
 

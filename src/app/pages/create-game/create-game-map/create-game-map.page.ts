@@ -6,11 +6,11 @@ import mapboxgl from 'mapbox-gl';
 
 import { ModalController } from '@ionic/angular';
 
-import { GameFactoryService } from '../../../services/game-factory.service'
+import { GameFactoryService } from '../../../services/game-factory.service';
 
-import { CreateTaskModalPage } from './../create-task-modal/create-task-modal.page'
+import { CreateTaskModalPage } from './../create-task-modal/create-task-modal.page';
 
-import { CreateModuleModalPage } from './../create-module-modal/create-module-modal.page'
+import { CreateModuleModalPage } from './../create-module-modal/create-module-modal.page';
 
 
 @Component({
@@ -20,17 +20,17 @@ import { CreateModuleModalPage } from './../create-module-modal/create-module-mo
 })
 export class CreateGameMapPage implements OnInit {
 
-  name: String
-  waypoints: any[]
-  addMarker: boolean
+  name: String;
+  waypoints: any[];
+  addMarker: boolean;
 
   constructor(private gameFactory: GameFactoryService, public modalController: ModalController) {
-    this.waypoints = []
+    this.waypoints = [];
   }
 
   ngOnInit() {
-    this.name = this.gameFactory.game ? this.gameFactory.game.name : ''
-    this.addMarker = true
+    this.name = this.gameFactory.game ? this.gameFactory.game.name : '';
+    this.addMarker = true;
   }
 
   ionViewWillEnter() {
@@ -52,7 +52,7 @@ export class CreateGameMapPage implements OnInit {
         maxZoom: 14
       },
       trackUserLocation: true
-    })
+    });
     map.addControl(geolocate);
 
     // let watch = this.geolocation.watchPosition();
@@ -64,33 +64,33 @@ export class CreateGameMapPage implements OnInit {
 
     map.on('load', () => {
       geolocate.trigger();
-    })
+    });
 
     map.on('click', e => {
       if (this.addMarker) {
         // create a HTML element for each feature
         const el = document.createElement('div');
         el.className = 'mymarker';
-        el.innerHTML = `<p>${this.waypoints.length + 1}</p>`
+        el.innerHTML = `<p>${this.waypoints.length + 1}</p>`;
         const newMarker = new mapboxgl.Marker({
           element: el,
           offset: [0, -16],
           draggable: true,
-        }).setLngLat(e.lngLat).addTo(map)
+        }).setLngLat(e.lngLat).addTo(map);
         this.waypoints.push({
           marker: newMarker,
           tasks: []
-        })
-        console.log(this.waypoints)
-        this.toggleAddMarker()
-        this.presentTaskModal(this.waypoints.length - 1)
+        });
+        console.log(this.waypoints);
+        this.toggleAddMarker();
+        this.presentTaskModal(this.waypoints.length - 1);
       }
     });
 
   }
 
   async presentTaskModal(index: Number) {
-    console.log(index)
+    console.log(index);
     const modal = await this.modalController.create({
       component: CreateTaskModalPage,
       backdropDismiss: false,
@@ -113,7 +113,7 @@ export class CreateGameMapPage implements OnInit {
   }
 
   toggleAddMarker() {
-    this.addMarker = !this.addMarker
+    this.addMarker = !this.addMarker;
   }
 
 

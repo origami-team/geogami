@@ -1,4 +1,4 @@
-import { Map as MapboxMap } from "mapbox-gl";
+import { Map as MapboxMap } from 'mapbox-gl';
 import { Subscription } from 'rxjs';
 import { OrigamiOrientationService } from '../services/origami-orientation.service';
 
@@ -11,7 +11,7 @@ export enum RotationType {
 
 export class RotationControl {
     private deviceOrientationSubscription: Subscription;
-    private rotationType: RotationType = RotationType.Manual
+    private rotationType: RotationType = RotationType.Manual;
 
     private map: MapboxMap;
 
@@ -22,7 +22,7 @@ export class RotationControl {
 
     public setType(type: RotationType): void {
         if (this.map != undefined) {
-            this.rotationType = type
+            this.rotationType = type;
             this.reset();
             this.rotate();
         }
@@ -30,9 +30,9 @@ export class RotationControl {
 
     public toggle() {
         if (this.rotationType != RotationType.Auto) {
-            this.setType(RotationType.Auto)
+            this.setType(RotationType.Auto);
         } else {
-            this.setType(RotationType.North)
+            this.setType(RotationType.North);
         }
     }
 
@@ -54,8 +54,8 @@ export class RotationControl {
                 this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
                     requestAnimationFrame(() => {
                         this.map.rotateTo(heading, { duration: 20 });
-                    })
-                })
+                    });
+                });
                 break;
             case RotationType.Button:
 
@@ -65,7 +65,7 @@ export class RotationControl {
                     this.map.resetNorth({ duration: 50 });
                     this.map.dragRotate.disable();
                     this.map.touchZoomRotate.disableRotation();
-                }, 100)
+                }, 100);
                 break;
         }
     }

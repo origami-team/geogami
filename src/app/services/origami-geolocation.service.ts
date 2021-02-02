@@ -29,37 +29,37 @@ export class OrigamiGeolocationService {
     this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
       this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
         if (error != null) {
-          observer.error(error)
+          observer.error(error);
         }
         observer.next(position);
-      })
+      });
     }).pipe(shareReplay());
-    console.log('initializing geolocation service')
+    console.log('initializing geolocation service');
   }
 
   getSinglePositionWatch(): Observable<GeolocationPosition> {
     return new Observable((observer: Subscriber<GeolocationPosition>) => {
       const singleWatchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
         if (error != null) {
-          observer.error(error)
+          observer.error(error);
         }
         observer.next(position);
-      })
+      });
 
       return () => {
-        Plugins.Geolocation.clearWatch({ id: singleWatchID })
-      }
+        Plugins.Geolocation.clearWatch({ id: singleWatchID });
+      };
     });
   }
 
   initGeofence(bbox: Feature<Polygon, MultiPolygon>) {
     return new Observable<boolean>((subscriber) => {
-      // this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
-      this.geolocationSubscription.subscribe((position) => {
-        const point = [position.coords.longitude, position.coords.latitude]
-        const inside = booleanPointInPolygon(point, bbox)
+      this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
+        // this.geolocationSubscription.subscribe((position) => {
+        const point = [position.coords.longitude, position.coords.latitude];
+        const inside = booleanPointInPolygon(point, bbox);
         if (inside) {
-          this.lastPointInBbox.next(point)
+          this.lastPointInBbox.next(point);
         } else {
           if (this.lastPointInBbox.getValue() !== undefined) {
             const direction = this.helperService.bearing(
@@ -68,17 +68,17 @@ export class OrigamiGeolocationService {
               this.lastPointInBbox[1],
               this.lastPointInBbox[0],
             );
-            this.lastPointInBboxDirection.next(direction)
+            this.lastPointInBboxDirection.next(direction);
           } else {
-            this.lastPointInBboxDirection.next(undefined)
+            this.lastPointInBboxDirection.next(undefined);
           }
         }
         subscriber.next(inside);
-      })
-    })
+      });
+    });
   }
 
   clear() {
-    Plugins.Geolocation.clearWatch({ id: this.watchID })
+    Plugins.Geolocation.clearWatch({ id: this.watchID });
   }
 }

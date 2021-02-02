@@ -5,7 +5,7 @@ import { NavController } from '@ionic/angular';
 
 import mapboxgl from 'mapbox-gl';
 
-import { GamesService } from '../../../services/games.service'
+import { GamesService } from '../../../services/games.service';
 import { environment } from 'src/environments/environment';
 
 
@@ -19,8 +19,8 @@ export class GameDetailPage implements OnInit {
   @ViewChild('map') mapContainer;
 
   game: any;
-  activities: any[]
-  points: any[]
+  activities: any[];
+  points: any[];
 
   constructor(public navCtrl: NavController, private route: ActivatedRoute, private gamesService: GamesService) { }
 
@@ -29,16 +29,16 @@ export class GameDetailPage implements OnInit {
       this.gamesService.getGame(params.id)
         .then(res => res.content)
         .then(game => {
-          this.game = game
+          this.game = game;
         })
         .finally(() => {
-          console.log(this.game)
+          console.log(this.game);
           // this.activities = this.game.activities
           // this.points = this.activities[0].points
           // if(this.mapContainer.nativeElement) {
           //   this.initMap()
           // }
-        })
+        });
     });
 
   }
@@ -67,11 +67,11 @@ export class GameDetailPage implements OnInit {
   // }
 
   pointClick(point) {
-    console.log(point)
+    console.log(point);
   }
 
   startGame() {
-    this.navCtrl.navigateForward(`play-game/playing-game/${this.game._id}`)
+    this.navCtrl.navigateForward(`play-game/playing-game/${this.game._id}`);
   }
 
 }

@@ -1,6 +1,6 @@
-import { Map as MapboxMap } from "mapbox-gl";
-import { OsmService } from '../services/osm.service'
-import osmtogeojson from "osmtogeojson";
+import { Map as MapboxMap } from 'mapbox-gl';
+import { OsmService } from '../services/osm.service';
+import osmtogeojson from 'osmtogeojson';
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +15,7 @@ export enum StreetSectionType {
 export class StreetSectionControl {
   private map: MapboxMap;
   private streetSectionType: StreetSectionType;
-  private osm: OsmService
+  private osm: OsmService;
   private positionSubscription: Subscription;
   private primaryColor: string;
   private dangerColor: string;
@@ -30,7 +30,7 @@ export class StreetSectionControl {
 
   public setType(type: StreetSectionType): void {
     if (this.map != undefined) {
-      this.streetSectionType = type
+      this.streetSectionType = type;
       this.reset();
       this.update();
     }
@@ -56,28 +56,28 @@ export class StreetSectionControl {
               ).then(data => {
                 const geometries = osmtogeojson(data);
 
-                if (this.map.getSource("section") == undefined) {
-                  this.map.addSource("section", {
-                    type: "geojson",
+                if (this.map.getSource('section') == undefined) {
+                  this.map.addSource('section', {
+                    type: 'geojson',
                     data: geometries
                   });
                   this.map.addLayer({
-                    id: "section",
-                    type: "line",
-                    source: "section",
+                    id: 'section',
+                    type: 'line',
+                    source: 'section',
                     paint: {
-                      "line-color": this.dangerColor,
-                      "line-opacity": 0.5,
-                      "line-width": 10
+                      'line-color': this.dangerColor,
+                      'line-opacity': 0.5,
+                      'line-width': 10
                     },
                     layout: {
-                      "line-cap": "round"
+                      'line-cap': 'round'
                     }
                   });
                 } else {
-                  this.map.getSource("section").setData(geometries);
+                  this.map.getSource('section').setData(geometries);
                 }
-              }).catch(e => { console.log("error", e) })
+              }).catch(e => { console.log('error', e); });
             }
           }
         );
