@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { filter, shareReplay } from 'rxjs/operators';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 
@@ -49,7 +49,7 @@ export class OrigamiGeolocationService {
 
   initGeofence(bbox: Feature<Polygon, MultiPolygon>) {
     return new Observable<boolean>((subscriber) => {
-      this.geolocationSubscription.subscribe((position) => {
+      this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
         const point = [position.coords.longitude, position.coords.latitude]
         subscriber.next(booleanPointInPolygon(point, bbox));
       })
