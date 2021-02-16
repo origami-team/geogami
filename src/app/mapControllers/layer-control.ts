@@ -77,7 +77,7 @@ export class LayerControl {
                 id: 'satellite',
                 source: 'satellite',
                 type: 'raster'
-            }, 'country-label-lg');
+            });
         }
     }
 
