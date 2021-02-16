@@ -820,6 +820,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource('viewDirectionClickGeolocate');
     }
 
+    this.map.setPitch(0);
+    this.map.rotateTo(0);
+
     this.photo = '';
     this.photoURL = '';
     this.clickDirection = 0;
