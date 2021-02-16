@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark (click)="navigateBack()"></ion-back-button>
+      <ion-back-button color="dark" (click)="navigateBack()"></ion-back-button>
     </ion-buttons>
     <ion-title>Bearbeite "<span *ngIf="game">{{game.name}}</span>"</ion-title>
     <ion-buttons slot="end">
-      <ion-button color=dark (click)="uploadGame()">
+      <ion-button color="dark" (click)="uploadGame()">
         <ion-icon name="save"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -31,7 +31,6 @@
         <ion-icon name="information-circle-outline"></ion-icon>
       </ion-chip>
     </div> -->
-
 
   <!-- Old card style -->
   <!-- <div *ngFor="let task of game.tasks; index as i">
@@ -95,28 +94,43 @@
     <ion-card-content>
       <ion-text>Stelle eine Aufgabenabfolge zusammen</ion-text>
       <ion-list mode="ios" *ngIf="game">
-        <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!reorder">
-          <ion-item color="light" class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
-            <ion-avatar slot="start" *ngIf="task.category.includes('nav')">
-              <div class="mymarker">
-                <!-- <p class="list">{{ i + 1 }}</p> -->
-              </div>
+        <ion-reorder-group
+          (ionItemReorder)="doReorder($event)"
+          [disabled]="!reorder"
+        >
+          <ion-item
+            color="light"
+            class="item-text-wrap"
+            lines="none"
+            *ngFor="let task of game.tasks; index as i"
+          >
+            <ion-avatar
+              class="flag"
+              slot="start"
+              *ngIf="task.category.includes('nav')"
+            >
+              <img src="./../../../../assets/icons/target-flag.png" />
             </ion-avatar>
             <ion-avatar slot="start" *ngIf="task.category.includes('theme')">
-              <div class="mymarker invisible">
-              </div>
+              <div class="mymarker invisible"></div>
             </ion-avatar>
             <ion-avatar slot="start" *ngIf="task.category.includes('info')">
-              <div class="mymarker invisible">
-              </div>
+              <div class="mymarker invisible"></div>
             </ion-avatar>
-            <ion-chip *ngIf="task.category.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
+            <ion-chip
+              *ngIf="task.category.includes('nav')"
+              color="primary"
+              (click)="presentTaskModal('nav', task)"
+            >
               <ion-label>
                 <ion-icon name="navigate"></ion-icon> {{ task.name }}
               </ion-label>
             </ion-chip>
-            <ion-chip *ngIf="task.category.includes('theme')" color="secondary"
-              (click)="presentTaskModal('theme', task)">
+            <ion-chip
+              *ngIf="task.category.includes('theme')"
+              color="secondary"
+              (click)="presentTaskModal('theme', task)"
+            >
               <ion-label>
                 <ion-icon name="clipboard"></ion-icon> {{ task.name }}
               </ion-label>
@@ -126,12 +140,22 @@
                 <ion-icon name="rose"></ion-icon> {{ task.name }}
               </ion-label>
             </ion-chip> -->
-            <ion-chip *ngIf="task.category.includes('info')" color="warning" (click)="presentTaskModal('info', task)">
+            <ion-chip
+              *ngIf="task.category.includes('info')"
+              color="warning"
+              (click)="presentTaskModal('info', task)"
+            >
               <ion-label>
-                <ion-icon name="information-circle-outline"></ion-icon> Information
+                <ion-icon name="information-circle-outline"></ion-icon>
+                Information
               </ion-label>
             </ion-chip>
-            <ion-icon *ngIf="!reorder" slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
+            <ion-icon
+              *ngIf="!reorder"
+              slot="end"
+              name="close"
+              (click)="deleteTask(task.id)"
+            ></ion-icon>
             <ion-reorder *ngIf="reorder" slot="end"></ion-reorder>
           </ion-item>
         </ion-reorder-group>
@@ -157,17 +181,26 @@
         </ion-chip>
 
         <ng-container *ngIf="game.tasks && game.tasks.length > 1">
-          <ion-chip color="dark" slot="end" *ngIf="!reorder" (click)="toggleReorder()">
+          <ion-chip
+            color="dark"
+            slot="end"
+            *ngIf="!reorder"
+            (click)="toggleReorder()"
+          >
             <ion-icon name="reorder-three"></ion-icon>
           </ion-chip>
-          <ion-chip color="dark" slot="end" *ngIf="reorder" (click)="toggleReorder()">
+          <ion-chip
+            color="dark"
+            slot="end"
+            *ngIf="reorder"
+            (click)="toggleReorder()"
+          >
             <ion-icon name="close"></ion-icon>
           </ion-chip>
         </ng-container>
       </ion-item>
     </ion-card-content>
   </ion-card>
-
 
   <!-- <ion-card class="my-card">
       <ion-card-header>
@@ -234,6 +267,4 @@
         </ion-item>
       </ion-card-content>
     </ion-card> -->
-
-
 </ion-content>
