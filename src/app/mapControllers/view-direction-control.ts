@@ -33,11 +33,13 @@ export class ViewDirectionControl {
             }
         );
         this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe((heading: number) => {
-            this.map.setLayoutProperty(
-                'viewDirection',
-                'icon-rotate',
-                heading - this.map.getBearing()
-            );
+            if (this.map.getLayer('viewDirection')) {
+                this.map.setLayoutProperty(
+                    'viewDirection',
+                    'icon-rotate',
+                    heading - this.map.getBearing()
+                );
+            }
         });
 
         this.map.loadImage(
