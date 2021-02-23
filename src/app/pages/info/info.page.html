@@ -1,45 +1,1822 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/"></ion-back-button>
+      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>Informationen über OriGami</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <h5>Über OriGami</h5>
-    <p><b>OriGami</b> ist eine App, zum Erstellen und Spielen von kartenbasierten Games
-    und eignet sich insbesondere für den Einsatz an Bildungseinrichtungen. Die Entwicklung der App wird vom 
-    <b>Insitut für Geoinformatik</b> der Westfälischen Wilhelms-Universität Münster wissenschaftlich begleitet
-    und didaktisch konzeptioniert.</p>
-    <p>Der Schwerpunkt von <b>OriGami</b> liegt auf der Förderung von Kompetenzen im Navigieren mit Karte,
-    d.h. in der Kompetenz des Selbstlokalisierens, des Lokalisieren von Objekten auf der Karte und  
-    der Interpretation der Kartenausrichtung. Der Ersteller eines Spiels kann zwischen entsprechenden Aufgabentypen wählen und seine Spieler
-    durch das An- und Ausstellen von Kartenfeatures (wie z.B. der Positionsanzeige, der Markierung vom Objekten in der
-    Umgebung usw.) unterstützen. Desweiteren lassen sich mit <b>OriGami</b> auch thematische Spiele, Ralleys und digitale Exkursionen anlegen.</p>
+  <p>
+    <b>OriGami</b> ist eine App, zum Erstellen und Spielen von kartenbasierten
+    Games und eignet sich insbesondere für den Einsatz an Bildungseinrichtungen.
+    Die Entwicklung der App wird vom <b>Insitut für Geoinformatik</b> der
+    Westfälischen Wilhelms-Universität Münster wissenschaftlich begleitet und
+    didaktisch konzeptioniert.
+  </p>
+  <p>
+    Der Schwerpunkt von <b>OriGami</b> liegt auf der Förderung von Kompetenzen
+    im Navigieren mit Karte, d.h. in der Kompetenz des Selbstlokalisierens, des
+    Lokalisieren von Objekten auf der Karte und der Interpretation der
+    Kartenausrichtung. Der Ersteller eines Spiels kann zwischen entsprechenden
+    Aufgabentypen wählen und seine Spieler durch das An- und Ausstellen von
+    Kartenfeatures (wie z.B. der Positionsanzeige, der Markierung vom Objekten
+    in der Umgebung usw.) unterstützen. Desweiteren lassen sich mit
+    <b>OriGami</b> auch thematische Spiele, Ralleys und digitale Exkursionen
+    anlegen.
+  </p>
 
-  <p>Mehr Informationen findest du auf <a href="origami.ifgi.de">unserer Webseite</a>!<br><br></p>
+  <p>
+    Mehr Informationen findest du auf
+    <a href="origami.ifgi.de">unserer Webseite</a>!<br /><br />
+  </p>
 
-  <h2 class="ion-text-center">Made with <span (click)="onDarkThemeChange()"><span *ngIf="dark">❤️</span><span
-        *ngIf="!dark">🖤</span></span> by re:edu</h2>
+  <h2 class="ion-text-center">
+    Made with
+    <span (click)="onDarkThemeChange()"
+      ><span *ngIf="dark">❤️</span><span *ngIf="!dark">🖤</span></span
+    >
+    by <a href="https://reedu.de">re:edu</a>
+  </h2>
 
-  <h5><br><br>Animationen</h5>
+  <h5><br /><br />Animationen</h5>
   <p>
     ⭐️ Star Success by Taras Chernenko / LottieFiles
     <br />
     👨‍🚀 Astronaut by PARIsa / LottieFiles
   </p>
 
-  <h5><br><br>Icons</h5>
+  <h5><br /><br />Icons</h5>
   <p>
-    Flag obtained from <a href="https://fontawesome.com/license">FontAwesome Pro License (CC BY 4.0)</a> with modifications in shape, color, and outline
+    Flag obtained from
+    <a href="https://fontawesome.com/license"
+      >FontAwesome Pro License (CC BY 4.0)</a
+    >
+    with modifications in shape, color, and outline
   </p>
 
-  <h5><br><br>Sounds</h5>
+  <h5><br /><br />Sounds</h5>
   <p>
-    Sound effects obtained from <a href="https://www.zapsplat.com">https://www.zapsplat.com</a>
+    Sound effects obtained from
+    <a href="https://www.zapsplat.com">https://www.zapsplat.com</a>
   </p>
 
+  <h1 class="adsimple-321265083">Impressum</h1>
+  <p class="adsimple-321265083">Informationspflicht laut § 5 TMG.</p>
+  <p class="adsimple-321265083">
+    Institut für Geoinformatik<br />
+    SIL<br />
+    Heisenbergstraße 2<br />
+    Geo 1<br />
+    48149 Münster<br />
+  </p>
+  <p class="adsimple-321265083"><strong>UID-Nummer:</strong> 126118759<br /></p>
+  <p class="adsimple-321265083">
+    <strong>Tel.:</strong> +49 251 83-30001<br />
+    <strong>E-Mail:</strong>
+    <a href="mailto:origami.ifgi@uni-muenster.de"
+      >origami.ifgi(at)uni-muenster.de</a
+    >
+  </p>
+  <p class="adsimple-321265083">
+    <strong>Aufsichtsbehörde</strong><br />
+    Ministerium für Innovation, Wissenschaft und Forschung des Landes
+    Nordrhein-Westfalen<br />
+    Völklinger Straße 49<br />
+    40221 Düsseldorf<br />
+  </p>
+  <h2 class="adsimple-321265083">EU-Streitschlichtung</h2>
+  <p>
+    Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten
+    (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform
+    (OS-Plattform) informieren.<br />
+    Verbraucher haben die Möglichkeit, Beschwerden an die Online
+    Streitbeilegungsplattform der Europäischen Kommission unter
+    <a
+      class="adsimple-321265083"
+      href="https://ec.europa.eu/consumers/odr/main/index.cfm?event=main.home2.show&amp;lng=DE"
+      target="_blank"
+      rel="noopener"
+      >http://ec.europa.eu/odr?tid=321265083</a
+    >
+    zu richten. Die dafür notwendigen Kontaktdaten finden Sie oberhalb in
+    unserem Impressum.
+  </p>
+  <p>
+    Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder
+    verpflichtet sind, an Streitbeilegungsverfahren vor einer
+    Verbraucherschlichtungsstelle teilzunehmen.
+  </p>
+  <h2 class="adsimple-321265083">Haftung für Inhalte dieser Website</h2>
+  <p>
+    Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns
+    korrekte und aktuelle Informationen bereitzustellen. Laut Telemediengesetz
+    <a
+      class="adsimple-321265083"
+      href="https://www.gesetze-im-internet.de/tmg/__7.html?tid=321265083"
+      rel="noopener"
+      target="_blank"
+      >(TMG) §7 (1)</a
+    >
+    sind wir als Diensteanbieter für eigene Informationen, die wir zur Nutzung
+    bereitstellen, nach den allgemeinen Gesetzen verantwortlich. Leider können
+    wir keine Haftung für die Korrektheit aller Inhalte auf dieser Webseite
+    übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden. Als
+    Diensteanbieter im Sinne der §§ 8 bis 10 sind wir nicht verpflichtet, die
+    von ihnen übermittelten oder gespeicherten Informationen zu überwachen oder
+    nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+  </p>
+  <p>
+    Unsere Verpflichtungen zur Entfernung von Informationen oder zur Sperrung
+    der Nutzung von Informationen nach den allgemeinen Gesetzen aufgrund von
+    gerichtlichen oder behördlichen Anordnungen bleiben auch im Falle unserer
+    Nichtverantwortlichkeit nach den §§ 8 bis 10 unberührt.
+  </p>
+  <p>
+    Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitte wir
+    Sie uns umgehend zu kontaktieren, damit wir die rechtswidrigen Inhalte
+    entfernen können. Sie finden die Kontaktdaten im Impressum.
+  </p>
+  <h2 class="adsimple-321265083">Haftung für Links auf dieser Website</h2>
+  <p>
+    Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir
+    nicht verantwortlich sind. Haftung für verlinkte Websites besteht für uns
+    nicht, da wir keine Kenntnis rechtswidriger Tätigkeiten hatten und haben,
+    uns solche Rechtswidrigkeiten auch bisher nicht aufgefallen sind und wir
+    Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden.
+  </p>
+  <p>
+    Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitte wir Sie
+    uns zu kontaktieren. Sie finden die Kontaktdaten im Impressum.
+  </p>
+  <h2 class="adsimple-321265083">Urheberrechtshinweis</h2>
+  <p>
+    Alle Inhalte dieser Webseite (Bilder, Fotos, Texte, Videos) unterliegen dem
+    Urheberrecht der Bundesrepublik Deutschland. Bitte fragen Sie uns bevor Sie
+    die Inhalte dieser Website verbreiten, vervielfältigen oder verwerten wie
+    zum Beispiel auf anderen Websites erneut veröffentlichen. Falls notwendig,
+    werden wir die unerlaubte Nutzung von Teilen der Inhalte unserer Seite
+    rechtlich verfolgen.
+  </p>
+  <p>
+    Sollten Sie auf dieser Webseite Inhalte finden, die das Urheberrecht
+    verletzen, bitten wir Sie uns zu kontaktieren.
+  </p>
+
+  <h1>Datenschutzerklärung</h1>
+  <h2>Einleitung</h2>
+  <p>
+    Mit der folgenden Datenschutzerklärung möchten wir Sie darüber aufklären,
+    welche Arten Ihrer personenbezogenen Daten (nachfolgend auch kurz als
+    "Daten“ bezeichnet) wir zu welchen Zwecken und in welchem Umfang im Rahmen
+    der Bereitstellung unserer Applikation verarbeiten.
+  </p>
+  <p>Die verwendeten Begriffe sind nicht geschlechtsspezifisch.</p>
+  <p>Stand: 23. Februar 2021</p>
+  <h2>Inhaltsübersicht</h2>
+  <ul class="index">
+    <li><a class="index-link" href="/info#m1870">Einleitung</a></li>
+    <li><a class="index-link" href="/info#m3">Verantwortlicher</a></li>
+    <li>
+      <a class="index-link" href="/info#mOverview"
+        >Übersicht der Verarbeitungen</a
+      >
+    </li>
+    <li>
+      <a class="index-link" href="/info#m13">Maßgebliche Rechtsgrundlagen</a>
+    </li>
+    <li><a class="index-link" href="/info#m27">Sicherheitsmaßnahmen</a></li>
+    <li>
+      <a class="index-link" href="/info#m25"
+        >Übermittlung von personenbezogenen Daten</a
+      >
+    </li>
+    <li>
+      <a class="index-link" href="/info#m24"
+        >Datenverarbeitung in Drittländern</a
+      >
+    </li>
+    <li><a class="index-link" href="/info#m134">Einsatz von Cookies</a></li>
+    <li>
+      <a class="index-link" href="/info#m225"
+        >Bereitstellung des Onlineangebotes und Webhosting</a
+      >
+    </li>
+    <li>
+      <a class="index-link" href="/info#m469"
+        >Besondere Hinweise zu Applikationen (Apps)</a
+      >
+    </li>
+    <li>
+      <a class="index-link" href="/info#m1466"
+        >Bezug von Applikationen über Appstores</a
+      >
+    </li>
+    <li>
+      <a class="index-link" href="/info#m367"
+        >Registrierung, Anmeldung und Nutzerkonto</a
+      >
+    </li>
+    <li><a class="index-link" href="/info#m432">Community Funktionen</a></li>
+    <li>
+      <a class="index-link" href="/info#m263"
+        >Webanalyse, Monitoring und Optimierung</a
+      >
+    </li>
+    <li>
+      <a class="index-link" href="/info#m328"
+        >Plugins und eingebettete Funktionen sowie Inhalte</a
+      >
+    </li>
+    <li><a class="index-link" href="/info#m12">Löschung von Daten</a></li>
+    <li>
+      <a class="index-link" href="/info#m15"
+        >Änderung und Aktualisierung der Datenschutzerklärung</a
+      >
+    </li>
+    <li>
+      <a class="index-link" href="/info#m10">Rechte der betroffenen Personen</a>
+    </li>
+    <li><a class="index-link" href="/info#m42">Begriffsdefinitionen</a></li>
+  </ul>
+  <h2 id="m3">Verantwortlicher</h2>
+  <p>
+    Institut für Geoinformatik<br />Prof. Dr. Angela Schwering<br />Heisenbergstraße
+    2<br />48149 Münster
+  </p>
+  <p>E-Mail-Adresse: origami.ifgi(at)uni-muenster.de.</p>
+  <h2 id="mOverview">Übersicht der Verarbeitungen</h2>
+  <p>
+    Die nachfolgende Übersicht fasst die Arten der verarbeiteten Daten und die
+    Zwecke ihrer Verarbeitung zusammen und verweist auf die betroffenen
+    Personen.
+  </p>
+  <h3>Arten der verarbeiteten Daten</h3>
+  <ul>
+    <li>Bestandsdaten (z.B. Namen, Adressen).</li>
+    <li>Inhaltsdaten (z.B. Eingaben in Onlineformularen).</li>
+    <li>Kontaktdaten (z.B. E-Mail, Telefonnummern).</li>
+    <li>Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).</li>
+    <li>
+      Nutzungsdaten (z.B. besuchte Webseiten, Interesse an Inhalten,
+      Zugriffszeiten).
+    </li>
+    <li>
+      Bild- und/ oder Videoaufnahmen (z. B. Fotografien oder Videoaufnahmen
+      einer Person).
+    </li>
+    <li>Tonaufnahmen.</li>
+    <li>
+      Standortdaten (Angaben zur geografischen Position eines Gerätes oder einer
+      Person).
+    </li>
+    <li>
+      Standortverlauf und Bewegungsprofile (Sammlung von Standortdaten und
+      Positionsveränderungen über einen gewissen Zeitraum).
+    </li>
+    <li>Vertragsdaten (z.B. Vertragsgegenstand, Laufzeit, Kundenkategorie).</li>
+    <li>
+      Zahlungsdaten (z.B. Bankverbindungen, Rechnungen, Zahlungshistorie).
+    </li>
+  </ul>
+  <h3>Kategorien betroffener Personen</h3>
+  <ul>
+    <li>Kunden.</li>
+    <li>Nutzer (z.B. Webseitenbesucher, Nutzer von Onlinediensten).</li>
+  </ul>
+  <h3>Zwecke der Verarbeitung</h3>
+  <ul>
+    <li>Bereitstellung unseres Onlineangebotes und Nutzerfreundlichkeit.</li>
+    <li>
+      Profile mit nutzerbezogenen Informationen (Erstellen von Nutzerprofilen).
+    </li>
+    <li>
+      Reichweitenmessung (z.B. Zugriffsstatistiken, Erkennung wiederkehrender
+      Besucher).
+    </li>
+    <li>Sicherheitsmaßnahmen.</li>
+    <li>Erbringung vertragliche Leistungen und Kundenservice.</li>
+    <li>Verwaltung und Beantwortung von Anfragen.</li>
+  </ul>
+  <h3 id="m13">Maßgebliche Rechtsgrundlagen</h3>
+  <p>
+    Im Folgenden erhalten Sie eine Übersicht der Rechtsgrundlagen der DSGVO, auf
+    deren Basis wir personenbezogenen Daten verarbeiten. Bitte nehmen Sie zur
+    Kenntnis, dass neben den Regelungen der DSGVO nationale Datenschutzvorgaben
+    in Ihrem bzw. unserem Wohn- oder Sitzland gelten können. Sollten ferner im
+    Einzelfall speziellere Rechtsgrundlagen maßgeblich sein, teilen wir Ihnen
+    diese in der Datenschutzerklärung mit.
+  </p>
+  <ul>
+    <li>
+      <strong>Einwilligung (Art. 6 Abs. 1 S. 1 lit. a. DSGVO)</strong> - Die
+      betroffene Person hat ihre Einwilligung in die Verarbeitung der sie
+      betreffenden personenbezogenen Daten für einen spezifischen Zweck oder
+      mehrere bestimmte Zwecke gegeben.
+    </li>
+    <li>
+      <strong
+        >Vertragserfüllung und vorvertragliche Anfragen (Art. 6 Abs. 1 S. 1 lit.
+        b. DSGVO)</strong
+      >
+      - Die Verarbeitung ist für die Erfüllung eines Vertrags, dessen
+      Vertragspartei die betroffene Person ist, oder zur Durchführung
+      vorvertraglicher Maßnahmen erforderlich, die auf Anfrage der betroffenen
+      Person erfolgen.
+    </li>
+    <li>
+      <strong>Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO)</strong>
+      - Die Verarbeitung ist zur Wahrung der berechtigten Interessen des
+      Verantwortlichen oder eines Dritten erforderlich, sofern nicht die
+      Interessen oder Grundrechte und Grundfreiheiten der betroffenen Person,
+      die den Schutz personenbezogener Daten erfordern, überwiegen.
+    </li>
+  </ul>
+  <p>
+    <strong>Nationale Datenschutzregelungen in Deutschland</strong>: Zusätzlich
+    zu den Datenschutzregelungen der Datenschutz-Grundverordnung gelten
+    nationale Regelungen zum Datenschutz in Deutschland. Hierzu gehört
+    insbesondere das Gesetz zum Schutz vor Missbrauch personenbezogener Daten
+    bei der Datenverarbeitung (Bundesdatenschutzgesetz – BDSG). Das BDSG enthält
+    insbesondere Spezialregelungen zum Recht auf Auskunft, zum Recht auf
+    Löschung, zum Widerspruchsrecht, zur Verarbeitung besonderer Kategorien
+    personenbezogener Daten, zur Verarbeitung für andere Zwecke und zur
+    Übermittlung sowie automatisierten Entscheidungsfindung im Einzelfall
+    einschließlich Profiling. Des Weiteren regelt es die Datenverarbeitung für
+    Zwecke des Beschäftigungsverhältnisses (§ 26 BDSG), insbesondere im Hinblick
+    auf die Begründung, Durchführung oder Beendigung von
+    Beschäftigungsverhältnissen sowie die Einwilligung von Beschäftigten. Ferner
+    können Landesdatenschutzgesetze der einzelnen Bundesländer zur Anwendung
+    gelangen.
+  </p>
+  <h2 id="m27">Sicherheitsmaßnahmen</h2>
+  <p>
+    Wir treffen nach Maßgabe der gesetzlichen Vorgaben unter Berücksichtigung
+    des Stands der Technik, der Implementierungskosten und der Art, des Umfangs,
+    der Umstände und der Zwecke der Verarbeitung sowie der unterschiedlichen
+    Eintrittswahrscheinlichkeiten und des Ausmaßes der Bedrohung der Rechte und
+    Freiheiten natürlicher Personen geeignete technische und organisatorische
+    Maßnahmen, um ein dem Risiko angemessenes Schutzniveau zu gewährleisten.
+  </p>
+  <p>
+    Zu den Maßnahmen gehören insbesondere die Sicherung der Vertraulichkeit,
+    Integrität und Verfügbarkeit von Daten durch Kontrolle des physischen und
+    elektronischen Zugangs zu den Daten als auch des sie betreffenden Zugriffs,
+    der Eingabe, der Weitergabe, der Sicherung der Verfügbarkeit und ihrer
+    Trennung. Des Weiteren haben wir Verfahren eingerichtet, die eine
+    Wahrnehmung von Betroffenenrechten, die Löschung von Daten und Reaktionen
+    auf die Gefährdung der Daten gewährleisten. Ferner berücksichtigen wir den
+    Schutz personenbezogener Daten bereits bei der Entwicklung bzw. Auswahl von
+    Hardware, Software sowie Verfahren entsprechend dem Prinzip des
+    Datenschutzes, durch Technikgestaltung und durch datenschutzfreundliche
+    Voreinstellungen.
+  </p>
+  <p>
+    <strong>SSL-Verschlüsselung (https)</strong>: Um Ihre via unser
+    Online-Angebot übermittelten Daten zu schützen, nutzen wir eine
+    SSL-Verschlüsselung. Sie erkennen derart verschlüsselte Verbindungen an dem
+    Präfix https:// in der Adresszeile Ihres Browsers.
+  </p>
+  <h2 id="m25">Übermittlung von personenbezogenen Daten</h2>
+  <p>
+    Im Rahmen unserer Verarbeitung von personenbezogenen Daten kommt es vor,
+    dass die Daten an andere Stellen, Unternehmen, rechtlich selbstständige
+    Organisationseinheiten oder Personen übermittelt oder sie ihnen gegenüber
+    offengelegt werden. Zu den Empfängern dieser Daten können z.B. mit
+    IT-Aufgaben beauftragte Dienstleister oder Anbieter von Diensten und
+    Inhalten, die in eine Webseite eingebunden werden, gehören. In solchen Fall
+    beachten wir die gesetzlichen Vorgaben und schließen insbesondere
+    entsprechende Verträge bzw. Vereinbarungen, die dem Schutz Ihrer Daten
+    dienen, mit den Empfängern Ihrer Daten ab.
+  </p>
+  <p>
+    <strong>Datenübermittlung innerhalb der Organisation</strong>: Wir können
+    personenbezogene Daten an andere Stellen innerhalb unserer Organisation
+    übermitteln oder ihnen den Zugriff auf diese Daten gewähren. Sofern diese
+    Weitergabe zu administrativen Zwecken erfolgt, beruht die Weitergabe der
+    Daten auf unseren berechtigten unternehmerischen und
+    betriebswirtschaftlichen Interessen oder erfolgt, sofern sie Erfüllung
+    unserer vertragsbezogenen Verpflichtungen erforderlich ist oder wenn eine
+    Einwilligung der Betroffenen oder eine gesetzliche Erlaubnis vorliegt.
+  </p>
+  <h2 id="m24">Datenverarbeitung in Drittländern</h2>
+  <p>
+    Sofern wir Daten in einem Drittland (d.h., außerhalb der Europäischen Union
+    (EU), des Europäischen Wirtschaftsraums (EWR)) verarbeiten oder die
+    Verarbeitung im Rahmen der Inanspruchnahme von Diensten Dritter oder der
+    Offenlegung bzw. Übermittlung von Daten an andere Personen, Stellen oder
+    Unternehmen stattfindet, erfolgt dies nur im Einklang mit den gesetzlichen
+    Vorgaben.
+  </p>
+  <p>
+    Vorbehaltlich ausdrücklicher Einwilligung oder vertraglich oder gesetzlich
+    erforderlicher Übermittlung verarbeiten oder lassen wir die Daten nur in
+    Drittländern mit einem anerkannten Datenschutzniveau, vertraglichen
+    Verpflichtung durch sogenannte Standardschutzklauseln der EU-Kommission,
+    beim Vorliegen von Zertifizierungen oder verbindlicher internen
+    Datenschutzvorschriften verarbeiten (Art. 44 bis 49 DSGVO, Informationsseite
+    der EU-Kommission:
+    <a
+      href="https://ec.europa.eu/info/law/law-topic/data-protection/international-dimension-data-protection_de"
+      target="_blank"
+      >https://ec.europa.eu/info/law/law-topic/data-protection/international-dimension-data-protection_de</a
+    >).
+  </p>
+  <h2 id="m134">Einsatz von Cookies</h2>
+  <p>
+    Cookies sind Textdateien, die Daten von besuchten Websites oder Domains
+    enthalten und von einem Browser auf dem Computer des Benutzers gespeichert
+    werden. Ein Cookie dient in erster Linie dazu, die Informationen über einen
+    Benutzer während oder nach seinem Besuch innerhalb eines Onlineangebotes zu
+    speichern. Zu den gespeicherten Angaben können z.B. die Spracheinstellungen
+    auf einer Webseite, der Loginstatus, ein Warenkorb oder die Stelle, an der
+    ein Video geschaut wurde, gehören. Zu dem Begriff der Cookies zählen wir
+    ferner andere Technologien, die die gleichen Funktionen wie Cookies erfüllen
+    (z.B., wenn Angaben der Nutzer anhand pseudonymer Onlinekennzeichnungen
+    gespeichert werden, auch als "Nutzer-IDs" bezeichnet)
+  </p>
+  <p>
+    <strong
+      >Die folgenden Cookie-Typen und Funktionen werden unterschieden:</strong
+    >
+  </p>
+  <ul>
+    <li>
+      <strong>Temporäre Cookies (auch: Session- oder Sitzungs-Cookies):</strong
+      >&nbsp;Temporäre Cookies werden spätestens gelöscht, nachdem ein Nutzer
+      ein Online-Angebot verlassen und seinen Browser geschlossen hat.
+    </li>
+    <li>
+      <strong>Permanente Cookies:</strong>&nbsp;Permanente Cookies bleiben auch
+      nach dem Schließen des Browsers gespeichert. So kann beispielsweise der
+      Login-Status gespeichert oder bevorzugte Inhalte direkt angezeigt werden,
+      wenn der Nutzer eine Website erneut besucht. Ebenso können die Interessen
+      von Nutzern, die zur Reichweitenmessung oder zu Marketingzwecken verwendet
+      werden, in einem solchen Cookie gespeichert werden.
+    </li>
+    <li>
+      <strong>First-Party-Cookies:</strong>&nbsp;First-Party-Cookies werden von
+      uns selbst gesetzt.
+    </li>
+    <li>
+      <strong>Third-Party-Cookies (auch: Drittanbieter-Cookies)</strong>:
+      Drittanbieter-Cookies werden hauptsächlich von Werbetreibenden (sog.
+      Dritten) verwendet, um Benutzerinformationen zu verarbeiten.
+    </li>
+    <li>
+      <strong
+        >Notwendige (auch: essentielle oder unbedingt erforderliche)
+        Cookies:</strong
+      >
+      Cookies können zum einen für den Betrieb einer Webseite unbedingt
+      erforderlich sein (z.B. um Logins oder andere Nutzereingaben zu speichern
+      oder aus Gründen der Sicherheit).
+    </li>
+    <li>
+      <strong>Statistik-, Marketing- und Personalisierungs-Cookies</strong>:
+      Ferner werden Cookies im Regelfall auch im Rahmen der Reichweitenmessung
+      eingesetzt sowie dann, wenn die Interessen eines Nutzers oder sein
+      Verhalten (z.B. Betrachten bestimmter Inhalte, Nutzen von Funktionen etc.)
+      auf einzelnen Webseiten in einem Nutzerprofil gespeichert werden. Solche
+      Profile dienen dazu, den Nutzern z.B. Inhalte anzuzeigen, die ihren
+      potentiellen Interessen entsprechen. Dieses Verfahren wird auch als
+      "Tracking", d.h., Nachverfolgung der potentiellen Interessen der Nutzer
+      bezeichnet. Soweit wir Cookies oder "Tracking"-Technologien einsetzen,
+      informieren wir Sie gesondert in unserer Datenschutzerklärung oder im
+      Rahmen der Einholung einer Einwilligung.
+    </li>
+  </ul>
+  <p>
+    <strong>Hinweise zu Rechtsgrundlagen: </strong> Auf welcher Rechtsgrundlage
+    wir Ihre personenbezogenen Daten mit Hilfe von Cookies verarbeiten, hängt
+    davon ab, ob wir Sie um eine Einwilligung bitten. Falls dies zutrifft und
+    Sie in die Nutzung von Cookies einwilligen, ist die Rechtsgrundlage der
+    Verarbeitung Ihrer Daten die erklärte Einwilligung. Andernfalls werden die
+    mithilfe von Cookies verarbeiteten Daten auf Grundlage unserer berechtigten
+    Interessen (z.B. an einem betriebswirtschaftlichen Betrieb unseres
+    Onlineangebotes und dessen Verbesserung) verarbeitet oder, wenn der Einsatz
+    von Cookies erforderlich ist, um unsere vertraglichen Verpflichtungen zu
+    erfüllen.
+  </p>
+  <p>
+    <strong>Speicherdauer: </strong>Sofern wir Ihnen keine expliziten Angaben
+    zur Speicherdauer von permanenten Cookies mitteilen (z. B. im Rahmen eines
+    sog. Cookie-Opt-Ins), gehen Sie bitte davon aus, dass die Speicherdauer bis
+    zu zwei Jahre betragen kann.
+  </p>
+  <p>
+    <strong
+      >Allgemeine Hinweise zum Widerruf und Widerspruch (Opt-Out):
+    </strong>
+    Abhängig davon, ob die Verarbeitung auf Grundlage einer Einwilligung oder
+    gesetzlichen Erlaubnis erfolgt, haben Sie jederzeit die Möglichkeit, eine
+    erteilte Einwilligung zu widerrufen oder der Verarbeitung Ihrer Daten durch
+    Cookie-Technologien zu widersprechen (zusammenfassend als "Opt-Out"
+    bezeichnet). Sie können Ihren Widerspruch zunächst mittels der Einstellungen
+    Ihres Browsers erklären, z.B., indem Sie die Nutzung von Cookies
+    deaktivieren (wobei hierdurch auch die Funktionsfähigkeit unseres
+    Onlineangebotes eingeschränkt werden kann). Ein Widerspruch gegen den
+    Einsatz von Cookies zu Zwecken des Onlinemarketings kann auch mittels einer
+    Vielzahl von Diensten, vor allem im Fall des Trackings, über die Webseiten
+    <a href="https://optout.aboutads.info" target="_blank"
+      >https://optout.aboutads.info</a
+    >
+    und
+    <a href="https://www.youronlinechoices.com/" target="_blank"
+      >https://www.youronlinechoices.com/</a
+    >
+    erklärt werden. Daneben können Sie weitere Widerspruchshinweise im Rahmen
+    der Angaben zu den eingesetzten Dienstleistern und Cookies erhalten.
+  </p>
+  <p>
+    <strong
+      >Verarbeitung von Cookie-Daten auf Grundlage einer Einwilligung</strong
+    >: Wir setzen ein Verfahren zum Cookie-Einwilligungs-Management ein, in
+    dessen Rahmen die Einwilligungen der Nutzer in den Einsatz von Cookies, bzw.
+    der im Rahmen des Cookie-Einwilligungs-Management-Verfahrens genannten
+    Verarbeitungen und Anbieter eingeholt sowie von den Nutzern verwaltet und
+    widerrufen werden können. Hierbei wird die Einwilligungserklärung
+    gespeichert, um deren Abfrage nicht erneut wiederholen zum müssen und die
+    Einwilligung entsprechend der gesetzlichen Verpflichtung nachweisen zu
+    können. Die Speicherung kann serverseitig und/oder in einem Cookie
+    (sogenanntes Opt-In-Cookie, bzw. mithilfe vergleichbarer Technologien)
+    erfolgen, um die Einwilligung einem Nutzer, bzw. dessen Gerät zuordnen zu
+    können. Vorbehaltlich individueller Angaben zu den Anbietern von
+    Cookie-Management-Diensten, gelten die folgenden Hinweise: Die Dauer der
+    Speicherung der Einwilligung kann bis zu zwei Jahren betragen. Hierbei wird
+    ein pseudonymer Nutzer-Identifikator gebildet und mit dem Zeitpunkt der
+    Einwilligung, Angaben zur Reichweite der Einwilligung (z. B. welche
+    Kategorien von Cookies und/oder Diensteanbieter) sowie dem Browser, System
+    und verwendeten Endgerät gespeichert.
+  </p>
+  <ul class="m-elements">
+    <li>
+      <strong>Verarbeitete Datenarten:</strong> Nutzungsdaten (z.B. besuchte
+      Webseiten, Interesse an Inhalten, Zugriffszeiten),
+      Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
+    </li>
+    <li>
+      <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
+      Nutzer von Onlinediensten).
+    </li>
+    <li>
+      <strong>Rechtsgrundlagen:</strong> Einwilligung (Art. 6 Abs. 1 S. 1 lit.
+      a. DSGVO), Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
+    </li>
+  </ul>
+  <h2 id="m225">Bereitstellung des Onlineangebotes und Webhosting</h2>
+  <p>
+    Um unser Onlineangebot sicher und effizient bereitstellen zu können, nehmen
+    wir die Leistungen von einem oder mehreren Webhosting-Anbietern in Anspruch,
+    von deren Servern (bzw. von ihnen verwalteten Servern) das Onlineangebot
+    abgerufen werden kann. Zu diesen Zwecken können wir Infrastruktur- und
+    Plattformdienstleistungen, Rechenkapazität, Speicherplatz und
+    Datenbankdienste sowie Sicherheitsleistungen und technische
+    Wartungsleistungen in Anspruch nehmen.
+  </p>
+  <p>
+    Zu den im Rahmen der Bereitstellung des Hostingangebotes verarbeiteten Daten
+    können alle die Nutzer unseres Onlineangebotes betreffenden Angaben gehören,
+    die im Rahmen der Nutzung und der Kommunikation anfallen. Hierzu gehören
+    regelmäßig die IP-Adresse, die notwendig ist, um die Inhalte von
+    Onlineangeboten an Browser ausliefern zu können, und alle innerhalb unseres
+    Onlineangebotes oder von Webseiten getätigten Eingaben.
+  </p>
+  <p>
+    <strong>Erhebung von Zugriffsdaten und Logfiles</strong>: Wir selbst (bzw.
+    unser Webhostinganbieter) erheben Daten zu jedem Zugriff auf den Server
+    (sogenannte Serverlogfiles). Zu den Serverlogfiles können die Adresse und
+    Name der abgerufenen Webseiten und Dateien, Datum und Uhrzeit des Abrufs,
+    übertragene Datenmengen, Meldung über erfolgreichen Abruf, Browsertyp nebst
+    Version, das Betriebssystem des Nutzers, Referrer URL (die zuvor besuchte
+    Seite) und im Regelfall IP-Adressen und der anfragende Provider gehören.
+  </p>
+  <p>
+    Die Serverlogfiles können zum einen zu Zwecken der Sicherheit eingesetzt
+    werden, z.B., um eine Überlastung der Server zu vermeiden (insbesondere im
+    Fall von missbräuchlichen Angriffen, sogenannten DDoS-Attacken) und zum
+    anderen, um die Auslastung der Server und ihre Stabilität sicherzustellen.
+  </p>
+  <ul class="m-elements">
+    <li>
+      <strong>Verarbeitete Datenarten:</strong> Inhaltsdaten (z.B. Eingaben in
+      Onlineformularen), Nutzungsdaten (z.B. besuchte Webseiten, Interesse an
+      Inhalten, Zugriffszeiten), Meta-/Kommunikationsdaten (z.B.
+      Geräte-Informationen, IP-Adressen).
+    </li>
+    <li>
+      <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
+      Nutzer von Onlinediensten).
+    </li>
+    <li>
+      <strong>Rechtsgrundlagen:</strong> Berechtigte Interessen (Art. 6 Abs. 1
+      S. 1 lit. f. DSGVO).
+    </li>
+  </ul>
+  <p><strong>Eingesetzte Dienste und Diensteanbieter:</strong></p>
+  <ul class="m-elements">
+    <li>
+      <strong>Amazon Web Services (AWS):</strong> Leistungen auf dem Gebiet der
+      Bereitstellung von informationstechnischer Infrastruktur und verbundenen
+      Dienstleistungen (z.B. Speicherplatz und/oder Rechenkapazitäten);
+      Dienstanbieter: Amazon Web Services, Inc., 410 Terry Avenue North, Seattle
+      WA 98109, USA; Website:
+      <a href="https://aws.amazon.com/de/" target="_blank"
+        >https://aws.amazon.com/de/</a
+      >; Datenschutzerklärung:
+      <a href="https://aws.amazon.com/de/privacy/?nc1=f_pr" target="_blank"
+        >https://aws.amazon.com/de/privacy/?nc1=f_pr</a
+      >.
+    </li>
+  </ul>
+  <h2 id="m469">Besondere Hinweise zu Applikationen (Apps)</h2>
+  <p>
+    >Wir verarbeiten die Daten der Nutzer unserer Applikation, soweit diese
+    erforderlich sind, um den Nutzern die Applikation sowie deren
+    Funktionalitäten bereitstellen, deren Sicherheit überwachen und sie
+    weiterentwickeln zu können. Wir können ferner Nutzer unter Beachtung der
+    gesetzlichen Vorgaben kontaktieren, sofern die Kommunikation zu Zwecken der
+    Administration oder Nutzung der Applikation erforderlich ist. Im Übrigen
+    verweisen wir im Hinblick auf die Verarbeitung der Daten der Nutzer auf die
+    Datenschutzhinweise in dieser Datenschutzerklärung.
+  </p>
+  <div class="dsg-license-content-blurred">
+    <ul class="m-elements">
+      <li>
+        <strong>Verarbeitete Datenarten:</strong> Bestandsdaten (z.B. Namen,
+        Adressen), Meta-/Kommunikationsdaten (z.B. Geräte-Informationen,
+        IP-Adressen), Zahlungsdaten (z.B. Bankverbindungen, Rechnungen,
+        Zahlungshistorie), Vertragsdaten (z.B. Vertragsgegenstand, Laufzeit,
+        Kundenkategorie), Bild- und/ oder Videoaufnahmen (z. B. Fotografien oder
+        Videoaufnahmen einer Person), Tonaufnahmen, Standortdaten (Angaben zur
+        geografischen Position eines Gerätes oder einer Person), Standortverlauf
+        und Bewegungsprofile (Sammlung von Standortdaten und
+        Positionsveränderungen über einen gewissen Zeitraum).
+      </li>
+      <li>
+        <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
+        Nutzer von Onlinediensten).
+      </li>
+      <li>
+        <strong>Zwecke der Verarbeitung:</strong> Erbringung vertragliche
+        Leistungen und Kundenservice.
+      </li>
+      <li>
+        <strong>Rechtsgrundlagen:</strong> Einwilligung (Art. 6 Abs. 1 S. 1 lit.
+        a. DSGVO), Vertragserfüllung und vorvertragliche Anfragen (Art. 6 Abs. 1
+        S. 1 lit. b. DSGVO), Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f.
+        DSGVO).
+      </li>
+    </ul>
+  </div>
+  <h2 id="m367">Registrierung, Anmeldung und Nutzerkonto</h2>
+  <p>
+    Nutzer können ein Nutzerkonto anlegen. Im Rahmen der Registrierung werden
+    den Nutzern die erforderlichen Pflichtangaben mitgeteilt und zu Zwecken der
+    Bereitstellung des Nutzerkontos auf Grundlage vertraglicher Pflichterfüllung
+    verarbeitet. Zu den verarbeiteten Daten gehören insbesondere die
+    Login-Informationen (Nutzername, Passwort sowie eine E-Mail-Adresse).
+  </p>
+  <p>
+    Im Rahmen der Inanspruchnahme unserer Registrierungs- und Anmeldefunktionen
+    sowie der Nutzung des Nutzerkontos speichern wir die IP-Adresse und den
+    Zeitpunkt der jeweiligen Nutzerhandlung. Die Speicherung erfolgt auf
+    Grundlage unserer berechtigten Interessen als auch jener der Nutzer an einem
+    Schutz vor Missbrauch und sonstiger unbefugter Nutzung. Eine Weitergabe
+    dieser Daten an Dritte erfolgt grundsätzlich nicht, es sei denn, sie ist zur
+    Verfolgung unserer Ansprüche erforderlich oder es besteht eine gesetzliche
+    Verpflichtung hierzu.
+  </p>
+  <p>
+    Die Nutzer können über Vorgänge, die für deren Nutzerkonto relevant sind,
+    wie z.B. technische Änderungen, per E-Mail informiert werden.
+  </p>
+  <p>
+    <strong>Registrierung mit Pseudonymen</strong>: Nutzer dürfen statt
+    Klarnamen Pseudonyme als Nutzernamen verwenden.
+  </p>
+  <ul class="m-elements">
+    <li>
+      <strong>Verarbeitete Datenarten:</strong> Bestandsdaten (z.B. Namen,
+      Adressen), Kontaktdaten (z.B. E-Mail, Telefonnummern), Inhaltsdaten (z.B.
+      Eingaben in Onlineformularen), Meta-/Kommunikationsdaten (z.B.
+      Geräte-Informationen, IP-Adressen).
+    </li>
+    <li>
+      <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
+      Nutzer von Onlinediensten).
+    </li>
+    <li>
+      <strong>Zwecke der Verarbeitung:</strong> Erbringung vertragliche
+      Leistungen und Kundenservice, Sicherheitsmaßnahmen, Verwaltung und
+      Beantwortung von Anfragen.
+    </li>
+    <li>
+      <strong>Rechtsgrundlagen:</strong> Vertragserfüllung und vorvertragliche
+      Anfragen (Art. 6 Abs. 1 S. 1 lit. b. DSGVO), Berechtigte Interessen (Art.
+      6 Abs. 1 S. 1 lit. f. DSGVO).
+    </li>
+  </ul>
+  <h2 id="m432">Community Funktionen</h2>
+  <p>
+    Die von uns bereitgestellten Community Funktionen erlauben es Nutzern
+    miteinander in Konversationen oder sonst miteinander in einen Austausch zu
+    treten. Hierbei bitten wir zu beachten, dass die Nutzung der
+    Communityfunktionen nur unter Beachtung der geltenden Rechtslage, unserer
+    Bedingungen und Richtlinien sowie der Rechte anderer Nutzer und Dritter
+    gestattet ist.
+  </p>
+  <p>
+    <strong>Beiträge der Nutzer sind öffentlich</strong>: Die von Nutzern
+    erstellten Beiträge und Inhalte sind öffentlich sichtbar und zugänglich.
+  </p>
+  <p>
+    <strong>Speicherung von Daten zu Sicherheitszwecken</strong>: Die Beiträge
+    und sonstige Eingaben der Nutzer werden zu Zwecken der Community- und
+    Konversationsfunktionen verarbeitet und, vorbehaltlich gesetzlicher
+    Pflichten oder gesetzlicher Erlaubnis nicht an Dritte herausgegeben. Eine
+    Herausgabepflicht kann insbesondere im Fall von rechtswidrigen Beiträgen zu
+    Zwecken der Rechtsverfolgung entstehen. Wir weisen darauf hin, dass neben
+    den Inhalten der Beiträge auch deren Zeitpunkt und die IP-Adresse der Nutzer
+    gespeichert werden. Dies geschieht, um zum Schutz anderer Nutzer und der
+    Community angemessene Maßnahmen ergreifen zu können.
+  </p>
+  <ul class="m-elements">
+    <li>
+      <strong>Verarbeitete Datenarten:</strong> Nutzungsdaten (z.B. besuchte
+      Webseiten, Interesse an Inhalten, Zugriffszeiten),
+      Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
+    </li>
+    <li>
+      <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
+      Nutzer von Onlinediensten).
+    </li>
+    <li>
+      <strong>Zwecke der Verarbeitung:</strong> Erbringung vertragliche
+      Leistungen und Kundenservice, Sicherheitsmaßnahmen.
+    </li>
+    <li>
+      <strong>Rechtsgrundlagen:</strong> Vertragserfüllung und vorvertragliche
+      Anfragen (Art. 6 Abs. 1 S. 1 lit. b. DSGVO), Berechtigte Interessen (Art.
+      6 Abs. 1 S. 1 lit. f. DSGVO).
+    </li>
+  </ul>
+  <h2 id="m263">Webanalyse, Monitoring und Optimierung</h2>
+  <p>
+    Die Webanalyse (auch als "Reichweitenmessung" bezeichnet) dient der
+    Auswertung der Besucherströme unseres Onlineangebotes und kann Verhalten,
+    Interessen oder demographische Informationen zu den Besuchern, wie z.B. das
+    Alter oder das Geschlecht, als pseudonyme Werte umfassen. Mit Hilfe der
+    Reichweitenanalyse können wir z.B. erkennen, zu welcher Zeit unser
+    Onlineangebot oder dessen Funktionen oder Inhalte am häufigsten genutzt
+    werden oder zur Wiederverwendung einladen. Ebenso können wir nachvollziehen,
+    welche Bereiche der Optimierung bedürfen.
+  </p>
+  <p>
+    Neben der Webanalyse können wir auch Testverfahren einsetzen, um z.B.
+    unterschiedliche Versionen unseres Onlineangebotes oder seiner Bestandteile
+    zu testen und optimieren.
+  </p>
+  <p>
+    Zu diesen Zwecken können sogenannte Nutzerprofile angelegt und in einer
+    Datei (sogenannte "Cookie") gespeichert oder ähnliche Verfahren mit dem
+    gleichen Zweck genutzt werden. Zu diesen Angaben können z.B. betrachtete
+    Inhalte, besuchte Webseiten und dort genutzte Elemente und technische
+    Angaben, wie der verwendete Browser, das verwendete Computersystem sowie
+    Angaben zu Nutzungszeiten gehören. Sofern Nutzer in die Erhebung ihrer
+    Standortdaten eingewilligt haben, können je nach Anbieter auch diese
+    verarbeitet werden.
+  </p>
+  <p>
+    Es werden ebenfalls die IP-Adressen der Nutzer gespeichert. Jedoch nutzen
+    wir ein IP-Masking-Verfahren (d.h., Pseudonymisierung durch Kürzung der
+    IP-Adresse) zum Schutz der Nutzer. Generell werden die im Rahmen von
+    Webanalyse, A/B-Testings und Optimierung keine Klardaten der Nutzer (wie
+    z.B. E-Mail-Adressen oder Namen) gespeichert, sondern Pseudonyme. D.h., wir
+    als auch die Anbieter der eingesetzten Software kennen nicht die
+    tatsächliche Identität der Nutzer, sondern nur den für Zwecke der jeweiligen
+    Verfahren in deren Profilen gespeicherten Angaben.
+  </p>
+  <p>
+    <strong>Hinweise zu Rechtsgrundlagen:</strong> Sofern wir die Nutzer um
+    deren Einwilligung in den Einsatz der Drittanbieter bitten, ist die
+    Rechtsgrundlage der Verarbeitung von Daten die Einwilligung. Ansonsten
+    werden die Daten der Nutzer auf Grundlage unserer berechtigten Interessen
+    (d.h. Interesse an effizienten, wirtschaftlichen und empfängerfreundlichen
+    Leistungen) verarbeitet. In diesem Zusammenhang möchten wir Sie auch auf die
+    Informationen zur Verwendung von Cookies in dieser Datenschutzerklärung
+    hinweisen.
+  </p>
+  <ul class="m-elements">
+    <li>
+      <strong>Verarbeitete Datenarten:</strong> Nutzungsdaten (z.B. besuchte
+      Webseiten, Interesse an Inhalten, Zugriffszeiten),
+      Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
+    </li>
+    <li>
+      <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
+      Nutzer von Onlinediensten).
+    </li>
+    <li>
+      <strong>Zwecke der Verarbeitung:</strong> Reichweitenmessung (z.B.
+      Zugriffsstatistiken, Erkennung wiederkehrender Besucher), Profile mit
+      nutzerbezogenen Informationen (Erstellen von Nutzerprofilen).
+    </li>
+    <li>
+      <strong>Sicherheitsmaßnahmen:</strong> IP-Masking (Pseudonymisierung der
+      IP-Adresse).
+    </li>
+    <li>
+      <strong>Rechtsgrundlagen:</strong> Einwilligung (Art. 6 Abs. 1 S. 1 lit.
+      a. DSGVO), Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
+    </li>
+  </ul>
+  <p><strong>Eingesetzte Dienste und Diensteanbieter:</strong></p>
+  <ul class="m-elements">
+    <li>
+      <strong>Matomo:</strong> Die durch das Cookie erzeugte Informationen über
+      Ihre Benutzung dieser Webseite werden nur auf unserem Server gespeichert
+      und nicht an Dritte weitergegeben; Dienstanbieter: Webanalyse/
+      Reichweitenmessung im Selbsthosting; Website:
+      <a href="https://matomo.org/" target="_blank">https://matomo.org/</a>;
+      Löschung von Daten: Die Cookies haben eine Speicherdauer von maximal 13
+      Monaten.
+    </li>
+  </ul>
+  <h2 id="m328">Plugins und eingebettete Funktionen sowie Inhalte</h2>
+  <p>
+    Wir binden in unser Onlineangebot Funktions- und Inhaltselemente ein, die
+    von den Servern ihrer jeweiligen Anbieter (nachfolgend bezeichnet als
+    "Drittanbieter”) bezogen werden. Dabei kann es sich zum Beispiel um
+    Grafiken, Videos oder Stadtpläne handeln (nachfolgend einheitlich bezeichnet
+    als "Inhalte”).
+  </p>
+  <p>
+    Die Einbindung setzt immer voraus, dass die Drittanbieter dieser Inhalte die
+    IP-Adresse der Nutzer verarbeiten, da sie ohne die IP-Adresse die Inhalte
+    nicht an deren Browser senden könnten. Die IP-Adresse ist damit für die
+    Darstellung dieser Inhalte oder Funktionen erforderlich. Wir bemühen uns,
+    nur solche Inhalte zu verwenden, deren jeweilige Anbieter die IP-Adresse
+    lediglich zur Auslieferung der Inhalte verwenden. Drittanbieter können
+    ferner sogenannte Pixel-Tags (unsichtbare Grafiken, auch als "Web Beacons"
+    bezeichnet) für statistische oder Marketingzwecke verwenden. Durch die
+    "Pixel-Tags" können Informationen, wie der Besucherverkehr auf den Seiten
+    dieser Webseite, ausgewertet werden. Die pseudonymen Informationen können
+    ferner in Cookies auf dem Gerät der Nutzer gespeichert werden und unter
+    anderem technische Informationen zum Browser und zum Betriebssystem, zu
+    verweisenden Webseiten, zur Besuchszeit sowie weitere Angaben zur Nutzung
+    unseres Onlineangebotes enthalten als auch mit solchen Informationen aus
+    anderen Quellen verbunden werden.
+  </p>
+  <p>
+    <strong>Hinweise zu Rechtsgrundlagen:</strong> Sofern wir die Nutzer um
+    deren Einwilligung in den Einsatz der Drittanbieter bitten, ist die
+    Rechtsgrundlage der Verarbeitung von Daten die Einwilligung. Ansonsten
+    werden die Daten der Nutzer auf Grundlage unserer berechtigten Interessen
+    (d.h. Interesse an effizienten, wirtschaftlichen und empfängerfreundlichen
+    Leistungen) verarbeitet. In diesem Zusammenhang möchten wir Sie auch auf die
+    Informationen zur Verwendung von Cookies in dieser Datenschutzerklärung
+    hinweisen.
+  </p>
+  <ul class="m-elements">
+    <li>
+      <strong>Verarbeitete Datenarten:</strong> Nutzungsdaten (z.B. besuchte
+      Webseiten, Interesse an Inhalten, Zugriffszeiten),
+      Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
+    </li>
+    <li>
+      <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
+      Nutzer von Onlinediensten).
+    </li>
+    <li>
+      <strong>Zwecke der Verarbeitung:</strong> Bereitstellung unseres
+      Onlineangebotes und Nutzerfreundlichkeit.
+    </li>
+  </ul>
+  <h2 id="m12">Löschung von Daten</h2>
+  <p>
+    Die von uns verarbeiteten Daten werden nach Maßgabe der gesetzlichen
+    Vorgaben gelöscht, sobald deren zur Verarbeitung erlaubten Einwilligungen
+    widerrufen werden oder sonstige Erlaubnisse entfallen (z.B., wenn der Zweck
+    der Verarbeitung dieser Daten entfallen ist oder sie für den Zweck nicht
+    erforderlich sind).
+  </p>
+  <p>
+    Sofern die Daten nicht gelöscht werden, weil sie für andere und gesetzlich
+    zulässige Zwecke erforderlich sind, wird deren Verarbeitung auf diese Zwecke
+    beschränkt. D.h., die Daten werden gesperrt und nicht für andere Zwecke
+    verarbeitet. Das gilt z.B. für Daten, die aus handels- oder
+    steuerrechtlichen Gründen aufbewahrt werden müssen oder deren Speicherung
+    zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum
+    Schutz der Rechte einer anderen natürlichen oder juristischen Person
+    erforderlich ist.
+  </p>
+  <p>
+    Unsere Datenschutzhinweise können ferner weitere Angaben zu der Aufbewahrung
+    und Löschung von Daten beinhalten, die für die jeweiligen Verarbeitungen
+    vorrangig gelten.
+  </p>
+  <h2 id="m15">Änderung und Aktualisierung der Datenschutzerklärung</h2>
+  <p>
+    Wir bitten Sie, sich regelmäßig über den Inhalt unserer Datenschutzerklärung
+    zu informieren. Wir passen die Datenschutzerklärung an, sobald die
+    Änderungen der von uns durchgeführten Datenverarbeitungen dies erforderlich
+    machen. Wir informieren Sie, sobald durch die Änderungen eine
+    Mitwirkungshandlung Ihrerseits (z.B. Einwilligung) oder eine sonstige
+    individuelle Benachrichtigung erforderlich wird.
+  </p>
+  <p>
+    Sofern wir in dieser Datenschutzerklärung Adressen und Kontaktinformationen
+    von Unternehmen und Organisationen angeben, bitten wir zu beachten, dass die
+    Adressen sich über die Zeit ändern können und bitten die Angaben vor
+    Kontaktaufnahme zu prüfen.
+  </p>
+  <h2 id="m10">Rechte der betroffenen Personen</h2>
+  <p>
+    Ihnen stehen als Betroffene nach der DSGVO verschiedene Rechte zu, die sich
+    insbesondere aus Art. 15 bis 21 DSGVO ergeben:
+  </p>
+  <ul>
+    <li>
+      <strong
+        >Widerspruchsrecht: Sie haben das Recht, aus Gründen, die sich aus Ihrer
+        besonderen Situation ergeben, jederzeit gegen die Verarbeitung der Sie
+        betreffenden personenbezogenen Daten, die aufgrund von Art. 6 Abs. 1
+        lit. e oder f DSGVO erfolgt, Widerspruch einzulegen; dies gilt auch für
+        ein auf diese Bestimmungen gestütztes Profiling. Werden die Sie
+        betreffenden personenbezogenen Daten verarbeitet, um Direktwerbung zu
+        betreiben, haben Sie das Recht, jederzeit Widerspruch gegen die
+        Verarbeitung der Sie betreffenden personenbezogenen Daten zum Zwecke
+        derartiger Werbung einzulegen; dies gilt auch für das Profiling, soweit
+        es mit solcher Direktwerbung in Verbindung steht.</strong
+      >
+    </li>
+    <li>
+      <strong>Widerrufsrecht bei Einwilligungen:</strong> Sie haben das Recht,
+      erteilte Einwilligungen jederzeit zu widerrufen.
+    </li>
+    <li>
+      <strong>Auskunftsrecht:</strong> Sie haben das Recht, eine Bestätigung
+      darüber zu verlangen, ob betreffende Daten verarbeitet werden und auf
+      Auskunft über diese Daten sowie auf weitere Informationen und Kopie der
+      Daten entsprechend den gesetzlichen Vorgaben.
+    </li>
+    <li>
+      <strong>Recht auf Berichtigung:</strong> Sie haben entsprechend den
+      gesetzlichen Vorgaben das Recht, die Vervollständigung der Sie
+      betreffenden Daten oder die Berichtigung der Sie betreffenden unrichtigen
+      Daten zu verlangen.
+    </li>
+    <li>
+      <strong>Recht auf Löschung und Einschränkung der Verarbeitung:</strong>
+      Sie haben nach Maßgabe der gesetzlichen Vorgaben das Recht, zu verlangen,
+      dass Sie betreffende Daten unverzüglich gelöscht werden, bzw. alternativ
+      nach Maßgabe der gesetzlichen Vorgaben eine Einschränkung der Verarbeitung
+      der Daten zu verlangen.
+    </li>
+    <li>
+      <strong>Recht auf Datenübertragbarkeit:</strong> Sie haben das Recht, Sie
+      betreffende Daten, die Sie uns bereitgestellt haben, nach Maßgabe der
+      gesetzlichen Vorgaben in einem strukturierten, gängigen und
+      maschinenlesbaren Format zu erhalten oder deren Übermittlung an einen
+      anderen Verantwortlichen zu fordern.
+    </li>
+    <li>
+      <strong>Beschwerde bei Aufsichtsbehörde:</strong> Sie haben unbeschadet
+      eines anderweitigen verwaltungsrechtlichen oder gerichtlichen
+      Rechtsbehelfs das Recht auf Beschwerde bei einer Aufsichtsbehörde,
+      insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthaltsorts,
+      ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes, wenn Sie
+      der Ansicht sind, dass die Verarbeitung der Sie betreffenden
+      personenbezogenen Daten gegen die Vorgaben der DSGVO verstößt.
+    </li>
+  </ul>
+  <h2 id="m42">Begriffsdefinitionen</h2>
+  <p>
+    In diesem Abschnitt erhalten Sie eine Übersicht über die in dieser
+    Datenschutzerklärung verwendeten Begrifflichkeiten. Viele der Begriffe sind
+    dem Gesetz entnommen und vor allem im Art. 4 DSGVO definiert. Die
+    gesetzlichen Definitionen sind verbindlich. Die nachfolgenden Erläuterungen
+    sollen dagegen vor allem dem Verständnis dienen. Die Begriffe sind
+    alphabetisch sortiert.
+  </p>
+  <ul class="glossary">
+    <li>
+      <strong>IP-Masking:</strong> Als "IP-Masking” wird eine Methode
+      bezeichnet, bei der das letzte Oktett, d.h., die letzten beiden Zahlen
+      einer IP-Adresse, gelöscht wird, damit die IP-Adresse nicht mehr der
+      eindeutigen Identifizierung einer Person dienen kann. Daher ist das
+      IP-Masking ein Mittel zur Pseudonymisierung von Verarbeitungsverfahren,
+      insbesondere im Onlinemarketing
+    </li>
+    <li>
+      <strong>Personenbezogene Daten:</strong> "Personenbezogene Daten“ sind
+      alle Informationen, die sich auf eine identifizierte oder identifizierbare
+      natürliche Person (im Folgenden "betroffene Person“) beziehen; als
+      identifizierbar wird eine natürliche Person angesehen, die direkt oder
+      indirekt, insbesondere mittels Zuordnung zu einer Kennung wie einem Namen,
+      zu einer Kennnummer, zu Standortdaten, zu einer Online-Kennung (z.B.
+      Cookie) oder zu einem oder mehreren besonderen Merkmalen identifiziert
+      werden kann, die Ausdruck der physischen, physiologischen, genetischen,
+      psychischen, wirtschaftlichen, kulturellen oder sozialen Identität dieser
+      natürlichen Person sind.
+    </li>
+    <li>
+      <strong>Profile mit nutzerbezogenen Informationen:</strong> Die
+      Verarbeitung von "Profilen mit nutzerbezogenen Informationen", bzw. kurz
+      "Profilen" umfasst jede Art der automatisierten Verarbeitung
+      personenbezogener Daten, die darin besteht, dass diese personenbezogenen
+      Daten verwendet werden, um bestimmte persönliche Aspekte, die sich auf
+      eine natürliche Person beziehen (je nach Art der Profilbildung können dazu
+      unterschiedliche Informationen betreffend die Demographie, Verhalten und
+      Interessen, wie z.B. die Interaktion mit Webseiten und deren Inhalten,
+      etc.) zu analysieren, zu bewerten oder, um sie vorherzusagen (z.B. die
+      Interessen an bestimmten Inhalten oder Produkten, das Klickverhalten auf
+      einer Webseite oder den Aufenthaltsort). Zu Zwecken des Profilings werden
+      häufig Cookies und Web-Beacons eingesetzt.
+    </li>
+    <li>
+      <strong>Reichweitenmessung:</strong> Die Reichweitenmessung (auch als Web
+      Analytics bezeichnet) dient der Auswertung der Besucherströme eines
+      Onlineangebotes und kann das Verhalten oder Interessen der Besucher an
+      bestimmten Informationen, wie z.B. Inhalten von Webseiten, umfassen. Mit
+      Hilfe der Reichweitenanalyse können Webseiteninhaber z.B. erkennen, zu
+      welcher Zeit Besucher ihre Webseite besuchen und für welche Inhalte sie
+      sich interessieren. Dadurch können sie z.B. die Inhalte der Webseite
+      besser an die Bedürfnisse ihrer Besucher anpassen. Zu Zwecken der
+      Reichweitenanalyse werden häufig pseudonyme Cookies und Web-Beacons
+      eingesetzt, um wiederkehrende Besucher zu erkennen und so genauere
+      Analysen zur Nutzung eines Onlineangebotes zu erhalten.
+    </li>
+    <li>
+      <strong>Standortdaten:</strong> Standortdaten entstehen, wenn sich ein
+      mobiles Gerät (oder ein anderes Gerät mit den technischen Voraussetzungen
+      einer Standortbestimmung) mit einer Funkzelle, einem WLAN oder ähnlichen
+      technischen Mittlern und Funktionen der Standortbestimmung, verbindet.
+      Standortdaten dienen der Angabe, an welcher geografisch bestimmbaren
+      Position der Erde sich das jeweilige Gerät befindet. Standortdaten können
+      z. B. eingesetzt werden, um Kartenfunktionen oder andere von einem Ort
+      abhängige Informationen darzustellen.
+    </li>
+    <li>
+      <strong>Standortverlauf und Bewegungsprofile:</strong> Als Standortverlauf
+      (auch als "Bewegungsprofil" bezeichnet) wird die Sammlung von
+      Standortdaten über einen gewissen Zeitraum bezeichnet. Der Standortverlauf
+      erlaubt einen Rückschluss auf die geografischen Bewegungen (d. h.
+      Positionsveränderungen) von Geräten, bzw. ihrer Nutzer.
+    </li>
+    <li>
+      <strong>Verantwortlicher:</strong> Als "Verantwortlicher“ wird die
+      natürliche oder juristische Person, Behörde, Einrichtung oder andere
+      Stelle, die allein oder gemeinsam mit anderen über die Zwecke und Mittel
+      der Verarbeitung von personenbezogenen Daten entscheidet, bezeichnet.
+    </li>
+    <li>
+      <strong>Verarbeitung:</strong> "Verarbeitung" ist jeder mit oder ohne
+      Hilfe automatisierter Verfahren ausgeführte Vorgang oder jede solche
+      Vorgangsreihe im Zusammenhang mit personenbezogenen Daten. Der Begriff
+      reicht weit und umfasst praktisch jeden Umgang mit Daten, sei es das
+      Erheben, das Auswerten, das Speichern, das Übermitteln oder das Löschen.
+    </li>
+  </ul>
+  <h1 class="adsimple-311265068">Datenschutzerklärung</h1>
+  <h2 class="adsimple-311265068">Datenschutz</h2>
+  <p>
+    Wir haben diese Datenschutzerklärung (Fassung 23.02.2021-311265068)
+    verfasst, um Ihnen gemäß der Vorgaben der
+    <a
+      class="adsimple-311265068"
+      href="https://eur-lex.europa.eu/legal-content/DE/ALL/?uri=celex%3A32016R0679&amp;tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Datenschutz-Grundverordnung (EU) 2016/679</a
+    >
+    zu erklären, welche Informationen wir sammeln, wie wir Daten verwenden und
+    welche Entscheidungsmöglichkeiten Sie als Besucher dieser Webseite haben.
+  </p>
+  <p>
+    Datenschutzerklärungen klingen für gewöhnlich sehr technisch. Diese Version
+    soll Ihnen hingegen die wichtigsten Dinge so einfach und klar wie möglich
+    beschreiben. Soweit es möglich ist, werden technische Begriffe
+    leserfreundlich erklärt. Außerdem möchten wir vermitteln, dass wir mit
+    dieser Website nur dann Informationen sammeln und verwenden, wenn eine
+    entsprechende gesetzliche Grundlage gegeben ist. Das ist sicher nicht
+    möglich, wenn man möglichst knappe, technische Erklärungen abgibt, so wie
+    sie im Internet oft Standard sind, wenn es um Datenschutz geht. Ich hoffe
+    Sie finden die folgenden Erläuterungen interessant und informativ und
+    vielleicht ist die eine oder andere Information dabei, die Sie noch nicht
+    kannten.<br />
+    Wenn trotzdem Fragen bleiben, möchten wir Sie bitten den vorhandenen Links
+    zu folgen und sich weitere Informationen auf Drittseiten anzusehen, oder uns
+    einfach eine E-Mail zu schreiben. Unsere Kontaktdaten finden Sie im
+    Impressum.
+  </p>
+  <h2 class="adsimple-311265068">Automatische Datenspeicherung</h2>
+  <p>
+    Wenn Sie heutzutage Websites besuchen, werden gewisse Informationen
+    automatisch erstellt und gespeichert, so auch auf dieser Website. Diese
+    gesammelten Daten sollten möglichst sparsam und nur mit Begründung gesammelt
+    werden werden. Mit Website meinen wir übrigens die Gesamtheit aller
+    Webseiten auf Ihrer Domain, d.h. alles von der Startseite (Homepage) bis hin
+    zur aller letzten Unterseite (wie dieser hier). Mit Domain meinen wir zum
+    Beispiel beispiel.de oder musterbeispiel.com.
+  </p>
+  <p>
+    Auch während Sie unsere Website jetzt gerade besuchen, speichert unser
+    Webserver &#8211; das ist der Computer auf dem diese Webseite gespeichert
+    ist &#8211;  aus Gründen der Betriebssicherheit, zur Erstellung von
+    Zugriffsstatistik usw. in der Regel automatisch Daten wie
+  </p>
+  <ul class="adsimple-311265068">
+    <li class="adsimple-311265068">
+      die komplette Internetadresse (URL) der aufgerufenen Webseite (z. B.
+      https://www.beispielwebsite.de/beispielunterseite.html/)
+    </li>
+    <li class="adsimple-311265068">
+      Browser und Browserversion (z. B. Chrome 87)
+    </li>
+    <li class="adsimple-311265068">
+      das verwendete Betriebssystem (z. B. Windows 10)
+    </li>
+    <li class="adsimple-311265068">
+      die Adresse (URL) der zuvor besuchten Seite (Referrer URL) (z. B.
+      https://www.beispielquellsite.de/vondabinichgekommen.html/)
+    </li>
+    <li class="adsimple-311265068">
+      den Hostname und die IP-Adresse des Geräts von welchem aus zugegriffen
+      wird (z. B. COMPUTERNAME und 194.23.43.121)
+    </li>
+    <li class="adsimple-311265068">Datum und Uhrzeit</li>
+    <li class="adsimple-311265068">
+      in Dateien, den sogenannten Webserver-Logfiles.
+    </li>
+  </ul>
+  <p>
+    In der Regel werden diese Dateien zwei Wochen gespeichert und danach
+    automatisch gelöscht. Wir geben diese Daten nicht weiter, können jedoch
+    nicht ausschließen, dass diese Daten beim Vorliegen von rechtswidrigem
+    Verhalten von Behörden eingesehen werden.
+  </p>
+  <p>
+    Kurz gesagt: Ihr Besuch wird durch unseren Provider (Firma, die unsere
+    Website auf speziellen Computern (Servern) laufen lässt), protokolliert,
+    aber wir geben Ihre Daten nicht weiter!
+  </p>
+  <h2 class="adsimple-311265068">Cookies</h2>
+  <p>
+    Unsere Website verwendet HTTP-Cookies um nutzerspezifische Daten zu
+    speichern.<br />
+    Im Folgenden erklären wir, was Cookies sind und warum Sie genutzt werden,
+    damit Sie die folgende Datenschutzerklärung besser verstehen.
+  </p>
+  <h3 class="adsimple-311265068">Was genau sind Cookies?</h3>
+  <p>
+    Immer wenn Sie durch das Internet surfen, verwenden Sie einen Browser.
+    Bekannte Browser sind beispielsweise Chrome, Safari, Firefox, Internet
+    Explorer und Microsoft Edge. Die meisten Webseiten speichern kleine
+    Text-Dateien in Ihrem Browser. Diese Dateien nennt man Cookies.
+  </p>
+  <p>
+    Eines ist nicht von der Hand zu weisen: Cookies sind echt nützliche
+    Helferlein. Fast alle Webseiten verwenden Cookies. Genauer gesprochen sind
+    es HTTP-Cookies, da es auch noch andere Cookies für andere
+    Anwendungsbereiche gibt. HTTP-Cookies sind kleine Dateien, die von unserer
+    Website auf Ihrem Computer gespeichert werden. Diese Cookie-Dateien werden
+    automatisch im Cookie-Ordner, quasi dem &#8220;Hirn&#8221; Ihres Browsers,
+    untergebracht. Ein Cookie besteht aus einem Namen und einem Wert. Bei der
+    Definition eines Cookies müssen zusätzlich ein oder mehrere Attribute
+    angegeben werden.
+  </p>
+  <p>
+    Cookies speichern gewisse Nutzerdaten von Ihnen, wie beispielsweise Sprache
+    oder persönliche Seiteneinstellungen. Wenn Sie unsere Seite wieder aufrufen,
+    übermittelt Ihr Browser die „userbezogenen“ Informationen an unsere Seite
+    zurück. Dank der Cookies weiß unsere Website, wer Sie sind und bietet Ihnen
+    Ihre gewohnte Standardeinstellung. In einigen Browsern hat jedes Cookie eine
+    eigene Datei, in anderen wie beispielsweise Firefox sind alle Cookies in
+    einer einzigen Datei gespeichert.
+  </p>
+  <p>
+    Es gibt sowohl Erstanbieter Cookies als auch Drittanbieter-Cookies.
+    Erstanbieter-Cookies werden direkt von unserer Seite erstellt,
+    Drittanbieter-Cookies werden von Partner-Webseiten (z.B. Google Analytics)
+    erstellt. Jedes Cookie ist individuell zu bewerten, da jedes Cookie andere
+    Daten speichert. Auch die Ablaufzeit eines Cookies variiert von ein paar
+    Minuten bis hin zu ein paar Jahren. Cookies sind keine Software-Programme
+    und enthalten keine Viren, Trojaner oder andere „Schädlinge“. Cookies können
+    auch nicht auf Informationen Ihres PCs zugreifen.
+  </p>
+  <p>So können zum Beispiel Cookie-Daten aussehen:</p>
+  <ul class="adsimple-311265068">
+    <li class="adsimple-311265068">Name: _ga</li>
+    <li class="adsimple-311265068">Ablaufzeit: 2 Jahre</li>
+    <li class="adsimple-311265068">
+      Verwendung: Unterscheidung der Webseitenbesucher
+    </li>
+    <li class="adsimple-311265068">
+      Beispielhafter Wert: GA1.2.1326744211.152311265068
+    </li>
+  </ul>
+  <p>Ein Browser sollte folgende Mindestgrößen unterstützen:</p>
+  <ul class="adsimple-311265068">
+    <li class="adsimple-311265068">
+      Ein Cookie soll mindestens 4096 Bytes enthalten können
+    </li>
+    <li class="adsimple-311265068">
+      Pro Domain sollen mindestens 50 Cookies gespeichert werden können
+    </li>
+    <li class="adsimple-311265068">
+      Insgesamt sollen mindestens 3000 Cookies gespeichert werden können
+    </li>
+  </ul>
+  <h3 class="adsimple-311265068">Welche Arten von Cookies gibt es?</h3>
+  <p>
+    Die Frage welche Cookies wir im Speziellen verwenden, hängt von den
+    verwendeten Diensten ab und wird in der folgenden Abschnitten der
+    Datenschutzerklärung geklärt. An dieser Stelle möchten wir kurz auf die
+    verschiedenen Arten von HTTP-Cookies eingehen.
+  </p>
+  <p>Man kann 4 Arten von Cookies unterscheiden:</p>
+  <p>
+    <strong class="adsimple-311265068"
+      >Unbedingt notwendige Cookies<br /> </strong
+    >Diese Cookies sind nötig, um grundlegende Funktionen der Website
+    sicherzustellen. Zum Beispiel braucht es diese Cookies, wenn ein User ein
+    Produkt in den Warenkorb legt, dann auf anderen Seiten weitersurft und
+    später erst zur Kasse geht. Durch diese Cookies wird der Warenkorb nicht
+    gelöscht, selbst wenn der User sein Browserfenster schließt.
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Funktionelle Cookies<br /> </strong>Diese
+    Cookies sammeln Infos über das Userverhalten und ob der User etwaige
+    Fehlermeldungen bekommt. Zudem werden mithilfe dieser Cookies auch die
+    Ladezeit und das Verhalten der Website bei verschiedenen Browsern gemessen.
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Zielorientierte Cookies<br /> </strong
+    >Diese Cookies sorgen für eine bessere Nutzerfreundlichkeit. Beispielsweise
+    werden eingegebene Standorte, Schriftgrößen oder Formulardaten gespeichert.
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Werbe-Cookies<br /> </strong>Diese
+    Cookies werden auch Targeting-Cookies genannt. Sie dienen dazu dem User
+    individuell angepasste Werbung zu liefern. Das kann sehr praktisch, aber
+    auch sehr nervig sein.
+  </p>
+  <p>
+    Üblicherweise werden Sie beim erstmaligen Besuch einer Webseite gefragt,
+    welche dieser Cookiearten Sie zulassen möchten. Und natürlich wird diese
+    Entscheidung auch in einem Cookie gespeichert.
+  </p>
+  <h3 class="adsimple-311265068">Wie kann ich Cookies löschen?</h3>
+  <p>
+    Wie und ob Sie Cookies verwenden wollen, entscheiden Sie selbst. Unabhängig
+    von welchem Service oder welcher Website die Cookies stammen, haben Sie
+    immer die Möglichkeit Cookies zu löschen, nur teilweise zuzulassen oder zu
+    deaktivieren. Zum Beispiel können Sie Cookies von Drittanbietern blockieren,
+    aber alle anderen Cookies zulassen.
+  </p>
+  <p>
+    Wenn Sie feststellen möchten, welche Cookies in Ihrem Browser gespeichert
+    wurden, wenn Sie Cookie-Einstellungen ändern oder löschen wollen, können Sie
+    dies in Ihren Browser-Einstellungen finden:
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.google.com/chrome/answer/95647?tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Chrome: Cookies in Chrome löschen, aktivieren und verwalten</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.apple.com/de-at/guide/safari/sfri11471/mac?tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Safari: Verwalten von Cookies und Websitedaten mit Safari</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.mozilla.org/de/kb/cookies-und-website-daten-in-firefox-loschen?tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Firefox: Cookies löschen, um Daten zu entfernen, die Websites auf Ihrem
+      Computer abgelegt haben</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.microsoft.com/de-at/help/17442/windows-internet-explorer-delete-manage-cookies?tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Internet Explorer: Löschen und Verwalten von Cookies</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.microsoft.com/de-at/help/4027947/windows-delete-cookies?tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Microsoft Edge: Löschen und Verwalten von Cookies</a
+    >
+  </p>
+  <p>
+    Falls Sie grundsätzlich keine Cookies haben wollen, können Sie Ihren Browser
+    so einrichten, dass er Sie immer informiert, wenn ein Cookie gesetzt werden
+    soll. So können Sie bei jedem einzelnen Cookie entscheiden, ob Sie das
+    Cookie erlauben oder nicht. Die Vorgangsweise ist je nach Browser
+    verschieden. Am besten ist es Sie suchen die Anleitung in Google mit dem
+    Suchbegriff “Cookies löschen Chrome” oder &#8220;Cookies deaktivieren
+    Chrome&#8221; im Falle eines Chrome Browsers oder tauschen das Wort
+    &#8220;Chrome&#8221; gegen den Namen Ihres Browsers, z.B. Edge, Firefox,
+    Safari aus.
+  </p>
+  <h3 class="adsimple-311265068">Wie sieht es mit meinem Datenschutz aus?</h3>
+  <p>
+    Seit 2009 gibt es die sogenannten „Cookie-Richtlinien“. Darin ist
+    festgehalten, dass das Speichern von Cookies eine Einwilligung von Ihnen
+    verlangt. Innerhalb der EU-Länder gibt es allerdings noch sehr
+    unterschiedliche Reaktionen auf diese Richtlinien. In Deutschland wurden die
+    Cookie-Richtlinien nicht als nationales Recht umgesetzt. Stattdessen
+    erfolgte die Umsetzung dieser Richtlinie weitgehend in § 15 Abs.3 des
+    Telemediengesetzes (TMG).
+  </p>
+  <p>
+    Wenn Sie mehr über Cookies wissen möchten und technischen Dokumentationen
+    nicht scheuen, empfehlen wir <a
+      class="adsimple-311265068"
+      href="https://tools.ietf.org/html/rfc6265"
+      target="_blank"
+      rel="nofollow noopener"
+      >https://tools.ietf.org/html/rfc6265</a
+    >, dem Request for Comments der Internet Engineering Task Force (IETF)
+    namens &#8220;HTTP State Management Mechanism&#8221;.
+  </p>
+  <h2 class="adsimple-311265068">Speicherung persönlicher Daten</h2>
+  <p>
+    Persönliche Daten, die Sie uns auf dieser Website elektronisch übermitteln,
+    wie zum Beispiel Name, E-Mail-Adresse, Adresse oder andere persönlichen
+    Angaben im Rahmen der Übermittlung eines Formulars oder Kommentaren im Blog,
+    werden von uns gemeinsam mit dem Zeitpunkt und der IP-Adresse nur zum
+    jeweils angegebenen Zweck verwendet, sicher verwahrt und nicht an Dritte
+    weitergegeben.
+  </p>
+  <p>
+    Wir nutzen Ihre persönlichen Daten somit nur für die Kommunikation mit jenen
+    Besuchern, die Kontakt ausdrücklich wünschen und für die Abwicklung der auf
+    dieser Webseite angebotenen Dienstleistungen und Produkte. Wir geben Ihre
+    persönlichen Daten ohne Zustimmung nicht weiter, können jedoch nicht
+    ausschließen, dass diese Daten beim Vorliegen von rechtswidrigem Verhalten
+    eingesehen werden.
+  </p>
+  <p>
+    Wenn Sie uns persönliche Daten per E-Mail schicken &#8211; somit abseits
+    dieser Webseite &#8211; können wir keine sichere Übertragung und den Schutz
+    Ihrer Daten garantieren. Wir empfehlen Ihnen, vertrauliche Daten niemals
+    unverschlüsselt per E-Mail zu übermitteln.
+  </p>
+  <p>
+    Die Rechtsgrundlage besteht nach
+    <a
+      class="adsimple-311265068"
+      href="https://eur-lex.europa.eu/legal-content/DE/TXT/HTML/?uri=CELEX:32016R0679&amp;from=DE&amp;tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Artikel 6  Absatz 1 a DSGVO</a
+    >
+    (Rechtmäßigkeit der Verarbeitung) darin, dass Sie uns die Einwilligung zur
+    Verarbeitung der von Ihnen eingegebenen Daten geben. Sie können diesen
+    Einwilligung jederzeit widerrufen &#8211; eine formlose E-Mail reicht aus,
+    Sie finden unsere Kontaktdaten im Impressum.
+  </p>
+  <h2 class="adsimple-311265068">Rechte laut Datenschutzgrundverordnung</h2>
+  <p>
+    Ihnen stehen laut den Bestimmungen der DSGVO grundsätzlich die folgende
+    Rechte zu:
+  </p>
+  <ul class="adsimple-311265068">
+    <li class="adsimple-311265068">
+      Recht auf Berichtigung (Artikel 16 DSGVO)
+    </li>
+    <li class="adsimple-311265068">
+      Recht auf Löschung („Recht auf Vergessenwerden“) (Artikel 17 DSGVO)
+    </li>
+    <li class="adsimple-311265068">
+      Recht auf Einschränkung der Verarbeitung (Artikel 18 DSGVO)
+    </li>
+    <li class="adsimple-311265068">
+      Recht auf Benachrichtigung &#8211; Mitteilungspflicht im Zusammenhang mit
+      der Berichtigung oder Löschung personenbezogener Daten oder der
+      Einschränkung der Verarbeitung (Artikel 19 DSGVO)
+    </li>
+    <li class="adsimple-311265068">
+      Recht auf Datenübertragbarkeit (Artikel 20 DSGVO)
+    </li>
+    <li class="adsimple-311265068">Widerspruchsrecht (Artikel 21 DSGVO)</li>
+    <li class="adsimple-311265068">
+      Recht, nicht einer ausschließlich auf einer automatisierten Verarbeitung —
+      einschließlich Profiling — beruhenden Entscheidung unterworfen zu werden
+      (Artikel 22 DSGVO)
+    </li>
+  </ul>
+  <p>
+    Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das
+    Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst
+    in einer Weise verletzt worden sind, können Sie sich an die
+    <a
+      class="adsimple-311265068"
+      class="311265068"
+      href="https://www.bfdi.bund.de"
+      target="_blank"
+      rel="noopener"
+      >Bundesbeauftragte für den Datenschutz und die Informationsfreiheit
+      (BfDI)</a
+    >
+    wenden.
+  </p>
+  <h2 class="adsimple-311265068">Auswertung des Besucherverhaltens</h2>
+  <p>
+    In der folgenden Datenschutzerklärung informieren wir Sie darüber, ob und
+    wie wir Daten Ihres Besuchs dieser Website auswerten. Die Auswertung der
+    gesammelten Daten erfolgt in der Regel anonym und wir können von Ihrem
+    Verhalten auf dieser Website nicht auf Ihre Person schließen.
+  </p>
+  <p>
+    Mehr über Möglichkeiten dieser Auswertung der Besuchsdaten zu widersprechen
+    erfahren Sie in der folgenden Datenschutzerklärung.
+  </p>
+  <h2 class="adsimple-311265068">TLS-Verschlüsselung mit https</h2>
+  <p>
+    TLS, Verschlüsselung und https klingen sehr technisch und sind es auch. Wir
+    verwenden HTTPS (das Hypertext Transfer Protocol Secure steht für „sicheres
+    Hypertext-Übertragungsprotokoll“) um Daten abhörsicher im Internet zu
+    übertragen.<br />
+    Das bedeutet, dass die komplette Übertragung aller Daten von Ihrem Browser
+    zu unserem Webserver abgesichert ist &#8211; niemand kann
+    &#8220;mithören&#8221;.
+  </p>
+  <p>
+    Damit haben wir eine zusätzliche Sicherheitsschicht eingeführt und erfüllen
+    Datenschutz durch Technikgestaltung
+    <a
+      class="adsimple-311265068"
+      href="https://eur-lex.europa.eu/legal-content/DE/TXT/HTML/?uri=CELEX:32016R0679&amp;from=DE&amp;tid=311265068"
+      target="_blank"
+      rel="noopener"
+      >Artikel 25 Absatz 1 DSGVO</a
+    >). Durch den Einsatz von TLS (Transport Layer Security), einem
+    Verschlüsselungsprotokoll zur sicheren Datenübertragung im Internet können
+    wir den Schutz vertraulicher Daten sicherstellen.<br />
+    Sie erkennen die Benutzung dieser Absicherung der Datenübertragung am
+    kleinen Schlosssymbol
+    <img
+      role="img"
+      src="https://www.adsimple.at/wp-content/uploads/2018/03/schlosssymbol-https-211141072.svg"
+      width="17"
+      height="18"
+    /> links oben im Browser links von der Internetadresse (z. B.
+    beispielseite.de) und der Verwendung des Schemas https (anstatt http) als
+    Teil unserer Internetadresse.<br />
+    Wenn Sie mehr zum Thema Verschlüsselung wissen möchten, empfehlen wir die
+    Google Suche nach &#8220;Hypertext Transfer Protocol Secure wiki&#8221; um
+    gute Links zu weiterführenden Informationen zu erhalten.
+  </p>
+  <h2 class="adsimple-311265068">OpenStreetMap Datenschutzerklärung</h2>
+  <p>
+    Wir haben auf unserer Website Kartenausschnitte des Online-Kartentools
+    „OpenStreetMap“ eingebunden. Dabei handelt es sich um ein sogenanntes
+    Open-Source-Mapping, welches wir über eine API (Schnittstelle) abrufen
+    können. Angeboten wird diese Funktion von OpenStreetMap Foundation, St
+    John’s Innovation Centre, Cowley Road, Cambridge, CB4 0WS, United Kingdom.
+    Durch die Verwendung dieser Kartenfunktion wird Ihre IP-Adresse an
+    OpenStreetMap weitergeleitet. In dieser Datenschutzerklärung erfahren Sie
+    warum wir Funktionen des Tools OpenStreetMap verwenden, wo welche Daten
+    gespeichert werden und wie Sie diese Datenspeicherung verhindern können.
+  </p>
+  <h3 class="adsimple-311265068">Was ist OpenStreetMap?</h3>
+  <p>
+    Das Projekt OpenStreetMap wurde 2004 ins Leben gerufen. Ziel des Projekts
+    ist und war es, eine freie Weltkarte zu erschaffen. User sammeln weltweit
+    Daten etwa über Gebäude, Wälder, Flüsse und Straßen. So entstand über die
+    Jahre eine umfangreiche, von Usern selbst erstellte digitale Weltkarte.
+    Selbstverständlich ist die Karte, nicht vollständig, aber in den meisten
+    Regionen mit sehr vielen Daten ausgestattet.
+  </p>
+  <h3 class="adsimple-311265068">
+    Warum verwenden wir OpenStreetMap auf unserer Website?
+  </h3>
+  <p>
+    Unsere Website soll Ihnen in erster Linie hilfreich sein. Und das ist sie
+    aus unserer Sicht immer dann, wenn man Information schnell und einfach
+    findet. Da geht es natürlich einerseits um unsere Dienstleistungen und
+    Produkte, andererseits sollen Ihnen auch weitere hilfreiche Informationen
+    zur Verfügung stehen. Deshalb nutzen wir auch den Kartendienst
+    OpenStreetMap. Denn so können wir Ihnen beispielsweise genau zeigen, wie Sie
+    unsere Firma finden. Die Karte zeigt Ihnen den besten Weg zu uns und Ihre
+    Anfahrt wird zum Kinderspiel.
+  </p>
+  <h3 class="adsimple-311265068">
+    Welche Daten werden von OpenStreetMap gespeichert?
+  </h3>
+  <p>
+    Wenn Sie eine unserer Webseiten besuchen, die OpenStreetMap anbietet, werden
+    Nutzerdaten an den Dienst übermittelt und dort gespeichert. OpenStreetMap
+    sammelt etwa Informationen über Ihre Interaktionen mit der digitalen Karte,
+    Ihre IP-Adresse, Daten zu Ihrem Browser, Gerätetyp, Betriebssystem und an
+    welchem Tag und zu welcher Uhrzeit Sie den Dienst in Anspruch genommen
+    haben. Dafür wird auch Tracking-Software zur Aufzeichnung von
+    Userinteraktionen verwendet. Das Unternehmen gibt hier in der eigenen
+    Datenschutzerklärung das Analysetool „Piwik“ an.
+  </p>
+  <p>
+    Die erhobenen Daten sind in Folge den entsprechenden Arbeitsgruppen der
+    OpenStreetMap Foundation zugänglich. Laut dem Unternehmen werden persönliche
+    Daten nicht an andere Personen oder Firmen weitergegeben, außer dies ist
+    rechtlich notwendig. Der Drittanbieter Piwik speichert zwar Ihre IP-Adresse,
+    allerdings in gekürzter Form.
+  </p>
+  <p>
+    Folgendes Cookie kann in Ihrem Browser gesetzt werden, wenn Sie mit
+    OpenStreetMap auf unserer Website interagieren:
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Name:</strong> _osm_location<br />
+    <strong class="adsimple-311265068">Wert:</strong>
+    9.63312%7C52.41500%7C17%7CM<br />
+    <strong class="adsimple-311265068">Verwendungszweck:</strong> Das Cookie
+    wird benötigt, um die Inhalte von OpenStreetMap zu entsperren.<br />
+    <strong class="adsimple-311265068">Ablaufdatum:</strong> nach 10 Jahren
+  </p>
+  <p>
+    Wenn Sie sich das Vollbild der Karte ansehen wollen, werden Sie auf die
+    OpenStreetMap-Website verlinkt. Dort können unter anderem folgende Cookies
+    in Ihrem Browser gespeichert werden:
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Name:</strong> _osm_totp_token<br />
+    <strong class="adsimple-311265068">Wert:</strong> 148253311265068-2<br />
+    <strong class="adsimple-311265068">Verwendungszweck:</strong> Dieses Cookie
+    wird benutzt, um die Bedienung des Kartenausschnitts zu gewährleisten.<br />
+    <strong class="adsimple-311265068">Ablaufdatum:</strong> nach einer Stunde
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Name:</strong> _osm_session<br />
+    <strong class="adsimple-311265068">Wert:</strong>
+    1d9bfa122e0259d5f6db4cb8ef653a1c<br />
+    <strong class="adsimple-311265068">Verwendungszweck:</strong> Mit Hilfe des
+    Cookies können Sitzungsinformationen (also Userverhalten) gespeichert
+    werden.<br />
+    <strong class="adsimple-311265068">Ablaufdatum:</strong> nach Sitzungsende
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Name:</strong> _pk_id.1.cf09<br />
+    <strong class="adsimple-311265068">Wert:</strong>
+    4a5.1593684142.2.1593688396.1593688396311265068-9<br />
+    <strong class="adsimple-311265068">Verwendungszweck:</strong> Dieses Cookie
+    wird von Piwik gesetzt, um Userdaten wie etwa das Klickverhalten zu
+    speichern bzw. zu messen.<br />
+    <strong class="adsimple-311265068">Ablaufdatum:</strong> nach einem Jahr
+  </p>
+  <h3 class="adsimple-311265068">
+    Wie lange und wo werden die Daten gespeichert?
+  </h3>
+  <p>
+    Die API-Server, die Datenbanken und die Server von Hilfsdiensten befinden
+    sich derzeit im Vereinten Königreich (Großbritannien und Nordirland) und in
+    den Niederlanden. Ihre IP-Adresse und Userinformationen, die in gekürzter
+    Form durch das Webanalysetool Piwik gespeichert werden, werden nach 180
+    Tagen wieder gelöscht.
+  </p>
+  <h3 class="adsimple-311265068">
+    Wie kann ich meine Daten löschen bzw. die Datenspeicherung verhindern?
+  </h3>
+  <p>
+    Sie haben jederzeit das Recht auf Ihre personenbezogenen Daten zuzugreifen
+    und Einspruch gegen die Nutzung und Verarbeitung zu erheben. Cookies, die
+    von OpenStreetMap möglicherweise gesetzt werden, können Sie in Ihrem Browser
+    jederzeit verwalten, löschen oder deaktivieren. Dadurch wird allerdings der
+    Dienst nicht mehr im vollen Ausmaß funktionieren. Bei jedem Browser
+    funktioniert die Verwaltung, Löschung oder Deaktivierung von Cookies etwas
+    anders. Im Folgenden finden Sie Links zu den Anleitungen der bekanntesten
+    Browser:
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.google.com/chrome/answer/95647?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Chrome: Cookies in Chrome löschen, aktivieren und verwalten</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.apple.com/de-at/guide/safari/sfri11471/mac?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Safari: Verwalten von Cookies und Websitedaten mit Safari</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.mozilla.org/de/kb/cookies-und-website-daten-in-firefox-loschen?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Firefox: Cookies löschen, um Daten zu entfernen, die Websites auf Ihrem
+      Computer abgelegt haben</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.microsoft.com/de-at/help/17442/windows-internet-explorer-delete-manage-cookies?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Internet Explorer: Löschen und Verwalten von Cookies</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.microsoft.com/de-at/help/4027947/windows-delete-cookies?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Microsoft Edge: Löschen und Verwalten von Cookies</a
+    >
+  </p>
+  <p>
+    Wenn Sie mehr über die Datenverarbeitung durch OpenStreetMap erfahren
+    wollen, empfehlen wir Ihnen die Datenschutzerklärung des Unternehmens unter
+    <a
+      class="adsimple-311265068"
+      href="https://wiki.osmfoundation.org/wiki/Privacy_Policy?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >https://wiki.osmfoundation.org/wiki/Privacy_Policy.</a
+    >
+  </p>
+  <h2 class="adsimple-311265068">Mapbox API Datenschutzerklärung</h2>
+  <p>
+    Auf unserer Website nutzen wir die Mapbox API des amerikanischen
+    Software-Unternehmens Mapbox Inc., 740 15th Street NW, 5th Floor, District
+    of Columbia 20005, USA. Mapbox ist ein Online-Kartentool
+    (Open-Source-Mapping), das über eine Schnittstelle (API) abgerufen wird.
+    Durch die Nutzung dieses Tools wird unter anderem Ihre IP-Adresse an Mapbox
+    weitergeleitet und gespeichert. In dieser Datenschutzerklärung erfahren Sie
+    mehr über die Funktionen des Tools, warum wir es verwenden und vor allem
+    welche Daten gespeichert werden und wie Sie das verhindern können.
+  </p>
+  <h3 class="adsimple-311265068">Was ist Mapbox API?</h3>
+  <p>
+    Mapbox ist ein amerikanisches Software-Unternehmen, das benutzerdefinierte
+    Online-Karten für Websites anbieten. Mit Mapbox kann man Inhalte auf unserer
+    Website illustrieren oder beispielsweise Anfahrtswege grafisch darstellen.
+    Die Karten können mit kleinen Code-Snippets (JavaScript-Code) sehr leicht in
+    unsere Website eingebunden werden. Mapbox bietet unter anderem eine
+    mobile-freundliche Umgebung, die Routenauskunft erfolgt in Echtzeit und
+    Daten werden visualisiert dargestellt.
+  </p>
+  <h3 class="adsimple-311265068">
+    Warum verwenden wir Mapbox API auf unserer Website?
+  </h3>
+  <p>
+    Wir wollen Ihnen auch auf unserer Website einen umfassenden Service bieten
+    und dieser soll nicht einfach bei unseren Dienstleistungen oder Produkten
+    enden. Nein, auch unsere gesamten Inhalte sollen Ihnen von Nutzen sein. Und
+    dazu zählen zum Beispiel auch Anfahrtskarten, die Ihnen etwa den Weg zu
+    unserem Unternehmen zeigen.
+  </p>
+  <h3 class="adsimple-311265068">
+    Welche Daten werden von Mapbox API gespeichert?
+  </h3>
+  <p>
+    Wenn Sie eine unserer Unterseiten aufrufen, die eine Online-Karte von Mapbox
+    eingebunden hat, können Daten über Ihr Nutzerverhalten gesammelt und
+    gespeichert werden. Das muss sein, damit die eingebundenen Online-Karten
+    einwandfrei funktionieren. Es kann auch sein, dass erhobene Daten durch
+    Mapbox an Dritte weitergegeben werden, allerdings keine personenbezogenen
+    Daten.  Das geschieht entweder, wenn dies aus rechtlichen Gründen nötig ist
+    oder wenn Mapbox ein anderes Unternehmen explizit beauftragt. Die
+    Karteninhalte werden direkt an Ihren Browser übermittelt und in unsere
+    Website eingebunden.
+  </p>
+  <p>
+    Mapbox erfasst automatisch bestimmte technische Informationen, wenn Anfragen
+    an die APIs gestellt werden. Dazu zählen neben Ihrer IP-Adresse etwa
+    Browserinformationen, Ihr Betriebssystem, Inhalt der Anfrage, eingeschränkte
+    Standorts- und Nutzungsdaten, die URL der besuchten Webseite und Datum und
+    Uhrzeit des Websitebesuchs. Laut Mapbox werden die Daten nur zur
+    Verbesserung der eigenen Produkte verwendet. Zudem sammelt Mapbox auch
+    zufällig generierte IDs, um Nutzerverhalten zu analysieren und die Anzahl
+    der aktiven User festzustellen.
+  </p>
+  <p>
+    Wenn Sie eine unserer Unterseiten nutzen und mit einer Online-Karte
+    interagieren, setzt Mapbox folgendes Cookie in Ihrem Browser:
+  </p>
+  <p>
+    <strong class="adsimple-311265068">Name:</strong>
+    ppcbb-enable-content-mapbox_js<br />
+    <strong class="adsimple-311265068">Wert:</strong>
+    1605795587311265068-4<br />
+    <strong class="adsimple-311265068">Verwendungszweck:</strong> Genauere
+    Informationen über den Verwendungszweck des Cookies konnten wir bis dato
+    noch nicht in Erfahrung bringen.<br />
+    <strong class="adsimple-311265068">Ablaufdatum:</strong> nach einem Jahr
+  </p>
+  <h3 class="adsimple-311265068">Wo und wie lange werden Daten gespeichert?</h3>
+  <p>
+    Die erhobenen Daten werden auf amerikanischen Servern des Unternehmens
+    Mapbox gespeichert und verarbeitet. Ihre IP-Adresse wird aus
+    Sicherheitsgründen für 30 Tage aufbewahrt und anschließend gelöscht.
+    Zufällig generierte IDs (keine personenbezogenen Daten), die die Nutzung der
+    APIs analysieren werden nach 36 Monaten wieder gelöscht.
+  </p>
+  <h3 class="adsimple-311265068">
+    Wie kann ich meine Daten löschen bzw. die Datenspeicherung verhindern?
+  </h3>
+  <p>
+    Wenn Sie nicht wollen, dass Mapbox Daten über Sie bzw. Ihr Userverhalten
+    verarbeitet, können Sie in Ihren Browsereinstellungen JavaScript
+    deaktivieren. Natürlich können Sie dann allerdings auch die entsprechenden
+    Funktionen nicht mehr im vollen Ausmaß nutzen.
+  </p>
+  <p>
+    Sie haben jederzeit das Recht auf Ihre personenbezogenen Daten zuzugreifen
+    und Einspruch gegen die Nutzung und Verarbeitung zu erheben. Cookies, die
+    von Mapbox API möglicherweise gesetzt werden, können Sie in Ihrem Browser
+    jederzeit verwalten, löschen oder deaktivieren. Dadurch funktioniert
+    allerdings der Dienst eventuell nicht mehr vollständig. Bei jedem Browser
+    funktioniert die Verwaltung, Löschung oder Deaktivierung von Cookies etwas
+    anders. Im Folgenden finden Sie Links zu den Anleitungen der bekanntesten
+    Browser:
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.google.com/chrome/answer/95647?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Chrome: Cookies in Chrome löschen, aktivieren und verwalten</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.apple.com/de-at/guide/safari/sfri11471/mac?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Safari: Verwalten von Cookies und Websitedaten mit Safari</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.mozilla.org/de/kb/cookies-und-website-daten-in-firefox-loschen?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Firefox: Cookies löschen, um Daten zu entfernen, die Websites auf Ihrem
+      Computer abgelegt haben</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.microsoft.com/de-at/help/17442/windows-internet-explorer-delete-manage-cookies?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Internet Explorer: Löschen und Verwalten von Cookies</a
+    >
+  </p>
+  <p>
+    <a
+      class="adsimple-311265068"
+      href="https://support.microsoft.com/de-at/help/4027947/windows-delete-cookies?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Microsoft Edge: Löschen und Verwalten von Cookies</a
+    >
+  </p>
+  <p>
+    Wenn Sie mehr über die Datenverarbeitung durch Mapbox erfahren wollen,
+    empfehlen wir Ihnen die Datenschutzerklärung des Unternehmens unter
+    <a
+      class="adsimple-311265068"
+      href="https://www.mapbox.com/legal/privacy?tid=311265068"
+      target="_blank"
+      rel="noopener noreferrer"
+      >https://www.mapbox.com/legal/privacy</a
+    >.
+  </p>
 </ion-content>
