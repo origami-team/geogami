@@ -308,8 +308,9 @@ export class LayerControl {
 
             Object.entries(sources).forEach((s: any) => {
                 if(s.length > 0) {
-                    if (this.satMap.getSource(s[0])) {
-                        this.satMap.getSource(s[0]).setData(s[1].data);
+                    const source = this.satMap.getSource(s[0]);
+                    if (source != undefined) {
+                        source.setData(s[1].data);
                     } else {
                         this.satMap.addSource(s[0], s[1]);
                     }
