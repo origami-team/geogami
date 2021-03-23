@@ -179,6 +179,14 @@ export class LayerControl {
                         this.satMap.addImage('marker-editor', image);
                     });
 
+                this.satMap.loadImage(
+                    '/assets/icons/landmark-marker.png',
+                    (error, image) => {
+                        if (error) throw error;
+
+                        this.satMap.addImage('landmark-marker', image);
+                    });
+
 
                 this.satMap.on('load', () => {
                     if (!this.map.dragRotate.isEnabled()) {
@@ -299,10 +307,13 @@ export class LayerControl {
             const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building');
 
             Object.entries(sources).forEach((s: any) => {
-                if (this.satMap.getSource(s[0])) {
-                    this.satMap.getSource(s[0]).setData(s[1].data);
-                } else {
-                    this.satMap.addSource(s[0], s[1]);
+                if(s.length > 0) {
+                    const source = this.satMap.getSource(s[0]);
+                    if (source != undefined) {
+                        source.setData(s[1].data);
+                    } else {
+                        this.satMap.addSource(s[0], s[1]);
+                    }
                 }
             });
 

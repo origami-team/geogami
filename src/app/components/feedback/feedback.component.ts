@@ -57,7 +57,7 @@ export class FeedbackComponent {
     private direction: number;
     successColor: string;
 
-    private DIRECTION_TRESHOLD = 22.5;
+    private DIRECTION_TRESHOLD = 30;
 
     constructor(private orientationService: OrigamiOrientationService, private changeDetectorRef: ChangeDetectorRef) { }
 
@@ -288,6 +288,7 @@ export class FeedbackComponent {
         }
 
         if (this.task.answer.type == AnswerType.DIRECTION) {
+            console.log(this.Math.abs(directionBearing - compassHeading));
             this.initFeedback(this.Math.abs(directionBearing - compassHeading) <= this.DIRECTION_TRESHOLD);
             isCorrect = this.Math.abs(directionBearing - compassHeading) <= this.DIRECTION_TRESHOLD;
             answer = {
