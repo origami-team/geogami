@@ -149,7 +149,7 @@
               *ngIf="!reorder"
               slot="end"
               name="close"
-              (click)="deleteTask(task.id)"
+              (click)="deleteTask(task._id)"
             ></ion-icon>
             <ion-reorder *ngIf="reorder" slot="end"></ion-reorder>
           </ion-item>
