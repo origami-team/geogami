@@ -39,17 +39,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>To Take Photos and Video</string>
+	<string>OriGami benötigt Zugriff auf deine Kamera um Aufgaben mit Bildern zu versehen.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Always allow Geolocation?</string>
+	<string>Deine Position wird für das Spiel selbst sowie für die Auswertung deiner Spielperformance genutzt.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow Geolocation?</string>
+	<string>Deine Position wird für das Spiel selbst sowie für die Auswertung deiner Spielperformance genutzt.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>To Record Audio With Video</string>
+	<string>OriGami benötigt Zugriff auf dein Mikrofon um Aufgaben mit Audiohinweisen zu versehen.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Store camera photos to camera</string>
+	<string>OriGami benötigt Zugriff auf deine Fotos um Aufgaben mit Bildern zu versehen.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To Pick Photos from Library</string>
+	<string>OriGami benötigt Zugriff auf deine Fotos um Aufgaben mit Bildern zu versehen.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
