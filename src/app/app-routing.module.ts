@@ -166,6 +166,10 @@ const routes: Routes = [
         (m) => m.TaskShowroomPageModule
       ),
   },
+  {
+    path: 'create-game-menu',
+    loadChildren: () => import('./pages/create-game/create-game-menu/create-game-menu.module').then( m => m.CreateGameMenuPageModule)
+  },
 ];
 @NgModule({
   imports: [

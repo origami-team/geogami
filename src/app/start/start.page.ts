@@ -69,7 +69,7 @@ export class StartPage implements OnInit {
   }
 
   navigateCreatePage() {
-    this.navCtrl.navigateForward('create-game');
+    this.navCtrl.navigateForward('create-game-menu');
   }
 
   navigateShowroomPage() {
