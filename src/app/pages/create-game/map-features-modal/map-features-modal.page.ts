@@ -32,6 +32,9 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
 
   @Input() features: any = cloneDeep(standardMapFeatures);
 
+  // VR world
+  @Input() isVirtualWorld: boolean;
+
   constructor(
     public modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef
