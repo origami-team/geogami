@@ -65,7 +65,8 @@ export class StartPage implements OnInit {
   }
 
   navigateGamesOverviewPage() {
-    this.navCtrl.navigateForward('play-game/play-game-list');
+    //this.navCtrl.navigateForward('play-game/play-game-list');
+    this.navCtrl.navigateForward('play-game/play-game-menu');
   }
 
   navigateCreatePage() {
