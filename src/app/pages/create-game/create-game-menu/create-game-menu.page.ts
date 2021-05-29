@@ -18,7 +18,7 @@ export class CreateGameMenuPage implements OnInit {
   }
 
   navigateCreateVirtualGamePage() {
-    //this.navCtrl.navigateForward('play-game/play-game-list');
+    this.navCtrl.navigateForward('create-game-virtual');
   }
   
 }

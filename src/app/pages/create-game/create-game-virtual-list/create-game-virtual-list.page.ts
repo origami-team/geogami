@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { IonReorderGroup } from "@ionic/angular";
 
 import mapboxgl from "mapbox-gl";
@@ -20,17 +20,16 @@ import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 
 @Component({
-  selector: "app-create-game-list",
-  templateUrl: "./create-game-list.page.html",
-  styleUrls: ["./create-game-list.page.scss"],
+  selector: 'app-create-game-virtual-list',
+  templateUrl: './create-game-virtual-list.page.html',
+  styleUrls: ['./create-game-virtual-list.page.scss'],
 })
-export class CreateGameListPage implements OnInit {
-  // name: String;
-  // tasks: any[] = [];
+export class CreateGameVirtualListPage implements OnInit {
+
   game: Game;
   reorder: Boolean = false;
 
-  isVirtualWorld: boolean = false;
+  isVirtualWorld: boolean = true;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
@@ -45,7 +44,7 @@ export class CreateGameListPage implements OnInit {
     private modalController: ModalController,
     private navCtrl: NavController,
     public popoverController: PopoverController
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.gameFactory.getGame().then((game) => (this.game = game));
@@ -54,36 +53,11 @@ export class CreateGameListPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    // mapboxgl.accessToken =
-    //   "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA";
-    // const map = new mapboxgl.Map({
-    //   container: "create-game-map",
-    //   style: "mapbox://styles/mapbox/streets-v9",
-    //   center: [8, 51.8],
-    //   zoom: 2
-    // });
-    // const geolocate = new mapboxgl.GeolocateControl({
-    //   positionOptions: {
-    //     enableHighAccuracy: true
-    //   },
-    //   fitBoundsOptions: {
-    //     maxZoom: 25
-    //   },
-    //   trackUserLocation: true
-    // });
-    // map.addControl(geolocate);
-    // // let watch = this.geolocation.watchPosition();
-    // // watch.subscribe((data) => {
-    // //   console.log(data)
-    // // });
-    // // Add geolocate control to the map.
-    // map.on("load", () => {
-    //   geolocate.trigger();
-    // });
   }
 
   async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld) {
     console.log(task);
+    console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -98,7 +72,7 @@ export class CreateGameListPage implements OnInit {
 
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    console.log(data);
+    console.log("data:", data);
     if (data != undefined) {
       if (task != null) {
         if (!task._id) {
@@ -115,10 +89,6 @@ export class CreateGameListPage implements OnInit {
 
   addTaskToGame(task) {
     this.game = this.gameFactory.addTask(task);
-    // this.gameFactory.getGame().then(game => {
-    //   console.log(game)
-    //   this.game = game
-    // });
 
     console.log(this.game.tasks);
   }
@@ -164,7 +134,7 @@ export class CreateGameListPage implements OnInit {
 
   navigateToOverview() {
     console.log("navigate");
-    this.navCtrl.navigateForward(`create-game/create-game-overview/${"RealWorld"}`);
+    this.navCtrl.navigateForward(`create-game/create-game-overview/${"VRWorld"}`);
   }
 
   async showPopover(ev: any, text: string) {
@@ -176,4 +146,5 @@ export class CreateGameListPage implements OnInit {
     });
     return await popover.present();
   }
+
 }
