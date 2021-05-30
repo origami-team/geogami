@@ -14,7 +14,7 @@ export class ShowroomPage implements OnInit {
   }
 
   navigateMapShowroom() {
-    this.navCtrl.navigateForward('map-showroom');
+    this.navCtrl.navigateForward('ngx-map-showroom');
   }
   navigateTaskShowroom() {
     this.navCtrl.navigateForward('task-showroom');

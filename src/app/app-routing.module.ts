@@ -141,10 +141,10 @@ const routes: Routes = [
       import('./start/start.module').then((m) => m.StartPageModule),
   },
   {
-    path: 'map-showroom',
+    path: 'ngx-map-showroom',
     loadChildren: () =>
-      import('./pages/showroom/map-showroom/map-showroom.module').then(
-        (m) => m.MapShowroomPageModule
+      import('./pages/showroom/ngx-map-showroom/ngx-map-showroom.module').then(
+        (m) => m.NGXMapShowroomPageModule
       ),
   },
   {

@@ -41,14 +41,14 @@ export class MaskControl {
         // outer circle
         let ocCenter = [this.coords[0], this.coords[1]];
         let ocRadius = 1500;
-        let ocPptions = { steps: 30, units: 'kilometers'};
-        let outerCircle = circle(ocCenter, ocRadius, ocPptions);
+        let ocPptions = { steps: 30, units:'kilometers', properties: {}};
+        let outerCircle = circle(ocCenter, ocRadius, { steps: 30, units:'kilometers', properties: {}});
 
         // inner circle
         let icCenter = [this.coords[0], this.coords[1]];
         let icRadius = val/1000; // to get it in meter
-        let icOptions = { steps: 30, units: 'kilometers' };
-        let innerCircle = circle(icCenter, icRadius, icOptions);
+        let icOptions = { steps: 30, units: 'kilometers'};
+        let innerCircle = circle(icCenter, icRadius, { steps: 30, units:'kilometers', properties: {}});
 
         let masked = mask(innerCircle, outerCircle);
 

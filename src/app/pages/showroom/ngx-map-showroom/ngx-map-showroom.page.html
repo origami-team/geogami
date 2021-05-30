@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color=dark defaultHref="/showroom"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Kartenfeatures</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="primary-map" class="map"></div>
+  <div *ngIf='enabledFeatures.includes("swipe")' id="secondary-map" class="map"></div>
+
+  <div class="control">
+    <ion-icon name="map" size="large"></ion-icon> 
+    <ion-chip [color]='enabledFeatures.includes("zoomBar") ? "primary" : "medium"' (click)=toggleZoomBar()>
+      <ion-label>Zoom</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("swipe") ? "primary" : "medium"' (click)=toggleSwipe()>
+      <ion-label>Swipe</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("pan") ? "primary" : "medium"' (click)=togglePan()>
+      <ion-label>Verschieben</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("manualRotate") ? "primary" : "medium"' (click)=toggleManualRotate()>
+      <ion-label>Manuelle Rotation</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("autoRotate") ? "primary" : "medium"' (click)=toggleAutoRotate()>
+      <ion-label>Automatische Rotation</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("position") ? "primary" : "medium"' (click)=togglePosition()>
+      <ion-label>Position</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("viewDirection") ? "primary" : "medium"' (click)=toggleViewDirection()>
+      <ion-label>Blickrichtung</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("track") ? "primary" : "medium"' (click)=toggleTrack()>
+      <ion-label>Track</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("styleSwitcher") ? "primary" : "medium"' (click)=toggleStyleSwitcher()>
+      <ion-label>Layercontrol</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("3D") ? "primary" : "medium"' (click)=toggle3D()>
+      <ion-label>3D</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("streetSection") ? "primary" : "medium"' (click)=toggleStreetSection()>
+      <ion-label>Straßenabschnitt</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("offline") ? "primary" : "medium"' (click)=toggleOffline()>
+      <ion-label>Offline</ion-label>
+    </ion-chip>
+    <ion-chip [color]='enabledFeatures.includes("draw") ? "primary" : "medium"' (click)=toggleDraw()>
+      <ion-label>Draw</ion-label>
+    </ion-chip>
+  </div>
+
+</ion-content>
