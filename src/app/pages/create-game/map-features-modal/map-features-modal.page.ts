@@ -43,7 +43,12 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   ngOnInit() {
     if (this.features == undefined) {
       this.features = cloneDeep(standardMapFeatures);
+
+      if (this.isVirtualWorld) {
+        this.features.rotation = "north"
+      }
     }
+
     this.onZoomChange();
 
     this.changeDetectorRef.detectChanges();
