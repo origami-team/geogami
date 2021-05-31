@@ -43,11 +43,11 @@ export class GeolocateControl {
             });
         } else {
             // VR world
-            this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(message => {
+            this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(avatarPosition => {
                 if (this.map && this.map.getLayer('geolocate')) {
                     this.map.getSource('geolocate').setData({
                         type: 'Point',
-                        coordinates: [parseFloat(message["x"]) / 111000, parseFloat(message["z"]) / 111200]
+                        coordinates: [parseFloat(avatarPosition["x"]) / 111000, parseFloat(avatarPosition["z"]) / 111200]
                     });
                 }
             });

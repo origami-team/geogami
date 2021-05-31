@@ -47,10 +47,10 @@ export class TrackControl {
         } else {
             // VR world
             this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(
-                message => {
+                avatarPosition => {
                     this.path.geometry.coordinates.push([
-                        parseFloat(message["x"]) / 111000,
-                        parseFloat(message["z"]) / 111200
+                        parseFloat(avatarPosition["x"]) / 111000,
+                        parseFloat(avatarPosition["z"]) / 111200
                     ]);
                     if (this.map && this.map.getSource('track')) {
                         this.map.getSource('track').setData(this.path);

@@ -58,11 +58,11 @@ export class ViewDirectionControl {
         } else {
             // VR world
             this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(
-                message => {
+                avatarPosition => {
                     if (this.map != undefined && this.isInitalized) {
                         this.map.getSource('viewDirection').setData({
                             type: 'Point',
-                            coordinates: [parseFloat(message["x"]) / 111000, parseFloat(message["z"]) / 111200]
+                            coordinates: [parseFloat(avatarPosition["x"]) / 111000, parseFloat(avatarPosition["z"]) / 111200]
                         });
                     }
                 });

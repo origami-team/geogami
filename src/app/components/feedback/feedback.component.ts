@@ -128,13 +128,13 @@ export class FeedbackComponent {
 
         } else {
             // VR world
-            this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(message => {
+            this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(avatarPosition => {
 
                 if (this.avatarLastKnownPosition === undefined) {
                     // Initial avatar's Loc to measure target distance that will be displayed in VR app
                     this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(environment.initialAvatarLoc.lat, environment.initialAvatarLoc.lng));
-                } else if (!Number.isNaN(parseFloat(message["z"]))) {
-                    this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(message["z"]) / 111200, parseFloat(message["x"]) / 111000));
+                } else if (!Number.isNaN(parseFloat(avatarPosition["z"]))) {
+                    this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
                 }
 
                 if (this.task && !PlayingGamePage.showSuccess) {

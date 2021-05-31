@@ -39,9 +39,9 @@ export class PanControl {
         } else {
             // VR world
             this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(
-                message => {
+                avatarPosition => {
                     if (this.map != undefined && this.panType == PanType.Center) {
-                        this.map.setCenter([parseFloat(message["x"]) / 111000, parseFloat(message["z"]) / 111200]);
+                        this.map.setCenter([parseFloat(avatarPosition["x"]) / 111000, parseFloat(avatarPosition["z"]) / 111200]);
                     }
                 }
             );

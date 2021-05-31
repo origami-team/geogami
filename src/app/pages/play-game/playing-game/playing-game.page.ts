@@ -219,7 +219,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   connectSocketIO() {
     this.socket.connect();
-    this.socket.emit('updatePosition', "Hello from play game");
+    this.socket.emit('updateAvatarPosition', "Hello from play game");
   }
 
   disconnectSocketIO() {
@@ -457,18 +457,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     } else {
       // VR world
       this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(
-        (message) => {
+        (avatarPosition) => {
           this.trackerService.addWaypoint({});
 
-          this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(message["z"]) / 111200, parseFloat(message["x"]) / 111000));
+          this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
 
           if (this.task && !PlayingGamePage.showSuccess) {
             if (this.task.answer.type == AnswerType.POSITION) {
               if (this.task.answer.mode == TaskMode.NAV_ARROW) {
                 const destCoords = this.task.answer.position.geometry.coordinates;
                 const bearing = this.helperService.bearing(
-                  parseFloat(message["z"]) / 111200,
-                  parseFloat(message["x"]) / 111000,
+                  parseFloat(avatarPosition["z"]) / 111200,
+                  parseFloat(avatarPosition["x"]) / 111000,
                   destCoords[1],
                   destCoords[0]
                 );

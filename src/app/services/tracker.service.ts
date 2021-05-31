@@ -85,13 +85,13 @@ export class TrackerService {
 
     } else {
       // ** VR world ** //
-      this.avatarPositionWatch = this.geolocateService.avatarGeolocationSubscription.subscribe(message => {
+      this.avatarPositionWatch = this.geolocateService.avatarGeolocationSubscription.subscribe(avatarPosition => {
         // Set timestamp (to do: timestamp)
         if (this.avatarPosition === undefined) {
           // Initial target distance that will be displayed in VR app
           this.avatarPosition = new AvatarPosition(0, new Coords(environment.initialAvatarLoc.lat, environment.initialAvatarLoc.lng));
         } else {
-          this.avatarPosition = new AvatarPosition(0, new Coords(parseFloat(message["z"]) / 111200, parseFloat(message["x"]) / 111000));
+          this.avatarPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
         }
       });
 

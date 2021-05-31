@@ -45,7 +45,7 @@ export class OrigamiGeolocationService {
     } else {
       // VR world
       this.avatarGeolocationSubscription = Observable.create((observer: Subscriber<any>) => {
-        this.socket.on('updatePosition', (data) => {
+        this.socket.on('updateAvatarPosition', (data) => {
           observer.next(data);
         });
       }).pipe(shareReplay());

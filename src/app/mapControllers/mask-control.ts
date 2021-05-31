@@ -40,8 +40,8 @@ export class MaskControl {
         } else {
             // VR world
             this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(
-                message => {
-                this.coords = [parseFloat(message["x"]) / 111000, parseFloat(message["z"]) / 111200];
+                avatarPosition => {
+                this.coords = [parseFloat(avatarPosition["x"]) / 111000, parseFloat(avatarPosition["z"]) / 111200];
             });
         }
     }
