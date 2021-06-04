@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import mapboxgl from 'mapbox-gl';
+import ngxmapboxgl from 'ngx-mapbox-gl';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import MapboxCompare from 'mapbox-gl-compare';
 
 import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher';
@@ -15,11 +17,36 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
 
 @Component({
   selector: 'ngx-app-map-showroom',
-  templateUrl: './ngx-map-showroom.page.html',
-  styleUrls: ['./ngx-map-showroom.page.scss'],
-})
-export class NGXMapShowroomPage implements OnInit {
+  template: `
+  <mgl-map
+    [style]="'mapbox://styles/mapbox/streets-v9'"
+    [zoom]="[9]"
+    [center]="[-74.5, 40]"
+  ></mgl-map>
 
+`,
+  styles: [
+    `
+      mgl-map {
+        height: 100%;
+        width: 100%;
+      }
+    `,
+  ],
+})
+export class NGXMapShowroomPage {
+
+  layerId = 'basic';
+  style: string;
+
+  ngOnInit() {
+    this.changeStyle(this.layerId);
+  }
+
+  changeStyle(layerId: string) {
+    this.style = `mapbox://styles/mapbox/${layerId}-v9`;
+  }
+/**
   map: any;
 
   enabledFeatures: string[] = ['pan', 'manualRotate'];
@@ -487,4 +514,5 @@ export class NGXMapShowroomPage implements OnInit {
       this.map.addControl(this.drawControl, 'top-left');
     }
   }
+  */
 }
