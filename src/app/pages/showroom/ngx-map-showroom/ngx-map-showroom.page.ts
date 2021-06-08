@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MapImageData } from 'ngx-mapbox-gl';
 import { AnyLayout } from 'mapbox-gl';
-//import {MatButtonToggleModule} from '@angular/material/button-toggle';
-//import { MatButtonModule } from '@angular/material/button';
 
 import mapboxgl from 'mapbox-gl';
 import ngxmapboxgl from 'ngx-mapbox-gl';
@@ -25,11 +23,14 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
   styleUrls: ['./ngx-map-showroom.page.scss'],
 })
 export class NGXMapShowroomPage {
-  
-  map: any;
 
   enabledFeatures: string[] = ['pan', 'manualRotate'];
 
+  map: mapboxgl.Map;
+  swipeMap: mapboxgl.Map;
+  swipe = false; //satellite map initially off
+  mapCenter: number[] = [8, 51.8];
+  mapZoom = 2;
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
   geolocateControl: mapboxgl.GeolocateControl = new mapboxgl.GeolocateControl({
     positionOptions: {
@@ -50,141 +51,144 @@ export class NGXMapShowroomPage {
   currentCompassData: DeviceOrientationCompassHeading;
 
   path: any;
-/**
-  constructor(private OSMService: OsmService, private deviceOrientation: DeviceOrientation) {
-
-    console.log('creating orientation subscribe...');
-    this.directionSubscribe = this.deviceOrientation.watchHeading().subscribe(
-      (data: DeviceOrientationCompassHeading) => this.currentCompassData = data
-    );
-    console.log('...done');
-
-
-    this._rotateTo = (e: DeviceOrientationEvent) => {
-      this.map.rotateTo(this.currentCompassData.magneticHeading, { duration: 50 });
-    };
-
-    this._orientTo = (e: DeviceOrientationEvent) => {
-      if (e.beta <= 60 && e.beta >= 0) {
-        this.map.setPitch(e.beta);
-      }
-      this.map.rotateTo(this.currentCompassData.magneticHeading, { duration: 50 });
-    };
-
-    this._viewDirection = (e: DeviceOrientationEvent) => {
-      // this.map.rotateTo(e.alpha, { duration: 10 })
-      console.log(this.currentCompassData);
-
-      if (this.map.getSource('viewDirection') == undefined) {
-        // this.map.addImage('view-direction', 'assets/icons/direction.png')
-
-        this.map.loadImage('/assets/icons/directionv2-richtung.png', (error, image) => {
-          if (error) throw error;
-          this.map.addImage('view-direction', image);
-
-
-          this.map.addSource('viewDirection', {
-            type: 'geojson',
-            data: {
-              type: 'Point',
-              coordinates: this.currentLocation
-            }
+  /**
+    constructor(private OSMService: OsmService, private deviceOrientation: DeviceOrientation) {
+  
+      console.log('creating orientation subscribe...');
+      this.directionSubscribe = this.deviceOrientation.watchHeading().subscribe(
+        (data: DeviceOrientationCompassHeading) => this.currentCompassData = data
+      );
+      console.log('...done');
+  
+  
+      this._rotateTo = (e: DeviceOrientationEvent) => {
+        this.map.rotateTo(this.currentCompassData.magneticHeading, { duration: 50 });
+      };
+  
+      this._orientTo = (e: DeviceOrientationEvent) => {
+        if (e.beta <= 60 && e.beta >= 0) {
+          this.map.setPitch(e.beta);
+        }
+        this.map.rotateTo(this.currentCompassData.magneticHeading, { duration: 50 });
+      };
+  
+      this._viewDirection = (e: DeviceOrientationEvent) => {
+        // this.map.rotateTo(e.alpha, { duration: 10 })
+        console.log(this.currentCompassData);
+  
+        if (this.map.getSource('viewDirection') == undefined) {
+          // this.map.addImage('view-direction', 'assets/icons/direction.png')
+  
+          this.map.loadImage('/assets/icons/directionv2-richtung.png', (error, image) => {
+            if (error) throw error;
+            this.map.addImage('view-direction', image);
+  
+  
+            this.map.addSource('viewDirection', {
+              type: 'geojson',
+              data: {
+                type: 'Point',
+                coordinates: this.currentLocation
+              }
+            });
+  
+            this.map.addLayer({
+              id: 'viewDirection',
+              source: 'viewDirection',
+              type: 'symbol',
+              layout: {
+                'icon-image': 'view-direction',
+                'icon-size': 1,
+                'icon-offset': [0, -25]
+              }
+            });
+            this.map.setLayoutProperty('viewDirection', 'icon-rotate', this.currentCompassData.magneticHeading);
+            // this.map.setLayoutProperty('viewDirection', "icon-rotate", e.alpha)
           });
-
-          this.map.addLayer({
-            id: 'viewDirection',
-            source: 'viewDirection',
-            type: 'symbol',
-            layout: {
-              'icon-image': 'view-direction',
-              'icon-size': 1,
-              'icon-offset': [0, -25]
-            }
+        } else {
+          this.map.getSource('viewDirection').setData({
+            type: 'Point',
+            coordinates: this.currentLocation
           });
           this.map.setLayoutProperty('viewDirection', 'icon-rotate', this.currentCompassData.magneticHeading);
-          // this.map.setLayoutProperty('viewDirection', "icon-rotate", e.alpha)
-        });
-      } else {
-        this.map.getSource('viewDirection').setData({
-          type: 'Point',
-          coordinates: this.currentLocation
-        });
-        this.map.setLayoutProperty('viewDirection', 'icon-rotate', this.currentCompassData.magneticHeading);
-      }
-
-
-    };
-
-    this.path = {
-      type: 'Feature',
-      properties: {},
-      geometry: {
-        type: 'LineString',
-        coordinates: [
-
-        ]
-      }
-    };
-  }
-
-  ngOnInit() {
-
-  }
-
-  ionViewWillEnter() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
-
-
-    this.map = new mapboxgl.Map({
-      container: 'primary-map',
-      style: {
-        version: 8,
-        metadata: {
-          'mapbox:autocomposite': true,
-          'mapbox:type': 'template'
-        },
-        sources: {
-          'raster-tiles': {
-            type: 'raster',
-            tiles: [
-              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-            ],
-            tileSize: 256,
+        }
+  
+  
+      };
+  
+      this.path = {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+  
+          ]
+        }
+      };
+    }
+  
+    ngOnInit() {
+  
+    }
+  
+    ionViewWillEnter() {
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
+  
+  
+      this.map = new mapboxgl.Map({
+        container: 'primary-map',
+        style: {
+          version: 8,
+          metadata: {
+            'mapbox:autocomposite': true,
+            'mapbox:type': 'template'
           },
-          mapbox: {
-            url: 'mapbox://mapbox.mapbox-streets-v7',
-            type: 'vector'
-          }
-        },
-        layers: [
-          {
-            id: 'simple-tiles',
-            type: 'raster',
-            source: 'raster-tiles',
-            minzoom: 0,
-            maxzoom: 22
-          },
-          {
-            id: 'building',
-            type: 'fill',
-            source: 'mapbox',
-            'source-layer': 'building',
-            paint: {
-              'fill-color': '#d6d6d6',
-              'fill-opacity': 0,
+          sources: {
+            'raster-tiles': {
+              type: 'raster',
+              tiles: [
+                'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+              ],
+              tileSize: 256,
             },
-            interactive: true
+            mapbox: {
+              url: 'mapbox://mapbox.mapbox-streets-v7',
+              type: 'vector'
+            }
           },
-        ]
-      },
-      center: [8, 51.8],
-      zoom: 2
-    });
+          layers: [
+            {
+              id: 'simple-tiles',
+              type: 'raster',
+              source: 'raster-tiles',
+              minzoom: 0,
+              maxzoom: 22
+            },
+            {
+              id: 'building',
+              type: 'fill',
+              source: 'mapbox',
+              'source-layer': 'building',
+              paint: {
+                'fill-color': '#d6d6d6',
+                'fill-opacity': 0,
+              },
+              interactive: true
+            },
+          ]
+        },
+        center: [8, 51.8],
+        zoom: 2
+      });
+  
+    }
+  */
 
-  }
-*/
-onMapLoad(map) {
-  map.resize();
+  //ensures that the map has full size
+  onMapLoad(map: mapboxgl.Map) {
+    this.map = map;
+    this.map.resize();
   }
 
   toggleZoomBar() {
@@ -200,24 +204,15 @@ onMapLoad(map) {
   toggleSwipe() {
     if (this.enabledFeatures.includes('swipe')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'swipe');
+      this.swipe=false;
+      //TODO: was tut das?
       const elem = document.getElementsByClassName('mapboxgl-compare');
       while (elem.length > 0)
         elem[0].remove();
 
     } else {
       this.enabledFeatures.push('swipe');
-
-      setTimeout(() => {
-        const satMap = new mapboxgl.Map({
-          container: 'secondary-map',
-          style: 'mapbox://styles/mapbox/satellite-v9',
-          center: [8, 51.8],
-          zoom: 2
-        });
-
-        new MapboxCompare(this.map, satMap);
-
-      }, 100);
+      this.swipe=true;
 
     }
   }
@@ -499,5 +494,5 @@ onMapLoad(map) {
       this.map.addControl(this.drawControl, 'top-left');
     }
   }
-  
+
 }

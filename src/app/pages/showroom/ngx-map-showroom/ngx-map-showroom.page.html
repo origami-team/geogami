@@ -13,10 +13,17 @@
     <mgl-map
     class="map"
     [style]="'mapbox://styles/mapbox/streets-v9'"
-    [zoom]="[1]"
-    [center]="[8, 51.8]"
+    [zoom]="[mapZoom]"
+    [center]="mapCenter"
     (load)="onMapLoad($event)"
   >  </mgl-map>
+  <mgl-map
+  *ngIf="swipe"
+  class="map"
+  [style]="'mapbox://styles/mapbox/satellite-v9'"
+  [zoom]="[mapZoom]"
+  [center]="mapCenter"
+></mgl-map>
   </div>
   </div>
 
