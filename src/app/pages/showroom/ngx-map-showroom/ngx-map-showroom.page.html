@@ -8,8 +8,17 @@
 </ion-header>
 
 <ion-content>
-  <div id="primary-map" class="map"></div>
-  <div *ngIf='enabledFeatures.includes("swipe")' id="secondary-map" class="map"></div>
+  <div class="wrapper">
+  <div #mapWrapper>
+    <mgl-map
+    class="map"
+    [style]="'mapbox://styles/mapbox/streets-v9'"
+    [zoom]="[1]"
+    [center]="[8, 51.8]"
+    (load)="onMapLoad($event)"
+  >  </mgl-map>
+  </div>
+  </div>
 
   <div class="control">
     <ion-icon name="map" size="large"></ion-icon> 

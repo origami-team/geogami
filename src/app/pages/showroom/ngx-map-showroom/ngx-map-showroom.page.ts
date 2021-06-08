@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MapImageData } from 'ngx-mapbox-gl';
+import { AnyLayout } from 'mapbox-gl';
+//import {MatButtonToggleModule} from '@angular/material/button-toggle';
+//import { MatButtonModule } from '@angular/material/button';
 
 import mapboxgl from 'mapbox-gl';
 import ngxmapboxgl from 'ngx-mapbox-gl';
@@ -17,36 +21,11 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
 
 @Component({
   selector: 'ngx-app-map-showroom',
-  template: `
-  <mgl-map
-    [style]="'mapbox://styles/mapbox/streets-v9'"
-    [zoom]="[9]"
-    [center]="[-74.5, 40]"
-  ></mgl-map>
-
-`,
-  styles: [
-    `
-      mgl-map {
-        height: 100%;
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: './ngx-map-showroom.page.html',
+  styleUrls: ['./ngx-map-showroom.page.scss'],
 })
 export class NGXMapShowroomPage {
-
-  layerId = 'basic';
-  style: string;
-
-  ngOnInit() {
-    this.changeStyle(this.layerId);
-  }
-
-  changeStyle(layerId: string) {
-    this.style = `mapbox://styles/mapbox/${layerId}-v9`;
-  }
-/**
+  
   map: any;
 
   enabledFeatures: string[] = ['pan', 'manualRotate'];
@@ -71,7 +50,7 @@ export class NGXMapShowroomPage {
   currentCompassData: DeviceOrientationCompassHeading;
 
   path: any;
-
+/**
   constructor(private OSMService: OsmService, private deviceOrientation: DeviceOrientation) {
 
     console.log('creating orientation subscribe...');
@@ -203,6 +182,10 @@ export class NGXMapShowroomPage {
     });
 
   }
+*/
+onMapLoad(map) {
+  map.resize();
+  }
 
   toggleZoomBar() {
     if (this.enabledFeatures.includes('zoomBar')) {
@@ -311,6 +294,7 @@ export class NGXMapShowroomPage {
     if (this.enabledFeatures.includes('streetSection')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'streetSection');
     } else {
+      /** 
       this.enabledFeatures.push('streetSection');
       this.togglePosition();
 
@@ -341,6 +325,7 @@ export class NGXMapShowroomPage {
           }
         });
       });
+      */
     }
   }
 
@@ -514,5 +499,5 @@ export class NGXMapShowroomPage {
       this.map.addControl(this.drawControl, 'top-left');
     }
   }
-  */
+  
 }
