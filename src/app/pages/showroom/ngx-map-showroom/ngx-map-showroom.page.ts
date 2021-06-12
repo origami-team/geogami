@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  Directive, Input, ViewChild} from '@angular/core';
 import { MapImageData } from 'ngx-mapbox-gl';
 import { AnyLayout } from 'mapbox-gl';
 
@@ -28,7 +28,10 @@ export class NGXMapShowroomPage {
 
   map: mapboxgl.Map;
   swipeMap: mapboxgl.Map;
+
   swipe = false; //satellite map initially off
+  @ViewChild('mapWrapper') mapWrapper;
+  @ViewChild('swipeMap') swipeMapContainer;
   mapCenter: number[] = [8, 51.8];
   mapZoom = 2;
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
@@ -53,137 +56,22 @@ export class NGXMapShowroomPage {
   path: any;
   /**
     constructor(private OSMService: OsmService, private deviceOrientation: DeviceOrientation) {
-  
-      console.log('creating orientation subscribe...');
-      this.directionSubscribe = this.deviceOrientation.watchHeading().subscribe(
-        (data: DeviceOrientationCompassHeading) => this.currentCompassData = data
-      );
-      console.log('...done');
-  
-  
-      this._rotateTo = (e: DeviceOrientationEvent) => {
-        this.map.rotateTo(this.currentCompassData.magneticHeading, { duration: 50 });
-      };
-  
-      this._orientTo = (e: DeviceOrientationEvent) => {
-        if (e.beta <= 60 && e.beta >= 0) {
-          this.map.setPitch(e.beta);
-        }
-        this.map.rotateTo(this.currentCompassData.magneticHeading, { duration: 50 });
-      };
-  
-      this._viewDirection = (e: DeviceOrientationEvent) => {
-        // this.map.rotateTo(e.alpha, { duration: 10 })
-        console.log(this.currentCompassData);
-  
-        if (this.map.getSource('viewDirection') == undefined) {
-          // this.map.addImage('view-direction', 'assets/icons/direction.png')
-  
-          this.map.loadImage('/assets/icons/directionv2-richtung.png', (error, image) => {
-            if (error) throw error;
-            this.map.addImage('view-direction', image);
-  
-  
-            this.map.addSource('viewDirection', {
-              type: 'geojson',
-              data: {
-                type: 'Point',
-                coordinates: this.currentLocation
-              }
-            });
-  
-            this.map.addLayer({
-              id: 'viewDirection',
-              source: 'viewDirection',
-              type: 'symbol',
-              layout: {
-                'icon-image': 'view-direction',
-                'icon-size': 1,
-                'icon-offset': [0, -25]
-              }
-            });
-            this.map.setLayoutProperty('viewDirection', 'icon-rotate', this.currentCompassData.magneticHeading);
-            // this.map.setLayoutProperty('viewDirection', "icon-rotate", e.alpha)
-          });
-        } else {
-          this.map.getSource('viewDirection').setData({
-            type: 'Point',
-            coordinates: this.currentLocation
-          });
-          this.map.setLayoutProperty('viewDirection', 'icon-rotate', this.currentCompassData.magneticHeading);
-        }
-  
-  
-      };
-  
-      this.path = {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'LineString',
-          coordinates: [
-  
-          ]
-        }
-      };
     }
   
     ngOnInit() {
   
     }
   
-    ionViewWillEnter() {
-      mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
-  
-  
-      this.map = new mapboxgl.Map({
-        container: 'primary-map',
-        style: {
-          version: 8,
-          metadata: {
-            'mapbox:autocomposite': true,
-            'mapbox:type': 'template'
-          },
-          sources: {
-            'raster-tiles': {
-              type: 'raster',
-              tiles: [
-                'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-              ],
-              tileSize: 256,
-            },
-            mapbox: {
-              url: 'mapbox://mapbox.mapbox-streets-v7',
-              type: 'vector'
-            }
-          },
-          layers: [
-            {
-              id: 'simple-tiles',
-              type: 'raster',
-              source: 'raster-tiles',
-              minzoom: 0,
-              maxzoom: 22
-            },
-            {
-              id: 'building',
-              type: 'fill',
-              source: 'mapbox',
-              'source-layer': 'building',
-              paint: {
-                'fill-color': '#d6d6d6',
-                'fill-opacity': 0,
-              },
-              interactive: true
-            },
-          ]
-        },
-        center: [8, 51.8],
-        zoom: 2
-      });
-  
+    ionViewWillEnter() {  
+      this.swipeMap = new mapboxgl.Map({
+        container: 'swipingContainer',
+        style: 'mapbox://styles/mapbox/dark-v10',
+        center: [0, 0],
+        zoom: 0
+        });
     }
-  */
+    */
+  
 
   //ensures that the map has full size
   onMapLoad(map: mapboxgl.Map) {
@@ -212,9 +100,55 @@ export class NGXMapShowroomPage {
 
     } else {
       this.enabledFeatures.push('swipe');
-      this.swipe=true;
-
+      //this.swipe=true;
+      this.swipeMap = new mapboxgl.Map({
+        container: 'swipingContainer',
+        style: 'mapbox://styles/mapbox/satellite-v9',
+        center: [8, 51.8], //TODO:dynamisch anpassen?
+        zoom: 2
+        });
+      this.map.setStyle('mapbox://styles/mapbox/streets-v9');
+      const compare = new MapboxCompare(
+        this.map,
+        this.swipeMap,
+        this.mapWrapper.nativeElement
+      );
+      console.log(compare);
     }
+  }
+
+  //TODO: entfernen
+  onSwipeMapLoad(swipeMap: mapboxgl.Map) {
+    this.swipeMap = swipeMap;
+
+    /**
+    if (this.swipeMap.loaded()) {
+      const defaultMapSources = this.map.getStyle().sources;
+      const { mapbox, satellite, ...sources } = defaultMapSources;
+      delete sources['raster-tiles'];
+
+      const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building');
+
+      Object.entries(sources).forEach(s => {
+        if (this.swipeMap.getSource(s[0])) {
+          // this.satMap.getSource(s[0]).setData(s[1]['data'])
+        } else {
+          this.swipeMap.addSource(s[0], s[1]);
+        }
+      });
+
+      layers.forEach(l => {
+        if (this.swipeMap.getLayer(l.id)) {
+          if (l.id === 'viewDirection' || l.id === 'viewDirectionTask' || l.id === 'viewDirectionClick') {
+            const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate');
+            this.swipeMap.setLayoutProperty(l.id, 'icon-rotate', bearing);
+          }
+        } else {
+          this.swipeMap.addLayer(l);
+        }
+      });
+    }
+    */
   }
 
   togglePan() {

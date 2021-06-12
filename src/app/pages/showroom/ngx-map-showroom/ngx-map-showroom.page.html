@@ -23,10 +23,11 @@
   [style]="'mapbox://styles/mapbox/satellite-v9'"
   [zoom]="[mapZoom]"
   [center]="mapCenter"
+  (mapLoad)="onSwipeMapLoad($event)"
 ></mgl-map>
   </div>
   </div>
-
+  <div id="swipingContainer" class="map"></div>
   <div class="control">
     <ion-icon name="map" size="large"></ion-icon> 
     <ion-chip [color]='enabledFeatures.includes("zoomBar") ? "primary" : "medium"' (click)=toggleZoomBar()>
