@@ -9,27 +9,23 @@
 
 <ion-content>
   <div class="wrapper">
-  <div #mapWrapper>
-    <mgl-map
-    class="map"
-    [style]="'mapbox://styles/mapbox/streets-v9'"
-    [zoom]="[mapZoom]"
-    [center]="mapCenter"
-    (load)="onMapLoad($event)"
-  >  </mgl-map>
-  <mgl-map
-  *ngIf="swipe"
-  class="map"
-  [style]="'mapbox://styles/mapbox/satellite-v9'"
-  [zoom]="[mapZoom]"
-  [center]="mapCenter"
-  (mapLoad)="onSwipeMapLoad($event)"
-></mgl-map>
+    <div #mapWrapper>
+      <div id="swipingContainer1" class="map">
+        <mgl-map class="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[mapZoom]" [center]="mapCenter"
+          (load)="onMapLoad($event)"> </mgl-map>
+      </div>
+      <div id="swipingContainer2" class="map">
+        <mgl-map class="map" [style]="'mapbox://styles/mapbox/satellite-v9'" [zoom]="[mapZoom]" [center]="mapCenter"
+          (load)="onMapLoad($event)"> </mgl-map>
+      </div>
+    </div>
+    <mgl-map  *ngIf='!enabledFeatures.includes("swipe")'id="mainMap" class="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[mapZoom]"
+      [center]="mapCenter" (load)="onMapLoad($event)"> </mgl-map>
   </div>
-  </div>
-  <div id="swipingContainer" class="map"></div>
+
+
   <div class="control">
-    <ion-icon name="map" size="large"></ion-icon> 
+    <ion-icon name="map" size="large"></ion-icon>
     <ion-chip [color]='enabledFeatures.includes("zoomBar") ? "primary" : "medium"' (click)=toggleZoomBar()>
       <ion-label>Zoom</ion-label>
     </ion-chip>

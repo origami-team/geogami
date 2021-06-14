@@ -1,4 +1,4 @@
-import { Component, OnInit,  Directive, Input, ViewChild} from '@angular/core';
+import { Component, OnInit, Directive, Input, ViewChild } from '@angular/core';
 import { MapImageData } from 'ngx-mapbox-gl';
 import { AnyLayout } from 'mapbox-gl';
 
@@ -27,11 +27,12 @@ export class NGXMapShowroomPage {
   enabledFeatures: string[] = ['pan', 'manualRotate'];
 
   map: mapboxgl.Map;
-  swipeMap: mapboxgl.Map;
+  swipeMap1: mapboxgl.Map;
+  swipeMap2: mapboxgl.Map;
 
   swipe = false; //satellite map initially off
   @ViewChild('mapWrapper') mapWrapper;
-  @ViewChild('swipeMap') swipeMapContainer;
+  compare: any;
   mapCenter: number[] = [8, 51.8];
   mapZoom = 2;
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
@@ -71,7 +72,7 @@ export class NGXMapShowroomPage {
         });
     }
     */
-  
+
 
   //ensures that the map has full size
   onMapLoad(map: mapboxgl.Map) {
@@ -92,63 +93,42 @@ export class NGXMapShowroomPage {
   toggleSwipe() {
     if (this.enabledFeatures.includes('swipe')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'swipe');
-      this.swipe=false;
+      this.swipe = false;
+      this.compare.remove();
+      this.map.setStyle('mapbox://styles/mapbox/streets-v9');
       //TODO: was tut das?
-      const elem = document.getElementsByClassName('mapboxgl-compare');
+      const elem = document.getElementsByClassName('compare');
       while (elem.length > 0)
         elem[0].remove();
 
     } else {
       this.enabledFeatures.push('swipe');
-      //this.swipe=true;
-      this.swipeMap = new mapboxgl.Map({
-        container: 'swipingContainer',
+      //this.swipe=true;     
+      this.swipeMap1 = new mapboxgl.Map({
+        container: 'swipingContainer1',
         style: 'mapbox://styles/mapbox/satellite-v9',
-        center: [8, 51.8], //TODO:dynamisch anpassen?
+        center: [8, 51.8],
         zoom: 2
-        });
-      this.map.setStyle('mapbox://styles/mapbox/streets-v9');
-      const compare = new MapboxCompare(
-        this.map,
-        this.swipeMap,
+      });
+      this.swipeMap2 = new mapboxgl.Map({
+        container: 'swipingContainer2',
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [8, 51.8],
+        zoom: 2
+      });
+
+      this.compare = new MapboxCompare(
+        this.swipeMap2,
+        this.swipeMap1,
         this.mapWrapper.nativeElement
       );
-      console.log(compare);
+      //this.swipeMap.setStyle('mapbox://styles/mapbox/satellite-v9');
+      console.log(this.compare);
     }
   }
 
-  //TODO: entfernen
+  //TODO: entfernen?
   onSwipeMapLoad(swipeMap: mapboxgl.Map) {
-    this.swipeMap = swipeMap;
-
-    /**
-    if (this.swipeMap.loaded()) {
-      const defaultMapSources = this.map.getStyle().sources;
-      const { mapbox, satellite, ...sources } = defaultMapSources;
-      delete sources['raster-tiles'];
-
-      const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building');
-
-      Object.entries(sources).forEach(s => {
-        if (this.swipeMap.getSource(s[0])) {
-          // this.satMap.getSource(s[0]).setData(s[1]['data'])
-        } else {
-          this.swipeMap.addSource(s[0], s[1]);
-        }
-      });
-
-      layers.forEach(l => {
-        if (this.swipeMap.getLayer(l.id)) {
-          if (l.id === 'viewDirection' || l.id === 'viewDirectionTask' || l.id === 'viewDirectionClick') {
-            const bearing = this.map.getLayoutProperty(l.id, 'icon-rotate');
-            this.swipeMap.setLayoutProperty(l.id, 'icon-rotate', bearing);
-          }
-        } else {
-          this.swipeMap.addLayer(l);
-        }
-      });
-    }
-    */
   }
 
   togglePan() {
