@@ -460,7 +460,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         (avatarPosition) => {
           this.trackerService.addWaypoint({});
 
-          this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
+          if (this.avatarLastKnownPosition === undefined) {
+            // Initial avatar's positoin to measure distance to target in nav-arrow tasks
+            this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(environment.initialAvatarLoc.lat, environment.initialAvatarLoc.lng));
+          } else {
+            this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
+          }
 
           if (this.task && !PlayingGamePage.showSuccess) {
             if (this.task.answer.type == AnswerType.POSITION) {
@@ -1176,6 +1181,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.landmarkControl.setSearchArea(this.task.question.area);
     }
 
+    // VR world (calcualte initial distance to target in nav-arrow tasks)
+    if (this.isVirtualWorld && this.task.answer.mode == TaskMode.NAV_ARROW) {
+      const waypoint = this.task.answer.position.geometry.coordinates;
+      this.targetDistance = this.calculateDistanceToTarget(waypoint)
+    }
+
     this.changeDetectorRef.detectChanges();
   }
 
@@ -1325,14 +1336,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.changeDetectorRef.detectChanges();
   }
 
-  userDidArrive(waypoint) {
-    this.targetDistance = this.helperService.getDistanceFromLatLonInM(
+  calculateDistanceToTarget(waypoint): number {
+    return this.helperService.getDistanceFromLatLonInM(
       waypoint[1],
       waypoint[0],
       (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
       (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
     );
-    return this.targetDistance < PlayingGamePage.triggerTreshold;
   }
 
   ngOnDestroy() { }
