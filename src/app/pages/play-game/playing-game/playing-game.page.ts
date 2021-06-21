@@ -1185,6 +1185,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.isVirtualWorld && this.task.answer.mode == TaskMode.NAV_ARROW) {
       const waypoint = this.task.answer.position.geometry.coordinates;
       this.targetDistance = this.calculateDistanceToTarget(waypoint)
+      this.UpdateInitialArrowDirection();
     }
 
     this.changeDetectorRef.detectChanges();
@@ -1343,6 +1344,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
       (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
     );
+  }
+
+  UpdateInitialArrowDirection() {
+    const destCoords = this.task.answer.position.geometry.coordinates;
+    const bearing = this.helperService.bearing(
+      this.avatarLastKnownPosition.coords.latitude,
+      this.avatarLastKnownPosition.coords.longitude,
+      destCoords[1],
+      destCoords[0]
+    );
+
+    this.targetHeading = 360 - (this.compassHeading - bearing);
   }
 
   ngOnDestroy() { }
