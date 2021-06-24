@@ -35,6 +35,19 @@ export class NGXMapShowroomPage {
   compare: any;
   mapCenter: number[] = [8, 51.8];
   mapZoom = 2;
+  mapZoomEnabled = false;
+  mapPanEnabled = true;
+  mapBearing: number[] = [0];
+  // map layer plugins
+  viewDirectionVisible = false;
+  geolocateVisible = false;
+  trackVisible = false;
+  streetSectionVisible = false;
+  // @ViewChild('map') mapContainer;
+  @ViewChild('swipeMap') swipeMapContainer;
+  @ViewChild('panel') panel;
+  @ViewChild('feedback') feedbackControl;
+  
   zoomControl: mapboxgl.NavigationControl = new mapboxgl.NavigationControl();
   geolocateControl: mapboxgl.GeolocateControl = new mapboxgl.GeolocateControl({
     positionOptions: {
@@ -42,6 +55,8 @@ export class NGXMapShowroomPage {
     },
     trackUserLocation: true
   });
+  layerId = 'basic';
+  style: string;
   styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
   drawControl: MapboxDraw = new MapboxDraw();
 
@@ -59,10 +74,6 @@ export class NGXMapShowroomPage {
     constructor(private OSMService: OsmService, private deviceOrientation: DeviceOrientation) {
     }
   
-    ngOnInit() {
-  
-    }
-  
     ionViewWillEnter() {  
       this.swipeMap = new mapboxgl.Map({
         container: 'swipingContainer',
@@ -72,7 +83,10 @@ export class NGXMapShowroomPage {
         });
     }
     */
-
+//set initial style
+    ngOnInit() {
+      this.changeStyle(this.layerId);
+    }
 
   //ensures that the map has full size
   onMapLoad(map: mapboxgl.Map) {
@@ -80,13 +94,25 @@ export class NGXMapShowroomPage {
     this.map.resize();
   }
 
+  onSwipeMap1Load(map: mapboxgl.Map) {
+    this.swipeMap1 = map;
+    this.swipeMap1.resize();
+  }
+
+  onSwipeMap2Load(map: mapboxgl.Map) {
+    this.swipeMap2 = map;
+    this.swipeMap2.resize();
+  }
+
   toggleZoomBar() {
     if (this.enabledFeatures.includes('zoomBar')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'zoomBar');
-      this.map.removeControl(this.zoomControl);
+      //this.map.removeControl(this.zoomControl);
+      this.mapZoomEnabled = false;
     } else {
       this.enabledFeatures.push('zoomBar');
-      this.map.addControl(this.zoomControl);
+      this.mapZoomEnabled = true;
+      //this.map.addControl(this.zoomControl);
     }
   }
 
@@ -97,48 +123,47 @@ export class NGXMapShowroomPage {
       this.compare.remove();
       this.map.setStyle('mapbox://styles/mapbox/streets-v9');
       //TODO: was tut das?
-      const elem = document.getElementsByClassName('compare');
+      const elem = document.getElementsByClassName('swiping');
       while (elem.length > 0)
         elem[0].remove();
 
     } else {
+      this.mapZoom = this.map.getZoom();
       this.enabledFeatures.push('swipe');
       //this.swipe=true;     
+      /**
       this.swipeMap1 = new mapboxgl.Map({
         container: 'swipingContainer1',
-        style: 'mapbox://styles/mapbox/satellite-v9',
+        style: 'mapbox://styles/mapbox/streets-v9',
         center: [8, 51.8],
-        zoom: 2
+        zoom:this.mapZoom 
       });
       this.swipeMap2 = new mapboxgl.Map({
         container: 'swipingContainer2',
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'mapbox://styles/mapbox/satellite-v9',
         center: [8, 51.8],
-        zoom: 2
+        zoom:this.mapZoom
       });
-
+*/
       this.compare = new MapboxCompare(
-        this.swipeMap2,
         this.swipeMap1,
+        this.swipeMap2,
         this.mapWrapper.nativeElement
       );
-      //this.swipeMap.setStyle('mapbox://styles/mapbox/satellite-v9');
+      this.map.setStyle('mapbox://styles/mapbox/satellite-v9');
       console.log(this.compare);
     }
-  }
-
-  //TODO: entfernen?
-  onSwipeMapLoad(swipeMap: mapboxgl.Map) {
   }
 
   togglePan() {
     if (this.enabledFeatures.includes('pan')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'pan');
-      this.map.dragPan.disable();
-
+      //this.map.dragPan.disable();
+      this.mapPanEnabled=false;
     } else {
       this.enabledFeatures.push('pan');
-      this.map.dragPan.enable();
+      //this.map.dragPan.enable();
+      this.mapPanEnabled=true;
     }
   }
 
@@ -174,20 +199,21 @@ export class NGXMapShowroomPage {
   togglePosition() {
     if (this.enabledFeatures.includes('position')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'position');
-      this.map.removeControl(this.geolocateControl);
+      //this.map.removeControl(this.geolocateControl);
+      this.geolocateVisible = false;
 
     } else {
       this.enabledFeatures.push('position');
-      this.map.addControl(this.geolocateControl);
-      setTimeout(() => this.geolocateControl.trigger(), 100);
-
+      //this.map.addControl(this.geolocateControl);
+      //setTimeout(() => this.geolocateControl.trigger(), 100);
+      this.geolocateVisible = true;
     }
   }
 
   toggleStyleSwitcher() {
     if (this.enabledFeatures.includes('styleSwitcher')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'styleSwitcher');
-      this.map.removeControl(this.styleSwitcherControl);
+      //this.map.removeControl(this.styleSwitcherControl);
 
       document.querySelectorAll('.mapboxgl-ctrl .mapboxgl-style-switcher').forEach(element => {
         element.parentElement.remove();
@@ -195,8 +221,13 @@ export class NGXMapShowroomPage {
 
     } else {
       this.enabledFeatures.push('styleSwitcher');
-      this.map.addControl(this.styleSwitcherControl);
+     // this.map.addControl(this.styleSwitcherControl);
     }
+  }
+
+
+  changeStyle(layerId: string) {
+    this.style = `mapbox://styles/mapbox/${layerId}-v9`;
   }
 
   toggleStreetSection() {
@@ -242,6 +273,7 @@ export class NGXMapShowroomPage {
     if (this.enabledFeatures.includes('viewDirection')) {
       this.enabledFeatures = this.enabledFeatures.filter(e => e != 'viewDirection');
 
+      this.viewDirectionVisible = false;
 
 
     } else {
@@ -391,7 +423,7 @@ export class NGXMapShowroomPage {
         },
         paint: {
           'line-opacity': 0.6,
-          'line-color': 'rgb(53, 175, 109)',
+          'line-color': 'rgb(53, 175, 109)this.mapZoom',
           'line-width': 2
         }
       }, 'waterway-label');
@@ -404,7 +436,6 @@ export class NGXMapShowroomPage {
       this.map.removeControl(this.drawControl);
     } else {
       this.enabledFeatures.push('draw');
-
       this.map.addControl(this.drawControl, 'top-left');
     }
   }

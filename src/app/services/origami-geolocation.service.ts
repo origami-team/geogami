@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, Subscriber } from 'rxjs';
-import { filter, shareReplay, take } from 'rxjs/operators';
-import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
-
+import { Observable, Subscriber } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 import { Plugins, GeolocationPosition } from '@capacitor/core';
-import { Feature, MultiPolygon, Polygon } from '@turf/helpers';
-import { HelperService } from './helper.service';
-import { OrigamiOrientationService } from './origami-orientation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +13,7 @@ export class OrigamiGeolocationService {
 
   private watchID: string;
 
-  public lastPointInBbox: BehaviorSubject<number[]> = new BehaviorSubject<number[]>(undefined);
-  public lastPointInBboxDirection: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
-
-
-  constructor(private helperService: HelperService, private orientationService: OrigamiOrientationService) {
-
-  }
-
-  init() {
+  constructor() {
     this.geolocationSubscription = Observable.create((observer: Subscriber<GeolocationPosition>) => {
       this.watchID = Plugins.Geolocation.watchPosition({ enableHighAccuracy: true }, (position, error) => {
         if (error != null) {
@@ -36,6 +23,10 @@ export class OrigamiGeolocationService {
       });
     }).pipe(shareReplay());
     console.log('initializing geolocation service');
+  }
+
+  init() {
+
   }
 
   getSinglePositionWatch(): Observable<GeolocationPosition> {
@@ -51,40 +42,7 @@ export class OrigamiGeolocationService {
         Plugins.Geolocation.clearWatch({ id: singleWatchID });
       };
     });
-  }
 
-  initGeofence(bbox: Feature<Polygon, MultiPolygon>) {
-    return new Observable<boolean>((subscriber) => {
-      let headingSubscription;
-      this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
-        // this.geolocationSubscription.subscribe((position) => {
-        const point = [position.coords.longitude, position.coords.latitude];
-        const inside = booleanPointInPolygon(point, bbox);
-        if (inside) {
-          this.lastPointInBbox.next(point);
-        } else {
-          if (this.lastPointInBbox.getValue() !== undefined) {
-            // reset the subscription each time we get a new position
-            if (headingSubscription) {
-              headingSubscription.unsubscribe();
-            }
-            const direction = this.helperService.bearing(
-              point[1],
-              point[0],
-              this.lastPointInBbox.getValue()[1],
-              this.lastPointInBbox.getValue()[0],
-            );
-            headingSubscription = this.orientationService.orientationSubscription.subscribe(compassHeading => {
-              const arrowDirection = 360 - (compassHeading - direction);
-              this.lastPointInBboxDirection.next(arrowDirection);
-            });
-          } else {
-            this.lastPointInBboxDirection.next(undefined);
-          }
-        }
-        subscriber.next(inside);
-      });
-    });
   }
 
   clear() {

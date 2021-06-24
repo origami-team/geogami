@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color=dark (click)="dismissModal('close')">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="rose" color="tertiary"></ion-icon> Freie Aufgabe
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color=dark (click)="dismissModal(null)">
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card color="tertiary">
+    <ion-card-content>
+      <ion-icon name="help-circle"></ion-icon>
+      In <b> "Freien Aufgaben"</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise
+      können zum Beispiel Quiz- und Sachaufgaben gestellt werden.
+    </ion-card-content>
+  </ion-card>
+
+  <div>
+    <div>
+      <ion-text>
+        <h5>Fragetyp</h5>
+      </ion-text>
+      <select [(ngModel)]="task.question.type" interface="popover">
+        <option [ngValue]="option" *ngFor="let option of objectQuestionSelect">
+          {{ option | typeToText: task.type : false }}</option>
+      </select>
+    </div>
+    <div>
+      <ion-text>
+        <h5>Antworttyp</h5>
+      </ion-text>
+      <select interface="popover" [(ngModel)]="task.answer.type">
+        <option [ngValue]="option" *ngFor="let option of objectAnswerSelect">
+          {{ option | typeToText: task.type : true }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div>
+    <question-type [(question)]="task.question" [taskType]="task.category"></question-type>
+    <answer-type [(answer)]="task.answer" [taskType]="task.category"></answer-type>
+  </div>
+
+  <div *ngIf="task.settings">
+    <ion-text>
+      <h5>Weitere Einstellungen</h5>
+    </ion-text>
+    <ion-item lines="none" *ngIf="task.type == 'nav-flag'">
+      <ion-label>Eingabebestätigung
+        <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Soll der Spieler seine Ankunft am Ziel mit OK bestätigen?')">
+        </ion-icon>
+      </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.confirmation" (ngModelChange)="settingsChange($event)"></ion-toggle>
+    </ion-item>
+    <ion-item lines="none" *ngIf="task.type == 'nav-text' || task.type == 'nav-photo'">
+      <ion-label>Zielfahne anzeigen
+        <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Soll eine Zielfahne auf der Karte angezeigt werden?')">
+        </ion-icon>
+      </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.showMarker" (ngModelChange)="settingsChange()"></ion-toggle>
+    </ion-item>
+    <ion-item lines="none" *ngIf="showFeedback">
+      <ion-label>Feedback
+        <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Soll der Spieler Feedback darüber erhalten, ob er die Aufgabe korrekt gelöst hat?')">
+        </ion-icon>
+      </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.feedback" color="tertiary" (ngModelChange)="feedbackChange()">
+      </ion-toggle>
+    </ion-item>
+    <ion-item lines="none" *ngIf="showMultipleTries">
+      <ion-label>Mehrere Versuche
+        <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Darf der Spieler sich verbessern, wenn er die Aufgabe falsch gelöst hat?')">
+        </ion-icon>
+      </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.multipleTries" color="tertiary" [disabled]="!task.settings.feedback"
+        (ngModelChange)="settingsChange()">
+      </ion-toggle>
+    </ion-item>
+  </div>
+
+  <ion-item detail lines="none" (click)="presentMapFeaturesModal()" *ngIf="task.type != 'nav-arrow'">
+    <ion-label>
+      Kartenfeatures
+    </ion-label>
+  </ion-item>
+</ion-content>

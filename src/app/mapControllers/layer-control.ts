@@ -4,6 +4,7 @@ import MapboxCompare from 'mapbox-gl-compare';
 import { ElementRef } from '@angular/core';
 import { Subscription, Observable, fromEvent } from 'rxjs';
 import { AlertController, Platform } from '@ionic/angular';
+import mapboxgl from 'mapbox-gl';
 
 
 export enum LayerType {
@@ -35,7 +36,7 @@ export class LayerControl {
     private platform: Platform;
     private layerType: LayerType;
     private styleSwitcherControl: MapboxStyleSwitcherControl = new MapboxStyleSwitcherControl();
-    private swipeMapContainer: ElementRef;
+    private swipeMap: mapboxgl.Map;
     private deviceOrientationSubscription: Subscription;
     private mapWrapper: ElementRef;
 
@@ -56,7 +57,7 @@ export class LayerControl {
         }
     }
 
-    public setType(type: LayerType, swipeMapContainer: ElementRef = undefined): void {
+    public setType(type: LayerType, swipeMap?: mapboxgl.Map): void {
         if (this.map != undefined) {
             if (this.satMap) {
                 this.satMap.remove();
@@ -64,7 +65,7 @@ export class LayerControl {
             }
             this.layerType = type;
             this.reset();
-            this.swipeMapContainer = swipeMapContainer;
+            this.swipeMap = swipeMap;
             this.update();
         }
     }
@@ -77,7 +78,7 @@ export class LayerControl {
                 id: 'satellite',
                 source: 'satellite',
                 type: 'raster'
-            });
+            }, 'country-label-lg');
         }
     }
 
@@ -133,73 +134,66 @@ export class LayerControl {
                 // TODO: implement
                 break;
             case LayerType.Swipe:
-                this.satMap = new MapboxMap({
-                    container: this.swipeMapContainer.nativeElement,
-                    style: 'mapbox://styles/mapbox/satellite-v9',
-                    center: this.map.getCenter(),
-                    zoom: this.map.getZoom(),
-                    dragRotate: this.map.dragRotate.isEnabled(),
-                    dragPan: this.map.dragPan.isEnabled(),
-                    scrollZoom: this.map.scrollZoom.isEnabled(),
-                    doubleClickZoom: this.map.doubleClickZoom.isEnabled(),
-                    touchZoomRotate: this.map.touchZoomRotate.isEnabled(),
-                    maxZoom: this.map.getMaxZoom()
-                });
+                // this.satMap = new MapboxMap({
+                //     container: this.swipeMapContainer.nativeElement,
+                //     style: 'mapbox://styles/mapbox/satellite-v9',
+                //     center: this.map.getCenter(),
+                //     zoom: this.map.getZoom(),
+                //     dragRotate: this.map.dragRotate.isEnabled(),
+                //     dragPan: this.map.dragPan.isEnabled(),
+                //     scrollZoom: this.map.scrollZoom.isEnabled(),
+                //     doubleClickZoom: this.map.doubleClickZoom.isEnabled(),
+                //     touchZoomRotate: this.map.touchZoomRotate.isEnabled(),
+                //     maxZoom: this.map.getMaxZoom()
+                // });
+                this.satMap = this.swipeMap;
 
-                this.satMap.loadImage(
-                    '/assets/icons/position.png',
-                    (error, image) => {
-                        if (error) throw error;
+                // this.satMap.loadImage(
+                //     '/assets/icons/position.png',
+                //     (error, image) => {
+                //         if (error) throw error;
 
-                        this.satMap.addImage('geolocate', image);
-                        this.satMap.addImage('view-direction-click-geolocate', image);
-                    });
+                //         this.satMap.addImage('geolocate', image);
+                //         this.satMap.addImage('view-direction-click-geolocate', image);
+                //     });
 
-                this.satMap.loadImage(
-                    '/assets/icons/directionv2.png',
-                    (error, image) => {
-                        if (error) throw error;
+                // this.satMap.loadImage(
+                //     '/assets/icons/directionv2.png',
+                //     (error, image) => {
+                //         if (error) throw error;
 
-                        this.satMap.addImage('view-direction', image);
-                    });
+                //         this.satMap.addImage('view-direction', image);
+                //     });
 
-                this.satMap.loadImage(
-                    '/assets/icons/directionv2-richtung.png',
-                    (error, image) => {
-                        if (error) throw error;
+                // this.satMap.loadImage(
+                //     '/assets/icons/directionv2-richtung.png',
+                //     (error, image) => {
+                //         if (error) throw error;
 
-                        this.satMap.addImage('view-direction-task', image);
-                    });
+                //         this.satMap.addImage('view-direction-task', image);
+                //     });
 
-                this.satMap.loadImage(
-                    '/assets/icons/marker-editor.png',
-                    (error, image) => {
-                        if (error) throw error;
+                // this.satMap.loadImage(
+                //     '/assets/icons/marker-editor.png',
+                //     (error, image) => {
+                //         if (error) throw error;
 
-                        this.satMap.addImage('marker-editor', image);
-                    });
-
-                this.satMap.loadImage(
-                    '/assets/icons/landmark-marker.png',
-                    (error, image) => {
-                        if (error) throw error;
-
-                        this.satMap.addImage('landmark-marker', image);
-                    });
+                //         this.satMap.addImage('marker-editor', image);
+                //     });
 
 
-                this.satMap.on('load', () => {
-                    if (!this.map.dragRotate.isEnabled()) {
-                        this.satMap.touchZoomRotate.disableRotation();
-                    }
-                    this.syncMaps();
-                });
-                this.map.on('styledata', () => this.syncMaps());
-                this.map.on('sourcedata', () => this.syncMaps());
+                // this.satMap.on('load', () => {
+                //     if (!this.map.dragRotate.isEnabled()) {
+                //         this.satMap.touchZoomRotate.disableRotation();
+                //     }
+                //     this.syncMaps();
+                // });
+                // this.map.on('styledata', () => this.syncMaps());
+                // this.map.on('sourcedata', () => this.syncMaps());
 
-                this.swipeClickSubscription = fromEvent(this.satMap, 'click');
+                // this.swipeClickSubscription = fromEvent(this.satMap, 'click');
 
-                this.compare = new MapboxCompare(this.map, this.satMap, this.mapWrapper.nativeElement);
+                // this.compare = new MapboxCompare(this.map, this.satMap, this.mapWrapper.nativeElement);
                 break;
             case LayerType.ThreeDimension:
                 this._add3DBuildingsLayer();
@@ -306,14 +300,11 @@ export class LayerControl {
 
             const layers = this.map.getStyle().layers.filter(l => l.id !== 'simple-tiles' && l.id !== 'building');
 
-            Object.entries(sources).forEach((s: any) => {
-                if(s.length > 0) {
-                    const source = this.satMap.getSource(s[0]);
-                    if (source != undefined) {
-                        source.setData(s[1].data);
-                    } else {
-                        this.satMap.addSource(s[0], s[1]);
-                    }
+            Object.entries(sources).forEach(s => {
+                if (this.satMap.getSource(s[0])) {
+                    // this.satMap.getSource(s[0]).setData(s[1]['data'])
+                } else {
+                    this.satMap.addSource(s[0], s[1]);
                 }
             });
 

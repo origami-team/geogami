@@ -1,105 +1,68 @@
-import { Map as MapboxMap } from 'mapbox-gl';
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import mapboxgl from 'mapbox-gl';
 
-export enum TrackType {
-    Enabled,
-    Disabled
-}
+@Component({
+    selector: 'app-track-control',
+    template: `
+        <mgl-geojson-source id="trackSource" [data]="trackGeometry">
+        </mgl-geojson-source>
+        <mgl-layer
+            id="trackLineString"
+            type="line"
+            source="trackSource"
+            [paint]="trackLinePaint"
+            [layout]="trackLineLayout"
+        ></mgl-layer>
+    `,
+})
 
-export class TrackControl {
-    private map: MapboxMap;
-    private path: any;
-    private trackType: TrackType;
+export class TrackControlComponent implements OnChanges, OnDestroy {
+    @Input() visible = true;
+
+    trackGeometry: GeoJSON.LineString = {
+        type: 'LineString',
+        coordinates: []
+    };
+
+    trackLinePaint: mapboxgl.LinePaint = {
+        'line-color': 'red',
+        'line-opacity': 0.5,
+        'line-width': 5
+    };
+
+    trackLineLayout: mapboxgl.LineLayout = {
+        'line-cap': 'round'
+    };
+
+
     private positionSubscription: Subscription;
 
-    constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService) {
-        this.map = map;
+    constructor(private geolocationService: OrigamiGeolocationService) {
         const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
         const dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
 
-        this.path = {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-                type: 'LineString',
-                coordinates: []
-            }
-        };
         this.positionSubscription = this.geolocationService.geolocationSubscription
             .pipe(filter(p => p.coords.accuracy <= 5))
             .subscribe(position => {
-                this.path.geometry.coordinates.push([
+                this.trackGeometry.coordinates.push([
                     position.coords.longitude,
                     position.coords.latitude
                 ]);
-                if (this.map && this.map.getSource('track')) {
-                    this.map.getSource('track').setData(this.path);
-                }
             });
-
-        this.map.addSource('track', { type: 'geojson', data: this.path });
-        this.map.addLayer({
-            id: 'track',
-            type: 'line',
-            source: 'track',
-            paint: {
-                'line-color': dangerColor,
-                'line-opacity': 0.5,
-                'line-width': 5
-            },
-            layout: {
-                'line-cap': 'round'
-            }
-        });
-        this.map.setLayoutProperty('track', 'visibility', 'none');
     }
 
-    public setType(type: TrackType): void {
-        if (this.map != undefined) {
-            this.trackType = type;
-            this.reset();
-            this.update();
-        }
-    }
 
-    private reset(): void {
-        this.path = {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-                type: 'LineString',
-                coordinates: []
-            }
+    ngOnChanges(changes: SimpleChanges): void {
+        this.trackLineLayout = {
+            ...this.trackLineLayout,
+            visibility: changes.visible.currentValue ? 'visible' : 'none'
         };
     }
 
-    private update(): void {
-        switch (this.trackType) {
-            case TrackType.Enabled:
-                this.map.setLayoutProperty('track', 'visibility', 'visible');
-                break;
-            case TrackType.Disabled:
-                this.map.setLayoutProperty('track', 'visibility', 'none');
-                break;
-
-        }
-    }
-
-    public remove(): void {
-        if (this.map.getLayer('track')) {
-            this.map.removeLayer('track');
-        }
-        this.path = {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-                type: 'LineString',
-                coordinates: []
-            }
-        };
+    ngOnDestroy(): void {
         this.positionSubscription.unsubscribe();
-        // window.navigator.geolocation.clearWatch(this.trackPositionWatch);
     }
 }

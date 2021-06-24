@@ -11,16 +11,30 @@
   <div class="wrapper">
     <div #mapWrapper>
       <div id="swipingContainer1" class="map">
-        <mgl-map class="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[mapZoom]" [center]="mapCenter"
-          (load)="onMapLoad($event)"> </mgl-map>
+        <mgl-map [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[mapZoom]" [center]="mapCenter" (load)="onSwipeMap1Load($event)">
+        </mgl-map>
       </div>
       <div id="swipingContainer2" class="map">
-        <mgl-map class="map" [style]="'mapbox://styles/mapbox/satellite-v9'" [zoom]="[mapZoom]" [center]="mapCenter"
-          (load)="onMapLoad($event)"> </mgl-map>
+        <mgl-map [style]="'mapbox://styles/mapbox/satellite-v9'" [zoom]="[mapZoom]" [center]="mapCenter" (load)="onSwipeMap2Load($event)">
+        </mgl-map>
       </div>
     </div>
-    <mgl-map  *ngIf='!enabledFeatures.includes("swipe")'id="mainMap" class="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[mapZoom]"
-      [center]="mapCenter" (load)="onMapLoad($event)"> </mgl-map>
+    <mgl-map *ngIf='!enabledFeatures.includes("swipe")' id="mainMap" class="map"
+      [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[mapZoom]" [maxZoom]="18" 
+      [center]="mapCenter" 
+      [scrollZoom]="mapZoomEnabled" [doubleClickZoom]="mapZoomEnabled"
+      [boxZoom]="mapZoomEnabled"
+      [dragPan]="mapPanEnabled"
+      movingMethod="flyTo"
+      [(bearing)]="mapBearing" 
+      (load)="onMapLoad($event)">
+      <app-map-image-control></app-map-image-control>
+
+        <app-geolocate-control
+          [visible]="geolocateVisible"
+        ></app-geolocate-control>
+        
+    </mgl-map>
   </div>
 
 

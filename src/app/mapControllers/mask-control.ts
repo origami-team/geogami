@@ -39,18 +39,18 @@ export class MaskControl {
 
     public addLayer(val: number) {
         // outer circle
-        let ocCenter = [this.coords[0], this.coords[1]];
-        let ocRadius = 1500;
-        let ocPptions = { steps: 30, units:'kilometers', properties: {}};
-        let outerCircle = circle(ocCenter, ocRadius, { steps: 30, units:'kilometers', properties: {}});
+        const ocCenter = [this.coords[0], this.coords[1]];
+        const ocRadius = 1500;
+        const ocPptions = { steps: 30, units: 'kilometers' };
+        const outerCircle = circle(ocCenter, ocRadius, { steps: 30, units: 'kilometers' });
 
         // inner circle
-        let icCenter = [this.coords[0], this.coords[1]];
-        let icRadius = val/1000; // to get it in meter
-        let icOptions = { steps: 30, units: 'kilometers'};
-        let innerCircle = circle(icCenter, icRadius, { steps: 30, units:'kilometers', properties: {}});
+        const icCenter = [this.coords[0], this.coords[1]];
+        const icRadius = val / 1000; // to get it in meter
+        const icOptions = { steps: 30, units: 'kilometers' };
+        const innerCircle = circle(icCenter, icRadius, { steps: 30, units: 'kilometers' });
 
-        let masked = mask(innerCircle, outerCircle);
+        const masked = mask(innerCircle, outerCircle);
 
         this.map.addSource('circle-mask', {
             type: 'geojson',
@@ -96,7 +96,7 @@ export class MaskControl {
                 this.reset();
                 break;
             case MaskType.Enabled:
-                if (this.map.getLayoutProperty('circle-mask', 'visibility') == 'none'){
+                if (this.map.getLayoutProperty('circle-mask', 'visibility') == 'none') {
                     this.map.setLayoutProperty('circle-mask', 'visibility', 'visible');
                 }
                 break;

@@ -3,97 +3,84 @@ import { OsmService } from '../services/osm.service';
 import osmtogeojson from 'osmtogeojson';
 import { OrigamiGeolocationService } from '../services/origami-geolocation.service';
 import { Subscription } from 'rxjs';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { GeometryObject } from '@turf/helpers';
+import mapboxgl from 'mapbox-gl';
 
+@Component({
+  selector: 'app-street-section-control',
+  template: `
+      <mgl-geojson-source id="streetSectionSource" [data]="streetSectionGeometry">
+      </mgl-geojson-source>
+      <mgl-layer
+          id="streetSection"
+          type="line"
+          source="streetSectionSource"
+          [paint]="streetSectionPaint"
+          [layout]="streetSectionLayout"
+      ></mgl-layer>
+  `,
+})
 
-
-
-export enum StreetSectionType {
-  Enabled,
-  Disabled
-}
-
-export class StreetSectionControl {
+export class StreetSectionControlComponent implements OnChanges, OnDestroy {
   private map: MapboxMap;
-  private streetSectionType: StreetSectionType;
   private osm: OsmService;
   private positionSubscription: Subscription;
   private primaryColor: string;
   private dangerColor: string;
+  
 
-  constructor(map: MapboxMap, osm: OsmService, private geolocationService: OrigamiGeolocationService) {
-    this.map = map;
+  @Input() visible = true;
+
+  streetSectionGeometry: GeoJSON.FeatureCollection<any> = {
+    features: [],
+    type: 'FeatureCollection'
+  };
+
+  streetSectionPaint: mapboxgl.LinePaint = {
+    'line-color': 'red',
+    'line-opacity': 0.5,
+    'line-width': 10
+  };
+
+  streetSectionLayout: mapboxgl.LineLayout = {
+    'line-cap': 'round'
+  };
+
+  constructor(osm: OsmService, private geolocationService: OrigamiGeolocationService) {
     this.osm = osm;
     this.primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary');
     this.dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-danger');
 
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.visible.currentValue) {
+      this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
+        position => {
+          if (this.map !== undefined) {
+            this.osm.getStreetCoordinates(
+              position.coords.latitude,
+              position.coords.longitude
+            ).then(data => {
 
-  public setType(type: StreetSectionType): void {
-    if (this.map != undefined) {
-      this.streetSectionType = type;
-      this.reset();
-      this.update();
+              // tslint hacking idk
+              osmtogeojson(data).features.forEach(f => {
+                this.streetSectionGeometry.features.push(f as any);
+              });
+            }).catch(e => { console.log('error', e); });
+          }
+        }
+      );
+    } else {
+      if (this.positionSubscription) {
+        this.positionSubscription.unsubscribe();
+      }
     }
   }
 
-  private reset(): void {
+  ngOnDestroy(): void {
     if (this.positionSubscription) {
       this.positionSubscription.unsubscribe();
     }
-    if (this.map.getLayer('section'))
-      this.map.removeLayer('section');
-  }
-
-  private update(): void {
-    switch (this.streetSectionType) {
-      case StreetSectionType.Enabled:
-        this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
-          position => {
-            if (this.map != undefined) {
-              this.osm.getStreetCoordinates(
-                position.coords.latitude,
-                position.coords.longitude
-              ).then(data => {
-                const geometries = osmtogeojson(data);
-
-                if (this.map.getSource('section') == undefined) {
-                  this.map.addSource('section', {
-                    type: 'geojson',
-                    data: geometries
-                  });
-                  this.map.addLayer({
-                    id: 'section',
-                    type: 'line',
-                    source: 'section',
-                    paint: {
-                      'line-color': this.dangerColor,
-                      'line-opacity': 0.5,
-                      'line-width': 10
-                    },
-                    layout: {
-                      'line-cap': 'round'
-                    }
-                  });
-                } else {
-                  this.map.getSource('section').setData(geometries);
-                }
-              }).catch(e => { console.log('error', e); });
-            }
-          }
-        );
-
-        break;
-      case StreetSectionType.Disabled:
-        if (this.map.getLayer('section'))
-          this.map.removeLayer('section');
-        break;
-
-
-    }
-  }
-
-  public remove(): void {
-    if (this.map.getLayer('section'))
-      this.map.removeLayer('section');
   }
 }

@@ -17,12 +17,43 @@
 <ion-content forceOverscroll="false">
   <div class="wrapper">
     <div #mapWrapper>
-      <div
-        #map
+      <!-- <div #map class="map" [class.blur]="task != null && task.type == 'nav-arrow'"></div> -->
+      <mgl-map
         class="map"
-        [class.blur]="task != null && task.type == 'nav-arrow'"
-      ></div>
-      <div *ngIf="swipe" #swipeMap class="map"></div>
+        [style]="mapStyle"
+        [zoom]="[mapZoom]"
+        [center]="mapCenter"
+        [maxZoom]="18"
+        [(bearing)]="mapBearing"
+        (mapLoad)="onMapLoad($event)"
+        (mapClick)="onMapClick($event)"
+        [scrollZoom]="mapZoomEnabled"
+        [doubleClickZoom]="mapZoomEnabled"
+        [boxZoom]="mapZoomEnabled"
+        [dragPan]="mapPanEnabled"
+        [fitBounds]="mapBounds"
+        [fitBoundsOptions]="{
+          padding: {
+            top: 80,
+            bottom: 500,
+            left: 40,
+            right: 40
+          },
+          duration: 1000,
+          maxZoom: 16}"
+        movingMethod="flyTo"
+      >
+      </mgl-map>
+      <mgl-map
+        *ngIf="swipe"
+        class="map"
+        [style]="'mapbox://styles/mapbox/satellite-v9'"
+        [zoom]="[mapZoom]"
+        [center]="mapCenter"
+        (mapLoad)="onSwipeMapLoad($event)"
+        (mapClick)='onMapClick($event, "swipe")'
+      ></mgl-map>
+      <!-- <div  #swipeMap class="map"></div> -->
     </div>
 
     <ion-card
@@ -307,7 +338,7 @@
       <ion-button
         slot="end"
         size="default"
-        [disabled]="!loaded"
+        [disabled]="!map"
         (click)="startGame()"
         >Fertig</ion-button
       >
@@ -324,28 +355,8 @@
       color="primary"
       (click)="navigateHome()"
       [disabled]="!uploadDone"
+      >Fertig</ion-button
     >
-      Fertig
-    </ion-button>
-  </ion-card>
-
-  <ion-card class="overlay success" *ngIf="geofenceAlert">
-    <h3 *ngIf="game.mapSectionVisible">
-      Du hast das
-      <ion-text color="warning">markierte Gebiet</ion-text> verlassen. Kehre
-      zurück!
-    </h3>
-    <h3 *ngIf="!game.mapSectionVisible">
-      Du verlässt den Spielbereich. Kehre zurück!
-    </h3>
-    <div class="compass bearing" *ngIf="lastPointInBboxDirection !== undefined">
-      <img
-        src="/assets/icons/compass_yellow.svg"
-        [ngStyle]="{
-                  transform: 'translateX(-50%) rotate(' + lastPointInBboxDirection + 'deg)'
-                }"
-      />
-    </div>
   </ion-card>
 
   <ion-card class="overlay correct-position" *ngIf="showCorrectPositionModal">

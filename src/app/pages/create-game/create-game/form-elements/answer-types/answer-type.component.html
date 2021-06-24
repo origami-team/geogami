@@ -1,0 +1,36 @@
+<div *ngIf="answer.type == answerTypeEnum.POSITION">
+    <h5>Zielort
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.')">
+        </ion-icon>
+    </h5>
+    <app-map featureType="point" drawTheme="nav" [(feature)]="answer.position"></app-map>
+</div>
+
+<div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
+    <h5>Multiple Choice
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Füge ein Foto der korrekten Lösung ein sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.')">
+        </ion-icon>
+    </h5>
+    <app-photo-upload-multiple-choice [(photos)]="answer.photos" [taskType]="taskType">
+    </app-photo-upload-multiple-choice>
+</div>
+
+<div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
+    <h5>Multiple Choice Text
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder.')">
+        </ion-icon>
+    </h5>
+    <app-multiple-choice-text [(answers)]="answer.choices"></app-multiple-choice-text>
+</div>
+
+<div *ngIf="answer.type == answerTypeEnum.NUMBER">
+    <h5>Korrekte Antwort (Zahl)
+        <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Schreibe die richtige Aufgabenlösung in das Feld.')">
+        </ion-icon>
+    </h5>
+    <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
+</div>
