@@ -996,6 +996,37 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initTask();
   }
 
+  previousTask() {
+    if(this.taskIndex>0){
+
+    this.taskIndex--;
+    /**
+    if (this.taskIndex > 1) {
+      PlayingGamePage.showSuccess = true;
+      this.trackerService.addEvent({
+        type: 'FINISHED_GAME',
+      });
+      this.trackerService.uploadTrack().then((res) => {
+        if (res.status == 201) {
+          this.uploadDone = true;
+        }
+      });
+      if (Capacitor.isNative) {
+        Plugins.Haptics.vibrate();
+        Plugins.CapacitorKeepScreenOn.disable();
+      }
+
+      return;
+    }
+    */
+
+    this.task = this.game.tasks[this.taskIndex];
+    this.feedbackControl.setTask(this.task);
+    this.initTask();
+  }
+
+  }
+
   async onMultipleChoicePhotoSelected(item, event) {
     this.selectedPhoto = item;
     this.isCorrectPhotoSelected = item.key === '0';
