@@ -28,6 +28,7 @@
   </ion-card>
 
   <ion-card
+    *ngIf="(user | async)?.role"
     id="start_card_analyze"
     (click)="navigateAnalyzePage()"
     color="secondary"
