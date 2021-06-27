@@ -180,7 +180,7 @@ export class TrackerService {
     this.events.push({
       ...event,
       timestamp: new Date().toISOString(),
-      position: this.position,
+      position: (this.isVirtualWorld ? this.avatarPosition : this.position),
       mapViewport: {
         bounds: this.map.getBounds(),
         center: this.map.getCenter(),
