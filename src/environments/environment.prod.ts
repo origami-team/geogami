@@ -8,5 +8,9 @@ export const environment = {
   initialAvatarLoc: {
     lng:224 / 111000,
     lat:74 / 112000
+  },  
+  initialAvatarLoc_MirroredVersion: {
+    lng:214 / 111000,
+    lat:69 / 112000
   }
 };

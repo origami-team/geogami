@@ -164,7 +164,12 @@ export class CreateGameListPage implements OnInit {
 
   navigateToOverview() {
     console.log("navigate");
-    this.navCtrl.navigateForward(`create-game/create-game-overview/${"RealWorld"}`);
+    
+    let bundle = {
+      isVRWorld: false,
+      isVRMirrored: false
+    }
+    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
   }
 
   async showPopover(ev: any, text: string) {

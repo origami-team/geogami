@@ -35,6 +35,7 @@ export class CreateTaskModalPage implements OnInit {
   
   // VR world
   @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
 
   tasks: any[] = [];
 
@@ -295,7 +296,8 @@ export class CreateTaskModalPage implements OnInit {
       backdropDismiss: false,
       componentProps: {
         features: this.mapFeatures,
-        isVirtualWorld: this.isVirtualWorld
+        isVirtualWorld: this.isVirtualWorld,
+        isVRMirrored: this.isVRMirrored
       }
     });
     await modal.present();

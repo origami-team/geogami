@@ -52,6 +52,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
 
   // VR world
   isVirtualWorld: boolean = false;
+  isVRMirrored: boolean = false;
 
 
   constructor(
@@ -74,9 +75,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     // VR world
     // to add game attribute that distinguish VR games from real ones
     this.route.params.subscribe((params) => {
-      if (params.worldType === "VRWorld") {
-        this.isVirtualWorld = true;
-      }
+      this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
+      this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
     });
   }
   ngAfterViewInit(): void {
@@ -383,7 +383,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
       mapSectionVisible: this.mapSectionVisible,
       geofence: this.geofence,
       place: this.game.place,
-      isVRWorld: this.isVirtualWorld
+      isVRWorld: this.isVirtualWorld,
+      isVRMirrored: this.isVRMirrored
     });
     console.log(this.gameFactory.game);
 

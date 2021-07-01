@@ -19,6 +19,9 @@ import { CreateFreeTaskModalComponent } from "../create-free-task-modal/create-f
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 
+// VR world
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-create-game-virtual-list',
   templateUrl: './create-game-virtual-list.page.html',
@@ -30,6 +33,7 @@ export class CreateGameVirtualListPage implements OnInit {
   reorder: Boolean = false;
 
   isVirtualWorld: boolean = true;
+  isVRMirrored: boolean = false;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
@@ -43,10 +47,18 @@ export class CreateGameVirtualListPage implements OnInit {
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
     private navCtrl: NavController,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    // to check if VR version is mirrored
+    this.route.params.subscribe((params) => {
+      if (params.VR_version === "VR_type_B") {
+        this.isVRMirrored = true;
+      }
+    });
+
     this.gameFactory.getGame().then((game) => (this.game = game));
 
     console.log(this.gameFactory.game);
@@ -55,7 +67,7 @@ export class CreateGameVirtualListPage implements OnInit {
   ionViewWillEnter() {
   }
 
-  async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld) {
+  async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
     console.log(task);
     console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
 
@@ -66,7 +78,8 @@ export class CreateGameVirtualListPage implements OnInit {
       componentProps: {
         type,
         task,
-        isVirtualWorld
+        isVirtualWorld,
+        isVRMirrored
       },
     });
 
@@ -134,7 +147,12 @@ export class CreateGameVirtualListPage implements OnInit {
 
   navigateToOverview() {
     console.log("navigate");
-    this.navCtrl.navigateForward(`create-game/create-game-overview/${"VRWorld"}`);
+
+    let bundle = {
+      isVRWorld: this.isVirtualWorld,
+      isVRMirrored: this.isVRMirrored
+    }
+    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
   }
 
   async showPopover(ev: any, text: string) {

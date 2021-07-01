@@ -45,7 +45,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'create-game/create-game-overview/:worldType',
+    path: 'create-game/create-game-overview/:bundle',
     loadChildren: () =>
       import(
         './pages/create-game/create-game-overview/create-game-overview.module'
@@ -175,13 +175,17 @@ const routes: Routes = [
     loadChildren: () => import('./pages/create-game/create-game-virtual/create-game-virtual.module').then( m => m.CreateGameVirtualPageModule)
   },
   {
-    path: 'create-game-virtual-list',
+    path: 'create-game-virtual-list/:VR_version',
     loadChildren: () => import('./pages/create-game/create-game-virtual-list/create-game-virtual-list.module').then( m => m.CreateGameVirtualListPageModule)
   },
   {
     path: 'play-game/play-game-menu',
     loadChildren: () => import('./pages/play-game/play-game-menu/play-game-menu.module').then( 
       m => m.PlayGameMenuPageModule)
+  },
+  {
+    path: 'create-game-virtual-menu',
+    loadChildren: () => import('./pages/create-game/create-game-virtual-menu/create-game-virtual-menu.module').then( m => m.CreateGameVirtualMenuPageModule)
   },
 ];
 @NgModule({

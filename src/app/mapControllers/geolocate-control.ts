@@ -20,17 +20,19 @@ export class GeolocateControl {
 
     // VR world
     isVirtualWorld: boolean = false;
+    initialAvatarLoc: any;
     private avatarPositionSubscription: Subscription;
 
     private map: MapboxMap;
 
     private isInitalized = false;
 
-    constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService, isVirtualWorld: boolean) {
+    constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService, isVirtualWorld: boolean, initialAvatarLoc: any) {
         this.map = map;
 
         // VR world (to check type of the game)
         this.isVirtualWorld = isVirtualWorld;
+        this.initialAvatarLoc = initialAvatarLoc;
 
         if (!isVirtualWorld) {
             this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(position => {
@@ -64,7 +66,7 @@ export class GeolocateControl {
                     type: 'geojson',
                     data: {
                         type: 'Point',
-                        coordinates: (this.isVirtualWorld ? [environment.initialAvatarLoc.lng, environment.initialAvatarLoc.lat] : [0, 0])
+                        coordinates: (this.isVirtualWorld ? [this.initialAvatarLoc.lng, this.initialAvatarLoc.lat] : [0, 0])
                     }
                 });
                 this.map.addLayer({

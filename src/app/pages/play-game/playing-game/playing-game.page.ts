@@ -155,10 +155,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   lastKnownPosition: GeolocationPosition;
 
   // VR world
-  isVirtualWorld: boolean = false; //ToDo: make it dynamic (done)
+  isVirtualWorld: boolean = false; 
+  isVRMirrored: boolean = false; // for multi VR designs 
   avatarPositionSubscription: Subscription;
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
+  initialAvatarLoc: any;
 
   // degree for nav-arrow
   heading = 0;
@@ -231,10 +233,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // to seperate realworld games from VR ones in view
     this.route.params.subscribe((params) => {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
+      this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
     });
 
+    // Set the intial avatar location (in either normal or mirrored version)
+    this.initialAvatarLoc = (this.isVRMirrored?environment.initialAvatarLoc_MirroredVersion:environment.initialAvatarLoc)    
+
     this.game = null;
-    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false);
+    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false);
     this.route.params.subscribe((params) => {
       this.gamesService
         .getGame(JSON.parse(params.bundle).id)
@@ -265,7 +271,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         'overlay':
         {
           'type': 'image',
-          'url': 'https://i.imgur.com/THnVL8y.png', // V3
+          'url': (this.isVRMirrored ? 'https://i.imgur.com/Q6SKqN0.png' : 'https://i.imgur.com/THnVL8y.png'), // V4
 
           'coordinates': [
             [0.0002307207207, 0.004459082914], // NW
@@ -274,7 +280,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             [0.0002307207207, 0.0003628597122] // SW
           ]
         }
-
       },
       'sprite': 'mapbox://sprites/mapbox/dark-v10',
       'glyphs': 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
@@ -462,7 +467,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
           if (this.avatarLastKnownPosition === undefined) {
             // Initial avatar's positoin to measure distance to target in nav-arrow tasks
-            this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(environment.initialAvatarLoc.lat, environment.initialAvatarLoc.lng));
+            this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(this.initialAvatarLoc.lat, this.initialAvatarLoc.lng));
           } else {
             this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
           }
@@ -514,13 +519,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.geolocateControl = new GeolocateControl(
         this.map,
         this.geolocationService,
-        this.isVirtualWorld
+        this.isVirtualWorld,
+        this.initialAvatarLoc
       );
       this.viewDirectionControl = new ViewDirectionControl(
         this.map,
         this.geolocationService,
         this.orientationService,
-        this.isVirtualWorld
+        this.isVirtualWorld,
+        this.initialAvatarLoc
       );
       this.panControl = new PanControl(
         this.map,
@@ -862,8 +869,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // include position into bounds (only if position is in bbox bounds)
       if (
         this.task.mapFeatures.position == 'true' ||
-        this.task.mapFeatures.direction == 'true'
-      ) {
+        this.task.mapFeatures.direction == 'true') {
         const position = point([
           (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
           (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
@@ -942,7 +948,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.game.name,
       this.map,
       this.playersNames,
-      this.isVirtualWorld
+      this.isVirtualWorld,
+      this.initialAvatarLoc
     );
     console.log(this.game);
 

@@ -17,6 +17,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     // VR world
     @Input() isVirtualWorld: boolean;
+    @Input() isVRMirrored: boolean;
 
     @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
 

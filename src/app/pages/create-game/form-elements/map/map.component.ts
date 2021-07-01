@@ -45,7 +45,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
   @Input() drawTheme: string;
 
+  // VR world
   @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
 
   showDirectionMarker = false;
   directionMarkerPosition: any;
@@ -127,7 +129,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         'overlay':
         {
           'type': 'image',
-          'url': 'https://i.imgur.com/THnVL8y.png', // V3
+          'url': (this.isVRMirrored ? 'https://i.imgur.com/Q6SKqN0.png' : 'https://i.imgur.com/THnVL8y.png'), // V4
           'coordinates': [
             [0.0002307207207, 0.004459082914], // NW
             [0.003717027207, 0.004459082914], // NE 

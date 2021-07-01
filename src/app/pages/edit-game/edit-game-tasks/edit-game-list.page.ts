@@ -32,6 +32,7 @@ export class EditGameListPage implements OnInit {
 
   // VR world
   isVirtualWorld: boolean = false;
+  isVRMirrored: boolean = false;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
@@ -62,6 +63,9 @@ export class EditGameListPage implements OnInit {
           // VR world
           if( game.isVRWorld !== undefined &&  game.isVRWorld != false){
             this.isVirtualWorld = true;
+            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
+              this.isVRMirrored = true;
+            }
           }
         });
     });
@@ -96,7 +100,7 @@ export class EditGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld) {
+  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored:boolean = this.isVRMirrored) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -106,7 +110,8 @@ export class EditGameListPage implements OnInit {
       componentProps: {
         type,
         task,
-        isVirtualWorld  // added to view VR world map instead of real map if true  
+        isVirtualWorld,  // added to view VR world map instead of real map if true
+        isVRMirrored  
       },
     });
 

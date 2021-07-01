@@ -38,6 +38,7 @@ export class TrackerService {
   private avatarPositionWatch: Subscription;
   isVirtualWorld: boolean = false;
   private avatarOrientationSubscription: Subscription;
+  initialAvatarLoc: any;
 
 
   private map: any;
@@ -55,9 +56,10 @@ export class TrackerService {
     private orientationService: OrigamiOrientationService
   ) { }
 
-  async init(gameID, name, map: any, players: string[], isVirtualWorld: boolean) {
+  async init(gameID, name, map: any, players: string[], isVirtualWorld: boolean, initialAvatarLoc: any) {
 
     this.isVirtualWorld = isVirtualWorld;
+    this.initialAvatarLoc = initialAvatarLoc;
 
     if (!isVirtualWorld) {
       this.positionWatch = this.geolocateService.geolocationSubscription.subscribe(
@@ -89,7 +91,7 @@ export class TrackerService {
         // Set timestamp (to do: timestamp)
         if (this.avatarPosition === undefined) {
           // Initial avatar position
-          this.avatarPosition = new AvatarPosition(0, new Coords(environment.initialAvatarLoc.lat, environment.initialAvatarLoc.lng));
+          this.avatarPosition = new AvatarPosition(0, new Coords(this.initialAvatarLoc.lat, this.initialAvatarLoc.lng));
         } else {
           this.avatarPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
         }

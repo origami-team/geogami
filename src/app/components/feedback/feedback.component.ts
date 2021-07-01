@@ -132,7 +132,7 @@ export class FeedbackComponent {
 
                 if (this.avatarLastKnownPosition === undefined) {
                     // Initial avatar's positoin to measure target distance that will be displayed in VR app
-                    this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(environment.initialAvatarLoc.lat, environment.initialAvatarLoc.lng));
+                    this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(this.playingGamePage.initialAvatarLoc.lat, this.playingGamePage.initialAvatarLoc.lng));
                 } else if (!Number.isNaN(parseFloat(avatarPosition["z"]))) {
                     this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
                 }

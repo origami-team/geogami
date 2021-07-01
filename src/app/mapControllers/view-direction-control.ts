@@ -25,13 +25,15 @@ export class ViewDirectionControl {
 
     // VR world
     isVirtualWorld: boolean = false;
+    initialAvatarLoc: any;
     private avatarPositionSubscription: Subscription;
     private avatarOrientationSubscription: Subscription;
 
     constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService, private orientationService: OrigamiOrientationService,
-        isVirtualWorld: boolean) {
+        isVirtualWorld: boolean, initialAvatarLoc: any) {
         this.map = map;
         this.isVirtualWorld = isVirtualWorld;
+        this.initialAvatarLoc = initialAvatarLoc;
 
         if (!isVirtualWorld) {
             this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
@@ -89,7 +91,7 @@ export class ViewDirectionControl {
                     type: 'geojson',
                     data: {
                         type: 'Point',
-                        coordinates: (this.isVirtualWorld ? [environment.initialAvatarLoc.lng, environment.initialAvatarLoc.lat] : [0, 0]) // VR World: update the inititial avatar position
+                        coordinates: (this.isVirtualWorld ? [this.initialAvatarLoc.lng, this.initialAvatarLoc.lat] : [0, 0]) // VR World: update the inititial avatar position
                     }
                 });
                 this.map.addLayer({

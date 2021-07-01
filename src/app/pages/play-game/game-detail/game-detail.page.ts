@@ -24,6 +24,7 @@ export class GameDetailPage implements OnInit {
 
   // VR world
   isVirtualWorld: boolean = false;
+  isVRMirrored: boolean = false;
 
   constructor(public navCtrl: NavController, private route: ActivatedRoute, private gamesService: GamesService) { }
 
@@ -38,6 +39,9 @@ export class GameDetailPage implements OnInit {
           // Check game type either real or VR world
           if (game.isVRWorld !== undefined && game.isVRWorld != false) {
             this.isVirtualWorld = true;
+            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
+              this.isVRMirrored = true;
+            }
           }
         })
         .finally(() => {
@@ -82,7 +86,8 @@ export class GameDetailPage implements OnInit {
   startGame() {
     let bundle = {
       id: this.game._id,
-      isVRWorld: this.isVirtualWorld
+      isVRWorld: this.isVirtualWorld,
+      isVRMirrored:this.isVRMirrored
     }
     this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
   }

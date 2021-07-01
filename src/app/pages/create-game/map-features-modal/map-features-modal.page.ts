@@ -34,6 +34,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
 
   // VR world
   @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
 
   constructor(
     public modalController: ModalController,

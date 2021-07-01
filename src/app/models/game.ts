@@ -10,6 +10,7 @@ export class Game {
     public bbox: any,
     public mapSectionVisible: boolean,
     public geofence: boolean,
-    public isVRWorld: boolean
+    public isVRWorld: boolean,
+    public isVRMirrored: boolean
   ) { }
 }
