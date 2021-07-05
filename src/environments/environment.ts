@@ -20,7 +20,9 @@ export const environment = {
   initialAvatarLoc_MirroredVersion: {
     lng:214 / 111000,
     lat:69 / 112000
-  }
+  },
+  VR_Version_A:'https://i.imgur.com/SvU6G4d.png',
+  VR_Version_B:'https://i.imgur.com/vRzUK1F.png'
 };
 
 /*

@@ -271,7 +271,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         'overlay':
         {
           'type': 'image',
-          'url': (this.isVRMirrored ? 'https://i.imgur.com/Q6SKqN0.png' : 'https://i.imgur.com/THnVL8y.png'), // V4
+          'url': (this.isVRMirrored ? environment.VR_Version_B: environment.VR_Version_A), // V4
 
           'coordinates': [
             [0.0002307207207, 0.004459082914], // NW
@@ -1192,7 +1192,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.isVirtualWorld && this.task.answer.mode == TaskMode.NAV_ARROW) {
       const waypoint = this.task.answer.position.geometry.coordinates;
       this.targetDistance = this.calculateDistanceToTarget(waypoint)
-      this.UpdateInitialArrowDirection();
+      this.UpdateInitialArrowDirection(); // To update iniatl arrow direction
     }
 
     this.changeDetectorRef.detectChanges();
