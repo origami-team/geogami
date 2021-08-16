@@ -161,6 +161,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
   initialAvatarLoc: any;
+  currentSecond: number = 0;
 
   // degree for nav-arrow
   heading = 0;
@@ -463,7 +464,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // VR world
       this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(
         (avatarPosition) => {
-          this.trackerService.addWaypoint({});
+
+          // Store waypoint every second
+          if (this.currentSecond != new Date().getSeconds()) {
+            this.currentSecond = new Date().getSeconds();
+            this.trackerService.addWaypoint({});
+          }
 
           if (this.avatarLastKnownPosition === undefined) {
             // Initial avatar's positoin to measure distance to target in nav-arrow tasks
