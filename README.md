@@ -2,6 +2,10 @@
 
 # OriGami
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/cdc7d43f-3125-4477-bbcb-8138671c61b7/deploy-status)](https://app.netlify.com/sites/origami-4/deploys)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5384903.svg)](https://doi.org/10.5281/zenodo.5384903)
+
+
 OriGami is a location-based game that allows the user to play and create map-based games - for any place in the world. It is created by the Spatial Intelligence Lab (SIL) of the Institute for Geoinformatics, University of Münster.
 
 For more information on **OriGami** and our **research** visit the [Website](https://origami.ifgi.de) (German).
