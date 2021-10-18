@@ -155,13 +155,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   lastKnownPosition: GeolocationPosition;
 
   // VR world
-  isVirtualWorld: boolean = false; 
+  isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false; // for multi VR designs 
   avatarPositionSubscription: Subscription;
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
   initialAvatarLoc: any;
   currentSecond: number = 0;
+  gameCode: string = "";
 
   // degree for nav-arrow
   heading = 0;
@@ -222,7 +223,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   connectSocketIO() {
     this.socket.connect();
-    this.socket.emit('updateAvatarPosition', "Hello from play game");
+    /* MultiUsers in Parallel impl. */
+    this.socket.emit("newGame", {gameCode: this.gameCode});
   }
 
   disconnectSocketIO() {
@@ -235,10 +237,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
+      this.gameCode = JSON.parse(params.bundle).gameCode;
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
-    this.initialAvatarLoc = (this.isVRMirrored?environment.initialAvatarLoc_MirroredVersion:environment.initialAvatarLoc)    
+    this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc)
 
     this.game = null;
     this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false);
@@ -272,7 +275,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         'overlay':
         {
           'type': 'image',
-          'url': (this.isVRMirrored ? environment.VR_Version_B: environment.VR_Version_A), // V4
+          'url': (this.isVRMirrored ? environment.VR_Version_B : environment.VR_Version_A), // V4
 
           'coordinates': [
             [0.0002307207207, 0.004459082914], // NW

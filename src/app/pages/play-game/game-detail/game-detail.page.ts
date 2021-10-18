@@ -8,6 +8,8 @@ import mapboxgl from 'mapbox-gl';
 import { GamesService } from '../../../services/games.service';
 import { environment } from 'src/environments/environment';
 
+import { PopoverController } from '@ionic/angular';
+import { PopoverComponent } from 'src/app/popover/popover.component';
 
 @Component({
   selector: 'app-game-detail',
@@ -25,8 +27,12 @@ export class GameDetailPage implements OnInit {
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
+  gameCode: string = "";
 
-  constructor(public navCtrl: NavController, private route: ActivatedRoute, private gamesService: GamesService) { }
+  constructor(public navCtrl: NavController,
+    private route: ActivatedRoute,
+    private gamesService: GamesService,
+    public popoverController: PopoverController) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -87,9 +93,20 @@ export class GameDetailPage implements OnInit {
     let bundle = {
       id: this.game._id,
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored:this.isVRMirrored
+      isVRMirrored: this.isVRMirrored,
+      gameCode: this.gameCode
     }
     this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+  }
+
+  async showPopover(ev: any, text: string) {
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 
 }
