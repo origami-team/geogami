@@ -1,4 +1,4 @@
-![](https://origami.ifgi.de/pictures/logo/logo.png)
+![](https://origami.ifgi.de/pictures/logo/icon.png)
 
 # OriGami
 
