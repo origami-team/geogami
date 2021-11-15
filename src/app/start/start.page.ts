@@ -33,7 +33,7 @@ export class StartPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public toastController: ToastController,
-    private _translate: TranslateService,
+    public _translate: TranslateService,
     private authService: AuthService
   ) { }
 
@@ -48,30 +48,8 @@ export class StartPage implements OnInit {
       });
 
     this._translate.setDefaultLang('de');
-    this._initialiseTranslation();
 
     Plugins.Device.getInfo().then((device) => (this.device = device));
-  }
-
-  _initialiseTranslation(): void {
-    this._translate.get('playerMode').subscribe((res: string) => {
-      this.playerMode = res;
-    });
-    this._translate.get('playerModeDescription').subscribe((res: string) => {
-      this.playerModeDescription = res;
-    });
-    this._translate.get('developerMode').subscribe((res: string) => {
-      this.developerMode = res;
-    });
-    this._translate.get('developerModeDescription').subscribe((res: string) => {
-      this.developerModeDescription = res;
-    });
-    this._translate.get('evaluateMode').subscribe((res: string) => {
-      this.evaluateMode = res;
-    });
-    this._translate.get('evaluateModeDescription').subscribe((res: string) => {
-      this.evaluateModeDescription = res;
-    });
   }
 
   handleCardClick(e) {
@@ -86,8 +64,6 @@ export class StartPage implements OnInit {
     } else {
       this.navCtrl.navigateForward(`play-game/play-game-list/${"RealWorld"}`);
     }
-
-
 
   }
 
@@ -121,8 +97,15 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('user/profile');
   }
 
-  async setLanguage(e) {
-    this._translate.use(e.target.dataset.value);
-    this._initialiseTranslation();
+  changeTR(languageText: string){
+    //console.log("language changed", languageText);
+    switch (languageText) {
+      case "de":
+          this._translate.setDefaultLang('de');
+          break;
+      case "en":
+          this._translate.setDefaultLang('en');
+          break;
+    }
   }
 }

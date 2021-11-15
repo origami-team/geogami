@@ -6,5 +6,21 @@
     "evaluateMode": "Evaluate Ori-Gami",
     "evaluateModeDescription": "Have a look on the results of your Ori-Gami",
     "selectGame": "Select a game",
-    "gameTrackingDescription": "If \"on\" is selected, all waypoints, objects and tracks created during the course of the game will be displayed during the entire course of the game. If \"off\" is selected, only the current waypoint, objects and tracks are displayed."
+    "gameTrackingDescription": "If \"on\" is selected, all waypoints, objects and tracks created during the course of the game will be displayed during the entire course of the game. If \"off\" is selected, only the current waypoint, objects and tracks are displayed.",
+    
+    "Start": {
+        "playMode": "Play",
+        "playModeDescription": "Select a game from the game list.",
+        "developMode": "Create",
+        "developModeeDescription": "Create or edit a game.",
+        "EvaluateMode": "Evaluate",
+        "EvaluateModeDescription": "View the game results.",
+        "learnMode": "Learn",
+        "learnModeDescription": "Learn more about the functions.",
+        "aboutMode": "...about ",
+        "aboutModeDescription": "Learn more about the app.",
+        "loginModeDescription": "Login to create games.",
+        "hello": "Hello",
+        "userpreferences": "User preferences"
+    }
 }

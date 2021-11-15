@@ -6,5 +6,22 @@
     "evaluateMode": "Auswertungs Modus",
     "evaluateModeDescription": "Sieh dir die Spielergebnisse an",
     "selectGame": "Wähle ein Spiel",
-    "gameTrackingDescription": "Bei der Auswahl „on“ werden alle Zwischenziele, Objekte und Tracks, die im Spielverlauf entstehen, während des gesamten Spielverlaufs angezeigt. Bei der Auswahl „off“ werden nur die aktuellen Ziele, Objekte und Tracks angezeigt"
+    "gameTrackingDescription": "Bei der Auswahl „on“ werden alle Zwischenziele, Objekte und Tracks, die im Spielverlauf entstehen, während des gesamten Spielverlaufs angezeigt. Bei der Auswahl „off“ werden nur die aktuellen Ziele, Objekte und Tracks angezeigt",
+
+    "Start": {
+            "playMode": "Spielen",
+            "playModeDescription": "Wähle ein Spiel aus der Spieleliste.",
+            "developMode": "Entwickeln",
+            "developModeeDescription": "Erstelle oder bearbeite ein Spiel.",
+            "EvaluateMode": "Auswerten",
+            "EvaluateModeDescription": "Sieh dir die Spielergebnisse an.",
+            "learnMode": "Lernen",
+            "learnModeDescription": "Erfahre mehr über die Funktionen.",
+            "aboutMode": "...über ",
+            "aboutModeDescription": "Erfahre mehr über die App.",
+            "loginModeDescription": "Logge dich ein um Spiele zu erstellen.",
+            "hello": "Hallo",
+            "userpreferences": "Benutzereinstellungen"
+    }
+    
 }

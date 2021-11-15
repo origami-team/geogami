@@ -43,7 +43,7 @@ import { TokenInterceptor } from './services/token-intercepor.service';
 import { HelperService } from './services/helper.service';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
+export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -91,7 +91,7 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-users.herokuapp.com/
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
+        useFactory: (createTranslateLoader),
         deps: [HttpClient],
       },
     }),
