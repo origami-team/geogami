@@ -21,8 +21,8 @@ export const environment = {
     lng:214 / 111000,
     lat:69 / 112000
   },
-  VR_Version_A:'https://i.imgur.com/SvU6G4d.png',
-  VR_Version_B:'https://i.imgur.com/vRzUK1F.png'
+  VR_World_1:'assets/icons/vr_world_1.png',
+  VR_World_2:'assets/icons/vr_world_2.png'
 };
 
 /*
