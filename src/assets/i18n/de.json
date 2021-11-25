@@ -1,27 +1,146 @@
-{
-    "playerMode": "Spiele Ori-Gami",
-    "playerModeDescription": "Spiele ein Kartenlese Spiel",
-    "developerMode": "Entwickler Modus",
-    "developerModeDescription": "Erstelle ein neues Kartenlese Spiel",
-    "evaluateMode": "Auswertungs Modus",
-    "evaluateModeDescription": "Sieh dir die Spielergebnisse an",
-    "selectGame": "Wähle ein Spiel",
-    "gameTrackingDescription": "Bei der Auswahl „on“ werden alle Zwischenziele, Objekte und Tracks, die im Spielverlauf entstehen, während des gesamten Spielverlaufs angezeigt. Bei der Auswahl „off“ werden nur die aktuellen Ziele, Objekte und Tracks angezeigt",
+{       
+    "General": {
+            "yes": "Ja",
+            "no": "Nein",
+            "name": "Name",
+            "mapfeatures": "Kartenfeatures",
+            "tasktypes": "Aufgabentypen",
+            "task": "Aufgabe",
+            "info": "Info",
+            "done": "Fertig",
+            "OK": "Okay",
+            "start": "Start"
+    },
+
+    "Tasktypes": {
+            "navigationTasks": "Navigationsaufgaben",
+            "thematicTasks": "Themenaufgaben",
+            "information": "Infomationen",
+            "navigationToFlag": "Navigation zur Zielfahne",
+            "navigationWithArrow": "Navigation mit Richtungspfeil",
+            "navigationViaText": "Navigation mit Textanweisung",
+            "navigationViaPhoto": "Navigation mit Foto",
+            "selfLocation": "Selbst-Lokalisation",
+            "objectLocation": "Objekt-Lokalisation",
+            "directionDetermination": "Richtungsbestimmung",
+            "freeTasks": "Freie Aufgaben"
+    },
+    
+    "Mapfeatures": {
+    },
+
+    "GameList": {
+        "chooseGame": "Wähle ein Spiel aus der Liste." 
+    },
+
+    "CreateTasks": {
+        "combineTasks": "Stelle dein Spiel zusammen:",
+        "information": "Information",
+        "chooseComponents": "Wähle aus folgenden Bausteinen:"
+
+    },
+    
+    "SaveGame": {
+        "titleSaveGame": "Speichere dein GeoGami Spiel",
+        "gameNameExist": "Ein Spiel mit diesem Namen existiert bereits!",
+        "gameName": "Spielname",
+        "gameLocation": "Spielort",
+        "mapSection": "Kartenausschnitt",
+        "warningLeaveArea": "Warnung beim Verlassen des markierten Gebiets",
+        "outlined": "Umrandet",
+        "invisible": "Unsichtbar",
+        "saveGame": "Spiel speichern",
+        "sendingData": "Übertrage Daten...",
+        "gameSaved": "Dein Spiel wurde gespeichert!"
+
+    },
 
     "Start": {
             "playMode": "Spielen",
             "playModeDescription": "Wähle ein Spiel aus der Spieleliste.",
             "developMode": "Entwickeln",
-            "developModeeDescription": "Erstelle oder bearbeite ein Spiel.",
+            "developModeDescription": "Erstelle oder bearbeite ein Spiel.",
             "EvaluateMode": "Auswerten",
             "EvaluateModeDescription": "Sieh dir die Spielergebnisse an.",
             "learnMode": "Lernen",
             "learnModeDescription": "Erfahre mehr über die Funktionen.",
-            "aboutMode": "...über ",
+            "aboutMode": "Über GeoGami",
             "aboutModeDescription": "Erfahre mehr über die App.",
-            "loginModeDescription": "Logge dich ein um Spiele zu erstellen.",
+            "loginModeDescription": "Logge dich ein, um Spiele zu erstellen.",
             "hello": "Hallo",
             "userpreferences": "Benutzereinstellungen"
-    }
-    
+    },
+
+    "AnalyzeGame": {
+            "title": "Analysiere dein GeoGami Spiel"
+        },
+
+    "CreateGame": {
+        },
+
+    "EditGame": {
+            "titleEditGame": "Bearbeite dein GeoGami Spiel",
+            "titleEditGameTasks": "Bearbeite"
+        },
+
+    "Info": {
+            "title": "Informationen über GeoGami",
+            "titleInfotext": "Über GeoGami",
+            "infotext1": "GeoGami ist eine App zum Erstellen und Spielen von kartenbasierten Games und eignet sich insbesondere für den Einsatz an Bildungseinrichtungen. Die App wird vom Institut für Geoinformatik der Westfälischen Wilhelms-Universität Münster wissenschaftlich begleitet und didaktisch konzeptioniert.",
+            "infotext2": "Der Schwerpunkt von GeoGami liegt auf der Förderung der kartengestützten Orientierungskompetenz. Die Spiele-Ersteller:innen können zwischen entsprechenden Aufgabentypen wählen und seine Spieler:innen durch das An- und Ausstellen von Kartenfeatures unterstützen. GeoGami eignet sich auch dazu, thematische Spiele, Rallyes und digitale Exkursionen anlegen.",
+            "infotext3": "Mehr Informationen findest du auf unserer",
+            "website": "unserer Webseite"
+    },
+
+    "PlayGame": {
+            "titlePlayGameList": "Spiele GeoGami",
+            "titlePlayGameMenu": "Wähle die Spielumgebung",
+            "realWorld": "Echte Welt",
+            "realWorldDescription": "Spiele GeoGami draußen.",
+            "virtualWorld": "Virtuelle Welt",
+            "virtualWorldDescription": "Spiele GeoGami in einer virtuellen Welt.",
+            "toDestination": "Zum Ziel:",
+            "pressOK": "Drücke 'Okay'!",
+            "pressOKdestination": "Drücke 'Okay', wenn du da bist!",
+            "GPSaccuracy": "GPS Genauigkeit:",
+            "playersNames": "Wer spielt?",
+            "congratulations": "Herzlichen Glückwunsch!",
+            "finished": "Du hast das Spiel beendet!",
+            "youLeave": "Du verlässt",
+            "gameArea": "das Spielgebiet.",
+            "markedArea": "das markierte Gebiet.",
+            "goBack": "Gehe zurück!",
+            "correctLocation": "Stehst du genau richtig? Dann drücke 'Okay'!",
+            "gamecode": "Spielcode erstellen (5 Ziffern/Buchstaben)"
+        },
+        
+    "Showroom": {
+            "titleShowroom" :"Lerne GeoGami kennen",
+            "mapfeaturesDescription": "Probiere die Kartenfunktionen aus.",
+            "tasktypesDescription": "Lerne die Aufgabentypen kennen.",
+            "navtasksexpl":"Navigationsaufgaben leiten den Spieler an neue Orte.",
+            "navtoflagexpl": "Bei der Navigation zur Zielfahne sieht der Spieler eine Fahne auf der Karte, die einen Zielort markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.",
+            "navwitharrowexpl": "Die Navigation mit Richtungspfeil ist eine Navigation mit Pfeil und eine Distanzangabe, die dem Spieler die Richtung zum nächsten Zielort weist. Die Karte ist dabei nicht sichtbar.",
+            "navviatextexpl": "Bei der Navigation mit Textanweisung bekommt der Spieler eine genaue Navigationsanweisung zum nächsten Zielort.",
+            "navviaphotoexpl": "Der Aufgabentyp Navigation mit Foto navigiert den Spieler mittels Foto zum nächsten Ziel.",
+            "themtasksexpl": "Themenaufgaben sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.",
+            "selflocexpl":"Bei der Selbst-Lokalisation muss der Spieler seine aktuelle Position auf der Karte finden.",
+            "objectlocexpl": "Der Aufgabentyp Objekt-Lokalisation umfasst das Zuordnen von Objekte der Karte zu Objekten der Umgebung und umgekehrt.",
+            "directiondetermexpl": "Bei der Richtungsbestimmung muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in Verbindung bringen.",
+            "freetasksexpl":"In Freien Aufgaben können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise können zum Beispiel Quiz- und Sachaufgaben gestellt werden.",
+            "informationexpl": "Über den Baustein Information können dem Spieler Hinweise und Tipps gegeben werden. Neben reinen Textinformationen können Audioaufnahmen und demnächst auch Videoaufnahmen eingebunden werden. Außerdem besteht die Möglichkeit, Kartenfeatures zu nutzen und gezielt einzuführen."
+        },
+
+    "User": {
+            "forgotpw": "Passwort vergessen",
+            "resetpw": "Passwort zurücksetzen",
+            "registerSuccess": "Registrierung erfolgreich. Bitte einloggen.",
+            "register": "Registrieren",
+            "profile": "Profil",
+            "mail": "E-Mail",
+            "mailconfirmed": "E-Mail-Adresse bestätigt",
+            "registered": "Registriert am:",
+            "roles": "Rollen",
+            "registerUser": "Nutzer registrieren"
+        }
 }
