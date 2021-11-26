@@ -85,7 +85,7 @@ export class FeedbackComponent {
     ).getPropertyValue("--ion-color-success");
 
     this.map.loadImage(
-      "/assets/icons/position-solution.png",
+      "/assets/icons/marker-editor-solution.png",
       (error, image) => {
         if (error) throw error;
 
