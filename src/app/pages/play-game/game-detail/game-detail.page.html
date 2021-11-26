@@ -27,7 +27,7 @@
   <ion-card *ngIf="isVirtualWorld">
     <!-- <div #map class="map"></div> -->
     <ion-card-header>
-      <ion-card-title> Spielcode erstellen (5-digit/char)
+      <ion-card-title> {{ "PlayGame.gamecode" | translate }}
         <ion-icon name="information-circle"
           (click)="showPopover($event, 'Sie müssen Spielcode hinzufügen, um die Origami VR App ausführen zu können.')">
         </ion-icon>
@@ -42,6 +42,6 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="block" (click)="startGame()" [disabled]="gameCode.length==5||!isVirtualWorld?false:true">Start</ion-button>
+    <ion-button expand="block" (click)="startGame()" [disabled]="gameCode.length==5||!isVirtualWorld?false:true">{{ "General.start" | translate }}</ion-button>
   </ion-toolbar>
 </ion-footer>

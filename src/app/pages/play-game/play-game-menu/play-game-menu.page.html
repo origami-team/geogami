@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="start"></ion-back-button>
     </ion-buttons>
-    <ion-title>Wähle die Welt des Spiels </ion-title>
+    <ion-title>{{ "PlayGame.titlePlayGameMenu" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,22 +11,22 @@
   <ion-card id="create_card_create" (click)=navigateToRealGameListPage() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="globe"></ion-icon> Echte Welt
+        <ion-icon name="globe"></ion-icon>{{ "PlayGame.realWorld" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Spiele OriGami.
+      {{ "PlayGame.realWorldDescription" | translate }}
     </ion-card-content>
   </ion-card>
 
   <ion-card id="create_card_create" (click)=navigateToVirtualGameListPage() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="tv"></ion-icon> Virtuelle Welt 
+        <ion-icon name="tv"></ion-icon>{{ "PlayGame.virtualWorld" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Spiele ein virtuelles OriGami.
+      {{ "PlayGame.virtualWorldDescription" | translate }}
     </ion-card-content>
   </ion-card>
 

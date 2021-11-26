@@ -16,6 +16,7 @@ import { AudioPlayerModule } from 'src/app/components/audio-player/audio-player.
 
 import { MarkdownModule } from 'ngx-markdown';
 
+import { TranslateModule } from '@ngx-translate/core';
 
 // Note we need a separate function as it's required
 // by the AOT compiler.
@@ -40,6 +41,7 @@ const routes: Routes = [
     LottieModule.forRoot({ player: playerFactory }),
     NgShufflePipeModule,
     MarkdownModule.forRoot(),
+    TranslateModule
   ],
   declarations: [PlayingGamePage, KeywordPipe, FeedbackComponent],
   providers: []

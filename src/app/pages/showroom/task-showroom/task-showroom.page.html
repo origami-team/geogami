@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Aufgabentypen</ion-title>
+    <ion-title>{{ "General.tasktypes" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,34 +11,31 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="navigate" color="primary"></ion-icon> Navigationsaufgaben
+        <ion-icon name="navigate" color="primary"></ion-icon> {{ "Tasktypes.navigationTasks" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p><b>Navigationsaufgaben</b> leiten den Spieler an neue Orte.<br><br></p>
+      <p>{{ "Showroom.navtasksexpl" | translate }}<br></p>
        
         <ion-chip color="primary">
-          <ion-label><ion-icon name="navigate"></ion-icon> Navigation zur Zielfahne</ion-label>
+          <ion-label><ion-icon name="navigate"></ion-icon> {{ "Tasktypes.navigationToFlag" | translate }}</ion-label>
         </ion-chip>
-        <p><br>Bei der <b>Navigation zur Zielfahne</b> sieht der Spieler eine Fahne auf der Karte, die einen Zielort
-          markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.<br><br></p>
+        <p>{{ "Showroom.navtoflagexpl" | translate }}</p>
         
         <ion-chip color="primary">
-          <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Richtungspfeil</ion-label>
+          <ion-label><ion-icon name="navigate"></ion-icon> {{ "Tasktypes.navigationWithArrow" | translate }}</ion-label>
         </ion-chip>
-        <p><br>Die <b>Navigation mit Richtungspfeil</b> ist eine Navigation mit Pfeil und eine Distanzangabe, die dem Spieler die
-          Richtung zum nächsten Zielort weist. Die Karte ist dabei nicht sichtbar.<br><br></p>
+        <p>{{ "Showroom.navwitharrowexpl" | translate }}</p>
       
         <ion-chip color="primary">
-          <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Textanweisung</ion-label>
+          <ion-label><ion-icon name="navigate"></ion-icon> {{ "Tasktypes.navigationViaText" | translate }}</ion-label>
         </ion-chip>
-        <p><br>Bei der <b>Navigation mit Textanweisung</b> bekommt der Spieler eine genaue Navigationsanweisung zum nächsten
-          Zielort.<br><br></p>
+        <p>{{ "Showroom.navviatextexpl" | translate }}</p>
 
         <ion-chip color="primary">
-          <ion-label><ion-icon name="navigate"></ion-icon> Navigation mit Foto</ion-label>
+          <ion-label><ion-icon name="navigate"></ion-icon> {{ "Tasktypes.navigationViaPhoto" | translate }}</ion-label>
         </ion-chip>
-        <p><br>Der Aufgabentyp <b>Navigation mit Foto</b> navigiert den Spieler mittels Foto zum nächsten Ziel.<br><br></p>
+        <p>{{ "Showroom.navviaphoto" | translate }}</p>
 
       </ion-card-content>
     </ion-card>
@@ -46,34 +43,31 @@
     <ion-card>
       <ion-card-header>
         <ion-card-title>
-          <ion-icon name="clipboard" color="secondary"></ion-icon> Themenaufgaben
+          <ion-icon name="clipboard" color="secondary"></ion-icon> {{ "Tasktypes.thematicTasks" | translate }}
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p><b>Themenaufgaben</b> sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.</p>
+        <p>{{ "Showroom.themtasksexpl" | translate }}</p>
          
           <ion-chip color="secondary">
-            <ion-label><ion-icon name="clipboard"></ion-icon> Selbst-Lokalisation</ion-label>
+            <ion-label><ion-icon name="clipboard"></ion-icon> {{ "Tasktypes.selfLocation" | translate }}</ion-label>
           </ion-chip>
-          <p><br>Bei der <b>Selbst-Lokalisation</b> muss der Spieler seine aktuelle Position auf der Karte finden.<br><br></p>
+          <p>{{ "Showroom.selflocexpl" | translate }}</p>
   
           <ion-chip color="secondary">
-            <ion-label><ion-icon name="clipboard"></ion-icon> Objekt-Lokalisation</ion-label>
+            <ion-label><ion-icon name="clipboard"></ion-icon> {{ "Tasktypes.objectLocation" | translate }}</ion-label>
           </ion-chip>
-          <p><br>Der Aufgabentyp <b>Objekt-Lokalisation</b> umfasst das Zuordnen von Objekte der Karte zu Objekten der Umgebung
-            und umgekehrt.<br><br></p>
+          <p>{{ "Showroom.objectlocexpl" | translate }}</p>
 
           <ion-chip color="secondary">
-            <ion-label><ion-icon name="clipboard"></ion-icon> Richtungsbestimmung</ion-label>
+            <ion-label><ion-icon name="clipboard"></ion-icon> {{ "Tasktypes.directionDetermination" | translate }}</ion-label>
           </ion-chip>
-          <p><br>Bei der <b>Richtungsbestimmung</b> muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in
-            Verbindung bringen.<br><br></p>
+          <p>{{ "Showroom.directiondetermexpl" | translate }}</p>
 
           <ion-chip color="secondary">
-            <ion-label><ion-icon name="clipboard"></ion-icon> Freie Aufgaben</ion-label>
+            <ion-label><ion-icon name="clipboard"></ion-icon> {{ "Tasktypes.freeTasks" | translate }}</ion-label>
           </ion-chip>
-          <p><br>In <b>Freien Aufgaben</b> können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise
-            können zum Beispiel Quiz- und Sachaufgaben gestellt werden.<br><br></p>
+          <p>{{ "Showroom.freetasksexpl" | translate }}</p>
 
         </ion-card-content>
       </ion-card>
@@ -81,13 +75,11 @@
       <ion-card>
         <ion-card-header>
           <ion-card-title>
-            <ion-icon name="information-circle-outline" color="warning"></ion-icon> Informationen
+            <ion-icon name="information-circle-outline" color="warning"></ion-icon> {{ "Tasktypes.information" | translate }}
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <p>Über den Baustein <b>Information</b> können dem Spieler Hinweise und Tipps gegeben werden.</p>
-          <p>Neben reinen Textinformationen können Audioaufnahmen und demnächst auch Videoaufnahmen eingebunden werden. 
-            Außerdem besteht die Möglichkeit, <b>Kartenfeatures</b> zu nutzen und gezielt einzuführen.</p>
+          <p>{{ "Showroom.informationexpl" | translate }}</p>
           </ion-card-content>
         </ion-card>
 

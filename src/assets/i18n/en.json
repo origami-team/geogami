@@ -1,26 +1,147 @@
-{
-    "playerMode": "Play Ori-Gami",
-    "playerModeDescription": "Play a map reading game",
-    "developerMode": "Create Ori-Gami",
-    "developerModeDescription": "Create a map reading game",
-    "evaluateMode": "Evaluate Ori-Gami",
-    "evaluateModeDescription": "Have a look on the results of your Ori-Gami",
-    "selectGame": "Select a game",
-    "gameTrackingDescription": "If \"on\" is selected, all waypoints, objects and tracks created during the course of the game will be displayed during the entire course of the game. If \"off\" is selected, only the current waypoint, objects and tracks are displayed.",
+{       
+    "General": {
+        "yes": "yes",
+        "no": "no",
+        "name": "name",
+        "mapfeatures": "Map Features",
+        "tasktypes": "Task Types",
+        "task": "task",
+        "info": "info",
+        "done": "done",
+        "OK": "okay",
+        "start": "start"
+},
+
+    "Tasktypes": {
+            "navigationTasks": "navigation tasks",
+            "thematicTasks": "thematic tasks",
+            "information": "information",
+            "navigationToFlag": "navigation-to-a-flag",
+            "navigationWithArrow": "navigation-with-arrow",
+            "navigationViaText": "navigation-via-text",
+            "navigationViaPhoto": "navigation-via-photo",
+            "selfLocation": "self-location",
+            "objectLocation": "object-location",
+            "directionDetermination": "direction determination",
+            "freeTasks": "free tasks"
+    },
     
+    "MapFeatures": {
+    },
+
+    "GameList": {
+        "chooseGame": "Choose a game from the list." 
+    },
+
+    "CreateTasks": {
+        "combineTasks": "Create a game:",
+        "information": "information",
+        "chooseComponents": "Choose from the following components:"
+
+    },
+    
+    "SaveGame": {
+        "titleSaveGame": "Save Your GeoGami game",
+        "gameNameExist": "A game with this name already exists!",
+        "gameName": "game name",
+        "gameLocation": "game location",
+        "mapSection": "map section",
+        "warningLeaveArea": "warning when leaving the highlighted area",
+        "outlined": "outlined",
+        "invisible": "invisible",
+        "saveGame": "save game",
+        "sendingData": "sending data...",
+        "gameSaved": "Your game has been saved!"
+
+    },
+
     "Start": {
-        "playMode": "Play",
-        "playModeDescription": "Select a game from the game list.",
-        "developMode": "Create",
-        "developModeeDescription": "Create or edit a game.",
-        "EvaluateMode": "Evaluate",
-        "EvaluateModeDescription": "View the game results.",
-        "learnMode": "Learn",
-        "learnModeDescription": "Learn more about the functions.",
-        "aboutMode": "...about ",
-        "aboutModeDescription": "Learn more about the app.",
-        "loginModeDescription": "Login to create games.",
-        "hello": "Hello",
-        "userpreferences": "User preferences"
-    }
+            "playMode": "Play",
+            "playModeDescription": "Choose a game from the game list.",
+            "developMode": "Develop",
+            "developModeDescription": "Create or edit a game.",
+            "EvaluateMode": "Evaluate",
+            "EvaluateModeDescription": "Analyze the game results.",
+            "learnMode": "Learn",
+            "learnModeDescription": "Learn more about the task types and features.",
+            "aboutMode": "About GeoGami",
+            "aboutModeDescription": "Learn more about the app.",
+            "loginModeDescription": "Log-in for creating games.",
+            "hello": "Hello",
+            "userpreferences": "user settings"
+    },
+
+    "AnalyzeGame": {
+            "title": "Analyze your GeoGami game"
+        },
+
+    "CreateGame": {
+        },
+
+    "EditGame": {
+            "titleEditGame": "Edit your GeoGami game",
+            "titleEditGameTasks": "Edit"
+        },
+
+    "Info": {
+            "title": "Information about GeoGami",
+            "titleInfotext": "About GeoGami",
+            "infotext1": "GeoGami is an app for creating and playing map-based games and is designed for educational usage. The app is didactically conceptualized by the Institute for Geoinformatics at the Westfälische Wilhelms-Universität Münster.",
+            "infotext2": "The focus of GeoGami is on fostering navigational map reading competencies. The game creator can choose between appropriate task types and support their players by adding and removing map features. GeoGami is also suitable for creating thematic games, rallies, and digital excursions.",
+            "infotext3": "More information can be found on",
+            "website": "our website"
+    },
+
+    "PlayGame": {
+            "titlePlayGameList": "Play GeoGami",
+            "titlePlayGameMenu": "Choose game environment.",
+            "realWorld": "Real World",
+            "realWorldDescription": "Play GeoGami outdoors",
+            "virtualWorld": "Virtual World",
+            "virtualWorldDescription": "Play GeoGami in a virtual world.",
+            "toDestination": "To destination:",
+            "pressOK": "Press 'okay'!",
+            "pressOKdestination": "Press 'okay' when you are there!",
+            "GPSaccuracy": "GPS accuracy:",
+            "playersNames": "Who is playing?",
+            "congratulations": "Congratulations!",
+            "finished": "You finished the game!",
+            "youLeave": "You are leaving",
+            "gameArea": "the game area.",
+            "markedArea": "the marked area.",
+            "goBack": "Go back!",
+            "correctLocation": "Are you standing exactly right? Press 'okay'!",
+            "gamecode": "Create gamecode (5 digits/letters)"
+        },
+        
+        
+    "Showroom": {
+            "titleShowroom" : "Get to know GeoGami",
+            "mapfeaturesDescription": "Try out the map features.",
+            "tasktypesDescription": "Get to know the task types.",
+            "navtasksexpl": "Navigation tasks guide the player to new locations.",
+            "navtoflagexpl": "In navigation-to-a-flag tasks, the player sees a flag on the map marking a destination location. His task is to go to this location.",
+            "navwitharrowexpl": "Navigation-with-arrow is a navigation with arrow and a distance indication, which shows the player the direction to the next destination. The map is not visible during this process.",
+            "navviatextexpl": "Navigation-via-text gives the player precise navigation instructions to the next destination.",
+            "navviaphotoexpl": "The navigation-via-photo tasks navigate the player to the next destination using a photo.",
+            "themtasksexpl": "Thematic tasks are location-based tasks with different thematic content.",
+            "selflocexpl": "Self-location requires the player to find his current position on the map.",
+            "objectlocexpl": "The object-location task type involves matching objects on the map to objects in the environment and vice versa.",
+            "directiondetermexpl": "The direction-determination task requires the player to relate view direction to map alignment.",
+            "freetasksexpl": "In free tasks, question and answer types of the task can be freely combined. In this way, for example, quiz and factual tasks can be created.",
+            "informationexpl": "The information module can be used to give hints and tips to the player. In addition to pure text information, audio recordings and video recordings can be integrated. There is also the possibility of using map features."
+        },
+
+    "User": {
+            "forgotpw": "forgot password?",
+            "resetpw": "reset password",
+            "registerSuccess": "Registration successful. Please log in.",
+            "register": "Register",
+            "profile": "Profile",
+            "mail": "mail",
+            "mailconfirmed": "mail address confirmed",
+            "registered": "registered on:",
+            "roles": "roles",
+            "registerUser": "register user"
+        }
 }

@@ -3,13 +3,13 @@
     <ion-buttons slot="start">
       <ion-back-button color="dark" defaultHref="/user/login"></ion-back-button>
     </ion-buttons>
-    <ion-title>Registrieren</ion-title>
+    <ion-title>{{ "User.register" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div>
-    <h1>Nutzer registrieren</h1>
+    <h1>{{ "User.registerUser" | translate }}</h1>
     <ion-card color="danger" *ngIf="error">
       <ion-card-content> {{error}} </ion-card-content>
     </ion-card>
@@ -29,7 +29,7 @@
       <br />
       <ion-input
         type="password"
-        placeholder="Password"
+        placeholder="Passwort"
         [id]="'password'"
         formControlName="password"
       ></ion-input>
@@ -38,7 +38,7 @@
         expand="block"
         type="submit"
         [disabled]="loginForm.invalid || loading"
-        ><ion-spinner *ngIf="loading"></ion-spinner> Registrieren</ion-button
+        ><ion-spinner *ngIf="loading"></ion-spinner> {{ "User.register" | translate }}</ion-button
       >
     </form>
     <br />
