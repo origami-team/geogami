@@ -82,7 +82,6 @@
     "@ionic/angular-toolkit": "^2.2.0",
     "@types/jasmine": "~3.5.10",
     "@types/jasminewd2": "~2.0.3",
-    "@types/mapbox__mapbox-gl-draw": "^1.2.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
     "ionic": "^5.4.5",
