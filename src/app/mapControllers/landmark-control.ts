@@ -127,10 +127,102 @@ export class LandmarkControl {
     });
   }
 
-  keepDrawing(drawControl) {
+  addPermanentDrawing(drawing, taskId) {
+    this.removeDrawing(taskId);
+    this.map.addSource(`drawing${taskId}`, {
+      type: "geojson",
+      data: drawing,
+    });
+    this.map.addLayer({
+      id: `drawingPolygon${taskId}`,
+      type: "fill",
+      source: `drawing${taskId}`,
+      filter: ["all", ["==", ["geometry-type"], "Polygon"]],
+      paint: {
+        "fill-opacity": 0.5,
+        "fill-color": this.secondaryColor,
+        "fill-outline-color": this.secondaryColor,
+      },
+    });
+    this.map.addLayer({
+      id: `drawingLine${taskId}`,
+      type: "line",
+      source: `drawing${taskId}`,
+      filter: ["all", ["==", ["geometry-type"], "LineString"]],
+      paint: {
+        "line-color": this.secondaryColor,
+        "line-opacity": 0.5,
+        "line-width": 5,
+      },
+    });
+    this.map.addLayer({
+      id: `drawingPoint${taskId}`,
+      type: "circle",
+      source: `drawing${taskId}`,
+      filter: ["all", ["==", ["geometry-type"], "Point"]],
+      paint: {
+        "circle-radius": 8,
+        "circle-color": this.secondaryColor,
+        "circle-stroke-width": 4,
+        "circle-stroke-color": "#fff",
+      },
+    });
+  }
+
+  removeDrawing(taskId = "") {
+    if (this.map.getLayer(`drawingPolygon${taskId}`)) {
+      this.map.removeLayer(`drawingPolygon${taskId}`);
+    }
+    if (this.map.getLayer(`drawingLine${taskId}`)) {
+      this.map.removeLayer(`drawingLine${taskId}`);
+    }
+    if (this.map.getLayer(`drawingPoint${taskId}`)) {
+      this.map.removeLayer(`drawingPoint${taskId}`);
+    }
+    if (this.map.getSource(`drawing${taskId}`)) {
+      this.map.removeSource(`drawing${taskId}`);
+    }
+  }
+
+  addTemporaryDrawing(drawing) {
+    this.removeDrawing();
     this.map.addSource("drawing", {
       type: "geojson",
-      data: drawControl.getAll(),
+      data: drawing,
+    });
+    this.map.addLayer({
+      id: "drawingPolygon",
+      type: "fill",
+      source: "drawing",
+      filter: ["all", ["==", ["geometry-type"], "Polygon"]],
+      paint: {
+        "fill-opacity": 0.5,
+        "fill-color": this.secondaryColor,
+        "fill-outline-color": this.secondaryColor,
+      },
+    });
+    this.map.addLayer({
+      id: "drawingLine",
+      type: "line",
+      source: "drawing",
+      filter: ["all", ["==", ["geometry-type"], "LineString"]],
+      paint: {
+        "line-color": this.secondaryColor,
+        "line-opacity": 0.5,
+        "line-width": 5,
+      },
+    });
+    this.map.addLayer({
+      id: "drawingPoint",
+      type: "circle",
+      source: "drawing",
+      filter: ["all", ["==", ["geometry-type"], "Point"]],
+      paint: {
+        "circle-radius": 8,
+        "circle-color": this.secondaryColor,
+        "circle-stroke-width": 4,
+        "circle-stroke-color": "#fff",
+      },
     });
   }
 

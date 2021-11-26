@@ -1006,6 +1006,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.removeSource("viewDirectionClickGeolocate");
     }
 
+    // check if the task before the last task was a drawing task
+    // and if the drawing should be kept for the previous task
+    // remove it then now
+    const prevTask =
+      this.taskIndex - 2 >= 0 ? this.game.tasks[this.taskIndex - 2] : undefined;
+    if (prevTask) {
+      if (
+        prevTask.answer.type === AnswerType.DRAW &&
+        prevTask.settings.keepDrawing === "next"
+      ) {
+        this.landmarkControl.removeDrawing();
+      }
+    }
+
     if (this.map.hasControl(this.DrawControl)) {
       this.map.removeControl(this.DrawControl);
     }
@@ -1315,6 +1329,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     let draw = undefined;
     if (this.task.answer.type == AnswerType.DRAW) {
       draw = this.DrawControl.getAll();
+
+      if (this.task.settings.keepDrawing === "all") {
+        this.landmarkControl.addPermanentDrawing(
+          this.DrawControl.getAll(),
+          this.taskIndex
+        );
+      } else if (this.task.settings.keepDrawing === "next") {
+        this.landmarkControl.addTemporaryDrawing(this.DrawControl.getAll());
+      }
     }
 
     await this.feedbackControl.setAnswer({
@@ -1585,12 +1608,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                 this.landmarkControl.setLandmark(mapFeatures.landmarkFeatures);
               } else {
                 this.landmarkControl.remove();
-              }
-              if (
-                this.task.answer.type === AnswerType.DRAW &&
-                this.task.settings.keepDrawing === "all"
-              ) {
-                this.landmarkControl.keepDrawing(this.DrawControl);
               }
               break;
             case "reducedInformation":
