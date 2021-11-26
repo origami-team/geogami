@@ -1,22 +1,36 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
-import { PopoverComponent } from 'src/app/popover/popover.component';
-import { environment } from 'src/environments/environment';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectorRef,
+} from "@angular/core";
+import { PopoverController } from "@ionic/angular";
+import { PopoverComponent } from "src/app/popover/popover.component";
+import { environment } from "src/environments/environment";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource } from "@capacitor/core";
 
 @Component({
-  selector: 'app-photo-upload-multiple-choice',
-  templateUrl: './photo-upload-multiple-choice.component.html',
-  styleUrls: ['./photo-upload-multiple-choice.component.scss']
+  selector: "app-photo-upload-multiple-choice",
+  templateUrl: "./photo-upload-multiple-choice.component.html",
+  styleUrls: ["./photo-upload-multiple-choice.component.scss"],
 })
 export class PhotoUploadMultipleChoiceComponent implements OnInit {
+  @Input() photos: SafeResourceUrl[] = ["", "", "", ""];
+  @Input() taskType = "";
 
-  @Input() photos: SafeResourceUrl[] = ['', '', '', ''];
-  @Input() taskType = '';
+  @Input() hints?: String[] = [
+    "Probiere es noch einmal.",
+    "Probiere es noch einmal.",
+    "Probiere es noch einmal.",
+    "Probiere es noch einmal.",
+  ];
 
   @Output() photosChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() hintsChange: EventEmitter<any> = new EventEmitter<any>();
 
   uploading: boolean[] = [false, false, false, false];
   uploadingProgress: number[] = [100, 100, 100, 100];
@@ -25,11 +39,19 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
     public popoverController: PopoverController,
     private sanitizer: DomSanitizer,
     private changeRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (this.photos == undefined) {
-      this.photos = ['', '', '', ''];
+      this.photos = ["", "", "", ""];
+    }
+    if (this.hints == undefined) {
+      this.hints = [
+        "Probiere es noch einmal.",
+        "Probiere es noch einmal.",
+        "Probiere es noch einmal.",
+        "Probiere es noch einmal.",
+      ];
     }
   }
 
@@ -39,26 +61,31 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
       allowEditing: false,
       resultType: CameraResultType.Uri,
       source: library ? CameraSource.Photos : CameraSource.Camera,
-      width: 500
+      width: 500,
     });
 
-    this.photos[photoNumber] = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+    this.photos[photoNumber] = this.sanitizer.bypassSecurityTrustResourceUrl(
+      image.webPath
+    );
 
     this.uploading[photoNumber] = true;
 
-    const blob = await fetch(image.webPath).then(r => r.blob());
+    const blob = await fetch(image.webPath).then((r) => r.blob());
     const formData = new FormData();
-    formData.append('file', blob);
+    formData.append("file", blob);
 
     const options = {
-      method: 'POST',
-      body: formData
+      method: "POST",
+      body: formData,
     };
 
-    const postResponse = await fetch(`${environment.apiURL}/file/upload`, options);
+    const postResponse = await fetch(
+      `${environment.apiURL}/file/upload`,
+      options
+    );
 
     if (!postResponse.ok) {
-      throw Error('File upload failed');
+      throw Error("File upload failed");
     }
     this.uploading[photoNumber] = false;
 
@@ -69,12 +96,16 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
     this.photosChange.emit(this.photos);
   }
 
+  onChange() {
+    this.hintsChange.emit(this.hints);
+  }
+
   async showPopover(ev: any, text: string) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,
       translucent: true,
-      componentProps: { text }
+      componentProps: { text },
     });
     return await popover.present();
   }

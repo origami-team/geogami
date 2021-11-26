@@ -35,6 +35,7 @@
   </h5>
   <app-photo-upload-multiple-choice
     [(photos)]="answer.photos"
+    [(hints)]="answer.hints"
     [taskType]="taskType"
   >
   </app-photo-upload-multiple-choice>
@@ -48,7 +49,7 @@
       (click)="
         showPopover(
           $event,
-          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder.'
+          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.'
         )
       "
     >

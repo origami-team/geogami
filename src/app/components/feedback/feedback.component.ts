@@ -484,7 +484,11 @@ export class FeedbackComponent {
           'Das stimmt leider nicht.<br />Die richtige Lösung wird <ion-text color="success">grün</ion-text> angezeigt.'
         );
 
-        if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
+        if (
+          this.task.answer.type === AnswerType.MULTIPLE_CHOICE ||
+          this.task.answer.type === AnswerType.MULTIPLE_CHOICE_TEXT ||
+          this.task.answer.type === AnswerType.NUMBER
+        ) {
           this.feedback.text = "Das stimmt leider nicht.";
         }
 
@@ -494,7 +498,10 @@ export class FeedbackComponent {
           );
         }
 
-        if (this.task.question.type == QuestionType.MAP_DIRECTION_MARKER) {
+        if (
+          this.task.question.type == QuestionType.MAP_DIRECTION_MARKER &&
+          this.task.answer.type !== AnswerType.MULTIPLE_CHOICE
+        ) {
           this.feedback.text = this.sanitizer.bypassSecurityTrustHtml(
             'Das stimmt leider nicht.<br />Der <ion-text color="danger">rote Pfeil</ion-text> zeigt dir, in welche Richtung du gerade siehst.'
           );
