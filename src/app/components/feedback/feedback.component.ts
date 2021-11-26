@@ -503,7 +503,7 @@ export class FeedbackComponent {
           this.task.answer.type !== AnswerType.MULTIPLE_CHOICE
         ) {
           this.feedback.text = this.sanitizer.bypassSecurityTrustHtml(
-            'Das stimmt leider nicht.<br />Der <ion-text color="danger">rote Pfeil</ion-text> zeigt dir, in welche Richtung du gerade siehst.'
+            'Das stimmt leider nicht.<br />Der <ion-text color="danger">rote Pfeil</ion-text> zeigt dir, in welche Richtung du siehst.'
           );
         }
         this.feedback.icon = "😕";
