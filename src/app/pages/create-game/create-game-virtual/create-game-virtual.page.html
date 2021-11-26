@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="start"></ion-back-button>
     </ion-buttons>
-    <ion-title>Stelle dein virtuelles Spiel zusammen</ion-title>
+    <ion-title>{{ "CreateGame.titleCreateGameVirtual" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,22 +11,22 @@
   <ion-card id="create_card_create" (click)=navigateCreateVirtualGamePage() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="add-circle"></ion-icon> Erstellen
+        <ion-icon name="add-circle"></ion-icon>{{ "CreateGame.create" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Gestalte ein neues Spiel.
+      {{ "CreateGame.createDescription" | translate }}
     </ion-card-content>
   </ion-card>
 
   <ion-card id="create_card_edit" (click)=navigateEditVirtualGame() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="construct"></ion-icon> Bearbeiten
+        <ion-icon name="construct"></ion-icon>{{ "CreateGame.edit" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Verändere ein bereits bestehendes Spiel.
+      {{ "CreateGame.editDescription" | translate }}
     </ion-card-content>
   </ion-card>
 

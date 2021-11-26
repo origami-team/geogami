@@ -101,18 +101,18 @@
     },
 
     "Start": {
-            "playMode": "Play",
+            "playMode": "Jogar",
             "playModeDescription": "Choose a game from the game list.",
-            "developMode": "Develop",
+            "developMode": "Desenvolver",
             "developModeDescription": "Create or edit a game.",
-            "EvaluateMode": "Evaluate",
+            "EvaluateMode": "Avaliar",
             "EvaluateModeDescription": "Analyze the game results.",
-            "learnMode": "Learn",
+            "learnMode": "Aprender",
             "learnModeDescription": "Learn more about the task types and features.",
-            "aboutMode": "About GeoGami",
+            "aboutMode": "Sobre GeoGami",
             "aboutModeDescription": "Learn more about the app.",
             "loginModeDescription": "Log-in for creating games.",
-            "hello": "Hello",
+            "hello": "Olá",
             "userpreferences": "user settings"
     },
 

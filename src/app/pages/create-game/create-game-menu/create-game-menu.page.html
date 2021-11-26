@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="start"></ion-back-button>
     </ion-buttons>
-    <ion-title>Wähle die Welt </ion-title>
+    <ion-title>{{ "GameList.titleGameMenu" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,22 +11,22 @@
   <ion-card id="create_card_create" (click)=navigateCreateRealGamePage() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="globe"></ion-icon> Echte Welt
+        <ion-icon name="globe"></ion-icon> {{ "GameList.realWorld" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Erstelle ein Spiel für die echte Welt.
+      {{ "CreateGame.realWorldDescription" | translate }}
     </ion-card-content>
   </ion-card>
 
   <ion-card id="create_card_create" (click)=navigateCreateVirtualGamePage() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="tv"></ion-icon> Virtuelle Welt
+        <ion-icon name="tv"></ion-icon> {{ "GameList.virtualWorld" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Erstelle ein Spiel für die virtuelle Welt.
+      {{ "CreateGame.virtualWorldDescription" | translate }}
     </ion-card-content>
   </ion-card>
 

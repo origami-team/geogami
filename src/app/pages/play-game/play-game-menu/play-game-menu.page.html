@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="start"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ "PlayGame.titlePlayGameMenu" | translate }}</ion-title>
+    <ion-title>{{ "GameList.titleGameMenu" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
   <ion-card id="create_card_create" (click)=navigateToRealGameListPage() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="globe"></ion-icon>{{ "PlayGame.realWorld" | translate }}
+        <ion-icon name="globe"></ion-icon>{{ "GameList.realWorld" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
@@ -22,7 +22,7 @@
   <ion-card id="create_card_create" (click)=navigateToVirtualGameListPage() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="tv"></ion-icon>{{ "PlayGame.virtualWorld" | translate }}
+        <ion-icon name="tv"></ion-icon>{{ "GameList.virtualWorld" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>

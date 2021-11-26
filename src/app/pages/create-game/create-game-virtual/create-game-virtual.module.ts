@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { CreateGameVirtualPage } from './create-game-virtual.page';
 
+import { TranslateModule } from '@ngx-translate/core';
+
+
 const routes: Routes = [
   {
     path: '',
@@ -19,7 +22,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    TranslateModule
   ],
   declarations: [CreateGameVirtualPage]
 })

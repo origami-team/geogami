@@ -4,6 +4,7 @@
             "no": "Nein",
             "name": "Name",
             "mapfeatures": "Kartenfeatures",
+            "tasktype": "Aufgabentyp",
             "tasktypes": "Aufgabentypen",
             "task": "Aufgabe",
             "info": "Info",
@@ -15,7 +16,7 @@
     "Tasktypes": {
             "navigationTasks": "Navigationsaufgaben",
             "thematicTasks": "Themenaufgaben",
-            "information": "Infomationen",
+            "information": "Informationen",
             "navigationToFlag": "Navigation zur Zielfahne",
             "navigationWithArrow": "Navigation mit Richtungspfeil",
             "navigationViaText": "Navigation mit Textanweisung",
@@ -23,43 +24,87 @@
             "selfLocation": "Selbst-Lokalisation",
             "objectLocation": "Objekt-Lokalisation",
             "directionDetermination": "Richtungsbestimmung",
-            "freeTasks": "Freie Aufgaben"
+            "freeTasks": "Freie Aufgaben",
+            "navigationtasksDescription": "Navigationsaufgaben leiten den Spieler an neue Orte.",
+            "thematictasksDescription": "Themenaufgaben sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.",
+            "informationDescription": "Über den Baustein 'Informationen' können dem Spieler Hinweise und Tipps gegeben werden.",
+            "navtoflagDescription": "Bei der Navigation zur Zielfahne sieht der Spieler eine Fahne auf der Karte, die einen Zielort markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.",
+            "navwitharrowDescription": "Die Navigation mit Richtungspfeil ist eine Navigation mit Pfeil und Distanzangabe, die dem Spieler die Richtung zum nächsten Zielort weist. Die Karte ist dabei nicht sichtbar.",
+            "navviatextDescription": "Bei der Navigation mit Textanweisung bekommt der Spieler eine genaue Navigationsanweisung zum nächsten Zielort.",
+            "navviaphotoDescription": "Der Aufgabentyp Navigation mit Foto navigiert den Spieler mittels Foto zum nächsten Ziel.",
+            "selflocDescription":"Bei der Selbst-Lokalisation muss der Spieler seine aktuelle Position auf der Karte finden.",
+            "objectlocDescription": "Der Aufgabentyp Objekt-Lokalisation umfasst das Zuordnen von Objekte der Karte zu Objekten der Umgebung und umgekehrt.",
+            "directiondetermDescription": "Bei der Richtungsbestimmung muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in Verbindung bringen.",
+            "freetasksDescription":"In Freien Aufgaben können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise können zum Beispiel Quiz- und Sachaufgaben gestellt werden."
     },
     
     "Mapfeatures": {
+            "mapSettings": "Karteneinstellungen",
+            "markerSettings": "Markereinstellungen",
+            "zoom": "Zoom",
+            "mapSection": "Kartenbereich",
+            "mapRotation": "Kartenrotation",
+            "mapType": "Kartentyp",
+            "locationMarker": "Positionsmarker",
+            "directionMarker": "Blickrichtungsmarker",
+            "track": "Trackaufzeichnung",
+            "streetMarker": "Markierung des Straßenabschnitt bei Position",
+            "buffer": "Kartenausschnitt (Buffer) um Position",
+            "landmarks": "Hervorhebung von Landmarken",
+            "manual": "manuell",
+            "off": "aus",
+            "on": "an",
+            "onDemand": "auf Knopfdruck",
+            "init": "zu Aufgabenbeginn",
+            "zoomToTask": "Zoom zur Aufgabe",
+            "zoomToBB": "Zoom zum Spiel",
+            "panningOn": "verschiebbar",
+            "autoCentered": "automatisch-zentriert",
+            "static": "statisch",
+            "automatic": "automatisch",
+            "automaticOnDemand": "automatisch auf Knopfdruck",
+            "fixedToNorth": "genordet",
+            "standardMap": "Standardkarte",
+            "mapChoice": "Kartenauswahl",
+            "satellite": "Satellitenbild",
+            "satelliteOnDemand": "Satellitenbild auf Knopfdruck",
+            "satelliteSwipe": "Satellitenbild mit Swipefunktion",
+            "3D": "3D-Ansicht",
+            "3DonDemand": "3D-Ansicht auf Knopfdruck"
     },
 
     "GameList": {
-        "chooseGame": "Wähle ein Spiel aus der Liste." 
+            "titleGameMenu": "Wähle die Spielumgebung",
+            "realWorld": "Realraum",
+            "virtualWorld": "Virtuelle Welt",
+            "chooseGame": "Wähle ein GeoGami aus der Liste." 
     },
 
     "CreateTasks": {
-        "combineTasks": "Stelle dein Spiel zusammen:",
-        "information": "Information",
-        "chooseComponents": "Wähle aus folgenden Bausteinen:"
-
+            "combineTasks": "Stelle dein GeoGami zusammen:",
+            "information": "Information",
+            "chooseComponents": "Wähle aus folgenden Bausteinen:"
     },
     
     "SaveGame": {
-        "titleSaveGame": "Speichere dein GeoGami Spiel",
-        "gameNameExist": "Ein Spiel mit diesem Namen existiert bereits!",
-        "gameName": "Spielname",
-        "gameLocation": "Spielort",
-        "mapSection": "Kartenausschnitt",
-        "warningLeaveArea": "Warnung beim Verlassen des markierten Gebiets",
-        "outlined": "Umrandet",
-        "invisible": "Unsichtbar",
-        "saveGame": "Spiel speichern",
-        "sendingData": "Übertrage Daten...",
-        "gameSaved": "Dein Spiel wurde gespeichert!"
-
+            "titleSaveGame": "Speichere dein GeoGami",
+            "gameNameExist": "Ein Spiel mit diesem Namen existiert bereits!",
+            "gameName": "Spielname",
+            "gameLocation": "Spielort",
+            "mapSection": "Kartenausschnitt",
+            "warningLeaveArea": "Warnung beim Verlassen des markierten Gebiets",
+            "outlined": "Umrandet",
+            "invisible": "Unsichtbar",
+            "saveGame": "GeoGami speichern",
+            "sendingData": "Übertrage Daten...",
+            "gameSaved": "Dein GeoGami wurde gespeichert!"
     },
 
     "Start": {
             "playMode": "Spielen",
-            "playModeDescription": "Wähle ein Spiel aus der Spieleliste.",
+            "playModeDescription": "Wähle ein GeoGami aus der Spieleliste.",
             "developMode": "Entwickeln",
-            "developModeDescription": "Erstelle oder bearbeite ein Spiel.",
+            "developModeDescription": "Erstelle oder bearbeite ein GeoGami.",
             "EvaluateMode": "Auswerten",
             "EvaluateModeDescription": "Sieh dir die Spielergebnisse an.",
             "learnMode": "Lernen",
@@ -72,16 +117,60 @@
     },
 
     "AnalyzeGame": {
-            "title": "Analysiere dein GeoGami Spiel"
-        },
+            "title": "Analysiere dein GeoGami"
+    },
 
     "CreateGame": {
-        },
+            "titleCreateGame": "Entwickle dein GeoGami",
+            "titleCreateGameMenu": "Wähle die Spielumgebung",
+            "realWorldDescription": "Entwickle ein GeoGami, um es draußen zu spielen.",
+            "virtualWorldDescription": "Entwickle ein GeoGami für die virtuelle Welt.",
+            "titleCreateGameVirtual": "Entwickle dein virtuelles GeoGami",
+            "titleCreateGameVirtualMenu": "Wähle eine virtuelle Welt",
+            "titleCreateGameList": "Erstelle ein GeoGami",
+            "titleCreateGameVirtualList": "Erstelle ein virtuelles GeoGami",
+            "create": "Erstellen",
+            "edit": "Bearbeiten",
+            "createDescription": "Gestalte ein neues GeoGami.",
+            "editDescription": "Verändere ein bestehendes GeoGami.",
+            "informationText": "Informationstext",
+            "markdownSupported": "Markdown wird unterstützt",
+            "audioMessage": "Audiobotschaft",
+            "photos": "Fotos und Grafiken",
+            "addSettings": "Weitere Einstellungen",
+            "object": "Das gesuchte Objekt...",
+            "direction": "Die gesuchte Richtung...",
+            "questiontype": "Fragetyp",
+            "playerAnswers": "Der Spieler antwortet...",
+            "searchArea": "Suchgebiet festlegen <i>(optional)</i>",
+            "setLocation": "Ort festlegen",
+            "confirmation": "Eingabebestätigung",
+            "showFlag": "Fahne anzeigen",
+            "feedback": "Feedback",
+            "severalTrials": "Mehrere Versuche",
+            "keepFlag": "Fahne auf der Karte behalten",
+            "accuracy": "Genauigkeit",
+            "destination": "Zielort",
+            "multipleChoice": "Multiple Choice",
+            "correctNumber": "Korrekte Antwort <i>(Zahl)</i>",
+            "reset": "Zurücksetzen",
+            "threewrongtaskanswers": "Drei falsche Antwortmöglichkeiten:",
+            "taskInstruction": "Aufgabenstellung",
+            "navInstruction": "Navigationsanweisung",
+            "photo": "Foto",
+            "objectLocation": "Objekt markieren",
+            "markedMap": "Kartenmarkierung",
+            "objectPhoto": "Foto des zu suchenden Objekts",
+            "destinationDirection": "Gewünschte Blickrichtung",
+            "directionMap": "Richtung auf der Karte",
+            "photoDirection": "Foto der zu suchenden Richtung",
+            "photoTask": "Foto zur Aufgabe"
+    },
 
     "EditGame": {
-            "titleEditGame": "Bearbeite dein GeoGami Spiel",
+            "titleEditGame": "Bearbeite dein GeoGami",
             "titleEditGameTasks": "Bearbeite"
-        },
+    },
 
     "Info": {
             "title": "Informationen über GeoGami",
@@ -94,10 +183,7 @@
 
     "PlayGame": {
             "titlePlayGameList": "Spiele GeoGami",
-            "titlePlayGameMenu": "Wähle die Spielumgebung",
-            "realWorld": "Echte Welt",
             "realWorldDescription": "Spiele GeoGami draußen.",
-            "virtualWorld": "Virtuelle Welt",
             "virtualWorldDescription": "Spiele GeoGami in einer virtuellen Welt.",
             "toDestination": "Zum Ziel:",
             "pressOK": "Drücke 'Okay'!",
@@ -112,24 +198,13 @@
             "goBack": "Gehe zurück!",
             "correctLocation": "Stehst du genau richtig? Dann drücke 'Okay'!",
             "gamecode": "Spielcode erstellen (5 Ziffern/Buchstaben)"
-        },
+    },
         
     "Showroom": {
             "titleShowroom" :"Lerne GeoGami kennen",
             "mapfeaturesDescription": "Probiere die Kartenfunktionen aus.",
-            "tasktypesDescription": "Lerne die Aufgabentypen kennen.",
-            "navtasksexpl":"Navigationsaufgaben leiten den Spieler an neue Orte.",
-            "navtoflagexpl": "Bei der Navigation zur Zielfahne sieht der Spieler eine Fahne auf der Karte, die einen Zielort markiert. Seine Aufgabe ist es, zu diesem Ort zu gehen.",
-            "navwitharrowexpl": "Die Navigation mit Richtungspfeil ist eine Navigation mit Pfeil und eine Distanzangabe, die dem Spieler die Richtung zum nächsten Zielort weist. Die Karte ist dabei nicht sichtbar.",
-            "navviatextexpl": "Bei der Navigation mit Textanweisung bekommt der Spieler eine genaue Navigationsanweisung zum nächsten Zielort.",
-            "navviaphotoexpl": "Der Aufgabentyp Navigation mit Foto navigiert den Spieler mittels Foto zum nächsten Ziel.",
-            "themtasksexpl": "Themenaufgaben sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.",
-            "selflocexpl":"Bei der Selbst-Lokalisation muss der Spieler seine aktuelle Position auf der Karte finden.",
-            "objectlocexpl": "Der Aufgabentyp Objekt-Lokalisation umfasst das Zuordnen von Objekte der Karte zu Objekten der Umgebung und umgekehrt.",
-            "directiondetermexpl": "Bei der Richtungsbestimmung muss der Spieler seine Blickrichtung mit der Ausrichtung der Karte in Verbindung bringen.",
-            "freetasksexpl":"In Freien Aufgaben können Frage- und Antworttypen der Aufgabe frei kombiniert werden. Auf diese Weise können zum Beispiel Quiz- und Sachaufgaben gestellt werden.",
-            "informationexpl": "Über den Baustein Information können dem Spieler Hinweise und Tipps gegeben werden. Neben reinen Textinformationen können Audioaufnahmen und demnächst auch Videoaufnahmen eingebunden werden. Außerdem besteht die Möglichkeit, Kartenfeatures zu nutzen und gezielt einzuführen."
-        },
+            "tasktypesDescription": "Lerne die Aufgabentypen kennen."
+    },
 
     "User": {
             "forgotpw": "Passwort vergessen",
@@ -142,5 +217,6 @@
             "registered": "Registriert am:",
             "roles": "Rollen",
             "registerUser": "Nutzer registrieren"
-        }
+    }
+
 }

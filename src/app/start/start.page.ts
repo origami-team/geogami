@@ -106,6 +106,9 @@ export class StartPage implements OnInit {
       case "en":
           this._translate.setDefaultLang('en');
           break;
+      case "pt":
+          this._translate.setDefaultLang('pt');
+          break;
     }
   }
 }

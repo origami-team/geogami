@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title>
       <ion-icon name="information-circle-outline" color="warning"></ion-icon>
-      Information
+      {{ "Tasktypes.information" | translate }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -22,12 +22,11 @@
   <ion-card color="warning">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
-      Über den Baustein <b>Information</b> können dem Spieler Hinweise und Tipps
-      gegeben werden.
+      {{ "Tasktypes.informationDescription" | translate }}
     </ion-card-content>
   </ion-card>
 
-  <h5>Informationstext</h5>
+  <h5>{{ "CreateGame.informationText" | translate }}</h5>
 
   <ion-textarea
     autoGrow
@@ -37,7 +36,7 @@
   ></ion-textarea>
   <ion-text color="medium">
     <p>
-      Markdown wird unterstützt
+      {{ "CreateGame.markdownSupported" | translate }}
       <ion-icon
         name="information-circle"
         (click)="
@@ -51,22 +50,22 @@
     </p>
   </ion-text>
 
-  <h5>Audiobotschaft</h5>
+  <h5>{{ "CreateGame.audioMessage" | translate }}</h5>
 
   <app-audio-recorder
     [(audioSource)]="task.question.audio"
   ></app-audio-recorder>
 
-  <h5>Fotos und Grafiken</h5>
+  <h5>{{ "CreateGame.photos" | translate }}</h5>
 
   <app-photo-upload
     theme="warning"
     [(photo)]="task.question.photo"
   ></app-photo-upload>
 
-  <h5>Weitere Einstellungen</h5>
+  <h5>{{ "CreateGame.addSettings" | translate }}</h5>
 
   <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
-    <ion-label> Kartenfeatures </ion-label>
+    <ion-label> {{ "General.mapfeatures" | translate }} </ion-label>
   </ion-item>
 </ion-content>
