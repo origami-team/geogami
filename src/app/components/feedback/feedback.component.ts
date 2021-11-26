@@ -580,11 +580,9 @@ export class FeedbackComponent {
       const evalDistance =
         distance - (PlayingGamePage.triggerTreshold as number);
       if (evalDistance > 10) {
-        this.feedback.hint = `Du bist ${distance.toFixed(
-          1
-        )} m vom Ziel entfernt.`;
+        this.feedback.hint = `${distance.toFixed(0)} m vom Ziel entfernt!`;
       } else {
-        this.feedback.hint = `Du bist sehr nah am Ziel.`;
+        this.feedback.hint = `Nah am Ziel!`;
       }
     }
 
@@ -592,11 +590,9 @@ export class FeedbackComponent {
       const evalDistance =
         options.distance - (PlayingGamePage.triggerTreshold as number);
       if (evalDistance > 10) {
-        this.feedback.hint = `Du liegst ${options.distance.toFixed(
-          1
-        )} m daneben.`;
+        this.feedback.hint = `${options.distance.toFixed(0)} m daneben`;
       } else {
-        this.feedback.hint = `Du bist sehr nah dran.`;
+        this.feedback.hint = `Nah dran!`;
       }
     }
 
@@ -623,9 +619,9 @@ export class FeedbackComponent {
       const evalDistance =
         distance - (PlayingGamePage.triggerTreshold as number);
       if (evalDistance > 10) {
-        this.feedback.hint = `Du liegst ${distance.toFixed(1)} m daneben.`;
+        this.feedback.hint = `${distance.toFixed(0)} m daneben!`;
       } else {
-        this.feedback.hint = `Du bist sehr nah dran.`;
+        this.feedback.hint = `Nah dran!`;
       }
     }
 
