@@ -787,7 +787,6 @@ export class FeedbackComponent {
           coordinates: position,
         },
       });
-
       this.map.addLayer({
         id: "direction-solution",
         source: "direction-solution",

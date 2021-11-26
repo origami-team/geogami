@@ -25,7 +25,11 @@
     </ion-item> -->
     <ion-item>
       <ion-label>Zoom</ion-label>
-      <select [(ngModel)]="features.zoombar" (change)="onZoomChange()" interface="popover">
+      <select
+        [(ngModel)]="features.zoombar"
+        (change)="onZoomChange()"
+        interface="popover"
+      >
         <option value="true">manuell</option>
         <option value="task">Zoom zur Aufgabe</option>
         <option value="game">Zoom zum Spiel</option>
@@ -36,8 +40,12 @@
       <ion-label>Kartenbereich</ion-label>
       <select [(ngModel)]="features.pan" interface="popover">
         <option value="true">verschiebbar</option>
-        <option value="center" [disabled]="features.zoombar == 'task' || features.zoombar == 'game'">
-          automatisch-zentriert</option>
+        <option
+          value="center"
+          [disabled]="features.zoombar == 'task' || features.zoombar == 'game'"
+        >
+          automatisch-zentriert
+        </option>
         <option value="static">statisch</option>
       </select>
     </ion-item>
@@ -57,9 +65,15 @@
         <option value="selection">Kartenauswahl</option>
         <option value="sat">Satellitenbild</option>
         <option value="sat-button">Satellitenbild auf Knopfdruck</option>
-        <option value="sat-swipe">Satellitenbild mit Swipefunktion</option>
+        <option value="sat-swipe">
+          Standardkarte und Satellitenbild (Swipe)
+        </option>
         <option value="3D">3D-Ansicht</option>
         <option value="3D-button">3D-Ansicht auf Knopfdruck</option>
+        <option value="blank">Leere Karte</option>
+        <option value="blank-swipe">
+          Leere Karte und Satellitenbild (Swipe)
+        </option>
       </select>
     </ion-item>
 
@@ -90,30 +104,50 @@
 
     <ion-item>
       <ion-label>Aktueller Straßenabschnitt</ion-label>
-      <ion-toggle color="danger" [(ngModel)]="features.streetSection"></ion-toggle>
+      <ion-toggle
+        color="danger"
+        [(ngModel)]="features.streetSection"
+      ></ion-toggle>
     </ion-item>
 
-    <ion-item style="--border-style: none;">
+    <ion-item style="--border-style: none">
       <ion-label>Reduzierter Kartenausschnitt</ion-label>
-      <ion-toggle color="danger" [(ngModel)]="features.reducedInformation"></ion-toggle>
+      <ion-toggle
+        color="danger"
+        [(ngModel)]="features.reducedInformation"
+      ></ion-toggle>
     </ion-item>
 
     <ion-item>
-    <ion-range color="danger" [(ngModel)]="features.reducedMapSectionDiameter" style="padding-top: 22px;" min="20" max="100" snaps ticks pin step="5" [disabled]="! features.reducedInformation">
-      <ion-label slot="start">20m</ion-label>
-      <ion-icon slot="start" size="small"  name="locate">
-      </ion-icon>
-      <ion-icon slot="end"  name="locate"></ion-icon>
-      <ion-label slot="end">100m</ion-label>
-    </ion-range>
-  </ion-item>
+      <ion-range
+        color="danger"
+        [(ngModel)]="features.reducedMapSectionDiameter"
+        style="padding-top: 22px"
+        min="20"
+        max="100"
+        snaps
+        ticks
+        pin
+        step="5"
+        [disabled]="! features.reducedInformation"
+      >
+        <ion-label slot="start">20m</ion-label>
+        <ion-icon slot="start" size="small" name="locate"> </ion-icon>
+        <ion-icon slot="end" name="locate"></ion-icon>
+        <ion-label slot="end">100m</ion-label>
+      </ion-range>
+    </ion-item>
 
     <ion-item>
       <ion-label>Hervorhebung von Landmarken</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
     <!-- <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'" lines="none"> -->
-    <div #map class="map" [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"></div>
+    <div
+      #map
+      class="map"
+      [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"
+    ></div>
     <!-- </ion-item> -->
   </ion-list>
 </ion-content>
