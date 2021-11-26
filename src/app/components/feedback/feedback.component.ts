@@ -481,7 +481,7 @@ export class FeedbackComponent {
         break;
       case FeedbackType.Wrong:
         this.feedback.text = this.sanitizer.bypassSecurityTrustHtml(
-          'Das stimmt leider nicht.<br />Die richtige Lösung wird in <ion-text color="success">Grün</ion-text> angezeigt.'
+          'Das stimmt leider nicht.<br />Die richtige Lösung wird <ion-text color="success">grün</ion-text> angezeigt.'
         );
 
         if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {

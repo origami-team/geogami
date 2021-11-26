@@ -1,6 +1,6 @@
 <ion-card class="overlay feedback" *ngIf="showFeedback">
   <h1 class="feedback-icon">{{ feedback.icon }}</h1>
-  <h4 [innerHTML]="feedback.text"></h4>
+  <h5 [innerHTML]="feedback.text"></h5>
 
   <ion-card color="success" *ngIf="feedback.solution != ''">
     <ion-card-content>
