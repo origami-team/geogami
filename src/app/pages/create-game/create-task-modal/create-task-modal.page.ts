@@ -298,6 +298,11 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings.multipleTries = false;
       this.showFeedback = false;
       this.showMultipleTries = false;
+    } else if (this.task.answer.type == AnswerType.DRAW) {
+      this.task.settings.feedback = false;
+      this.task.settings.multipleTries = false;
+      this.showFeedback = false;
+      this.showMultipleTries = false;
     } else {
       this.task.settings.feedback = true;
       this.task.settings.multipleTries = true;
