@@ -20,9 +20,9 @@
     </ion-card>
     <br />
     <form (ngSubmit)="login()" [formGroup]="loginForm">
-      <ion-input placeholder="Benutzername oder E-Mail" [id]="'username'" formControlName="username"></ion-input>
+      <ion-input placeholder="{{ 'User.pl_usernameOREmail' | translate }}" [id]="'username'" formControlName="username"></ion-input>
       <br />
-      <ion-input type="password" placeholder="Passwort" [id]="'password'" formControlName="password"></ion-input>
+      <ion-input type="password" placeholder="{{ 'User.pl_password' | translate }}" [id]="'password'" formControlName="password"></ion-input>
       <br />
       <ion-button expand="block" type="submit" [disabled]="loginForm.invalid">
         <ion-spinner *ngIf="loading"></ion-spinner> Login

@@ -197,7 +197,8 @@
             "markedArea": "the marked area.",
             "goBack": "Go back!",
             "correctLocation": "Are you exactly right? Then press 'okay'!",
-            "gamecode": "Create game code (5 digits/letters)"
+            "gamecode": "Create game code (5 digits/letters)",
+            "pl_EnterCode": "Enter game code"
     },
         
     "Showroom": {
@@ -216,7 +217,11 @@
             "mailconfirmed": "Email address confirmed",
             "registered": "Registered on:",
             "roles": "Roles",
-            "registerUser": "Register user"
+            "registerUser": "Register user",
+            "pl_usernameOREmail": "Username or E-Mail",
+            "pl_username": "Username",
+            "pl_password": "Password",
+            "pl_newPassword": "New Password"
     }
 
 }

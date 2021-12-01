@@ -197,7 +197,8 @@
             "markedArea": "das markierte Gebiet.",
             "goBack": "Gehe zurück!",
             "correctLocation": "Stehst du genau richtig? Dann drücke 'Okay'!",
-            "gamecode": "Spielcode erstellen (5 Ziffern/Buchstaben)"
+            "gamecode": "Spielcode erstellen (5 Ziffern/Buchstaben)",
+            "pl_EnterCode": "Spielcode eingeben"
     },
         
     "Showroom": {
@@ -216,7 +217,11 @@
             "mailconfirmed": "E-Mail-Adresse bestätigt",
             "registered": "Registriert am:",
             "roles": "Rollen",
-            "registerUser": "Nutzer registrieren"
+            "registerUser": "Nutzer registrieren",
+            "pl_usernameOREmail": "Benutzername oder E-Mail",
+            "pl_username": "Benutzername",
+            "pl_password": "Passwort",
+            "pl_newPassword": "Neues Passwort"
     }
 
 }
