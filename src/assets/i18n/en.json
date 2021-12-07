@@ -10,7 +10,9 @@
             "info": "Info",
             "done": "Done",
             "OK": "Okay",
-            "start": "Start"
+            "start": "Start",
+            "pl_text": "Text",
+            "pl_optional": "(optional)"
     },
 
     "Tasktypes": {
@@ -142,7 +144,7 @@
             "direction": "The direction to be searched for ...",
             "questiontype": "Question type",
             "playerAnswers": "The player answers ...",
-            "searchArea": "Define search area <i>(optional)</i>",
+            "searchArea": "Define search area (optional)",
             "setLocation": "Set location",
             "confirmation": "Input confirmation",
             "showFlag": "Show flag",
@@ -152,7 +154,7 @@
             "accuracy": "Accuracy",
             "destination": "Destination",
             "multipleChoice": "Multiple Choice",
-            "correctNumber": "Correct answer <i>(number)</i>",
+            "correctNumber": "Correct answer (number)",
             "reset": "reset",
             "threewrongtaskanswers": "Three wrong answers:",
             "taskInstruction": "Task instruction",
@@ -197,7 +199,8 @@
             "markedArea": "the marked area.",
             "goBack": "Go back!",
             "correctLocation": "Are you exactly right? Then press 'okay'!",
-            "gamecode": "Create game code (5 digits/letters)"
+            "gamecode": "Game code",
+            "pl_EnterCode": "Enter game code"
     },
         
     "Showroom": {
@@ -216,7 +219,43 @@
             "mailconfirmed": "Email address confirmed",
             "registered": "Registered on:",
             "roles": "Roles",
-            "registerUser": "Register user"
+            "registerUser": "Register user",
+            "pl_usernameOREmail": "Username or E-Mail",
+            "pl_username": "Username",
+            "pl_password": "Password",
+            "pl_newPassword": "New Password"
+    },
+
+    "Popover": {
+            "chooseComponent": "Tap on the buttons to learn more about the task types.",
+            "showFeedback": "Should the player receive feedback on whether the task was solved correctly?",
+            "gameArea": "Should the game be limited to a map section?",
+            "leaveGameArea": "Should a warning be displayed to the player when leaving the marked area?",
+            "outlinedGameArea": "Should the selected map section be displayed outlined in the game?",
+            "invisibleGameArea": "Should the selected map section not be displayed in the game?",
+            "searchArea": "Mark a search area to be displayed to the player as support.",
+            "markLocation": "Tap on the map to set a location.",
+            "confirmLocation": "Should the player confirm the arrival at the destination with 'Okay'?",
+            "showFlag": "Should a destination flag be displayed on the map?",
+            "severalAttempts": "May the player try to improve if the task was solved incorrectly?",
+            "keepFlag": "Should the destination flag continue to be displayed after the task has been solved?",
+            "accuracy": "Set the accuracy to >10m if the marked location is near tall buildings or dense tree canopies, or if you want to allow a larger area as the correct solution.",
+            "flag": "This destination is indicated in the game with a flag on the map.",
+            "photoMC": "Choose a photo for the correct solution. Also choose three other photos that do not match the correct solution.",
+            "textMC": "Write the correct solution in the green box. Write incorrect answers in the red boxes.",
+            "number": "Write the correct solution (number) in the box.",
+            "photo": "This photo will be displayed in the game.",
+            "gameCode": "Add a five-digit game code (numbers/letters). Open the VR World and enter the code.",
+            "markdown": "Markdown elements can be used.\n**example** for bold text.\n_example_ for italic text.\n~~example~~ for strike through text.\n[example link](https://example.com/) for a link.\nFurther information: https://jfcere.github.io/ngx-markdown/cheat-sheet",
+            "taskInstruction": "This task instruction is displayed in the game.",
+            "navInstruction": "Add a detailed description of the route here. This will be displayed in the game.",
+            "audioMessage": "Click the button to record an audio message or read out the task.",
+            "objectLocation": "Select the object to be searched. To do this, click on the small square, outline the object with several clicks and tap on the last selected point to confirm the selection.",
+            "markedMap": "The map marker is displayed to the player with the task.",
+            "objectPhoto": "Include a photo of the object to be searched. It will be displayed in the game.",
+            "destinationDirection": "Mark the direction to be searched on the map. First select the location and then the view direction.",
+            "directionMap": "Mark the direction to be searched on the map. First select the location and then the view direction. The marker will be displayed in the game.",
+            "photoDirection": "Choose a photo that represents the view direction to be searched."
     }
 
 }

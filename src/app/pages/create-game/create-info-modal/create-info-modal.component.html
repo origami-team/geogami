@@ -30,7 +30,7 @@
 
   <ion-textarea
     autoGrow
-    placeholder=" (optional)"
+    placeholder="{{ 'General.pl_optional' | translate }}"
     *ngIf="task"
     [(ngModel)]="task.question.text"
   ></ion-textarea>
@@ -42,7 +42,7 @@
         (click)="
           showPopover(
             $event,
-            'Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) Beispiel für einen Link.\n<p>Zeile1<br>Zeile2</p> Beispiel für eine Zeilenumbruch. Weitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet'
+            'PopOver.markdown'
           )
         "
       >

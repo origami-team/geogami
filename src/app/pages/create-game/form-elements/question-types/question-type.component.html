@@ -9,7 +9,7 @@
     <ion-icon
       name="information-circle"
       (click)="
-        showPopover($event, 'Diese Aufgabenstellung wird im Spiel angezeigt.')
+        showPopover($event, 'PopOver.taskInstruction')
       "
     >
     </ion-icon>
@@ -23,7 +23,7 @@
         (click)="
           showPopover(
             $event,
-            'Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet'
+            'PopOver.markdown'
           )
         "
       >
@@ -40,7 +40,7 @@
       (click)="
         showPopover(
           $event,
-          'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.'
+          'PopOver.navInstruction'
         )
       "
     >
@@ -55,7 +55,7 @@
         (click)="
           showPopover(
             $event,
-            'Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet'
+            'PopOver.markdown'
           )
         "
       >
@@ -69,7 +69,7 @@
     {{ "CreateGame.photo" | translate }}
     <ion-icon
       name="information-circle"
-      (click)="showPopover($event, 'Dieses Foto wird im Spiel angezeigt.')"
+      (click)="showPopover($event, 'PopOver.photo')"
     >
     </ion-icon>
   </h5>
@@ -85,7 +85,7 @@
       (click)="
         showPopover(
           $event,
-          'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.'
+          'PopOver.navInstruction'
         )
       "
     >
@@ -100,7 +100,7 @@
         (click)="
           showPopover(
             $event,
-            'Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet'
+            'PopOver.markdown'
           )
         "
       >
@@ -117,7 +117,7 @@
       (click)="
         showPopover(
           $event,
-          'Die Aufgabenstellung kann auch als Audiobotschaft abgespielt werden. Klicke auf den Record Button um eine Audiobotschaft aufzunehmen.'
+          'PopOver.audioMessage'
         )
       "
     >
@@ -134,7 +134,7 @@
       (click)="
         showPopover(
           $event,
-          'Markiere das Objekt, das der Spieler in seiner Nähe finden soll. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen. Die Markierung wird im Spiel angezeigt.'
+          'PopOver.objectLocation'
         )
       "
     >
@@ -157,7 +157,7 @@
       (click)="
         showPopover(
           $event,
-          'Die gewählte Kartenmarkierung wird dem Spieler bei der Aufgabenstellung angezeigt.'
+          'PopOver.markedMap'
         )
       "
     >
@@ -178,7 +178,7 @@
       (click)="
         showPopover(
           $event,
-          'Markiere das Objekt, das der Spieler in seiner Umgebung finden soll. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.'
+          'PopOver.objectLocation'
         )
       "
     >
@@ -201,7 +201,7 @@
       (click)="
         showPopover(
           $event,
-          'Füge ein Foto vom gesuchten Objekt ein. Es wird im Spiel angezeigt.'
+          'PopOver.objectPhoto'
         )
       "
     >
@@ -218,7 +218,7 @@
       (click)="
         showPopover(
           $event,
-          'Markiere das gesuchte Objekt auf der Karte. Klicke dazu auf das kleine Quadrat, umrande dann das Objekt mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.'
+          'PopOver.objectLocation'
         )
       "
     >
@@ -241,7 +241,7 @@
       (click)="
         showPopover(
           $event,
-          'Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt. Die App wird den Spieler in diese Richtung leiten, ohne die Karte anzuzeigen.'
+          'PopOver.destinationDirection'
         )
       "
     >
@@ -258,7 +258,7 @@
       (click)="
         showPopover(
           $event,
-          'Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt. Die Markierung wird im Spiel angezeigt.'
+          'PopOver.directionMap'
         )
       "
     >
@@ -275,7 +275,7 @@
       (click)="
         showPopover(
           $event,
-          'Wähle ein Foto, das die gesuchte Blickrichtung zeigt.'
+          'PopOver.photoDirection'
         )
       "
     >
@@ -292,7 +292,7 @@
       (click)="
         showPopover(
           $event,
-          'Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt.'
+          'PopOver.directionMap'
         )
       "
     >
@@ -309,7 +309,7 @@
       (click)="
         showPopover(
           $event,
-          'Das gewählte Foto wird dem Spieler bei Aufgabenstellung angezeigt.'
+          'PopOver.photo'
         )
       "
     >

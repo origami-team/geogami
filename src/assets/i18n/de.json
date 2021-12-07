@@ -10,7 +10,9 @@
             "info": "Info",
             "done": "Fertig",
             "OK": "Okay",
-            "start": "Start"
+            "start": "Start",
+            "pl_text": "Text",
+            "pl_optional": "(optional)"
     },
 
     "Tasktypes": {
@@ -142,7 +144,7 @@
             "direction": "Die gesuchte Richtung...",
             "questiontype": "Fragetyp",
             "playerAnswers": "Der Spieler antwortet...",
-            "searchArea": "Suchgebiet festlegen <i>(optional)</i>",
+            "searchArea": "Suchgebiet festlegen (optional)",
             "setLocation": "Ort festlegen",
             "confirmation": "Eingabebestätigung",
             "showFlag": "Fahne anzeigen",
@@ -152,7 +154,7 @@
             "accuracy": "Genauigkeit",
             "destination": "Zielort",
             "multipleChoice": "Multiple Choice",
-            "correctNumber": "Korrekte Antwort <i>(Zahl)</i>",
+            "correctNumber": "Korrekte Antwort (Zahl)",
             "reset": "Zurücksetzen",
             "threewrongtaskanswers": "Drei falsche Antwortmöglichkeiten:",
             "taskInstruction": "Aufgabenstellung",
@@ -197,7 +199,8 @@
             "markedArea": "das markierte Gebiet.",
             "goBack": "Gehe zurück!",
             "correctLocation": "Stehst du genau richtig? Dann drücke 'Okay'!",
-            "gamecode": "Spielcode erstellen (5 Ziffern/Buchstaben)"
+            "gamecode": "Spielcode",
+            "pl_EnterCode": "Spielcode eingeben"
     },
         
     "Showroom": {
@@ -216,7 +219,43 @@
             "mailconfirmed": "E-Mail-Adresse bestätigt",
             "registered": "Registriert am:",
             "roles": "Rollen",
-            "registerUser": "Nutzer registrieren"
+            "registerUser": "Nutzer registrieren",
+            "pl_usernameOREmail": "Benutzername oder E-Mail",
+            "pl_username": "Benutzername",
+            "pl_password": "Passwort",
+            "pl_newPassword": "Neues Passwort"
+    },
+
+    "Popover": {
+            "chooseComponent": "Tippe die Felder an, um mehr über die Aufgabentypen zu erfahren.",
+            "showFeedback": "Soll der/die Spieler:in Feedback darüber erhalten, ob die Aufgabe korrekt gelöst wurde?",
+            "gameArea": "Soll das Spiel auf einen Kartenausschnitt begrenzt werden?",
+            "leaveGameArea": "Soll dem/der Spieler:in beim Verlassen der markierten Region eine Warnung angezeigt werden?",
+            "outlinedGameArea": "Soll der gewählte Kartenausschnitt im Spiel umrandet dargestellt werden?",
+            "invisibleGameArea": "Soll der gewählte Kartenausschnitt im Spiel nicht dargestellt werden?",
+            "searchArea": "Markiere ein Suchgebiet, das dem/der Spieler:in als Hilfe angezeigt werden soll.",
+            "markLocation": "Tippe auf die Karte, um einen Ort festzulegen.",
+            "confirmLocation": "Soll der/die Spieler:in die Ankunft am Ziel mit 'Okay' bestätigen?",
+            "showFlag": "Soll eine Zielfahne auf der Karte angezeigt werden?",
+            "severalAttempts": "Darf der/die Spieler:in probieren, sich zu verbessern, wenn die Aufgabe falsch gelöst wurde?",
+            "keepFlag": "Soll die Zielfahne weiterhin angezeigt werden, nachdem die Aufgabe gelöst wurde?",
+            "accuracy": "Setze die Genauigkeit auf >10m, wenn der markierte Punkt an einem Ort ist, an dem sich hohe Gebäude oder dichte Baumkronen befinden, oder wenn du ein größeres Gebiet als korrekte Lösung zulassen möchtest.",
+            "flag": "Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.",
+            "photoMC": "Wähle ein Foto für die korrekte Lösung. Wähle außerdem drei weitere Fotos, die nicht der korrekten Lösung entsprechen.",
+            "textMC": "Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder.",
+            "number": "Schreibe die richtige Aufgabenlösung (Zahl) in das Feld.",
+            "photo": "Dieses Foto wird im Spiel angezeigt.",
+            "gameCode": "Füge einen fünfstelligen Spielcode (Zahlen/Buchstaben) hinzu. Öffne die VR Welt und gib den Code dort ein.",
+            "markdown": "Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet",
+            "taskInstruction": "Diese Aufgabenstellung wird im Spiel angezeigt.",
+            "navInstruction": "Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.",
+            "audioMessage": "Klicke auf den Record Button um eine Audiobotschaft aufzunehmen oder die Aufgabe vorzulesen.",
+            "objectLocation": "Markiere das gesuchte Objekt. Klicke dazu auf das kleine Quadrat, umrande das Objekt mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um die Auswahl zu bestätigen.",
+            "markedMap": "Die gewählte Kartenmarkierung wird dem/der Spieler:in mit der Aufgabenstellung angezeigt.",
+            "objectPhoto": "Füge ein Foto vom gesuchten Objekt ein. Es wird im Spiel angezeigt.",
+            "destinationDirection": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung.",
+            "directionMap": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung. Die Markierung wird im Spiel angezeigt.",
+            "photoDirection": "Wähle ein Foto, das die gesuchte Blickrichtung darstellt."
     }
 
 }
