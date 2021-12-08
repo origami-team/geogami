@@ -37,7 +37,7 @@
   <ion-text>
     <h5>{{ "General.tasktype" | translate }}</h5>
   </ion-text>
-  <select interface="popover" *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompare"
+  <select interface="popover" *ngIf="type == 'nav'" [compareWith]="selectCompare"
     [(ngModel)]="task" (ngModelChange)="onTaskSelected($event)">
     <option [ngValue]="myTask" *ngFor="let myTask of tasks">{{ myTask.name }}</option>
   </select>
@@ -131,7 +131,7 @@
         <h5>{{ "CreateGame.searchArea" | translate }}
           <ion-label>
             <ion-icon name="information-circle"
-              (click)="showPopover($event, 'Markiere ein Suchgebiet, das dem Spieler als Hilfe angezeigt werden soll.')">
+              (click)="showPopover($event, 'PopOver.searchArea')">
             </ion-icon>
           </ion-label>
         </h5>
@@ -142,7 +142,7 @@
       <ion-item lines="none">
         <ion-label>{{ "CreateGame.setLocation" | translate }}
           <ion-icon name="information-circle"
-            (click)="showPopover($event, 'Tippe auf die Karte um einen Ort festzulegen.')">
+            (click)="showPopover($event, 'PopOver.markLocation')">
           </ion-icon>
         </ion-label>
         <ion-toggle color="secondary" [(ngModel)]="viewDirectionSetPosition">
@@ -162,7 +162,7 @@
     <ion-item lines="none" *ngIf="task.type == 'nav-flag'">
       <ion-label>{{ "CreateGame.confirmation" | translate }}
         <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Soll der Spieler seine Ankunft am Ziel mit OK bestätigen?')">
+          (click)="showPopover($event, 'PopOver.confirmLocation')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.confirmation" (ngModelChange)="settingsChange($event)"></ion-toggle>
@@ -170,7 +170,7 @@
     <ion-item lines="none" *ngIf="task.type == 'nav-text' || task.type == 'nav-photo'">
       <ion-label>{{ "CreateGame.showFlag" | translate }}
         <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Soll eine Zielfahne auf der Karte angezeigt werden?')">
+          (click)="showPopover($event, 'PopOver.showFlag')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.showMarker" (ngModelChange)="settingsChange()"></ion-toggle>
@@ -178,7 +178,7 @@
     <ion-item lines="none" *ngIf="showFeedback">
       <ion-label>{{ "CreateGame.feedback" | translate }}
         <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Soll der Spieler Feedback darüber erhalten, ob er die Aufgabe korrekt gelöst hat?')">
+          (click)="showPopover($event, 'PopOver.showFeedback')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.feedback" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
@@ -187,7 +187,7 @@
     <ion-item lines="none" *ngIf="showMultipleTries">
       <ion-label>{{ "CreateGame.severalTrials" | translate }}
         <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Darf der Spieler probieren, sich zu verbessern, wenn er die Aufgabe falsch gelöst hat?')">
+          (click)="showPopover($event, 'PopOver.severalAttempts')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
@@ -197,7 +197,7 @@
     <ion-item lines="none" *ngIf="task.category == 'nav' && task.settings.showMarker && task.type != 'nav-arrow'">
       <ion-label>{{ "CreateGame.keepFlag" | translate }}
         <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Soll die Zielfahne weiterhin angezeigt werden nachdem die Aufgabe korrekt gelöst hat?')">
+          (click)="showPopover($event, 'PopOver.keepFlag')">
         </ion-icon>
       </ion-label>
       <ion-toggle [(ngModel)]="task.settings.keepMarker" [color]="primary"></ion-toggle>
@@ -205,7 +205,7 @@
     <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction' && task.type != 'free'">
       <ion-label>{{ "CreateGame.accuracy" | translate }}
         <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Setze die Genauigkeit auf >10m, wenn der markierte Punkt an einem Ort ist, an dem sich hohe Gebäude oder dichte Baumkronen befinden, oder wenn du ein größeres Gebiet als korrekte Lösung zulassen möchtest.')">
+          (click)="showPopover($event, 'PopOver.accuracy')">
         </ion-icon>
       </ion-label>
       <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="50" [step]="step" snaps
