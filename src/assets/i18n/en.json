@@ -85,8 +85,7 @@
     "CreateTasks": {
             "combineTasks": "Create your GeoGami:",
             "information": "Information",
-            "chooseComponents": "Choose from the following components:",
-            "popover_chooseComponent": "Click the fields to learn more about the task types."
+            "chooseComponents": "Choose from the following components:"
     },
 
     "SaveGame": {
