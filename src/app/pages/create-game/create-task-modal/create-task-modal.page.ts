@@ -21,6 +21,7 @@ import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal
 import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -74,7 +75,10 @@ export class CreateTaskModalPage implements OnInit {
 
   viewDirectionSetPosition = false;
 
-  constructor(public modalController: ModalController, public popoverController: PopoverController) { }
+  constructor(public modalController: ModalController, 
+    public popoverController: PopoverController,
+    private translate: TranslateService
+    ) { }
 
   ngOnInit() {
     if (this.type == 'nav') {
@@ -341,7 +345,9 @@ export class CreateTaskModalPage implements OnInit {
     });
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

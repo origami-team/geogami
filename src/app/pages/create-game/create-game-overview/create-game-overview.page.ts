@@ -26,6 +26,7 @@ import { featureCollection } from '@turf/helpers';
 
 // VR world
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -61,7 +62,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     public gameFactory: GameFactoryService,
     public gamesService: GamesService,
     private changeDetectorRef: ChangeDetectorRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {
     this.lottieConfig = {
       path: 'assets/lottie/astronaut.json',
@@ -529,7 +531,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
     this.navCtrl.navigateRoot('/');
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
     console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,

@@ -5,6 +5,7 @@ import {
 import { QuestionType, TaskMode } from './../../../../models/types';
 import { PopoverComponent } from 'src/app/popover/popover.component';
 import { PopoverController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     questionTypeEnum = QuestionType;
     taskModeEnum = TaskMode;
 
-    constructor(public popoverController: PopoverController) { }
+    constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         console.log(changes);
@@ -35,7 +36,8 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     }
 
-    async showPopover(ev: any, text: string) {
+    async showPopover(ev: any, key: string) {
+        let text = this.translate.instant(key);
         console.log(ev);
         const popover = await this.popoverController.create({
             component: PopoverComponent,

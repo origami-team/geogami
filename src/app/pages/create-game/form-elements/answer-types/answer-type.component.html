@@ -1,7 +1,7 @@
 <div *ngIf="answer.type == answerTypeEnum.POSITION">
     <h5>{{ "CreateGame.destination" | translate }}
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'PopOver.flag')">
+            (click)="showPopover($event, 'Popover.flag')">
         </ion-icon>
     </h5>
     <app-map featureType="point" drawTheme="nav" [(feature)]="answer.position" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
@@ -10,7 +10,7 @@
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
     <h5>{{ "CreateGame.multipleChoice" | translate }}
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'PopOver.photoMC')">
+            (click)="showPopover($event, 'Popover.photoMC')">
         </ion-icon>
     </h5>
     <app-photo-upload-multiple-choice [(photos)]="answer.photos" [taskType]="taskType">
@@ -20,7 +20,7 @@
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
     <h5>{{ "CreateGame.multipleChoice" | translate }}
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'PopOver.textMC')">
+            (click)="showPopover($event, 'Popover.textMC')">
         </ion-icon>
     </h5>
     <app-multiple-choice-text [(answers)]="answer.choices"></app-multiple-choice-text>
@@ -29,7 +29,7 @@
 <div *ngIf="answer.type == answerTypeEnum.NUMBER">
     <h5>{{ "CreateGame.correctNumber" | translate }}
         <ion-icon name="information-circle"
-            (click)="showPopover($event, 'PopOver.number')">
+            (click)="showPopover($event, 'Popover.number')">
         </ion-icon>
     </h5>
     <ion-input type="number" [(ngModel)]="answer.number"></ion-input>

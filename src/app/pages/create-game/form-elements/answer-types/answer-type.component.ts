@@ -5,6 +5,7 @@ import {
 import { AnswerType } from './../../../../models/types';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
 
     answerTypeEnum = AnswerType;
 
-    constructor(public popoverController: PopoverController) { }
+    constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.answerChange.emit(changes.answer.currentValue);
@@ -32,7 +33,9 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
     ngOnInit() {
     }
 
-    async showPopover(ev: any, text: string) {
+    async showPopover(ev: any, key: string) {
+        let text = this.translate.instant(key);
+
         console.log(ev);
         const popover = await this.popoverController.create({
             component: PopoverComponent,
