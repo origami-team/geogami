@@ -24,6 +24,7 @@ import { AnswerType, QuestionType } from 'src/app/models/types';
 import { LandmarkControl } from 'src/app/mapControllers/landmark-control';
 import { featureCollection } from '@turf/helpers';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -58,6 +59,7 @@ export class EditGameOverviewPage implements AfterViewInit {
     public gamesService: GamesService,
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private translate: TranslateService
 
   ) {
     this.lottieConfig = {
@@ -426,7 +428,9 @@ export class EditGameOverviewPage implements AfterViewInit {
     this.navCtrl.navigateRoot('/');
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
     console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,

@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-game-detail',
@@ -32,7 +33,8 @@ export class GameDetailPage implements OnInit {
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
     private gamesService: GamesService,
-    public popoverController: PopoverController) { }
+    public popoverController: PopoverController,
+    private translate: TranslateService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -99,7 +101,9 @@ export class GameDetailPage implements OnInit {
     this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,
