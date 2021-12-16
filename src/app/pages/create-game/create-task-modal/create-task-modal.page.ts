@@ -272,6 +272,14 @@ export class CreateTaskModalPage implements OnInit {
           }))
         )
       );
+
+      if (this.task.question.type == QuestionType.MAP_DIRECTION) {
+        this.task.settings.multipleTries = false;
+        this.showMultipleTries = false;
+      } else {
+        this.task.settings.multipleTries = true;
+        this.showMultipleTries = true;
+      }
     }
   }
 
