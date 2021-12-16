@@ -543,6 +543,10 @@ export class FeedbackComponent {
       this.showHint(options);
     }
 
+    if (this.task.answer.type === AnswerType.MAP_DIRECTION) {
+      this.showHint(options);
+    }
+
     this.showFeedback = true;
 
     if (type != FeedbackType.TryAgain) {
@@ -640,12 +644,18 @@ export class FeedbackComponent {
       console.log(this.Math.abs(options.clickDirection - evalDirection));
 
       if (this.Math.abs(options.clickDirection - evalDirection) <= 45) {
-        this.feedback.hint = `Das ist fast richtig.`;
+        this.feedback.hint =
+          this.task.answer?.hints?.[0] ?? `Das ist fast richtig.`;
       } else if (this.Math.abs(options.clickDirection - evalDirection) <= 135) {
-        this.feedback.hint = `Die Richtung stimmt nicht.`;
+        this.feedback.hint =
+          this.task.answer?.hints?.[1] ?? `Die Richtung stimmt nicht.`;
       } else {
-        this.feedback.hint = `Die Richtung stimmt nicht. Schau noch einmal nach, was auf deiner linken und deiner rechten Seite zu sehen ist.`;
+        this.feedback.hint =
+          this.task.answer?.hints?.[2] ??
+          `Die Richtung stimmt nicht. Schau noch einmal nach, was auf deiner linken und deiner rechten Seite zu sehen ist.`;
       }
+      console.log(this.feedback.hint);
+      this.changeDetectorRef.detectChanges();
     }
 
     if (this.task.answer.type == AnswerType.NUMBER) {

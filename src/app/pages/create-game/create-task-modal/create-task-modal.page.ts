@@ -370,6 +370,18 @@ export class CreateTaskModalPage implements OnInit {
 
       this.showMultipleTries = false;
     }
+
+    if (
+      this.task.answer.type == AnswerType.MAP_DIRECTION &&
+      this.task.settings.feedback &&
+      !this.task.settings.multipleTries
+    ) {
+      this.task.answer.hints = [
+        "Probiere es noch einmal",
+        "Probiere es noch einmal",
+        "Probiere es noch einmal",
+      ];
+    }
   }
 
   selectCompare(task1, task2) {

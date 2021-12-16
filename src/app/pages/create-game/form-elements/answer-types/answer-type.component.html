@@ -87,3 +87,17 @@
   </h5>
   <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
 </div>
+
+<div *ngIf="answer.type == answerTypeEnum.MAP_DIRECTION">
+  <div *ngIf="settings.feedback && !settings.multipleTries">
+    <ion-text>
+      <h5>Feedback</h5>
+    </ion-text>
+    <ion-label>Abweichung &lt; 45°</ion-label>
+    <ion-textarea autoGrow [(ngModel)]="answer.hints[0]"></ion-textarea>
+    <ion-label>Abweichung &gt; 45° und &lt; 135°</ion-label>
+    <ion-textarea autoGrow [(ngModel)]="answer.hints[1]"></ion-textarea>
+    <ion-label>Abweichung &gt; 135°</ion-label>
+    <ion-textarea autoGrow [(ngModel)]="answer.hints[2]"></ion-textarea>
+  </div>
+</div>
