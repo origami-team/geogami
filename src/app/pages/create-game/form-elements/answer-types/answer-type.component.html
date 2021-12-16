@@ -45,6 +45,18 @@
   <h5>
     Multiple Choice Text
     <ion-icon
+      *ngIf="!settings.feedback"
+      name="information-circle"
+      (click)="
+        showPopover(
+          $event,
+          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder.'
+        )
+      "
+    >
+    </ion-icon>
+    <ion-icon
+      *ngIf="settings.feedback"
       name="information-circle"
       (click)="
         showPopover(
@@ -58,6 +70,7 @@
   <app-multiple-choice-text
     [(answers)]="answer.choices"
     [(hints)]="answer.hints"
+    [feedback]="settings.feedback"
   ></app-multiple-choice-text>
 </div>
 

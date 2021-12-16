@@ -20,6 +20,7 @@ export class MultipleChoiceTextComponent implements OnInit {
     "Probiere es noch einmal.",
     "Probiere es noch einmal.",
   ];
+  @Input() feedback: boolean;
 
   @Output() answersChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() hintsChange: EventEmitter<any> = new EventEmitter<any>();

@@ -8,6 +8,7 @@
       ></ion-textarea>
     </div>
     <ion-textarea
+      *ngIf="feedback"
       autoGrow
       [(ngModel)]="hints[0]"
       (ngModelChange)="onChange()"
@@ -22,6 +23,7 @@
       ></ion-textarea>
     </div>
     <ion-textarea
+      *ngIf="feedback"
       autoGrow
       [(ngModel)]="hints[1]"
       (ngModelChange)="onChange()"
@@ -36,6 +38,7 @@
       ></ion-textarea>
     </div>
     <ion-textarea
+      *ngIf="feedback"
       autoGrow
       [(ngModel)]="hints[2]"
       (ngModelChange)="onChange()"
@@ -50,6 +53,7 @@
       ></ion-textarea>
     </div>
     <ion-textarea
+      *ngIf="feedback"
       autoGrow
       [(ngModel)]="hints[3]"
       (ngModelChange)="onChange()"
