@@ -13,6 +13,7 @@ import { Plugins, Capacitor, GeolocationPosition } from "@capacitor/core";
 import centroid from "@turf/centroid";
 import { OrigamiOrientationService } from "src/app/services/origami-orientation.service";
 import { DomSanitizer } from "@angular/platform-browser";
+import mapboxgl from "mapbox-gl";
 
 enum FeedbackType {
   Correct,
@@ -483,6 +484,30 @@ export class FeedbackComponent {
         this.feedback.text = this.sanitizer.bypassSecurityTrustHtml(
           'Das stimmt leider nicht.<br />Die richtige Lösung wird <ion-text color="success">grün</ion-text> angezeigt.'
         );
+
+        if (
+          this.task.answer.type === AnswerType.MAP_POINT &&
+          this.task.type == "theme-loc"
+        ) {
+          const bounds = new mapboxgl.LngLatBounds();
+          bounds.extend(options.clickPosition);
+          console.log(this.lastKnownPosition.coords);
+          bounds.extend([
+            this.lastKnownPosition.coords.longitude,
+            this.lastKnownPosition.coords.latitude,
+          ]);
+
+          this.map.fitBounds(bounds, {
+            padding: {
+              top: 80,
+              bottom: 500,
+              left: 40,
+              right: 40,
+            },
+            duration: 1000,
+            maxZoom: 16,
+          });
+        }
 
         if (
           this.task.answer.type === AnswerType.MULTIPLE_CHOICE ||
