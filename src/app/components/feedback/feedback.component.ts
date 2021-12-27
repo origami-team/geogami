@@ -17,6 +17,7 @@ import { OrigamiOrientationService } from 'src/app/services/origami-orientation.
 import { AvatarPosition } from 'src/app/models/avatarPosition';
 import { Coords } from 'src/app/models/coords'
 import { environment } from 'src/environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 
 enum FeedbackType {
@@ -71,7 +72,7 @@ export class FeedbackComponent {
 
     private DIRECTION_TRESHOLD = 30;
 
-     constructor(private orientationService: OrigamiOrientationService, private changeDetectorRef: ChangeDetectorRef) { }
+     constructor(private orientationService: OrigamiOrientationService, private changeDetectorRef: ChangeDetectorRef, private translate: TranslateService) { }
 
     init(map: any, geolocationService: OrigamiGeolocationService, helperService: HelperService, toastController: ToastController, trackerService: TrackerService, playingGamePage: PlayingGamePage) {
         this.map = map;
@@ -207,7 +208,7 @@ export class FeedbackComponent {
                 this.initFeedback(distance < PlayingGamePage.triggerTreshold, { distance, clickPosition });
             } else {
                 const toast = await this.toastController.create({
-                    message: 'Bitte setze zuerst deine Position',
+                    message: this.translate.instant("Feedback.setPosition"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -237,7 +238,7 @@ export class FeedbackComponent {
                 }
             } else {
                 const toast = await this.toastController.create({
-                    message: 'Bitte wähle zuerst ein Foto',
+                    message: this.translate.instant("Feedback.choosePhoto"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -265,7 +266,7 @@ export class FeedbackComponent {
                 }
             } else {
                 const toast = await this.toastController.create({
-                    message: 'Bitte wähle zuerst eine Antwort',
+                    message: this.translate.instant("Feedback.chooseAnswer"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -282,7 +283,7 @@ export class FeedbackComponent {
         if (this.task.answer.type == AnswerType.PHOTO) {
             if (photo == '') {
                 const toast = await this.toastController.create({
-                    message: 'Bitte mache ein Foto',
+                    message: this.translate.instant("Feedback.takePhoto"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -318,7 +319,7 @@ export class FeedbackComponent {
                 };
             } else {
                 const toast = await this.toastController.create({
-                    message: 'Bitte setze zuerst einen Punkt auf der Karte',
+                    message: this.translate.instant("Feedback.setPoint"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -357,7 +358,7 @@ export class FeedbackComponent {
                 };
             } else {
                 const toast = await this.toastController.create({
-                    message: 'Bitte setze zuerst deine Blickrichtung',
+                    message: this.translate.instant("Feedback.setLineofsight"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -381,7 +382,7 @@ export class FeedbackComponent {
                 };
             } else {
                 const toast = await this.toastController.create({
-                    message: 'Bitte gib zuerst eine Zahl ein',
+                    message: this.translate.instant("Feedback.enterNumber"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -405,7 +406,7 @@ export class FeedbackComponent {
                 };
             } else {
                 const toast = await this.toastController.create({
-                    message: 'Bitte gib zuerst eine Antwort ein',
+                    message: this.translate.instant("Feedback.enterAnswer"),
                     color: 'dark',
                     // showCloseButton: true,
                     duration: 2000
@@ -453,24 +454,24 @@ export class FeedbackComponent {
         switch (type) {
             case FeedbackType.Correct:
                 this.feedback.icon = '😊';
-                this.feedback.text = 'Du hast die Aufgabe richtig gelöst!';
+                this.feedback.text = this.translate.instant("Feedback.correct");
                 break;
             case FeedbackType.Wrong:
                 this.feedback.icon = '😕';
-                this.feedback.text = 'Das stimmt leider nicht. Die richtige Lösung wird in Grün angezeigt.';
+                this.feedback.text = this.translate.instant("Feedback.wrong");
                 break;
             case FeedbackType.TryAgain:
                 this.feedback.icon = '😕';
-                this.feedback.text = 'Probiere es noch einmal!';
+                this.feedback.text = this.translate.instant("Feedback.tryAgain");
                 this.feedbackRetry = true;
                 break;
             case FeedbackType.Saved:
                 this.feedback.icon = '';
-                this.feedback.text = 'Deine Antwort wurde gespeichert!';
+                this.feedback.text = this.translate.instant("Feedback.saved");
                 break;
             case FeedbackType.Success:
                 this.feedback.icon = '';
-                this.feedback.text = 'Ziel erreicht!';
+                this.feedback.text = this.translate.instant("Feedback.success");
                 break;
         }
 
@@ -525,18 +526,18 @@ export class FeedbackComponent {
             const distance = this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude));
             const evalDistance = distance - (PlayingGamePage.triggerTreshold as number);
             if (evalDistance > 10) {
-                this.feedback.hint = `Du bist ${distance.toFixed(1)} m vom Ziel entfernt.`;
+                this.feedback.hint = this.translate.instant("Feedback.distanceFromDistanation1", {distance: `${distance.toFixed(1)}`});
             } else {
-                this.feedback.hint = `Du bist sehr nah am Ziel.`;
+                this.feedback.hint = this.translate.instant("Feedback.youAreNearGoal");
             }
         }
 
         if (this.task.type == 'theme-loc') {
             const evalDistance = options.distance - (PlayingGamePage.triggerTreshold as number);
             if (evalDistance > 10) {
-                this.feedback.hint = `Du liegst ${options.distance.toFixed(1)} m daneben.`;
+                this.feedback.hint = this.translate.instant("Feedback.distanceFromDistanation2", {distance: `${options.distance.toFixed(1)}`});
             } else {
-                this.feedback.hint = `Du bist sehr nah dran.`;
+                this.feedback.hint = this.translate.instant("Feedback.youAreNear");
             }
         }
 
@@ -555,9 +556,9 @@ export class FeedbackComponent {
             const distance = this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], center.geometry.coordinates[1], center.geometry.coordinates[0]);
             const evalDistance = distance - (PlayingGamePage.triggerTreshold as number);
             if (evalDistance > 10) {
-                this.feedback.hint = `Du liegst ${distance.toFixed(1)} m daneben.`;
+                this.feedback.hint = this.translate.instant("Feedback.distanceFromDistanation2", {distance: `${distance.toFixed(1)}`});
             } else {
-                this.feedback.hint = `Du bist sehr nah dran.`;
+                this.feedback.hint = this.translate.instant("Feedback.youAreNear");
             }
 
         }
@@ -567,11 +568,11 @@ export class FeedbackComponent {
 
 
             if (this.Math.abs(options.clickDirection - this.task.question.direction.bearing) <= 45) {
-                this.feedback.hint = `Das ist fast richtig.`;
+                this.feedback.hint = this.translate.instant("Feedback.directionRight");
             } else if (this.Math.abs(options.clickDirection - this.task.question.direction.bearing) <= 135) {
-                this.feedback.hint = `Die Richtung stimmt nicht.`;
+                this.feedback.hint = this.translate.instant("Feedback.directionWrong");
             } else {
-                this.feedback.hint = `Die Richtung stimmt nicht. Schau noch einmal nach, was auf deiner linken und deiner rechten Seite zu sehen ist.`;
+                this.feedback.hint = this.translate.instant("Feedback.directionWrongHint");
             }
         }
 
@@ -630,12 +631,12 @@ export class FeedbackComponent {
         }
 
         if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
-            this.feedback.solution = `Die korrekte Lösung ist`;
+            this.feedback.solution = this.translate.instant("Feedback.correctAnswerIs1");
             this.feedback.img = this.task.answer.photos[0];
         }
 
         if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
-            this.feedback.solution = `Die korrekte Lösung ist ${this.task.answer.choices[0]}`;
+            this.feedback.solution = this.translate.instant("Feedback.correctAnswerIs2", {answer: `${this.task.answer.choices[0]}`});
         }
 
         if (this.task.answer.type == AnswerType.MAP_POINT && this.task.type != 'theme-loc') {

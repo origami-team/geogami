@@ -7,6 +7,7 @@
                 "tasktype": "Task type",
                 "tasktypes": "Task types",
                 "task": "Task",
+                "tasks": "Tasks",
                 "info": "Info",
                 "done": "Done",
                 "OK": "Okay",
@@ -257,6 +258,31 @@
                 "destinationDirection": "Mark the direction to be searched on the map. First select the location and then the view direction.",
                 "directionMap": "Mark the direction to be searched on the map. First select the location and then the view direction. The marker will be displayed in the game.",
                 "photoDirection": "Choose a photo that represents the view direction to be searched."
-        }
+        },
+    
+        "Feedback": {
+                "correct": "You solved the task correctly!",
+                "wrong": "Unfortunately that is not true. The correct solution is displayed in green.",
+                "tryAgain": "Try again!",
+                "saved": "Your answer has been saved!",
+                "success": "Goal achieved!",
+                "setPosition": "Please set your position first",
+                "choosePhoto": "Please choose a photo first",
+                "chooseAnswer": "Please choose an answer first",
+                "takePhoto": "Please take a photo",
+                "setPoint": "Please set a point on the map first",
+                "setLineofsight": "Please set your viewing direction first",
+                "enterNumber": "Please enter a number first",
+                "enterAnswer": "Please enter an answer first",
+                "distanceFromDistanation1": "You are {{distance}} m away from the destination.",
+                "distanceFromDistanation2": "You are {{distance}} m away.",
+                "youAreNear": "You are very close.",
+                "youAreNearGoal": "You are very close to the goal.",
+                "directionRight": "That's almost right.",
+                "directionWrong": "The direction is wrong.",
+                "directionWrongHint": "The direction is wrong. Look again to see what's on your left and right side.",
+                "correctAnswerIs1": "The correct answer is",
+                "correctAnswerIs2": "The correct answer is {{answer}}"
+        } 
     
     }

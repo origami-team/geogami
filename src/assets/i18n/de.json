@@ -7,6 +7,7 @@
             "tasktype": "Aufgabentyp",
             "tasktypes": "Aufgabentypen",
             "task": "Aufgabe",
+            "tasks": "Aufgaben",
             "info": "Info",
             "done": "Fertig",
             "OK": "Okay",
@@ -257,6 +258,31 @@
             "destinationDirection": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung.",
             "directionMap": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung. Die Markierung wird im Spiel angezeigt.",
             "photoDirection": "Wähle ein Foto, das die gesuchte Blickrichtung darstellt."
+    },
+    
+    "Feedback": {
+            "correct": "Du hast die Aufgabe richtig gelöst!",
+            "wrong": "Das stimmt leider nicht. Die richtige Lösung wird in Grün angezeigt.",
+            "tryAgain": "Probiere es noch einmal!",
+            "saved": "Deine Antwort wurde gespeichert!",
+            "success": "Ziel erreicht!",
+            "setPosition": "Bitte setze zuerst deine Position",
+            "choosePhoto": "Bitte wähle zuerst ein Foto",
+            "chooseAnswer": "Bitte wähle zuerst eine Antwort",
+            "takePhoto": "Bitte mache ein Foto",
+            "setPoint": "Bitte setze zuerst einen Punkt auf der Karte",
+            "setLineofsight": "Bitte setze zuerst deine Blickrichtung",
+            "enterNumber": "Bitte gib zuerst eine Zahl ein",
+            "enterAnswer": "Bitte gib zuerst eine Antwort ein",
+            "distanceFromDistanation1": "Du bist {{distance}} m vom Ziel entfernt.",
+            "distanceFromDistanation2": "Du liegst {{distance}} m daneben.",
+            "youAreNear": "Du bist sehr nah dran.",
+            "youAreNearGoal": "Du bist sehr nah am Ziel.",
+            "directionRight": "Das ist fast richtig.",
+            "directionWrong": "Die Richtung stimmt nicht.",
+            "directionWrongHint": "Die Richtung stimmt nicht. Schau noch einmal nach, was auf deiner linken und deiner rechten Seite zu sehen ist.",
+            "correctAnswerIs1": "Die korrekte Lösung ist",
+            "correctAnswerIs2": "Die korrekte Lösung ist {{answer}}"
     }
 
 }
