@@ -56,16 +56,16 @@ export class CreateTaskModalPage implements OnInit {
   taskTypes: any[] = [
     {
       type: 1,
-      text: 'Selbst-Lokalisation'
+      text: this.translate.instant("Tasktypes.selfLocation")
     }, {
       type: 2,
-      text: 'Objekt-Lokalisation'
+      text: this.translate.instant("Tasktypes.objectLocation")
     }, {
       type: 3,
-      text: 'Richtungsbestimmung'
+      text: this.translate.instant("Tasktypes.directionDetermination")
     }, {
       type: 4,
-      text: 'Freie Aufgabe'
+      text: this.translate.instant("Tasktypes.freeTasks")
     }
   ];
 

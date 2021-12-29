@@ -5,7 +5,8 @@ export const navtasks: ReadonlyArray<any> = [
     {
         category: 'nav',
         type: 'nav-flag',
-        name: 'Navigation zur Zielfahne',
+        //name: 'Navigation zur Zielfahne',
+        name: 'Tasktypes.navigationToFlag',
         question: {
             type: QuestionType.TEXT,
             text: 'Gehe zur Fahne.'
@@ -19,7 +20,8 @@ export const navtasks: ReadonlyArray<any> = [
     }, {
         category: 'nav',
         type: 'nav-arrow',
-        name: 'Navigation mit Richtungspfeil',
+        //name: 'Navigation mit Richtungspfeil',
+        name: 'Tasktypes.navigationWithArrow',
         question: {
             type: QuestionType.TEXT,
             text: 'Folge dem Pfeil bis zum Ziel.'
@@ -34,7 +36,8 @@ export const navtasks: ReadonlyArray<any> = [
     }, {
         category: 'nav',
         type: 'nav-text',
-        name: 'Navigation mit Textanweisung',
+        //name: 'Navigation mit Textanweisung',
+        name: 'Tasktypes.navigationViaText',
         question: {
             type: QuestionType.NAV_INSTRUCTION,
             text: ''
@@ -48,7 +51,8 @@ export const navtasks: ReadonlyArray<any> = [
     }, {
         category: 'nav',
         type: 'nav-photo',
-        name: 'Navigation mit Foto',
+        //name: 'Navigation mit Foto',
+        name: 'Tasktypes.navigationViaPhoto',
         question: {
             type: QuestionType.NAV_INSTRUCTION_PHOTO,
             text: 'Gehe zu dem Ort, den man auf dem Foto sieht.'

@@ -39,7 +39,7 @@
   </ion-text>
   <select interface="popover" *ngIf="type == 'nav'" [compareWith]="selectCompare"
     [(ngModel)]="task" (ngModelChange)="onTaskSelected($event)">
-    <option [ngValue]="myTask" *ngFor="let myTask of tasks">{{ myTask.name }}</option>
+    <option [ngValue]="myTask" *ngFor="let myTask of tasks">{{ myTask.name | translate }}</option>
   </select>
 
   <select interface="popover" *ngIf="type != 'nav'" [compareWith]="taskTypeCompare" [(ngModel)]="selectedTaskType"
