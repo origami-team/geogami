@@ -8,7 +8,7 @@ export const themetasks: ReadonlyArray<any> = [
         category: 'theme',
         question: {
             type: QuestionType.TEXT,
-            text: 'Wo bist du jetzt? Tippe auf die Karte.'
+            text: 'QuestionText.whereAreYouNow'
         },
         answer: {
             type: AnswerType.MAP_POINT
@@ -23,7 +23,7 @@ export const themetasks: ReadonlyArray<any> = [
         category: 'theme',
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: 'Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.',
+            text: 'QuestionText.findTheHouseChoosePhoto',
         },
         answer: {
             type: AnswerType.MULTIPLE_CHOICE
@@ -37,7 +37,7 @@ export const themetasks: ReadonlyArray<any> = [
         category: 'theme',
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: 'Finde das markierte Haus in deiner Nähe. Mache ein Foto.',
+            text: 'QuestionText.findTheHouseTakePhoto',
         },
         answer: {
             type: AnswerType.PHOTO
@@ -52,7 +52,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textPhoto',
         question: {
             type: QuestionType.MAP_FEATURE_PHOTO,
-            text: 'Suche dieses Haus in deiner Nähe. Finde es auf der Karte und tippe es an.',
+            text: 'QuestionText.lookForTheHouse',
         },
         answer: {
             type: AnswerType.MAP_POINT
@@ -67,7 +67,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Suche [...] in deiner Nähe. Finde es auf der Karte und tippe es an.',
+            text: 'QuestionText.lookForSThingTap',
             mode: TaskMode.NO_FEATURE
         },
         answerType: 'mapPoint',
@@ -85,7 +85,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Suche [...] in deiner Nähe. Wähle das passende Foto.'
+            text: 'QuestionText.lookForSThingChoosePhoto'
         },
         answerType: 'multipleChoice',
         answer: {
@@ -101,7 +101,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Suche [...] in deiner Nähe. Mache ein Foto.'
+            text: 'QuestionText.lookForSThingTakePhoto'
         },
         answerType: 'photo',
         answer: {
@@ -118,7 +118,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textMapFeature',
         question: {
             type: QuestionType.MAP_DIRECTION_MARKER,
-            text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst. Wähle das passende Foto.'
+            text: 'QuestionText.turnDirectionChoosePhoto'
         },
         answerType: 'multipleChoice',
         answer: {
@@ -134,7 +134,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textMapFeature',
         question: {
             type: QuestionType.MAP_DIRECTION_MARKER,
-            text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst.'
+            text: 'QuestionText.turnDirection'
         },
         answerType: 'direction',
         answer: {
@@ -150,7 +150,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textOrientation',
         question: {
             type: QuestionType.MAP_DIRECTION,
-            text: 'Drehe dich, bis die Pfeile in die gleiche Richtung zeigen.'
+            text: 'QuestionText.turnDirectionArrow'
         },
         answerType: 'direction',
         answer: {
@@ -167,7 +167,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte.'
+            text: 'QuestionText.whereAreYouLooking'
         },
         answer: {
             type: AnswerType.MAP_DIRECTION,
@@ -183,7 +183,7 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textPhoto',
         question: {
             type: QuestionType.MAP_DIRECTION_PHOTO,
-            text: 'Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte.'
+            text: 'QuestionText.turnDirectionPhoto'
         },
         answerType: 'mapDirection',
         answer: {

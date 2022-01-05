@@ -86,7 +86,7 @@
       <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
         interface="popover">
         <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
-          {{ option.text | typeToText: task.type : false }}</option>
+          {{ option.text | typeToText: task.type : false | translate }}</option>
       </select>
     </div>
     <div>
@@ -95,7 +95,7 @@
       </ion-text>
       <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
         <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
-          {{ option.text | typeToText: task.type : true }}</option>
+          {{ option.text | typeToText: task.type : true | translate }}</option>
       </select>
     </div>
   </div>
@@ -108,7 +108,7 @@
       <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
         interface="popover">
         <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
-          {{ option.text | typeToText: task.type : false }}</option>
+          {{ option.text | typeToText: task.type : false | translate }}</option>
       </select>
     </div>
     <div>
@@ -117,7 +117,7 @@
       </ion-text>
       <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
         <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
-          {{ option.text | typeToText: task.type : true }}</option>
+          {{ option.text | typeToText: task.type : true | translate}}</option>
       </select>
     </div>
   </div>

@@ -283,6 +283,44 @@
                 "directionWrongHint": "The direction is wrong. Look again to see what's on your left and right side.",
                 "correctAnswerIs1": "The correct answer is",
                 "correctAnswerIs2": "The correct answer is {{answer}}"
+        },
+        
+        "QuestionText": {
+                "goToFlag": "Go to the flag.",
+                "followTheArrow": "Follow the arrow to the target.",
+                "goToPlace": "Go to the place shown in the photo.",
+                "whereAreYouNow": "Where are you now? Tap on the map.",
+                "findTheHouseChoosePhoto": "Find the highlighted house near you. Choose the appropriate photo.",
+                "findTheHouseTakePhoto": "Find the highlighted house near you. Take a photo.",
+                "lookForTheHouse": "Find this house near you. Find it on the map and tap it.",
+                "lookForSThingTap": "Search [...] near you. Find it on the map and tap it.",
+                "lookForSThingChoosePhoto": "Search [...] near you. Choose the appropriate photo.",
+                "lookForSThingTakePhoto": "Search [...] near you. Take a photo.",
+                "turnDirectionChoosePhoto": "Turn to the direction you see on the map. Choose the appropriate photo.",
+                "turnDirection": "Turn the direction you see on the map.",
+                "turnDirectionArrow": "Turn in to the direction you see on the map.",
+                "whereAreYouLooking": "Where are you looking now? Mark your viewing-direction on the map..",
+                "turnDirectionPhoto": "Turn in the direction of the photo. Mark your viewing-direction on the map."
+        },
+    
+        "QuestionType": {
+                "isShownOnMap": "... is shown on the map",
+                "isDisplayedAsPhoto": "... is displayed as a photo",
+                "withDiscribedText": "... is described with a text",
+                "bySelectingPhoto": "... by selecting a photo",
+                "byMarkingObject": "... by marking the object on the map",
+                "byTakingPhoto": "... by taking a photo",
+                "isDisplayedWithPhoto": "... is displayed with a photo",
+                "isIndicatedByArrow": "... is indicated by an arrow",
+                "correspondToDirection": "... corresponds to the current viewing-direction",
+                "byTakingLineOfSight": "... by taking the viewing-direction",
+                "text": "Text",
+                "textPhoto": "Text and photo",
+                "textMapMarking": "Text and map marking",
+                "bySelectingText": "... by choosing a text answer",
+                "byEnteringNumber": "... by entering a number",
+                "byMarkingDirectionOnMap": "... by marking the direction on the map",
+                "byEnteringText": "... by entering text"
         } 
     
     }

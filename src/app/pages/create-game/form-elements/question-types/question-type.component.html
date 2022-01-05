@@ -14,7 +14,8 @@
     >
     </ion-icon>
   </h5>
-  <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
+  <ion-textarea autoGrow ngModel='{{ question.text | translate }}'></ion-textarea>
+  <!-- <ion-textarea autoGrow [(ngModel)]="question.text" ></ion-textarea> -->
   <ion-text color="medium">
     <p>
       {{ "CreateGame.markdownSupported" | translate }}
@@ -46,7 +47,7 @@
     >
     </ion-icon>
   </h5>
-  <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
+  <ion-textarea autoGrow ngModel='{{ question.text | translate }}'></ion-textarea>
   <ion-text color="medium">
     <p>
       {{ "CreateGame.markdownSupported" | translate }}
@@ -91,7 +92,7 @@
     >
     </ion-icon>
   </h5>
-  <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
+  <ion-textarea autoGrow ngModel='{{ question.text | translate }}'></ion-textarea>
   <ion-text color="medium">
     <p>
       {{ "CreateGame.markdownSupported" | translate }}
