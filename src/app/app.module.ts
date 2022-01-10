@@ -34,6 +34,7 @@ import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-up
 import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component';
 
 import { TypeToTextPipe } from './pipes/typeToText.pipe';
+import { LangTranslatePipe } from './pipes/langTranslate';
 import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-recorder/audio-recorder.component';
 import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { AudioPlayerModule } from './components/audio-player/audio-player.module';
@@ -72,6 +73,7 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-users.herokuapp.com/
     QuestionTypeComponent,
     AnswerTypeComponent,
     TypeToTextPipe,
+    LangTranslatePipe,
   ],
   exports: [],
   entryComponents: [
