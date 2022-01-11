@@ -89,7 +89,7 @@
 </div>
 
 <div *ngIf="answer.type == answerTypeEnum.MAP_DIRECTION">
-  <div *ngIf="settings.feedback && !settings.multipleTries">
+  <div *ngIf="settings.feedback && settings.multipleTries">
     <ion-text>
       <h5>Feedback</h5>
     </ion-text>

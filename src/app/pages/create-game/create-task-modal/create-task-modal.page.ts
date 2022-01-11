@@ -374,7 +374,8 @@ export class CreateTaskModalPage implements OnInit {
     if (
       this.task.answer.type == AnswerType.MAP_DIRECTION &&
       this.task.settings.feedback &&
-      !this.task.settings.multipleTries
+      this.task.settings.multipleTries &&
+      !this.task.answer.hints
     ) {
       this.task.answer.hints = [
         "Probiere es noch einmal",
