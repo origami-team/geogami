@@ -9,7 +9,7 @@ export const navtasks: ReadonlyArray<any> = [
         name: 'Tasktypes.navigationToFlag',
         question: {
             type: QuestionType.TEXT,
-            text: 'QuestionText.goToFlag'
+            text: 'Gehe zur Fahne.'
         },
         answer: {
             type: AnswerType.POSITION,
@@ -24,7 +24,7 @@ export const navtasks: ReadonlyArray<any> = [
         name: 'Tasktypes.navigationWithArrow',
         question: {
             type: QuestionType.TEXT,
-            text: 'QuestionText.followTheArrow'
+            text: 'Folge dem Pfeil bis zum Ziel.'
         },
         answer: {
             type: AnswerType.POSITION,
@@ -55,7 +55,7 @@ export const navtasks: ReadonlyArray<any> = [
         name: 'Tasktypes.navigationViaPhoto',
         question: {
             type: QuestionType.NAV_INSTRUCTION_PHOTO,
-            text: 'QuestionText.followTheArrow'
+            text: 'Gehe zu dem Ort, den man auf dem Foto sieht.'
         },
         answer: {
             type: AnswerType.POSITION,
