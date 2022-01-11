@@ -37,6 +37,7 @@
     [(photos)]="answer.photos"
     [(hints)]="answer.hints"
     [taskType]="taskType"
+    [feedback]="settings.feedback && settings.multipleTries"
   >
   </app-photo-upload-multiple-choice>
 </div>
@@ -70,7 +71,7 @@
   <app-multiple-choice-text
     [(answers)]="answer.choices"
     [(hints)]="answer.hints"
-    [feedback]="settings.feedback"
+    [feedback]="settings.feedback && settings.multipleTries"
   ></app-multiple-choice-text>
 </div>
 
