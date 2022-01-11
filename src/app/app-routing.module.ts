@@ -85,7 +85,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'edit-game/edit-game-overview/:id',
+    path: 'edit-game/edit-game-overview/:bundle',
     loadChildren: () =>
       import(
         './pages/edit-game/edit-game-overview/edit-game-overview.module'

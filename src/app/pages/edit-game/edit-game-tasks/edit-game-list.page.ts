@@ -178,10 +178,16 @@ export class EditGameListPage implements OnInit {
   }
 
   uploadGame() {
+    let bundle = {
+      game_id: this.game._id,
+      isVRWorld: this.isVirtualWorld,
+      isVRMirrored: this.isVRMirrored
+    }
+
     this.gamesService.updateGame(this.game).then((res) => {
       if (res.status == 200) {
         this.navCtrl.navigateForward(
-          `edit-game/edit-game-overview/${this.game._id}`
+          `edit-game/edit-game-overview/${JSON.stringify(bundle)}`
         );
         // this.gameFactory.flushGame();
       }
