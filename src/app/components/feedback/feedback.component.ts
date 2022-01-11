@@ -2,7 +2,7 @@ import { Map as MapboxMap } from "mapbox-gl";
 import { OrigamiGeolocationService } from "../../services/origami-geolocation.service";
 import { Subscription } from "rxjs";
 import { Task } from "../../models/task";
-import { AnswerType, QuestionType } from "../../models/types";
+import { AnswerType, QuestionType, TaskMode } from "../../models/types";
 import { HelperService } from "../../services/helper.service";
 import { PlayingGamePage } from "../../pages/play-game/playing-game/playing-game.page";
 import { ToastController } from "@ionic/angular";
@@ -14,6 +14,7 @@ import centroid from "@turf/centroid";
 import { OrigamiOrientationService } from "src/app/services/origami-orientation.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import mapboxgl from "mapbox-gl";
+import bbox from "@turf/bbox";
 
 enum FeedbackType {
   Correct,
@@ -521,6 +522,45 @@ export class FeedbackComponent {
           this.feedback.text = this.sanitizer.bypassSecurityTrustHtml(
             'Das stimmt leider nicht.<br />Der <ion-text color="danger">rote Punkt</ion-text> zeigt dir, wo du bist.'
           );
+
+          const bounds = new mapboxgl.LngLatBounds();
+          bounds.extend(this.task.answer.position.coordinates);
+          bounds.extend([
+            this.lastKnownPosition.coords.longitude,
+            this.lastKnownPosition.coords.latitude,
+          ]);
+
+          this.map.fitBounds(bounds, {
+            padding: {
+              top: 80,
+              bottom: 500,
+              left: 40,
+              right: 40,
+            },
+            duration: 1000,
+            maxZoom: 16,
+          });
+        }
+
+        if (
+          this.task.type === "theme-object" &&
+          this.task.answer.type === AnswerType.MAP_POINT &&
+          this.task.answer.mode === TaskMode.NO_FEATURE
+        ) {
+          const bounds = new mapboxgl.LngLatBounds();
+          bounds.extend(options.clickPosition);
+          bounds.extend(bbox(this.task.question.geometry));
+
+          this.map.fitBounds(bounds, {
+            padding: {
+              top: 80,
+              bottom: 500,
+              left: 40,
+              right: 40,
+            },
+            duration: 1000,
+            maxZoom: 16,
+          });
         }
 
         if (
