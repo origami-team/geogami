@@ -129,7 +129,8 @@ export class CreateTaskModalPage implements OnInit {
       this.task = this.tasks[7];
     } else {
       this.task = {
-        name: 'Freie Aufgabe',
+        //name: 'Freie Aufgabe??',
+        name: this.translate.instant('Tasktypes.freeTask'),
         type: 'free',
         category: 'theme',
         question: {

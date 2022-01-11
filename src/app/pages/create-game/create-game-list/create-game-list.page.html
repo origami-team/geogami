@@ -123,7 +123,7 @@
               (click)="presentTaskModal('nav', task)"
             >
               <ion-label>
-                <ion-icon name="navigate"></ion-icon> {{ task.name }}
+                <ion-icon name="navigate"></ion-icon> {{ task.name | translate }}
               </ion-label>
             </ion-chip>
             <ion-chip
@@ -132,7 +132,7 @@
               (click)="presentTaskModal('theme', task)"
             >
               <ion-label>
-                <ion-icon name="clipboard"></ion-icon> {{ task.name }}
+                <ion-icon name="clipboard"></ion-icon> {{ task.name | translate }}
               </ion-label>
             </ion-chip>
             <ion-chip

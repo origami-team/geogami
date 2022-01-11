@@ -28,6 +28,7 @@
                 "objectLocation": "Objekt-Lokalisation",
                 "directionDetermination": "Richtungsbestimmung",
                 "freeTasks": "Freie Aufgaben",
+                "freeTask": "Freie Aufgabe",
                 "navigationtasksDescription": "Navigationsaufgaben leiten den Spieler an neue Orte.",
                 "thematictasksDescription": "Themenaufgaben sind ortsgebundene Aufgaben mit unterschiedlichem thematischem Inhalt.",
                 "informationDescription": "Über den Baustein 'Informationen' können dem Spieler Hinweise und Tipps gegeben werden.",
@@ -160,7 +161,8 @@
                 "destinationDirection": "Gewünschte Blickrichtung",
                 "directionMap": "Richtung auf der Karte",
                 "photoDirection": "Foto der zu suchenden Richtung",
-                "photoTask": "Foto zur Aufgabe"
+                "photoTask": "Foto zur Aufgabe",
+                "correctAnswer": "Die korrekte Anwort:"
         },
         "EditGame": {
                 "titleEditGame": "Bearbeite dein GeoGami",
