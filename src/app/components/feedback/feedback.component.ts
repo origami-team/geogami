@@ -616,9 +616,9 @@ export class FeedbackComponent {
       const evalDistance =
         distance - (PlayingGamePage.triggerTreshold as number);
       if (evalDistance > 10) {
-        this.feedback.hint = `${distance.toFixed(0)} m vom Ziel entfernt!`;
+        this.feedback.hint = `${distance.toFixed(0)} m daneben`;
       } else {
-        this.feedback.hint = `Nah am Ziel!`;
+        this.feedback.hint = `Nah dran!`;
       }
     }
 
