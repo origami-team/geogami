@@ -18,7 +18,7 @@ You can install GeoGami...
 
 1. **on your iOS device:** [Visit the App Store](https://apps.apple.com/de/app/origami-geogame/id1495660295) to install GeoGami on your iOS device.
 2. **on your Android device:** See APK-Files under [releases](https://github.com/origami-team/origami/releases) (you may need to allow your device to install from third party sources).
-3. **in the Browser:** [Visit app.geogami.ifgi.de](https://app.origami.ifgi.de) to get to know the app or to create games with GeoGami. _The browser version does not have the same full functionality as the iOS and Android versions._
+3. **in the Browser:** [Visit app.geogami.ifgi.de](https://app.geogami.ifgi.de) to get to know the app or to create games with GeoGami. _The browser version does not have the same full functionality as the iOS and Android versions._
 
 At the moment GeoGami is available in German language only.
 
