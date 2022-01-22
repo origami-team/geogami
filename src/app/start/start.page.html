@@ -1,66 +1,72 @@
 <ion-content fullscreen>
+
+  <ion-item lines="none" >
+    <ion-select placeholder= 🇩🇪  (ionChange)="changeTR($event.detail.value);"  interface="customPopoverOptions" interface="popover"  >
+       <ion-select-option value="de"> 🇩🇪 </ion-select-option>
+       <ion-select-option value="en"> 🇺🇸 </ion-select-option>
+       <ion-select-option value="pt"> 🇵🇹 </ion-select-option>
+    </ion-select>
+ </ion-item>
+
   <img src="assets/icons/icon.png" class="logo center" />
+
   <ion-card
     id="start_card_play"
     (click)="navigateGamesOverviewPage()"
-    color="secondary"
-  >
+    color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="game-controller"></ion-icon> Spielen
+        <ion-icon name="game-controller"></ion-icon> {{ "Start.playMode" | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Wähle ein Spiel aus der Spieleliste. </ion-card-content>
+    <ion-card-content>  {{ "Start.playModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
   <ion-card
     *ngIf="(user | async)?.username"
     id="start_card_create"
     (click)="navigateCreatePage()"
-    color="secondary"
-  >
+    color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="construct"></ion-icon> Entwickeln
+        <ion-icon name="construct"></ion-icon> {{ "Start.developMode" | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Erstelle oder bearbeite ein Spiel. </ion-card-content>
+    <ion-card-content> {{ "Start.developModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
   <ion-card
     *ngIf="(user | async)?.roles && (user | async)?.roles.includes('admin')"
     id="start_card_analyze"
     (click)="navigateAnalyzePage()"
-    color="secondary"
-  >
+    color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="ribbon"></ion-icon> Auswerten
+        <ion-icon name="ribbon"></ion-icon> {{ "Start.EvaluateMode" | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Sieh dir die Spielergebnisse an. </ion-card-content>
+    <ion-card-content> {{ "Start.EvaluateModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
   <ion-card
     id="start_showroom"
     (click)="navigateShowroomPage()"
-    color="secondary"
-  >
+    color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="bulb"></ion-icon> Lernen
+        <ion-icon name="bulb"></ion-icon> {{ "Start.learnMode" | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Erfahre mehr über die Funktionen. </ion-card-content>
+    <ion-card-content> {{ "Start.learnModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
   <ion-card id="start_info" (click)="navigateInfoPage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="information-circle"></ion-icon> ...über <b>OriGami</b>
+        <ion-icon name="information-circle"></ion-icon> {{ "Start.aboutMode" | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Erfahre mehr über die App. </ion-card-content>
+    <ion-card-content> {{ "Start.aboutModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
   <ion-card (click)="login()" *ngIf="!(user | async)?.username">
@@ -69,17 +75,17 @@
         <ion-icon name="person-outline"></ion-icon> Login
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Logge dich ein um Spiele zu erstellen </ion-card-content>
+    <ion-card-content> {{ "Start.loginModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
   <ion-card *ngIf="(user | async)?.username" (click)="navigateProfile()">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="person-outline"></ion-icon> Hallo {{ (user |
+        <ion-icon name="person-outline"></ion-icon> {{ "Start.hello" | translate }} {{ (user |
         async)?.username }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Benutzereinstellungen </ion-card-content>
+    <ion-card-content> {{ "Start.userpreferences" | translate }} </ion-card-content>
   </ion-card>
 
   <div class="ion-text-center" *ngIf="device && device.appBuild">

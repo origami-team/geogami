@@ -1,15 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/user/login"></ion-back-button>
+      <ion-back-button color="dark" defaultHref="/user/login" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
-    <ion-title>Registrieren</ion-title>
+    <ion-title>{{ "User.register" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div>
-    <h1>Nutzer registrieren</h1>
+    <h1>{{ "User.registerUser" | translate }}</h1>
     <ion-card color="danger" *ngIf="error">
       <ion-card-content> {{error}} </ion-card-content>
     </ion-card>
@@ -22,14 +22,14 @@
       ></ion-input>
       <br />
       <ion-input
-        placeholder="Benutzername"
+        placeholder="{{ 'User.pl_username' | translate }}"
         [id]="'username'"
         formControlName="username"
       ></ion-input>
       <br />
       <ion-input
         type="password"
-        placeholder="Password"
+        placeholder="{{ 'User.pl_password' | translate }}"
         [id]="'password'"
         formControlName="password"
       ></ion-input>
@@ -38,7 +38,7 @@
         expand="block"
         type="submit"
         [disabled]="loginForm.invalid || loading"
-        ><ion-spinner *ngIf="loading"></ion-spinner> Registrieren</ion-button
+        ><ion-spinner *ngIf="loading"></ion-spinner> {{ "User.register" | translate }}</ion-button
       >
     </form>
     <br />

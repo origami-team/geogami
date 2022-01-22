@@ -1,4 +1,4 @@
-<ion-label>Die korrekte Anwort:</ion-label>
+<ion-label>{{ "CreateGame.correctAnswer" | translate }}</ion-label>
 
 <div class="photo-wrapper">
   (1)&nbsp;
@@ -26,7 +26,7 @@
   ></ion-textarea>
 </div>
 
-<ion-label>Drei falsche Antwortmöglichkeiten:</ion-label>
+<ion-label>{{ "CreateGame.threewrongtaskanswers" | translate }}</ion-label>
 <div class="photo-wrapper">
   (2)&nbsp;
   <ion-thumbnail slot="start" *ngIf="photos[1]" class="preview">

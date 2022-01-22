@@ -25,7 +25,7 @@ import {
 } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 import { Game } from "src/app/models/game";
-import { interval, Subscription } from "rxjs";
+import { interval, Observable, Subscription } from "rxjs";
 import {
   RotationControl,
   RotationType,
@@ -67,6 +67,11 @@ import { throttle } from "rxjs/operators";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 
+// VR world
+import { Socket } from 'ngx-socket-io';
+import { AvatarPosition } from 'src/app/models/avatarPosition'
+import { Coords } from 'src/app/models/coords'
+
 @Component({
   selector: "app-playing-game",
   templateUrl: "./playing-game.page.html",
@@ -87,7 +92,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     public helperService: HelperService,
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService,
-    private orientationService: OrigamiOrientationService
+    private orientationService: OrigamiOrientationService,
+    private socket: Socket
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -149,6 +155,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   positionSubscription: Subscription;
   lastKnownPosition: GeolocationPosition;
+
+  // VR world
+  isVirtualWorld: boolean = false;
+  isVRMirrored: boolean = false; // for multi VR designs 
+  avatarPositionSubscription: Subscription;
+  avatarLastKnownPosition: AvatarPosition;
+  avatarOrientationSubscription: Subscription;
+  initialAvatarLoc: any;
+  currentSecond: number = 0;
+  gameCode: string = "";
 
   // degree for nav-arrow
   heading = 0;
@@ -384,14 +400,166 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     PlayingGamePage.showSuccess = false;
+
+  }
+
+  connectSocketIO() {
+    this.socket.connect();
+    /* MultiUsers in Parallel impl. */
+    this.socket.emit("newGame", {gameCode: this.gameCode});
+  }
+
+  disconnectSocketIO() {
+    this.socket.disconnect();
   }
 
   ionViewWillEnter() {
+    // VR world
+    // to seperate realworld games from VR ones in view
+    this.route.params.subscribe((params) => {
+      this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
+      this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
+      this.gameCode = JSON.parse(params.bundle).gameCode;
+    });
+
+    // Set the intial avatar location (in either normal or mirrored version)
+    this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc)
+
+    this.game = null;
+    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false);
+    this.route.params.subscribe((params) => {
+      this.gamesService
+        .getGame(JSON.parse(params.bundle).id)
+        .then((res) => res.content)
+        .then((game) => {
+          this.game = game;
+          this.loaded = true;
+
+          // VR world
+          // Check game type either real or VR world
+          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+            this.connectSocketIO();
+          }
+        });
+    });
+
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
-    let mapStyle;
+    // VR world style start
+    let virtualWorldMapStyle = {
+      'version': 8,
+      'name': 'Dark',
+      'sources': {
+        'mapbox': {
+          'type': 'vector',
+          'url': 'mapbox://mapbox.mapbox-streets-v8'
+        },
+        'overlay':
+        {
+          'type': 'image',
+          'url': (this.isVRMirrored ? environment.VR_World_2 : environment.VR_World_1), // V4
+
+          'coordinates': [
+            [0.0002307207207, 0.004459082914], // NW
+            [0.003717027207, 0.004459082914], // NE 
+            [0.003717027207, 0.0003628597122], // SE
+            [0.0002307207207, 0.0003628597122] // SW
+          ]
+        }
+      },
+      'sprite': 'mapbox://sprites/mapbox/dark-v10',
+      'glyphs': 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
+      'layers': [
+        {
+          'id': 'background',
+          'type': 'background',
+          'paint': { 'background-color': '#111' }
+        },
+        {
+          'id': 'water',
+          'source': 'mapbox',
+          'source-layer': 'water',
+          'type': 'fill',
+          'paint': { 'fill-color': '#2c2c2c' }
+        },
+        {
+          'id': 'boundaries',
+          'source': 'mapbox',
+          'source-layer': 'admin',
+          'type': 'line',
+          'paint': {
+            'line-color': '#797979',
+            'line-dasharray': [2, 2, 6, 2]
+          },
+          'filter': ['all', ['==', 'maritime', 0]]
+        },
+        {
+          'id': 'overlay',
+          'source': 'overlay',
+          'type': 'raster',
+          'paint': { 'raster-opacity': 0.85 }
+        },
+        {
+          'id': 'cities',
+          'source': 'mapbox',
+          'source-layer': 'place_label',
+          'type': 'symbol',
+          'layout': {
+            "visibility": "none",
+            'text-field': '{name_en}',
+            'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'],
+            'text-size': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              4,
+              9,
+              6,
+              12
+            ]
+          },
+          'paint': {
+            'text-color': '#969696',
+            'text-halo-width': 2,
+            'text-halo-color': 'rgba(0, 0, 0, 0.85)'
+          }
+        },
+        {
+          'id': 'states',
+          'source': 'mapbox',
+          'source-layer': 'place_label',
+          'type': 'symbol',
+          'layout': {
+            'text-transform': 'uppercase',
+            'text-field': '{name_en}',
+            'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'],
+            'text-letter-spacing': 0.15,
+            'text-max-width': 7,
+            'text-size': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              4,
+              10,
+              6,
+              14
+            ]
+          },
+          'filter': ['==', ['get', 'class'], 'state'],
+          'paint': {
+            'text-color': '#969696',
+            'text-halo-width': 2,
+            'text-halo-color': 'rgba(0, 0, 0, 0.85)'
+          }
+        }
+      ]
+    };
+    // VR world style end
+
     // if (environment.production) {
-    mapStyle = {
+
+    // Real world style start
+    let realWorldMapStyle = {
       version: 8,
       metadata: {
         "mapbox:autocomposite": true,
@@ -435,68 +603,132 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     //     : "mapbox://styles/mapbox/streets-v9"
     // }
 
+    // Set bounds of VR world 
+    var bounds = [
+      [0.0002307207207 - 0.004, 0.0003628597122 - 0.004], // Southwest coordinates
+      [0.003717027207 + 0.004, 0.004459082914 + 0.004] // Northeast coordinates
+    ];
+
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: mapStyle,
-      center: [8, 51.8],
+      style: (this.isVirtualWorld ? virtualWorldMapStyle : realWorldMapStyle),
+      center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxZoom: 18,
+      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
     });
 
-    this.geolocationService.init();
-    this.orientationService.init();
 
-    this.positionSubscription =
-      this.geolocationService.geolocationSubscription.subscribe((position) => {
-        this.trackerService.addWaypoint({});
+    this.geolocationService.init(this.isVirtualWorld);
+    this.orientationService.init(this.isVirtualWorld);
 
-        this.lastKnownPosition = position;
+    if (!this.isVirtualWorld) {
+      this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
+        (position) => {
+          this.trackerService.addWaypoint({});
 
-        if (this.task && !PlayingGamePage.showSuccess) {
-          if (this.task.answer.type == AnswerType.POSITION) {
-            if (this.task.answer.mode == TaskMode.NAV_ARROW) {
-              const destCoords = this.task.answer.position.geometry.coordinates;
-              const bearing = this.helperService.bearing(
-                position.coords.latitude,
-                position.coords.longitude,
-                destCoords[1],
-                destCoords[0]
-              );
-              this.heading = bearing;
+          this.lastKnownPosition = position;
+
+          if (this.task && !PlayingGamePage.showSuccess) {
+            if (this.task.answer.type == AnswerType.POSITION) {
+              if (this.task.answer.mode == TaskMode.NAV_ARROW) {
+                const destCoords = this.task.answer.position.geometry.coordinates;
+                const bearing = this.helperService.bearing(
+                  position.coords.latitude,
+                  position.coords.longitude,
+                  destCoords[1],
+                  destCoords[0]
+                );
+                this.heading = bearing;
+              }
             }
           }
         }
-      });
+      );
+    } else {
+      // VR world
+      this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(
+        (avatarPosition) => {
+
+          // Store waypoint every second
+          if (this.currentSecond != new Date().getSeconds()) {
+            this.currentSecond = new Date().getSeconds();
+            this.trackerService.addWaypoint({});
+          }
+
+          if (this.avatarLastKnownPosition === undefined) {
+            // Initial avatar's positoin to measure distance to target in nav-arrow tasks
+            this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(this.initialAvatarLoc.lat, this.initialAvatarLoc.lng));
+          } else {
+            this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
+          }
+
+          if (this.task && !PlayingGamePage.showSuccess) {
+            if (this.task.answer.type == AnswerType.POSITION) {
+              if (this.task.answer.mode == TaskMode.NAV_ARROW) {
+                const destCoords = this.task.answer.position.geometry.coordinates;
+                const bearing = this.helperService.bearing(
+                  parseFloat(avatarPosition["z"]) / 111200,
+                  parseFloat(avatarPosition["x"]) / 111000,
+                  destCoords[1],
+                  destCoords[0]
+                );
+                this.heading = bearing;
+              }
+            }
+          }
+        }
+      );
+    }
 
     this.map.on("load", () => {
       this.rotationControl = new RotationControl(
         this.map,
-        this.orientationService
+        this.orientationService,
+        this.isVirtualWorld
       );
       this.landmarkControl = new LandmarkControl(this.map);
-      this.streetSectionControl = new StreetSectionControl(
-        this.map,
-        this.OSMService,
-        this.geolocationService
-      );
+
+      // Execute only with real world games
+      if (!this.isVirtualWorld) {
+        this.streetSectionControl = new StreetSectionControl(
+          this.map,
+          this.OSMService,
+          this.geolocationService
+        );
+      }
       this.layerControl = new LayerControl(
         this.map,
         this.mapWrapper,
         this.alertController,
         this.platform
       );
-      this.trackControl = new TrackControl(this.map, this.geolocationService);
+      this.trackControl = new TrackControl(
+        this.map,
+        this.geolocationService,
+        this.isVirtualWorld);
       this.geolocateControl = new GeolocateControl(
         this.map,
-        this.geolocationService
+        this.geolocationService,
+        this.isVirtualWorld,
+        this.initialAvatarLoc
       );
       this.viewDirectionControl = new ViewDirectionControl(
         this.map,
         this.geolocationService,
-        this.orientationService
+        this.orientationService,
+        this.isVirtualWorld,
+        this.initialAvatarLoc
       );
-      this.panControl = new PanControl(this.map, this.geolocationService);
-      this.maskControl = new MaskControl(this.map, this.geolocationService);
+      this.panControl = new PanControl(
+        this.map,
+        this.geolocationService,
+        this.isVirtualWorld
+      );
+      this.maskControl = new MaskControl(
+        this.map,
+        this.geolocationService,
+        this.isVirtualWorld);
 
       this.feedbackControl.init(
         this.map,
@@ -535,18 +767,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.map.addImage("landmark-marker", image);
         }
       );
-
-      this.game = null;
-      this.game = new Game(0, "Loading...", "", false, [], false, false, false);
-      this.route.params.subscribe((params) => {
-        this.gamesService
-          .getGame(params.id)
-          .then((res) => res.content)
-          .then((game) => {
-            this.game = game;
-            this.loaded = true;
-          });
-      });
     });
 
     this.map.on("click", (e) => this.onMapClick(e, "standard"));
@@ -577,14 +797,23 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     // rotation
-    this.deviceOrientationSubscription =
-      this.orientationService.orientationSubscription.subscribe(
+    if (!this.isVirtualWorld) {
+      this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe(
         (heading: number) => {
           this.compassHeading = heading;
           this.targetHeading = 360 - (this.compassHeading - this.heading);
           this.indicatedDirection = this.compassHeading - this.directionBearing;
         }
       );
+    } else {
+      this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(
+        (avatarHeading: number) => {
+          this.compassHeading = avatarHeading;
+          this.targetHeading = 360 - (this.compassHeading - this.heading);
+          this.indicatedDirection = this.compassHeading - this.directionBearing;
+        }
+      );
+    }
 
     if (Capacitor.isNative) {
       Plugins.CapacitorKeepScreenOn.enable();
@@ -656,8 +885,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           );
         } else {
           this.clickDirection = this.helperService.bearing(
-            this.lastKnownPosition.coords.latitude,
-            this.lastKnownPosition.coords.longitude,
+            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
             e.lngLat.lat,
             e.lngLat.lng
           );
@@ -679,8 +908,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               data: {
                 type: "Point",
                 coordinates: [
-                  this.lastKnownPosition.coords.longitude,
-                  this.lastKnownPosition.coords.latitude,
+                  (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+                  (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
                 ],
               },
             });
@@ -712,9 +941,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         const center = this.task.question.direction?.position
           ? this.task.question.direction.position.geometry.coordinates
           : [
-              this.lastKnownPosition.coords.longitude,
-              this.lastKnownPosition.coords.latitude,
-            ];
+            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+          ];
         this.map.flyTo({
           center,
           zoom: 18,
@@ -797,8 +1026,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.task.type == "theme-loc"
     ) {
       const position = point([
-        this.lastKnownPosition.coords.longitude,
-        this.lastKnownPosition.coords.latitude,
+        (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+        (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
       ]);
       if (this.game.bbox?.features?.length > 0) {
         const bbox = this.game.bbox?.features[0];
@@ -834,8 +1063,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.task.mapFeatures.direction == "true"
       ) {
         const position = point([
-          this.lastKnownPosition.coords.longitude,
-          this.lastKnownPosition.coords.latitude,
+          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
         ]);
         const bbox = this.game.bbox.features[0];
 
@@ -910,7 +1139,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.game._id,
       this.game.name,
       this.map,
-      this.playersNames
+      this.playersNames,
+      this.isVirtualWorld,
+      this.initialAvatarLoc
     );
     console.log(this.game);
 
@@ -1175,6 +1406,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.addControl(this.DrawControl, "top-left");
     }
 
+    // VR world (calcualte initial distance to target in nav-arrow tasks)
+    if (this.isVirtualWorld && this.task.answer.mode == TaskMode.NAV_ARROW) {
+      const waypoint = this.task.answer.position.geometry.coordinates;
+      this.targetDistance = this.calculateDistanceToTarget(waypoint)
+      this.UpdateInitialArrowDirection(); // To update iniatl arrow direction
+    }
+
     this.changeDetectorRef.detectChanges();
   }
 
@@ -1183,6 +1421,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
       PlayingGamePage.showSuccess = true;
+
+      // VR world (disconnect socket connection when tasks are done)
+      if (this.isVirtualWorld) {
+        this.disconnectSocketIO();
+      }
+
       this.trackerService.addEvent({
         type: "FINISHED_GAME",
       });
@@ -1365,30 +1609,53 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.changeDetectorRef.detectChanges();
   }
 
-  userDidArrive(waypoint) {
-    this.targetDistance = this.helperService.getDistanceFromLatLonInM(
+  calculateDistanceToTarget(waypoint): number {
+    return this.helperService.getDistanceFromLatLonInM(
       waypoint[1],
       waypoint[0],
-      this.lastKnownPosition.coords.latitude,
-      this.lastKnownPosition.coords.longitude
+      (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+      (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
     );
-    return this.targetDistance < PlayingGamePage.triggerTreshold;
+  }
+
+  UpdateInitialArrowDirection() {
+    const destCoords = this.task.answer.position.geometry.coordinates;
+    const bearing = this.helperService.bearing(
+      this.avatarLastKnownPosition.coords.latitude,
+      this.avatarLastKnownPosition.coords.longitude,
+      destCoords[1],
+      destCoords[0]
+    );
+
+    this.targetHeading = 360 - (this.compassHeading - bearing);
   }
 
   ngOnDestroy() {}
 
   navigateHome() {
-    this.positionSubscription.unsubscribe();
-    this.geolocationService.clear();
+    if (!this.isVirtualWorld) {
+      this.positionSubscription.unsubscribe(); //
+      this.deviceOrientationSubscription.unsubscribe();
+    } else {
+      this.disconnectSocketIO();
 
-    this.deviceOrientationSubscription.unsubscribe();
+      this.avatarPositionSubscription.unsubscribe();
+      this.avatarOrientationSubscription.unsubscribe();
+    }
+
+    this.geolocationService.clear();
 
     this.trackerService.clear();
 
     this.rotationControl.remove();
     this.viewDirectionControl.remove();
     this.landmarkControl.remove();
-    this.streetSectionControl.remove();
+
+    // Execute only with real world games
+    if (!this.isVirtualWorld) {
+      this.streetSectionControl.remove();
+    }
+
     this.layerControl.remove();
     this.trackControl.remove();
     this.geolocateControl.remove();
@@ -1400,8 +1667,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.orientationService.clear();
 
     // this.map.remove();
-    this.navCtrl.navigateRoot("/");
-    this.streetSectionControl.remove();
+    this.navCtrl.navigateRoot('/');
+    //this.streetSectionControl.remove();  // duplicate
   }
 
   togglePanel() {
@@ -1597,10 +1864,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               }
               break;
             case "streetSection":
-              if (mapFeatures[key]) {
-                this.streetSectionControl.setType(StreetSectionType.Enabled);
-              } else {
-                this.streetSectionControl.setType(StreetSectionType.Disabled);
+              if (!this.isVirtualWorld) {
+                if (mapFeatures[key]) {
+                  this.streetSectionControl.setType(StreetSectionType.Enabled);
+                } else {
+                  this.streetSectionControl.setType(StreetSectionType.Disabled);
+                }
               }
               break;
             case "landmarks":

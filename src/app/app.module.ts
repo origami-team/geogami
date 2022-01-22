@@ -34,6 +34,7 @@ import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-up
 import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component';
 
 import { TypeToTextPipe } from './pipes/typeToText.pipe';
+import { LangTranslatePipe } from './pipes/langTranslate';
 import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-recorder/audio-recorder.component';
 import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { AudioPlayerModule } from './components/audio-player/audio-player.module';
@@ -43,9 +44,17 @@ import { TokenInterceptor } from './services/token-intercepor.service';
 import { HelperService } from './services/helper.service';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
+export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+/* VR world
+* Using sockit.IO for receiving data from VR App
+*/
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+//const config: SocketIoConfig = { url: 'http://192.168.0.242:3001', options: {} }; // local
+const config: SocketIoConfig = { url: 'https://vr-app-multi-users.herokuapp.com/', options: {} }; // multi users at once
+
 
 @NgModule({
   declarations: [
@@ -64,6 +73,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuestionTypeComponent,
     AnswerTypeComponent,
     TypeToTextPipe,
+    LangTranslatePipe,
   ],
   exports: [],
   entryComponents: [
@@ -79,10 +89,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     BrowserModule,
     HttpClientModule,
+    SocketIoModule.forRoot(config),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
+        useFactory: (createTranslateLoader),
         deps: [HttpClient],
       },
     }),

@@ -1,15 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/"></ion-back-button>
+      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
-    <ion-title>Spiele OriGami</ion-title>
+    <ion-title>{{ "PlayGame.titlePlayGameList" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content class="ion-padding">
-  <h5>Wähle ein Spiel aus der Liste.</h5>
+  <h5>{{ "GameList.chooseGame" | translate }}</h5>
   <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

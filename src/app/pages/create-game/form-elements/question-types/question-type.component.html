@@ -5,25 +5,26 @@
   "
 >
   <h5>
-    Aufgabenstellung
+    {{ "CreateGame.taskInstruction" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
-        showPopover($event, 'Diese Aufgabenstellung wird im Spiel angezeigt.')
+        showPopover($event, 'Popover.taskInstruction')
       "
     >
     </ion-icon>
   </h5>
-  <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
+  <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
+  <!-- <ion-textarea autoGrow [(ngModel)]="question.text" ></ion-textarea> -->
   <ion-text color="medium">
     <p>
-      Markdown wird unterstützt
+      {{ "CreateGame.markdownSupported" | translate }}
       <ion-icon
         name="information-circle"
         (click)="
           showPopover(
             $event,
-            'Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet'
+            'Popover.markdown'
           )
         "
       >
@@ -34,28 +35,28 @@
 
 <div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION">
   <h5>
-    Navigationsanweisung
+    {{ "CreateGame.navInstruction" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.'
+          'Popover.navInstruction'
         )
       "
     >
     </ion-icon>
   </h5>
-  <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
+  <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
   <ion-text color="medium">
     <p>
-      Markdown wird unterstützt
+      {{ "CreateGame.markdownSupported" | translate }}
       <ion-icon
         name="information-circle"
         (click)="
           showPopover(
             $event,
-            'Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet'
+            'Popover.markdown'
           )
         "
       >
@@ -66,10 +67,10 @@
 
 <div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION_PHOTO">
   <h5>
-    Foto
+    {{ "CreateGame.photo" | translate }}
     <ion-icon
       name="information-circle"
-      (click)="showPopover($event, 'Dieses Foto wird im Spiel angezeigt.')"
+      (click)="showPopover($event, 'Popover.photo')"
     >
     </ion-icon>
   </h5>
@@ -79,28 +80,28 @@
     theme="primary"
   ></app-photo-upload>
   <h5>
-    Navigationsanweisung
+    {{ "CreateGame.navInstruction" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.'
+          'Popover.navInstruction'
         )
       "
     >
     </ion-icon>
   </h5>
-  <ion-textarea autoGrow [(ngModel)]="question.text"></ion-textarea>
+  <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
   <ion-text color="medium">
     <p>
-      Markdown wird unterstützt
+      {{ "CreateGame.markdownSupported" | translate }}
       <ion-icon
         name="information-circle"
         (click)="
           showPopover(
             $event,
-            'Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet'
+            'Popover.markdown'
           )
         "
       >
@@ -111,13 +112,13 @@
 
 <div>
   <h5>
-    Audiobotschaft
+    {{ "CreateGame.audioMessage" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Die Aufgabenstellung kann auch als Audiobotschaft abgespielt werden. Klicke auf den Record Button um eine Audiobotschaft aufzunehmen.'
+          'Popover.audioMessage'
         )
       "
     >
@@ -128,13 +129,13 @@
 
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE">
   <h5>
-    Objektposition
+    {{ "CreateGame.objectLocation" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Markiere das Objekt, das der Spieler in seiner Nähe finden soll. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen. Die Markierung wird im Spiel angezeigt.'
+          'Popover.objectLocation'
         )
       "
     >
@@ -144,18 +145,20 @@
     featureType="geometry"
     drawTheme="searchArea"
     [(feature)]="question.geometry"
+    [isVirtualWorld]="isVirtualWorld"
+    [isVRMirrored]="isVRMirrored"
   ></app-map>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE_FREE">
   <h5>
-    Kartenmarkierung
+    {{ "CreateGame.markedMap" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Die gewählte Kartenmarkierung wird dem Spieler bei der Aufgabenstellung angezeigt.'
+          'Popover.markedMap'
         )
       "
     >
@@ -170,13 +173,13 @@
 
 <div *ngIf="question.mode == taskModeEnum.NO_FEATURE">
   <h5>
-    Objektposition
+    {{ "CreateGame.objectLocation" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Markiere das Objekt, das der Spieler in seiner Umgebung finden soll. Klicke dazu auf das kleine Quadrat, umrande das Objekt dann mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.'
+          'Popover.objectLocation'
         )
       "
     >
@@ -186,18 +189,20 @@
     featureType="geometry"
     drawTheme="searchArea"
     [(feature)]="question.geometry"
+    [isVirtualWorld]="isVirtualWorld"
+    [isVRMirrored]="isVRMirrored"
   ></app-map>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE_PHOTO">
   <h5>
-    Foto des zu suchenden Objekts
+    {{ "CreateGame.objectPhoto" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Füge ein Foto vom gesuchten Objekt ein. Es wird im Spiel angezeigt.'
+          'Popover.objectPhoto'
         )
       "
     >
@@ -208,13 +213,13 @@
     [taskType]="taskType"
   ></app-photo-upload>
   <h5>
-    Objektposition
+    {{ "CreateGame.objectLocation" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Markiere das gesuchte Objekt auf der Karte. Klicke dazu auf das kleine Quadrat, umrande dann das Objekt mit mehreren Klicks und tippe auf den zuletzt gewählten Punkt, um deine Auswahl zu bestätigen.'
+          'Popover.objectLocation'
         )
       "
     >
@@ -224,52 +229,54 @@
     featureType="geometry"
     drawTheme="searchArea"
     [(feature)]="question.geometry"
+    [isVirtualWorld]="isVirtualWorld"
+    [isVRMirrored]="isVRMirrored"
   ></app-map>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION">
   <h5>
-    Gewünschte Blickrichtung
+    {{ "CreateGame.destinationDirection" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt. Die App wird den Spieler in diese Richtung leiten, ohne die Karte anzuzeigen.'
+          'Popover.destinationDirection'
         )
       "
     >
     </ion-icon>
   </h5>
-  <app-map featureType="direction" [(feature)]="question.direction"></app-map>
+  <app-map featureType="direction" [(feature)]="question.direction" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_MARKER">
   <h5>
-    Richtung auf der Karte
+    {{ "CreateGame.directionMap" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt. Die Markierung wird im Spiel angezeigt.'
+          'Popover.directionMap'
         )
       "
     >
     </ion-icon>
   </h5>
-  <app-map featureType="direction" [(feature)]="question.direction"></app-map>
+  <app-map featureType="direction" [(feature)]="question.direction" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
 </div>
 
 <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_PHOTO">
   <h5>
-    Foto der zu suchenden Richtung
+    {{ "CreateGame.photoDirection" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Wähle ein Foto, das die gesuchte Blickrichtung zeigt.'
+          'Popover.photoDirection'
         )
       "
     >
@@ -280,13 +287,13 @@
     [taskType]="taskType"
   ></app-photo-upload>
   <h5>
-    Richtung auf der Karte
+    {{ "CreateGame.directionMap" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Markiere die Richtung, in die der Spieler blicken soll, auf der Karte. Setze dazu den roten Ring um die Position des Spielers, die er zu Aufgabenbeginn hat. Drehe die Karte nun so, dass der Pfeil in die gewünschte Richtung zeigt.'
+          'Popover.directionMap'
         )
       "
     >
@@ -297,13 +304,13 @@
 
 <div *ngIf="question.type == questionTypeEnum.PHOTO">
   <h5>
-    Foto zur Frage
+    {{ "CreateGame.photoTask" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Das gewählte Foto wird dem Spieler bei Aufgabenstellung angezeigt.'
+          'Popover.photo'
         )
       "
     >

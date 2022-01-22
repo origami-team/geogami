@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color=dark defaultHref="start" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "CreateGame.titleCreateGameVirtualMenu" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+ <ion-content>
+
+  <ion-card class="welcome-card" (click)=navigateCreateVRGameTypeA()>
+<!--     <ion-img src='https://i.imgur.com/SvU6G4d.png'></ion-img>  -->    
+    <ion-img src='assets/icons/vr_world_1.png'></ion-img>
+  </ion-card>
+
+  <ion-card class="welcome-card" (click)=navigateCreateVRGameTypeB()>
+    <ion-img src='assets/icons/vr_world_2.png'></ion-img>
+  </ion-card>
+
+</ion-content>

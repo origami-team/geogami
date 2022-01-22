@@ -4,9 +4,9 @@
       <ion-back-button
         color="dark"
         defaultHref="create-game/create-game-list"
-      ></ion-back-button>
+       text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
-    <ion-title>Speichere dein OriGami</ion-title>
+    <ion-title>{{ "SaveGame.titleSaveGame" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,14 +14,14 @@
   <div [className]="showUpload ? 'blur' : ''">
     <ion-card color="danger" *ngIf="showNameError">
       <ion-card-content>
-        Ein Spiel mit diesem Namen existiert bereits
+        {{ "SaveGame.gameNameExist" | translate }}
       </ion-card-content>
     </ion-card>
 
     <ion-card color="light" *ngIf="game">
       <ion-card-content>
         <ion-item color="light">
-          <ion-label position="stacked">Spielname</ion-label>
+          <ion-label position="stacked">{{ "SaveGame.gameName" | translate }}</ion-label>
           <ion-input
             type="text"
             [(ngModel)]="game.name"
@@ -29,7 +29,7 @@
           ></ion-input>
         </ion-item>
         <ion-item color="light">
-          <ion-label position="stacked">Spielort</ion-label>
+          <ion-label position="stacked">{{ "SaveGame.gameLocation" | translate }}</ion-label>
           <ion-input
             type="text"
             [(ngModel)]="game.place"
@@ -42,10 +42,10 @@
     <div class="map-section-container">
       <ion-item lines="none" color="light">
         <ion-label
-          >Kartenausschnitt
+          >{{ "SaveGame.mapSection" | translate }}
           <ion-icon
             name="information-circle"
-            (click)="showPopover($event, 'Soll der Spieler Feedback darüber erhalten, ob er die Aufgabe korrekt gelöst hat?')"
+            (click)="showPopover($event, 'Popover.gameArea')"
           >
           </ion-icon>
         </ion-label>
@@ -57,10 +57,10 @@
 
       <ion-item lines="none" color="light" *ngIf="mapSection">
         <ion-label
-          >Warnung bei Verlassen der markierten Region
+          >{{ "SaveGame.warningLeaveArea" | translate }}
           <ion-icon
             name="information-circle"
-            (click)="showPopover($event, 'Dem Spieler wird beim Verlassen der markierten Region eine Warnung angezeigt')"
+            (click)="showPopover($event, 'Popover.leaveGameArea')"
           >
           </ion-icon>
         </ion-label>
@@ -77,10 +77,10 @@
             [checked]="mapSectionVisible"
             (click)="mapSectionVisibleChange(true)"
           />
-          <label for="rd-visible"> Umrandet </label>
+          <label for="rd-visible"> {{ "SaveGame.outlined" | translate }} </label>
           <ion-icon
             name="information-circle"
-            (click)="showPopover($event, 'Der Kartenausschnitt wird umrandet im Spiel dargestellt')"
+            (click)="showPopover($event, 'Popover.outlinedGameArea')"
           >
           </ion-icon>
         </div>
@@ -94,10 +94,10 @@
             [checked]="!mapSectionVisible"
             (click)="mapSectionVisibleChange(false)"
           />
-          <label for="rd-invisible"> Unsichtbar </label>
+          <label for="rd-invisible"> {{ "SaveGame.invisible" | translate }} </label>
           <ion-icon
             name="information-circle"
-            (click)="showPopover($event, 'Der Kartenausschnitt wird im Spiel nicht visualisiert')"
+            (click)="showPopover($event, 'Popover.invisibleGameArea')"
           >
           </ion-icon>
         </div>
@@ -115,7 +115,7 @@
             type="submit"
             class="ion-no-margin"
             (click)="uploadGame()"
-            >Spiel speichern
+            >{{ "SaveGame.saveGame" | translate }}
           </ion-button>
         </div>
       </ion-card-content>
@@ -123,11 +123,11 @@
   </div>
 
   <div class="overlay success" *ngIf="showUpload">
-    <h3 *ngIf="!showSuccess">Übertrage Daten...</h3>
-    <h3 *ngIf="showSuccess">Dein Spiel wurde gespeichert</h3>
+    <h3 *ngIf="!showSuccess">{{ "SaveGame.sendingData" | translate }}</h3>
+    <h3 *ngIf="showSuccess">{{ "SaveGame.gameSaved" | translate }}</h3>
     <div lottie [options]="lottieConfig"></div>
     <ion-button (click)="navigateHome()" [disabled]="!showSuccess"
-      >Fertig</ion-button
+      >{{ "General.done" | translate }}</ion-button
     >
   </div>
 </ion-content>

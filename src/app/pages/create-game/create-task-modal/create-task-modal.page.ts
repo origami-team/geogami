@@ -20,6 +20,7 @@ import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal
 import { QuestionType, AnswerType, TaskMode } from "src/app/models/types";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-create-task-modal",
@@ -30,6 +31,10 @@ export class CreateTaskModalPage implements OnInit {
   @Input() gameName = "";
   @Input() type = "nav";
   @Input() task: any = {};
+  
+  // VR world
+  @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
 
   tasks: any[] = [];
 
@@ -60,20 +65,17 @@ export class CreateTaskModalPage implements OnInit {
   taskTypes: any[] = [
     {
       type: 1,
-      text: "Selbst-Lokalisation",
-    },
-    {
+      text: this.translate.instant("Tasktypes.selfLocation")
+    }, {
       type: 2,
-      text: "Objekt-Lokalisation",
-    },
-    {
+      text: this.translate.instant("Tasktypes.objectLocation")
+    }, {
       type: 3,
-      text: "Richtungsbestimmung",
-    },
-    {
+      text: this.translate.instant("Tasktypes.directionDetermination")
+    }, {
       type: 4,
-      text: "Freie Aufgabe",
-    },
+      text: this.translate.instant("Tasktypes.freeTasks")
+    }
   ];
 
   selectedTaskType: any;
@@ -91,7 +93,8 @@ export class CreateTaskModalPage implements OnInit {
 
   constructor(
     public modalController: ModalController,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -143,7 +146,8 @@ export class CreateTaskModalPage implements OnInit {
       this.task = this.tasks[7];
     } else {
       this.task = {
-        name: "Freie Aufgabe",
+        //name: 'Freie Aufgabe??',
+        name: this.translate.instant("Tasktypes.freeTask"),
         type: "free",
         category: "theme",
         question: {
@@ -405,7 +409,9 @@ export class CreateTaskModalPage implements OnInit {
       backdropDismiss: false,
       componentProps: {
         features: this.mapFeatures,
-      },
+        isVirtualWorld: this.isVirtualWorld,
+        isVRMirrored: this.isVRMirrored
+      }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
@@ -452,7 +458,9 @@ export class CreateTaskModalPage implements OnInit {
     });
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

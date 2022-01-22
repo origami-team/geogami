@@ -1,21 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="start"></ion-back-button>
+      <ion-back-button color=dark defaultHref="start" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
-    <ion-title>Lerne OriGami kennen</ion-title>
+    <ion-title>{{ "Showroom.titleShowroom" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card id="create_card_create" (click)=navigateMapShowroom() color="secondary">
+  <ion-card id="create_card_create" color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="map"></ion-icon> Kartenfeatures
+        <ion-icon name="map"></ion-icon> {{ "General.mapfeatures" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Probiere die Kartenfunktionen aus.
+      {{ "Showroom.mapfeaturesDescription" | translate }}
     </ion-card-content>
   </ion-card>
 
@@ -23,22 +23,11 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="navigate"></ion-icon>
-        <ion-icon name="clipboard"></ion-icon> Aufgabentypen
+        <ion-icon name="clipboard"></ion-icon> {{ "General.tasktypes" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Lerne die verschiedenen Aufgabentypen kennen.
-    </ion-card-content>
-  </ion-card>
-  
-  <ion-card id="create_card_edit" color="secondary">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="film"></ion-icon> Tutorials
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      Sieh dir Lernvideos zu OriGami an.
+      {{ "Showroom.tasktypesDescription" | translate }}
     </ion-card-content>
   </ion-card>
 

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="play-game/play-game-list"></ion-back-button>
+      <ion-back-button color=dark defaultHref="play-game/play-game-list" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
     <ion-buttons slot="primary"></ion-buttons>
@@ -15,7 +15,7 @@
       <ion-card-title *ngIf="game">{{ game.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content *ngIf="game">
-      {{ game.tasks.length }} {{ game.tasks.length == 1 ? "Aufgabe" : "Aufgaben"}}
+      {{ game.tasks.length }} {{ game.tasks.length == 1 ? ['General.task' | translate ] : ['General.tasks' | translate ]}}
       <div>
         <span *ngFor="let task of game.tasks" class="dot" [class.nav]="task.category.includes('nav')"
           [class.theme]="task.category.includes('theme')" [class.free]="task.category.includes('free')"
@@ -24,11 +24,24 @@
     </ion-card-content>
   </ion-card>
 
+  <ion-card *ngIf="isVirtualWorld">
+    <!-- <div #map class="map"></div> -->
+    <ion-card-header>
+      <ion-card-title> {{ "PlayGame.gamecode" | translate }}
+        <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Popover.gameCode')">
+        </ion-icon>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input placeholder="{{ 'PlayGame.pl_EnterCode' | translate }}" [(ngModel)]="gameCode"></ion-input>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="block" (click)="startGame()">Start</ion-button>
+    <ion-button expand="block" (click)="startGame()" [disabled]="gameCode.length==5||!isVirtualWorld?false:true">{{ "General.start" | translate }}</ion-button>
   </ion-toolbar>
 </ion-footer>

@@ -8,6 +8,9 @@ import mapboxgl from 'mapbox-gl';
 import { GamesService } from '../../../services/games.service';
 import { environment } from 'src/environments/environment';
 
+import { PopoverController } from '@ionic/angular';
+import { PopoverComponent } from 'src/app/popover/popover.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-game-detail',
@@ -22,7 +25,16 @@ export class GameDetailPage implements OnInit {
   activities: any[];
   points: any[];
 
-  constructor(public navCtrl: NavController, private route: ActivatedRoute, private gamesService: GamesService) { }
+  // VR world
+  isVirtualWorld: boolean = false;
+  isVRMirrored: boolean = false;
+  gameCode: string = "";
+
+  constructor(public navCtrl: NavController,
+    private route: ActivatedRoute,
+    private gamesService: GamesService,
+    public popoverController: PopoverController,
+    private translate: TranslateService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -30,6 +42,15 @@ export class GameDetailPage implements OnInit {
         .then(res => res.content)
         .then(game => {
           this.game = game;
+
+          // VR world
+          // Check game type either real or VR world
+          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+            this.isVirtualWorld = true;
+            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
+              this.isVRMirrored = true;
+            }
+          }
         })
         .finally(() => {
           console.log(this.game);
@@ -71,7 +92,25 @@ export class GameDetailPage implements OnInit {
   }
 
   startGame() {
-    this.navCtrl.navigateForward(`play-game/playing-game/${this.game._id}`);
+    let bundle = {
+      id: this.game._id,
+      isVRWorld: this.isVirtualWorld,
+      isVRMirrored: this.isVRMirrored,
+      gameCode: this.gameCode
+    }
+    this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+  }
+
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
   }
 
 }

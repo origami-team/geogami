@@ -1,12 +1,12 @@
 <div *ngIf="answer.type == answerTypeEnum.POSITION">
   <h5>
-    Zielort
+    {{ "CreateGame.destination" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Dieser Zielort wird im Spiel mit einer Zielfahne auf der Karte angezeigt.'
+          'Popover.flag'
         )
       "
     >
@@ -21,13 +21,13 @@
 
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
   <h5>
-    Multiple Choice
+    {{ "CreateGame.multipleChoice" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Füge ein Foto der korrekten Lösung ein sowie drei weitere Fotos, die nicht der korrekten Lösung entsprechen.'
+          'Popover.photoMC'
         )
       "
     >
@@ -44,14 +44,14 @@
 
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
   <h5>
-    Multiple Choice Text
+    {{ "CreateGame.multipleChoice" | translate }}
     <ion-icon
       *ngIf="!settings.feedback"
       name="information-circle"
       (click)="
         showPopover(
           $event,
-          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder.'
+          'Popover.textMC'
         )
       "
     >
@@ -77,11 +77,11 @@
 
 <div *ngIf="answer.type == answerTypeEnum.NUMBER">
   <h5>
-    Korrekte Antwort (Zahl)
+    {{ "CreateGame.correctNumber" | translate }}
     <ion-icon
       name="information-circle"
       (click)="
-        showPopover($event, 'Schreibe die richtige Aufgabenlösung in das Feld.')
+        showPopover($event, 'Popover.number')
       "
     >
     </ion-icon>
