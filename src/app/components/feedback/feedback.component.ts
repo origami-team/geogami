@@ -74,147 +74,106 @@ export class FeedbackComponent {
 
     private DIRECTION_TRESHOLD = 30;
 
-     constructor(private orientationService: OrigamiOrientationService, private changeDetectorRef: ChangeDetectorRef, private translate: TranslateService) { }
+     constructor(
+       private orientationService: OrigamiOrientationService, private changeDetectorRef: ChangeDetectorRef, 
+       private sanitizer: DomSanitizer,
+       private translate: TranslateService) { }
 
     init(map: any, geolocationService: OrigamiGeolocationService, helperService: HelperService, toastController: ToastController, trackerService: TrackerService, playingGamePage: PlayingGamePage) {
-        this.map = map;
-        this.geolocationService = geolocationService;
-        this.helperService = helperService;
-        this.toastController = toastController;
-        this.trackerService = trackerService;
-        this.playingGamePage = playingGamePage;
+      this.map = map;
+      this.geolocationService = geolocationService;
+      this.helperService = helperService;
+      this.toastController = toastController;
+      this.trackerService = trackerService;
+      this.playingGamePage = playingGamePage;
 
-        this.successColor = getComputedStyle(
-          document.documentElement
-        ).getPropertyValue("--ion-color-success");
-    
-        this.map.loadImage(
-          "/assets/icons/marker-editor-solution.png",
-          (error, image) => {
-            if (error) throw error;
-    
-            this.map.addImage("geolocate-solution", image);
-          }
-        );
-    
-        this.map.loadImage(
-          "/assets/icons/directionv2-solution.png",
-          (error, image) => {
-            if (error) throw error;
-    
-            this.map.addImage("direction-solution", image);
-          }
-        );
-    
-        this.map.loadImage("/assets/icons/directionv2.png", (error, image) => {
+      this.successColor = getComputedStyle(
+        document.documentElement
+      ).getPropertyValue("--ion-color-success");
+  
+      this.map.loadImage(
+        "/assets/icons/marker-editor-solution.png",
+        (error, image) => {
           if (error) throw error;
-    
-          this.map.addImage("directionv2", image);
-        });
-
-        this.audioPlayer.src = 
-          "assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3";
-
-        // VR world (to check type of the game)
-        this.isVirtualWorld = playingGamePage.isVirtualWorld;
-
-        if (!this.isVirtualWorld) {
-            this.positionSubscription = 
-              this.geolocationService.geolocationSubscription.subscribe(
-                (position: GeolocationPosition) => {
-                this.lastKnownPosition = position;
-
-                if (this.task && !PlayingGamePage.showSuccess) {
-                    if (this.task.answer.type == AnswerType.POSITION) {
-                        const waypoint = this.task.answer.position.geometry.coordinates;
-
-                        if (this.userDidArrive(waypoint) && 
-                        !this.task.settings.confirmation && 
-                        !this.showFeedback) {
-                            this.onWaypointReached();
-                        }
-                    }
-                }
-            });
-
-            this.deviceOrientationSubscription = 
-              this.orientationService.orientationSubscription.subscribe(
-                (heading: number) => {
-                this.direction = heading;
-            });
-
-        } else {
-            // VR world
-            this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(avatarPosition => {
-
-                if (this.avatarLastKnownPosition === undefined) {
-                    // Initial avatar's positoin to measure target distance that will be displayed in VR app
-                    this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(this.playingGamePage.initialAvatarLoc.lat, this.playingGamePage.initialAvatarLoc.lng));
-                } else if (!Number.isNaN(parseFloat(avatarPosition["z"]))) {
-                    this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
-                }
-
-                if (this.task && !PlayingGamePage.showSuccess) {
-                    if (this.task.answer.type == AnswerType.POSITION) {
-                        this.waypoint = this.task.answer.position.geometry.coordinates;
-                        
-                        if (this.userDidArrive(this.waypoint) && !this.task.settings.confirmation && !this.showFeedback) {
-                            this.onWaypointReached();
-                        }
-                    }
-                }
-            });
-
-            // Avatar's direction
-            this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(avatarHeading => {
-                this.direction = avatarHeading;
-            });
-        }
-    }
-
-    public setTask(task: Task) {
-        this.dismissFeedback();
-        this.task = task;
-    }
-
-    public async setAnswer({
-        selectedPhoto,
-        isCorrectPhotoSelected,
-        selectedChoice,
-        isCorrectChoiceSelected,
-        photo,
-        photoURL,
-        directionBearing,
-        compassHeading,
-        clickDirection,
-        numberInput,
-        textInput
-    }) {
-        let isCorrect = true;
-        let answer: any = {};
-
-        if (this.task.answer.type == AnswerType.POSITION) {
-            const waypoint = this.task.answer.position.geometry.coordinates;
-            const arrived = this.userDidArrive(waypoint);
-            answer = {
-                target: waypoint,
-                position: this.lastKnownPosition,
-                distance: this.helperService.getDistanceFromLatLonInM(waypoint[1], waypoint[0], (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)),
-                correct: arrived
-            };
-            isCorrect = arrived;
-            if (!arrived) {
-                this.initFeedback(false);
-            } else {
-                this.onWaypointReached();
-              }
-            }
-          }
-        }
-
+  
+          this.map.addImage("geolocate-solution", image);
         }
       );
-  }
+  
+      this.map.loadImage(
+        "/assets/icons/directionv2-solution.png",
+        (error, image) => {
+          if (error) throw error;
+  
+          this.map.addImage("direction-solution", image);
+        }
+      );
+  
+      this.map.loadImage("/assets/icons/directionv2.png", (error, image) => {
+        if (error) throw error;
+  
+        this.map.addImage("directionv2", image);
+      });
+
+      this.audioPlayer.src = 
+        "assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3";
+
+      // VR world (to check type of the game)
+      this.isVirtualWorld = playingGamePage.isVirtualWorld;
+
+      if (!this.isVirtualWorld) {
+          this.positionSubscription = 
+            this.geolocationService.geolocationSubscription.subscribe(
+              (position: GeolocationPosition) => {
+              this.lastKnownPosition = position;
+
+              if (this.task && !PlayingGamePage.showSuccess) {
+                  if (this.task.answer.type == AnswerType.POSITION) {
+                      const waypoint = this.task.answer.position.geometry.coordinates;
+
+                      if (this.userDidArrive(waypoint) && 
+                      !this.task.settings.confirmation && 
+                      !this.showFeedback) {
+                          this.onWaypointReached();
+                      }
+                  }
+              }
+          });
+
+          this.deviceOrientationSubscription = 
+            this.orientationService.orientationSubscription.subscribe(
+              (heading: number) => {
+              this.direction = heading;
+          });
+
+      } else {
+          // VR world
+          this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(avatarPosition => {
+
+              if (this.avatarLastKnownPosition === undefined) {
+                  // Initial avatar's positoin to measure target distance that will be displayed in VR app
+                  this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(this.playingGamePage.initialAvatarLoc.lat, this.playingGamePage.initialAvatarLoc.lng));
+              } else if (!Number.isNaN(parseFloat(avatarPosition["z"]))) {
+                  this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
+              }
+
+              if (this.task && !PlayingGamePage.showSuccess) {
+                  if (this.task.answer.type == AnswerType.POSITION) {
+                      this.waypoint = this.task.answer.position.geometry.coordinates;
+                      
+                      if (this.userDidArrive(this.waypoint) && !this.task.settings.confirmation && !this.showFeedback) {
+                          this.onWaypointReached();
+                      }
+                  }
+              }
+          });
+
+          // Avatar's direction
+          this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(avatarHeading => {
+              this.direction = avatarHeading;
+          });
+      }
+    }
 
   public setTask(task: Task) {
     this.dismissFeedback();
@@ -246,8 +205,8 @@ export class FeedbackComponent {
         distance: this.helperService.getDistanceFromLatLonInM(
           waypoint[1],
           waypoint[0],
-          this.lastKnownPosition.coords.latitude,
-          this.lastKnownPosition.coords.longitude
+          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), 
+          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
         ),
         correct: arrived,
       };
