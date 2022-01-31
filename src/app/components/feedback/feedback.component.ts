@@ -259,7 +259,7 @@ export class FeedbackComponent {
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
       if (selectedPhoto != null) {
-        this.initFeedback(isCorrectPhotoSelected);
+        this.initFeedback(isCorrectPhotoSelected, { selectedPhoto });
         isCorrect = isCorrectPhotoSelected;
         answer = {
           selectedPhoto,
@@ -705,6 +705,7 @@ export class FeedbackComponent {
     }
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
+      this.feedback.hint = this.task.answer.hints[options.selectedPhoto.key];
     }
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
