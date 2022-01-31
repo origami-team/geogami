@@ -48,7 +48,7 @@ export class PhotoUploadMultipleChoiceComponent implements OnInit {
     }
     if (this.hints == undefined) {
       this.hints = [
-        "Probiere es noch einmal.",
+        "",
         "Probiere es noch einmal.",
         "Probiere es noch einmal.",
         "Probiere es noch einmal.",

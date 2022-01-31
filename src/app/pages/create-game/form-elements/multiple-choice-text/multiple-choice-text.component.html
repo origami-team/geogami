@@ -8,12 +8,6 @@
         placeholder="{{ 'General.pl_text' | translate }}"
       ></ion-textarea>
     </div>
-    <ion-textarea
-      *ngIf="feedback"
-      autoGrow
-      [(ngModel)]="hints[0]"
-      (ngModelChange)="onChange()"
-    ></ion-textarea>
   </div>
   <div>
     <div class="answer wrong">

@@ -18,12 +18,6 @@
   <ion-button color="secondary" size="default" (click)="capturePhoto(0, true)">
     <ion-icon slot="icon-only" name="images"></ion-icon>
   </ion-button>
-  <ion-textarea
-    *ngIf="feedback"
-    autoGrow
-    [(ngModel)]="hints[0]"
-    (ngModelChange)="onChange()"
-  ></ion-textarea>
 </div>
 
 <ion-label>{{ "CreateGame.threewrongtaskanswers" | translate }}</ion-label>

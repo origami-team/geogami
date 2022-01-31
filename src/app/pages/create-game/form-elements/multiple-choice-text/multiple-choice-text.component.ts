@@ -15,7 +15,7 @@ import {
 export class MultipleChoiceTextComponent implements OnInit {
   @Input() answers: String[] = ["", "", "", ""];
   @Input() hints?: String[] = [
-    "Probiere es noch einmal.",
+    "",
     "Probiere es noch einmal.",
     "Probiere es noch einmal.",
     "Probiere es noch einmal.",
