@@ -740,13 +740,17 @@ export class FeedbackComponent {
       if (this.task.question.direction?.bearing) {
         evalDirection = this.task.question.direction.bearing;
       }
-      console.log(this.Math.abs(options.clickDirection - evalDirection));
+      
+      const absClckDir = this.Math.abs(options.clickDirection - evalDirection)
+      console.log(absClckDir);
 
-      if (this.Math.abs(options.clickDirection - evalDirection) <= 45) {
-        this.feedback.hint = this.translate.instant("Feedback.directionRight");
-      } else if (this.Math.abs(options.clickDirection - evalDirection) <= 135) {
-        this.feedback.hint = this.translate.instant("Feedback.directionWrong");
-      } else {
+      this.feedback.hint = ""
+
+      if (absClckDir > 30 && absClckDir <= 45) {
+        this.feedback.hint = this.task.answer?.hints?.[0] ?? this.translate.instant("Feedback.directionRight");
+      } else if (absClckDir > 45 && absClckDir <= 135) {
+        this.feedback.hint = this.task.answer?.hints?.[1] ?? this.translate.instant("Feedback.directionWrong");
+      } else if (absClckDir > 135){
         this.feedback.hint =
           this.task.answer?.hints?.[2] ?? this.translate.instant("Feedback.directionWrongHint");
       }
