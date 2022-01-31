@@ -89,7 +89,7 @@
   <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
 </div>
 
-<div *ngIf="answer.type == answerTypeEnum.MAP_DIRECTION">
+<div *ngIf="answer.type == answerTypeEnum.MAP_DIRECTION || answer.type == answerTypeEnum.DIRECTION">
   <div *ngIf="settings.feedback && settings.multipleTries">
     <ion-text>
       <h5>Feedback</h5>

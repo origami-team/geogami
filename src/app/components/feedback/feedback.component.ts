@@ -377,7 +377,8 @@ export class FeedbackComponent {
       console.log(this.Math.abs(directionBearing - compassHeading));
       this.initFeedback(
         this.Math.abs(directionBearing - compassHeading) <=
-          this.DIRECTION_TRESHOLD
+          this.DIRECTION_TRESHOLD, 
+          { clickDirection }
       );
       isCorrect =
         this.Math.abs(directionBearing - compassHeading) <=
@@ -640,7 +641,7 @@ export class FeedbackComponent {
       this.showHint(options);
     }
 
-    if (this.task.answer.type === AnswerType.MAP_DIRECTION) {
+    if (this.task.answer.type === AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) {
       this.showHint(options);
     }
 
@@ -734,7 +735,7 @@ export class FeedbackComponent {
       }
     }
 
-    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+    if (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type == AnswerType.DIRECTION) {
       let evalDirection = this.direction;
       if (this.task.question.direction?.bearing) {
         evalDirection = this.task.question.direction.bearing;
