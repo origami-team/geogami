@@ -14,7 +14,8 @@
                 "start": "Start",
                 "pl_text": "Text",
                 "pl_optional": "(optional)",
-                "back_button": "Zurück"
+                "back_button": "Zurück", 
+                "from": "von"
         },
         "Tasktypes": {
                 "navigationTasks": "Navigationsaufgaben",

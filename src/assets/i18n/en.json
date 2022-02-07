@@ -14,7 +14,8 @@
             "start": "Start",
             "pl_text": "Text",
             "pl_optional": "(optional)",
-            "back_button": "Back"
+            "back_button": "Back", 
+            "from": "from"
     },
 
     "Tasktypes": {
