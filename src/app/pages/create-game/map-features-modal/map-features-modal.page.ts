@@ -68,7 +68,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
         'overlay':
         {
           'type': 'image',
-          'url': (this.isVRMirrored ? environment.VR_World_2: environment.VR_World_1), // V4
+          'url': (this.isVRMirrored ? environment.VR_World_2 : environment.VR_World_1), // V4
           'coordinates': [
             [0.0002307207207, 0.004459082914], // NW
             [0.003717027207, 0.004459082914], // NE 
@@ -210,8 +210,8 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
 
     // Set bounds of VR world 
     var bounds = [
-      [0.0002307207207 - 0.007, 0.0003628597122 - 0.007], // Southwest coordinates
-      [0.003717027207 + 0.007, 0.004459082914 + 0.007] // Northeast coordinates
+      [0.0002307207207 - 0.002, 0.0003628597122 - 0.002], // Southwest coordinates
+      [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates
     ];
     ///
 
@@ -452,39 +452,41 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
           this.map.addImage('landmark-marker', image);
         });
 
-      Plugins.Geolocation.getCurrentPosition().then(position => {
-        this.map.flyTo({
-          center: [position.coords.longitude, position.coords.latitude],
-          zoom: 13,
-          speed: 3
-        });
-
-        this.map.loadImage(
-          '/assets/icons/position.png',
-          (error, image) => {
-            if (error) throw error;
-
-            this.map.addImage('geolocate', image);
-
-            this.map.addSource('geolocate', {
-              type: 'geojson',
-              data: {
-                type: 'Point',
-                coordinates: [position.coords.longitude, position.coords.latitude]
-              }
-            });
-            this.map.addLayer({
-              id: 'geolocate',
-              source: 'geolocate',
-              type: 'symbol',
-              layout: {
-                'icon-image': 'geolocate',
-                'icon-size': 0.4,
-                'icon-offset': [0, 0]
-              }
-            });
+      if (!this.isVirtualWorld) {
+        Plugins.Geolocation.getCurrentPosition().then(position => {
+          this.map.flyTo({
+            center: [position.coords.longitude, position.coords.latitude],
+            zoom: 13,
+            speed: 3
           });
-      });
+
+          this.map.loadImage(
+            '/assets/icons/position.png',
+            (error, image) => {
+              if (error) throw error;
+
+              this.map.addImage('geolocate', image);
+
+              this.map.addSource('geolocate', {
+                type: 'geojson',
+                data: {
+                  type: 'Point',
+                  coordinates: [position.coords.longitude, position.coords.latitude]
+                }
+              });
+              this.map.addLayer({
+                id: 'geolocate',
+                source: 'geolocate',
+                type: 'symbol',
+                layout: {
+                  'icon-image': 'geolocate',
+                  'icon-size': 0.4,
+                  'icon-offset': [0, 0]
+                }
+              });
+            });
+        });
+      }
 
       if (this.features.landmarkFeatures != undefined) {
         console.log('adding feature', this.features.landmarkFeatures);
