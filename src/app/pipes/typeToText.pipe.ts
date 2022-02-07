@@ -27,7 +27,7 @@ export class TypeToTextPipe implements PipeTransform {
     MULTIPLE_CHOICE: "QuestionType.bySelectingPhoto",
     MULTIPLE_CHOICE_TEXT: "QuestionType.bySelectingText",
     NUMBER: "QuestionType.byEnteringNumber",
-    DRAW: "... mittels Kartierung ",
+    DRAW: "QuestionType.byMapping",
   };
 
   transform(value: string, taskType: string, answer: boolean): string {

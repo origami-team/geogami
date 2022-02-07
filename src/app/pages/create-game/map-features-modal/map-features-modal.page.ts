@@ -452,6 +452,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
           this.map.addImage('landmark-marker', image);
         });
 
+      // disable zoom to current position in VR world  
       if (!this.isVirtualWorld) {
         Plugins.Geolocation.getCurrentPosition().then(position => {
           this.map.flyTo({

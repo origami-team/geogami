@@ -14,7 +14,8 @@
             "start": "Start",
             "pl_text": "Text",
             "pl_optional": "(optional)",
-            "back_button": "Back"
+            "back_button": "Back", 
+            "from": "from"
     },
 
     "Tasktypes": {
@@ -259,7 +260,8 @@
             "objectPhoto": "Include a photo of the object to be searched. It will be displayed in the game.",
             "destinationDirection": "Mark the direction to be searched on the map. First select the location and then the view direction.",
             "directionMap": "Mark the direction to be searched on the map. First select the location and then the view direction. The marker will be displayed in the game.",
-            "photoDirection": "Choose a photo that represents the view direction to be searched."
+            "photoDirection": "Choose a photo that represents the view direction to be searched.",
+            "showMappingView": "When should the player's mapping be displayed on the map?"
     },
     
     "Feedback": {
@@ -322,6 +324,13 @@
             "bySelectingText": "... by choosing a text answer",
             "byEnteringNumber": "... by entering a number",
             "byMarkingDirectionOnMap": "... by marking the direction on the map",
-            "byEnteringText": "... by entering text"
+            "byEnteringText": "... by entering text",
+            "byMapping": "... by mapping"
+    },
+    "DrawSetting":{
+            "keepMappingOption":"Keep mapping on the map",
+            "onlyCurrentTask":"only for the current task",
+            "alsoNextTask":"also for the next task",
+            "inEntireGame":"in the entire game"
     }
 }
