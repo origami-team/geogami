@@ -73,7 +73,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     };
   }
 
-  ngOnInit(){
+  ngOnInit() {
     // VR world
     // to add game attribute that distinguish VR games from real ones
     this.route.params.subscribe((params) => {
@@ -104,7 +104,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
         'overlay':
         {
           'type': 'image',
-          'url': (this.isVRMirrored ? environment.VR_World_2: environment.VR_World_1), // V4
+          'url': (this.isVRMirrored ? environment.VR_World_2 : environment.VR_World_1), // V4
 
           'coordinates': [
             [0.0002307207207, 0.004459082914], // NW
@@ -260,6 +260,14 @@ export class CreateGameOverviewPage implements AfterViewInit {
     });
 
     this.map.on('load', () => {
+      // disable map rotation in VR world
+      if (this.isVirtualWorld) {
+        // disable map rotation using right click + drag
+        this.map.dragRotate.disable();
+        // disable map rotation using touch rotation gesture
+        this.map.touchZoomRotate.disableRotation();
+      }
+
       this.draw = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
