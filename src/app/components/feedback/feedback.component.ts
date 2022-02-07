@@ -767,6 +767,7 @@ export class FeedbackComponent {
 
   public showSolution() {
     this.feedback.solution = "";
+    this.feedback.img = "";
 
     if (this.task.answer.type == AnswerType.POSITION) {
       this.map.addSource("geolocate-solution", {
