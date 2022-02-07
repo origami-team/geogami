@@ -130,7 +130,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         'overlay':
         {
           'type': 'image',
-          'url': (this.isVRMirrored ? environment.VR_World_2: environment.VR_World_1), // V4
+          'url': (this.isVRMirrored ? environment.VR_World_2 : environment.VR_World_1), // V4
           'coordinates': [
             [0.0002307207207, 0.004459082914], // NW
             [0.003717027207, 0.004459082914], // NE 
@@ -272,8 +272,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     // Set bounds of VR world 
     var bounds = [
-      [0.0002307207207 - 0.007, 0.0003628597122 - 0.007], // Southwest coordinates
-      [0.003717027207 + 0.007, 0.004459082914 + 0.007] // Northeast coordinates
+      [0.0002307207207 - 0.002, 0.0003628597122 - 0.002], // Southwest coordinates
+      [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates
     ];
 
     this.map = new mapboxgl.Map({
@@ -294,7 +294,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         this._onChange(this.feature);
 
         // Temporary show loc of selected flag
-        console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat," )");
+        console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
       }
 
       if (this.featureType == 'direction') {
@@ -415,42 +415,44 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
         });
 
-      Plugins.Geolocation.getCurrentPosition().then(position => {
-        if (!this.feature) {
-          this.map.flyTo({
-            center: [position.coords.longitude, position.coords.latitude],
-            zoom: 13,
-            bearing: this.featureType == 'direction' ? (this.feature && this.feature.bearing) ? this.feature.bearing : 0 : 0,
-            speed: 3
-          });
-        }
-
-        this.map.loadImage(
-          '/assets/icons/position.png',
-          (error, image) => {
-            if (error) throw error;
-
-            this.map.addImage('geolocate', image);
-
-            this.map.addSource('geolocate', {
-              type: 'geojson',
-              data: {
-                type: 'Point',
-                coordinates: [position.coords.longitude, position.coords.latitude]
-              }
+      if (!this.isVirtualWorld) {
+        Plugins.Geolocation.getCurrentPosition().then(position => {
+          if (!this.feature) {
+            this.map.flyTo({
+              center: [position.coords.longitude, position.coords.latitude],
+              zoom: 13,
+              bearing: this.featureType == 'direction' ? (this.feature && this.feature.bearing) ? this.feature.bearing : 0 : 0,
+              speed: 3
             });
-            this.map.addLayer({
-              id: 'geolocate',
-              source: 'geolocate',
-              type: 'symbol',
-              layout: {
-                'icon-image': 'geolocate',
-                'icon-size': 0.4,
-                'icon-offset': [0, 0]
-              }
+          }
+
+          this.map.loadImage(
+            '/assets/icons/position.png',
+            (error, image) => {
+              if (error) throw error;
+
+              this.map.addImage('geolocate', image);
+
+              this.map.addSource('geolocate', {
+                type: 'geojson',
+                data: {
+                  type: 'Point',
+                  coordinates: [position.coords.longitude, position.coords.latitude]
+                }
+              });
+              this.map.addLayer({
+                id: 'geolocate',
+                source: 'geolocate',
+                type: 'symbol',
+                layout: {
+                  'icon-image': 'geolocate',
+                  'icon-size': 0.4,
+                  'icon-offset': [0, 0]
+                }
+              });
             });
-          });
-      });
+        });
+      }
 
 
 
