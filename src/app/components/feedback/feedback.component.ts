@@ -791,7 +791,7 @@ export class FeedbackComponent {
         type: "symbol",
         layout: {
           "icon-image": image,
-          "icon-size": 0.4,
+          "icon-size": 0.65,
           "icon-offset": [0, 0],
           "icon-allow-overlap": true,
         },
@@ -815,7 +815,7 @@ export class FeedbackComponent {
         type: "symbol",
         layout: {
           "icon-image": "geolocate-solution",
-          "icon-size": 0.4,
+          "icon-size": 0.65,
           "icon-offset": [0, 0],
           "icon-allow-overlap": true,
         },
