@@ -415,6 +415,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
         });
 
+      // disable zoom to current position in VR world
       if (!this.isVirtualWorld) {
         Plugins.Geolocation.getCurrentPosition().then(position => {
           if (!this.feature) {

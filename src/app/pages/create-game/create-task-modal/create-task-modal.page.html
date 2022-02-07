@@ -261,7 +261,7 @@
         > {{ "CreateGame.keepFlag" | translate }}
         <ion-icon
           name="information-circle"
-          (click)="showPopover($event, 'Soll die Zielfahne weiterhin angezeigt werden nachdem die Aufgabe korrekt gelöst hat?')"
+          (click)="showPopover($event, 'Popover.keepFlag')"
         >
         </ion-icon>
       </ion-label>
@@ -272,17 +272,17 @@
     </ion-item>
     <ion-item lines="none" *ngIf="task.answer.type === 'DRAW'">
       <ion-label
-        >Kartierung auf der Karte behalten
+        >{{ "DrawSetting.keepMappingOption" | translate }}
         <ion-icon
           name="information-circle"
-          (click)="showPopover($event, 'Wann soll die Kartierung des Spielers auf der Karte angezeigt werden?')"
+          (click)="showPopover($event, 'Popover.showMappingView')"
         >
         </ion-icon>
       </ion-label>
       <select interface="popover" [(ngModel)]="task.settings.keepDrawing">
-        <option ngValue="current">nur bei der aktuellen Aufgabe</option>
-        <option ngValue="next">auch bei der nächsten Aufgabe</option>
-        <option ngValue="all">im gesamten Spiel</option>
+        <option ngValue="current">{{ "DrawSetting.onlyCurrentTask" | translate }}</option>
+        <option ngValue="next">{{ "DrawSetting.alsoNextTask" | translate }}</option>
+        <option ngValue="all">{{ "DrawSetting.inEntireGame" | translate }}</option>
       </select>
     </ion-item>
     <ion-item 

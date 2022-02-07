@@ -245,7 +245,8 @@
                 "objectPhoto": "Füge ein Foto vom gesuchten Objekt ein. Es wird im Spiel angezeigt.",
                 "destinationDirection": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung.",
                 "directionMap": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung. Die Markierung wird im Spiel angezeigt.",
-                "photoDirection": "Wähle ein Foto, das die gesuchte Blickrichtung darstellt."
+                "photoDirection": "Wähle ein Foto, das die gesuchte Blickrichtung darstellt.",
+                "showMappingView": "Wann soll die Kartierung des Spielers auf der Karte angezeigt werden?"
         },
         "Feedback": {
                 "correct": "Du hast die Aufgabe richtig gelöst!",
@@ -305,6 +306,13 @@
                 "bySelectingText": "... durch Wählen einer Textantwort",
                 "byEnteringNumber": "... durch Eingabe einer Zahl",
                 "byMarkingDirectionOnMap": "... durch Markierung der Richtung auf der Karte",
-                "byEnteringText": "... durch Texteingabe"
+                "byEnteringText": "... durch Texteingabe",
+                "byMapping": "... mittels Kartierung"
+        },
+        "DrawSetting":{
+                "keepMappingOption":"Kartierung auf der Karte behalten",
+                "onlyCurrentTask":"nur bei der aktuellen Aufgabe",
+                "alsoNextTask":"auch bei der nächsten Aufgabe",
+                "inEntireGame":"im gesamten Spiel"
         }
 }
