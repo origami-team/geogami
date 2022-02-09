@@ -392,6 +392,14 @@ export class EditGameOverviewPage implements AfterViewInit {
 
 
     this.map.on('load', () => {
+      // disable map rotation in VR world
+      if (this.isVirtualWorld) {
+        // disable map rotation using right click + drag
+        this.map.dragRotate.disable();
+        // disable map rotation using touch rotation gesture
+        this.map.touchZoomRotate.disableRotation();
+      }
+
       if (this.game.bbox != undefined) {
         if (this.game.bbox.type == 'FeatureCollection') {
           this.game.bbox.features.forEach(element => {
