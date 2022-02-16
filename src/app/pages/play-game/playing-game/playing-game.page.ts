@@ -1417,6 +1417,28 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   nextTask() {
+
+    // Keep track on map impl.
+    // Check if the previous task has track feature and check 
+    // if it has keep feature `next`, to delete the track before viweing next game
+    const prevNavTask =
+      this.taskIndex - 1 >= 0 ? this.game.tasks[this.taskIndex - 1] : undefined;
+    if(prevNavTask){
+      if(
+        prevNavTask.answer.type == AnswerType.POSITION && 
+        prevNavTask.mapFeatures.keepTrack === "next"){
+        this.trackControl.removeTemporaryTrack(this.taskIndex - 1);
+        }
+    }
+    // check if current task has `track feature` and whether its keep feature `next` or `all` to keep the route
+    if(this.task.answer.type === AnswerType.POSITION){
+      if(this.task.mapFeatures.keepTrack === "all"){
+        this.trackControl.addPermanentTrack(this.taskIndex);
+      } else if(this.task.mapFeatures.keepTrack === "next"){
+        this.trackControl.addTemporaryTrack(this.taskIndex);
+      }
+    } 
+
     // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
@@ -1516,6 +1538,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   async onOkClicked() {
+
+    console.log("onOkClicked//////")
     const isCorrect = true;
     const answer: any = {};
 
@@ -1583,6 +1607,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.landmarkControl.addTemporaryDrawing(this.DrawControl.getAll());
       }
     }
+
+    
 
     await this.feedbackControl.setAnswer({
       selectedPhoto: this.selectedPhoto,

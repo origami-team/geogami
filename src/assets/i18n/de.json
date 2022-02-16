@@ -74,7 +74,8 @@
                 "satelliteOnDemand": "Satellitenbild auf Knopfdruck",
                 "satelliteSwipe": "Satellitenbild mit Swipefunktion",
                 "3D": "3D-Ansicht",
-                "3DonDemand": "3D-Ansicht auf Knopfdruck"
+                "3DonDemand": "3D-Ansicht auf Knopfdruck",
+                "keepTrack":"Strecke auf der Karte behalten"
         },
         "GameList": {
                 "titleGameMenu": "Wähle die Spielumgebung",
@@ -247,7 +248,9 @@
                 "destinationDirection": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung.",
                 "directionMap": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung. Die Markierung wird im Spiel angezeigt.",
                 "photoDirection": "Wähle ein Foto, das die gesuchte Blickrichtung darstellt.",
-                "showMappingView": "Wann soll die Kartierung des Spielers auf der Karte angezeigt werden?"
+                "showMappingView": "Wann soll die Kartierung des Spielers auf der Karte angezeigt werden?",
+                "showTrack": "Wann soll die Strecke des Spielers auf der Karte angezeigt werden?"
+
         },
         "Feedback": {
                 "correct": "Du hast die Aufgabe richtig gelöst!",

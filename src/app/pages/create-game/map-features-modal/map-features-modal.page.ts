@@ -7,7 +7,7 @@ import {
   AfterViewInit,
   Input
 } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
 
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
@@ -18,6 +18,8 @@ import { Plugins } from '@capacitor/core';
 
 import { cloneDeep } from 'lodash';
 import { standardMapFeatures } from '../../../models/standardMapFeatures';
+import { TranslateService } from '@ngx-translate/core';
+import { PopoverComponent } from 'src/app/popover/popover.component';
 
 @Component({
   selector: 'app-map-features-modal',
@@ -38,7 +40,9 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
 
   constructor(
     public modalController: ModalController,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private translate: TranslateService,
+    public popoverController: PopoverController,
   ) { }
 
   ngOnInit() {
@@ -525,5 +529,17 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
         landmarkFeatures: this.draw.getAll()
       }
     });
+  }
+
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text },
+    });
+    return await popover.present();
   }
 }

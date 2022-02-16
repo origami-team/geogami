@@ -86,9 +86,24 @@
       </select>
     </ion-item>
 
-    <ion-item>
+    <ion-item style="--border-style: none;">
       <ion-label>{{ "Mapfeatures.track" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.track"></ion-toggle>
+    </ion-item>
+
+    <ion-item [disabled]="! features.track">
+      <ion-label>
+        {{ "Mapfeatures.keepTrack" | translate }}
+      <ion-icon
+        name="information-circle"
+        (click)="showPopover($event, 'Popover.showTrack')">
+      </ion-icon>
+    </ion-label>
+      <select interface="popover" [(ngModel)]="features.keepTrack">
+        <option ngValue="current">{{ "DrawSetting.onlyCurrentTask" | translate }}</option>
+        <option ngValue="next">{{ "DrawSetting.alsoNextTask" | translate }}</option>
+        <option ngValue="all">{{ "DrawSetting.inEntireGame" | translate }}</option>
+      </select>
     </ion-item>
 
     <ion-item>

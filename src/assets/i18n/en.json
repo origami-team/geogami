@@ -76,7 +76,8 @@
             "satelliteOnDemand": "satellite image on-demand",
             "satelliteSwipe": "satellite image with swipe function",
             "3D": "3D view",
-            "3DonDemand": "3D view on-demand"
+            "3DonDemand": "3D view on-demand",
+            "keepTrack":"Keep track on the map"
     },
 
     "GameList": {
@@ -261,7 +262,9 @@
             "destinationDirection": "Mark the direction to be searched on the map. First select the location and then the view direction.",
             "directionMap": "Mark the direction to be searched on the map. First select the location and then the view direction. The marker will be displayed in the game.",
             "photoDirection": "Choose a photo that represents the view direction to be searched.",
-            "showMappingView": "When should the player's mapping be displayed on the map?"
+            "showMappingView": "When should the player's mapping be displayed on the map?",
+            "showTrack": "When should the player's track be displayed on the map?"
+
     },
     
     "Feedback": {

@@ -8,6 +8,7 @@ export const standardMapFeatures: MapFeatures = {
     position: 'none',
     direction: 'none',
     track: false,
+    keepTrack: 'current',
     streetSection: false,
     reducedInformation: false,
     landmarks: false,
