@@ -213,6 +213,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   uploading = false;
   loaded = false;
 
+  // to disable on-demand marker for some seconds after pressing
+  geolocateButton = true;
+
   DrawControl = new MapboxDraw({
     displayControlsDefault: false,
     controls: {
@@ -1761,7 +1764,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   toggleGeolocate() {
-    this.geolocateControl.toggle();
+    if(this.geolocateButton){
+      this.geolocateControl.toggle();
+      this.geolocateButton = false;
+
+      setTimeout(() => {
+        this.geolocateControl.toggle();
+      }, 2000)
+
+      setTimeout(() => {
+        this.geolocateButton = true;
+      }, 20000)
+    }
   }
 
   async _initMapFeatures() {

@@ -72,6 +72,7 @@
       class="overlay feature-button"
       *ngIf="task?.mapFeatures?.position == 'button'"
       (click)="toggleGeolocate()"
+      [disabled]="!geolocateButton"
     >
       <ion-button fill="clear">
         <ion-icon name="locate" size="large"></ion-icon>
