@@ -67,7 +67,7 @@ export class FeedbackComponent {
     private trackerService: TrackerService;
     private playingGamePage: PlayingGamePage;
 
-    private feedbackDuration = 2000;
+    private feedbackDuration = 4000;
     deviceOrientationSubscription: any;
     private direction: number;
     successColor: string;
