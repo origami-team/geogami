@@ -1089,10 +1089,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
       }
     } else if (this.game.bbox?.features?.length > 0) {
-      const bboxBuffer = bbox(buffer(this.game.bbox, 0.4));
+      const bboxBuffer = bbox(this.game.bbox);
       bounds = bounds.extend(bboxBuffer);
     } else if (this.task.question.area?.features?.length > 0) {
-      const searchAreaBuffer = bbox(buffer(this.task.question.area, 0.5));
+      const searchAreaBuffer = bbox(this.task.question.area);
       bounds = bounds.extend(searchAreaBuffer);
     } else {
       if(!this.isVirtualWorld){
@@ -1108,8 +1108,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (!bounds.isEmpty()) {
         this.map.fitBounds(bounds, {
           padding: {
-            top: 80,
-            bottom: 500,
+            top: 40,
+            bottom: 400,
             left: 40,
             right: 40,
           },
@@ -1129,8 +1129,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const bboxBuffer = bbox(this.game.bbox);
       this.map.fitBounds(bboxBuffer, {
         padding: {
-          top: 80,
-          bottom: 500,
+          top: 40,
+          bottom: 400,
           left: 40,
           right: 40,
         },
