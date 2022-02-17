@@ -61,6 +61,7 @@ export class LandmarkControl {
         "icon-image": "landmark-marker",
         "icon-size": 1,
         "icon-anchor": "bottom",
+        'icon-allow-overlap': true
       },
     });
   }
