@@ -608,7 +608,7 @@ export class FeedbackComponent {
         break;
       case FeedbackType.TryAgain:
         this.feedback.icon = "😕";
-        this.feedback.text ="";
+        this.feedback.text = this.task.answer?.hints == undefined ? this.translate.instant("Feedback.tryAgain") : "";
         this.feedbackRetry = true;
         break;
       case FeedbackType.Saved:
