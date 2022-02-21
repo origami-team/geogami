@@ -52,8 +52,7 @@ export function createTranslateLoader(http: HttpClient) {
 * Using sockit.IO for receiving data from VR App
 */
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-//const config: SocketIoConfig = { url: 'http://192.168.0.242:3001', options: {} }; // local
-const config: SocketIoConfig = { url: 'https://vr-app-multi-users.herokuapp.com/', options: {} }; // multi users at once
+const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.com/', options: {} }; // multi users at once
 
 
 @NgModule({

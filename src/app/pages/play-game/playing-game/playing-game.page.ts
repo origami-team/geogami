@@ -409,7 +409,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   connectSocketIO() {
     this.socket.connect();
     /* MultiUsers in Parallel impl. */
-    this.socket.emit("newGame", {gameCode: this.gameCode});
+    this.socket.emit("newGame", {gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored});
   }
 
   disconnectSocketIO() {
@@ -1093,11 +1093,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const searchAreaBuffer = bbox(buffer(this.task.question.area, 0.5));
       bounds = bounds.extend(searchAreaBuffer);
     } else {
-      if(!this.isVirtualWorld){
         this.game.tasks.forEach((task) => {
         bounds = bounds.extend(this.calcBounds(task));
         });
-      }
     }
 
     const prom = new Promise((resolve, reject) => {
@@ -1312,10 +1310,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.landmarkControl.removeQT();
     this.landmarkControl.removeSearchArea();
 
-    try {
-      await this.zoomBounds();
-    } catch (e) {
-      console.log(e);
+    if(!this.isVirtualWorld){
+      try {
+        await this.zoomBounds();
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     if (
