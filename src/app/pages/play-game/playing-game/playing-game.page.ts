@@ -71,6 +71,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { Socket } from 'ngx-socket-io';
 import { AvatarPosition } from 'src/app/models/avatarPosition'
 import { Coords } from 'src/app/models/coords'
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-playing-game",
@@ -93,7 +94,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService,
     private orientationService: OrigamiOrientationService,
-    private socket: Socket
+    private socket: Socket,
+    private translate: TranslateService
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -1087,10 +1089,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
       }
     } else if (this.game.bbox?.features?.length > 0) {
-      const bboxBuffer = bbox(buffer(this.game.bbox, 0.4));
+      const bboxBuffer = bbox(this.game.bbox);
       bounds = bounds.extend(bboxBuffer);
     } else if (this.task.question.area?.features?.length > 0) {
-      const searchAreaBuffer = bbox(buffer(this.task.question.area, 0.5));
+      const searchAreaBuffer = bbox(this.task.question.area);
       bounds = bounds.extend(searchAreaBuffer);
     } else {
         this.game.tasks.forEach((task) => {
@@ -1104,8 +1106,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (!bounds.isEmpty()) {
         this.map.fitBounds(bounds, {
           padding: {
-            top: 80,
-            bottom: 500,
+            top: 40,
+            bottom: 400,
             left: 40,
             right: 40,
           },
@@ -1125,8 +1127,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const bboxBuffer = bbox(this.game.bbox);
       this.map.fitBounds(bboxBuffer, {
         padding: {
-          top: 80,
-          bottom: 500,
+          top: 40,
+          bottom: 400,
           left: 40,
           right: 40,
         },
@@ -1603,14 +1605,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.task.answer.type == AnswerType.DRAW) {
       draw = this.DrawControl.getAll();
 
-      if (this.task.settings.keepDrawing === "all") {
-        this.landmarkControl.addPermanentDrawing(
-          this.DrawControl.getAll(),
-          this.taskIndex
-        );
-      } else if (this.task.settings.keepDrawing === "next") {
-        this.landmarkControl.addTemporaryDrawing(this.DrawControl.getAll());
+      if(draw.features?.length === 0) {
+        const toast = await this.toastController.create({
+          message: this.translate.instant("Feedback.enterAnswer"),
+          color: "dark",
+          duration: 2000,
+        });
+        toast.present();
+
+      } else {
+        if (this.task.settings.keepDrawing === "all") {
+          this.landmarkControl.addPermanentDrawing(
+            this.DrawControl.getAll(),
+            this.taskIndex
+          );
+        } else if (this.task.settings.keepDrawing === "next") {
+          this.landmarkControl.addTemporaryDrawing(this.DrawControl.getAll());
+        }
       }
+
     }
 
     
@@ -1632,7 +1645,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (
       this.task.category == "info" ||
-      this.task.answer.type == AnswerType.DRAW
+      (this.task.answer.type == AnswerType.DRAW && this.DrawControl.getAll().features?.length > 0)
     ) {
       this.nextTask();
     }

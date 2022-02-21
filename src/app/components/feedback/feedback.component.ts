@@ -67,7 +67,7 @@ export class FeedbackComponent {
     private trackerService: TrackerService;
     private playingGamePage: PlayingGamePage;
 
-    private feedbackDuration = 2000;
+    private feedbackDuration = 4000;
     deviceOrientationSubscription: any;
     private direction: number;
     successColor: string;
@@ -608,7 +608,7 @@ export class FeedbackComponent {
         break;
       case FeedbackType.TryAgain:
         this.feedback.icon = "😕";
-        this.feedback.text ="";
+        this.feedback.text = this.task.answer?.hints == undefined ? this.translate.instant("Feedback.tryAgain") : "";
         this.feedbackRetry = true;
         break;
       case FeedbackType.Saved:
