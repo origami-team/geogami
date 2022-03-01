@@ -16,7 +16,11 @@ Steps to reproduce the behavior:
 If applicable, add screenshots to help explain your problem.
 
 
-### OS
-[X] WinOS
-[ ] MacOS
+### Computer OS
+[X] Mac
+[ ] Win
 
+
+### Smartphone OS
+[X] IOS
+[ ] Android
