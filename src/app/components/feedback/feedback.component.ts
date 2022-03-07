@@ -641,7 +641,7 @@ export class FeedbackComponent {
       this.showHint(options);
     }
 
-    if (this.task.answer.type === AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) {
+    if ((this.task.answer.type === AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) && !correct) {
       this.showHint(options);
     }
 
