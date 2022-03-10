@@ -317,6 +317,7 @@
                 "keepMappingOption":"Kartierung auf der Karte behalten",
                 "onlyCurrentTask":"nur bei der aktuellen Aufgabe",
                 "alsoNextTask":"auch bei der nächsten Aufgabe",
-                "inEntireGame":"im gesamten Spiel"
+                "inEntireGame":"im gesamten Spiel",
+                "drawPointOnly": "Nur punkt anzeigen "
         }
 }

@@ -116,6 +116,7 @@ export class CreateTaskModalPage implements OnInit {
         showMarker: true,
         keepMarker: false,
         keepDrawing: "current",
+        drawPointOnly: false
       };
 
       this.settingsChange();
@@ -174,6 +175,7 @@ export class CreateTaskModalPage implements OnInit {
         showMarker: true,
         keepMarker: false,
         keepDrawing: "current",
+        drawPointOnly: false
       };
     }
 

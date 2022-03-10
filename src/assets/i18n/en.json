@@ -334,6 +334,7 @@
             "keepMappingOption":"Keep mapping on the map",
             "onlyCurrentTask":"only for the current task",
             "alsoNextTask":"also for the next task",
-            "inEntireGame":"in the entire game"
+            "inEntireGame":"in the entire game",
+            "drawPointOnly": "Show only draw point"
     }
 }

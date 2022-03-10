@@ -218,7 +218,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // to disable on-demand marker for some seconds after pressing
   geolocateButton = true;
 
-  DrawControl = new MapboxDraw({
+  // to hold either all draw controls enabled or only point 
+  DrawControl: any;
+
+  // Draw control all enabled
+  DrawControl_all = new MapboxDraw({
     displayControlsDefault: false,
     controls: {
       polygon: true,
@@ -393,6 +397,54 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         paint: {
           "line-color": "#000",
           "line-width": 3,
+        },
+      },
+    ],
+  });
+
+  // Draw control only point enabled
+  DrawControl_point = new MapboxDraw({
+    displayControlsDefault: false,
+    controls: {
+      point: true ,
+      trash: true,
+    },
+    styles: [
+      {
+        id: "gl-draw-point-inactive",
+        type: "circle",
+        filter: [
+          "all",
+          ["==", "active", "false"],
+          ["==", "$type", "Point"],
+          ["==", "meta", "feature"],
+          ["!=", "mode", "static"],
+        ],
+        paint: {
+          "circle-radius": 8,
+          "circle-color": getComputedStyle(
+            document.documentElement
+          ).getPropertyValue("--ion-color-secondary"),
+          "circle-stroke-width": 4,
+          "circle-stroke-color": "#fff",
+        },
+      },
+      {
+        id: "gl-draw-point-active",
+        type: "circle",
+        filter: [
+          "all",
+          ["==", "$type", "Point"],
+          ["!=", "meta", "midpoint"],
+          ["==", "active", "true"],
+        ],
+        paint: {
+          "circle-radius": 8,
+          "circle-color": getComputedStyle(
+            document.documentElement
+          ).getPropertyValue("--ion-color-secondary"),
+          "circle-stroke-width": 6,
+          "circle-stroke-color": "#fff",
         },
       },
     ],
@@ -1410,7 +1462,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.DRAW) {
-      this.map.addControl(this.DrawControl, "top-left");
+      console.log(" tasks info: ",this.task)
+      if(this.task.settings.drawPointOnly !== undefined && this.task.settings.drawPointOnly) {
+        this.DrawControl = this.DrawControl_point;
+      } else{
+        this.DrawControl = this.DrawControl_all;
+      }
+      this.map.addControl(this.DrawControl, "top-left");   
     }
 
     // VR world (calcualte initial distance to target in nav-arrow tasks)
