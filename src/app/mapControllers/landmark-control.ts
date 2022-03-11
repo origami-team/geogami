@@ -7,6 +7,8 @@ export class LandmarkControl {
   private dangerColor: string;
   private tertiaryColor: string;
 
+  private landmarkColor = "orange";
+
   constructor(map: MapboxMap) {
     this.map = map;
     this.warningColor = getComputedStyle(
@@ -36,7 +38,7 @@ export class LandmarkControl {
       source: "landmarksSource",
       filter: ["all", ["==", ["geometry-type"], "Polygon"]],
       paint: {
-        "fill-extrusion-color": this.dangerColor,
+        "fill-extrusion-color": this.landmarkColor,
         "fill-extrusion-opacity": 0.5,
         "fill-extrusion-height": 20,
       },
@@ -47,7 +49,7 @@ export class LandmarkControl {
       source: "landmarksSource",
       filter: ["all", ["==", ["geometry-type"], "LineString"]],
       paint: {
-        "line-color": this.dangerColor,
+        "line-color": this.landmarkColor,
         "line-opacity": 0.5,
         "line-width": 5,
       },
@@ -61,7 +63,7 @@ export class LandmarkControl {
         "icon-image": "landmark-marker",
         "icon-size": 1,
         "icon-anchor": "bottom",
-        'icon-allow-overlap': true
+        "icon-allow-overlap": true,
       },
     });
   }
