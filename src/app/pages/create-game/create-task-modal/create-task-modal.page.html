@@ -285,6 +285,12 @@
         <option ngValue="all">{{ "DrawSetting.inEntireGame" | translate }}</option>
       </select>
     </ion-item>
+
+    <ion-item lines="none" *ngIf="task.answer.type === 'DRAW'">
+      <ion-label>{{ "DrawSetting.drawPointOnly" | translate }} </ion-label>
+      <ion-toggle color="danger" [(ngModel)]="task.settings.drawPointOnly"></ion-toggle>
+    </ion-item>
+
     <ion-item 
       lines="none" 
       *ngIf="task.type != 'theme-object' && task.type != 'theme-direction' && task.type != 'free'">
