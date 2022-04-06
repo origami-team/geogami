@@ -515,7 +515,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
       geofence: this.geofence,
       place: this.game.place,
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored
+      isVRMirrored: this.isVRMirrored,
+      isVisible: true                    // new game is visible by default
     });
     console.log(this.gameFactory.game);
 

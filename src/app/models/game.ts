@@ -11,6 +11,7 @@ export class Game {
     public mapSectionVisible: boolean,
     public geofence: boolean,
     public isVRWorld: boolean,
-    public isVRMirrored: boolean
+    public isVRMirrored: boolean,
+    public isVisible: boolean
   ) { }
 }
