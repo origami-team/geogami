@@ -662,8 +662,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     // Set bounds of VR world 
     var bounds = [
-      [0.0002307207207 - 0.003, 0.0003628597122 - 0.003], // Southwest coordinates
-      [0.003717027207 + 0.003, 0.004459082914 + 0.003] // Northeast coordinates
+      [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
+      [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates (lng,lat)
     ];
 
     this.map = new mapboxgl.Map({

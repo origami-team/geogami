@@ -388,8 +388,8 @@ export class EditGameOverviewPage implements AfterViewInit {
 
     // Set bounds of VR world
     var bounds = [
-      [0.0002307207207 - 0.004, 0.0003628597122 - 0.004], // Southwest coordinates
-      [0.003717027207 + 0.004, 0.004459082914 + 0.004], // Northeast coordinates
+      [0.0002307207207 - 0.003, 0.0003628597122 - 0.003], // Southwest coordinates
+      [0.003717027207 + 0.003, 0.004459082914 + 0.003], // Northeast coordinates
     ];
 
     this.map = new mapboxgl.Map({
