@@ -4,7 +4,7 @@
 
 GeoGami is a location-based game that allows the user to play and create map-based games - for any place in the world. It is created by the Spatial Intelligence Lab (SIL) of the Institute for Geoinformatics, University of Münster.
 
-For more information on GeoGami and our research visit the Website (German).
+For more information on **GeoGami** and our **research** visit the [Website](https://geogami.ifgi.de) (German).
 
 ## Installation and Usage
 - Clone / download the repo
