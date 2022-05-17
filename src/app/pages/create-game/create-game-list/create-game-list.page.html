@@ -104,6 +104,14 @@
             lines="none"
             *ngFor="let task of game.tasks; index as i"
           >
+
+            <!-- show task number -->
+            <ion-avatar slot="start">
+              <div class="mymarker">
+                <p class="list">{{ i + 1 }}</p>
+              </div>
+            </ion-avatar>
+
             <ion-avatar
               class="flag"
               slot="start"

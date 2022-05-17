@@ -55,7 +55,7 @@ export class AnalyzeGameListPage implements OnInit {
   }
 
   async remove(track) {
-    this.confirmDialog(`Willst du die Datei ${track} wirklich löschen?`)
+    this.confirmDialog(`Willst du die Datei ${track} wirklich löschen?`) // --- ToDo (translate) 
       .then(async () => {
         await Plugins.Filesystem.deleteFile({
           path: `origami/tracks/${track}`,
