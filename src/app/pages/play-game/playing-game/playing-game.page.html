@@ -254,9 +254,15 @@
           <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
             {{ "PlayGame.pressOKdestination" | translate }}
           </p>
-          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
+          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag' && !task?.answer?.type.includes('MULTIPLE_CHOICE')">
             {{ "PlayGame.pressOK" | translate }}
           </p>
+          <!-- To show differnt message with MULTIPLE_CHOICE questions -->
+          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag' && task?.answer?.type.includes('MULTIPLE_CHOICE')">
+            {{ "PlayGame.selectThenPressOK" | translate }}
+          </p>
+
+
         </div>
         <div class="ok-container">
           <app-audio-player

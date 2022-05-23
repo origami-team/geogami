@@ -195,6 +195,7 @@
             "virtualWorldDescription": "Play GeoGami in a virtual world.",
             "toDestination": "To destination:",
             "pressOK": "Press 'okay'!",
+            "selectThenPressOK": "Select an answer, then press 'okay'!",
             "pressOKdestination": "Press 'okay' when you arrive!",
             "GPSaccuracy": "GPS accuracy:",
             "playersNames": "Who is playing?",

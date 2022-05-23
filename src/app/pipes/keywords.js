@@ -14,6 +14,13 @@ export const mappings = [
   </ion-text>`,
   },
   {
+    text: "You are here",
+    tag: `<ion-text color="danger">You are here<ion-chip color="danger">
+      <ion-icon name="radio-button-on"></ion-icon>
+    </ion-chip>
+  </ion-text>`,
+  },
+  {
     text: "marker",
     tag: `<ion-text color="secondary">Marker<ion-chip color="secondary">
       <ion-icon name="location-sharp"></ion-icon>
