@@ -48,7 +48,7 @@ export class EditGameListPage implements OnInit {
     private navCtrl: NavController,
     private gamesService: GamesService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -61,7 +61,7 @@ export class EditGameListPage implements OnInit {
           this.gameFactory.addGameInformation(this.game);
 
           // VR world
-          if( game.isVRWorld !== undefined &&  game.isVRWorld != false){
+          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
             this.isVirtualWorld = true;
             if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
               this.isVRMirrored = true;
@@ -100,7 +100,7 @@ export class EditGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored:boolean = this.isVRMirrored) {
+  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -111,7 +111,7 @@ export class EditGameListPage implements OnInit {
         type,
         task,
         isVirtualWorld,  // added to view VR world map instead of real map if true
-        isVRMirrored  
+        isVRMirrored
       },
     });
 
@@ -196,6 +196,10 @@ export class EditGameListPage implements OnInit {
 
   navigateBack() {
     this.gameFactory.flushGame();
-    this.navCtrl.navigateBack("create-game");
+    if (!this.isVirtualWorld) {
+      this.navCtrl.navigateBack("create-game");
+    } else {
+      this.navCtrl.navigateBack("create-game-virtual");
+    }
   }
 }
