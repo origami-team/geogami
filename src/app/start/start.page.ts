@@ -47,7 +47,7 @@ export class StartPage implements OnInit {
         }
       });
 
-    this._translate.setDefaultLang('de');
+    this._translate.setDefaultLang('en'); // default language is english
 
     Plugins.Device.getInfo().then((device) => (this.device = device));
   }
