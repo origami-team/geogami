@@ -16,6 +16,10 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
 
   @Input() task: any;
 
+  // VR world
+  @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
+
   @Output() taskChange: EventEmitter<any> = new EventEmitter<any>(true);
 
   uploading = false;
@@ -56,7 +60,9 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       component: MapFeaturesModalPage,
       backdropDismiss: false,
       componentProps: {
-        features: this.task.mapFeatures
+        features: this.task.mapFeatures,
+        isVirtualWorld: this.isVirtualWorld,
+        isVRMirrored: this.isVRMirrored
       }
     });
     await modal.present();
