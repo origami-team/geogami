@@ -14,7 +14,7 @@ import {
 })
 export class MultipleChoiceTextComponent implements OnInit {
   @Input() answers: String[] = ["", "", "", ""];
-  //--- TODo: get text from transaltion 
+  //--- TODo: get text from translation 
   @Input() hints?: String[] = [
     "",
     "Probiere es noch einmal.",

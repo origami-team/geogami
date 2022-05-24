@@ -15,7 +15,8 @@
                 "pl_text": "Text",
                 "pl_optional": "(optional)",
                 "back_button": "Zurück", 
-                "from": "von"
+                "from": "von",
+                "next": "Weiter"
         },
         "Tasktypes": {
                 "navigationTasks": "Navigationsaufgaben",
