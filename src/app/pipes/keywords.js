@@ -7,6 +7,13 @@ export const mappings = [
   </ion-text>`,
   },
   {
+    text: "Flag",
+    tag: `<ion-text color="primary">Flag<ion-chip color="primary">
+      <ion-icon name="flag"></ion-icon>
+    </ion-chip>
+  </ion-text>`,
+  },
+  {
     text: "du bist hier",
     tag: `<ion-text color="danger">Du bist hier<ion-chip color="danger">
       <ion-icon name="radio-button-on"></ion-icon>

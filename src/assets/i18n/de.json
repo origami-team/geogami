@@ -196,8 +196,8 @@
                 "markedArea": "das markierte Gebiet.",
                 "goBack": "Gehe zurück!",
                 "correctLocation": "Stehst du genau richtig? Dann drücke 'Okay'!",
-                "gamecode": "Spielcode",
-                "pl_EnterCode": "Spielcode eingeben"
+                "gameConnection": "Verbindungscode",
+                "pl_EnterCode": "Verbindungscode eingeben"
         },
         "Showroom": {
                 "titleShowroom": "Lerne GeoGami kennen",
@@ -239,7 +239,7 @@
                 "textMC": "Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder.",
                 "number": "Schreibe die richtige Aufgabenlösung (Zahl) in das Feld.",
                 "photo": "Dieses Foto wird im Spiel angezeigt.",
-                "gameCode": "Füge einen fünfstelligen Spielcode (Zahlen/Buchstaben) hinzu. Öffne die VR Welt und gib den Code dort ein.",
+                "gameConnectionInfo": "Erstelle einen fünfstelligen Verbindungscode (Zahlen/Buchstaben), öffne dann die GeoGami Virtual Env. App und gib den Code dort ein.",
                 "markdown": "Es können Markdown Elemente genutzt werden.\n**Beispiel** für fetten Text.\n_Beispiel_ für kursiven Text.\n~~Beispiel~~ für durchgestrichenen Text.\n[Beispiellink](https://beispiel.de/) für einen Link.\nWeitere Informationen: https://jfcere.github.io/ngx-markdown/cheat-sheet",
                 "taskInstruction": "Diese Aufgabenstellung wird im Spiel angezeigt.",
                 "navInstruction": "Füge hier eine genaue Wegbeschreibung ein. Diese wird im Spiel angezeigt.",

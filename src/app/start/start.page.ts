@@ -47,7 +47,7 @@ export class StartPage implements OnInit {
         }
       });
 
-    this._translate.setDefaultLang('en'); // default language is english
+    this._translate.setDefaultLang('de'); // default language is german
 
     Plugins.Device.getInfo().then((device) => (this.device = device));
   }
@@ -59,11 +59,15 @@ export class StartPage implements OnInit {
   navigateGamesOverviewPage() {
     //this.navCtrl.navigateForward('play-game/play-game-list');
 
-    if (this.userRole != undefined && this.userRole == "admin") {
+    // disable unregistered users from playing using the virtual world
+    /* if (this.userRole != undefined && this.userRole == "admin") {
       this.navCtrl.navigateForward('play-game/play-game-menu');
     } else {
       this.navCtrl.navigateForward(`play-game/play-game-list/${"RealWorld"}`);
-    }
+    } */
+
+    // enable unregistered users to play using the virtual world
+    this.navCtrl.navigateForward('play-game/play-game-menu');
 
   }
 

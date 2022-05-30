@@ -207,8 +207,8 @@
                 "markedArea": "the marked area.",
                 "goBack": "Go back!",
                 "correctLocation": "Are you exactly right? Then press 'okay'!",
-                "gamecode": "Game code",
-                "pl_EnterCode": "Enter game code"
+                "gameConnection": "Connection code",
+                "pl_EnterCode": "Enter connection code"
         },
             
         "Showroom": {
@@ -253,7 +253,7 @@
                 "textMC": "Write the correct solution in the green box. Write incorrect answers in the red boxes.",
                 "number": "Write the correct solution (number) in the box.",
                 "photo": "This photo will be displayed in the game.",
-                "gameCode": "Add a five-digit game code (numbers/letters). Open the VR World and enter the code.",
+                "gameConnectionInfo": "Create a five-digit connection code (numbers/letters), then open GeoGami virtual env. App and enter the code.",
                 "markdown": "Markdown elements can be used.\n**example** for bold text.\n_example_ for italic text.\n~~example~~ for strike through text.\n[example link](https://example.com/) for a link.\nFurther information: https://jfcere.github.io/ngx-markdown/cheat-sheet",
                 "taskInstruction": "This task instruction is displayed in the game.",
                 "navInstruction": "Add a detailed description of the route here. This will be displayed in the game.",
@@ -295,7 +295,7 @@
         
         "QuestionText": {
                 "goToFlag": "Go to the flag.",
-                "followTheArrow": "Follow the arrow to the target.",
+                "followTheArrow": "Follow the arrow to the destination.",
                 "goToPlace": "Go to the place shown in the photo.",
                 "whereAreYouNow": "Where are you now? Tap on the map.",
                 "findTheHouseChoosePhoto": "Find the highlighted house near you. Choose the appropriate photo.",
