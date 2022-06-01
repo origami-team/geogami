@@ -2,7 +2,7 @@
   "index": "/index.html",
   "assetGroups": [
     {
-      "name": "OriGami",
+      "name": "GeoGami",
       "installMode": "prefetch",
       "resources": {
         "files": [

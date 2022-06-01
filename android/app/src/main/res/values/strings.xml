@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">OriGami</string>
-    <string name="title_activity_main">OriGami</string>
-    <string name="package_name">de.reedu.origaminext</string>
-    <string name="fileprovider_authority">de.reedu.origaminext.fileprovider</string>
-    <string name="custom_url_scheme">de.reedu.origaminext</string>
+    <string name="app_name">GeoGami</string>
+    <string name="title_activity_main">GeoGami</string>
+    <string name="package_name">com.ifgi.geogami</string>
+    <string name="fileprovider_authority">com.ifgi.geogami.fileprovider</string>
+    <string name="custom_url_scheme">com.ifgi.geogami</string>
 </resources>

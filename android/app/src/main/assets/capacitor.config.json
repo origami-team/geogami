@@ -1,6 +1,6 @@
 {
-  "appId": "de.reedu.origaminext",
-  "appName": "OriGami",
+  "appId": "com.ifgi.geogami",
+  "appName": "GeoGami",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www",
