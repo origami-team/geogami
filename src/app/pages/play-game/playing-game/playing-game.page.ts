@@ -221,6 +221,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // to hold either all draw controls enabled or only point 
   DrawControl: any;
 
+  // share data approval
+  shareData_cbox = false;
+
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
     displayControlsDefault: false,
@@ -406,7 +409,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   DrawControl_point = new MapboxDraw({
     displayControlsDefault: false,
     controls: {
-      point: true ,
+      point: true,
       trash: true,
     },
     styles: [
@@ -463,7 +466,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   connectSocketIO() {
     this.socket.connect();
     /* MultiUsers in Parallel impl. */
-    this.socket.emit("newGame", {gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored});
+    this.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored });
   }
 
   disconnectSocketIO() {
@@ -1048,25 +1051,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (task.answer.position) {
       try {
         bounds.extend(task.answer.position.geometry.coordinates);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (task.question.geometry) {
       try {
         bounds.extend(bbox(task.question.geometry));
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (task.question.area) {
       try {
         bounds.extend(bbox(task.question.area));
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (task.question.direction) {
       try {
         bounds.extend(task.question.direction.position.geometry.coordinates);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (
@@ -1075,7 +1078,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     ) {
       try {
         bounds.extend(bbox(task.mapFeatures.landmarkFeatures));
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (
@@ -1091,7 +1094,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         if (booleanWithin(position, bbox)) {
           try {
             bounds.extend(position);
-          } catch (e) {}
+          } catch (e) { }
         }
       }
     }
@@ -1147,9 +1150,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const searchAreaBuffer = bbox(this.task.question.area);
       bounds = bounds.extend(searchAreaBuffer);
     } else {
-        this.game.tasks.forEach((task) => {
+      this.game.tasks.forEach((task) => {
         bounds = bounds.extend(this.calcBounds(task));
-        });
+      });
     }
 
     const prom = new Promise((resolve, reject) => {
@@ -1364,7 +1367,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.landmarkControl.removeQT();
     this.landmarkControl.removeSearchArea();
 
-    if(!this.isVirtualWorld){
+    if (!this.isVirtualWorld) {
       try {
         await this.zoomBounds();
       } catch (e) {
@@ -1462,13 +1465,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.DRAW) {
-      console.log(" tasks info: ",this.task)
-      if(this.task.settings.drawPointOnly !== undefined && this.task.settings.drawPointOnly) {
+      console.log(" tasks info: ", this.task)
+      if (this.task.settings.drawPointOnly !== undefined && this.task.settings.drawPointOnly) {
         this.DrawControl = this.DrawControl_point;
-      } else{
+      } else {
         this.DrawControl = this.DrawControl_all;
       }
-      this.map.addControl(this.DrawControl, "top-left");   
+      this.map.addControl(this.DrawControl, "top-left");
     }
 
     // VR world (calcualte initial distance to target in nav-arrow tasks)
@@ -1488,18 +1491,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // if it has keep feature `next`, to delete the track before viweing next game
     const prevNavTask =
       this.taskIndex - 1 >= 0 ? this.game.tasks[this.taskIndex - 1] : undefined;
-    if(prevNavTask){
-      if(
-        prevNavTask.answer.type == AnswerType.POSITION && 
-        prevNavTask.mapFeatures.keepTrack === "next"){
+    if (prevNavTask) {
+      if (
+        prevNavTask.answer.type == AnswerType.POSITION &&
+        prevNavTask.mapFeatures.keepTrack === "next") {
         this.trackControl.removeTemporaryTrack(this.taskIndex - 1);
-        }
+      }
     }
     // check if current task has `track feature` and whether its keep feature `next` or `all` to keep the route
-    if(this.task.answer.type === AnswerType.POSITION){
-      if(this.task.mapFeatures.keepTrack === "all"){
+    if (this.task.answer.type === AnswerType.POSITION) {
+      if (this.task.mapFeatures.keepTrack === "all") {
         this.trackControl.addPermanentTrack(this.taskIndex);
-      } else if(this.task.mapFeatures.keepTrack === "next"){
+      } else if (this.task.mapFeatures.keepTrack === "next") {
         this.trackControl.addTemporaryTrack(this.taskIndex);
       }
     } 
@@ -1517,11 +1520,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.trackerService.addEvent({
         type: "FINISHED_GAME",
       });
-      this.trackerService.uploadTrack().then((res) => {
-        if (res.status == 201) {
-          this.uploadDone = true;
-        }
-      });
+
+      // store collected data in database only when user agree in the begining of the game
+      if(this.shareData_cbox){
+        this.trackerService.uploadTrack().then((res) => {
+          if (res.status == 201) {
+            this.uploadDone = true;
+          }
+        });
+      }
+
       if (Capacitor.isNative) {
         Plugins.Haptics.vibrate();
         Plugins.CapacitorKeepScreenOn.disable();
@@ -1683,8 +1691,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
 
     }
-
-    
 
     await this.feedbackControl.setAnswer({
       selectedPhoto: this.selectedPhoto,

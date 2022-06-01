@@ -208,7 +208,9 @@
             "goBack": "Go back!",
             "correctLocation": "Are you exactly right? Then press 'okay'!",
             "gameConnection": "Connection code",
-            "pl_EnterCode": "Enter connection code"
+            "pl_EnterCode": "Enter connection code",
+            "shareDataAgreement": "I agree that collected data can be processed in aggregate form for research purposes."
+
     },
         
     "Showroom": {

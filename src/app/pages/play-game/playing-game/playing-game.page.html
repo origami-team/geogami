@@ -301,18 +301,22 @@
 
   <ion-card class="overlay player-name" *ngIf="showPlayersNames">
     <h3>{{ "PlayGame.playersNames" | translate }}</h3>
-    <ion-item
-      lines="none"
-      *ngFor="let name of playersNames; let i = index; trackBy:indexTracker"
-    >
-      <ion-label class="player-counter" slot="start">{{i + 1}}</ion-label>
+    <ion-item lines="none" *ngFor="let name of playersNames; let i = index; trackBy:indexTracker">
+<!--       <ion-label class="player-counter" slot="start">{{i + 1}}</ion-label> -->
       <ion-input type="text" [(ngModel)]="playersNames[i]"></ion-input>
       <ion-icon slot="end" name="trash" (click)="removePlayer(i)"></ion-icon>
     </ion-item>
 
-    <ion-button (click)="addPlayer()" size="small">
+    <!-- No need to have multi players names -->
+    <!-- <ion-button (click)="addPlayer()" size="small">
       <ion-icon name="add"></ion-icon>
-    </ion-button>
+    </ion-button> -->
+
+    <ion-item lines="none">
+      <ion-label text-wrap>{{ "PlayGame.shareDataAgreement" | translate }}</ion-label>
+      <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
+    </ion-item>
+
     <ion-item lines="none">
       <ion-button
         slot="end"
@@ -333,7 +337,7 @@
     <ion-button
       color="primary"
       (click)="navigateHome()"
-      [disabled]="!uploadDone"
+      [disabled]="!uploadDone && shareData_cbox"
     >
     {{ "General.done" | translate }}
     </ion-button>
