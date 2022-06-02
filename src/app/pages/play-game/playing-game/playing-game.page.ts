@@ -72,6 +72,7 @@ import { Socket } from 'ngx-socket-io';
 import { AvatarPosition } from 'src/app/models/avatarPosition'
 import { Coords } from 'src/app/models/coords'
 import { TranslateService } from "@ngx-translate/core";
+import { map } from "rxjs-compat/operator/map";
 
 @Component({
   selector: "app-playing-game",
@@ -167,6 +168,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   initialAvatarLoc: any;
   currentSecond: number = 0;
   gameCode: string = "";
+
+  // static map impl // --- B.Sc. thesis
+  static_map = false;
+  gameName: string = "";
 
   // degree for nav-arrow
   heading = 0;
@@ -480,6 +485,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.gameCode = JSON.parse(params.bundle).gameCode;
+      this.gameName = JSON.parse(params.bundle).gameName;
+
+      // add static map impl. // --- B.Sc. thesis
+      if (this.gameName == "School 1 Post-Test PM & DM ") {
+        console.log("this.static_map1: ", this.static_map)
+        this.static_map = true;
+        console.log("this.static_map2: ", this.static_map)
+      }
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
@@ -664,7 +677,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // }
 
     // Set bounds of VR world 
-    var bounds = [
+    var bounds_VR_env = [
       [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
       [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates (lng,lat)
     ];
@@ -675,8 +688,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxZoom: 18,
-      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
+      maxBounds: (this.isVirtualWorld ? bounds_VR_env : null) // Sets bounds
     });
+
+
+    // Temp // --- B.Sc. thesis
+    this.map.on('click', e => {
+      var coordinates = e.lngLat;
+      console.log("lng lat:", coordinates)
+    });
+
+
 
 
     this.geolocationService.init(this.isVirtualWorld);
@@ -1167,7 +1189,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             right: 40,
           },
           duration: 1000,
-          maxZoom: 16,
+          maxZoom: 17,  // to change zoom level
         });
       } else {
         reject("bounds are empty");
@@ -1258,6 +1280,63 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   async initTask() {
+
+    
+    // adding static map impl. // --- B.Sc. thesis
+    if (this.static_map) {
+
+      //this.map.rotateTo(50)
+
+      let picIndex = 0;
+      if (this.taskIndex + 1 >= 5) {
+        picIndex = 0;
+      } else {
+        picIndex = this.taskIndex + 1;
+      }
+
+      // (note: i manged to add the static map layer using add layer as below code)
+      //this.map.on('load', () => {
+      if (this.map.getLayer("radar-layer")) {
+        this.map.removeLayer("radar-layer");
+        this.map.removeSource("radar");
+      }
+
+      this.map.addSource('radar', {
+        'type': 'image',
+        //'url': 'assets/icons/v1.png', // V4
+        'url': `assets/Post-Test/1_Post_Map_${1}.jpeg`, // V4
+        /* 'coordinates': [
+          [7.52543, 51.47987], // NW  7.52543, 51.47987
+          [7.52622, 51.48020], // NE 7.52622, 51.48020
+          [7.52769, 51.47905], // SE 7.52769, 51.47905
+          [7.52681, 51.47872]  // SW 7.52681, 51.47872
+        ] */
+        'coordinates': [
+          [7.525431470402509,  51.479874151710476], // NW  7.525470150110408, lat: 51.47985653524688
+          [ 7.526265499289508,  51.480238393944745], // NE 7.526306999322998, lat: 51.48022069238428 
+          [7.527733934519745, 51.47909480265798], // SE 7.527733934519745, 51.47909480265798
+          [7.526902449724844, 51.478700567638185]  // SW 7.526902449724844, 51.478700567638185
+        ]
+      });
+
+      this.map.addLayer({
+        id: 'radar-layer',
+        'type': 'raster',
+        'source': 'radar',
+        'paint': {
+          'raster-fade-duration': 0,
+          "raster-opacity": 0.3
+
+        }
+      });
+
+
+      //});
+
+    }
+
+    ///
+
     this.panelMinimized = false;
 
     console.log("Current task: ", this.task);
@@ -1481,7 +1560,23 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.UpdateInitialArrowDirection(); // To update iniatl arrow direction
     }
 
+
     this.changeDetectorRef.detectChanges();
+
+    /*     let bounds = this.calcBounds(this.task); // --- B.Sc. thesis
+        this.map.fitBounds(bounds, {
+          padding: {
+            top: 40,
+            bottom: 400,
+            left: 40,
+            right: 40,
+          },
+          duration: 1000,
+          maxZoom: 16,  // to change zoom level
+        }); */
+
+    //this.map.rotateTo(50)   
+    //this.map.setBearing(10); 
   }
 
   nextTask() {
@@ -1505,7 +1600,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       } else if (this.task.mapFeatures.keepTrack === "next") {
         this.trackControl.addTemporaryTrack(this.taskIndex);
       }
-    } 
+    }
 
     // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
@@ -1522,7 +1617,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
 
       // store collected data in database only when user agree in the begining of the game
-      if(this.shareData_cbox){
+      if (this.shareData_cbox) {
         this.trackerService.uploadTrack().then((res) => {
           if (res.status == 201) {
             this.uploadDone = true;
@@ -1671,7 +1766,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.task.answer.type == AnswerType.DRAW) {
       draw = this.DrawControl.getAll();
 
-      if(draw.features?.length === 0) {
+      if (draw.features?.length === 0) {
         const toast = await this.toastController.create({
           message: this.translate.instant("Feedback.enterAnswer"),
           color: "dark",
@@ -1738,7 +1833,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.targetHeading = 360 - (this.compassHeading - bearing);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   navigateHome() {
     if (!this.isVirtualWorld) {
@@ -1841,7 +1936,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   toggleGeolocate() {
-    if(this.geolocateButton){
+    if (this.geolocateButton) {
       this.geolocateControl.toggle();
       this.geolocateButton = false;
 
