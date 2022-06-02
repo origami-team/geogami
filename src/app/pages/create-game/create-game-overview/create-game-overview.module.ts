@@ -9,6 +9,9 @@ import { CreateGameOverviewPage } from './create-game-overview.page';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
 
+import { TranslateModule } from '@ngx-translate/core';
+
+
 // Note we need a separate function as it's required
 // by the AOT compiler.
 export function playerFactory() {
@@ -28,7 +31,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LottieModule.forRoot({ player: playerFactory })
+    LottieModule.forRoot({ player: playerFactory }),
+    TranslateModule
   ],
   declarations: [CreateGameOverviewPage]
 })

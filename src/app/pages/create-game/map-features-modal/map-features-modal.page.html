@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title>
-      <ion-icon color="danger" name="map"></ion-icon> Kartenfeatures
+      <ion-icon color="danger" name="map"></ion-icon> {{ "General.mapfeatures" | translate }}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button color="dark" (click)="dismissModal(null)">
@@ -18,102 +18,134 @@
 
 <ion-content class="ion-padding">
   <ion-list>
-    <h5>Karteneinstellungen</h5>
+    <h5>{{ "Mapfeatures.mapSettings" | translate }}</h5>
     <!-- <ion-item>
       <ion-label>Zoom</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.zoombar"></ion-toggle>
     </ion-item> -->
     <ion-item>
-      <ion-label>Zoom</ion-label>
+      <ion-label>{{ "Mapfeatures.zoom" | translate }}</ion-label>
       <select [(ngModel)]="features.zoombar" (change)="onZoomChange()" interface="popover">
-        <option value="true">manuell</option>
-        <option value="task">Zoom zur Aufgabe</option>
-        <option value="game">Zoom zum Spiel</option>
-        <option value="false">aus</option>
+        <option value="true">{{ "Mapfeatures.manual" | translate }}</option>
+        <option value="task">{{ "Mapfeatures.zoomToTask" | translate }}</option>
+        <option value="game">{{ "Mapfeatures.zoomToBB" | translate }}</option>
+        <option value="false">{{ "Mapfeatures.off" | translate }}</option>
       </select>
     </ion-item>
     <ion-item>
-      <ion-label>Kartenbereich</ion-label>
+      <ion-label>{{ "Mapfeatures.mapSection" | translate }}</ion-label>
       <select [(ngModel)]="features.pan" interface="popover">
-        <option value="true">verschiebbar</option>
-        <option value="center" [disabled]="features.zoombar == 'task' || features.zoombar == 'game'">
-          automatisch-zentriert</option>
-        <option value="static">statisch</option>
+        <option value="true">{{ "Mapfeatures.panningOn" | translate }}</option>
+        <option value="center" [disabled]="features.zoombar == 'task' || features.zoombar == 'game'">{{ "Mapfeatures.autoCentered" | translate }}</option>
+        <option value="static">{{ "Mapfeatures.static" | translate }}</option>
       </select>
     </ion-item>
     <ion-item>
-      <ion-label>Kartenrotation</ion-label>
+      <ion-label>{{ "Mapfeatures.mapRotation" | translate }}</ion-label>
       <select [(ngModel)]="features.rotation" interface="popover">
-        <option value="manual">manuell</option>
-        <option value="auto">automatisch</option>
-        <option value="button">automatisch auf Knopfdruck</option>
-        <option value="north">genordet</option>
+        <option *ngIf='!isVirtualWorld' value="manual">{{ "Mapfeatures.manual" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="auto">{{ "Mapfeatures.automatic" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="button">{{ "Mapfeatures.automaticOnDemand" | translate }}</option>
+        <option value="north">{{ "Mapfeatures.fixedToNorth" | translate }}</option>
       </select>
     </ion-item>
     <ion-item>
-      <ion-label>Kartenmaterial</ion-label>
+      <ion-label>{{ "Mapfeatures.mapType" | translate }}</ion-label>
       <select [(ngModel)]="features.material" interface="popover">
-        <option value="standard">Standardkarte</option>
-        <option value="selection">Kartenauswahl</option>
-        <option value="sat">Satellitenbild</option>
-        <option value="sat-button">Satellitenbild auf Knopfdruck</option>
-        <option value="sat-swipe">Satellitenbild mit Swipefunktion</option>
-        <option value="3D">3D-Ansicht</option>
-        <option value="3D-button">3D-Ansicht auf Knopfdruck</option>
+        <option value="standard">{{ "Mapfeatures.standardMap" | translate }}</option>
+        <option value="selection">{{ "Mapfeatures.mapChoice" | translate }}</option>
+        <option value="sat">{{ "Mapfeatures.satellite" | translate }}</option>
+        <option value="sat-button">{{ "Mapfeatures.satelliteOnDemand" | translate }}</option>
+        <option value="sat-swipe">{{ "Mapfeatures.satelliteSwipe" | translate }}</option>
+        <option value="3D">{{ "Mapfeatures.3D" | translate }}</option>
+        <option value="3D-button">{{ "Mapfeatures.3DonDemand" | translate }}</option>
+        <option value="blank">Leere Karte</option>
+        <option value="blank-swipe">
+          Leere Karte und Satellitenbild (Swipe)
+        </option>
       </select>
     </ion-item>
 
-    <h5>Marker</h5>
+    <h5>{{ "Mapfeatures.markerSettings" | translate }}</h5>
     <ion-item>
-      <ion-label>Positionsmarker</ion-label>
+      <ion-label>{{ "Mapfeatures.locationMarker" | translate }}</ion-label>
       <select [(ngModel)]="features.position" interface="popover">
-        <option value="none">ohne</option>
-        <option value="true">mit</option>
-        <option value="button">auf Knopfdruck</option>
-        <option value="start">zu Aufgabenbeginn</option>
+        <option value="none">{{ "Mapfeatures.off" | translate }}</option>
+        <option value="true">{{ "Mapfeatures.on" | translate }}</option>
+        <option value="button">{{ "Mapfeatures.onDemand" | translate }}</option>
+        <option value="start">{{ "Mapfeatures.init" | translate }}</option>
       </select>
     </ion-item>
     <ion-item>
-      <ion-label>Blickrichtungsmarker</ion-label>
+      <ion-label>{{ "Mapfeatures.directionMarker" | translate }}</ion-label>
       <select [(ngModel)]="features.direction" interface="popover">
-        <option value="none">ohne</option>
-        <option value="true">mit</option>
-        <option value="button">auf Knopfdruck</option>
-        <option value="start">zu Aufgabenbeginn</option>
+        <option value="none">{{ "Mapfeatures.off" | translate }}</option>
+        <option value="true">{{ "Mapfeatures.on" | translate }}</option>
+        <option value="button">{{ "Mapfeatures.onDemand" | translate }}</option>
+        <option value="start">{{ "Mapfeatures.init" | translate }}</option>
       </select>
     </ion-item>
 
-    <ion-item>
-      <ion-label>Trackaufzeichnung</ion-label>
+    <ion-item style="--border-style: none;">
+      <ion-label>{{ "Mapfeatures.track" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.track"></ion-toggle>
     </ion-item>
 
+    <ion-item [disabled]="! features.track">
+      <ion-label>
+        {{ "Mapfeatures.keepTrack" | translate }}
+      <ion-icon
+        name="information-circle"
+        (click)="showPopover($event, 'Popover.showTrack')">
+      </ion-icon>
+    </ion-label>
+      <select interface="popover" [(ngModel)]="features.keepTrack">
+        <option ngValue="current">{{ "DrawSetting.onlyCurrentTask" | translate }}</option>
+        <option ngValue="next">{{ "DrawSetting.alsoNextTask" | translate }}</option>
+        <option ngValue="all">{{ "DrawSetting.inEntireGame" | translate }}</option>
+      </select>
+    </ion-item>
+
     <ion-item>
-      <ion-label>Aktueller Straßenabschnitt</ion-label>
+      <ion-label>{{ "Mapfeatures.streetMarker" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.streetSection"></ion-toggle>
     </ion-item>
 
     <ion-item style="--border-style: none;">
-      <ion-label>Reduzierter Kartenausschnitt</ion-label>
+      <ion-label>{{ "Mapfeatures.buffer" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.reducedInformation"></ion-toggle>
     </ion-item>
 
     <ion-item>
-    <ion-range color="danger" [(ngModel)]="features.reducedMapSectionDiameter" style="padding-top: 22px;" min="20" max="100" snaps ticks pin step="5" [disabled]="! features.reducedInformation">
-      <ion-label slot="start">20m</ion-label>
-      <ion-icon slot="start" size="small"  name="locate">
-      </ion-icon>
-      <ion-icon slot="end"  name="locate"></ion-icon>
-      <ion-label slot="end">100m</ion-label>
-    </ion-range>
-  </ion-item>
+      <ion-range
+        color="danger"
+        [(ngModel)]="features.reducedMapSectionDiameter"
+        style="padding-top: 22px"
+        min="20"
+        max="100"
+        snaps
+        ticks
+        pin
+        step="5"
+        [disabled]="! features.reducedInformation"
+      >
+        <ion-label slot="start">20m</ion-label>
+        <ion-icon slot="start" size="small" name="locate"> </ion-icon>
+        <ion-icon slot="end" name="locate"></ion-icon>
+        <ion-label slot="end">100m</ion-label>
+      </ion-range>
+    </ion-item>
 
     <ion-item>
-      <ion-label>Hervorhebung von Landmarken</ion-label>
+      <ion-label>{{ "Mapfeatures.landmarks" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
     <!-- <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'" lines="none"> -->
-    <div #map class="map" [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"></div>
+    <div
+      #map
+      class="map"
+      [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"
+    ></div>
     <!-- </ion-item> -->
   </ion-list>
 </ion-content>

@@ -72,6 +72,7 @@
       class="overlay feature-button"
       *ngIf="task?.mapFeatures?.position == 'button'"
       (click)="toggleGeolocate()"
+      [disabled]="!geolocateButton"
     >
       <ion-button fill="clear">
         <ion-icon name="locate" size="large"></ion-icon>
@@ -99,11 +100,11 @@
           <div *ngIf="!panelMinimized">
             <ion-chip color="primary" *ngIf="task.category.includes('nav')">
               <ion-icon name="navigate"></ion-icon>
-              &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
+              &nbsp;{{ "General.task" | translate }} {{ taskIndex + 1 }}&nbsp;{{ "General.from" | translate }} {{ game.tasks.length }}
             </ion-chip>
             <ion-chip color="secondary" *ngIf="task.category.includes('theme')">
               <ion-icon name="clipboard"></ion-icon>
-              &nbsp;Aufgabe {{ taskIndex + 1 }}&nbsp;von {{ game.tasks.length }}
+              &nbsp;{{ "General.task" | translate }} {{ taskIndex + 1 }}&nbsp;{{ "General.from" | translate }} {{ game.tasks.length }}
             </ion-chip>
             <!-- <ion-chip color="tertiary" *ngIf="task.category.includes('free')">
               <ion-icon name="rose"></ion-icon>
@@ -111,7 +112,7 @@
             </ion-chip> -->
             <ion-chip color="warning" *ngIf="task.category.includes('info')">
               <ion-icon name="information-circle-outline"></ion-icon>
-              &nbsp;Info
+              &nbsp;{{ "General.info" | translate }}
             </ion-chip>
           </div>
           <ion-button
@@ -142,7 +143,7 @@
               transform: 'rotate(' + targetHeading + 'deg)'
             }"
             />
-            <p>Zum Ziel: <br /><b>{{ Math.round(targetDistance) }}</b> m</p>
+            <p>{{ "PlayGame.toDestination" | translate }} <br /><b>{{ Math.round(targetDistance) }}</b> m</p>
           </div>
 
           <div
@@ -251,11 +252,17 @@
         </div>
         <div class="task-text">
           <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
-            Drücke OK, wenn du da bist!
+            {{ "PlayGame.pressOKdestination" | translate }}
           </p>
-          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag'">
-            Drücke OK!
+          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag' && !task?.answer?.type.includes('MULTIPLE_CHOICE')">
+            {{ "PlayGame.pressOK" | translate }}
           </p>
+          <!-- To show differnt message with MULTIPLE_CHOICE questions -->
+          <p *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag' && task?.answer?.type.includes('MULTIPLE_CHOICE')">
+            {{ "PlayGame.selectThenPressOK" | translate }}
+          </p>
+
+
         </div>
         <div class="ok-container">
           <app-audio-player
@@ -270,7 +277,7 @@
             [color]="task.category.includes('nav') ? 'primary' : 'secondary'"
             (click)="onOkClicked()"
             *ngIf="task.settings?.confirmation && !task?.category?.includes('info')"
-            >OK
+            >{{ "General.OK" | translate }}
           </ion-button>
 
           <ion-button
@@ -278,7 +285,7 @@
             color="warning"
             (click)="onOkClicked()"
             *ngIf="task?.category?.includes('info')"
-            >OK
+            >{{ "General.OK" | translate }}
           </ion-button>
 
           <!-- <ion-button class="confirm" color=tertiary (click)="onOkClicked()" *ngIf="task?.category?.includes('free')">OK
@@ -288,31 +295,35 @@
     </div>
   </div>
 
-  <p class="accuracy">
-    GPS Genauigkeit: {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m
+  <p class="accuracy" *ngIf="!isVirtualWorld">
+    {{ "PlayGame.GPSaccuracy" | translate }} {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m
   </p>
 
   <ion-card class="overlay player-name" *ngIf="showPlayersNames">
-    <h3>Wer spielt?</h3>
-    <ion-item
-      lines="none"
-      *ngFor="let name of playersNames; let i = index; trackBy:indexTracker"
-    >
-      <ion-label class="player-counter" slot="start">{{i + 1}}</ion-label>
+    <h3>{{ "PlayGame.playersNames" | translate }}</h3>
+    <ion-item lines="none" *ngFor="let name of playersNames; let i = index; trackBy:indexTracker">
+<!--       <ion-label class="player-counter" slot="start">{{i + 1}}</ion-label> -->
       <ion-input type="text" [(ngModel)]="playersNames[i]"></ion-input>
       <ion-icon slot="end" name="trash" (click)="removePlayer(i)"></ion-icon>
     </ion-item>
 
-    <ion-button (click)="addPlayer()" size="small">
+    <!-- No need to have multi players names -->
+    <!-- <ion-button (click)="addPlayer()" size="small">
       <ion-icon name="add"></ion-icon>
-    </ion-button>
+    </ion-button> -->
+
+    <ion-item lines="none">
+      <ion-label text-wrap>{{ "PlayGame.shareDataAgreement" | translate }}</ion-label>
+      <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
+    </ion-item>
+
     <ion-item lines="none">
       <ion-button
         slot="end"
         size="default"
         [disabled]="!loaded"
         (click)="startGame()"
-        >Fertig</ion-button
+        >{{ "General.done" | translate }}</ion-button
       >
     </ion-item>
   </ion-card>
@@ -320,26 +331,28 @@
   <app-feedback #feedback></app-feedback>
 
   <ion-card class="overlay success" *ngIf="staticShowSuccess">
-    <h3>Herzlichen Glückwunsch!</h3>
-    <p>Du hast das Spiel beendet</p>
+    <h3>{{ "PlayGame.congratulations" | translate }}</h3>
+    <p>{{ "PlayGame.finished" | translate }}</p>
     <div lottie [options]="lottieConfig"></div>
     <ion-button
       color="primary"
       (click)="navigateHome()"
-      [disabled]="!uploadDone"
+      [disabled]="!uploadDone && shareData_cbox"
     >
-      Fertig
+    {{ "General.done" | translate }}
     </ion-button>
   </ion-card>
 
   <ion-card class="overlay success" *ngIf="geofenceAlert">
     <h3 *ngIf="game.mapSectionVisible">
-      Du hast das
-      <ion-text color="warning">markierte Gebiet</ion-text> verlassen. Kehre
-      zurück!
+      {{ "PlayGame.youLeave" | translate }}
+      <ion-text color="warning">{{ "PlayGame.markedArea" | translate }}</ion-text>. 
+      {{ "PlayGame.goBack" | translate }}
     </h3>
     <h3 *ngIf="!game.mapSectionVisible">
-      Du verlässt den Spielbereich. Kehre zurück!
+      {{ "PlayGame.youLeave" | translate }} 
+      {{ "PlayGame.gameArea" | translate }} 
+      {{ "PlayGame.goBack" | translate }}
     </h3>
     <div class="compass bearing" *ngIf="lastPointInBboxDirection !== undefined">
       <img
@@ -352,6 +365,6 @@
   </ion-card>
 
   <ion-card class="overlay correct-position" *ngIf="showCorrectPositionModal">
-    <h4>Stehst du genau richtig? Dann drücke OK!</h4>
+    <h4>{{ "PlayGame.correctLocation" | translate }}</h4>
   </ion-card>
 </ion-content>

@@ -4,34 +4,37 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
-  AfterViewInit
-} from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { cloneDeep } from 'lodash';
+  AfterViewInit,
+} from "@angular/core";
+import { ModalController } from "@ionic/angular";
+import { cloneDeep } from "lodash";
 
+import { navtasks } from "../../../models/navigation-tasks";
+import { themetasks } from "./../../../models/theme-tasks";
 
-import { navtasks } from '../../../models/navigation-tasks';
-import { themetasks } from './../../../models/theme-tasks';
-
-import { standardMapFeatures } from '../../../models/standardMapFeatures';
+import { standardMapFeatures } from "../../../models/standardMapFeatures";
 
 // import { FieldConfig } from "./../../../dynamic-form/models/field-config";
 // import { DynamicFormComponent } from "./../../../dynamic-form/container/dynamic-form.component";
-import { MapFeaturesModalPage } from './../map-features-modal/map-features-modal.page';
-import { QuestionType, AnswerType, TaskMode } from 'src/app/models/types';
-import { PopoverController } from '@ionic/angular';
-import { PopoverComponent } from 'src/app/popover/popover.component';
-
+import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal.page";
+import { QuestionType, AnswerType, TaskMode } from "src/app/models/types";
+import { PopoverController } from "@ionic/angular";
+import { PopoverComponent } from "src/app/popover/popover.component";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-create-task-modal',
-  templateUrl: './create-task-modal.page.html',
-  styleUrls: ['./create-task-modal.page.scss']
+  selector: "app-create-task-modal",
+  templateUrl: "./create-task-modal.page.html",
+  styleUrls: ["./create-task-modal.page.scss"],
 })
 export class CreateTaskModalPage implements OnInit {
-  @Input() gameName = '';
-  @Input() type = 'nav';
+  @Input() gameName = "";
+  @Input() type = "nav";
   @Input() task: any = {};
+  
+  // VR world
+  @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
 
   tasks: any[] = [];
 
@@ -45,35 +48,57 @@ export class CreateTaskModalPage implements OnInit {
   objectQuestionSelect: any[] = [];
   objectAnswerSelect: any[] = [];
 
-  freeQuestionSelect: any[] = [QuestionType.TEXT, QuestionType.MAP_FEATURE_FREE, QuestionType.PHOTO];
-  freeAnswerSelect: any[] = [AnswerType.MULTIPLE_CHOICE, AnswerType.PHOTO, AnswerType.MULTIPLE_CHOICE_TEXT, AnswerType.TEXT, AnswerType.NUMBER];
+  freeQuestionSelect: any[] = [
+    QuestionType.TEXT,
+    QuestionType.MAP_FEATURE_FREE,
+    QuestionType.PHOTO,
+  ];
+  freeAnswerSelect: any[] = [
+    AnswerType.MULTIPLE_CHOICE,
+    AnswerType.PHOTO,
+    AnswerType.MULTIPLE_CHOICE_TEXT,
+    AnswerType.TEXT,
+    AnswerType.NUMBER,
+    AnswerType.DRAW,
+  ];
 
   taskTypes: any[] = [
     {
       type: 1,
-      text: 'Selbst-Lokalisation'
+      text: this.translate.instant("Tasktypes.selfLocation")
     }, {
       type: 2,
-      text: 'Objekt-Lokalisation'
+      text: this.translate.instant("Tasktypes.objectLocation")
     }, {
       type: 3,
-      text: 'Richtungsbestimmung'
+      text: this.translate.instant("Tasktypes.directionDetermination")
     }, {
       type: 4,
-      text: 'Freie Aufgabe'
+      text: this.translate.instant("Tasktypes.freeTasks")
     }
   ];
 
   selectedTaskType: any;
 
-  objectQuestionTemplate = [QuestionType.MAP_FEATURE, QuestionType.MAP_FEATURE_PHOTO, QuestionType.MAP_DIRECTION_MARKER, QuestionType.MAP_DIRECTION, QuestionType.MAP_DIRECTION_PHOTO, QuestionType.TEXT];
+  objectQuestionTemplate = [
+    QuestionType.MAP_FEATURE,
+    QuestionType.MAP_FEATURE_PHOTO,
+    QuestionType.MAP_DIRECTION_MARKER,
+    QuestionType.MAP_DIRECTION,
+    QuestionType.MAP_DIRECTION_PHOTO,
+    QuestionType.TEXT,
+  ];
 
   viewDirectionSetPosition = false;
 
-  constructor(public modalController: ModalController, public popoverController: PopoverController) { }
+  constructor(
+    public modalController: ModalController,
+    public popoverController: PopoverController,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
-    if (this.type == 'nav') {
+    if (this.type == "nav") {
       this.tasks = cloneDeep(navtasks);
     } else {
       this.tasks = cloneDeep(themetasks);
@@ -86,25 +111,26 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings = {
         feedback: true,
         multipleTries: true,
-        confirmation: this.task.category.includes('theme'),
+        confirmation: this.task.category.includes("theme"),
         accuracy: 10,
         showMarker: true,
-        keepMarker: false
+        keepMarker: false,
+        keepDrawing: "current",
+        drawPointOnly: false
       };
 
       this.settingsChange();
-
     } else {
-      if (this.task.type.includes('loc')) {
+      if (this.task.type.includes("loc")) {
         this.selectedTaskType = this.taskTypes[0];
       }
-      if (this.task.type.includes('object')) {
+      if (this.task.type.includes("object")) {
         this.selectedTaskType = this.taskTypes[1];
       }
-      if (this.task.type.includes('direction')) {
+      if (this.task.type.includes("direction")) {
         this.selectedTaskType = this.taskTypes[2];
       }
-      if (this.task.type.includes('free')) {
+      if (this.task.type.includes("free")) {
         this.selectedTaskType = this.taskTypes[3];
       }
     }
@@ -121,16 +147,17 @@ export class CreateTaskModalPage implements OnInit {
       this.task = this.tasks[7];
     } else {
       this.task = {
-        name: 'Freie Aufgabe',
-        type: 'free',
-        category: 'theme',
+        //name: 'Freie Aufgabe??',
+        name: this.translate.instant("Tasktypes.freeTask"),
+        type: "free",
+        category: "theme",
         question: {
           type: QuestionType.TEXT,
-          text: ''
+          text: "",
         },
         answer: {
           type: AnswerType.MULTIPLE_CHOICE,
-        }
+        },
       };
     }
     this.onTaskSelected(this.task);
@@ -143,10 +170,12 @@ export class CreateTaskModalPage implements OnInit {
       this.task.settings = {
         feedback: true,
         multipleTries: true,
-        confirmation: this.task.category.includes('theme'),
+        confirmation: this.task.category.includes("theme"),
         accuracy: 10,
         showMarker: true,
-        keepMarker: false
+        keepMarker: false,
+        keepDrawing: "current",
+        drawPointOnly: false
       };
     }
 
@@ -154,30 +183,70 @@ export class CreateTaskModalPage implements OnInit {
 
     this.mapFeatures = this.task.mapFeatures;
 
-    if (this.task.type == 'free') {
-      this.objectQuestionSelect = this.freeQuestionSelect.map(t => ({ type: t as QuestionType, text: t }));
-      this.objectAnswerSelect = this.freeAnswerSelect.map(t => ({ type: t as AnswerType, text: t }));
+    if (this.task.type == "free") {
+      this.objectQuestionSelect = this.freeQuestionSelect.map((t) => ({
+        type: t as QuestionType,
+        text: t,
+      }));
+      this.objectAnswerSelect = this.freeAnswerSelect.map((t) => ({
+        type: t as AnswerType,
+        text: t,
+      }));
 
-      if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
+      if (
+        this.task.answer.type == AnswerType.PHOTO ||
+        this.task.answer.type == AnswerType.TEXT
+      ) {
         this.task.settings.feedback = false;
         this.task.settings.multipleTries = false;
         this.showFeedback = false;
         this.showMultipleTries = false;
       }
 
+      if (this.task.answer.type == AnswerType.DRAW) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      }
     } else {
-      this.objectQuestionSelect = Array.from(new Set(this.tasks.filter(t => t.type == this.task.type).map(t => t.question.type)))
-        .map(t => ({ type: t as QuestionType, text: t }))
-        .sort((a, b) => (this.objectQuestionTemplate.indexOf(a.type) - this.objectQuestionTemplate.indexOf(b.type)));
+      this.objectQuestionSelect = Array.from(
+        new Set(
+          this.tasks
+            .filter((t) => t.type == this.task.type)
+            .map((t) => t.question.type)
+        )
+      )
+        .map((t) => ({ type: t as QuestionType, text: t }))
+        .sort(
+          (a, b) =>
+            this.objectQuestionTemplate.indexOf(a.type) -
+            this.objectQuestionTemplate.indexOf(b.type)
+        );
 
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type);
+      const similarTypes = cloneDeep(themetasks).filter(
+        (t) => t.type == this.task.type
+      );
 
-      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type);
+      const similarQ = similarTypes.filter(
+        (t) => t.question.type == this.task.question.type
+      );
 
-      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))));
+      this.objectAnswerSelect = Array.from(
+        new Set(
+          similarQ.map((t) => ({
+            type: t.answer.type as AnswerType,
+            text: t.answer.type,
+          }))
+        )
+      );
     }
 
-    if (this.task.type == 'theme-direction' && this.task.question.type == 'TEXT' && this.task.answer.type == 'MAP_DIRECTION') {
+    if (
+      this.task.type == "theme-direction" &&
+      this.task.question.type == "TEXT" &&
+      this.task.answer.type == "MAP_DIRECTION"
+    ) {
       if (this.task.question.direction == undefined) {
         this.task.question.direction = {};
       }
@@ -187,31 +256,63 @@ export class CreateTaskModalPage implements OnInit {
         this.viewDirectionSetPosition = false;
       }
     }
-
   }
 
   onObjectQuestionSelectChange() {
-    if (this.task.type != 'free') {
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type);
+    if (this.task.type != "free") {
+      const similarTypes = cloneDeep(themetasks).filter(
+        (t) => t.type == this.task.type
+      );
 
-      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type);
+      const similarQ = similarTypes.filter(
+        (t) => t.question.type == this.task.question.type
+      );
 
       this.onTaskSelected(similarQ[0]);
 
-      this.objectAnswerSelect = Array.from(new Set(similarQ.map(t => ({ type: t.answer.type as AnswerType, text: t.answer.type }))));
+      this.objectAnswerSelect = Array.from(
+        new Set(
+          similarQ.map((t) => ({
+            type: t.answer.type as AnswerType,
+            text: t.answer.type,
+          }))
+        )
+      );
+
+      if (this.task.question.type == QuestionType.MAP_DIRECTION) {
+        this.task.settings.multipleTries = false;
+        this.showMultipleTries = false;
+      } else {
+        this.task.settings.multipleTries = true;
+        this.showMultipleTries = true;
+      }
     }
   }
 
   onObjectAnswerSelectChange() {
-    if (this.task.type != 'free') {
-      const similarTypes = cloneDeep(themetasks).filter(t => t.type == this.task.type);
+    if (this.task.type != "free") {
+      const similarTypes = cloneDeep(themetasks).filter(
+        (t) => t.type == this.task.type
+      );
 
-      const similarQ = similarTypes.filter(t => t.question.type == this.task.question.type && t.answer.type == this.task.answer.type);
+      const similarQ = similarTypes.filter(
+        (t) =>
+          t.question.type == this.task.question.type &&
+          t.answer.type == this.task.answer.type
+      );
 
       this.onTaskSelected(similarQ[0]);
     }
 
-    if (this.task.answer.type == AnswerType.PHOTO || this.task.answer.type == AnswerType.TEXT) {
+    if (
+      this.task.answer.type == AnswerType.PHOTO ||
+      this.task.answer.type == AnswerType.TEXT
+    ) {
+      this.task.settings.feedback = false;
+      this.task.settings.multipleTries = false;
+      this.showFeedback = false;
+      this.showMultipleTries = false;
+    } else if (this.task.answer.type == AnswerType.DRAW) {
       this.task.settings.feedback = false;
       this.task.settings.multipleTries = false;
       this.showFeedback = false;
@@ -230,7 +331,7 @@ export class CreateTaskModalPage implements OnInit {
 
   feedbackChange() {
     this.task.settings.multipleTries = this.task.settings.feedback;
-    if (this.task.category == 'nav' && !this.task.settings.confirmation) {
+    if (this.task.category == "nav" && !this.task.settings.confirmation) {
       this.showMultipleTries = false;
       this.task.settings.multipleTries = false;
     }
@@ -240,16 +341,19 @@ export class CreateTaskModalPage implements OnInit {
     this.showFeedback = true;
     this.showMultipleTries = true;
 
-    if (this.task.category == 'nav' && !this.task.settings.confirmation) {
+    if (this.task.category == "nav" && !this.task.settings.confirmation) {
       this.showMultipleTries = false;
       this.task.settings.multipleTries = false;
     }
 
-    if ((this.task.type == 'nav-text' || this.task.type == 'nav-photo') && !this.task.settings.showMarker) {
+    if (
+      (this.task.type == "nav-text" || this.task.type == "nav-photo") &&
+      !this.task.settings.showMarker
+    ) {
       this.task.settings.keepMarker = false;
     }
 
-    if (this.task.category == 'nav' && event === true) {
+    if (this.task.category == "nav" && event === true) {
       this.showMultipleTries = true;
       this.task.settings.multipleTries = true;
     }
@@ -261,14 +365,29 @@ export class CreateTaskModalPage implements OnInit {
       this.showMultipleTries = false;
     }
 
-    if (this.task.answer.mode == TaskMode.NAV_ARROW ||
+    if (
+      this.task.answer.mode == TaskMode.NAV_ARROW ||
       this.task.question.type == QuestionType.NAV_INSTRUCTION ||
       this.task.question.type == QuestionType.NAV_INSTRUCTION_PHOTO ||
       this.task.answer.type == AnswerType.PHOTO ||
-      this.task.type == 'nav-flag' && !this.task.settings.confirmation) {
+      (this.task.type == "nav-flag" && !this.task.settings.confirmation)
+    ) {
       this.task.settings.multipleTries = false;
 
       this.showMultipleTries = false;
+    }
+
+    if (
+      (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) &&
+      this.task.settings.feedback &&
+      this.task.settings.multipleTries &&
+      !this.task.answer.hints
+    ) {
+      this.task.answer.hints = [
+        "Probiere es noch einmal",
+        "Probiere es noch einmal",
+        "Probiere es noch einmal",
+      ];
     }
   }
 
@@ -291,7 +410,9 @@ export class CreateTaskModalPage implements OnInit {
       component: MapFeaturesModalPage,
       backdropDismiss: false,
       componentProps: {
-        features: this.mapFeatures
+        features: this.mapFeatures,
+        isVirtualWorld: this.isVirtualWorld,
+        isVRMirrored: this.isVRMirrored
       }
     });
     await modal.present();
@@ -302,8 +423,8 @@ export class CreateTaskModalPage implements OnInit {
     return;
   }
 
-  dismissModal(dismissType: string = 'null') {
-    if (dismissType == 'close') {
+  dismissModal(dismissType: string = "null") {
+    if (dismissType == "close") {
       this.modalController.dismiss();
       return;
     }
@@ -320,7 +441,11 @@ export class CreateTaskModalPage implements OnInit {
       this.task.question.area = undefined;
     }
 
-    if (this.task.type == 'theme-direction' && this.task.question.type == 'TEXT' && this.task.answer.type == 'MAP_DIRECTION') {
+    if (
+      this.task.type == "theme-direction" &&
+      this.task.question.type == "TEXT" &&
+      this.task.answer.type == "MAP_DIRECTION"
+    ) {
       if (this.viewDirectionSetPosition == false) {
         this.task.question.direction.position = undefined;
       }
@@ -330,17 +455,19 @@ export class CreateTaskModalPage implements OnInit {
       dismissed: true,
       data: {
         ...this.task,
-        mapFeatures: this.mapFeatures
-      }
+        mapFeatures: this.mapFeatures,
+      },
     });
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,
       translucent: true,
-      componentProps: { text }
+      componentProps: { text },
     });
     return await popover.present();
   }

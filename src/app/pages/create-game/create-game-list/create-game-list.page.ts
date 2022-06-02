@@ -18,6 +18,7 @@ import { CreateFreeTaskModalComponent } from "../create-free-task-modal/create-f
 
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-create-game-list",
@@ -29,6 +30,8 @@ export class CreateGameListPage implements OnInit {
   // tasks: any[] = [];
   game: Game;
   reorder: Boolean = false;
+
+  isVirtualWorld: boolean = false;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
@@ -42,7 +45,8 @@ export class CreateGameListPage implements OnInit {
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
     private navCtrl: NavController,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -80,7 +84,7 @@ export class CreateGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: any = null) {
+  async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -90,6 +94,7 @@ export class CreateGameListPage implements OnInit {
       componentProps: {
         type,
         task,
+        isVirtualWorld
       },
     });
 
@@ -161,15 +166,22 @@ export class CreateGameListPage implements OnInit {
 
   navigateToOverview() {
     console.log("navigate");
-    this.navCtrl.navigateForward("create-game/create-game-overview");
+    
+    let bundle = {
+      isVRWorld: false,
+      isVRMirrored: false
+    }
+    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+    
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,
       translucent: true,
-      componentProps: { text },
+      componentProps: { text }
     });
     return await popover.present();
   }

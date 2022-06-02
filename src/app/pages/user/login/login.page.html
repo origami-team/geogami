@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
+      <ion-back-button color="dark" defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
     <ion-title>Login</ion-title>
   </ion-toolbar>
@@ -9,41 +9,28 @@
 
 <ion-content class="ion-padding">
   <div>
-    <h1>OriGami Login</h1>
+    <h1>GeoGami Login</h1>
     <ion-card color="danger" *ngIf="error">
       <ion-card-content> {{error}} </ion-card-content>
     </ion-card>
     <ion-card color="light" *ngIf="register">
       <ion-card-content>
-        Registrierung erfolgreich. Bitte einloggen
+        {{ "User.registerSuccess" | translate }}
       </ion-card-content>
     </ion-card>
     <br />
     <form (ngSubmit)="login()" [formGroup]="loginForm">
-      <ion-input
-        placeholder="Benutzername oder E-Mail"
-        [id]="'username'"
-        formControlName="username"
-      ></ion-input>
+      <ion-input placeholder="{{ 'User.pl_usernameOREmail' | translate }}" [id]="'username'" formControlName="username"></ion-input>
       <br />
-      <ion-input
-        type="password"
-        placeholder="Password"
-        [id]="'password'"
-        formControlName="password"
-      ></ion-input>
+      <ion-input type="password" placeholder="{{ 'User.pl_password' | translate }}" [id]="'password'" formControlName="password"></ion-input>
       <br />
-      <ion-button expand="block" type="submit" [disabled]="loginForm.invalid"
-        ><ion-spinner *ngIf="loading"></ion-spinner> Login</ion-button
-      >
+      <ion-button expand="block" type="submit" [disabled]="loginForm.invalid">
+        <ion-spinner *ngIf="loading"></ion-spinner> Login
+      </ion-button>
       <br />
-      <ion-button fill="outline" expand="block" (click)="navigateRegister()"
-        >Registrieren</ion-button
-      >
+      <ion-button fill="outline" expand="block" (click)="navigateRegister()">{{ "User.register" | translate }}</ion-button>
       <br />
-      <ion-button fill="clear" expand="block" (click)="navigateForgotPassword()"
-        >Passwort vergessen</ion-button
-      >
+      <ion-button fill="clear" expand="block" (click)="navigateForgotPassword()">{{ "User.forgotpw" | translate }}</ion-button>
     </form>
     <br />
   </div>

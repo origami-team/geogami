@@ -9,6 +9,9 @@ export class Game {
     public tasks: Task[],
     public bbox: any,
     public mapSectionVisible: boolean,
-    public geofence: boolean
+    public geofence: boolean,
+    public isVRWorld: boolean,
+    public isVRMirrored: boolean,
+    public isVisible: boolean
   ) { }
 }

@@ -31,11 +31,11 @@ export class AudioPlayerComponent implements AfterViewInit, OnChanges {
 
     this.audio.nativeElement.addEventListener("ended", () => {
       this.loadAudio();
-      this.playing = false;
     });
   }
 
   loadAudio() {
+    this.playing = false;
     (this.audio.nativeElement as HTMLAudioElement).load();
   }
 

@@ -2,7 +2,7 @@ import { QuestionType, AnswerType, TaskMode } from './types';
 
 export const themetasks: ReadonlyArray<any> = [
     {
-        name: 'Selbst-Lokalisation',
+        name: 'Tasktypes.selfLocation',
         type: 'theme-loc',
         // category: "themeSelfLocalization",
         category: 'theme',
@@ -17,7 +17,7 @@ export const themetasks: ReadonlyArray<any> = [
         settings: {}
     },
     {
-        name: 'Objekt-Lokalisation',
+        name: 'Tasktypes.objectLocation',
         type: 'theme-object',
         // category: "themeobjectLocalization",
         category: 'theme',
@@ -31,7 +31,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalMultipleChoice',
         settings: {}
     }, {
-        name: 'Objekt-Lokalisation',
+        name: 'Tasktypes.objectLocation',
         type: 'theme-object',
         // category: "themeobjectLocalization",
         category: 'theme',
@@ -45,7 +45,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalNone',
         settings: {}
     }, {
-        name: 'Objekt-Lokalisation',
+        name: 'Tasktypes.objectLocation',
         type: 'theme-object',
         // category: "themeobjectLocalization",
         category: 'theme',
@@ -60,7 +60,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalPointInPolygon',
         settings: {}
     }, {
-        name: 'Objekt-Lokalisation',
+        name: 'Tasktypes.objectLocation',
         type: 'theme-object',
         // category: "themeobjectLocalization",
         category: 'theme',
@@ -78,7 +78,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalPointInPolygon',
         settings: {}
     }, {
-        name: 'Objekt-Lokalisation',
+        name: 'Tasktypes.objectLocation',
         type: 'theme-object',
         // category: "themeobjectLocalization",
         category: 'theme',
@@ -94,7 +94,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalMultipleChoice',
         settings: {}
     }, {
-        name: 'Objekt-Lokalisation',
+        name: 'Tasktypes.objectLocation',
         type: 'theme-object',
         // category: "themeobjectLocalization",
         category: 'theme',
@@ -111,7 +111,7 @@ export const themetasks: ReadonlyArray<any> = [
         settings: {}
     },
     {
-        name: 'Richtungsbestimmung',
+        name: 'Tasktypes.directionDetermination',
         type: 'theme-direction',
         // category: "themedirection",
         category: 'theme',
@@ -127,7 +127,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalMultipleChoice',
         settings: {}
     }, {
-        name: 'Richtungsbestimmung',
+        name: 'Tasktypes.directionDetermination',
         type: 'theme-direction',
         // category: "themedirection",
         category: 'theme',
@@ -143,7 +143,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalDirection',
         settings: {}
     }, {
-        name: 'Richtungsbestimmung',
+        name: 'Tasktypes.directionDetermination',
         type: 'theme-direction',
         // category: "themedirection",
         category: 'theme',
@@ -160,7 +160,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalDirection',
         settings: {}
     }, {
-        name: 'Richtungsbestimmung',
+        name: 'Tasktypes.directionDetermination',
         type: 'theme-direction',
         // category: "themedirection",
         category: 'theme',
@@ -176,7 +176,7 @@ export const themetasks: ReadonlyArray<any> = [
         evaluate: 'evalMapDirection',
         settings: {}
     }, {
-        name: 'Richtungsbestimmung',
+        name: 'Tasktypes.directionDetermination',
         type: 'theme-direction',
         // category: "themedirection",
         category: 'theme',

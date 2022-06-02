@@ -27,3 +27,15 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+@media only screen and (max-width: 500px) {
+  select {
+    max-width: 200px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  select {
+    max-width: 150px;
+  }
+}

@@ -25,39 +25,31 @@ export class StartPage implements OnInit {
 
   user = this.authService.getUser();
 
+  // Vr world
+  // to only allow admins to see pages related to VR games
+  userRole: String;
+
+
   constructor(
     public navCtrl: NavController,
     public toastController: ToastController,
-    private _translate: TranslateService,
+    public _translate: TranslateService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    this._translate.setDefaultLang('de');
-    this._initialiseTranslation();
+
+    // Get user role
+    this.user.subscribe(
+      event => {
+        if (event != null) {
+          this.userRole = (event['roles'])[0];
+        }
+      });
+
+    this._translate.setDefaultLang('de'); // default language is german
 
     Plugins.Device.getInfo().then((device) => (this.device = device));
-  }
-
-  _initialiseTranslation(): void {
-    this._translate.get('playerMode').subscribe((res: string) => {
-      this.playerMode = res;
-    });
-    this._translate.get('playerModeDescription').subscribe((res: string) => {
-      this.playerModeDescription = res;
-    });
-    this._translate.get('developerMode').subscribe((res: string) => {
-      this.developerMode = res;
-    });
-    this._translate.get('developerModeDescription').subscribe((res: string) => {
-      this.developerModeDescription = res;
-    });
-    this._translate.get('evaluateMode').subscribe((res: string) => {
-      this.evaluateMode = res;
-    });
-    this._translate.get('evaluateModeDescription').subscribe((res: string) => {
-      this.evaluateModeDescription = res;
-    });
   }
 
   handleCardClick(e) {
@@ -65,11 +57,28 @@ export class StartPage implements OnInit {
   }
 
   navigateGamesOverviewPage() {
-    this.navCtrl.navigateForward('play-game/play-game-list');
+    //this.navCtrl.navigateForward('play-game/play-game-list');
+
+    // disable unregistered users from playing using the virtual world
+    /* if (this.userRole != undefined && this.userRole == "admin") {
+      this.navCtrl.navigateForward('play-game/play-game-menu');
+    } else {
+      this.navCtrl.navigateForward(`play-game/play-game-list/${"RealWorld"}`);
+    } */
+
+    // enable unregistered users to play using the virtual world
+    this.navCtrl.navigateForward('play-game/play-game-menu');
+
   }
 
   navigateCreatePage() {
-    this.navCtrl.navigateForward('create-game');
+    this.navCtrl.navigateForward('create-game-menu');
+
+    if (this.userRole != undefined && this.userRole == "admin") {
+      this.navCtrl.navigateForward('create-game-menu');
+    } else {
+      this.navCtrl.navigateForward('create-game');
+    }
   }
 
   navigateShowroomPage() {
@@ -92,8 +101,18 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('user/profile');
   }
 
-  async setLanguage(e) {
-    this._translate.use(e.target.dataset.value);
-    this._initialiseTranslation();
+  changeTR(languageText: string){
+    //console.log("language changed", languageText);
+    switch (languageText) {
+      case "de":
+          this._translate.setDefaultLang('de');
+          break;
+      case "en":
+          this._translate.setDefaultLang('en');
+          break;
+      case "pt":
+          this._translate.setDefaultLang('pt');
+          break;
+    }
   }
 }

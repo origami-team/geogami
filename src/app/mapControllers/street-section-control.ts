@@ -61,21 +61,24 @@ export class StreetSectionControl {
                     type: 'geojson',
                     data: geometries
                   });
-                  this.map.addLayer({
-                    id: 'section',
-                    type: 'line',
-                    source: 'section',
-                    paint: {
-                      'line-color': this.dangerColor,
-                      'line-opacity': 0.5,
-                      'line-width': 10
-                    },
-                    layout: {
-                      'line-cap': 'round'
-                    }
-                  });
                 } else {
                   this.map.getSource('section').setData(geometries);
+                }
+
+                if (this.map.getLayer("section") == undefined) {
+                  this.map.addLayer({
+                    id: "section",
+                    type: "line",
+                    source: "section",
+                    paint: {
+                      "line-color": this.dangerColor,
+                      "line-opacity": 0.5,
+                      "line-width": 10,
+                    },
+                    layout: {
+                      "line-cap": "round",
+                    },
+                  });
                 }
               }).catch(e => { console.log('error', e); });
             }

@@ -5,6 +5,7 @@ import { QuestionType, AnswerType } from 'src/app/models/types';
 import { standardMapFeatures } from 'src/app/models/standardMapFeatures';
 import { cloneDeep } from 'lodash';
 import { PopoverComponent } from 'src/app/popover/popover.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-info-modal',
@@ -15,13 +16,18 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
 
   @Input() task: any;
 
+  // VR world
+  @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
+
   @Output() taskChange: EventEmitter<any> = new EventEmitter<any>(true);
 
   uploading = false;
 
   constructor(
     public modalController: ModalController,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -54,7 +60,9 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       component: MapFeaturesModalPage,
       backdropDismiss: false,
       componentProps: {
-        features: this.task.mapFeatures
+        features: this.task.mapFeatures,
+        isVirtualWorld: this.isVirtualWorld,
+        isVRMirrored: this.isVRMirrored
       }
     });
     await modal.present();
@@ -82,7 +90,9 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     });
   }
 
-  async showPopover(ev: any, text: string) {
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
     console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,

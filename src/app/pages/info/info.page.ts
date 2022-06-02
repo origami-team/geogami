@@ -5,6 +5,7 @@ import {
   Plugins,
   StatusBarStyle,
 } from '@capacitor/core';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -16,7 +17,9 @@ export class InfoPage implements OnInit {
 
   dark = false;
 
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, public translate: TranslateService) {
+    if(translate.getDefaultLang() == undefined)
+      translate.setDefaultLang('en');
   }
 
   ngOnInit() {

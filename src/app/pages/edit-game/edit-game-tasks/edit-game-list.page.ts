@@ -30,6 +30,10 @@ export class EditGameListPage implements OnInit {
   game: Game;
   reorder: Boolean = false;
 
+  // VR world
+  isVirtualWorld: boolean = false;
+  isVRMirrored: boolean = false;
+
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   // dismiss modal on hardware back button
@@ -44,7 +48,7 @@ export class EditGameListPage implements OnInit {
     private navCtrl: NavController,
     private gamesService: GamesService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -55,6 +59,14 @@ export class EditGameListPage implements OnInit {
           this.game = game;
           this.gameFactory.flushGame();
           this.gameFactory.addGameInformation(this.game);
+
+          // VR world
+          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+            this.isVirtualWorld = true;
+            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
+              this.isVRMirrored = true;
+            }
+          }
         });
     });
   }
@@ -88,7 +100,7 @@ export class EditGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null) {
+  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -98,6 +110,8 @@ export class EditGameListPage implements OnInit {
       componentProps: {
         type,
         task,
+        isVirtualWorld,  // added to view VR world map instead of real map if true
+        isVRMirrored
       },
     });
 
@@ -164,10 +178,16 @@ export class EditGameListPage implements OnInit {
   }
 
   uploadGame() {
+    let bundle = {
+      game_id: this.game._id,
+      isVRWorld: this.isVirtualWorld,
+      isVRMirrored: this.isVRMirrored
+    }
+
     this.gamesService.updateGame(this.game).then((res) => {
       if (res.status == 200) {
         this.navCtrl.navigateForward(
-          `edit-game/edit-game-overview/${this.game._id}`
+          `edit-game/edit-game-overview/${JSON.stringify(bundle)}`
         );
         // this.gameFactory.flushGame();
       }
@@ -176,6 +196,10 @@ export class EditGameListPage implements OnInit {
 
   navigateBack() {
     this.gameFactory.flushGame();
-    this.navCtrl.navigateBack("create-game");
+    if (!this.isVirtualWorld) {
+      this.navCtrl.navigateBack("create-game");
+    } else {
+      this.navCtrl.navigateBack("create-game-virtual");
+    }
   }
 }

@@ -1,4 +1,4 @@
-package de.reedu.origaminext;
+package com.ifgi.geogami;
 
 import android.os.Bundle;
 

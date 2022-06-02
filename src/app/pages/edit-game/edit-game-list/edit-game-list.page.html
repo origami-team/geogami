@@ -1,25 +1,25 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/"></ion-back-button>
+      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
-    <ion-title>Bearbeite dein OriGami</ion-title>
+    <ion-title>{{ "EditGame.titleEditGame" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content class="ion-padding">
-  <h5>Wähle ein Spiel aus der Spieleliste.</h5>
+  <h5>{{ "GameList.chooseGame" | translate }}</h5>
   <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
+  <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary" >
     <ion-card-header>
       <ion-label>
-        <h2><ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> - </span>{{ game.name }}</h2>
+        <h2><ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> - </span> {{ game.name }}</h2>
       </ion-label>
     </ion-card-header>
   </ion-card>
