@@ -97,7 +97,8 @@ export class GameDetailPage implements OnInit {
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
       gameCode: this.gameCode,
-      gameName: this.game.name
+      gameName: this.game.name,
+      gamePlace: this.game.place
     }
     this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
   }

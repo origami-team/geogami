@@ -1,0 +1,4 @@
+There are two games for the trainings for school 1. 
+One is Training DM (digital maps)
+The other is Training PM (paper map)
+Both games will just have the training map for all the tasks that need a map

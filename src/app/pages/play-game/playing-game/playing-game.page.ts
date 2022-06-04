@@ -73,6 +73,7 @@ import { AvatarPosition } from 'src/app/models/avatarPosition'
 import { Coords } from 'src/app/models/coords'
 import { TranslateService } from "@ngx-translate/core";
 import { map } from "rxjs-compat/operator/map";
+import { ShowroomPage } from "../../showroom/showroom/showroom.page";
 
 @Component({
   selector: "app-playing-game",
@@ -172,6 +173,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // static map impl // --- B.Sc. thesis
   static_map = false;
   gameName: string = "";
+  gamePlace: string = "";
+  layerURL: string = "";
+  layer_coordinates = [];
 
   // degree for nav-arrow
   heading = 0;
@@ -486,9 +490,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.gameCode = JSON.parse(params.bundle).gameCode;
       this.gameName = JSON.parse(params.bundle).gameName;
+      this.gamePlace = JSON.parse(params.bundle).gamePlace;
 
       // add static map impl. // --- B.Sc. thesis
-      if (this.gameName == "School 1 Post-Test PM & DM ") {
+      if (this.gamePlace.includes("Dortmund") && this.gameName.includes("School") && (this.gameName.includes("DM") || this.gameName.includes("PM"))) {
         console.log("this.static_map1: ", this.static_map)
         this.static_map = true;
         console.log("this.static_map2: ", this.static_map)
@@ -682,9 +687,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates (lng,lat)
     ];
 
+    // --- B.Sc. thesis
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ? virtualWorldMapStyle : realWorldMapStyle),
+      style: (this.isVirtualWorld || this.static_map ? virtualWorldMapStyle : realWorldMapStyle),
+      //style: (this.isVirtualWorld ? virtualWorldMapStyle : realWorldMapStyle),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxZoom: 18,
@@ -693,12 +700,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
 
     // Temp // --- B.Sc. thesis
-    this.map.on('click', e => {
+/*     this.map.on('click', e => {
       var coordinates = e.lngLat;
       console.log("lng lat:", coordinates)
-    });
-
-
+      console.log("zoom level:", this.map.getZoom())
+    }); */
 
 
     this.geolocationService.init(this.isVirtualWorld);
@@ -1189,7 +1195,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             right: 40,
           },
           duration: 1000,
-          maxZoom: 17,  // to change zoom level
+          maxZoom: (this.static_map ? 18 : 16),  // to change zoom level
         });
       } else {
         reject("bounds are empty");
@@ -1281,61 +1287,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async initTask() {
 
-    
-    // adding static map impl. // --- B.Sc. thesis
-    if (this.static_map) {
-
-      //this.map.rotateTo(50)
-
-      let picIndex = 0;
-      if (this.taskIndex + 1 >= 5) {
-        picIndex = 0;
-      } else {
-        picIndex = this.taskIndex + 1;
-      }
-
-      // (note: i manged to add the static map layer using add layer as below code)
-      //this.map.on('load', () => {
-      if (this.map.getLayer("radar-layer")) {
-        this.map.removeLayer("radar-layer");
-        this.map.removeSource("radar");
-      }
-
-      this.map.addSource('radar', {
-        'type': 'image',
-        //'url': 'assets/icons/v1.png', // V4
-        'url': `assets/Post-Test/1_Post_Map_${1}.jpeg`, // V4
-        /* 'coordinates': [
-          [7.52543, 51.47987], // NW  7.52543, 51.47987
-          [7.52622, 51.48020], // NE 7.52622, 51.48020
-          [7.52769, 51.47905], // SE 7.52769, 51.47905
-          [7.52681, 51.47872]  // SW 7.52681, 51.47872
-        ] */
-        'coordinates': [
-          [7.525431470402509,  51.479874151710476], // NW  7.525470150110408, lat: 51.47985653524688
-          [ 7.526265499289508,  51.480238393944745], // NE 7.526306999322998, lat: 51.48022069238428 
-          [7.527733934519745, 51.47909480265798], // SE 7.527733934519745, 51.47909480265798
-          [7.526902449724844, 51.478700567638185]  // SW 7.526902449724844, 51.478700567638185
-        ]
-      });
-
-      this.map.addLayer({
-        id: 'radar-layer',
-        'type': 'raster',
-        'source': 'radar',
-        'paint': {
-          'raster-fade-duration': 0,
-          "raster-opacity": 0.3
-
-        }
-      });
-
-
-      //});
-
-    }
-
-    ///
+    // --- B.Sc. thesis
+    this.showImageMapLayer();
 
     this.panelMinimized = false;
 
@@ -1563,20 +1516,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.changeDetectorRef.detectChanges();
 
-    /*     let bounds = this.calcBounds(this.task); // --- B.Sc. thesis
-        this.map.fitBounds(bounds, {
-          padding: {
-            top: 40,
-            bottom: 400,
-            left: 40,
-            right: 40,
-          },
-          duration: 1000,
-          maxZoom: 16,  // to change zoom level
-        }); */
 
-    //this.map.rotateTo(50)   
-    //this.map.setBearing(10); 
   }
 
   nextTask() {
@@ -2151,5 +2091,174 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         return key.includes(m.tag);
       }).length > 0
     );
+  }
+
+  // adding static map impl. // --- B.Sc. thesis
+  showImageMapLayer(){
+    
+    if (this.static_map) {
+      console.log("___taskIndex + 1:", this.taskIndex + 1)
+      this.layerURL = "";
+
+      switch (this.gameName) {
+        /* school 1 */
+        // School 1 Post-Test
+        case "School 1 Post-Test PM & DM ":
+          switch (this.taskIndex + 1) {
+            case 2:
+            case 3:
+              this.layerURL = "assets/School_1/Post-Test/1_Post_Map_1.jpeg";
+              break;
+            case 5:
+            case 6:
+              this.layerURL = "assets/School_1/Post-Test/1_Post_Map_2.jpeg";
+              break;
+            case 8:
+            case 9:
+              this.layerURL = "assets/School_1/Post-Test/1_Post_Map_3.jpeg";
+              break;
+            case 11:
+            case 12:
+            case 13:
+              this.layerURL = "assets/School_1/Post-Test/1_Post_Map_4.jpeg";
+              break;
+          }
+          break;
+
+        // School 1 Pre-Test
+        case "School 1 Pre-Test PM & DM":
+          switch (this.taskIndex + 1) {
+            case 2:
+            case 3:
+              this.layerURL = "assets/School_1/Pre-Test/1_Pre_Map_1.jpeg";
+              break;
+            case 5:
+            case 6:
+              this.layerURL = "assets/School_1/Pre-Test/1_Pre_Map_2.jpeg";
+              break;
+            case 8:
+            case 9:
+              this.layerURL = "assets/School_1/Pre-Test/1_Pre_Map_3.jpeg";
+              break;
+            case 11:
+            case 12:
+            case 13:
+              this.layerURL = "assets/School_1/Pre-Test/1_Pre_Map_4.jpeg";
+              break;
+          }
+          console.log("___after switch:", "this.layerURL:", this.layerURL)
+          break;
+
+        // School 1 Training
+        case "School 1 Training DM":
+        case "School 1 Training PM":
+          this.layerURL = "assets/School_1/Trainings/1_Training_Map.jpeg";
+          break;
+
+        // school 2
+        // School 2 Post-Test
+        case "School 2 Post-Test DM & PM":
+          switch (this.taskIndex + 1) {
+            case 2:
+            case 3:
+              this.layerURL = "assets/School_2/Post-Test/2_Post_Map_1.jpeg";
+              break;
+            case 5:
+            case 6:
+              this.layerURL = "assets/School_2/Post-Test/2_Post_Map_2.jpeg";
+              break;
+            case 8:
+            case 9:
+              this.layerURL = "assets/School_2/Post-Test/2_Post_Map_3.jpeg";
+              break;
+          }
+          break;
+
+        // School 2 Pre-Test
+        case "School 2 Pre-Test DM & PM":
+          switch (this.taskIndex + 1) {
+            case 2:
+            case 3:
+              this.layerURL = "assets/School_2/Pre-Test/2_Pre_Map_1.jpeg";
+              break;
+            case 5:
+            case 6:
+              this.layerURL = "assets/School_2/Pre-Test/2_Pre_Map_2.jpeg";
+              break;
+            case 8:
+            case 9:
+              this.layerURL = "assets/School_2/Pre-Test/2_Pre_Map_3.jpeg";
+              break;
+          }
+          break;
+
+        // School 2 Training
+        case "School 2 Training DM":
+        case "School 2 Training PM":
+          this.layerURL = "assets/School_2/Training/2_Training_Map.jpeg";
+          break;
+
+      }
+
+      console.log("___1this.layerURL:", this.layerURL)
+
+      if (this.layerURL != "") {
+        // check school 1 OR 2
+        if (this.gameName.includes("School 1")) {
+          this.layer_coordinates = [
+            [7.525428844788735, 51.47987798697528], // NW  7.525470150110408, lat: 51.47985653524688
+            [7.526238284951148, 51.480269771617344], // NE 7.526306999322998, lat: 51.48022069238428 
+            [7.527741757834178, 51.47908687626966], // SE 7.527733934519745, 51.47909480265798
+            [7.526922897883736, 51.47869482931878]  // SW 7.526902449724844, 51.478700567638185
+          ]
+
+          // rotate map
+          setTimeout(() => {
+            this.map.rotateTo(-38)
+          }, 1500);
+        }
+        else {
+          this.layer_coordinates = [
+            [7.507035848527437, 51.47406944074166], // NW  1,  7.507035848527437, 51.47406944074166
+            // 7.50709523585266, lat: 51.47406679750375 
+            [7.507935021335101, 51.47415524643509], // NE 2,  7.507935021335101, 51.47415524643509 
+            [7.5082143041779545, 51.47329155822925], // SE 3,  7.5082143041779545, 51.47329155822925 
+            [7.507303443022494, 51.473180634273746]  // SW 4,  7.507303443022494, 51.473180634273746 
+            // 7.5073521235915734, 51.47318572269714
+          ]
+
+          // rotate map
+          setTimeout(() => {
+            this.map.rotateTo(-10.4)
+          }, 1500);
+        }
+        // (note: i manged to add the static map layer using add layer as below code)
+        //this.map.on('load', () => {
+        if (this.map.getLayer("radar-layer")) {
+          this.map.removeLayer("radar-layer");
+          this.map.removeSource("radar");
+        }
+        console.log("___2this.layerURL:", this.layerURL)
+        this.map.addSource('radar', {
+          'type': 'image',
+          'url': this.layerURL, // V4
+          'coordinates': this.layer_coordinates
+        });
+        this.map.addLayer({
+          id: 'radar-layer',
+          'type': 'raster',
+          'source': 'radar',
+          'paint': {
+            'raster-fade-duration': 0,
+            //"raster-opacity": 0.5
+          }
+        });
+      } else { // to remove layer in next task
+        if (this.map.getLayer("radar-layer")) {
+          this.map.removeLayer("radar-layer");
+          this.map.removeSource("radar");
+        }
+      }
+    }
   }
 }
