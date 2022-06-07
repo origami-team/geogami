@@ -17,7 +17,7 @@ GeoGami runs on iOS and Android devices with a compass sensor and a GPS or GSM m
 You can install GeoGami...
 
 1. **on your iOS device:** [Visit App Store](https://apps.apple.com/app/geogami/id1614864078).
-2. **on your Android device:** [Visit Google Play Store](https://play.google.com/store/apps/details?id=de.reedu.origaminext&gl=DE).
+2. **on your Android device:** [Visit Google Play Store](https://play.google.com/store/apps/details?id=com.ifgi.geogami).
 
 ## Contact
 
