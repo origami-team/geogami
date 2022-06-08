@@ -72,6 +72,10 @@ export class TrackControl {
                 'line-cap': 'round'
             }
         });
+
+        // show layer above other layers such as static map layer
+        this.map.moveLayer(`track`);
+
         this.map.setLayoutProperty('track', 'visibility', 'none');
     }
 
@@ -123,6 +127,9 @@ export class TrackControl {
                 'line-cap': 'round'
             }
         });
+
+        // show layer above other layers such as static map layer
+        this.map.moveLayer(`permanentTrack${taskId}`);
     }
     
     // keep track temporary impl.
@@ -142,6 +149,9 @@ export class TrackControl {
                 'line-cap': 'round'
             }
         });
+
+        // show layer above other layers such as static map layer
+        this.map.moveLayer(`temporaryTrack${taskId}`);
     }
 
     // remove track temporary impl.

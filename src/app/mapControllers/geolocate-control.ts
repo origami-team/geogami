@@ -55,6 +55,7 @@ export class GeolocateControl {
             });
         }
 
+        // add player location marker
         this.map.loadImage(
             '/assets/icons/position.png',
             (error, image) => {
@@ -79,6 +80,10 @@ export class GeolocateControl {
                         'icon-offset': [0, 0]
                     }
                 });
+
+                // show layer above other layers such as static map layer
+                this.map.moveLayer(`geolocate`);
+
                 this.map.setLayoutProperty('geolocate', 'visibility', 'none');
                 this.isInitalized = true;
                 this.update();

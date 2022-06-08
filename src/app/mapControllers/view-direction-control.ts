@@ -69,17 +69,18 @@ export class ViewDirectionControl {
                     }
                 });
 
-                this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(avatarHeading => {
-                    if (this.map.getLayer('viewDirection')) {
-                        this.map.setLayoutProperty(
-                            'viewDirection',
-                            'icon-rotate',
-                            avatarHeading - this.map.getBearing()
-                        );
-                    }
-                });
+            this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(avatarHeading => {
+                if (this.map.getLayer('viewDirection')) {
+                    this.map.setLayoutProperty(
+                        'viewDirection',
+                        'icon-rotate',
+                        avatarHeading - this.map.getBearing()
+                    );
+                }
+            });
         }
 
+        // add player view-direction
         this.map.loadImage(
             '/assets/icons/directionv2.png',
             (error, image) => {
@@ -104,6 +105,10 @@ export class ViewDirectionControl {
                         'icon-offset': [0, -8]
                     }
                 });
+
+                // show layer above other layers such as static map layer
+                this.map.moveLayer(`viewDirection`);
+
                 this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
                 this.isInitalized = true;
                 this.update();
