@@ -74,7 +74,8 @@ export class TrackControl {
         });
 
         // show layer above other layers such as static map layer
-        this.map.moveLayer(`track`);
+        //this.map.moveLayer(`track`);
+        //this.map.moveLayer('radar-layer1', 'track');
 
         this.map.setLayoutProperty('track', 'visibility', 'none');
     }
@@ -130,6 +131,11 @@ export class TrackControl {
 
         // show layer above other layers such as static map layer
         this.map.moveLayer(`permanentTrack${taskId}`);
+        //this.map.moveLayer('radar-layer1', `permanentTrack${taskId}`);
+
+        /* if (this.map.getLayer('radar-layer1')) {
+            this.map.moveLayer('radar-layer1', `permanentTrack${taskId}`);
+        } */
     }
     
     // keep track temporary impl.
@@ -152,6 +158,11 @@ export class TrackControl {
 
         // show layer above other layers such as static map layer
         this.map.moveLayer(`temporaryTrack${taskId}`);
+        //this.map.moveLayer('radar-layer1', `temporaryTrack${taskId}`);
+
+        /* if (this.map.getLayer('radar-layer1')) {
+            this.map.moveLayer('radar-layer1', `temporaryTrack${taskId}`);
+        } */
     }
 
     // remove track temporary impl.

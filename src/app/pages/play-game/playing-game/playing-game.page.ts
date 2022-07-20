@@ -1288,6 +1288,46 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initTask() {
 
     // --- B.Sc. thesis
+    if(!this.isVirtualWorld){
+
+      if (this.map.getLayer("radar-layer1")) {
+        this.map.removeLayer("radar-layer1");
+        this.map.removeSource("radar2");
+      }
+
+      this.map.addSource('radar2', {
+        'type': 'image',
+        'url':  "assets/School_2/Training/2_Training_Map.jpeg", // V4
+        'coordinates': [
+          [0.0002307207207, 0.004459082914], // NW
+          [0.003717027207, 0.004459082914], // NE 
+          [0.003717027207, 0.0003628597122], // SE
+          [0.0002307207207, 0.0003628597122] // SW
+        ]
+      });
+      this.map.addLayer({
+        id: 'radar-layer1',
+        'type': 'raster',
+        'source': 'radar2',
+        'paint': {
+          'raster-fade-duration': 0,
+          //"raster-opacity": 0.5
+        }
+      });
+
+      if (this.map.getLayer("geolocate")) {
+        this.map.moveLayer('radar-layer1', 'geolocate');
+      }
+       if (this.map.getLayer("track")) {
+        this.map.moveLayer('radar-layer1', 'track');
+      }
+      if (this.map.getLayer("viewDirection")) {
+        this.map.moveLayer('radar-layer1', 'viewDirection');
+      }
+
+      //this.map.moveLayer('radar-layer1', 'geolocate');
+      //this.map.moveLayer('radar-layer1', 'viewDirection');
+    }
     this.showImageMapLayer();
 
     this.panelMinimized = false;

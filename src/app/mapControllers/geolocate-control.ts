@@ -82,7 +82,8 @@ export class GeolocateControl {
                 });
 
                 // show layer above other layers such as static map layer
-                this.map.moveLayer(`geolocate`);
+                //this.map.moveLayer(`geolocate`);
+                //this.map.moveLayer('radar-layer1', 'geolocate');
 
                 this.map.setLayoutProperty('geolocate', 'visibility', 'none');
                 this.isInitalized = true;

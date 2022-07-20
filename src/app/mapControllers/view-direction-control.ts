@@ -107,7 +107,8 @@ export class ViewDirectionControl {
                 });
 
                 // show layer above other layers such as static map layer
-                this.map.moveLayer(`viewDirection`);
+                //this.map.moveLayer(`viewDirection`);
+                //this.map.moveLayer('radar-layer1', 'viewDirection');
 
                 this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
                 this.isInitalized = true;
