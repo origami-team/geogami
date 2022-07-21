@@ -50,6 +50,10 @@ export class TrackerService {
   private rotationCounter = 0;
   private lastHeading: number = undefined;
 
+  // vars to store taskNo and category 
+  private taskNo = 0;
+  private taskCategory = "";
+
   constructor(
     private http: HttpClient,
     private geolocateService: OrigamiGeolocationService,
@@ -174,6 +178,8 @@ export class TrackerService {
           zoomCount: this.zoomCounter / 2,
           rotation: this.rotationCounter,
         },
+        taskNo: this.taskNo,
+        taskCategory: this.taskCategory
       });
     }
   }
@@ -282,4 +288,11 @@ export class TrackerService {
       })
       .toPromise();
   }
+
+  // update task number and cateogory
+  updateTaskNo(taskNo, taskCategory){
+    this.taskNo = taskNo;
+    this.taskCategory = taskCategory;
+  }
+
 }
