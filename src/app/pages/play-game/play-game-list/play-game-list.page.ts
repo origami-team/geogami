@@ -34,13 +34,12 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
-    this.gamesService.getGames(false).then(res => res.content).then(games => {
-      this.games = games.reverse();
-    
-      if (!this.isVirtualWorld) {
-        this.games = this.games.filter(game => game.isVRWorld != true); // Exclude VR games
-        console.log("-RW-this.games:", this.games);
-      } else {
+    // get games list
+    this.gamesService.getGames(true).then(res => res.content).then(games => {
+      // Get either real or VE agmes based on selected environment 
+      this.games = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();
+    });
+
         this.games = this.games.filter(game => game.isVRWorld === true); // Get VR games
         console.log("-VR_W-this.games:", this.games);
       }
@@ -48,12 +47,30 @@ export class PlayGameListPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.gamesService
-      .getGames(true).then(res => res.content)
-      .then(games => (this.games = games.reverse()))
-      .finally(() => event.target.complete());
-  }
+    let gamesListTemp;
 
+      this.gamesService.getGames(true).then(res => res.content).then(games => {
+        //this.games = games.reverse();
+
+        if (!this.isVirtualWorld) {
+          gamesListTemp = games.filter(game => game.isVRWorld != true).reverse(); // Exclude VR games
+          console.log("-RW-this.games:", this.games);
+        } else {
+          gamesListTemp = games.filter(game => game.isVRWorld === true).reverse(); // Get VR games
+          console.log("-VR_W-this.games:", this.games);
+        }
+
+        // to update shown games based on search phrase
+        if (this.searchText != "") {
+          console.log("this.searchText: ", this.searchText)
+          this.filterSelectedSegementList(this.searchText);
+        } else {
+          this.games = gamesListTemp;
+        }
+
+      }).finally(() => event.target.complete());
+  }
+  }
   filterList(event) {
     this.gamesService
       .getGames(true).then(res => res.content)
@@ -68,5 +85,19 @@ export class PlayGameListPage implements OnInit {
   gameClick(game: any) {
     console.log(game);
     this.navCtrl.navigateForward(`play-game/game-detail/${game._id}`);
+  }
+  // update list after selecting a segment
+  filterSelectedSegementList(searchPhrase) {
+      this.gamesService
+        //--- ToDo: EditGameListPage
+        //.getGames(true).then(res => res.content).then(
+        .getGames(true).then(res => res.content).then(
+          games => {
+            this.games = games.reverse();
+            this.games = this.games.filter(game =>
+              game.name.toLowerCase().includes(searchPhrase.toLowerCase()) && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))
+            )
+          }
+        );
   }
 }
