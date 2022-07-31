@@ -198,7 +198,10 @@
                 "correctLocation": "Stehst du genau richtig? Dann drücke 'Okay'!",
                 "gameConnection": "Verbindungscode",
                 "pl_EnterCode": "Verbindungscode eingeben",
-                "shareDataAgreement": "Ich bin damit einverstanden, dass erhobene Daten in aggregierter Form zu Forschungszwecken verarbeitet werden."
+                "shareDataAgreement": "Ich bin damit einverstanden, dass erhobene Daten in aggregierter Form zu Forschungszwecken verarbeitet werden.",
+                "allGames": "Alle",
+                "myGames": "Meine Spiele"
+
         },
         "Showroom": {
                 "titleShowroom": "Lerne GeoGami kennen",

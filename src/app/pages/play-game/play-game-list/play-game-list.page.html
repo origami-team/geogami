@@ -10,7 +10,17 @@
 
 <ion-content class="ion-padding">
   <h5>{{ "GameList.chooseGame" | translate }}</h5>
-  <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
+
+  <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="selectedSegment" color="dark">
+    <ion-segment-button value="all">
+      <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="mine" [disabled]="userRole == 'unloggedUser'">
+      <ion-label>{{ "PlayGame.myGames" | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
