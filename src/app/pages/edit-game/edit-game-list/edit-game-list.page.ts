@@ -49,7 +49,9 @@ export class EditGameListPage implements OnInit {
   filterList(event) {
     this.gamesService.getUserGames().then((games) => {
       this.games = games.filter(game =>
-        game.name.toLowerCase().includes(event.detail.value.toLowerCase()) && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+        (game.name.toLowerCase().includes(event.detail.value.toLowerCase())
+          || (game.place != undefined && game.place.toLowerCase().includes(event.detail.value.toLowerCase())))
+        && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
     });
   }
 

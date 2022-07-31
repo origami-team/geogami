@@ -6,6 +6,8 @@ import { GamesService } from '../../../services/games.service';
 
 // VR world
 import { ActivatedRoute } from '@angular/router';
+// For getting user role
+import { AuthService } from '../../../services/auth-service.service';
 
 
 @Component({
@@ -15,14 +17,20 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PlayGameListPage implements OnInit {
   games: any;
-
   // VR world
   isVirtualWorld: boolean = false;
+  // To be able to update games list and switch between segments 
+  searchText: string = "";
+  selectedSegment: string = "all";
+  // to disable mine segment for unlogged user
+  userRole: String = "unloggedUser";
+  user = this.authService.getUser();
 
   constructor(
     public navCtrl: NavController,
     private gamesService: GamesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -40,64 +48,118 @@ export class PlayGameListPage implements OnInit {
       this.games = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();
     });
 
-        this.games = this.games.filter(game => game.isVRWorld === true); // Get VR games
-        console.log("-VR_W-this.games:", this.games);
-      }
-    });
+    // Get user role
+    this.user.subscribe(
+      event => {
+        if (event != null) {
+          this.userRole = (event['roles'])[0];
+        }
+      });
   }
 
+  // ToDo: update it
   doRefresh(event) {
     let gamesListTemp;
 
-      this.gamesService.getGames(true).then(res => res.content).then(games => {
-        //this.games = games.reverse();
-
-        if (!this.isVirtualWorld) {
-          gamesListTemp = games.filter(game => game.isVRWorld != true).reverse(); // Exclude VR games
-          console.log("-RW-this.games:", this.games);
-        } else {
-          gamesListTemp = games.filter(game => game.isVRWorld === true).reverse(); // Get VR games
-          console.log("-VR_W-this.games:", this.games);
-        }
+    if (this.selectedSegment == "mine") { // if mine is selected
+      this.gamesService.getUserGames().then((games) => {
+        // Get either real or VE agmes based on selected environment 
+        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
 
         // to update shown games based on search phrase
         if (this.searchText != "") {
           console.log("this.searchText: ", this.searchText)
           this.filterSelectedSegementList(this.searchText);
         } else {
-          this.games = gamesListTemp;
+          this.games = gamesListTemp.reverse();
+        }
+      }).finally(() => event.target.complete());
+
+    } else if (this.selectedSegment == "all") { // if all is selected
+      this.gamesService.getGames(true).then(res => res.content).then(games => {
+        // Get either real or VE agmes based on selected environment 
+        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
+
+        // to update shown games based on search phrase
+        if (this.searchText != "") {
+          console.log("this.searchText: ", this.searchText)
+          this.filterSelectedSegementList(this.searchText);
+        } else {
+          this.games = gamesListTemp.reverse();
         }
 
       }).finally(() => event.target.complete());
+    }
   }
-  }
+
+  // search function
   filterList(event) {
-    this.gamesService
-      .getGames(true).then(res => res.content)
-      .then(
-        games =>
-          (this.games = games.filter(game =>
-            game.name.toLowerCase().includes(event.detail.value.toLowerCase())
-          ).reverse())
-      );
+    this.filterSelectedSegementList(event.detail.value);
   }
 
   gameClick(game: any) {
     console.log(game);
     this.navCtrl.navigateForward(`play-game/game-detail/${game._id}`);
   }
+
+  // segment (my games - all games)
+  segmentChanged(event) {  //--- ToDo check duplicate code and create a func for it
+    // clear search tbox
+    let gamesListTemp;
+
+    // if mine is selected
+    if (event.detail.value == "mine") {
+      this.gamesService.getUserGames().then((games) => {
+        // Get either real or VE agmes based on selected environment 
+        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
+
+        // to update shown games based on search phrase
+        if (this.searchText != "") {
+          this.filterSelectedSegementList(this.searchText);
+        } else {
+          this.games = gamesListTemp.reverse();
+        }
+
+      });
+    } else if (event.detail.value == "all") { // if all is selected
+      this.gamesService.getGames(true).then(res => res.content).then(games => {
+        // Get either real or VE agmes based on selected environment 
+        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
+
+        // to update shown games based on search phrase
+        if (this.searchText != "") {
+          console.log("this.searchText: ", this.searchText)
+          this.filterSelectedSegementList(this.searchText);
+        } else {
+          this.games = gamesListTemp.reverse();
+        }
+      });
+    }
+  }
+
   // update list after selecting a segment
   filterSelectedSegementList(searchPhrase) {
+    if (this.selectedSegment == "all") {
       this.gamesService
-        //--- ToDo: EditGameListPage
-        //.getGames(true).then(res => res.content).then(
         .getGames(true).then(res => res.content).then(
           games => {
             this.games = games.reverse();
             this.games = this.games.filter(game =>
-              game.name.toLowerCase().includes(searchPhrase.toLowerCase()) && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))
+              (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
+                || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+              && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))
             )
           }
         );
+    } else if (this.selectedSegment == "mine") {
+      this.gamesService.getUserGames().then((res) => {
+        this.games = res.reverse();
+
+        this.games = this.games.filter(game =>
+          (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
+            || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+          && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)))
+      });
+    }
   }
 }
