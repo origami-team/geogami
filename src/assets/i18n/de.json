@@ -76,6 +76,8 @@
                 "satelliteSwipe": "Satellitenbild mit Swipefunktion",
                 "3D": "3D-Ansicht",
                 "3DonDemand": "3D-Ansicht auf Knopfdruck",
+                "blankMap": "Leere Karte",
+                "blankMapAndSatelliteSwipe": "Leere Karte und Satellitenbild (Swipe)",
                 "keepTrack":"Strecke auf der Karte behalten"
         },
         "GameList": {

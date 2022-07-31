@@ -78,6 +78,8 @@
             "satelliteSwipe": "satellite image with swipe function",
             "3D": "3D view",
             "3DonDemand": "3D view on-demand",
+            "blankMap": "blank map",
+            "blankMapAndSatelliteSwipe": "blank map and satellite image (swipe)",
             "keepTrack":"Keep track on the map"
     },
 
