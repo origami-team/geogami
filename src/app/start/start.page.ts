@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Plugins } from '@capacitor/core';
 import { AuthService } from '../services/auth-service.service';
 import { IUser } from '../interfaces/iUser';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-start',
@@ -29,15 +30,24 @@ export class StartPage implements OnInit {
   // to only allow admins to see pages related to VR games
   userRole: String;
 
+  // (translation)
+  languages = [];
+  selected = '';
+
 
   constructor(
     public navCtrl: NavController,
     public toastController: ToastController,
     public _translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private languageService: LanguageService
   ) { }
 
   async ngOnInit() {
+    // (translation) get languages
+    this.languages = this.languageService.getLangauges();
+    // (translation) set selected language
+    this.selected = this.languageService.selected;
 
     // Get user role
     this.user.subscribe(
@@ -46,8 +56,6 @@ export class StartPage implements OnInit {
           this.userRole = (event['roles'])[0];
         }
       });
-
-    this._translate.setDefaultLang('de'); // default language is german
 
     Plugins.Device.getInfo().then((device) => (this.device = device));
   }
@@ -101,18 +109,7 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('user/profile');
   }
 
-  changeTR(languageText: string){
-    //console.log("language changed", languageText);
-    switch (languageText) {
-      case "de":
-          this._translate.setDefaultLang('de');
-          break;
-      case "en":
-          this._translate.setDefaultLang('en');
-          break;
-      case "pt":
-          this._translate.setDefaultLang('pt');
-          break;
-    }
+  changeLng(lng: string){
+    this.languageService.setLanguage(lng);
   }
 }

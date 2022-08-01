@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { Plugins, StatusBarStyle } from '@capacitor/core';
 import { AuthService } from './services/auth-service.service';
+import { LanguageService } from './services/language.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
 })
 export class AppComponent {
-  constructor(private platform: Platform, private authService: AuthService) {
+  constructor(private platform: Platform, private authService: AuthService, private languageService: LanguageService) {
     this.initializeApp();
 
     if (window.localStorage.getItem('bg_refreshtoken'))
@@ -26,6 +27,9 @@ export class AppComponent {
       if (this.platform.is('android')) {
         Plugins.StatusBar.setBackgroundColor({ color: 'white' });
       }
+
+      // Translate impl.
+      this.languageService.setInitialAppLangauge();
     });
   }
 }
