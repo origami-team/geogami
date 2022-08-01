@@ -14,7 +14,7 @@ export class LanguageService {
   constructor(private translate: TranslateService, private storage: Storage) { }
 
   setInitialAppLangauge() {
-    // 1. check if lng have aleady been chosen
+    // 1. check if lang have been stored
     // 2. check if device default lang can be fetched and it's one of the supported language
     // 3. use german as a default lang
     this.storage.get(LNG_KEY).then(val => {
@@ -23,16 +23,17 @@ export class LanguageService {
         this.selected = val
       } else {
         let langauge = this.translate.getBrowserCultureLang(); // Get browser lang
-        if (lngs.includes(langauge.slice(0, 2))) {
-          this.selected = 'de';
+        if (lngs.includes((langauge.toLowerCase().slice(0, 2)))) {
+          this.translate.setDefaultLang(langauge.toLowerCase().slice(0, 2));
+          this.selected = langauge.toLowerCase().slice(0, 2);
         } else {
           this.setLanguage('de') // german is the default lang if browser lang is not supported
         }
       }
+      //this.storage.clear()
     });
   }
 
-  // not used
   getLangauges() {
     return [
       { value: 'de', img: '🇩🇪' },

@@ -1,7 +1,7 @@
 <ion-content fullscreen>
 
   <ion-item lines="none">
-    <ion-select (ionChange)="changeLng($event.detail.value);" interface="customPopoverOptions" interface="popover"
+    <ion-select [placeholder] = "selected=='de'? '🇩🇪': '🇺🇸'" (ionChange)="changeLng($event.detail.value);" interface="customPopoverOptions" interface="popover"
       [ngModel]="selected">
 
       <ng-container *ngFor="let lang of languages">
