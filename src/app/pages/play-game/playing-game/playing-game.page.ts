@@ -222,7 +222,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   DrawControl: any;
 
   // share data approval
-  shareData_cbox = false;
+  shareData_cbox = true;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
@@ -486,7 +486,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc)
 
     this.game = null;
-    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false, false);
+    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false, false, false);
     this.route.params.subscribe((params) => {
       this.gamesService
         .getGame(JSON.parse(params.bundle).id)

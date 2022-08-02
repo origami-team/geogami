@@ -30,6 +30,8 @@ import { LandmarkControl } from "src/app/mapControllers/landmark-control";
 import { featureCollection } from "@turf/helpers";
 import { ActivatedRoute } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
+// For getting user role
+import { AuthService } from '../../../services/auth-service.service';
 
 @Component({
   selector: "app-edit-game-overview",
@@ -57,6 +59,12 @@ export class EditGameOverviewPage implements AfterViewInit {
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
 
+  // curated filter
+  isCuratedGame = false;
+  // to set curated gmaes only by admins (geogami team)
+  userRole: String = "";
+  user = this.authService.getUserValue();
+
   constructor(
     public popoverController: PopoverController,
     public navCtrl: NavController,
@@ -64,7 +72,8 @@ export class EditGameOverviewPage implements AfterViewInit {
     public gamesService: GamesService,
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService
   ) {
     this.lottieConfig = {
       path: "assets/lottie/astronaut.json",
@@ -216,6 +225,13 @@ export class EditGameOverviewPage implements AfterViewInit {
     });
   }
 
+  ngOnInit() {
+    // Get user role
+    if(this.user){
+      this.userRole = this.user['roles'][0];
+    }
+  }
+
   ngAfterViewInit(): void {
     this.route.params.subscribe((params) => {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
@@ -234,6 +250,7 @@ export class EditGameOverviewPage implements AfterViewInit {
 
           this.mapSectionVisible = this.game.mapSectionVisible;
           this.geofence = this.game.geofence;
+          this.isCuratedGame = this.game.isCuratedGame;
 
           if (this.mapSection) {
             this.changeDetectorRef.detectChanges();
@@ -573,6 +590,7 @@ export class EditGameOverviewPage implements AfterViewInit {
       geofence: this.geofence,
       name: this.game.name,
       place: this.game.place,
+      isCuratedGame: this.isCuratedGame // to set whether game can be viewed in curated filter list
     });
     console.log(this.gameFactory.game);
 

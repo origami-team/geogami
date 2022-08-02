@@ -107,7 +107,9 @@
             "invisible": "invisible",
             "saveGame": "Save game",
             "sendingData": "Transferring data...",
-            "gameSaved": "Your game has been saved!"
+            "gameSaved": "Your game has been saved!",
+            "setCuratedGame": "Set as a curated game"
+
     },
 
     "Start": {
@@ -213,7 +215,8 @@
             "pl_EnterCode": "Enter connection code",
             "shareDataAgreement": "I agree that collected data can be processed in aggregate form for research purposes.",
             "allGames": "All",
-            "myGames": "My games"
+            "myGames": "My games",
+            "curated": "Curated"
 
     },
         

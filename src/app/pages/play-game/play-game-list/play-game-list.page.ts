@@ -21,10 +21,10 @@ export class PlayGameListPage implements OnInit {
   isVirtualWorld: boolean = false;
   // To be able to update games list and switch between segments 
   searchText: string = "";
-  selectedSegment: string = "all";
+  selectedSegment: string = "curated";
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
-  user = this.authService.getUser();
+  user = this.authService.getUserValue();
 
   constructor(
     public navCtrl: NavController,
@@ -45,19 +45,17 @@ export class PlayGameListPage implements OnInit {
     // get games list
     this.gamesService.getGames(true).then(res => res.content).then(games => {
       // Get either real or VE agmes based on selected environment 
-      this.games = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();
+      this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame).reverse();
     });
 
     // Get user role
-    this.user.subscribe(
-      event => {
-        if (event != null) {
-          this.userRole = (event['roles'])[0];
-        }
-      });
+    if(this.user){
+      this.userRole = this.user['roles'][0];
+    }
+
   }
 
-  // ToDo: update it
+  // ToDo: update the functions
   doRefresh(event) {
     let gamesListTemp;
 
@@ -79,6 +77,21 @@ export class PlayGameListPage implements OnInit {
       this.gamesService.getGames(true).then(res => res.content).then(games => {
         // Get either real or VE agmes based on selected environment 
         gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
+
+        // to update shown games based on search phrase
+        if (this.searchText != "") {
+          console.log("this.searchText: ", this.searchText)
+          this.filterSelectedSegementList(this.searchText);
+        } else {
+          this.games = gamesListTemp.reverse();
+        }
+
+      }).finally(() => event.target.complete());
+    }
+    else if (this.selectedSegment == "curated") { // if all is selected
+      this.gamesService.getGames(true).then(res => res.content).then(games => {
+        // Get either real or VE agmes based on selected environment 
+        gamesListTemp = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame);
 
         // to update shown games based on search phrase
         if (this.searchText != "") {
@@ -135,6 +148,20 @@ export class PlayGameListPage implements OnInit {
         }
       });
     }
+    else if (event.detail.value == "curated") { // if all is selected
+      this.gamesService.getGames(true).then(res => res.content).then(games => {
+        // Get either real or VE agmes based on selected environment 
+        gamesListTemp = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame);
+
+        // to update shown games based on search phrase
+        if (this.searchText != "") {
+          console.log("this.searchText: ", this.searchText)
+          this.filterSelectedSegementList(this.searchText);
+        } else {
+          this.games = gamesListTemp.reverse();
+        }
+      });
+    }
   }
 
   // update list after selecting a segment
@@ -160,6 +187,19 @@ export class PlayGameListPage implements OnInit {
             || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
           && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)))
       });
+    }
+    else if (this.selectedSegment == "curated") {
+      this.gamesService
+        .getGames(true).then(res => res.content).then(
+          games => {
+            this.games = games.reverse();
+            this.games = this.games.filter(game =>
+            ((game.name.toLowerCase().includes(searchPhrase.toLowerCase())
+              || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+              && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame)
+            )
+          }
+        );
     }
   }
 }

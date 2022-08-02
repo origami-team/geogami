@@ -23,11 +23,11 @@ import { calcBounds } from './../../../helpers/bounds';
 import { AnswerType, QuestionType } from 'src/app/models/types';
 import { LandmarkControl } from 'src/app/mapControllers/landmark-control';
 import { featureCollection } from '@turf/helpers';
-
 // VR world
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-
+// For getting user role
+import { AuthService } from '../../../services/auth-service.service';
 
 
 @Component({
@@ -55,6 +55,12 @@ export class CreateGameOverviewPage implements AfterViewInit {
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
 
+  // curated filter
+  isCuratedGame = false;
+  // to set curated gmaes only by admins (geogami team)
+  userRole: String = "";
+  user = this.authService.getUserValue();
+
 
   constructor(
     public popoverController: PopoverController,
@@ -63,7 +69,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     public gamesService: GamesService,
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService
   ) {
     this.lottieConfig = {
       path: 'assets/lottie/astronaut.json',
@@ -80,7 +87,13 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
     });
+
+    // Get user role
+    if(this.user){
+      this.userRole = this.user['roles'][0];
+    }
   }
+
   ngAfterViewInit(): void {
     this.gameFactory.getGame().then(game => { this.game = game; }).finally(() => {
       if (this.mapSection) {
@@ -516,7 +529,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
       place: this.game.place,
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
-      isVisible: true                    // new game is visible by default
+      isVisible: true,                    // new game is visible by default
+      isCuratedGame: this.isCuratedGame  // to set whether game can be viewed in curated filter list
+
     });
     console.log(this.gameFactory.game);
 
