@@ -10,7 +10,22 @@
 
 <ion-content class="ion-padding">
   <h5>{{ "GameList.chooseGame" | translate }}</h5>
-  <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
+
+  <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="selectedSegment" color="dark">
+    <ion-segment-button value="curated">
+      <ion-label>{{ "PlayGame.curated" | translate }}</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="mine" [disabled]="userRole == 'unloggedUser'">
+      <ion-label>{{ "PlayGame.myGames" | translate }}</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="all">
+      <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -18,9 +33,16 @@
 
   <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
     <ion-card-header>
-      <ion-label>
-        <h2><ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> - </span> {{ game.name }}</h2>
-      </ion-label>
+      <ion-item lines="none" color="secondary">
+        <ion-label>
+          <h2>
+            <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
+            </span> {{ game.name }}
+          </h2>
+        </ion-label>
+        <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
+      </ion-item>
     </ion-card-header>
+
   </ion-card>
 </ion-content>

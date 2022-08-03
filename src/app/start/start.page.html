@@ -1,32 +1,28 @@
 <ion-content fullscreen>
 
-  <ion-item lines="none" >
-    <ion-select placeholder= 🇺🇸  (ionChange)="changeTR($event.detail.value);"  interface="customPopoverOptions" interface="popover" value="de" >
-       <ion-select-option value="de"> 🇩🇪 </ion-select-option>
-       <ion-select-option value="en"> 🇺🇸 </ion-select-option>
-       <!-- <ion-select-option value="pt"> 🇵🇹 </ion-select-option> -->
+  <ion-item lines="none">
+    <ion-select [placeholder] = "selected=='de'? '🇩🇪': '🇺🇸'" (ionChange)="changeLng($event.detail.value);" interface="customPopoverOptions" interface="popover"
+      [ngModel]="selected">
+
+      <ng-container *ngFor="let lang of languages">
+        <ion-select-option value="{{lang.value}}">{{lang.img}}</ion-select-option>
+      </ng-container>
+
     </ion-select>
- </ion-item>
+  </ion-item>
 
   <img src="assets/icons/icon.png" class="logo center" />
 
-  <ion-card
-    id="start_card_play"
-    (click)="navigateGamesOverviewPage()"
-    color="secondary">
+  <ion-card id="start_card_play" (click)="navigateGamesOverviewPage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="game-controller"></ion-icon> {{ "Start.playMode" | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>  {{ "Start.playModeDescription" | translate }} </ion-card-content>
+    <ion-card-content> {{ "Start.playModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
-  <ion-card
-    *ngIf="(user | async)?.username"
-    id="start_card_create"
-    (click)="navigateCreatePage()"
-    color="secondary">
+  <ion-card *ngIf="(user | async)?.username" id="start_card_create" (click)="navigateCreatePage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="construct"></ion-icon> {{ "Start.developMode" | translate }}
@@ -35,11 +31,8 @@
     <ion-card-content> {{ "Start.developModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
-  <ion-card
-    *ngIf="(user | async)?.roles && (user | async)?.roles.includes('admin')"
-    id="start_card_analyze"
-    (click)="navigateAnalyzePage()"
-    color="secondary">
+  <ion-card *ngIf="(user | async)?.roles && (user | async)?.roles.includes('admin')" id="start_card_analyze"
+    (click)="navigateAnalyzePage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="ribbon"></ion-icon> {{ "Start.EvaluateMode" | translate }}
@@ -48,10 +41,7 @@
     <ion-card-content> {{ "Start.EvaluateModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
-  <ion-card
-    id="start_showroom"
-    (click)="navigateShowroomPage()"
-    color="secondary">
+  <ion-card id="start_showroom" (click)="navigateShowroomPage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="bulb"></ion-icon> {{ "Start.learnMode" | translate }}
@@ -92,14 +82,4 @@
     <p>{{device.appVersion}} ({{device.appBuild}})</p>
   </div>
 
-  <!-- <ion-footer translucent>
-    <ion-row>
-      <ion-col>
-        <h1 class="ion-text-center" data-value="de" (click)=setLanguage($event)>🇩🇪</h1>
-      </ion-col>
-      <ion-col>
-        <h1 class="ion-text-center" data-value="en" (click)=setLanguage($event)>🇬🇧</h1>
-      </ion-col>
-    </ion-row>
-  </ion-footer> -->
 </ion-content>

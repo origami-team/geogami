@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="edit-game" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button color="dark" defaultHref="edit-game" text="{{ 'General.back_button' | translate }}">
+      </ion-back-button>
     </ion-buttons>
     <ion-title>{{ "SaveGame.titleSaveGame" | translate }}</ion-title>
   </ion-toolbar>
@@ -19,46 +20,27 @@
       <ion-card-content>
         <ion-item color="light">
           <ion-label position="stacked">{{ "SaveGame.gameName" | translate }}</ion-label>
-          <ion-input
-            type="text"
-            [(ngModel)]="game.name"
-            name="name"
-          ></ion-input>
+          <ion-input type="text" [(ngModel)]="game.name" name="name"></ion-input>
         </ion-item>
         <ion-item color="light">
           <ion-label position="stacked">{{ "SaveGame.gameLocation" | translate }}</ion-label>
-          <ion-input
-            type="text"
-            [(ngModel)]="game.place"
-            name="name"
-          ></ion-input>
+          <ion-input type="text" [(ngModel)]="game.place" name="name"></ion-input>
         </ion-item>
       </ion-card-content>
     </ion-card>
 
     <div class="map-section-container">
       <ion-item lines="none" color="light">
-        <ion-label
-          >{{ "SaveGame.mapSection" | translate }}
-          <ion-icon
-            name="information-circle"
-            (click)="showPopover($event, 'Popover.gameArea')"
-          >
+        <ion-label>{{ "SaveGame.mapSection" | translate }}
+          <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.gameArea')">
           </ion-icon>
         </ion-label>
-        <ion-toggle
-          [(ngModel)]="mapSection"
-          (ngModelChange)="mapSectionToggleChange($event)"
-        ></ion-toggle>
+        <ion-toggle [(ngModel)]="mapSection" (ngModelChange)="mapSectionToggleChange($event)"></ion-toggle>
       </ion-item>
 
       <ion-item lines="none" color="light" *ngIf="mapSection">
-        <ion-label
-          >{{ "SaveGame.warningLeaveArea" | translate }}
-          <ion-icon
-            name="information-circle"
-            (click)="showPopover($event, 'Popover.leaveGameArea')"
-          >
+        <ion-label>{{ "SaveGame.warningLeaveArea" | translate }}
+          <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.leaveGameArea')">
           </ion-icon>
         </ion-label>
         <ion-toggle [(ngModel)]="geofence"></ion-toggle>
@@ -66,36 +48,18 @@
 
       <div class="flex-radio-group" *ngIf="mapSection">
         <div>
-          <input
-            id="rd-visible"
-            name="map-section"
-            type="radio"
-            value="visible"
-            [checked]="mapSectionVisible"
-            (click)="mapSectionVisibleChange(true)"
-          />
+          <input id="rd-visible" name="map-section" type="radio" value="visible" [checked]="mapSectionVisible"
+            (click)="mapSectionVisibleChange(true)" />
           <label for="rd-visible"> {{ "SaveGame.outlined" | translate }}</label>
-          <ion-icon
-            name="information-circle"
-            (click)="showPopover($event, 'Popover.outlinedGameArea')"
-          >
+          <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.outlinedGameArea')">
           </ion-icon>
         </div>
 
         <div>
-          <input
-            id="rd-invisible"
-            name="map-section"
-            type="radio"
-            value="invisible"
-            [checked]="!mapSectionVisible"
-            (click)="mapSectionVisibleChange(false)"
-          />
+          <input id="rd-invisible" name="map-section" type="radio" value="invisible" [checked]="!mapSectionVisible"
+            (click)="mapSectionVisibleChange(false)" />
           <label for="rd-invisible"> {{ "SaveGame.invisible" | translate }}</label>
-          <ion-icon
-            name="information-circle"
-            (click)="showPopover($event, 'Popover.invisibleGameArea')"
-            >
+          <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.invisibleGameArea')">
           </ion-icon>
         </div>
       </div>
@@ -103,15 +67,22 @@
       <div #boundingMap class="map" *ngIf="mapSection"></div>
     </div>
 
+    <ion-card color="light" *ngIf="userRole == 'admin'">
+      <ion-card-content>
+        <ion-item lines="none" color="light">
+          <ion-label>
+            {{ "SaveGame.setCuratedGame" | translate }}
+          </ion-label>
+          <ion-toggle [(ngModel)]="isCuratedGame"></ion-toggle>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
     <ion-card color="light">
       <ion-card-content>
         <div class="ion-padding">
-          <ion-button
-            expand="block"
-            type="submit"
-            class="ion-no-margin"
-            (click)="uploadGame()"
-            >{{ "SaveGame.saveGame" | translate }}
+          <ion-button expand="block" type="submit" class="ion-no-margin" (click)="uploadGame()">{{ "SaveGame.saveGame" |
+            translate }}
           </ion-button>
         </div>
       </ion-card-content>
@@ -122,8 +93,6 @@
     <h3 *ngIf="!showSuccess">{{ "SaveGame.sendingData" | translate }}</h3>
     <h3 *ngIf="showSuccess">{{ "SaveGame.gameSaved" | translate }}</h3>
     <div lottie [options]="lottieConfig"></div>
-    <ion-button (click)="navigateHome()" [disabled]="!showSuccess"
-      >{{ "General.done" | translate }}</ion-button
-    >
+    <ion-button (click)="navigateHome()" [disabled]="!showSuccess">{{ "General.done" | translate }}</ion-button>
   </div>
 </ion-content>

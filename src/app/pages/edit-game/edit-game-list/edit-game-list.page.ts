@@ -34,35 +34,25 @@ export class EditGameListPage implements OnInit {
     });
 
     this.gamesService.getUserGames().then((res) => {
-      console.log(res);
-      this.games = res.reverse();
-
-      if (!this.isVirtualWorld) {
-        this.games = this.games.filter(game => game.isVRWorld != true); // Exclude VR games
-      } else {
-        this.games = this.games.filter(game => game.isVRWorld === true); // Get VR games
-      }
+      // Get either real or VE agmes based on selected environment 
+      this.games = res.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();;
     });
   }
 
   doRefresh(event) {
-    this.gamesService
-      .getUserGames()
-      .then((games) => (this.games = games.reverse()))
-      .finally(() => event.target.complete());
+    this.gamesService.getUserGames().then((games) => {
+      // Get either real or VE agmes based on selected environment 
+      this.games = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();
+    }).finally(() => event.target.complete());
   }
 
   filterList(event) {
-    this.gamesService
-      .getUserGames()
-      .then(
-        (games) =>
-        (this.games = games
-          .filter((game) =>
-            game.name.toLowerCase().includes(event.detail.value.toLowerCase())
-          )
-          .reverse())
-      );
+    this.gamesService.getUserGames().then((games) => {
+      this.games = games.filter(game =>
+        (game.name.toLowerCase().includes(event.detail.value.toLowerCase())
+          || (game.place != undefined && game.place.toLowerCase().includes(event.detail.value.toLowerCase())))
+        && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+    });
   }
 
   gameClick(game: any) {

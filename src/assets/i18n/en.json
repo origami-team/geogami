@@ -78,6 +78,8 @@
             "satelliteSwipe": "satellite image with swipe function",
             "3D": "3D view",
             "3DonDemand": "3D view on-demand",
+            "blankMap": "blank map",
+            "blankMapAndSatelliteSwipe": "blank map and satellite image (swipe)",
             "keepTrack":"Keep track on the map"
     },
 
@@ -105,7 +107,9 @@
             "invisible": "invisible",
             "saveGame": "Save game",
             "sendingData": "Transferring data...",
-            "gameSaved": "Your game has been saved!"
+            "gameSaved": "Your game has been saved!",
+            "setCuratedGame": "Set as a curated game"
+
     },
 
     "Start": {
@@ -209,7 +213,10 @@
             "correctLocation": "Are you exactly right? Then press 'okay'!",
             "gameConnection": "Connection code",
             "pl_EnterCode": "Enter connection code",
-            "shareDataAgreement": "I agree that collected data can be processed in aggregate form for research purposes."
+            "shareDataAgreement": "I agree that collected data can be processed in aggregate form for research purposes.",
+            "allGames": "All",
+            "myGames": "My games",
+            "curated": "Curated"
 
     },
         

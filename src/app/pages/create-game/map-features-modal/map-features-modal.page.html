@@ -53,15 +53,15 @@
       <ion-label>{{ "Mapfeatures.mapType" | translate }}</ion-label>
       <select [(ngModel)]="features.material" interface="popover">
         <option value="standard">{{ "Mapfeatures.standardMap" | translate }}</option>
-        <option value="selection">{{ "Mapfeatures.mapChoice" | translate }}</option>
-        <option value="sat">{{ "Mapfeatures.satellite" | translate }}</option>
-        <option value="sat-button">{{ "Mapfeatures.satelliteOnDemand" | translate }}</option>
-        <option value="sat-swipe">{{ "Mapfeatures.satelliteSwipe" | translate }}</option>
-        <option value="3D">{{ "Mapfeatures.3D" | translate }}</option>
-        <option value="3D-button">{{ "Mapfeatures.3DonDemand" | translate }}</option>
-        <option value="blank">Leere Karte</option>
-        <option value="blank-swipe">
-          Leere Karte und Satellitenbild (Swipe)
+        <option *ngIf='!isVirtualWorld' value="selection">{{ "Mapfeatures.mapChoice" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="sat">{{ "Mapfeatures.satellite" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="sat-button">{{ "Mapfeatures.satelliteOnDemand" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="sat-swipe">{{ "Mapfeatures.satelliteSwipe" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="3D">{{ "Mapfeatures.3D" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="3D-button">{{ "Mapfeatures.3DonDemand" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="blank">{{ "Mapfeatures.blankMap" | translate }}</option>
+        <option *ngIf='!isVirtualWorld' value="blank-swipe">
+          {{ "Mapfeatures.blankMapAndSatelliteSwipe" | translate }}
         </option>
       </select>
     </ion-item>

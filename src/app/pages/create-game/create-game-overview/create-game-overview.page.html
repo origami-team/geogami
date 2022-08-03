@@ -107,6 +107,17 @@
       <!-- <div #boundingMap class="map"></div> -->
     </div>
 
+    <ion-card color="light" *ngIf="userRole == 'admin'">
+      <ion-card-content>
+        <ion-item lines="none" color="light">
+          <ion-label>
+            {{ "SaveGame.setCuratedGame" | translate }}
+          </ion-label>
+          <ion-toggle [(ngModel)]="isCuratedGame"></ion-toggle>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
     <ion-card color="light">
       <ion-card-content>
         <div class="ion-padding">

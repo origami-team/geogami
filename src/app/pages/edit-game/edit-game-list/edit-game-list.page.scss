@@ -5,3 +5,12 @@ ion-refresher {
 .no-scroll {
   --overflow: hidden;
 }
+
+// To capitalize only first letter
+ion-segment-button {
+  text-transform:none;
+}
+
+ion-card-header{
+  padding: 0.4rem;
+}

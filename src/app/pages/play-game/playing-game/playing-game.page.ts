@@ -222,7 +222,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   DrawControl: any;
 
   // share data approval
-  shareData_cbox = false;
+  shareData_cbox = true;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
@@ -486,7 +486,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc)
 
     this.game = null;
-    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false, false);
+    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false, false, false);
     this.route.params.subscribe((params) => {
       this.gamesService
         .getGame(JSON.parse(params.bundle).id)
@@ -1194,6 +1194,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async initGame() {
     this.task = this.game.tasks[this.taskIndex];
+    this.trackerService.updateTaskNo(this.taskIndex + 1, this.task.category) // to update taskNo stored in waypoints
     this.feedbackControl.setTask(this.task);
     await this.trackerService.init(
       this.game._id,
@@ -1505,7 +1506,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       } else if (this.task.mapFeatures.keepTrack === "next") {
         this.trackControl.addTemporaryTrack(this.taskIndex);
       }
-    } 
+    }
 
     // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
@@ -1522,7 +1523,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
 
       // store collected data in database only when user agree in the begining of the game
-      if(this.shareData_cbox){
+      if (this.shareData_cbox) {
         this.trackerService.uploadTrack().then((res) => {
           if (res.status == 201) {
             this.uploadDone = true;
@@ -1539,6 +1540,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     this.task = this.game.tasks[this.taskIndex];
+    this.trackerService.updateTaskNo(this.taskIndex + 1, this.task.category) // to update taskNo stored in waypoints
     this.feedbackControl.setTask(this.task);
     this.initTask();
   }
@@ -1671,7 +1673,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.task.answer.type == AnswerType.DRAW) {
       draw = this.DrawControl.getAll();
 
-      if(draw.features?.length === 0) {
+      if (draw.features?.length === 0) {
         const toast = await this.toastController.create({
           message: this.translate.instant("Feedback.enterAnswer"),
           color: "dark",
@@ -1738,7 +1740,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.targetHeading = 360 - (this.compassHeading - bearing);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   navigateHome() {
     if (!this.isVirtualWorld) {
@@ -1841,7 +1843,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   toggleGeolocate() {
-    if(this.geolocateButton){
+    if (this.geolocateButton) {
       this.geolocateControl.toggle();
       this.geolocateButton = false;
 

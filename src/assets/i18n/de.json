@@ -76,6 +76,8 @@
                 "satelliteSwipe": "Satellitenbild mit Swipefunktion",
                 "3D": "3D-Ansicht",
                 "3DonDemand": "3D-Ansicht auf Knopfdruck",
+                "blankMap": "Leere Karte",
+                "blankMapAndSatelliteSwipe": "Leere Karte und Satellitenbild (Swipe)",
                 "keepTrack":"Strecke auf der Karte behalten"
         },
         "GameList": {
@@ -100,7 +102,8 @@
                 "invisible": "Unsichtbar",
                 "saveGame": "GeoGami speichern",
                 "sendingData": "Übertrage Daten...",
-                "gameSaved": "Dein GeoGami wurde gespeichert!"
+                "gameSaved": "Dein GeoGami wurde gespeichert!",
+                "setCuratedGame": "Als kuratiertes Spiel einstellen"
         },
         "Start": {
                 "playMode": "Spielen",
@@ -198,7 +201,11 @@
                 "correctLocation": "Stehst du genau richtig? Dann drücke 'Okay'!",
                 "gameConnection": "Verbindungscode",
                 "pl_EnterCode": "Verbindungscode eingeben",
-                "shareDataAgreement": "Ich bin damit einverstanden, dass erhobene Daten in aggregierter Form zu Forschungszwecken verarbeitet werden."
+                "shareDataAgreement": "Ich bin damit einverstanden, dass erhobene Daten in aggregierter Form zu Forschungszwecken verarbeitet werden.",
+                "allGames": "Alle",
+                "myGames": "Meine Spiele",
+                "curated": "Kuratiert"
+
         },
         "Showroom": {
                 "titleShowroom": "Lerne GeoGami kennen",
