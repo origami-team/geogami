@@ -83,6 +83,8 @@ export class AuthService {
     this.http.post(this.AUTH_API_URL + '/user/register', creds).subscribe(
       (res: any) => {
         this.registerMessage$.next(res.success);
+        this.loading$.next(false); // To avoid loading in user/login page
+        this.setLoginPageOpen(false); // Hide error message (if already shown)
         this.router.navigate(['/user/login']);
       },
       (err) => {
