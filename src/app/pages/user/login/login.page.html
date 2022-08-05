@@ -10,15 +10,19 @@
 <ion-content class="ion-padding">
   <div>
     <h1>GeoGami Login</h1>
+
     <ion-card color="danger" *ngIf="error">
       <ion-card-content> {{error}} </ion-card-content>
     </ion-card>
+
     <ion-card color="light" *ngIf="register">
       <ion-card-content>
         {{ "User.registerSuccess" | translate }}
       </ion-card-content>
     </ion-card>
+    
     <br />
+
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <ion-input placeholder="{{ 'User.pl_usernameOREmail' | translate }}" [id]="'username'" formControlName="username"></ion-input>
       <br />
