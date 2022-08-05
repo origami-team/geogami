@@ -23,6 +23,12 @@ export class ForgotPasswordPage implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
     });
+
+    this.authService.setLoginPageOpen(false); // To hide error message from other pages
+
+    this.authService.getErrorMessage().subscribe((e) => {
+      this.error = e;
+    });
   }
 
   resetPassword() {
