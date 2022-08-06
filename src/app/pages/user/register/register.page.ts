@@ -21,6 +21,8 @@ export class RegisterPage implements OnInit {
       password: ['', [Validators.required]],
     });
 
+    this.authService.setLoginPageOpen(false); // To hide error message from other pages
+
     this.authService.getErrorMessage().subscribe((e) => {
       this.error = e;
     });

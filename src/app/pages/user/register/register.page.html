@@ -13,7 +13,9 @@
     <ion-card color="danger" *ngIf="error">
       <ion-card-content> {{error}} </ion-card-content>
     </ion-card>
+
     <br />
+    
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <ion-input
         placeholder="E-Mail"

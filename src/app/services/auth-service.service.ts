@@ -120,9 +120,11 @@ export class AuthService {
       .subscribe(
         (res: any) => {
           this.registerMessage$.next(res.success);
+          this.setLoginPageOpen(false);
           this.router.navigate(['/']);
         },
         (err) => {
+          console.log(err);
           this.errorMessage$.next(err.error.message);
         }
       );

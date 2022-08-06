@@ -39,6 +39,11 @@ export class LoginPage implements OnInit {
     });
   }
 
+  // To hide error message when coming back from other pages
+  ionViewWillEnter(){
+    this.authService.setLoginPageOpen(false); 
+  }
+
   login() {
     console.log(this.loginForm.getRawValue());
     this.authService.login(this.loginForm.getRawValue());
