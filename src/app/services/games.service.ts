@@ -12,7 +12,7 @@ import { environment } from "../../environments/environment";
   providedIn: "root",
 })
 export class GamesService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createHeaders() {
     let headers = new HttpHeaders();
@@ -70,6 +70,13 @@ export class GamesService {
       .get(`${environment.apiURL}/user/games`, {
         headers: this.createHeaders(),
       })
+      .toPromise();
+  }
+
+  // To retreive updated app version
+  getAppVersion(): Promise<any> {
+    return this.http
+      .get(`${environment.apiURL}/appversion/current`)
       .toPromise();
   }
 }
