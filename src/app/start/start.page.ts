@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { Plugins } from '@capacitor/core';
+import { Capacitor, Plugins } from '@capacitor/core';
 import { AuthService } from '../services/auth-service.service';
 import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
+import { GamesService } from '../services/games.service';
 
 @Component({
   selector: 'app-start',
@@ -34,16 +35,33 @@ export class StartPage implements OnInit {
   languages = [];
   selected = '';
 
+  // current app version
+  currentAppVersion: any;
+
 
   constructor(
     public navCtrl: NavController,
     public toastController: ToastController,
     public _translate: TranslateService,
     private authService: AuthService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private alertController: AlertController,
+    private gamesService: GamesService,
   ) { }
 
   async ngOnInit() {
+    // get current app version
+    Plugins.Device.getInfo().then((device) => (this.device = device));
+    // get updated app version to notify user of app update
+    this.gamesService.getAppVersion()
+      .then(res => res.content)
+      .then(versionInfo => {
+        this.currentAppVersion = versionInfo;
+        if (this.currentAppVersion.enabled) {
+          this.showUpdateAppAlert(this.currentAppVersion.current, this.currentAppVersion.build);
+        }
+      });
+
     // (translation) get languages
     this.languages = this.languageService.getLangauges();
     // (translation) set selected language
@@ -56,8 +74,6 @@ export class StartPage implements OnInit {
           this.userRole = (event['roles'])[0];
         }
       });
-
-    Plugins.Device.getInfo().then((device) => (this.device = device));
   }
 
   handleCardClick(e) {
@@ -109,7 +125,37 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('user/profile');
   }
 
-  changeLng(lng: string){
+  changeLng(lng: string) {
     this.languageService.setLanguage(lng);
+  }
+
+  async showUpdateAppAlert(versionNum, buildNum) {
+
+    if (this.device.appVersion != versionNum || this.device.appBuild != buildNum) {
+      const alert = await this.alertController.create({
+        header: 'App Update Available',
+        //subHeader: 'Important message',
+        message: "There's a new version available, would you like to get it now? ",
+        buttons: [
+          {
+            text: 'Not Now',
+            handler: () => {
+              // Do nothing
+            },
+          },
+          {
+            text: 'Update',
+            handler: () => {
+              if (Capacitor.platform == "ios") {
+                window.open("https://apps.apple.com/app/geogami/id1614864078", "_system");
+              } else if (Capacitor.platform == "android") {
+                window.open("https://play.google.com/store/apps/details?id=com.ifgi.geogami", "_system");
+              }
+            },
+          },
+        ],
+      });
+      await alert.present();
+    }
   }
 }
