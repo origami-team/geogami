@@ -203,4 +203,17 @@ export class AuthService {
   getAccessToken() {
     return window.localStorage.getItem('bg_accesstoken');
   }
+
+  // Delete my account
+  DeleteMyAccount(user: string): Promise<any> {
+    return this.http
+      .post(`${environment.apiURL}/user/delete-me`, user)
+      .toPromise();
+  }
+
+  // Delete account and logout
+  DeleteAccountLogout(user: string){
+    this.DeleteMyAccount(user);
+    this.logout();
+  }
 }

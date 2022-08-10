@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth-service.service';
 import { Validators, FormBuilder } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +18,8 @@ export class ProfilePage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private alertController: AlertController,
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +43,34 @@ export class ProfilePage implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  // Delete user account
+  async deleteMyAccount() {
+    const alert = await this.alertController.create({
+      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
+      header: 'Delete Account',
+      //cssClass:'buttonCss',
+      //subHeader: 'Important message',
+      message: "Are you sure you want to delete your account?",
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+            // Do nothing
+          },
+        },
+        {
+          text: 'Delete Account',
+          cssClass: 'alert-button-confirm',
+          handler: () => {
+            console.log("user: ", this.user);
+            this.authService.DeleteAccountLogout(this.user);
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   navigateRegister() {
