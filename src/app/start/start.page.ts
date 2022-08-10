@@ -9,6 +9,7 @@ import { AuthService } from '../services/auth-service.service';
 import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
+import { platform } from 'process';
 
 @Component({
   selector: 'app-start',
@@ -57,7 +58,7 @@ export class StartPage implements OnInit {
       .then(res => res.content)
       .then(versionInfo => {
         this.currentAppVersion = versionInfo;
-        if (this.currentAppVersion.enabled) {
+        if (this.currentAppVersion.enabled && Capacitor.platform != "web") {
           this.showUpdateAppAlert(this.currentAppVersion.current, this.currentAppVersion.build);
         }
       });
@@ -133,6 +134,7 @@ export class StartPage implements OnInit {
 
     if (this.device.appVersion != versionNum || this.device.appBuild != buildNum) {
       const alert = await this.alertController.create({
+        backdropDismiss: false, // disable alert dismiss when backdrop is clicked
         header: 'App Update Available',
         //subHeader: 'Important message',
         message: "There's a new version available, would you like to get it now? ",
@@ -145,6 +147,7 @@ export class StartPage implements OnInit {
           },
           {
             text: 'Update',
+            cssClass: 'alert-button-update',
             handler: () => {
               if (Capacitor.platform == "ios") {
                 window.open("https://apps.apple.com/app/geogami/id1614864078", "_system");
