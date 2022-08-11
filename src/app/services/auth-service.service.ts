@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IUser } from '../interfaces/iUser';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
@@ -25,6 +25,16 @@ export class AuthService {
     this.errorMessage$ = new BehaviorSubject(null);
     this.refreshTokenInProgress$ = new BehaviorSubject(false);
     this.registerMessage$ = new BehaviorSubject(false);
+  }
+
+  createHeaders() {
+    let headers = new HttpHeaders();
+    const token = window.localStorage.getItem("bg_accesstoken");
+    if (token) {
+      headers = headers.append("Authorization", "Bearer " + token);
+    }
+    headers = headers.append("Content-Type", "application/json");
+    return headers;
   }
 
   getUser() {
@@ -207,12 +217,14 @@ export class AuthService {
   // Delete my account
   DeleteMyAccount(user: string): Promise<any> {
     return this.http
-      .post(`${environment.apiURL}/user/delete-me`, user)
+      .post(`${environment.apiURL}/user/delete-me`, user, {
+        headers: this.createHeaders()
+      })
       .toPromise();
   }
 
   // Delete account and logout
-  DeleteAccountLogout(user: string){
+  DeleteAccountLogout(user: string) {
     this.DeleteMyAccount(user);
     this.logout();
   }
