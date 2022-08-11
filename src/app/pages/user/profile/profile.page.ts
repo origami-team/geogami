@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth-service.service';
 import { Validators, FormBuilder } from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +21,7 @@ export class ProfilePage implements OnInit {
     private authService: AuthService,
     public navCtrl: NavController,
     private alertController: AlertController,
+    public _translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -49,19 +51,19 @@ export class ProfilePage implements OnInit {
   async deleteMyAccount() {
     const alert = await this.alertController.create({
       backdropDismiss: false, // disable alert dismiss when backdrop is clicked
-      header: 'Delete Account',
+      header: this._translate.instant("User.deleteAccountHeader"),
       //cssClass:'buttonCss',
       //subHeader: 'Important message',
-      message: "Are you sure you want to delete your account?",
+      message: this._translate.instant("User.deleteAccountMsg"),
       buttons: [
         {
-          text: 'Cancel',
+          text: this._translate.instant("User.cancel"),
           handler: () => {
             // Do nothing
           },
         },
         {
-          text: 'Delete Account',
+          text: this._translate.instant("User.deleteAccount"),
           cssClass: 'alert-button-confirm',
           handler: () => {
             console.log("user: ", this.user);
