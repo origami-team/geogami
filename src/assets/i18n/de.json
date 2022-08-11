@@ -118,7 +118,11 @@
                 "aboutModeDescription": "Erfahre mehr über die App.",
                 "loginModeDescription": "Logge dich ein, um Spiele zu erstellen.",
                 "hello": "Hallo",
-                "userpreferences": "Benutzereinstellungen"
+                "userpreferences": "Benutzereinstellungen",
+                "appUpdateHeader": "App-Aktualisierung verfügbar",
+                "appUpdateMsg": "Es ist eine neue Version verfügbar, möchten Sie sie jetzt laden?",
+                "update": "Aktualisieren",
+                "notNow": "Nicht Jetzt"
         },
         "AnalyzeGame": {
                 "title": "Analysiere dein GeoGami"
@@ -226,7 +230,11 @@
                 "pl_usernameOREmail": "Benutzername oder E-Mail",
                 "pl_username": "Benutzername",
                 "pl_password": "Passwort",
-                "pl_newPassword": "Neues Passwort"
+                "pl_newPassword": "Neues Passwort",
+                "deleteAccountHeader": "Konto löschen",
+                "deleteAccountMsg": "Bist du sicher, dass du dein Konto löschen möchtest?",
+                "deleteAccount": "Konto löschen",
+                "cancel": "Abbrechen"
         },
         "Popover": {
                 "chooseComponent": "Tippe die Felder an, um mehr über die Aufgabentypen zu erfahren.",

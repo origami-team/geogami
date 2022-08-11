@@ -125,7 +125,11 @@
             "aboutModeDescription": "Learn more about the app.",
             "loginModeDescription": "Log-in for creating games.",
             "hello": "Hello",
-            "userpreferences": "user settings"
+            "userpreferences": "user settings",
+            "appUpdateHeader": "App Update Available",
+            "appUpdateMsg": "There's a new version available, would you like to get it now?",
+            "update": "Update",
+            "notNow": "Not Now"
     },
 
     "AnalyzeGame": {
@@ -240,7 +244,12 @@
             "pl_usernameOREmail": "Username or E-Mail",
             "pl_username": "Username",
             "pl_password": "Password",
-            "pl_newPassword": "New Password"
+            "pl_newPassword": "New Password",
+            "deleteAccountHeader": "Delete Account",
+            "deleteAccountMsg": "Are you sure you want to delete your account?",
+            "deleteAccount": "Delete Account",
+            "cancel": "Cancel"
+            
     },
 
     "Popover": {

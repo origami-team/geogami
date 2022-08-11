@@ -135,18 +135,18 @@ export class StartPage implements OnInit {
     if (this.device.appVersion != versionNum || this.device.appBuild != buildNum) {
       const alert = await this.alertController.create({
         backdropDismiss: false, // disable alert dismiss when backdrop is clicked
-        header: 'App Update Available',
+        header: this._translate.instant("Start.appUpdateHeader"),
         //subHeader: 'Important message',
-        message: "There's a new version available, would you like to get it now? ",
+        message: this._translate.instant("Start.appUpdateMsg"),
         buttons: [
           {
-            text: 'Not Now',
+            text: this._translate.instant("Start.notNow"),
             handler: () => {
               // Do nothing
             },
           },
           {
-            text: 'Update',
+            text: this._translate.instant("Start.update"),
             cssClass: 'alert-button-update',
             handler: () => {
               if (Capacitor.platform == "ios") {
