@@ -1,22 +1,29 @@
 # **Map Features and Task Types in GeoGami**
 
 ## Table of Content
-[Task Types](#task-types)  
-[Map Features](#map-features) 
+
+<!--ts-->
+   * [Task Types](#task-types) 
+      * [Navigation Tasks](#navigation-tasks)
+      * [Thematic Tasks](#thematic-tasks)
+   * [Map Features](#map-features) 
+      * [Map Settings](#map-settings)
+      * [Marker Settings](#marker-settings)
+<!--te-->
 
 ## Task Types
 
 Task types are like game types meant to access the navigation skills and abilities.
 
 These are classified as : 
-a)  Navigation Tasks 
+
+###  Navigation Tasks 
 
 ![image](https://user-images.githubusercontent.com/94603960/187164909-381b18c2-0ef7-49ad-9240-6b9f48a8826b.png)
 
-b) Thematic Tasks
+### Thematic Tasks
 
 ![image](https://user-images.githubusercontent.com/94603960/187165447-ad3d46df-f4e5-4adb-9a67-244cff62cdcc.png)
-
 
 Additionally we have Information type where you can explain the game in detail to the players, give instructions and rules before proceeding to play.
 
