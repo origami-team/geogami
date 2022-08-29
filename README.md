@@ -22,7 +22,13 @@ You can install GeoGami...
 After installation, you can play the game but if you want to create a game and be part of newer version updates by registering as a user. 
 To do that, simply register using your email id and set up a strong password. With that you are ready to play.
 
-You can view the video on how to register as a user here
+## Instruction Guides :
+
+:video_game: read how to [play the GeoGame](Readme_Guides/README.how_to_play.md) here
+
+:construction_worker: read how to [create a GeoGame](Readme_Guides/README.create_real_world_game.md) here
+
+:spiral_notepad: To know more about GeoGami [task types and Features](Readme_Guides/README.overall_features.md) here 
 
 
 ## Contact
