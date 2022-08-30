@@ -117,6 +117,10 @@ export class StartPage implements OnInit {
   navigateAnalyzePage() {
     this.navCtrl.navigateForward('analyze');
   }
+  
+  navigateUserManagement() {
+    this.navCtrl.navigateForward('user/user-management');
+  }
 
   login() {
     this.navCtrl.navigateForward('user/login');

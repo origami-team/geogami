@@ -187,6 +187,10 @@ const routes: Routes = [
     path: 'create-game-virtual-menu',
     loadChildren: () => import('./pages/create-game/create-game-virtual-menu/create-game-virtual-menu.module').then( m => m.CreateGameVirtualMenuPageModule)
   },
+  {
+    path: 'user/user-management',
+    loadChildren: () => import('./pages/user/user-management/user-management.module').then( m => m.UserManagementPageModule)
+  },
 ];
 @NgModule({
   imports: [

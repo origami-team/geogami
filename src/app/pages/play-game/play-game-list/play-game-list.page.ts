@@ -74,6 +74,7 @@ export class PlayGameListPage implements OnInit {
       }).finally(() => event.target.complete());
 
     } else if (this.selectedSegment == "all") { // if all is selected
+      //--- ToDo
       this.gamesService.getGames(true).then(res => res.content).then(games => {
         // Get either real or VE agmes based on selected environment 
         gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
