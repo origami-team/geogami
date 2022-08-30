@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="dark" defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+    </ion-buttons>
+    <ion-title> User Management</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <h3>Users list</h3>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-start" style="background-color: #d0def8">
+      <ion-col size="1"> # </ion-col>
+      <ion-col size="1.5"> Name </ion-col>
+      <ion-col size="3"> Email </ion-col>
+      <ion-col size="2"> Created date </ion-col>
+      <ion-col size="2"> Role </ion-col>
+      <ion-col size="2"> Action </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor=" let user of users; index as i" class="ion-justify-content-start"
+      style="border-bottom: 1px solid grey;"  [ngStyle]="{ 'background-color' : i%2 ? '#ecebeb' : ''}">
+      <ion-col size="1"> {{ i+1 }} </ion-col>
+      <ion-col size="1.5"> {{ user.username }} </ion-col>
+      <ion-col size="3"> {{ user.email }} </ion-col>
+      <ion-col size="2"> {{ user.createdAt.slice(0, 19) }} </ion-col>
+      <ion-col size="2">
+        <!-- <ion-item> -->
+        <ion-list>
+          <!-- <ion-select interface="popover" placeholder="{{ user.roles[0] }}" ngmodel="{{ user.roles[0]}}"> -->
+          <ion-select interface="popover" value="{{ user.roles[0]}}" (ionChange)="changeRole(i, $event.detail.value)" [ngStyle]="{ 'background-color' : i%2 ? '#ecebeb' : ''}">
+            <ion-select-option value="admin">admin</ion-select-option>
+            <ion-select-option value="scholar">scholar</ion-select-option>
+            <ion-select-option value="user">user</ion-select-option>
+          </ion-select>
+        </ion-list>
+        <!-- </ion-item> -->
+      </ion-col>
+      <ion-col size="2">
+        <ion-buttons>
+          <ion-button (click)="saveRoleUpdate(i)" disabled = "{{!user.roleIsUpdated}}">
+            <ion-icon name="save-sharp" color="{{ user.roleIsUpdated?'primary':'dark'}}"></ion-icon>
+          </ion-button>
+
+          <ion-button (click)="dismissModal(null)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+</ion-content>

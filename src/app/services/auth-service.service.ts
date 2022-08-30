@@ -228,4 +228,23 @@ export class AuthService {
     this.DeleteMyAccount(user);
     this.logout();
   }
+
+  // Get users list
+  GetUsers(): Promise<any>{
+    return this.http
+      .get(`${environment.apiURL}/user/user`, {
+        headers: this.createHeaders(),
+      })
+      .toPromise();
+  }
+
+  // update user role
+  updateUserRole(user: string ): Promise<any> {
+    return this.http
+      .put(`${environment.apiURL}/user/update-role`, user, {
+        headers: this.createHeaders(),
+        observe: "response",
+      })
+      .toPromise();
+  }
 }

@@ -1,0 +1,12 @@
+ion-col {
+    text-align: start;
+  
+    > ion-buttons ,ion-button, ion-icon{
+      padding: 0rem;
+      margin: 0rem;
+    }
+  }
+  
+  ion-list, ion-select{
+    padding: 0rem;
+  }
