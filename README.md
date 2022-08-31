@@ -12,10 +12,10 @@ For more information on **GeoGami** and our **research** visit the [Website](htt
 
 ## Table of Contents
 
+* [Installation Guide](#installation-guide)
 * [How to Play a GeoGame](Readme_Guides/README.how_to_play.md)
 * [How to Create  a GeoGame](Readme_Guides/README.create_real_world_game.md)
 * [Map Features and Task Types](Readme_Guides/README.overall_features.md)
-* [Installation Guide](installation_guide)
 
 ## Installation Guide
 
