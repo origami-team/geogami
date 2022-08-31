@@ -19,11 +19,16 @@ These are classified as :
 
 ###  Navigation Tasks 
 
-![image](https://user-images.githubusercontent.com/94603960/187164909-381b18c2-0ef7-49ad-9240-6b9f48a8826b.png)
+| Navigation to Flag | Navigation with Arrow | Navigation via Text | Navigation via Photo |
+| ------------------ | --------------------- | ------------------- | -------------------- |
+| <img src = 'https://user-images.githubusercontent.com/94603960/187637133-a20c0fda-10aa-4503-998e-6dbbaf797a96.png' width = 500 height = 300>| <img src = 'https://user-images.githubusercontent.com/94603960/187635944-32cb9af4-38c4-4708-9c4d-17e12233b063.png' width = 500 height = 300 > | <img src = 'https://user-images.githubusercontent.com/94603960/187636087-572196b9-53ed-4549-956f-51d2e37cc1d7.png' width = 500 height = 300 > | <img src = 'https://user-images.githubusercontent.com/94603960/187642472-3f325e27-42fd-4e31-854f-d544cecf093e.png' width = 500 height = 300 > |
+
 
 ### Thematic Tasks
 
-![image](https://user-images.githubusercontent.com/94603960/187165447-ad3d46df-f4e5-4adb-9a67-244cff62cdcc.png)
+| Self location Task | Object location Task | Direction determination Task | Free Tasks |
+| ------------------ | -------------------- | ---------------------------- | ---------- |
+| <img src = 'https://user-images.githubusercontent.com/94603960/187638750-25c43869-2e90-4e37-9b68-8e24d6b6bcc9.png' width = 600 height = 300> | <img src = 'https://user-images.githubusercontent.com/94603960/187638782-22d54619-c337-4b15-aa2a-4f827fc37123.png' width = 600 height = 300> | <img src = 'https://user-images.githubusercontent.com/94603960/187639130-4daa58c2-3e41-4718-a2e2-46b20f2e0837.png' width = 550 height = 300> | <img src = 'https://user-images.githubusercontent.com/94603960/187638950-b029cbd6-0b54-4934-84f4-13b40747b523.png' width = 600 height = 300> |
 
 Additionally we have Information type where you can explain the game in detail to the players, give instructions and rules before proceeding to play.
 
