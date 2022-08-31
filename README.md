@@ -10,25 +10,24 @@ GeoGami is a location-based game that allows the user to play and create map-bas
 
 For more information on **GeoGami** and our **research** visit the [Website](https://geogami.ifgi.de). It's available in both English and German.
 
-## Run the app
+## Table of Contents
+
+* [How to Play a GeoGame](Readme_Guides/README.how_to_play.md)
+* [How to Create  a GeoGame](Readme_Guides/README.create_real_world_game.md)
+* [Map Features and Task Types](Readme_Guides/README.overall_features.md)
+* [Installation Guide](installation_guide)
+
+## Installation Guide
 
 GeoGami runs on both iOS and Android devices with a compass sensor and a GPS or GSM module. The app is still under development and it would be helpful if you all contribute by reporting bugs and functional limitations here: [issues](https://github.com/origami-team/origami/issues).
 
-You can install GeoGami...
+***You can install GeoGami***...
 
 1. **on your iOS device:** [Visit App Store](https://apps.apple.com/app/geogami/id1614864078).
 2. **on your Android device:** [Visit Google Play Store](https://play.google.com/store/apps/details?id=com.ifgi.geogami).
 
 After installation, you can play the game but if you want to create a game and be part of newer version updates by registering as a user. 
 To do that, simply register using your email id and set up a strong password. With that you are ready to play.
-
-## Instruction Guides :
-
-:video_game: read how to [play the GeoGame](Readme_Guides/README.how_to_play.md) here
-
-:construction_worker: read how to [create a GeoGame](Readme_Guides/README.create_real_world_game.md) here
-
-:spiral_notepad: To know more about GeoGami [task types and Features](Readme_Guides/README.overall_features.md) here 
 
 
 ## Contact
