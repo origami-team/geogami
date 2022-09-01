@@ -99,7 +99,7 @@ export class StartPage implements OnInit {
   navigateCreatePage() {
     this.navCtrl.navigateForward('create-game-menu');
 
-    if (this.userRole != undefined && this.userRole == "admin") {
+    if (this.userRole != undefined && (this.userRole == "admin" || this.userRole == "scholar")) {
       this.navCtrl.navigateForward('create-game-menu');
     } else {
       this.navCtrl.navigateForward('create-game');
