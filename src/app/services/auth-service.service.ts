@@ -4,6 +4,7 @@ import { IUser } from '../interfaces/iUser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class AuthService {
   private refreshTokenInProgress$: BehaviorSubject<boolean>;
   private registerMessage$: BehaviorSubject<boolean>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, public toastService: ToastService) {
     this.user$ = new BehaviorSubject(null);
     this.loading$ = new BehaviorSubject(false);
     this.loginPageOpen$ = new BehaviorSubject(false);
@@ -92,7 +93,7 @@ export class AuthService {
     this.loading$.next(true);
     this.http.post(this.AUTH_API_URL + '/user/register', creds).subscribe(
       (res: any) => {
-        this.registerMessage$.next(res.success);
+        this.registerMessage$.next(res.success); //-- ToDo
         this.loading$.next(false); // To avoid loading in user/login page
         this.setLoginPageOpen(false); // Hide error message (if already shown)
         this.router.navigate(['/user/login']);
@@ -131,7 +132,8 @@ export class AuthService {
         (res: any) => {
           this.registerMessage$.next(res.success);
           this.setLoginPageOpen(false);
-          this.router.navigate(['/']);
+          // send email address as a parameter to reset-password page (to be used in text and in backend to find user)
+          this.router.navigate(['/user/reset-password'], { state: { email :email.email} });
         },
         (err) => {
           console.log(err);
@@ -140,15 +142,19 @@ export class AuthService {
       );
   }
 
-  resetPassword(newPassword, token) {
+  resetPassword(newPassword, email, verificationCode) {
     this.http
       .post(this.AUTH_API_URL + '/user/password-reset', {
-        ...newPassword,
-        token,
+        newPassword,
+        email,
+        verificationCode,
       })
       .subscribe(
         (res: any) => {
-          this.router.navigate(['/']);
+          // show toast msg
+          this.toastService.showToast(res.message, "dark", 3000)
+          this.setLoginPageOpen(false);
+          this.router.navigate(['/user/login']);
         },
         (err) => {
           this.errorMessage$.next(err.error.message);

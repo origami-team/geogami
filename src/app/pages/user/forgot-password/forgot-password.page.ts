@@ -32,6 +32,8 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   resetPassword() {
+    // Remove extra spaces before and after email string
+    this.loginForm.setValue({email: (this.loginForm.getRawValue().email).trim()})
     this.authService.requestResetPassword(this.loginForm.getRawValue());
   }
 }
