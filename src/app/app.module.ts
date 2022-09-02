@@ -75,14 +75,6 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
     LangTranslatePipe,
   ],
   exports: [],
-  entryComponents: [
-    PopoverComponent,
-    CreateTaskModalPage,
-    CreateFreeTaskModalComponent,
-    MapFeaturesModalPage,
-    CreateModuleModalPage,
-    CreateInfoModalComponent,
-  ],
   imports: [
     AudioPlayerModule,
     FormsModule,
