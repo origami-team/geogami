@@ -147,7 +147,7 @@
             "titleCreateGameVirtualList": "Create a virtual GeoGami",
             "create": "Create",
             "edit": "Edit",
-            "createDescription": "Create a new GeoGami.",
+            "createDescription": "Create a new Game.",
             "editDescription": "Modify an existing GeoGami.",
             "informationText": "Information text",
             "markdownSupported": "Markdown supported",

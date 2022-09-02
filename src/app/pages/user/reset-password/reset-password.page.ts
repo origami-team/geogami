@@ -25,7 +25,9 @@ export class ResetPasswordPage implements OnInit {
     private router: Router
   ) {
     // Get user email address sent from forgot password page
-    this.userEmail = this.router.getCurrentNavigation().extras.state.email;
+    if(this.router.getCurrentNavigation().extras.state){
+      this.userEmail = this.router.getCurrentNavigation().extras.state.email;
+    }
   }
 
   ngOnInit(): void {
