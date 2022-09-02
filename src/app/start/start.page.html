@@ -90,7 +90,7 @@
   </ion-card>
 
   <div class="ion-text-center" *ngIf="device && device.appBuild">
-    <p>v. {{device.appVersion}} {{['admin', 'scholar'].includes( (user | async)?.roles[0])? "("+device.appBuild+")":""}}</p>
+    <p>V. {{device.appVersion}} {{['admin', 'scholar'].includes( (user | async)?.roles[0])? "("+device.appBuild+")":""}}</p>
   </div>
 
 </ion-content>
