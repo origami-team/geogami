@@ -10,6 +10,7 @@ import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
 import { platform } from 'process';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-start',
@@ -48,6 +49,7 @@ export class StartPage implements OnInit {
     private languageService: LanguageService,
     private alertController: AlertController,
     private gamesService: GamesService,
+    public toastService: ToastService
   ) { }
 
   async ngOnInit() {
@@ -59,7 +61,11 @@ export class StartPage implements OnInit {
       .then(latestVersionInfo => {
         this.latestAppVersionInfo = latestVersionInfo;
         if (this.latestAppVersionInfo.enabled && Capacitor.platform != "web") {
-          this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
+          if(Capacitor.platform == "ios" && this.latestAppVersionInfo.ios){
+            this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
+          } else if(Capacitor.platform == "android" && this.latestAppVersionInfo.android){
+            this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
+          }
         }
       });
 

@@ -8,7 +8,7 @@ export class ToastService {
 
   constructor(public toastController: ToastController) { }
 
-  async showToast(msg, colorV, durationV) {
+  async showToast(msg, colorV = "dark", durationV=3000) {
     const toast = await this.toastController.create({
       message: msg,
       color: colorV,
