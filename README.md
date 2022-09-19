@@ -39,7 +39,7 @@ GeoGami offers many games in both Real World and Virtual World. In this video, w
 
 If you don't like the game list, you can create a game of your own by registering as a user. 
 
-[![Watch the video](https://uni-muenster.sciebo.de/s/0pEVIrcOVUhdxcc/view)](https://uni-muenster.sciebo.de/s/clgfAHZL6dhQyMw)
+[![Watch the video](https://uni-muenster.sciebo.de/s/0pEVIrcOVUhdxcc/view)](https://uni-muenster.sciebo.de/s/zTIT6F6zQ8VExXj)
 
 ## How to Create a GeoGame
 
@@ -50,7 +50,7 @@ To do that you need to install GeoGami and register as a User in GeoGami. This c
 
 In this video, we will see how to create a game in geogami with a single task. You can create your games with as many task types as you want.
 
-https://uni-muenster.sciebo.de/s/1HH5IBMJLArwyEy
+https://uni-muenster.sciebo.de/s/g6eXo4xB7264g08
 
 ## Map Features and Task Types in GeoGami
 
