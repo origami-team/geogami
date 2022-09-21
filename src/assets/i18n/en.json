@@ -235,7 +235,9 @@
                 "deleteAccountHeader": "Delete Account",
                 "deleteAccountMsg": "Are you sure you want to delete your account?",
                 "deleteAccount": "Delete Account",
-                "cancel": "Cancel"
+                "cancel": "Cancel",
+                "enterEmail": "Enter your email address and we'll send you an email to reset your password.",
+                "enterVirCode": "Verification code has been sent to {{email}}. Please enter the code below along with your new password."
         },
         "Popover": {
                 "chooseComponent": "Tap on the buttons to learn more about the task types.",

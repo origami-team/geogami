@@ -73,6 +73,7 @@ export class OrigamiOrientationService {
     window.removeEventListener('deviceorientation', this.handleDeviceOrientation, true);
     window.removeEventListener('deviceorientationabsolute', this.handleDeviceOrientation, true);
 
+    //--- ToDo
     if (!this.isVirtualWorld) {
       this.orientationSubscriber.unsubscribe();
     }
