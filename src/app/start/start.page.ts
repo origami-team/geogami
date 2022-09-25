@@ -10,6 +10,7 @@ import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
 import { platform } from 'process';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-start',
@@ -36,8 +37,8 @@ export class StartPage implements OnInit {
   languages = [];
   selected = '';
 
-  // current app version
-  currentAppVersion: any;
+  // latest app version
+  latestAppVersionInfo: any;
 
 
   constructor(
@@ -48,6 +49,7 @@ export class StartPage implements OnInit {
     private languageService: LanguageService,
     private alertController: AlertController,
     private gamesService: GamesService,
+    public toastService: ToastService
   ) { }
 
   async ngOnInit() {
@@ -56,10 +58,14 @@ export class StartPage implements OnInit {
     // get updated app version to notify user of app update
     this.gamesService.getAppVersion()
       .then(res => res.content)
-      .then(versionInfo => {
-        this.currentAppVersion = versionInfo;
-        if (this.currentAppVersion.enabled && Capacitor.platform != "web") {
-          this.showUpdateAppAlert(this.currentAppVersion.current, this.currentAppVersion.build);
+      .then(latestVersionInfo => {
+        this.latestAppVersionInfo = latestVersionInfo;
+        if (this.latestAppVersionInfo.enabled && Capacitor.platform != "web") {
+          if(Capacitor.platform == "ios" && this.latestAppVersionInfo.ios){
+            this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
+          } else if(Capacitor.platform == "android" && this.latestAppVersionInfo.android){
+            this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
+          }
         }
       });
 
@@ -82,8 +88,6 @@ export class StartPage implements OnInit {
   }
 
   navigateGamesOverviewPage() {
-    //this.navCtrl.navigateForward('play-game/play-game-list');
-
     // disable unregistered users from playing using the virtual world
     /* if (this.userRole != undefined && this.userRole == "admin") {
       this.navCtrl.navigateForward('play-game/play-game-menu');
@@ -99,7 +103,7 @@ export class StartPage implements OnInit {
   navigateCreatePage() {
     this.navCtrl.navigateForward('create-game-menu');
 
-    if (this.userRole != undefined && this.userRole == "admin") {
+    if (this.userRole != undefined && (this.userRole == "admin" || this.userRole == "scholar")) {
       this.navCtrl.navigateForward('create-game-menu');
     } else {
       this.navCtrl.navigateForward('create-game');
@@ -118,6 +122,10 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward('analyze');
   }
 
+  navigateUserManagement() {
+    this.navCtrl.navigateForward('user/user-management');
+  }
+
   login() {
     this.navCtrl.navigateForward('user/login');
   }
@@ -130,35 +138,46 @@ export class StartPage implements OnInit {
     this.languageService.setLanguage(lng);
   }
 
-  async showUpdateAppAlert(versionNum, buildNum) {
+  async showUpdateAppAlert(latestVersion, latestBuild, isMajorUpdate) {
+    let currentAppVersion = this.versionToInt(this.device.appVersion);
+    let currentAppBuild = parseInt(this.device.appBuild);
 
-    if (this.device.appVersion != versionNum || this.device.appBuild != buildNum) {
-      const alert = await this.alertController.create({
-        backdropDismiss: false, // disable alert dismiss when backdrop is clicked
-        header: this._translate.instant("Start.appUpdateHeader"),
-        //subHeader: 'Important message',
-        message: this._translate.instant("Start.appUpdateMsg"),
-        buttons: [
-          {
-            text: this._translate.instant("Start.notNow"),
-            handler: () => {
-              // Do nothing
-            },
-          },
-          {
-            text: this._translate.instant("Start.update"),
-            cssClass: 'alert-button-update',
-            handler: () => {
-              if (Capacitor.platform == "ios") {
-                window.open("https://apps.apple.com/app/geogami/id1614864078", "_system");
-              } else if (Capacitor.platform == "android") {
-                window.open("https://play.google.com/store/apps/details?id=com.ifgi.geogami", "_system");
-              }
-            },
-          },
-        ],
-      });
-      await alert.present();
+    let btnsObj = [
+      {
+        text: this._translate.instant("Start.notNow"),
+        handler: () => {
+          // Do nothing
+        }
+      },
+      {
+        text: this._translate.instant("Start.update"),
+        cssClass: 'alert-button-update',
+        handler: () => {
+          if (Capacitor.platform == "ios") {
+            window.open("https://apps.apple.com/app/geogami/id1614864078", "_system");
+          } else if (Capacitor.platform == "android") {
+            window.open("https://play.google.com/store/apps/details?id=com.ifgi.geogami", "_system");
+          }
+        },
+      }
+    ];
+
+    if (currentAppVersion < latestVersion || ( currentAppVersion == latestVersion && currentAppBuild < latestBuild)) {
+    const alert = await this.alertController.create({
+      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
+      header: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateHeader" : "Start.appUpdateHeader")),
+      //subHeader: 'Important message',
+      message: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateMsg" : "Start.appUpdateMsg")),
+      buttons: (isMajorUpdate ? [btnsObj[1]] : btnsObj)
+    });
+    await alert.present();
     }
+  }
+
+  // convert version value to int
+  versionToInt(VersionInString) {
+    let v = VersionInString.split('.');
+    console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);
+    return (v[0] * 100 + v[1] * 10 + v[2] * 1)
   }
 }

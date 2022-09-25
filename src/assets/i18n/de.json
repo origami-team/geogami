@@ -14,7 +14,7 @@
                 "start": "Start",
                 "pl_text": "Text",
                 "pl_optional": "(optional)",
-                "back_button": "Zurück", 
+                "back_button": "Zurück",
                 "from": "von",
                 "next": "Weiter"
         },
@@ -78,7 +78,7 @@
                 "3DonDemand": "3D-Ansicht auf Knopfdruck",
                 "blankMap": "Leere Karte",
                 "blankMapAndSatelliteSwipe": "Leere Karte und Satellitenbild (Swipe)",
-                "keepTrack":"Strecke auf der Karte behalten"
+                "keepTrack": "Strecke auf der Karte behalten"
         },
         "GameList": {
                 "titleGameMenu": "Wähle die Spielumgebung",
@@ -121,6 +121,8 @@
                 "userpreferences": "Benutzereinstellungen",
                 "appUpdateHeader": "App-Aktualisierung verfügbar",
                 "appUpdateMsg": "Es ist eine neue Version verfügbar, möchten Sie sie jetzt laden?",
+                "majorAppUpdateHeader": "Wichtige App-Aktualisierung",
+                "majorAppUpdateMsg": "Bitte aktualisieren Sie, um die App weiterhin zu verwenden.",
                 "update": "Aktualisieren",
                 "notNow": "Nicht Jetzt"
         },
@@ -138,7 +140,7 @@
                 "titleCreateGameVirtualList": "Erstelle ein virtuelles GeoGami",
                 "create": "Erstellen",
                 "edit": "Bearbeiten",
-                "createDescription": "Gestalte ein neues GeoGami.",
+                "createDescription": "Gestalte ein neues Spiel.",
                 "editDescription": "Verändere ein bestehendes GeoGami.",
                 "informationText": "Informationstext",
                 "markdownSupported": "Markdown wird unterstützt",
@@ -192,7 +194,7 @@
                 "virtualWorldDescription": "Spiele GeoGami in einer virtuellen Welt.",
                 "toDestination": "Zum Ziel:",
                 "pressOK": "Drücke 'Okay'!",
-                "selectThenPressOK": "Wähle eine Antwort, dann drücke 'okay'!", 
+                "selectThenPressOK": "Wähle eine Antwort, dann drücke 'okay'!",
                 "pressOKdestination": "Drücke 'Okay', wenn du da bist!",
                 "GPSaccuracy": "GPS Genauigkeit:",
                 "playersNames": "Wer spielt?",
@@ -209,7 +211,6 @@
                 "allGames": "Alle",
                 "myGames": "Meine Spiele",
                 "curated": "Kuratiert"
-
         },
         "Showroom": {
                 "titleShowroom": "Lerne GeoGami kennen",
@@ -234,7 +235,9 @@
                 "deleteAccountHeader": "Konto löschen",
                 "deleteAccountMsg": "Bist du sicher, dass du dein Konto löschen möchtest?",
                 "deleteAccount": "Konto löschen",
-                "cancel": "Abbrechen"
+                "cancel": "Abbrechen",
+                "enterEmail": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen eine E-Mail zum Zurücksetzen Ihres Passworts.",
+                "enterVirCode": "Der Bestätigungscode wurde an {{email}} gesendet. Bitte geben Sie den unten stehenden Code zusammen mit Ihrem neuen Passwort ein."
         },
         "Popover": {
                 "chooseComponent": "Tippe die Felder an, um mehr über die Aufgabentypen zu erfahren.",
@@ -268,7 +271,6 @@
                 "photoDirection": "Wähle ein Foto, das die gesuchte Blickrichtung darstellt.",
                 "showMappingView": "Wann soll die Kartierung des Spielers auf der Karte angezeigt werden?",
                 "showTrack": "Wann soll die Strecke des Spielers auf der Karte angezeigt werden?"
-
         },
         "Feedback": {
                 "correct": "Du hast die Aufgabe richtig gelöst!",
@@ -331,11 +333,11 @@
                 "byEnteringText": "... durch Texteingabe",
                 "byMapping": "... mittels Kartierung"
         },
-        "DrawSetting":{
-                "keepMappingOption":"Kartierung auf der Karte behalten",
-                "onlyCurrentTask":"nur bei der aktuellen Aufgabe",
-                "alsoNextTask":"auch bei der nächsten Aufgabe",
-                "inEntireGame":"im gesamten Spiel",
+        "DrawSetting": {
+                "keepMappingOption": "Kartierung auf der Karte behalten",
+                "onlyCurrentTask": "nur bei der aktuellen Aufgabe",
+                "alsoNextTask": "auch bei der nächsten Aufgabe",
+                "inEntireGame": "im gesamten Spiel",
                 "drawPointOnly": "Nur punkt anzeigen "
         }
 }

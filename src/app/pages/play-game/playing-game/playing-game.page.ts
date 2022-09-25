@@ -222,7 +222,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   DrawControl: any;
 
   // share data approval
-  shareData_cbox = false;
+  shareData_cbox = true;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({

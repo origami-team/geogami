@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IUser { //--- ToDo
   username: {
     type: string;
     value: string;

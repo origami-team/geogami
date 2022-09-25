@@ -45,7 +45,8 @@ export class LoginPage implements OnInit {
   }
 
   login() {
-    console.log(this.loginForm.getRawValue());
+    // Remove extra spaces before and after username string
+    this.loginForm.setValue({username: (this.loginForm.getRawValue().username).trim(), password:this.loginForm.getRawValue().password})
     this.authService.login(this.loginForm.getRawValue());
   }
 

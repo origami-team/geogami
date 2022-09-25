@@ -59,6 +59,17 @@
     <ion-card-content> {{ "Start.aboutModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
+  <!--  -->
+  <ion-card *ngIf="(user | async)?.username && (user | async)?.roles.includes('admin')" id="user_management" (click)="navigateUserManagement()" color="secondary">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="people-outline"></ion-icon> User Management 
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content> Manage user roles and permissions </ion-card-content>
+  </ion-card>
+  <!--  -->
+  
   <ion-card (click)="login()" *ngIf="!(user | async)?.username">
     <ion-card-header>
       <ion-card-title>
@@ -79,7 +90,7 @@
   </ion-card>
 
   <div class="ion-text-center" *ngIf="device && device.appBuild">
-    <p>{{device.appVersion}} ({{device.appBuild}})</p>
+    <p>V. {{device.appVersion}} {{['admin', 'scholar'].includes( (user | async)?.roles[0])? "("+device.appBuild+")":""}}</p>
   </div>
 
 </ion-content>
