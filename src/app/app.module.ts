@@ -44,7 +44,10 @@ import { TokenInterceptor } from './services/token-intercepor.service';
 import { HelperService } from './services/helper.service';
 
 
-//import { MatTableModule } from "@angular/material/table";
+//---
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -111,7 +114,9 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
       driverOrder: ['localstorage', 'indexeddb'],
     }),
     MarkdownModule.forRoot(),
-    //MatTableModule
+    MatTableModule,
+    MatPaginator,
+    MatSort
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

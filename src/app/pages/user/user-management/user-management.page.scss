@@ -10,3 +10,17 @@ ion-col {
   ion-list, ion-select{
     padding: 0rem;
   }
+
+
+  table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  td, th {
+    width: 25%;
+  }
