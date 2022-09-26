@@ -15,10 +15,13 @@
   "postinstall": "jetifier",
   "private": true,
   "dependencies": {
+    "@angular/animations": "^14.2.3",
+    "@angular/cdk": "^14.2.2",
     "@angular/common": "^9.1.2",
     "@angular/core": "^9.1.13",
     "@angular/forms": "^9.1.2",
     "@angular/http": "^7.2.2",
+    "@angular/material": "^14.2.2",
     "@angular/platform-browser": "^9.1.2",
     "@angular/platform-browser-dynamic": "^9.1.2",
     "@angular/router": "^9.1.2",
