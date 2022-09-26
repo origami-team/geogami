@@ -6,9 +6,16 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-
 import { UserManagementPage } from './user-management.page';
 import { TranslateModule } from '@ngx-translate/core';
+
+/* import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input'; */
+
+import { MaterialModule } from '../../../material.module';
 
 
 const routes: Routes = [
@@ -24,8 +31,14 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    TranslateModule
+    TranslateModule,
+    /* MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule, */
+    MaterialModule
   ],
   declarations: [UserManagementPage]
 })
-export class UserManagementPageModule {}
+export class UserManagementPageModule { }
