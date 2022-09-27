@@ -3,8 +3,8 @@ import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/services/auth-service.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator} from '@angular/material/paginator';
-import { MatSort} from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 
 @Component({
@@ -30,8 +30,8 @@ export class UserManagementPage implements OnInit {
   ) { }
 
   ngAfterViewInit() {
-    /* this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort; */
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -39,11 +39,11 @@ export class UserManagementPage implements OnInit {
     this.authService.GetUsers().then((res) => {
       this.users = res.map(obj => ({ ...obj, roleIsUpdated: false }))
       this.initializeDataSource(this.users)
-      
+
     });
   }
 
-  initializeDataSource(usersData){
+  initializeDataSource(usersData) {
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(usersData);
     console.log("this.dataSource: ", this.dataSource)
@@ -52,19 +52,36 @@ export class UserManagementPage implements OnInit {
   }
 
   // update user role
-  changeRole(index, roleValue) {
-    this.users[index].roleIsUpdated = true
-    this.users[index].roles[0] = roleValue
+  async changeRole(roleValue, userEmail) {
+    if (userEmail != undefined) {
+      console.log("userEmail1: ", userEmail)
+      console.log("roleValue1: ", roleValue)
+
+      // update user role and change save icon color to blue
+      this.users.find(user => {
+        if (user.email == userEmail) {
+          user.roleIsUpdated = true
+          user.roles = [roleValue]
+          console.log("user: ", user)
+          return user;
+        }
+      });
+    }
   }
 
   // save updated role
-  saveRoleUpdate(index) {
-    this.authService.updateUserRole(this.users[index]).then((res) => {
-      if (res.status == 200) {
-        this.users[index].roleIsUpdated = false;
-        this.showToast("User role was successfully updated!")
-      }
-    });
+  saveRoleUpdate(userEmail) {
+    if (userEmail != undefined) {
+      // get user whose role has been changed
+      let user = this.users.find(user => user.email == userEmail);
+
+      this.authService.updateUserRole(user).then((res) => {
+        if (res.status == 200) {
+          user.roleIsUpdated = false;
+          this.showToast("User role was successfully updated!")
+        }
+      });
+    }
   }
 
   // show feedback after updating user role
@@ -78,7 +95,7 @@ export class UserManagementPage implements OnInit {
     toast.present();
   }
 
-  // material table
+  // material table filter
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
