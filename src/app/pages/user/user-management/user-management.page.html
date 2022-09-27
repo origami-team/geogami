@@ -11,12 +11,12 @@
 
   <h3>Users list</h3>
 
-  <!-- ['#', 'Name', 'Email', 'Created date', 'Role', 'Action']; -->
-
-  <mat-form-field appearance="standard">
+  <!-- <mat-form-field appearance="standard" >
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-  </mat-form-field>
+  </mat-form-field> -->
+
+  <ion-searchbar (ionChange)="applyFilter($event)" placeholder="Filter" #input></ion-searchbar>
 
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
