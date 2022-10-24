@@ -84,7 +84,7 @@
                 "titleGameMenu": "Wähle die Spielumgebung",
                 "realWorld": "Realraum",
                 "virtualWorld": "Virtuelle Welt",
-                "chooseGame": "Wähle ein GeoGami aus der Liste."
+                "chooseGame": "Wähle ein Spiel aus der Liste."
         },
         "CreateTasks": {
                 "combineTasks": "Stelle dein GeoGami zusammen:",
@@ -210,7 +210,8 @@
                 "shareDataAgreement": "Ich bin damit einverstanden, dass erhobene Daten in aggregierter Form zu Forschungszwecken verarbeitet werden.",
                 "allGames": "Alle",
                 "myGames": "Meine Spiele",
-                "curated": "Kuratiert"
+                "curated": "Kuratiert",
+                "emptyGamesList": "Du hast noch kein Spiel erstellt!"
         },
         "Showroom": {
                 "titleShowroom": "Lerne GeoGami kennen",
