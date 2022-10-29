@@ -21,7 +21,7 @@ export class PlayGameListPage implements OnInit {
   isVirtualWorld: boolean = false;
   // To be able to update games list and switch between segments 
   searchText: string = "";
-  selectedSegment: string = "curated";
+  selectedSegment: string = "all";
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
   user = this.authService.getUserValue();
@@ -42,17 +42,13 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
-    // get games list
-    this.gamesService.getGames(true).then(res => res.content).then(games => {
-      // Get either real or VE agmes based on selected environment 
-      this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame).reverse();
-    });
+    // Get games data from server
+    this.getGamesData();
 
     // Get user role
-    if(this.user){
+    if (this.user) {
       this.userRole = this.user['roles'][0];
     }
-
   }
 
   // ToDo: update the functions
@@ -73,37 +69,36 @@ export class PlayGameListPage implements OnInit {
         }
       }).finally(() => event.target.complete());
 
-    } else if (this.selectedSegment == "all") { // if all is selected
-      //--- ToDo
-      this.gamesService.getGames(true).then(res => res.content).then(games => {
+  // Get games data from server
+  getGamesData() {
+    this.gamesService.getGames(true).then(res => res.content).then(games => {
+      // Get either real or VE agmes based on selected environment 
         // Get either real or VE agmes based on selected environment 
-        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
+      // Get either real or VE agmes based on selected environment 
+      this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+      //this.gamesTemp = cloneDeep(this.games);
+      this.gamesTemp = this.games;
 
-        // to update shown games based on search phrase
-        if (this.searchText != "") {
-          console.log("this.searchText: ", this.searchText)
-          this.filterSelectedSegementList(this.searchText);
-        } else {
-          this.games = gamesListTemp.reverse();
-        }
+      //console.log("games: ", this.games);
+    });
+  }
 
-      }).finally(() => event.target.complete());
-    }
-    else if (this.selectedSegment == "curated") { // if all is selected
-      this.gamesService.getGames(true).then(res => res.content).then(games => {
+  // ToDo: update the functions
+  doRefresh(event) {
+    //this.initMap();
+
+    // Get games data from server
+    this.gamesService.getGames(true).then(res => res.content).then(games => {
+      // Get either real or VE agmes based on selected environment 
         // Get either real or VE agmes based on selected environment 
-        gamesListTemp = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame);
+      // Get either real or VE agmes based on selected environment 
+      this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+      //this.gamesTemp = cloneDeep(this.games);
+      this.gamesTemp = this.games;
 
-        // to update shown games based on search phrase
-        if (this.searchText != "") {
-          console.log("this.searchText: ", this.searchText)
-          this.filterSelectedSegementList(this.searchText);
-        } else {
-          this.games = gamesListTemp.reverse();
-        }
-
-      }).finally(() => event.target.complete());
-    }
+      // Filter data of selected segment
+      this.segmentChanged(this.selectedSegment)
+    }).finally(() => event.target.complete());;
   }
 
   // search function
@@ -116,91 +111,67 @@ export class PlayGameListPage implements OnInit {
     this.navCtrl.navigateForward(`play-game/game-detail/${game._id}`);
   }
 
-  // segment (my games - all games)
-  segmentChanged(event) {  //--- ToDo check duplicate code and create a func for it
-    // clear search tbox
-    let gamesListTemp;
-
+  // segment (my games - all games - curated game)
+  segmentChanged(segVal) {  //--- ToDo check duplicate code and create a func for it
     // if mine is selected
-    if (event.detail.value == "mine") {
-      this.gamesService.getUserGames().then((games) => {
-        // Get either real or VE agmes based on selected environment 
-        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
+    if (segVal == "mine") {
+      // console.log("mine"); //temp
+      this.games = this.gamesTemp.filter(game => game.user == this.user['_id']);
 
-        // to update shown games based on search phrase
-        if (this.searchText != "") {
-          this.filterSelectedSegementList(this.searchText);
-        } else {
-          this.games = gamesListTemp.reverse();
-        }
+      // to update shown games based on search phrase
+      if (this.searchText != "") {
+        this.games = this.games.filter(game =>
+        (game.name.toLowerCase().includes(this.searchText.toLowerCase())
+          || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
+        )
+      }
+    } else if (segVal == "all") { // if all is selected
+      //onsole.log("all"); //temp
+      this.games = this.gamesTemp;
 
-      });
-    } else if (event.detail.value == "all") { // if all is selected
-      this.gamesService.getGames(true).then(res => res.content).then(games => {
-        // Get either real or VE agmes based on selected environment 
-        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
-
-        // to update shown games based on search phrase
-        if (this.searchText != "") {
-          console.log("this.searchText: ", this.searchText)
-          this.filterSelectedSegementList(this.searchText);
-        } else {
-          this.games = gamesListTemp.reverse();
-        }
-      });
+      // to update shown games based on search phrase
+      if (this.searchText != "") {
+        this.games = this.games.filter(game =>
+        (game.name.toLowerCase().includes(this.searchText.toLowerCase())
+          || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
+        )
+      }
     }
-    else if (event.detail.value == "curated") { // if all is selected
-      this.gamesService.getGames(true).then(res => res.content).then(games => {
-        // Get either real or VE agmes based on selected environment 
-        gamesListTemp = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame);
+    else if (segVal == "curated") { // if all is selected
+      //console.log("curated");
+      this.games = this.gamesTemp.filter(game => game.isCuratedGame == true);
 
-        // to update shown games based on search phrase
-        if (this.searchText != "") {
-          console.log("this.searchText: ", this.searchText)
-          this.filterSelectedSegementList(this.searchText);
-        } else {
-          this.games = gamesListTemp.reverse();
-        }
-      });
+      // to update shown games based on search phrase
+      if (this.searchText != "") {
+        this.games = this.games.filter(game =>
+        (game.name.toLowerCase().includes(this.searchText.toLowerCase())
+          || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
+        )
+      }
     }
   }
 
   // update list after selecting a segment
   filterSelectedSegementList(searchPhrase) {
     if (this.selectedSegment == "all") {
-      this.gamesService
-        .getGames(true).then(res => res.content).then(
-          games => {
-            this.games = games.reverse();
-            this.games = this.games.filter(game =>
-              (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
-                || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
-              && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))
-            )
-          }
-        );
+      this.games = this.gamesTemp.filter(game =>
+      (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
+        || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+      )
     } else if (this.selectedSegment == "mine") {
-      this.gamesService.getUserGames().then((res) => {
-        this.games = res.reverse();
-
-        this.games = this.games.filter(game =>
-          (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
-            || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
-          && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)))
-      });
+      this.games = this.gamesTemp.filter(game =>
+        (game.user == this.user['_id']) &&
+        (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
+          || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+      )
     }
     else if (this.selectedSegment == "curated") {
-      this.gamesService
-        .getGames(true).then(res => res.content).then(
-          games => {
-            this.games = games.reverse();
-            this.games = this.games.filter(game =>
-            ((game.name.toLowerCase().includes(searchPhrase.toLowerCase())
-              || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
-              && (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)) && game.isCuratedGame)
-            )
-          }
-        );
+      this.games = this.gamesTemp.filter(game =>
+        (game.isCuratedGame == true) &&
+        (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
+          || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+      )
     }
+  }
   }
 }

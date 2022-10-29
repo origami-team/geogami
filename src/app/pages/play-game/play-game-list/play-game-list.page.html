@@ -13,7 +13,7 @@
 
   <ng-container *ngIf="isListTabSelected">
     <!-- segment start -->
-    <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="selectedSegment" color="dark">
+    <ion-segment (ionChange)="segmentChanged($event.detail.value)" [(ngModel)]="selectedSegment" color="dark">
 
       <ion-segment-button value="all">
         <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
@@ -30,28 +30,30 @@
     </ion-segment>
     <!-- segment end -->
 
-  <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
+    <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
 
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-  <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
-    <ion-card-header>
-      <ion-item lines="none" color="secondary">
-        <ion-label>
-          <h2>
-            <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
-            </span> {{ game.name }}
-          </h2>
-        </ion-label>
-        <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
-      </ion-item>
-    </ion-card-header>
 
-  </ion-card>
+    <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
+      <ion-card-header>
+        <ion-item lines="none" color="secondary">
+          <ion-label>
+            <h2>
+              <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
+              </span> {{ game.name }}
+            </h2>
+          </ion-label>
+          <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
+        </ion-item>
+      </ion-card-header>
+    </ion-card>
+  </ng-container>
+
   <!-- show this message only when my games section is selected and there're no games were created by logged user -->
-  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && games.length == 0" >
+  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && games.length == 0">
     <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
   </div>
 </ion-content>
