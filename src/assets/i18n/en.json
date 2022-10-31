@@ -84,7 +84,8 @@
                 "titleGameMenu": "Select the game environment",
                 "realWorld": "Real world",
                 "virtualWorld": "Virtual world",
-                "chooseGame": "Choose a game from the list."
+                "chooseGameList": "Choose a game from the list.",
+                "chooseGameMap": "Choose a game from the map."
         },
         "CreateTasks": {
                 "combineTasks": "Create your GeoGami:",

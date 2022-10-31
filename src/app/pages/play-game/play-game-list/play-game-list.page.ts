@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { NavController } from '@ionic/angular';
 
@@ -8,6 +8,10 @@ import { GamesService } from '../../../services/games.service';
 import { ActivatedRoute } from '@angular/router';
 // For getting user role
 import { AuthService } from '../../../services/auth-service.service';
+import { environment } from 'src/environments/environment';
+
+import mapboxgl from "mapbox-gl";
+import { cloneDeep } from "lodash";
 
 
 @Component({
@@ -16,7 +20,12 @@ import { AuthService } from '../../../services/auth-service.service';
   styleUrls: ['./play-game-list.page.scss']
 })
 export class PlayGameListPage implements OnInit {
+  @ViewChild("gamesMap") mapContainer;
+  @ViewChild("popupContainer") popupContainer: any;
+
   games: any;
+  gamesTemp: any;
+  gamesWithLocs: any;
   // VR world
   isVirtualWorld: boolean = false;
   // To be able to update games list and switch between segments 
@@ -25,6 +34,18 @@ export class PlayGameListPage implements OnInit {
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
   user = this.authService.getUserValue();
+
+  isVRMirrored: boolean = false; // temp
+  map: mapboxgl.Map;
+  isListTabSelected: boolean = true;
+
+  //temp
+  popup: any;
+  game_id: any;
+  game_name: any;
+  game_place: any;
+  game_numTasks: any;
+
 
   constructor(
     public navCtrl: NavController,
@@ -51,29 +72,12 @@ export class PlayGameListPage implements OnInit {
     }
   }
 
-  // ToDo: update the functions
-  doRefresh(event) {
-    let gamesListTemp;
-
-    if (this.selectedSegment == "mine") { // if mine is selected
-      this.gamesService.getUserGames().then((games) => {
-        // Get either real or VE agmes based on selected environment 
-        gamesListTemp = games.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined));
-
-        // to update shown games based on search phrase
-        if (this.searchText != "") {
-          console.log("this.searchText: ", this.searchText)
-          this.filterSelectedSegementList(this.searchText);
-        } else {
-          this.games = gamesListTemp.reverse();
-        }
-      }).finally(() => event.target.complete());
+  ngAfterViewInit(): void {
+  }
 
   // Get games data from server
   getGamesData() {
     this.gamesService.getGames(true).then(res => res.content).then(games => {
-      // Get either real or VE agmes based on selected environment 
-        // Get either real or VE agmes based on selected environment 
       // Get either real or VE agmes based on selected environment 
       this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
       //this.gamesTemp = cloneDeep(this.games);
@@ -85,12 +89,8 @@ export class PlayGameListPage implements OnInit {
 
   // ToDo: update the functions
   doRefresh(event) {
-    //this.initMap();
-
     // Get games data from server
     this.gamesService.getGames(true).then(res => res.content).then(games => {
-      // Get either real or VE agmes based on selected environment 
-        // Get either real or VE agmes based on selected environment 
       // Get either real or VE agmes based on selected environment 
       this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
       //this.gamesTemp = cloneDeep(this.games);
@@ -173,5 +173,217 @@ export class PlayGameListPage implements OnInit {
       )
     }
   }
+
+  //
+  initMap(gamesPoints) {
+    mapboxgl.accessToken = environment.mapboxAccessToken;
+
+    // Real world style start
+    let realWorldMapStyle = {
+      version: 8,
+      metadata: {
+        "mapbox:autocomposite": true,
+        "mapbox:type": "template",
+      },
+      sources: {
+        "raster-tiles": {
+          type: "raster",
+          tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+          tileSize: 256,
+        },
+        mapbox: {
+          url: "mapbox://mapbox.mapbox-streets-v7",
+          type: "vector",
+        },
+      },
+      layers: [
+        {
+          id: "simple-tiles",
+          type: "raster",
+          source: "raster-tiles",
+          minzoom: 0,
+          maxzoom: 22,
+        },
+        {
+          id: "building",
+          type: "fill",
+          source: "mapbox",
+          "source-layer": "building",
+          paint: {
+            "fill-color": "#d6d6d6",
+            "fill-opacity": 0,
+          },
+          interactive: true,
+        },
+      ],
+    };
+
+    this.map = new mapboxgl.Map({
+      container: this.mapContainer.nativeElement,
+      style: realWorldMapStyle,
+      center: [8, 51.8],
+      zoom: 3,
+      minZoom: 3
+    });
+
+    // disable map rotation using right click + drag
+    this.map.dragRotate.disable();
+    // disable map rotation using touch rotation gesture
+    this.map.touchZoomRotate.disableRotation();
+    // Add zomm in/out controls
+    this.map.addControl(new mapboxgl.NavigationControl());
+
+    //console.log("111111")
+    //Temp
+    this.map.on('load', () => {
+      // Load an image from an external URL pr assets
+      this.map.loadImage(
+        "assets/icons/icon-72x72.png",
+        //"/assets/icons/marker-editor-solution.png",
+        (error, image) => {
+          if (error) throw error;
+          // Add the image to the map style.
+          this.map.addImage("geogami-marker", image);
+        }
+      );
+
+      this.map.addSource('places', {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': gamesPoints
+        }
+      });
+
+      // Add a layer showing the places.
+      this.map.addLayer({
+        'id': 'places',
+        type: "symbol",
+        'source': 'places',
+        layout: {
+          "icon-image": "geogami-marker",
+          "icon-size": 0.65,
+          "icon-offset": [0, 0],
+          "icon-allow-overlap": true,
+        }
+      });
+
+      // When a click event occurs on a feature in the places layer, open a popup at the
+      // location of the feature, with description HTML from its properties.
+      this.map.on("click", "places", (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        this.popup = e.features[0].properties;
+
+        // Data to send topopup component
+        this.game_id = e.features[0].properties._id;
+        this.game_name = e.features[0].properties.name;
+        this.game_place = e.features[0].properties.place;
+        this.game_numTasks = e.features[0].properties.task_num;
+        //console.log('properties: ', e.features[0].properties)
+
+        this.popup = new mapboxgl.Popup({
+          //closeButton: false
+        })
+          .setLngLat(coordinates)
+          .setDOMContent(this.popupContainer.nativeElement)
+          .addTo(this.map);
+      });
+
+      // Change it back to a pointer when it leaves.
+      this.map.on('mouseleave', 'places', () => {
+        this.map.getCanvas().style.cursor = '';
+      });
+
+      // Change the cursor to a pointer when the mouse is over the places layer.
+      this.map.on('mouseenter', 'places', () => {
+        this.map.getCanvas().style.cursor = 'pointer';
+      });
+      //
+    });
+  }
+
+  async openMapTap() {
+    if (this.isListTabSelected) {
+      this.isListTabSelected = false;
+
+      // get minimal games with locs
+      this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
+        // Get either real or VE agmes based on selected environment 
+        this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+
+        console.log("gamesWithLocs: ", this.gamesWithLocs);
+
+        this.convertToGeoJson()
+      });
+    }
+  }
+
+  openListTap() {
+    if (!this.isListTabSelected) {
+      this.isListTabSelected = true;
+    }
+  }
+
+  async convertToGeoJson() {
+    let convertedData = []
+
+    //console.log("convertedData: ", convertedData)
+
+    this.gamesWithLocs.forEach(game => {
+      if (game.coords) {
+        convertedData.push({
+          'type': 'Feature',
+          'properties': {
+            '_id': game._id,
+            'name': game.name,
+            'place': game.place,
+            'task_num': game.task_num,
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': game.coords
+          }
+        })
+      }
+    });
+
+    console.log("convertedData: ", convertedData)
+    this.showGamesOnMap(convertedData);
+  }
+
+  showGamesOnMap(gamesListGeoJson) {
+
+    if (!this.map) {
+      console.log("Create map ////////////");
+      this.initMap(gamesListGeoJson);
+    }
+    else if (this.map.getLayer('places')) {
+      this.map.removeLayer(`places`);
+      this.map.removeSource("places");
+
+      console.log("Else ////////////");
+
+      this.map.addSource('places', {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': gamesListGeoJson
+        }
+      });
+
+      // Add a layer showing the places.
+      this.map.addLayer({
+        'id': 'places',
+        type: "symbol",
+        'source': 'places',
+        layout: {
+          "icon-image": "geogami-marker",
+          "icon-size": 0.65,
+          "icon-offset": [0, 0],
+          "icon-allow-overlap": true,
+        }
+      });
+    }
+
   }
 }

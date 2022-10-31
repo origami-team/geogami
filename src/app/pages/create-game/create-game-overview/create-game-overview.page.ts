@@ -521,6 +521,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
 
   uploadGame() {
+    console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : null,
