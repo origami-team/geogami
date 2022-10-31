@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { PlayGameListPage } from './play-game-list.page';
 
 import { TranslateModule } from '@ngx-translate/core';
-// import { PopupComponent } from 'src/app/components/popup/popup.component';
+import { PopupComponent } from 'src/app/components/popup/popup.component';
 
 const routes: Routes = [
   {
@@ -25,6 +25,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule
   ],
-  declarations: [PlayGameListPage ]
+  declarations: [PlayGameListPage, PopupComponent ]
 })
 export class PlayGameListPageModule {}

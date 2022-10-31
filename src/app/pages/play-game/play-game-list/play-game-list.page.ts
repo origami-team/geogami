@@ -220,10 +220,12 @@ export class PlayGameListPage implements OnInit {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: realWorldMapStyle,
+      // style: realWorldMapStyle,
+      style: 'mapbox://styles/mapbox/light-v9',
       center: [8, 51.8],
       zoom: 3,
-      minZoom: 3
+      minZoom: 3,
+      maxZoom: 18  // to avoid error
     });
 
     // disable map rotation using right click + drag
@@ -247,30 +249,98 @@ export class PlayGameListPage implements OnInit {
         }
       );
 
-      this.map.addSource('places', {
-        'type': 'geojson',
-        'data': {
+      // Add a new source from our GeoJSON data and
+      // set the 'cluster' option to true. GL-JS will
+      // add the point_count property to your source data.
+      this.map.addSource('earthquakes', {
+        type: 'geojson',
+        data: {
           'type': 'FeatureCollection',
           'features': gamesPoints
+        },
+        cluster: true,
+        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+      });
+
+      this.map.addLayer({
+        id: 'clusters',
+        type: 'circle',
+        source: 'earthquakes',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#51bbd6' /* [
+            'step',
+            ['get', 'point_count'],
+            '#51bbd6',
+            100,
+            '#f1f075',
+            750,
+            '#f28cb1'
+          ]*/,
+          'circle-radius': [
+            'step',
+            ['get', 'point_count'],
+            10, 2,
+            15, 7,
+            20, 20,
+            25, 30,
+            30
+          ],
+          'circle-opacity': 0.9
         }
       });
 
-      // Add a layer showing the places.
       this.map.addLayer({
-        'id': 'places',
-        type: "symbol",
-        'source': 'places',
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'earthquakes',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': '{point_count_abbreviated}',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 12,
+        }
+      });
+
+      // Add a layer showing game pont
+      this.map.addLayer({
+        id: 'unclustered-point',
+        type: 'symbol',
+        source: 'earthquakes',
+        filter: ['!', ['has', 'point_count']],
         layout: {
           "icon-image": "geogami-marker",
-          "icon-size": 0.65,
+          "icon-size": 0.75,
           "icon-offset": [0, 0],
           "icon-allow-overlap": true,
         }
       });
 
-      // When a click event occurs on a feature in the places layer, open a popup at the
-      // location of the feature, with description HTML from its properties.
-      this.map.on("click", "places", (e) => {
+      // inspect a cluster on click
+      this.map.on('click', 'clusters', (e) => {
+        const features = this.map.queryRenderedFeatures(e.point, {
+          layers: ['clusters']
+        });
+        const clusterId = features[0].properties.cluster_id;
+        this.map.getSource('earthquakes').getClusterExpansionZoom(
+          clusterId,
+          (err, zoom) => {
+            if (err) return;
+
+            this.map.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            });
+          }
+        );
+      });
+
+      // When a click event occurs on a feature in
+      // the unclustered-point layer, open a popup at
+      // the location of the feature, with
+      // description HTML from its properties.
+      this.map.on('click', 'unclustered-point', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         this.popup = e.features[0].properties;
 
@@ -281,6 +351,13 @@ export class PlayGameListPage implements OnInit {
         this.game_numTasks = e.features[0].properties.task_num;
         //console.log('properties: ', e.features[0].properties)
 
+        // Ensure that if the map is zoomed out such that
+        // multiple copies of the feature are visible, the
+        // popup appears over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
         this.popup = new mapboxgl.Popup({
           //closeButton: false
         })
@@ -289,17 +366,28 @@ export class PlayGameListPage implements OnInit {
           .addTo(this.map);
       });
 
+      //--- ToDo (imp) use one func mouseenter for both cluster and point
+      // Change the cursor to a pointer when the mouse is over the cluster layer.
+      this.map.on('mouseenter', 'clusters', (e) => {
+        this.map.getCanvas().style.cursor = 'pointer';
+      });
+
       // Change it back to a pointer when it leaves.
-      this.map.on('mouseleave', 'places', () => {
+      this.map.on('mouseleave', 'clusters', () => {
         this.map.getCanvas().style.cursor = '';
       });
 
-      // Change the cursor to a pointer when the mouse is over the places layer.
-      this.map.on('mouseenter', 'places', () => {
-        this.map.getCanvas().style.cursor = 'pointer';
+      // Change it back to a pointer when it leaves.
+      this.map.on('mouseleave', 'unclustered-point', () => {
+        this.map.getCanvas().style.cursor = '';
       });
-      //
+
+      // Change the cursor to a pointer when the mouse is over the game layer.
+      this.map.on('mouseenter', 'unclustered-point', () => {
+        this.map.getCanvas().style.cursor = 'pointer';
+      }); 
     });
+    
   }
 
   async openMapTap() {
