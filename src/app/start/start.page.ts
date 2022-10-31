@@ -140,7 +140,7 @@ export class StartPage implements OnInit {
 
   async showUpdateAppAlert(latestVersion, latestBuild, isMajorUpdate) {
     let currentAppVersion = this.versionToInt(this.device.appVersion);
-    let currentAppBuild = parseInt(this.device.appBuild);
+    //let currentAppBuild = parseInt(this.device.appBuild);
 
     let btnsObj = [
       {
@@ -161,8 +161,8 @@ export class StartPage implements OnInit {
         },
       }
     ];
-
-    if (currentAppVersion < latestVersion || ( currentAppVersion == latestVersion && currentAppBuild < latestBuild)) {
+ 
+    if (currentAppVersion < latestVersion /* || ( currentAppVersion == latestVersion && currentAppBuild < latestBuild) */) {
     const alert = await this.alertController.create({
       backdropDismiss: false, // disable alert dismiss when backdrop is clicked
       header: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateHeader" : "Start.appUpdateHeader")),
@@ -172,6 +172,7 @@ export class StartPage implements OnInit {
     });
     await alert.present();
     }
+    
   }
 
   // convert version value to int

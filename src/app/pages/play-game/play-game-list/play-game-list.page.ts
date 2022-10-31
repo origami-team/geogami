@@ -222,9 +222,10 @@ export class PlayGameListPage implements OnInit {
       container: this.mapContainer.nativeElement,
       // style: realWorldMapStyle,
       style: 'mapbox://styles/mapbox/light-v9',
+      // style: 'mapbox://styles/mapbox/streets-v11',
       center: [8, 51.8],
       zoom: 3,
-      minZoom: 3,
+      minZoom: 2,
       maxZoom: 18  // to avoid error
     });
 
@@ -281,13 +282,17 @@ export class PlayGameListPage implements OnInit {
           'circle-radius': [
             'step',
             ['get', 'point_count'],
-            10, 2,
-            15, 7,
-            20, 20,
-            25, 30,
-            30
+            5, 2,
+            10, 7,
+            15, 20,
+            20, 30,
+            25
           ],
-          'circle-opacity': 0.9
+          //'circle-opacity': 0.9,
+          "circle-opacity": 0,
+          "circle-stroke-width": 12,
+          "circle-stroke-color": '#51bbd6',
+          "circle-stroke-opacity": 0.9
         }
       });
 
@@ -299,7 +304,7 @@ export class PlayGameListPage implements OnInit {
         layout: {
           'text-field': '{point_count_abbreviated}',
           'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-          'text-size': 12,
+          'text-size': 20,
         }
       });
 
@@ -351,12 +356,12 @@ export class PlayGameListPage implements OnInit {
         this.game_numTasks = e.features[0].properties.task_num;
         //console.log('properties: ', e.features[0].properties)
 
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
+                // Ensure that if the map is zoomed out such that
+                // multiple copies of the feature are visible, the
+                // popup appears over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                  coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
 
         this.popup = new mapboxgl.Popup({
           //closeButton: false
@@ -385,9 +390,9 @@ export class PlayGameListPage implements OnInit {
       // Change the cursor to a pointer when the mouse is over the game layer.
       this.map.on('mouseenter', 'unclustered-point', () => {
         this.map.getCanvas().style.cursor = 'pointer';
-      }); 
+      });
     });
-    
+
   }
 
   async openMapTap() {
