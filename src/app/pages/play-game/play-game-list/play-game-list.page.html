@@ -56,4 +56,39 @@
   <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && games.length == 0">
     <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
   </div>
+
+
+  <div #gamesMap class="map" ></div>
+  <!-- <div #gamesMap class="map" *ngIf="!isListTabSelected"></div> -->
+
+  <!-- <div #popupContainer *ngIf="!isListTabSelected && gamesWithLocs"> -->
+  <div #popupContainer>
+    <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place" [NumTasks]="game_numTasks">
+    </app-popup>
+  </div>
+
+
+
 </ion-content>
+
+<ion-footer *ngIf="!isVirtualWorld">
+<!-- <ion-footer style="margin-bottom: 5%;"> -->
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+
+        <ion-tab-button (click)="openListTap()" class="{{isListTabSelected?'selectedTab': ''}}">
+          <ion-icon name="list"></ion-icon>
+          <ion-label>List</ion-label>
+          <!-- <ion-badge>6</ion-badge> -->
+        </ion-tab-button>
+
+        <ion-tab-button (click)="openMapTap()" class="{{!isListTabSelected?'selectedTab': ''}}">
+          <ion-icon name="map"></ion-icon>
+          <ion-label>Map</ion-label>
+        </ion-tab-button>
+
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

@@ -165,7 +165,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   navigateToOverview() {
-    console.log("navigate");
+    //console.log("navigate");
     
     let bundle = {
       isVRWorld: false,

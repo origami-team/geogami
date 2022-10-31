@@ -3,7 +3,7 @@ import { MapFeatures } from './mapFeatures';
 export const standardMapFeatures: MapFeatures = {
     zoombar: 'true',
     pan: 'true',
-    rotation: 'manual',
+    rotation: 'north',
     material: 'standard',
     position: 'none',
     direction: 'none',
