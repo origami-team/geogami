@@ -10,7 +10,7 @@ import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
 import { platform } from 'process';
-import { ToastService } from '../services/toast.service';
+import { UtilService } from '../services/util.service';
 
 @Component({
   selector: 'app-start',
@@ -49,10 +49,15 @@ export class StartPage implements OnInit {
     private languageService: LanguageService,
     private alertController: AlertController,
     private gamesService: GamesService,
-    public toastService: ToastService
+    public utilService: UtilService
   ) { }
 
   async ngOnInit() {
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      return;
+    }
+
     // get current app version
     Plugins.Device.getInfo().then((device) => (this.device = device));
     // get updated app version to notify user of app update
@@ -61,9 +66,9 @@ export class StartPage implements OnInit {
       .then(latestVersionInfo => {
         this.latestAppVersionInfo = latestVersionInfo;
         if (this.latestAppVersionInfo.enabled && Capacitor.platform != "web") {
-          if(Capacitor.platform == "ios" && this.latestAppVersionInfo.ios){
+          if (Capacitor.platform == "ios" && this.latestAppVersionInfo.ios) {
             this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
-          } else if(Capacitor.platform == "android" && this.latestAppVersionInfo.android){
+          } else if (Capacitor.platform == "android" && this.latestAppVersionInfo.android) {
             this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
           }
         }
@@ -142,37 +147,36 @@ export class StartPage implements OnInit {
     let currentAppVersion = this.versionToInt(this.device.appVersion);
     //let currentAppBuild = parseInt(this.device.appBuild);
 
-    let btnsObj = [
-      {
-        text: this._translate.instant("Start.notNow"),
-        handler: () => {
-          // Do nothing
+    // alert buttons objects
+    let btnOption1 = {
+      text: this._translate.instant("Start.notNow"),
+      handler: () => {
+        // Do nothing
+      }
+    };
+    let btnOption2 = {
+      text: this._translate.instant("Start.update"),
+      cssClass: 'alert-button-update',
+      handler: () => {
+        if (Capacitor.platform == "ios") {
+          window.open("https://apps.apple.com/app/geogami/id1614864078", "_system");
+        } else if (Capacitor.platform == "android") {
+          window.open("https://play.google.com/store/apps/details?id=com.ifgi.geogami", "_system");
         }
       },
-      {
-        text: this._translate.instant("Start.update"),
-        cssClass: 'alert-button-update',
-        handler: () => {
-          if (Capacitor.platform == "ios") {
-            window.open("https://apps.apple.com/app/geogami/id1614864078", "_system");
-          } else if (Capacitor.platform == "android") {
-            window.open("https://play.google.com/store/apps/details?id=com.ifgi.geogami", "_system");
-          }
-        },
-      }
-    ];
- 
+    };
+
     if (currentAppVersion < latestVersion /* || ( currentAppVersion == latestVersion && currentAppBuild < latestBuild) */) {
-    const alert = await this.alertController.create({
-      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
-      header: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateHeader" : "Start.appUpdateHeader")),
-      //subHeader: 'Important message',
-      message: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateMsg" : "Start.appUpdateMsg")),
-      buttons: (isMajorUpdate ? [btnsObj[1]] : btnsObj)
-    });
-    await alert.present();
+      const alert = await this.alertController.create({
+        backdropDismiss: false, // disable alert dismiss when backdrop is clicked
+        header: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateHeader" : "Start.appUpdateHeader")),
+        //subHeader: 'Important message',
+        message: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateMsg" : "Start.appUpdateMsg")),
+        buttons: (isMajorUpdate ? [btnOption2] : [btnOption1, btnOption2])
+      });
+      await alert.present();
     }
-    
+
   }
 
   // convert version value to int

@@ -18,6 +18,7 @@ import { GamesService } from "src/app/services/games.service";
 import { ActivatedRoute } from "@angular/router";
 import { CreateFreeTaskModalComponent } from "../../create-game/create-free-task-modal/create-free-task-modal.component";
 import { Task } from "src/app/models/task";
+import { UtilService } from "src/app/services/util.service";
 
 @Component({
   selector: "app-edit-game-list",
@@ -47,7 +48,8 @@ export class EditGameListPage implements OnInit {
     private modalController: ModalController,
     private navCtrl: NavController,
     private gamesService: GamesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private utilService: UtilService
   ) { }
 
   ngOnInit() {
@@ -178,6 +180,14 @@ export class EditGameListPage implements OnInit {
   }
 
   uploadGame() {
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      // show no connection notification
+      this.utilService.showAlertNoConnection();
+      return;
+    }
+
+    
     let bundle = {
       game_id: this.game._id,
       isVRWorld: this.isVirtualWorld,

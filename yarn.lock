@@ -1347,6 +1347,13 @@
   dependencies:
     "@types/cordova" "latest"
 
+"@ionic-native/network@^5.36.0":
+  "integrity" "sha512-gpa7cJqodEK+zmmViYJCqEpXoKSXcaYLaaRKdv5gn5M++bpmiw2pKM9JH8VoqYWaYDcUwD3S0yYeBBkG5DE0Kg=="
+  "resolved" "https://registry.npmjs.org/@ionic-native/network/-/network-5.36.0.tgz"
+  "version" "5.36.0"
+  dependencies:
+    "@types/cordova" "latest"
+
 "@ionic/angular-toolkit@^7.0.0":
   "integrity" "sha512-9nVeGuGRO3sUYSVzcHmddPd9+C+XDW2BpRSxCqMK1MKLlfnnpVMP1TTf/IDQhBj+koHwBAQBj6voBSsFUzTKBg=="
   "resolved" "https://registry.npmjs.org/@ionic/angular-toolkit/-/angular-toolkit-7.0.0.tgz"
@@ -3937,6 +3944,11 @@
   "integrity" "sha1-FJ1RJQ3vwwnw0D0wb+KOiYgbqE0="
   "resolved" "https://registry.npmjs.org/cordova-plugin-device-orientation/-/cordova-plugin-device-orientation-2.0.1.tgz"
   "version" "2.0.1"
+
+"cordova-plugin-network-information@^3.0.0":
+  "integrity" "sha512-bBtP3PxIX8vshsfR0+F6co2e2cFLgjt18yKIdigzMwk6ANudWQ72RB3g2qMPyT6fBDWmUyE1Qd+bKQB/fZtQwQ=="
+  "resolved" "https://registry.npmjs.org/cordova-plugin-network-information/-/cordova-plugin-network-information-3.0.0.tgz"
+  "version" "3.0.0"
 
 "cordova-serve@^3.0.0":
   "integrity" "sha512-h479g/5a0PXn//yiFuMrD5MDEbB+mtihNkWcE6uD/aCh/6z0FRZ9sWH3NfZbHDB+Bp1yGLYsjbH8LZBL8KOQ0w=="

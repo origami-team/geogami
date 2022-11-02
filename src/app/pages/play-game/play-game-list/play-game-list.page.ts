@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 
 import mapboxgl from "mapbox-gl";
 import { cloneDeep } from "lodash";
+import { UtilService } from 'src/app/services/util.service';
 
 
 @Component({
@@ -51,10 +52,19 @@ export class PlayGameListPage implements OnInit {
     public navCtrl: NavController,
     private gamesService: GamesService,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private utilService: UtilService
   ) { }
 
   ngOnInit() {
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      // show no connection notification
+      this.utilService.showAlertNoConnection();
+      return;
+    }
+
+    
     // VR world
     // to seperate realworld games from VR ones in view
     this.route.params.subscribe((params) => {
@@ -70,6 +80,7 @@ export class PlayGameListPage implements OnInit {
     if (this.user) {
       this.userRole = this.user['roles'][0];
     }
+
   }
 
   ngAfterViewInit(): void {
@@ -222,6 +233,7 @@ export class PlayGameListPage implements OnInit {
       container: this.mapContainer.nativeElement,
       // style: realWorldMapStyle,
       style: 'mapbox://styles/mapbox/light-v9',
+      // style: 'mapbox://styles/mapbox/light-v10',
       // style: 'mapbox://styles/mapbox/streets-v11',
       center: [8, 51.8],
       zoom: 3,
@@ -356,12 +368,12 @@ export class PlayGameListPage implements OnInit {
         this.game_numTasks = e.features[0].properties.task_num;
         //console.log('properties: ', e.features[0].properties)
 
-                // Ensure that if the map is zoomed out such that
-                // multiple copies of the feature are visible, the
-                // popup appears over the copy being pointed to.
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                  coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
+        // Ensure that if the map is zoomed out such that
+        // multiple copies of the feature are visible, the
+        // popup appears over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
 
         this.popup = new mapboxgl.Popup({
           //closeButton: false

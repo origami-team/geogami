@@ -28,6 +28,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 // For getting user role
 import { AuthService } from '../../../services/auth-service.service';
+import { UtilService } from 'src/app/services/util.service';
 
 
 @Component({
@@ -70,7 +71,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private utilService: UtilService
   ) {
     this.lottieConfig = {
       path: 'assets/lottie/astronaut.json',
@@ -521,6 +523,13 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
 
   uploadGame() {
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      // show no connection notification
+      this.utilService.showAlertNoConnection();
+      return;
+    }
+
     console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
