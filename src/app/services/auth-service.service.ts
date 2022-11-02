@@ -4,7 +4,7 @@ import { IUser } from '../interfaces/iUser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
-import { ToastService } from './toast.service';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class AuthService {
   private refreshTokenInProgress$: BehaviorSubject<boolean>;
   private registerMessage$: BehaviorSubject<boolean>;
 
-  constructor(private http: HttpClient, private router: Router, public toastService: ToastService) {
+  constructor(private http: HttpClient, private router: Router, private utilService: UtilService) {
     this.user$ = new BehaviorSubject(null);
     this.loading$ = new BehaviorSubject(false);
     this.loginPageOpen$ = new BehaviorSubject(false);
@@ -152,7 +152,7 @@ export class AuthService {
       .subscribe(
         (res: any) => {
           // show toast msg
-          this.toastService.showToast(res.message, "dark", 3000)
+          this.utilService.showToast(res.message, "dark", 3500)
           this.setLoginPageOpen(false);
           this.router.navigate(['/user/login']);
         },
