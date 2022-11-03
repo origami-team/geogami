@@ -70,7 +70,7 @@
               <ion-icon name="save-sharp" color="{{ row.roleIsUpdated?'primary':'dark'}}"></ion-icon>
             </ion-button>
 
-            <ion-button (click)="dismissModal(null)">
+            <ion-button (click)="deleteUser(row.email)">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-button>
           </ion-buttons>

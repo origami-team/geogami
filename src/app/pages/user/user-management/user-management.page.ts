@@ -84,6 +84,11 @@ export class UserManagementPage implements OnInit {
     }
   }
 
+  //delete user
+  deleteUser(userEmail){
+    // do nothing yet
+  }
+
   // show feedback after updating user role
   async showToast(msg) {
     const toast = await this.toastController.create({
