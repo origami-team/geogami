@@ -6,6 +6,12 @@ ion-refresher {
   --overflow: hidden;
 }
 
+.segment{
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+  // border: solid 3px;
+}
+
 // To capitalize only first letter
 ion-segment-button {
   text-transform:none;

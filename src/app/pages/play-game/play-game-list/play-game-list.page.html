@@ -9,26 +9,30 @@
 
 
 <ion-content class="ion-padding">
-  <h5> {{ (isListTabSelected ? "GameList.chooseGameList" : "GameList.chooseGameMap") | translate }}</h5>
+  <h5 class="segment"> {{ (isListTabSelected ? "GameList.chooseGameList" : "GameList.chooseGameMap") | translate }}</h5>
 
-  <ng-container *ngIf="isListTabSelected">
-    <!-- segment start -->
-    <ion-segment (ionChange)="segmentChanged($event.detail.value)" [(ngModel)]="selectedSegment" color="dark">
+  <ng-container *ngIf="isListTabSelected" >
 
-      <ion-segment-button value="all">
-        <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
-      </ion-segment-button>
+    <div class="segment">
+      <!-- segment start -->
+      <ion-segment (ionChange)="segmentChanged($event.detail.value)" [(ngModel)]="selectedSegment" color="dark">
 
-      <ion-segment-button value="curated">
-        <ion-label>{{ "PlayGame.curated" | translate }}</ion-label>
-      </ion-segment-button>
+        <ion-segment-button value="all">
+          <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
+        </ion-segment-button>
 
-      <ion-segment-button value="mine" *ngIf="userRole != 'unloggedUser'">
-        <ion-label>{{ "PlayGame.myGames" | translate }}</ion-label>
-      </ion-segment-button>
+        <ion-segment-button value="curated">
+          <ion-label>{{ "PlayGame.curated" | translate }}</ion-label>
+        </ion-segment-button>
 
-    </ion-segment>
-    <!-- segment end -->
+        <ion-segment-button value="mine" *ngIf="userRole != 'unloggedUser'">
+          <ion-label>{{ "PlayGame.myGames" | translate }}</ion-label>
+        </ion-segment-button>
+
+      </ion-segment>
+      <!-- segment end -->
+    </div>
+
 
     <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
 
@@ -58,12 +62,13 @@
   </div>
 
 
-  <div #gamesMap class="map" ></div>
+  <div #gamesMap class="map"></div>
   <!-- <div #gamesMap class="map" *ngIf="!isListTabSelected"></div> -->
 
   <!-- <div #popupContainer *ngIf="!isListTabSelected && gamesWithLocs"> -->
   <div #popupContainer>
-    <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place" [NumTasks]="game_numTasks">
+    <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place"
+      [NumTasks]="game_numTasks">
     </app-popup>
   </div>
 
@@ -72,7 +77,7 @@
 </ion-content>
 
 <ion-footer *ngIf="!isVirtualWorld">
-<!-- <ion-footer style="margin-bottom: 5%;"> -->
+  <!-- <ion-footer style="margin-bottom: 5%;"> -->
   <ion-toolbar>
     <ion-tabs>
       <ion-tab-bar slot="bottom">
