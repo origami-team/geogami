@@ -254,3 +254,16 @@ button.alert-button.alert-button-update {
   background-color: var(--ion-color-success);
   color: var(--ion-color-success-contrast);
 }
+
+.connection-toast-class{
+  // --width: 100%;
+  --start: 10%; 
+  --end: 10%; 
+}
+
+// To show border between msg and dismiss button
+.custom-toast::part(button) {
+  border-left: 1px solid #d2d2d2;
+  //color: #030207;
+  font-size: 15px;
+}

@@ -47,6 +47,9 @@ import { HelperService } from './services/helper.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 // import {FormControl} from '@angular/forms';
 
+// import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { Network } from '@ionic-native/network/ngx';
+
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -125,7 +128,8 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
       useClass: TokenInterceptor,
       multi: true,
     },
-    HelperService
+    HelperService,
+    Network
   ],
   bootstrap: [AppComponent],
 })
