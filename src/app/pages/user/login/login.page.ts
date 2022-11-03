@@ -51,7 +51,7 @@ export class LoginPage implements OnInit {
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      return;
+      // return; // ToDo --- uncomment it after further testing
     }
 
     // Remove extra spaces before and after username string

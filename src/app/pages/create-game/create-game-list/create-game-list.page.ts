@@ -52,7 +52,7 @@ export class CreateGameListPage implements OnInit {
   ngOnInit() {
     this.gameFactory.getGame().then((game) => (this.game = game));
 
-    console.log(this.gameFactory.game);
+    console.log("this.gameFactory.game: ", this.gameFactory.game);
   }
 
   ionViewWillEnter() {
@@ -85,7 +85,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld) {
-    console.log(task);
+    // console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:

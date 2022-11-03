@@ -21,7 +21,7 @@ export class PopupComponent implements OnInit {
   }
 
   playGame(){
-    console.log("play pressed: ", this.gameName)
+    // console.log("play pressed: ", this.gameName)
     this.navCtrl.navigateForward(`play-game/game-detail/${this.gameID}`);
 
   }

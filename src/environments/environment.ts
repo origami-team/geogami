@@ -18,8 +18,7 @@ export const environment = {
     lng:214 / 111000,
     lat:69 / 112000
   },
-  VR_World_1:'assets/icons/vr_world_1.png',
-  VR_World_2:'assets/icons/vr_world_2.png'
+  mapStyle:'../../../../assets/mapStyles/'
 };
 
 /*

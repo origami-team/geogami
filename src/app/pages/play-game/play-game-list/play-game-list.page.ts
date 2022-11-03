@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 import mapboxgl from "mapbox-gl";
 import { cloneDeep } from "lodash";
 import { UtilService } from 'src/app/services/util.service';
+// import {} from environment.mapStyle + 'realWorld.json'
 
 
 @Component({
@@ -61,7 +62,7 @@ export class PlayGameListPage implements OnInit {
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      return;
+      // return;
     }
 
     
@@ -188,51 +189,10 @@ export class PlayGameListPage implements OnInit {
   //
   initMap(gamesPoints) {
     mapboxgl.accessToken = environment.mapboxAccessToken;
-
-    // Real world style start
-    let realWorldMapStyle = {
-      version: 8,
-      metadata: {
-        "mapbox:autocomposite": true,
-        "mapbox:type": "template",
-      },
-      sources: {
-        "raster-tiles": {
-          type: "raster",
-          tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-          tileSize: 256,
-        },
-        mapbox: {
-          url: "mapbox://mapbox.mapbox-streets-v7",
-          type: "vector",
-        },
-      },
-      layers: [
-        {
-          id: "simple-tiles",
-          type: "raster",
-          source: "raster-tiles",
-          minzoom: 0,
-          maxzoom: 22,
-        },
-        {
-          id: "building",
-          type: "fill",
-          source: "mapbox",
-          "source-layer": "building",
-          paint: {
-            "fill-color": "#d6d6d6",
-            "fill-opacity": 0,
-          },
-          interactive: true,
-        },
-      ],
-    };
-
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      // style: realWorldMapStyle,
-      style: 'mapbox://styles/mapbox/light-v9',
+      style: environment.mapStyle + 'realWorld.json',
+      // style: 'mapbox://styles/mapbox/light-v9',
       // style: 'mapbox://styles/mapbox/light-v10',
       // style: 'mapbox://styles/mapbox/streets-v11',
       center: [8, 51.8],
@@ -248,7 +208,6 @@ export class PlayGameListPage implements OnInit {
     // Add zomm in/out controls
     this.map.addControl(new mapboxgl.NavigationControl());
 
-    //console.log("111111")
     //Temp
     this.map.on('load', () => {
       // Load an image from an external URL pr assets
@@ -304,7 +263,7 @@ export class PlayGameListPage implements OnInit {
           "circle-opacity": 0,
           "circle-stroke-width": 12,
           "circle-stroke-color": '#51bbd6',
-          "circle-stroke-opacity": 0.9
+          "circle-stroke-opacity": 0.85
         }
       });
 

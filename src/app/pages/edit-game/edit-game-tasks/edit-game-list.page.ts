@@ -184,7 +184,7 @@ export class EditGameListPage implements OnInit {
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      return;
+      // return;
     }
 
     

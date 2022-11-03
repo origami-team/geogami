@@ -107,159 +107,6 @@ export class CreateGameOverviewPage implements AfterViewInit {
   initMap() {
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
-    // VR world style start
-    let virtualWorldMapStyle = {
-      'version': 8,
-      'name': 'Dark',
-      'sources': {
-        'mapbox': {
-          'type': 'vector',
-          'url': 'mapbox://mapbox.mapbox-streets-v8'
-        },
-        'overlay':
-        {
-          'type': 'image',
-          'url': (this.isVRMirrored ? environment.VR_World_2 : environment.VR_World_1), // V4
-
-          'coordinates': [
-            [0.0002307207207, 0.004459082914], // NW
-            [0.003717027207, 0.004459082914], // NE 
-            [0.003717027207, 0.0003628597122], // SE
-            [0.0002307207207, 0.0003628597122] // SW
-          ]
-        }
-      },
-      'sprite': 'mapbox://sprites/mapbox/dark-v10',
-      'glyphs': 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
-      'layers': [
-        {
-          'id': 'background',
-          'type': 'background',
-          'paint': { 'background-color': '#111' }
-        },
-        {
-          'id': 'water',
-          'source': 'mapbox',
-          'source-layer': 'water',
-          'type': 'fill',
-          'paint': { 'fill-color': '#2c2c2c' }
-        },
-        {
-          'id': 'boundaries',
-          'source': 'mapbox',
-          'source-layer': 'admin',
-          'type': 'line',
-          'paint': {
-            'line-color': '#797979',
-            'line-dasharray': [2, 2, 6, 2]
-          },
-          'filter': ['all', ['==', 'maritime', 0]]
-        },
-        {
-          'id': 'overlay',
-          'source': 'overlay',
-          'type': 'raster',
-          'paint': { 'raster-opacity': 0.85 }
-        },
-        {
-          'id': 'cities',
-          'source': 'mapbox',
-          'source-layer': 'place_label',
-          'type': 'symbol',
-          'layout': {
-            "visibility": "none",
-            'text-field': '{name_en}',
-            'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'],
-            'text-size': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              4,
-              9,
-              6,
-              12
-            ]
-          },
-          'paint': {
-            'text-color': '#969696',
-            'text-halo-width': 2,
-            'text-halo-color': 'rgba(0, 0, 0, 0.85)'
-          }
-        },
-        {
-          'id': 'states',
-          'source': 'mapbox',
-          'source-layer': 'place_label',
-          'type': 'symbol',
-          'layout': {
-            'text-transform': 'uppercase',
-            'text-field': '{name_en}',
-            'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'],
-            'text-letter-spacing': 0.15,
-            'text-max-width': 7,
-            'text-size': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              4,
-              10,
-              6,
-              14
-            ]
-          },
-          'filter': ['==', ['get', 'class'], 'state'],
-          'paint': {
-            'text-color': '#969696',
-            'text-halo-width': 2,
-            'text-halo-color': 'rgba(0, 0, 0, 0.85)'
-          }
-        }
-      ]
-    };
-    // VR world style end
-
-    // Real world style start
-    let realWorldMapStyle = {
-      version: 8,
-      metadata: {
-        'mapbox:autocomposite': true,
-        'mapbox:type': 'template'
-      },
-      sources: {
-        'raster-tiles': {
-          type: 'raster',
-          tiles: [
-            'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-          ],
-          tileSize: 256,
-        },
-        mapbox: {
-          url: 'mapbox://mapbox.mapbox-streets-v7',
-          type: 'vector'
-        }
-      },
-      layers: [
-        {
-          id: 'simple-tiles',
-          type: 'raster',
-          source: 'raster-tiles',
-          minzoom: 0,
-          maxzoom: 22
-        },
-        {
-          id: 'building',
-          type: 'fill',
-          source: 'mapbox',
-          'source-layer': 'building',
-          paint: {
-            'fill-color': '#d6d6d6',
-            'fill-opacity': 0,
-          },
-          interactive: true
-        },
-      ]
-    };
-
     // Set bounds of VR world 
     var bounds = [
       [0.0002307207207 - 0.003, 0.0003628597122 - 0.003], // Southwest coordinates
@@ -268,7 +115,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ? virtualWorldMapStyle : realWorldMapStyle),
+      style: (this.isVirtualWorld ?
+          (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
+          environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
@@ -527,7 +376,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      return;
+      // return;
     }
 
     console.log("///Game to be uploaded: ", this.game);
