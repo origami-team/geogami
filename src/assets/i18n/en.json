@@ -88,7 +88,7 @@
                 "chooseGameMap": "Choose a game from the map."
         },
         "CreateTasks": {
-                "combineTasks": "Create your GeoGami:",
+                "combineTasks": "List of created tasks:",
                 "information": "Information",
                 "chooseComponents": "Choose from the following components:"
         },
