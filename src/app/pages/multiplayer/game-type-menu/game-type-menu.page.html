@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color=dark defaultHref="start" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+    </ion-buttons>
+    <ion-title> Game Type </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card id="create_card_create" (click)=navCreateSinglePlayerGamePage() color="secondary">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="person"></ion-icon> Single player
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Play Geogami individually
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card id="create_card_create" (click)=navCreateMultiPlayerGamePage() color="secondary">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="people"></ion-icon> Multiplayer
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Play Geogami with others
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

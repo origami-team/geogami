@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener, ChangeDetectorRef } from "@angular/core";
 import { IonReorderGroup } from "@ionic/angular";
 
 import mapboxgl from "mapbox-gl";
@@ -19,6 +19,8 @@ import { CreateFreeTaskModalComponent } from "../create-free-task-modal/create-f
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
+import { ActivatedRoute } from "@angular/router";
+import { Storage } from "@ionic/storage";
 
 @Component({
   selector: "app-create-game-list",
@@ -35,6 +37,10 @@ export class CreateGameListPage implements OnInit {
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
+  // To hold received parametres vlaues via route
+  isRealWorld: boolean = false;
+  isSinlgeMode: boolean = false;
+
   // dismiss modal on hardware back button
   @HostListener("document:ionBackButton", ["$event"])
   private async overrideHardwareBackAction($event: any) {
@@ -46,7 +52,17 @@ export class CreateGameListPage implements OnInit {
     private modalController: ModalController,
     private navCtrl: NavController,
     public popoverController: PopoverController,
+    private translate: TranslateService,
+    private route: ActivatedRoute,
+  ) { }
+
   async ngOnInit() {
+    // Get selected env. and game type
+    this.route.params.subscribe((params) => {
+      this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
+      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+    });
+
     this.gameFactory.getGame().then((game) => {
       // It could happen that game data is stored from edit game page
       // here we clean game data if it is realted to existed game. 
@@ -61,7 +77,6 @@ export class CreateGameListPage implements OnInit {
     });
     //console.log("this.gameFactory.game: ", this.gameFactory.game);
 
-    console.log("this.gameFactory.game: ", this.gameFactory.game);
   }
 
   ionViewWillEnter() {

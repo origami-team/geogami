@@ -14,7 +14,9 @@ export class CreateGameMenuPage implements OnInit {
   }
 
   navigateCreateRealGamePage() {
-    this.navCtrl.navigateForward('create-game');
+    // this.navCtrl.navigateForward('create-game');
+
+    this.navCtrl.navigateForward(`game-type-menu/${"RealWorld"}`);
   }
 
   navigateCreateVirtualGamePage() {

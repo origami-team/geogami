@@ -37,7 +37,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'create-game',
+    path: 'create-game/:bundle',
     loadChildren: () =>
       import('./pages/create-game/create-game/create-game.module').then(
         (m) => m.CreateGamePageModule
@@ -53,7 +53,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'create-game/create-game-list',
+    path: 'create-game-list/:bundle',
     loadChildren: () =>
       import(
         './pages/create-game/create-game-list/create-game-list.module'
@@ -69,7 +69,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'edit-game-list/:worldType',
+    path: 'edit-game-list/:bundle',
     loadChildren: () =>
       import('./pages/edit-game/edit-game-list/edit-game-list.module').then(
         (m) => m.EditGameListPageModule
@@ -190,6 +190,10 @@ const routes: Routes = [
   {
     path: 'user/user-management',
     loadChildren: () => import('./pages/user/user-management/user-management.module').then( m => m.UserManagementPageModule)
+  },
+  {
+    path: 'game-type-menu/:worldType',
+    loadChildren: () => import('./pages/multiplayer/game-type-menu/game-type-menu.module').then( m => m.GameTypeMenuPageModule)
   },
 ];
 @NgModule({

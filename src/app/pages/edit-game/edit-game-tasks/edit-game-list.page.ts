@@ -21,7 +21,7 @@ import { Task } from "src/app/models/task";
 import { UtilService } from "src/app/services/util.service";
 
 @Component({
-  selector: "app-edit-game-list",
+  selector: "app-edit-game-list", // edit-game-tasks-list
   templateUrl: "./edit-game-list.page.html",
   styleUrls: ["./edit-game-list.page.scss"],
 })
@@ -42,6 +42,7 @@ export class EditGameListPage implements OnInit {
   private async overrideHardwareBackAction($event: any) {
     await this.modalController.dismiss();
   }
+
 
   constructor(
     private gameFactory: GameFactoryService,
@@ -167,7 +168,7 @@ export class EditGameListPage implements OnInit {
 
     this.gameFactory.applyReorder(this.game.tasks);
 
-    console.log(this.game.tasks);
+    // console.log("this.game", this.game.tasks);
 
     ev.detail.complete(true);
 
@@ -207,7 +208,8 @@ export class EditGameListPage implements OnInit {
   navigateBack() {
     this.gameFactory.flushGame();
     if (!this.isVirtualWorld) {
-      this.navCtrl.navigateBack("create-game");
+      // this.navCtrl.navigateBack("create-game");
+      this.navCtrl.back();
     } else {
       this.navCtrl.navigateBack("create-game-virtual");
     }
