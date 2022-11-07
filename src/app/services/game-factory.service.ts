@@ -10,7 +10,7 @@ import { Task } from "./../models/task";
 export class GameFactoryService {
   public game: Game;
 
-  constructor(private storage: Storage) {}
+  constructor(private storage: Storage) { }
 
   addGameInformation(data: any) {
     this.game = {
@@ -81,6 +81,13 @@ export class GameFactoryService {
       }
       return this.game;
     });
+  }
+
+  // Initialize new game
+  initializeGame() {
+    this.game = new Game(0, "", "", true, [], undefined, false, false, false, false, false, false);
+    this.storage.set("game", this.game);
+    return this.game;
   }
 
   flushGame() {
