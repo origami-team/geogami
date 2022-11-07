@@ -77,10 +77,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'edit-game/:id',
+    path: 'edit-game-tasks/:id',
     loadChildren: () =>
-      import('./pages/edit-game/edit-game-tasks/edit-game-list.module').then(
-        (m) => m.EditGameListPageModule
+      import('./pages/edit-game/edit-game-tasks/edit-game-tasks.module').then(
+        (m) => m.EditGameTasksPageModule
       ),
     canActivate: [AuthGuard],
   },

@@ -77,6 +77,6 @@ export class EditGameListPage implements OnInit {
 
   gameClick(game: any) {
     // console.log("game: ", game);
-    this.navCtrl.navigateForward(`edit-game/${game._id}`);
+    this.navCtrl.navigateForward(`edit-game-tasks/${game._id}`);
   }
 }

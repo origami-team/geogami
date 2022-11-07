@@ -21,11 +21,11 @@ import { Task } from "src/app/models/task";
 import { UtilService } from "src/app/services/util.service";
 
 @Component({
-  selector: "app-edit-game-list", // edit-game-tasks-list
-  templateUrl: "./edit-game-list.page.html",
-  styleUrls: ["./edit-game-list.page.scss"],
+  selector: "app-edit-game-tasks", // edit-game-tasks
+  templateUrl: "./edit-game-tasks.page.html",
+  styleUrls: ["./edit-game-tasks.page.scss"],
 })
-export class EditGameListPage implements OnInit {
+export class EditGameTasksPage implements OnInit {
   // name: String;
   // tasks: any[] = [];
   game: Game;

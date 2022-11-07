@@ -5,14 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditGameListPage } from './edit-game-list.page';
+import { EditGameTasksPage } from './edit-game-tasks.page';
 
 import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
     path: '',
-    component: EditGameListPage
+    component: EditGameTasksPage
   }
 ];
 
@@ -24,7 +24,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule
   ],
-  declarations: [EditGameListPage],
+  declarations: [EditGameTasksPage],
   providers: []
 })
-export class EditGameListPageModule { }
+export class EditGameTasksPageModule { }
