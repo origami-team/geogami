@@ -1,3 +1,6 @@
+<!-- Destination map view (Start)-->
+<!-- Destination map view - Single-player mode -->
+<ng-container *ngIf="isSinlgeMode">
 <div *ngIf="answer.type == answerTypeEnum.POSITION">
   <h5>
     {{ "CreateGame.destination" | translate }}
@@ -20,6 +23,39 @@
     [isVRMirrored]="isVRMirrored"
   ></app-map>
 </div>
+</ng-container>
+
+<!-- Destination map view - Multi-player mode -->
+<ng-container *ngIf="!isSinlgeMode">
+  <div *ngFor="let e of [].constructor(numPlayers); let i = index">
+    <div *ngIf="answer[i].type == answerTypeEnum.POSITION">
+      <h5>
+        {{ "CreateGame.destination" | translate }} - player ({{i+1}})
+        <ion-icon
+          name="information-circle"
+          (click)="
+            showPopover(
+              $event,
+              'Popover.flag'
+            )
+          "
+          *ngIf="i==0"
+        >
+        </ion-icon>
+      </h5>
+      <app-map
+        featureType="point"
+        drawTheme="nav"
+        [(feature)]="answer[i].position"
+        [isVirtualWorld]="isVirtualWorld" 
+        [isVRMirrored]="isVRMirrored"
+        [allPlayersFeatures]="answer"
+      ></app-map>
+    </div>
+
+  </div>
+</ng-container>
+<!-- Destination map view (End) -->
 
 <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
   <h5>

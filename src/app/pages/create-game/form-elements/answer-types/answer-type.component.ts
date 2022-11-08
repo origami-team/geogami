@@ -26,6 +26,10 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
     @Input() isVirtualWorld: boolean;
     @Input() isVRMirrored: boolean;
 
+    // Multi-player Mode
+    @Input() numPlayers: Number;
+    @Input() isSinlgeMode: Number;
+
     @Output() answerChange: EventEmitter<any> = new EventEmitter<any>(true);
 
   answerTypeEnum = AnswerType;

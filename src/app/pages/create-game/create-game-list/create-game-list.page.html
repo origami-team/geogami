@@ -89,7 +89,22 @@
     </div>
   </div> -->
 
+  <!-- Select number of players card -->
+  <!-- Multi-player mode -->
+  <ion-card color="light" *ngIf="!isSinlgeMode">
+    <ion-card-content style="display: flex; justify-content: space-between">
+      <ion-label>Select number of players </ion-label>
+      <!-- DoDo l change color -->
+      <select [(ngModel)]="numPlayers" interface="popover" style="width: 30%;">
+        <option [ngValue]="2"> Two </option>
+        <option [ngValue]="3"> Three</option>
+        <option [ngValue]="3" disabled> Four</option>
+      </select>
+    </ion-card-content>
+  </ion-card>
+
   <!-- New reorder list style -->
+  <!-- List of created trasks -->
   <ion-card color="light">
     <ion-card-content>
       <ion-text>{{ "CreateTasks.combineTasks" | translate }}</ion-text>
@@ -145,16 +160,23 @@
         <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.chooseComponent')">
         </ion-icon>
       </ion-text>
+
+      <!-- Tasks types -->
       <ion-item color="light" lines="none" *ngIf="game">
+        <!-- Navigation -->
         <ion-chip color="primary" (click)="presentTaskModal('nav')">
           + <ion-icon name="navigate"></ion-icon>
         </ion-chip>
+        <!-- Thematic -->
         <ion-chip color="secondary" (click)="presentTaskModal('theme')">
           + <ion-icon name="clipboard"></ion-icon>
         </ion-chip>
+        <!-- Information -->
         <ion-chip color="warning" (click)="presentTaskModal('info')">
           + <ion-icon name="information-circle-outline"></ion-icon>
         </ion-chip>
+
+        <!-- To enable swap tasks -->
         <ng-container *ngIf="game.tasks && game.tasks.length > 1">
           <ion-chip color="dark" slot="end" *ngIf="!reorder" (click)="toggleReorder()">
             <ion-icon name="reorder-three"></ion-icon>
@@ -163,7 +185,9 @@
             <ion-icon name="close"></ion-icon>
           </ion-chip>
         </ng-container>
+
       </ion-item>
+
     </ion-card-content>
   </ion-card>
 

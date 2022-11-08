@@ -38,8 +38,11 @@ export class CreateGameListPage implements OnInit {
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   // To hold received parametres vlaues via route
+  // Multiplayer mode 
   isRealWorld: boolean = false;
-  isSinlgeMode: boolean = false;
+  isSinlgeMode: boolean = false; // used to show number of players card in multiplayer mode
+  bundle: any;
+  numPlayers = 3;
 
   // dismiss modal on hardware back button
   @HostListener("document:ionBackButton", ["$event"])
@@ -108,7 +111,11 @@ export class CreateGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld) {
+  async presentTaskModal(type: string = "nav",
+    task: any = null,
+    isVirtualWorld: boolean = this.isVirtualWorld,
+    numPlayers: number = this.numPlayers,
+    isSinlgeMode: boolean = this.isSinlgeMode) {
     // console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -118,7 +125,9 @@ export class CreateGameListPage implements OnInit {
       componentProps: {
         type,
         task,
-        isVirtualWorld
+        isVirtualWorld,
+        numPlayers,
+        isSinlgeMode
       },
     });
 
@@ -190,17 +199,21 @@ export class CreateGameListPage implements OnInit {
 
   navigateToOverview() {
     //console.log("navigate");
-    
-    let bundle = {
-      isVRWorld: false,
-      isVRMirrored: false
+
+    this.bundle = {
+      isVRWorld: !this.isRealWorld, // DoDo update it in overview to isRealWorld
+      isVRMirrored: false, // update code so you don't have to send it if realworld is false
+      //isRealWorld: this.isRealWorld,
+      isSinlgeMode: this.isSinlgeMode,
+      numPlayers: (this.isSinlgeMode ? undefined : this.numPlayers)
     }
-    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
+
+    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(this.bundle)}`);
   }
 
   async showPopover(ev: any, key: string) {
     let text = this.translate.instant(key);
-    
+
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

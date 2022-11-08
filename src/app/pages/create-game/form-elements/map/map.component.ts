@@ -57,6 +57,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   map: mapboxgl.Map;
   draw: MapboxDraw;
 
+  // Multi-player Mode
+  @Input() allPlayersFeatures: [];
+
 
   constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
 
@@ -138,6 +141,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.addControl(new mapboxgl.NavigationControl());
 
     this.map.on('click', e => {
+
+      // temp
+      console.log("allPlayersFeatures", this.allPlayersFeatures)
+
       if (this.featureType == 'point') {
         this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
         this.featureChange.emit(this.feature);

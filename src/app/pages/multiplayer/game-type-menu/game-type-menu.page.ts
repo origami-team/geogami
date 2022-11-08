@@ -41,7 +41,9 @@ export class GameTypeMenuPage implements OnInit {
     let bundle = {
       isRealWorld: this.isRealWorld,
       isSinlgeMode: false
-    }
+    }    
+    this.navCtrl.navigateForward(`create-game/${JSON.stringify(bundle)}`);
+
   }
 
 }

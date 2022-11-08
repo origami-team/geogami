@@ -20,6 +20,10 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     @Input() isVirtualWorld: boolean;
     @Input() isVRMirrored: boolean;
 
+    // Multi-player Mode
+    @Input() numPlayers: Number;
+    @Input() isSinlgeMode: Number;
+
     @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
 
     questionTypeEnum = QuestionType;

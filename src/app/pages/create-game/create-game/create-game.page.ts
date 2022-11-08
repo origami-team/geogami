@@ -13,6 +13,7 @@ import { NavController } from '@ionic/angular';
 })
 export class CreateGamePage implements OnInit {
 
+  // To hold received parametres vlaues via route
   isRealWorld: boolean = true;
   isSinlgeMode: boolean = true;
   bundle: any;

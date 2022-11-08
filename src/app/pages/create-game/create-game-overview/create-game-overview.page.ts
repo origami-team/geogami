@@ -62,6 +62,10 @@ export class CreateGameOverviewPage implements AfterViewInit {
   userRole: String = "";
   user = this.authService.getUserValue();
 
+  // Multiplayer mode 
+  isSinlgeMode: boolean = false; // used to show number of players card in multiplayer mode
+  numPlayers: Number = 1;
+
 
   constructor(
     public popoverController: PopoverController,
@@ -88,10 +92,13 @@ export class CreateGameOverviewPage implements AfterViewInit {
     this.route.params.subscribe((params) => {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
+      //this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
+      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+      this.numPlayers = JSON.parse(params.bundle).numPlayers;
     });
 
     // Get user role
-    if(this.user){
+    if (this.user) {
       this.userRole = this.user['roles'][0];
     }
   }
@@ -116,8 +123,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: (this.isVirtualWorld ?
-          (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-          environment.mapStyle + 'realWorld.json'),
+        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
+        environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
@@ -389,7 +396,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
       isVisible: true,                    // new game is visible by default
-      isCuratedGame: this.isCuratedGame  // to set whether game can be viewed in curated filter list
+      isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
+      isMultiplayerGame: !this.isSinlgeMode,
+      numPlayers : (!this.isSinlgeMode ? this.numPlayers : undefined )
 
     });
     console.log(this.gameFactory.game);

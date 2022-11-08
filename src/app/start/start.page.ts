@@ -9,7 +9,6 @@ import { AuthService } from '../services/auth-service.service';
 import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
-import { platform } from 'process';
 import { UtilService } from '../services/util.service';
 
 @Component({

@@ -21,6 +21,7 @@ import { QuestionType, AnswerType, TaskMode } from "src/app/models/types";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
+import { navtasksMultiplayers } from "src/app/models/navigation-tasks-multiplayers";
 
 @Component({
   selector: "app-create-task-modal",
@@ -36,6 +37,10 @@ export class CreateTaskModalPage implements OnInit {
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
 
+  // Multi-player Mode
+  @Input() numPlayers: Number;
+  @Input() isSinlgeMode: boolean;
+  
   tasks: any[] = [];
 
   mapFeatures: any = this.task.mapFeatures;
@@ -99,7 +104,13 @@ export class CreateTaskModalPage implements OnInit {
 
   ngOnInit() {
     if (this.type == "nav") {
-      this.tasks = cloneDeep(navtasks);
+      if(this.isSinlgeMode){
+        this.tasks = cloneDeep(navtasks);
+      } else {
+        this.tasks = cloneDeep(navtasksMultiplayers);
+        console.log("////navtasksMultiplayers: ", this.tasks)
+      }
+      
     } else {
       this.tasks = cloneDeep(themetasks);
     }

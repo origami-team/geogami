@@ -26,6 +26,7 @@
       {{ "Tasktypes.navigationtasksDescription" | translate }}
     </ion-card-content>
   </ion-card>
+
   <ion-card color="secondary" *ngIf="task.category == 'theme'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
@@ -33,6 +34,7 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Task type -->
   <ion-text>
     <h5>{{ "General.tasktype" | translate }}</h5>
   </ion-text>
@@ -49,6 +51,7 @@
     </option>
   </select>
 
+  <!-- DoDo -->
   <select
     interface="popover"
     *ngIf="type != 'nav'"
@@ -58,7 +61,9 @@
   >
     <option [ngValue]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</option>
   </select>
+  <!-- End of task type -->
 
+  <!-- Show Information about selected type -->
   <ion-card color="medium">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
@@ -88,7 +93,9 @@
       </ion-text>
     </ion-card-content>
   </ion-card>
+  <!-- End of show Information about selected type -->
 
+  <!-- More options of thematic types-->
   <div *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
     <div>
       <ion-text>
@@ -133,6 +140,7 @@
           {{ option.text | typeToText: task.type : false | translate }}</option>
       </select>
     </div>
+
     <div>
       <ion-text>
         <h5>{{ "CreateGame.playerAnswers" | translate }}</h5>
@@ -143,9 +151,12 @@
       </select>
     </div>
   </div>
+  <!-- End of more options of thematic types-->
 
   <div>
-    <question-type [(question)]="task.question" [taskType]="task.category" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></question-type>
+    <!-- Task instruction, markdown support, audio message ... -->
+    <question-type [(question)]="task.question" [taskType]="task.category" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSinlgeMode?numPlayers:1)" [isSinlgeMode]="isSinlgeMode"></question-type>
+
     <!-- Search Area -->
     <div *ngIf="task.type == 'theme-loc' || task.type == 'theme-object'">
       <ion-text>
@@ -159,6 +170,8 @@
       </ion-text>
       <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="task.question.area" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
     </div>
+
+    <!-- Set location by tapping on the map -->
     <div
       *ngIf="task.type == 'theme-direction' && task.question.type == 'TEXT' && task.answer.type == 'MAP_DIRECTION'"
     >
@@ -182,15 +195,20 @@
         [isVRMirrored]="isVRMirrored">
       </app-map>
     </div>
+
+    <!-- Destination -->
     <answer-type 
       [(answer)]="task.answer" 
       [taskType]="task.category"
       [settings]="task.settings" 
       [isVirtualWorld]="isVirtualWorld" 
-      [isVRMirrored]="isVRMirrored">
+      [isVRMirrored]="isVRMirrored"
+      [numPlayers]="(!isSinlgeMode?numPlayers:1)"
+      [isSinlgeMode]="isSinlgeMode">
     </answer-type>
   </div>
 
+  <!-- Additional settings -->
   <div *ngIf="task.settings">
     <ion-text>
       <h5>{{ "CreateGame.addSettings" | translate }}</h5>
