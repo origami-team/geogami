@@ -21,7 +21,7 @@ export class EditGameListPage implements OnInit {
   // Multiplyar impl.
   isRealWorld: boolean = true;
   isSinlgeMode: boolean = true;
-  bundle: any;
+  // bundle: any;
 
   
   constructor(
@@ -39,10 +39,7 @@ export class EditGameListPage implements OnInit {
 
       this.isVirtualWorld = !this.isRealWorld;
 
-      this.bundle = {
-        isRealWorld: this.isRealWorld,
-        isSinlgeMode: this.isSinlgeMode
-      }
+      
     });
 
     /* // VR world
@@ -77,6 +74,14 @@ export class EditGameListPage implements OnInit {
 
   gameClick(game: any) {
     // console.log("game: ", game);
-    this.navCtrl.navigateForward(`edit-game-tasks/${game._id}`);
+    // this.navCtrl.navigateForward(`edit-game-tasks/${game._id}`);
+
+    let bundle = {
+      isRealWorld: this.isRealWorld,
+      isSinlgeMode: this.isSinlgeMode,
+      game_id: game._id
+    }
+    
+    this.navCtrl.navigateForward(`edit-game-tasks/${JSON.stringify(bundle)}`);
   }
 }

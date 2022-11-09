@@ -128,7 +128,7 @@
             <ion-avatar slot="start" *ngIf="task.category.includes('info')">
               <div class="mymarker invisible"></div>
             </ion-avatar>-->
-            
+
             <ion-chip *ngIf="task.category.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
               <ion-label>
                 <ion-icon name="navigate"></ion-icon> {{ task.name | translate }}

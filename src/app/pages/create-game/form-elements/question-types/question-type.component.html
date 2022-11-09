@@ -1,7 +1,6 @@
-<!-- Task instruction -->
-<div *ngIf="
-    question.type != questionTypeEnum.NAV_INSTRUCTION &&
-    question.type != questionTypeEnum.NAV_INSTRUCTION_PHOTO">
+<!-- Task instruction - NavToFlag & NavWithArrow & NavViaText-->
+<div
+  *ngIf="question.type != questionTypeEnum.NAV_INSTRUCTION_PHOTO && (question[0]== undefined || question[0].type!= questionTypeEnum.NAV_INSTRUCTION_PHOTO)">
 
   <!-- temp: you may use ng-container -->
 
@@ -15,9 +14,7 @@
       </ion-icon>
     </h5>
     <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
-
   </ng-container>
-
   <!-- Task instruction - Multi-player mode -->
   <ng-container *ngIf="!isSinlgeMode">
     <div *ngFor="let e of [].constructor(numPlayers); let i = index">
@@ -30,7 +27,6 @@
       <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
     </div>
   </ng-container>
-
   <!-- Markdown supported -->
   <ion-text color="medium">
     <p>
@@ -46,50 +42,49 @@
   </ion-text>
 </div>
 
-<div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION">
-  <h5>
-    {{ "CreateGame.navInstruction" | translate }}
-    <ion-icon name="information-circle" (click)="
+<!-- Task instruction - NavViaPhoto -->
+<div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION_PHOTO || (question[0]!=undefined && question[0].type== questionTypeEnum.NAV_INSTRUCTION_PHOTO)">
+  <!-- NavViaPhoto - Single-player mode -->
+  <ng-container *ngIf="isSinlgeMode">
+    <h5>
+      {{ "CreateGame.photo" | translate }}
+      <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.photo')">
+      </ion-icon>
+    </h5>
+    <app-photo-upload [(photo)]="question.photo" [taskType]="taskType" theme="primary"></app-photo-upload>
+    <h5>
+      {{ "CreateGame.navInstruction" | translate }}
+      <ion-icon name="information-circle" (click)="
         showPopover(
           $event,
           'Popover.navInstruction'
-        )
-      ">
-    </ion-icon>
-  </h5>
-  <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
-  <ion-text color="medium">
-    <p>
-      {{ "CreateGame.markdownSupported" | translate }}
-      <ion-icon name="information-circle" (click)="
+        )">
+      </ion-icon>
+    </h5>
+    <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
+  </ng-container>
+  <!-- NavViaPhoto - Multi-player mode -->
+  <ng-container *ngIf="!isSinlgeMode">
+    <div *ngFor="let e of [].constructor(numPlayers); let i = index">
+      <h5>
+        {{ "CreateGame.photo" | translate }} - player ({{i+1}})
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.photo')" *ngIf="i==0">
+        </ion-icon>
+      </h5>
+      <app-photo-upload [(photo)]="question.photo" [taskType]="taskType" theme="primary"></app-photo-upload>
+      <h5>
+        {{ "CreateGame.navInstruction" | translate }} - player ({{i+1}})
+        <ion-icon name="information-circle" (click)="
           showPopover(
             $event,
-            'Popover.markdown'
-          )
-        ">
-      </ion-icon>
-    </p>
-  </ion-text>
-</div>
-
-<div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION_PHOTO">
-  <h5>
-    {{ "CreateGame.photo" | translate }}
-    <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.photo')">
-    </ion-icon>
-  </h5>
-  <app-photo-upload [(photo)]="question.photo" [taskType]="taskType" theme="primary"></app-photo-upload>
-  <h5>
-    {{ "CreateGame.navInstruction" | translate }}
-    <ion-icon name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.navInstruction'
-        )
-      ">
-    </ion-icon>
-  </h5>
-  <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
+            'Popover.navInstruction'
+          )" *ngIf="i==0">
+        </ion-icon>
+      </h5>
+      <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
+    </div>
+  </ng-container>
+  <!-- Markdown supported -->
   <ion-text color="medium">
     <p>
       {{ "CreateGame.markdownSupported" | translate }}

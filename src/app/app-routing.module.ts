@@ -77,7 +77,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'edit-game-tasks/:id',
+    path: 'edit-game-tasks/:bundle',
     loadChildren: () =>
       import('./pages/edit-game/edit-game-tasks/edit-game-tasks.module').then(
         (m) => m.EditGameTasksPageModule

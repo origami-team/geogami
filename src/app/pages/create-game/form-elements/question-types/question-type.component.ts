@@ -32,7 +32,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
+        // console.log("changes (QuestionTypeComponent): ", changes);
         this.questionChange.emit(changes.question.currentValue);
     }
 

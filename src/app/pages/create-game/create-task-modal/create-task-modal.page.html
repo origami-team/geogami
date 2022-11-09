@@ -57,8 +57,7 @@
     *ngIf="type != 'nav'"
     [compareWith]="taskTypeCompare"
     [(ngModel)]="selectedTaskType"
-    (ngModelChange)="onTaskTypeChange($event)"
-  >
+    (ngModelChange)="onTaskTypeChange($event)">
     <option [ngValue]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</option>
   </select>
   <!-- End of task type -->

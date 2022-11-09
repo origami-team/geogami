@@ -58,7 +58,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   draw: MapboxDraw;
 
   // Multi-player Mode
-  @Input() allPlayersFeatures: [];
+  // DoDo check the error you are getting @Input() allPlayersFeatures
+  // @Input() allPlayersFeatures: []; // to be able to view flages of all players in each map view
+  @Input() isSinlgeMode: boolean; // to use it in `ngOnChanges`
 
 
   constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
@@ -66,12 +68,25 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   ngOnDestroy(): void {
     this.map.remove();
   }
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    // console.log('// isSinlgeMode (map comp): ', this.isSinlgeMode)
+  }
 
+  // Compare the input feature value before and after change task type
+  // to keep flags on map 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
-      this.featureChange.emit(changes.feature.previousValue);
-    }
+    // if (this.isSinlgeMode) {
+      if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
+        this.featureChange.emit(changes.feature.previousValue);
+      }
+    /*}
+     else {
+      // Multi-player Mode
+      if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
+        this.featureChange.emit(changes.feature.previousValue);
+      }
+    } */
+
   }
 
   ngAfterViewInit(): void {
@@ -143,7 +158,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.on('click', e => {
 
       // temp
-      console.log("allPlayersFeatures", this.allPlayersFeatures)
+      // console.log("allPlayersFeatures", this.allPlayersFeatures)
 
       if (this.featureType == 'point') {
         this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);

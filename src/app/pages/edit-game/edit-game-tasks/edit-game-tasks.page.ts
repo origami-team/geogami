@@ -35,6 +35,12 @@ export class EditGameTasksPage implements OnInit {
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
 
+  // Multiplyar impl.
+  isRealWorld: boolean = true;
+  isSinlgeMode: boolean = true;
+  numPlayers = 1;
+  // bundle: any;
+
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   // dismiss modal on hardware back button
@@ -54,9 +60,18 @@ export class EditGameTasksPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Get selected env. and game type
     this.route.params.subscribe((params) => {
+      this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
+      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+      let game_id = JSON.parse(params.bundle).game_id;
+
+      this.isVirtualWorld = !this.isRealWorld;
+
+
+      // Get data of selected game via game_id
       this.gamesService
-        .getGame(params.id)
+        .getGame(game_id)
         .then((res) => res.content)
         .then((game) => {
           this.game = game;
@@ -64,12 +79,28 @@ export class EditGameTasksPage implements OnInit {
           this.gameFactory.addGameInformation(this.game);
 
           // VR world
-          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+          /* if (game.isVRWorld !== undefined && game.isVRWorld != false) {
             this.isVirtualWorld = true;
             if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
               this.isVRMirrored = true;
             }
+          } */
+
+          // check if game is VE 2 (mirrored)
+          if (!this.isRealWorld) {
+            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
+              this.isVRMirrored = true;
+            }
+          } else {
+            // Get num of players
+            this.numPlayers = game.numPlayers;
+            console.log("/// numPlayers: ", this.numPlayers);
           }
+
+          
+
+
+
         });
     });
   }
@@ -103,7 +134,10 @@ export class EditGameTasksPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
+  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, 
+  isVRMirrored: boolean = this.isVRMirrored,
+  numPlayers: number = this.numPlayers,
+    isSinlgeMode: boolean = this.isSinlgeMode) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -114,7 +148,9 @@ export class EditGameTasksPage implements OnInit {
         type,
         task,
         isVirtualWorld,  // added to view VR world map instead of real map if true
-        isVRMirrored
+        isVRMirrored,
+        numPlayers,
+        isSinlgeMode
       },
     });
 
@@ -188,7 +224,6 @@ export class EditGameTasksPage implements OnInit {
       // return;
     }
 
-    
     let bundle = {
       game_id: this.game._id,
       isVRWorld: this.isVirtualWorld,

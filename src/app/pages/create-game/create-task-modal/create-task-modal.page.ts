@@ -21,7 +21,7 @@ import { QuestionType, AnswerType, TaskMode } from "src/app/models/types";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
-import { navtasksMultiplayers } from "src/app/models/navigation-tasks-multiplayers";
+import { navtasksMultiplayers3 } from "src/app/models/navigation-tasks-multi_3_players";
 
 @Component({
   selector: "app-create-task-modal",
@@ -107,8 +107,8 @@ export class CreateTaskModalPage implements OnInit {
       if(this.isSinlgeMode){
         this.tasks = cloneDeep(navtasks);
       } else {
-        this.tasks = cloneDeep(navtasksMultiplayers);
-        console.log("////navtasksMultiplayers: ", this.tasks)
+        this.tasks = cloneDeep(navtasksMultiplayers3);
+        // console.log("////navtasksMultiplayers: ", this.tasks)
       }
       
     } else {
@@ -175,6 +175,8 @@ export class CreateTaskModalPage implements OnInit {
   }
 
   onTaskSelected(newValue) {
+    // console.log("//// newValue:", newValue)
+
     this.task = newValue;
 
     if (!this.task.settings || Object.keys(this.task.settings).length == 0) {

@@ -23,8 +23,12 @@ export class CreateGamePage implements OnInit {
   ngOnInit() {
     // Get selected env. and game type
     this.route.params.subscribe((params) => {
-      this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+      console.log("params.bundle1: ", params.bundle)
+      if (params.bundle != "userRole") {
+        this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
+        this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+
+      }
 
       this.bundle = {
         isRealWorld: this.isRealWorld,
@@ -42,6 +46,11 @@ export class CreateGamePage implements OnInit {
 
   navigateEditGame() {
     // this.navCtrl.navigateForward(`edit-game-list/${"RealWorld"}`);
+    // DoDo update impl of user role
+    /* this.bundle = {
+      isRealWorld: this.isRealWorld,
+      isSinlgeMode: this.isSinlgeMode
+    } */
 
     this.navCtrl.navigateForward(`edit-game-list/${JSON.stringify(this.bundle)}`);
   }
