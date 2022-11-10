@@ -15,6 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 export class EditGameListPage implements OnInit {
   games: any;
 
+  showEmptyInfo = false;
+
   // VR world
   isVirtualWorld: boolean = false;
 
@@ -35,7 +37,11 @@ export class EditGameListPage implements OnInit {
 
     this.gamesService.getUserGames().then((res) => {
       // Get either real or VE agmes based on selected environment 
-      this.games = res.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();;
+      this.games = res.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();
+      
+      if(this.games.length == 0){
+        this.showEmptyInfo = true;
+      }
     });
   }
 
