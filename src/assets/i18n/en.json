@@ -104,7 +104,8 @@
                 "saveGame": "Save game",
                 "sendingData": "Transferring data...",
                 "gameSaved": "Your game has been saved!",
-                "setCuratedGame": "Set as a curated game"
+                "setCuratedGame": "Set as a curated game",
+                "enterValidGameName": "Please enter a valid game name."
         },
         "Start": {
                 "playMode": "Play",

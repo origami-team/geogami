@@ -62,6 +62,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
   userRole: String = "";
   user = this.authService.getUserValue();
 
+  errorMsg: String;
+
 
   constructor(
     public popoverController: PopoverController,
@@ -378,8 +380,17 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.utilService.showAlertNoConnection();
       // return;
     }
+  
+    // Remove extra spaces from game name
+    this.game.name = this.game.name.trim();
 
-    console.log("///Game to be uploaded: ", this.game);
+    if(this.game.name == ""){
+      this.errorMsg = this.translate.instant("SaveGame.enterValidGameName")
+      this.showNameError = true;
+      return;
+    }
+    
+    // console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : null,
@@ -406,6 +417,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       .catch(e => {
         console.error(e);
         this.showUpload = false;
+        this.errorMsg = this.translate.instant("SaveGame.gameNameExist");
         this.showNameError = true;
       });
   }
