@@ -9,40 +9,86 @@
 
 
 <ion-content class="ion-padding">
-  <h5>{{ "GameList.chooseGame" | translate }}</h5>
+  <h5> {{ (isListTabSelected ? "GameList.chooseGameList" : "GameList.chooseGameMap") | translate }}</h5>
 
-  <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="selectedSegment" color="dark">
-    <ion-segment-button value="curated">
-      <ion-label>{{ "PlayGame.curated" | translate }}</ion-label>
-    </ion-segment-button>
+  <ng-container *ngIf="isListTabSelected">
+    <!-- segment start -->
+    <ion-segment (ionChange)="segmentChanged($event.detail.value)" [(ngModel)]="selectedSegment" color="dark">
 
-    <ion-segment-button value="mine" [disabled]="userRole == 'unloggedUser'">
-      <ion-label>{{ "PlayGame.myGames" | translate }}</ion-label>
-    </ion-segment-button>
+      <ion-segment-button value="all">
+        <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
+      </ion-segment-button>
 
-    <ion-segment-button value="all">
-      <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+      <ion-segment-button value="curated">
+        <ion-label>{{ "PlayGame.curated" | translate }}</ion-label>
+      </ion-segment-button>
 
-  <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
+      <ion-segment-button value="mine" *ngIf="userRole != 'unloggedUser'">
+        <ion-label>{{ "PlayGame.myGames" | translate }}</ion-label>
+      </ion-segment-button>
 
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+    </ion-segment>
+    <!-- segment end -->
 
-  <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
-    <ion-card-header>
-      <ion-item lines="none" color="secondary">
-        <ion-label>
-          <h2>
-            <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
-            </span> {{ game.name }}
-          </h2>
-        </ion-label>
-        <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
-      </ion-item>
-    </ion-card-header>
+    <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
 
-  </ion-card>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+
+    <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
+      <ion-card-header>
+        <ion-item lines="none" color="secondary">
+          <ion-label>
+            <h2>
+              <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
+              </span> {{ game.name }}
+            </h2>
+          </ion-label>
+          <!-- <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+        </ion-item>
+      </ion-card-header>
+    </ion-card>
+  </ng-container>
+
+  <!-- show this message only when my games section is selected and there're no games were created by logged user -->
+  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && games.length == 0">
+    <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
+  </div>
+
+
+  <div #gamesMap class="map" ></div>
+  <!-- <div #gamesMap class="map" *ngIf="!isListTabSelected"></div> -->
+
+  <!-- <div #popupContainer *ngIf="!isListTabSelected && gamesWithLocs"> -->
+  <div #popupContainer>
+    <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place" [NumTasks]="game_numTasks">
+    </app-popup>
+  </div>
+
+
+
 </ion-content>
+
+<ion-footer *ngIf="!isVirtualWorld">
+<!-- <ion-footer style="margin-bottom: 5%;"> -->
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+
+        <ion-tab-button (click)="openListTap()" class="{{isListTabSelected?'selectedTab': ''}}">
+          <ion-icon name="list"></ion-icon>
+          <ion-label>List</ion-label>
+          <!-- <ion-badge>6</ion-badge> -->
+        </ion-tab-button>
+
+        <ion-tab-button (click)="openMapTap()" class="{{!isListTabSelected?'selectedTab': ''}}">
+          <ion-icon name="map"></ion-icon>
+          <ion-label>Map</ion-label>
+        </ion-tab-button>
+
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

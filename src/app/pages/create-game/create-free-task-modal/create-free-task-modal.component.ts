@@ -73,6 +73,7 @@ export class CreateFreeTaskModalComponent implements OnInit {
 
       console.log(this.task);
 
+      // todo --- check it out
       // this.settingsChange();
 
     }

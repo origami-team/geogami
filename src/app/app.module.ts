@@ -43,6 +43,13 @@ import { MarkdownModule } from 'ngx-markdown';
 import { TokenInterceptor } from './services/token-intercepor.service';
 import { HelperService } from './services/helper.service';
 
+// for angular material
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+// import {FormControl} from '@angular/forms';
+
+// import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { Network } from '@ionic-native/network/ngx';
+
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -52,6 +59,7 @@ export function createTranslateLoader(http: HttpClient) {
 * Using sockit.IO for receiving data from VR App
 */
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+// import { PopupComponent } from './components/popup/popup.component';
 const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.com/', options: {} }; // multi users at once
 
 
@@ -73,6 +81,7 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
     AnswerTypeComponent,
     TypeToTextPipe,
     LangTranslatePipe,
+    // PopupComponent,
   ],
   exports: [],
   entryComponents: [
@@ -108,6 +117,8 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
       driverOrder: ['localstorage', 'indexeddb'],
     }),
     MarkdownModule.forRoot(),
+    BrowserAnimationsModule,
+    // FormControl
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -117,7 +128,8 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
       useClass: TokenInterceptor,
       multi: true,
     },
-    HelperService
+    HelperService,
+    Network
   ],
   bootstrap: [AppComponent],
 })

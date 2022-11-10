@@ -18,8 +18,7 @@ export const environment = {
     lng:214 / 111000,
     lat:69 / 112000
   },
-  VR_World_1:'assets/icons/vr_world_1.png',
-  VR_World_2:'assets/icons/vr_world_2.png'
+  mapStyle:'../../../../assets/mapStyles/'
 };
 
 /*
@@ -29,4 +28,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

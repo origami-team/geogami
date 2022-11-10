@@ -35,6 +35,9 @@
         <ion-chip *ngIf="role == 'trackAccess'" color="success">
           <ion-label>Track Access</ion-label>
         </ion-chip>
+        <ion-chip *ngIf="role == 'scholar'" color="success">
+          <ion-label>Scholar</ion-label>
+        </ion-chip>
         <ion-chip *ngIf="role == 'admin'" color="dark">
           <ion-label>Admin</ion-label>
         </ion-chip>
@@ -62,7 +65,8 @@
 
     <br />
     <br />
-    <ion-button expand="block" fill="outline" color="danger" (click)="deleteMyAccount()">{{ "User.deleteAccount" | translate }}</ion-button>
+    <ion-button expand="block" fill="outline" color="danger" (click)="deleteMyAccount()">{{ "User.deleteAccount" |
+      translate }}</ion-button>
 
     <!-- </form> -->
   </div>

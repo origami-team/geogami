@@ -84,7 +84,8 @@
                 "titleGameMenu": "Select the game environment",
                 "realWorld": "Real world",
                 "virtualWorld": "Virtual world",
-                "chooseGame": "Choose a GeoGami from the list."
+                "chooseGameList": "Choose a game from the list.",
+                "chooseGameMap": "Choose a game from the map."
         },
         "CreateTasks": {
                 "combineTasks": "Create your GeoGami:",
@@ -103,7 +104,8 @@
                 "saveGame": "Save game",
                 "sendingData": "Transferring data...",
                 "gameSaved": "Your game has been saved!",
-                "setCuratedGame": "Set as a curated game"
+                "setCuratedGame": "Set as a curated game",
+                "enterValidGameName": "Please enter a valid game name."
         },
         "Start": {
                 "playMode": "Play",
@@ -210,7 +212,8 @@
                 "shareDataAgreement": "I agree that collected data can be processed in aggregate form for research purposes.",
                 "allGames": "All",
                 "myGames": "My games",
-                "curated": "Curated"
+                "curated": "Curated",
+                "emptyGamesList": "You haven't created a game yet!"
         },
         "Showroom": {
                 "titleShowroom": "Get to know GeoGami",

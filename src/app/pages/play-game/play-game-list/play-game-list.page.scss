@@ -14,3 +14,29 @@ ion-segment-button {
 ion-card-header{
   padding: 0.4rem;
 }
+
+ion-tab-bar{
+  height: 100%;
+}
+
+
+.map {
+  height: 100%;
+  //border-radius: 1rem;
+}
+
+.emptygamecontent {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.selectedTab {
+  color: var(--ion-color-primary);
+  // border-radius: 16px;
+}
+
+
+  

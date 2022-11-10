@@ -6,9 +6,10 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-
 import { UserManagementPage } from './user-management.page';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { MaterialModule } from '../../../material.module';
 
 
 const routes: Routes = [
@@ -24,8 +25,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    TranslateModule
+    TranslateModule,
+    MaterialModule,
   ],
   declarations: [UserManagementPage]
 })
-export class UserManagementPageModule {}
+export class UserManagementPageModule { }

@@ -45,14 +45,24 @@ export class CreateGameListPage implements OnInit {
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
     private navCtrl: NavController,
-    public popoverController: PopoverController,
+    public popoverController: PopoverController, 
     private translate: TranslateService
-  ) {}
+    ) {}
 
-  ngOnInit() {
-    this.gameFactory.getGame().then((game) => (this.game = game));
+  async ngOnInit() {
+    this.gameFactory.getGame().then((game) => {
+      // It could happen that game data is stored from edit game page
+      // here we clean game data if it is realted to existed game. 
+      // otheriwse we get `name already exists` error
+      if (game._id != 0) {
+        this.gameFactory.flushGame(); // clear game data
+        this.game = this.gameFactory.initializeGame();
+      } else {
+        this.game = game;
+      }
 
-    console.log(this.gameFactory.game);
+    });
+    // console.log("this.gameFactory.game: ", this.gameFactory.game);
   }
 
   ionViewWillEnter() {
@@ -85,7 +95,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld) {
-    console.log(task);
+    // console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -165,7 +175,7 @@ export class CreateGameListPage implements OnInit {
   }
 
   navigateToOverview() {
-    console.log("navigate");
+    //console.log("navigate");
     
     let bundle = {
       isVRWorld: false,

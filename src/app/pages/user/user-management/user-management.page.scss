@@ -10,3 +10,32 @@ ion-col {
   ion-list, ion-select{
     padding: 0rem;
   }
+
+
+  table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+/*   td, th {
+    width: 25%;
+  } */
+
+   /* alternate row colours */
+  .mat-row:nth-child(even){
+    background-color: #ecebeb;
+  }
+
+  /* change header row colour */
+  .mat-header-cell {
+    background: #d0def8;
+  }
+
+  ion-searchbar {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }

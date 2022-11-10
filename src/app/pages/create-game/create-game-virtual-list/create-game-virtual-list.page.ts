@@ -63,14 +63,14 @@ export class CreateGameVirtualListPage implements OnInit {
 
     this.gameFactory.getGame().then((game) => (this.game = game));
 
-    console.log(this.gameFactory.game);
+    console.log("this.gameFactory.game: ",this.gameFactory.game);
   }
 
   ionViewWillEnter() {
   }
 
   async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
-    console.log(task);
+    // console.log(task);
     console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -87,7 +87,7 @@ export class CreateGameVirtualListPage implements OnInit {
 
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    console.log("data:", data);
+    // console.log("data:", data);
     if (data != undefined) {
       if (task != null) {
         if (!task._id) {
@@ -105,18 +105,18 @@ export class CreateGameVirtualListPage implements OnInit {
   addTaskToGame(task) {
     this.game = this.gameFactory.addTask(task);
 
-    console.log(this.game.tasks);
+    console.log("this.game.tasks: ",this.game.tasks);
   }
 
   deleteTask(taskID) {
-    console.log("deleting", taskID);
+    console.log("deleting taskID:", taskID);
     this.game = this.gameFactory.removeTask(taskID);
   }
 
   updateTask(taskID, task) {
-    console.log("updating", taskID);
+    console.log("updating taskID:", taskID);
     this.game = this.gameFactory.updateTask(taskID, task);
-    console.log(this.game);
+    console.log("this.game:", this.game);
   }
 
   doReorder(ev: any) {

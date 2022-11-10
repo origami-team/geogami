@@ -11,46 +11,84 @@
 
   <h3>Users list</h3>
 
-  <ion-grid>
-    <ion-row class="ion-justify-content-start" style="background-color: #d0def8">
-      <ion-col size="1"> # </ion-col>
-      <ion-col size="1.5"> Name </ion-col>
-      <ion-col size="3"> Email </ion-col>
-      <ion-col size="2"> Created date </ion-col>
-      <ion-col size="2"> Role </ion-col>
-      <ion-col size="2"> Action </ion-col>
-    </ion-row>
+  <mat-form-field appearance="standard" >
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Jan" #input>
+  </mat-form-field>
 
-    <ion-row *ngFor=" let user of users; index as i" class="ion-justify-content-start"
-      style="border-bottom: 1px solid grey;"  [ngStyle]="{ 'background-color' : i%2 ? '#ecebeb' : ''}">
-      <ion-col size="1"> {{ i+1 }} </ion-col>
-      <ion-col size="1.5"> {{ user.username }} </ion-col>
-      <ion-col size="3"> {{ user.email }} </ion-col>
-      <ion-col size="2"> {{ user.createdAt.slice(0, 19) }} </ion-col>
-      <ion-col size="2">
-        <!-- <ion-item> -->
-        <ion-list>
-          <!-- <ion-select interface="popover" placeholder="{{ user.roles[0] }}" ngmodel="{{ user.roles[0]}}"> -->
-          <ion-select interface="popover" value="{{ user.roles[0]}}" (ionChange)="changeRole(i, $event.detail.value)" [ngStyle]="{ 'background-color' : i%2 ? '#ecebeb' : ''}">
-            <ion-select-option value="admin">admin</ion-select-option>
-            <ion-select-option value="scholar">scholar</ion-select-option>
-            <ion-select-option value="user">user</ion-select-option>
-          </ion-select>
-        </ion-list>
-        <!-- </ion-item> -->
-      </ion-col>
-      <ion-col size="2">
-        <ion-buttons>
-          <ion-button (click)="saveRoleUpdate(i)" disabled = "{{!user.roleIsUpdated}}">
-            <ion-icon name="save-sharp" color="{{ user.roleIsUpdated?'primary':'dark'}}"></ion-icon>
-          </ion-button>
+<!--   <ion-searchbar (ionChange)="applyFilter($event)" placeholder="Filter" #input></ion-searchbar>   -->
 
-          <ion-button (click)="dismissModal(null)">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="#">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+        <td mat-cell *matCellDef="let row; let i = index"> {{i + 1}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let row"> {{row.username}} </td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+        <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+      </ng-container>
+
+      <!-- Created_date Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created date </th>
+        <td mat-cell *matCellDef="let row"> {{row.createdAt.slice(0, 10)}} </td>
+      </ng-container>
+
+      <!-- Role Column -->
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <ion-list>
+            <ion-select interface="popover" value="{{ row.roles[0]}}"
+              (ionChange)="changeRole($event.detail.value, row.email)"
+              [ngStyle]="{ 'background-color' : i%2 ? '#ecebeb' : ''}">
+              <ion-select-option value="admin">admin</ion-select-option>
+              <ion-select-option value="scholar">scholar</ion-select-option>
+              <ion-select-option value="user">user</ion-select-option>
+            </ion-select>
+          </ion-list>
+        </td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+        <td mat-cell *matCellDef="let row">
+          <ion-buttons>
+            <ion-button (click)="saveRoleUpdate(row.email)" disabled="{{!row.roleIsUpdated}}">
+              <ion-icon name="save-sharp" color="{{ row.roleIsUpdated?'primary':'dark'}}"></ion-icon>
+            </ion-button>
+
+            <ion-button (click)="deleteUser(row.email)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 15, 35, 100]" showFirstLastButtons aria-label="Select page of users"></mat-paginator>
+  </div>
+
+  <!-- end div -->
+
 </ion-content>

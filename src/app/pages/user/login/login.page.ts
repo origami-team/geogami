@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth-service.service';
 import { Validators, FormBuilder } from '@angular/forms';
 import { NavController } from '@ionic/angular';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ export class LoginPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +47,13 @@ export class LoginPage implements OnInit {
   }
 
   login() {
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      // show no connection notification
+      this.utilService.showAlertNoConnection();
+      // return; // ToDo --- uncomment it after further testing
+    }
+
     // Remove extra spaces before and after username string
     this.loginForm.setValue({username: (this.loginForm.getRawValue().username).trim(), password:this.loginForm.getRawValue().password})
     this.authService.login(this.loginForm.getRawValue());

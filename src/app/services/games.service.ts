@@ -30,6 +30,12 @@ export class GamesService {
       .toPromise();
   }
 
+  getMinimalGamesWithLocs(): Promise<any> {
+    return this.http
+      .get(`${environment.apiURL}/game/allwithlocs`)
+      .toPromise();
+  }
+
   getTracks(): Promise<any> {
     return this.http
       .get(`${environment.apiURL}/tracks`, {
@@ -43,7 +49,9 @@ export class GamesService {
   }
 
   postGame(game: Game): Promise<any> {
+    console.log("///Game to be posted: ", game);
     delete game._id;
+    console.log("///Game to be posted without id: ", game);
     game.tasks.forEach((task) => delete task._id);
     return this.http
       .post(`${environment.apiURL}/game`, game, {

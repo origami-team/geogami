@@ -20,6 +20,7 @@
       <ion-text>{{ "CreateTasks.combineTasks" | translate }}</ion-text>
       <ion-list mode="ios" *ngIf="game">
         <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!reorder">
+          
           <ion-item color="light" class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
             <ion-avatar class="flag" slot="start" *ngIf="task.category.includes('nav')">
               <img src="./../../../../assets/icons/target-flag.png" />

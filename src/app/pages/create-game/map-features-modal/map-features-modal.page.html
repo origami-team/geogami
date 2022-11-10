@@ -43,10 +43,10 @@
     <ion-item>
       <ion-label>{{ "Mapfeatures.mapRotation" | translate }}</ion-label>
       <select [(ngModel)]="features.rotation" interface="popover">
+        <option value="north">{{ "Mapfeatures.fixedToNorth" | translate }}</option>
         <option *ngIf='!isVirtualWorld' value="manual">{{ "Mapfeatures.manual" | translate }}</option>
         <option *ngIf='!isVirtualWorld' value="auto">{{ "Mapfeatures.automatic" | translate }}</option>
         <option *ngIf='!isVirtualWorld' value="button">{{ "Mapfeatures.automaticOnDemand" | translate }}</option>
-        <option value="north">{{ "Mapfeatures.fixedToNorth" | translate }}</option>
       </select>
     </ion-item>
     <ion-item>
