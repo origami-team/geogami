@@ -486,7 +486,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc)
 
     this.game = null;
-    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false, false, false);
+    this.game = new Game(0, 'Loading...', '', false, [], false, false, 1, false, false, false, false, false, false);
     this.route.params.subscribe((params) => {
       this.gamesService
         .getGame(JSON.parse(params.bundle).id)
@@ -522,8 +522,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: (this.isVirtualWorld ?
-          (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-          environment.mapStyle + 'realWorld.json'),
+        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
+        environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxZoom: 18,

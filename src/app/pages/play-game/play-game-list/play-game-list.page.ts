@@ -41,12 +41,17 @@ export class PlayGameListPage implements OnInit {
   map: mapboxgl.Map;
   isListTabSelected: boolean = true;
 
-  //temp
+  // Map popup
   popup: any;
   game_id: any;
   game_name: any;
   game_place: any;
   game_numTasks: any;
+
+  // no need for it
+  // Multiplyar impl. (get values from retreived game data)
+  /* isSinlgeMode: boolean = true;
+  numPlayers : number = 1; */
 
 
   constructor(
@@ -65,7 +70,7 @@ export class PlayGameListPage implements OnInit {
       // return;
     }
 
-    
+
     // VR world
     // to seperate realworld games from VR ones in view
     this.route.params.subscribe((params) => {
@@ -91,11 +96,23 @@ export class PlayGameListPage implements OnInit {
   getGamesData() {
     this.gamesService.getGames(true).then(res => res.content).then(games => {
       // Get either real or VE agmes based on selected environment 
-      this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+      this.games = games.filter(game => 
+        (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
       //this.gamesTemp = cloneDeep(this.games);
       this.gamesTemp = this.games;
 
-      //console.log("games: ", this.games);
+      // mo meed for it
+      // Check game mode, to view mumber of players on each game card
+/*       if(this.games.isMultiplayerGame !== undefined && 
+        this.games.isMultiplayerGame == true){
+          this.isSinlgeMode = false;
+          this.numPlayers = this.games.numPlayers;
+
+          console.log("// single: ", this.isSinlgeMode, ",,,,num: ", this.numPlayers)
+        } */
+
+
+      console.log("games: ", this.games);
     });
   }
 
