@@ -22,3 +22,14 @@ ion-card-header{
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+/* mutli-player mode */
+.numplayersCard {
+  padding: 1%;
+  color: red;
+  border: solid 1px;
+  border-color: red;
+  background: white;
+  border-radius: 5px;
+  margin: 0px;
+}

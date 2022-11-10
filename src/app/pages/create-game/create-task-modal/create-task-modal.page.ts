@@ -22,6 +22,7 @@ import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
 import { navtasksMultiplayers3 } from "src/app/models/navigation-tasks-multi_3_players";
+import { navtasksMultiplayers2 } from "src/app/models/navigation-tasks-multi_2_players";
 
 @Component({
   selector: "app-create-task-modal",
@@ -32,7 +33,7 @@ export class CreateTaskModalPage implements OnInit {
   @Input() gameName = "";
   @Input() type = "nav";
   @Input() task: any = {};
-  
+
   // VR world
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
@@ -40,7 +41,7 @@ export class CreateTaskModalPage implements OnInit {
   // Multi-player Mode
   @Input() numPlayers: Number;
   @Input() isSinlgeMode: boolean;
-  
+
   tasks: any[] = [];
 
   mapFeatures: any = this.task.mapFeatures;
@@ -100,17 +101,22 @@ export class CreateTaskModalPage implements OnInit {
     public modalController: ModalController,
     public popoverController: PopoverController,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.type == "nav") {
-      if(this.isSinlgeMode){
+      if (this.isSinlgeMode) {
         this.tasks = cloneDeep(navtasks);
       } else {
-        this.tasks = cloneDeep(navtasksMultiplayers3);
+        switch (this.numPlayers) {
+          case 2: this.tasks = cloneDeep(navtasksMultiplayers2);
+            break;
+          case 3: this.tasks = cloneDeep(navtasksMultiplayers3);
+          break;
+        }
         // console.log("////navtasksMultiplayers: ", this.tasks)
       }
-      
+
     } else {
       this.tasks = cloneDeep(themetasks);
     }
