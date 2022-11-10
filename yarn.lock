@@ -1798,19 +1798,6 @@
   "resolved" "https://registry.npmjs.org/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.2.tgz"
   "version" "2.0.2"
 
-"@mapbox/mapbox-gl-draw@trygveaa/mapbox-gl-draw#dont-drag-with-multiple-fingers":
-  "resolved" "git+ssh://git@github.com/trygveaa/mapbox-gl-draw.git#a290cccf75a705dc54e9df432a1eea6ca9c53407"
-  "version" "1.2.0-dev"
-  dependencies:
-    "@mapbox/geojson-area" "^0.2.1"
-    "@mapbox/geojson-extent" "^0.3.2"
-    "@mapbox/geojson-normalize" "0.0.1"
-    "@mapbox/geojsonhint" "3.0.0"
-    "@mapbox/point-geometry" "0.1.0"
-    "hat" "0.0.3"
-    "lodash.isequal" "^4.2.0"
-    "xtend" "^4.0.1"
-
 "@mapbox/mapbox-gl-supported@^1.5.0":
   "integrity" "sha512-/PT1P6DNf7vjEEiPkVIRJkvibbqWtqnyGaBz3nfRdcxclNSnSdaLU5tfAgcD7I8Yt5i+L19s406YLl1koLnLbg=="
   "resolved" "https://registry.npmjs.org/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-1.5.0.tgz"
