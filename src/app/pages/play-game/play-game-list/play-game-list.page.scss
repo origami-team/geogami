@@ -6,7 +6,7 @@ ion-refresher {
   --overflow: hidden;
 }
 
-.segment{
+.segment {
   margin-left: 0.5%;
   margin-right: 0.5%;
   // border: solid 3px;
@@ -14,14 +14,14 @@ ion-refresher {
 
 // To capitalize only first letter
 ion-segment-button {
-  text-transform:none;
+  text-transform: none;
 }
 
-ion-card-header{
+ion-card-header {
   padding: 0.4rem;
 }
 
-ion-tab-bar{
+ion-tab-bar {
   height: 100%;
 }
 
@@ -45,4 +45,13 @@ ion-tab-bar{
 }
 
 
-  
+/* mutli-player mode */
+.numplayersCard {
+  padding: 1%;
+  color: red;
+  border: solid 1px;
+  border-color: red;
+  background: white;
+  border-radius: 5px;
+  margin: 0px;
+}

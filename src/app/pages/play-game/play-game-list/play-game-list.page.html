@@ -51,6 +51,7 @@
             </h2>
           </ion-label>
           <!-- <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+          <ion-label slot="end" *ngIf="game.isMultiplayerGame && game.isMultiplayerGame == true" class="numplayersCard"> {{game.numPlayers}} players</ion-label>
         </ion-item>
       </ion-card-header>
     </ion-card>
