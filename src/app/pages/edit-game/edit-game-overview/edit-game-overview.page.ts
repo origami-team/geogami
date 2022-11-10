@@ -32,6 +32,7 @@ import { ActivatedRoute } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 // For getting user role
 import { AuthService } from '../../../services/auth-service.service';
+import { UtilService } from "src/app/services/util.service";
 
 @Component({
   selector: "app-edit-game-overview",
@@ -65,6 +66,9 @@ export class EditGameOverviewPage implements AfterViewInit {
   userRole: String = "";
   user = this.authService.getUserValue();
 
+  errorMsg: String;
+
+
   constructor(
     public popoverController: PopoverController,
     public navCtrl: NavController,
@@ -73,7 +77,8 @@ export class EditGameOverviewPage implements AfterViewInit {
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private utilService: UtilService
   ) {
     this.lottieConfig = {
       path: "assets/lottie/astronaut.json",
@@ -450,6 +455,22 @@ export class EditGameOverviewPage implements AfterViewInit {
   }
 
   uploadGame() {
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      // show no connection notification
+      this.utilService.showAlertNoConnection();
+      // return;
+    }
+
+    // Remove extra spaces from game name
+    this.game.name = this.game.name.trim();
+
+    if(this.game.name == ""){
+      this.errorMsg = this.translate.instant("SaveGame.enterValidGameName")
+      this.showNameError = true;
+      return;
+    }
+
     this.gameFactory.addGameInformation({
       bbox: this.mapSection ? this.draw.getAll() : null,
       mapSectionVisible: this.mapSectionVisible,
@@ -473,6 +494,7 @@ export class EditGameOverviewPage implements AfterViewInit {
       .catch((e) => {
         console.error(e);
         this.showUpload = false;
+        this.errorMsg = this.translate.instant("SaveGame.gameNameExist");
         this.showNameError = true;
       });
 

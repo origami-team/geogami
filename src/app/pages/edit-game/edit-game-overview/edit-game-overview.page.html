@@ -12,7 +12,8 @@
   <div [className]="showUpload ? 'blur' : ''">
     <ion-card color="danger" *ngIf="showNameError">
       <ion-card-content>
-        {{ "SaveGame.gameNameExist" | translate }}
+        <ion-icon name="alert-circle-outline" size="small" style="vertical-align: middle;"></ion-icon> <ion-text style="vertical-align: middle;"> {{ errorMsg }}</ion-text> 
+        <!-- {{ "SaveGame.gameNameExist" | translate }} -->
       </ion-card-content>
     </ion-card>
 
