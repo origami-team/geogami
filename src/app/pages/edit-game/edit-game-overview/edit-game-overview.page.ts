@@ -82,9 +82,9 @@ export class EditGameOverviewPage implements AfterViewInit {
   ) {
     this.lottieConfig = {
       path: "assets/lottie/astronaut.json",
-      renderer: "canvas",
+      renderer: "svg",
       autoplay: true,
-      loop: true,
+      loop: true
     };
 
     this.draw = new MapboxDraw({
