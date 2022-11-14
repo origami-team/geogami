@@ -54,6 +54,7 @@
               (ionChange)="changeRole($event.detail.value, row.email)"
               [ngStyle]="{ 'background-color' : i%2 ? '#ecebeb' : ''}">
               <ion-select-option value="admin">admin</ion-select-option>
+              <ion-select-option value="contentAdmin">content admin</ion-select-option>
               <ion-select-option value="scholar">scholar</ion-select-option>
               <ion-select-option value="user">user</ion-select-option>
             </ion-select>

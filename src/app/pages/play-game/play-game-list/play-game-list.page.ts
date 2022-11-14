@@ -104,17 +104,6 @@ export class PlayGameListPage implements OnInit {
       this.gamesTemp = this.games;
       this.loading = true;
 
-      // mo meed for it
-      // Check game mode, to view mumber of players on each game card
-/*       if(this.games.isMultiplayerGame !== undefined && 
-        this.games.isMultiplayerGame == true){
-          this.isSinlgeMode = false;
-          this.numPlayers = this.games.numPlayers;
-
-          console.log("// single: ", this.isSinlgeMode, ",,,,num: ", this.numPlayers)
-        } */
-
-
       console.log("games: ", this.games);
     });
   }

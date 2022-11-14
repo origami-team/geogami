@@ -1,7 +1,3 @@
-
-
-
-
 import {
   Component,
   Input,
