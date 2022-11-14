@@ -9,6 +9,10 @@ import { NavigationOptions } from '@ionic/angular/providers/nav-controller';
 })
 export class CreateGameVirtualPage implements OnInit {
 
+  // Multiplyar impl.
+  isRealWorld: boolean = true;
+  isSinlgeMode: boolean = true;
+
   constructor(public navCtrl: NavController) { }
 
   ngOnInit() {
@@ -20,7 +24,14 @@ export class CreateGameVirtualPage implements OnInit {
 
   navigateEditVirtualGame() {
     // VR world
-    this.navCtrl.navigateForward(`edit-game-list/${"VRWorld"}`);
+    // this.navCtrl.navigateForward(`edit-game-list/${"VRWorld"}`);
+
+    let bundle = {
+      isRealWorld: false,
+      isSinlgeMode: true // unitil multi-player impl is added in VE
+    }
+    this.navCtrl.navigateForward(`edit-game-list/${JSON.stringify(bundle)}`);
+
   }
 
 }

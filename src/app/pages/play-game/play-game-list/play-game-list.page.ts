@@ -48,6 +48,8 @@ export class PlayGameListPage implements OnInit {
   game_place: any;
   game_numTasks: any;
 
+  loading = false;
+
   // no need for it
   // Multiplyar impl. (get values from retreived game data)
   /* isSinlgeMode: boolean = true;
@@ -100,6 +102,7 @@ export class PlayGameListPage implements OnInit {
         (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
       //this.gamesTemp = cloneDeep(this.games);
       this.gamesTemp = this.games;
+      this.loading = true;
 
       // mo meed for it
       // Check game mode, to view mumber of players on each game card

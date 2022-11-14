@@ -40,21 +40,23 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
+    <div *ngIf="loading">
+      <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
+        <ion-card-header>
+          <ion-item lines="none" color="secondary">
+            <ion-label>
+              <h2>
+                <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
+                </span> {{ game.name }}
+              </h2>
+            </ion-label>
+            <!-- <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+            <ion-label slot="end" *ngIf="game.isMultiplayerGame && game.isMultiplayerGame == true" class="numplayersCard"> {{game.numPlayers}} players</ion-label>
+          </ion-item>
+        </ion-card-header>
+      </ion-card>
 
-    <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
-      <ion-card-header>
-        <ion-item lines="none" color="secondary">
-          <ion-label>
-            <h2>
-              <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
-              </span> {{ game.name }}
-            </h2>
-          </ion-label>
-          <!-- <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
-          <ion-label slot="end" *ngIf="game.isMultiplayerGame && game.isMultiplayerGame == true" class="numplayersCard"> {{game.numPlayers}} players</ion-label>
-        </ion-item>
-      </ion-card-header>
-    </ion-card>
+    </div>
   </ng-container>
 
   <!-- show this message only when my games section is selected and there're no games were created by logged user -->
