@@ -17,15 +17,25 @@
   </ng-container>
   <!-- Task instruction - Multi-player mode -->
   <ng-container *ngIf="!isSinlgeMode">
-    <div *ngFor="let e of [].constructor(numPlayers); let i = index">
-      <h5>
-        {{ "CreateGame.taskInstruction" | translate }} - player ({{i+1}})
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5 style="margin-bottom: 10px;">
+        {{ "CreateGame.taskInstruction" | translate }}
         <ion-icon name="information-circle" (click)="
-          showPopover($event, 'Popover.taskInstruction')" *ngIf="i==0">
-        </ion-icon>
-      </h5>
-      <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
-    </div>
+            showPopover($event, 'Popover.taskInstruction')">
+            </ion-icon>
+          </h5>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5> Player ({{i+1}})</h5>
+            
+          <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+
   </ng-container>
   <!-- Markdown supported -->
   <ion-text color="medium">
@@ -43,7 +53,8 @@
 </div>
 
 <!-- Task instruction - NavViaPhoto -->
-<div *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION_PHOTO || (question[0]!=undefined && question[0].type== questionTypeEnum.NAV_INSTRUCTION_PHOTO)">
+<div
+  *ngIf="question.type == questionTypeEnum.NAV_INSTRUCTION_PHOTO || (question[0]!=undefined && question[0].type== questionTypeEnum.NAV_INSTRUCTION_PHOTO)">
   <!-- NavViaPhoto - Single-player mode -->
   <ng-container *ngIf="isSinlgeMode">
     <h5>

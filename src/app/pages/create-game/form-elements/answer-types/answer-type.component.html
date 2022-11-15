@@ -28,10 +28,10 @@
 
 <!-- Destination map view - Multi-player mode -->
 <ng-container *ngIf="!isSinlgeMode">
-  <div *ngFor="let e of [].constructor(numPlayers); let i = index">
-    <div *ngIf="answer[i].type == answerTypeEnum.POSITION">
+  <ion-card style="color:black;">
+    <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
       <h5>
-        {{ "CreateGame.destination" | translate }} - player ({{i+1}})
+        {{ "CreateGame.destination" | translate }}
         <ion-icon
           name="information-circle"
           (click)="
@@ -39,10 +39,15 @@
               $event,
               'Popover.flag'
             )
-          "
-          *ngIf="i==0"
-        >
+          ">
         </ion-icon>
+      </h5>
+    </ion-card-header>
+    <ion-card-content>
+  <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+    <div *ngIf="answer[i].type == answerTypeEnum.POSITION" >
+      <h5 style="margin-bottom: 10px;">
+        Player ({{i+1}})
       </h5>
       <app-map
         featureType="point"
@@ -53,8 +58,9 @@
         [allPlayersFeatures]="answer"
       ></app-map>
     </div>
-
   </div>
+  </ion-card-content>
+  </ion-card>
 </ng-container>
 <!-- Destination map view (End) -->
 
