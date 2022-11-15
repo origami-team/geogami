@@ -15,15 +15,16 @@
     <!-- segment start -->
     <ion-segment (ionChange)="segmentChanged($event.detail.value)" [(ngModel)]="selectedSegment" color="dark">
 
-      <ion-segment-button value="all">
-        <ion-label>{{ "PlayGame.allGames" | translate }}</ion-label>
+      <ion-segment-button value="{{ ( user ? 'all' : 'curated') }}">
+        <ion-label>{{ (user ? "PlayGame.allGames" : "PlayGame.curated") | translate }}</ion-label>
       </ion-segment-button>
 
-      <ion-segment-button value="curated">
-        <ion-label>{{ "PlayGame.curated" | translate }}</ion-label>
+      <ion-segment-button value="{{ (user ? 'curated' : 'all') }}">
+        <ion-label>{{ (user ? "PlayGame.curated" : "PlayGame.allGames") | translate }}</ion-label>
       </ion-segment-button>
 
-      <ion-segment-button value="mine" *ngIf="userRole != 'unloggedUser'">
+      <!-- <ion-segment-button value="mine" *ngIf="userRole != 'unloggedUser'"> -->
+      <ion-segment-button value="mine" *ngIf="user">
         <ion-label>{{ "PlayGame.myGames" | translate }}</ion-label>
       </ion-segment-button>
 
@@ -58,13 +59,13 @@
   </div>
 
 
-    <div #gamesMap class="map" *ngIf="!isListTabSelected"></div>
-    <!-- map markers popup -->
-    <div #popupContainer *ngIf="!isListTabSelected">
-      <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place"
-        [NumTasks]="game_numTasks">
-      </app-popup>
-    </div>
+  <div #gamesMap class="map" *ngIf="!isListTabSelected"></div>
+  <!-- map markers popup -->
+  <div #popupContainer *ngIf="!isListTabSelected">
+    <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place"
+      [NumTasks]="game_numTasks">
+    </app-popup>
+  </div>
 
 
 </ion-content>
