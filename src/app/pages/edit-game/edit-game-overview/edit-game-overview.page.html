@@ -93,7 +93,7 @@
   <div class="overlay success" *ngIf="showUpload">
     <h3 *ngIf="!showSuccess">{{ "SaveGame.sendingData" | translate }}</h3>
     <h3 *ngIf="showSuccess">{{ "SaveGame.gameSaved" | translate }}</h3>
-    <div lottie [options]="lottieConfig"></div>
+    <div lottie [options]="lottieConfig" style="width: 33rem; height: 20rem;"></div>
     <ion-button (click)="navigateHome()" [disabled]="!showSuccess">{{ "General.done" | translate }}</ion-button>
   </div>
 </ion-content>
