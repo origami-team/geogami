@@ -58,21 +58,19 @@
   </div>
 
 
-  <div #gamesMap class="map" ></div>
-  <!-- <div #gamesMap class="map" *ngIf="!isListTabSelected"></div> -->
-
-  <!-- <div #popupContainer *ngIf="!isListTabSelected && gamesWithLocs"> -->
-  <div #popupContainer>
-    <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place" [NumTasks]="game_numTasks">
-    </app-popup>
-  </div>
-
+    <div #gamesMap class="map" *ngIf="!isListTabSelected"></div>
+    <!-- map markers popup -->
+    <div #popupContainer *ngIf="!isListTabSelected">
+      <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place"
+        [NumTasks]="game_numTasks">
+      </app-popup>
+    </div>
 
 
 </ion-content>
 
+
 <ion-footer *ngIf="!isVirtualWorld">
-<!-- <ion-footer style="margin-bottom: 5%;"> -->
   <ion-toolbar>
     <ion-tabs>
       <ion-tab-bar slot="bottom">
