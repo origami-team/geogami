@@ -23,6 +23,8 @@ import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
 import { navtasksMultiplayers3 } from "src/app/models/navigation-tasks-multi_3_players";
 import { navtasksMultiplayers2 } from "src/app/models/navigation-tasks-multi_2_players";
+import { themetasksMultiplayers3 } from "src/app/models/theme-tasks-multi-3-players";
+import { themetasksMultiplayers2 } from "src/app/models/theme-tasks-multi-2-players";
 
 @Component({
   selector: "app-create-task-modal",
@@ -118,7 +120,16 @@ export class CreateTaskModalPage implements OnInit {
       }
 
     } else {
-      this.tasks = cloneDeep(themetasks);
+      if (this.isSinlgeMode) {
+        this.tasks = cloneDeep(themetasks);
+      } else {
+        switch (this.numPlayers) {
+          case 2: this.tasks = cloneDeep(themetasksMultiplayers2);
+            break;
+          case 3: this.tasks = cloneDeep(themetasksMultiplayers3);
+          break;
+        }
+      }
     }
 
     if (this.task == null) {
