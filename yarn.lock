@@ -1303,9 +1303,9 @@
     "xml2js" "^0.4.19"
 
 "@capacitor/core@^2.0.1", "@capacitor/core@^2.4.2", "@capacitor/core@latest":
-  "integrity" "sha512-ZPzXXQ4EPwR/ZhNDkmlxyzw4FvquIl/ROj8HMMM0MEd4xZfM8ulNGPIL6br9TWdlFLGBKq40eymPZjKaivGnig=="
-  "resolved" "https://registry.npmjs.org/@capacitor/core/-/core-2.4.7.tgz"
-  "version" "2.4.7"
+  "integrity" "sha512-WUkUnqqLtlEYn6tly8t6VR0ABlSVbXdlD/gBbYxx0P+gEqMF9b46uYb2YqyH+8HBDANzTweEySpLfhiSUvYS7w=="
+  "resolved" "https://registry.npmjs.org/@capacitor/core/-/core-2.5.0.tgz"
+  "version" "2.5.0"
   dependencies:
     "tslib" "^1.9.0"
 
@@ -1725,37 +1725,37 @@
     "schema-utils" "^2.7.0"
 
 "@mapbox/extent@0.4.0":
-  "integrity" "sha1-PlkfMuHww5gchkI597CsBuYQ+Kk="
+  "integrity" "sha512-MSoKw3qPceGuupn04sdaJrFeLKvcSETVLZCGS8JA9x6zXQL3FWiKaIXYIZEDXd5jpXpWlRxinCZIN49yRy0C9A=="
   "resolved" "https://registry.npmjs.org/@mapbox/extent/-/extent-0.4.0.tgz"
   "version" "0.4.0"
 
-"@mapbox/geojson-area@^0.2.1", "@mapbox/geojson-area@0.2.2":
+"@mapbox/geojson-area@^0.2.2", "@mapbox/geojson-area@0.2.2":
   "integrity" "sha1-GNeBSqNr8j+7zDefjiaiKSfevxA="
   "resolved" "https://registry.npmjs.org/@mapbox/geojson-area/-/geojson-area-0.2.2.tgz"
   "version" "0.2.2"
   dependencies:
     "wgs84" "0.0.0"
 
-"@mapbox/geojson-coords@0.0.0":
-  "integrity" "sha1-SEeluWBZZm5SeiE551412E/Vj1A="
-  "resolved" "https://registry.npmjs.org/@mapbox/geojson-coords/-/geojson-coords-0.0.0.tgz"
-  "version" "0.0.0"
+"@mapbox/geojson-coords@0.0.2":
+  "integrity" "sha512-YuVzpseee/P1T5BWyeVVPppyfmuXYHFwZHmybkqaMfu4BWlOf2cmMGKj2Rr92MwfSTOCSUA0PAsVGRG8akY0rg=="
+  "resolved" "https://registry.npmjs.org/@mapbox/geojson-coords/-/geojson-coords-0.0.2.tgz"
+  "version" "0.0.2"
   dependencies:
     "@mapbox/geojson-normalize" "0.0.1"
-    "geojson-flatten" "~0.2.1"
+    "geojson-flatten" "^1.0.4"
 
-"@mapbox/geojson-extent@^0.3.2":
-  "integrity" "sha1-ob2yAVr9DgMcGMPyn36yKeThlQ8="
-  "resolved" "https://registry.npmjs.org/@mapbox/geojson-extent/-/geojson-extent-0.3.2.tgz"
-  "version" "0.3.2"
+"@mapbox/geojson-extent@^1.0.0":
+  "integrity" "sha512-hh8LEO3djT4fqfr8sSC6wKt+p0TMiu+KOLMBUiFOyj+zGq7+IXwQGl0ppCVDkyzCewyd9LoGe9zAvDxXrLfhLw=="
+  "resolved" "https://registry.npmjs.org/@mapbox/geojson-extent/-/geojson-extent-1.0.1.tgz"
+  "version" "1.0.1"
   dependencies:
     "@mapbox/extent" "0.4.0"
-    "@mapbox/geojson-coords" "0.0.0"
+    "@mapbox/geojson-coords" "0.0.2"
     "rw" "~0.1.4"
     "traverse" "~0.6.6"
 
-"@mapbox/geojson-normalize@0.0.1":
-  "integrity" "sha1-HaHms6et060pkJsw9Dj2BYG3zYA="
+"@mapbox/geojson-normalize@^0.0.1", "@mapbox/geojson-normalize@0.0.1":
+  "integrity" "sha512-82V7YHcle8lhgIGqEWwtXYN5cy0QM/OHq3ypGhQTbvHR57DF0vMHMjjVSQKFfVXBe/yWCBZTyOuzvK7DFFnx5Q=="
   "resolved" "https://registry.npmjs.org/@mapbox/geojson-normalize/-/geojson-normalize-0.0.1.tgz"
   "version" "0.0.1"
 
@@ -1782,34 +1782,23 @@
   "resolved" "https://registry.npmjs.org/@mapbox/geojson-types/-/geojson-types-1.0.2.tgz"
   "version" "1.0.2"
 
-"@mapbox/geojsonhint@3.0.0":
-  "integrity" "sha512-zHcyh1rDHYnEBd6NvOWoeHLuvazlDkIjvz9MJx4cKwcKTlfrqgxVnTv1QLnVJnsSU5neJnhQJcgscR/Zl4uYgw=="
-  "resolved" "https://registry.npmjs.org/@mapbox/geojsonhint/-/geojsonhint-3.0.0.tgz"
-  "version" "3.0.0"
-  dependencies:
-    "concat-stream" "^1.6.1"
-    "jsonlint-lines" "1.7.1"
-    "minimist" "1.2.0"
-    "vfile" "^4.0.0"
-    "vfile-reporter" "^5.1.1"
-
 "@mapbox/jsonlint-lines-primitives@^2.0.2":
   "integrity" "sha1-zlblOfg1UrWNENZy6k1vya3HsjQ="
   "resolved" "https://registry.npmjs.org/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.2.tgz"
   "version" "2.0.2"
 
-"@mapbox/mapbox-gl-draw@trygveaa/mapbox-gl-draw#dont-drag-with-multiple-fingers":
-  "resolved" "git+ssh://git@github.com/trygveaa/mapbox-gl-draw.git#a290cccf75a705dc54e9df432a1eea6ca9c53407"
-  "version" "1.2.0-dev"
+"@mapbox/mapbox-gl-draw@^1.3.0":
+  "integrity" "sha512-B+KWK+dAgzLHMNyKVuuMRfjeSlQ77MhNLdfpQQpbp3pkhnrdmydDe3ixto1Ua78hktNut0WTrAaD8gYu4PVcjA=="
+  "resolved" "https://registry.npmjs.org/@mapbox/mapbox-gl-draw/-/mapbox-gl-draw-1.3.0.tgz"
+  "version" "1.3.0"
   dependencies:
-    "@mapbox/geojson-area" "^0.2.1"
-    "@mapbox/geojson-extent" "^0.3.2"
-    "@mapbox/geojson-normalize" "0.0.1"
-    "@mapbox/geojsonhint" "3.0.0"
-    "@mapbox/point-geometry" "0.1.0"
+    "@mapbox/geojson-area" "^0.2.2"
+    "@mapbox/geojson-extent" "^1.0.0"
+    "@mapbox/geojson-normalize" "^0.0.1"
+    "@mapbox/point-geometry" "^0.1.0"
     "hat" "0.0.3"
-    "lodash.isequal" "^4.2.0"
-    "xtend" "^4.0.1"
+    "lodash.isequal" "^4.5.0"
+    "xtend" "^4.0.2"
 
 "@mapbox/mapbox-gl-supported@^1.5.0":
   "integrity" "sha512-/PT1P6DNf7vjEEiPkVIRJkvibbqWtqnyGaBz3nfRdcxclNSnSdaLU5tfAgcD7I8Yt5i+L19s406YLl1koLnLbg=="
@@ -2261,11 +2250,6 @@
   "resolved" "https://registry.npmjs.org/@types/source-list-map/-/source-list-map-0.1.2.tgz"
   "version" "0.1.2"
 
-"@types/unist@^2.0.0", "@types/unist@^2.0.2":
-  "integrity" "sha512-FvUupuM3rlRsRtCN+fDudtmytGO6iHJuuRKS1Ss0pG5z8oX0diNEw94UEL7hgDbpN94rgaK5R7sWm6RrSkZuAQ=="
-  "resolved" "https://registry.npmjs.org/@types/unist/-/unist-2.0.3.tgz"
-  "version" "2.0.3"
-
 "@types/webpack-sources@^0.1.5":
   "integrity" "sha512-bvzMnzqoK16PQIC8AYHNdW45eREJQMd6WG/msQWX5V2+vZmODCOPb4TJcbgRljTZZTwTM4wUMcsI8FftNA7new=="
   "resolved" "https://registry.npmjs.org/@types/webpack-sources/-/webpack-sources-0.1.9.tgz"
@@ -2626,11 +2610,6 @@
   "version" "4.3.0"
   dependencies:
     "color-convert" "^2.0.1"
-
-"ansi-styles@~1.0.0":
-  "integrity" "sha1-yxAt8cVvUSPquLZ817mAJ6AnkXg="
-  "resolved" "https://registry.npmjs.org/ansi-styles/-/ansi-styles-1.0.0.tgz"
-  "version" "1.0.0"
 
 "ansi@^0.3.1":
   "integrity" "sha1-DELU+xcWDVqa8eSEus4cZpIsGyE="
@@ -3377,15 +3356,6 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
-"chalk@~0.4.0":
-  "integrity" "sha1-UZmj3c0MHv4jvAjBsCewYXbgxk8="
-  "resolved" "https://registry.npmjs.org/chalk/-/chalk-0.4.0.tgz"
-  "version" "0.4.0"
-  dependencies:
-    "ansi-styles" "~1.0.0"
-    "has-color" "~0.1.0"
-    "strip-ansi" "~0.1.0"
-
 "chardet@^0.7.0":
   "integrity" "sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA=="
   "resolved" "https://registry.npmjs.org/chardet/-/chardet-0.7.0.tgz"
@@ -3727,7 +3697,7 @@
   "resolved" "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   "version" "0.0.1"
 
-"concat-stream@^1.4.7", "concat-stream@^1.6.1", "concat-stream@~1.6.0":
+"concat-stream@^1.4.7", "concat-stream@~1.6.0":
   "integrity" "sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw=="
   "resolved" "https://registry.npmjs.org/concat-stream/-/concat-stream-1.6.2.tgz"
   "version" "1.6.2"
@@ -5567,13 +5537,10 @@
   "resolved" "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
   "version" "1.0.0-beta.2"
 
-"geojson-flatten@~0.2.1":
-  "integrity" "sha512-LiX6Jmot8adiIdZ/fthbcKKPOfWjTQchX/ggHnwMZ2e4b0I243N1ANUos0LvnzepTEsj0+D4fIJ5bKhBrWnAHA=="
-  "resolved" "https://registry.npmjs.org/geojson-flatten/-/geojson-flatten-0.2.4.tgz"
-  "version" "0.2.4"
-  dependencies:
-    "get-stdin" "^6.0.0"
-    "minimist" "1.2.0"
+"geojson-flatten@^1.0.4":
+  "integrity" "sha512-k/6BCd0qAt7vdqdM1LkLfAy72EsLDy0laNwX0x2h49vfYCiQkRc4PSra8DNEdJ10EKRpwEvDXMb0dBknTJuWpQ=="
+  "resolved" "https://registry.npmjs.org/geojson-flatten/-/geojson-flatten-1.1.1.tgz"
+  "version" "1.1.1"
 
 "geojson-numeric@0.2.1":
   "integrity" "sha512-rvItMp3W7pe16o2EQTnRw54v6WHdiE4bYjUsdr3FZskFb6oPC7gjLe4zginP+Wd1B/HLl2acTukfn16Lmwn7lg=="
@@ -5606,11 +5573,6 @@
     "function-bind" "^1.1.1"
     "has" "^1.0.3"
     "has-symbols" "^1.0.3"
-
-"get-stdin@^6.0.0":
-  "integrity" "sha512-jp4tHawyV7+fkkSKyvjuLZswblUtz+SQKzSWnBbii16BuZksJlU1wuBYXY75r+duh/llF1ur6oNwi+2ZzjKZ7g=="
-  "resolved" "https://registry.npmjs.org/get-stdin/-/get-stdin-6.0.0.tgz"
-  "version" "6.0.0"
 
 "get-stream@^4.0.0":
   "integrity" "sha512-GMat4EJ5161kIy2HevLlr4luNjBgvmj413KaQA7jt4V8B4RDsfpHk7WQ9GVqfYyyx8OS/L66Kox+rJRNklLK7w=="
@@ -5799,11 +5761,6 @@
   dependencies:
     "isarray" "2.0.1"
 
-"has-color@~0.1.0":
-  "integrity" "sha1-ZxRKUmDDT8PMpnfQQdr1L+e3iy8="
-  "resolved" "https://registry.npmjs.org/has-color/-/has-color-0.1.7.tgz"
-  "version" "0.1.7"
-
 "has-cors@1.1.0":
   "integrity" "sha1-XkdHk/fqmEPRu5nCPu9J/xJv/zk="
   "resolved" "https://registry.npmjs.org/has-cors/-/has-cors-1.1.0.tgz"
@@ -5882,7 +5839,7 @@
     "function-bind" "^1.1.1"
 
 "hat@0.0.3":
-  "integrity" "sha1-uwFKnmSzeIrtgAWRdBPU/z1QLYo="
+  "integrity" "sha512-zpImx2GoKXy42fVDSEad2BPKuSQdLcqsCYa48K3zHSzM/ugWuYjLDr8IXxpVuL7uCLHw56eaiLxCRthhOzf5ug=="
   "resolved" "https://registry.npmjs.org/hat/-/hat-0.0.3.tgz"
   "version" "0.0.3"
 
@@ -6378,11 +6335,6 @@
   "integrity" "sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w=="
   "resolved" "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
   "version" "1.1.6"
-
-"is-buffer@^2.0.0":
-  "integrity" "sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ=="
-  "resolved" "https://registry.npmjs.org/is-buffer/-/is-buffer-2.0.5.tgz"
-  "version" "2.0.5"
 
 "is-callable@^1.1.3", "is-callable@^1.1.4", "is-callable@^1.2.6":
   "integrity" "sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA=="
@@ -6959,14 +6911,6 @@
   optionalDependencies:
     "graceful-fs" "^4.1.6"
 
-"jsonlint-lines@1.7.1":
-  "integrity" "sha1-UH3mgNP7jEvhZBzFfW9nnynxeP8="
-  "resolved" "https://registry.npmjs.org/jsonlint-lines/-/jsonlint-lines-1.7.1.tgz"
-  "version" "1.7.1"
-  dependencies:
-    "JSV" ">= 4.0.x"
-    "nomnom" ">= 1.5.x"
-
 "jsonparse@^1.3.1":
   "integrity" "sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg=="
   "resolved" "https://registry.npmjs.org/jsonparse/-/jsonparse-1.3.1.tgz"
@@ -6994,11 +6938,6 @@
     "extsprintf" "1.3.0"
     "json-schema" "0.4.0"
     "verror" "1.10.0"
-
-"JSV@>= 4.0.x":
-  "integrity" "sha1-0Hf2glVx+CEy+d/67Vh7QCn+/1c="
-  "resolved" "https://registry.npmjs.org/JSV/-/JSV-4.0.2.tgz"
-  "version" "4.0.2"
 
 "jszip@^3.1.3":
   "integrity" "sha512-ghL0tz1XG9ZEmRMcEN2vt7xabrDdqHHeykgARpmZ0BiIctWxM47Vt63ZO2dnp4QYt/xJVLLy5Zv1l/xRdh2byg=="
@@ -7361,8 +7300,8 @@
   "resolved" "https://registry.npmjs.org/lodash.isarray/-/lodash.isarray-3.0.4.tgz"
   "version" "3.0.4"
 
-"lodash.isequal@^4.2.0":
-  "integrity" "sha1-QVxEePK8wwEgwizhDtMib30+GOA="
+"lodash.isequal@^4.5.0":
+  "integrity" "sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ=="
   "resolved" "https://registry.npmjs.org/lodash.isequal/-/lodash.isequal-4.5.0.tgz"
   "version" "4.5.0"
 
@@ -8072,14 +8011,6 @@
   "integrity" "sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg=="
   "resolved" "https://registry.npmjs.org/node-releases/-/node-releases-2.0.6.tgz"
   "version" "2.0.6"
-
-"nomnom@>= 1.5.x":
-  "integrity" "sha1-IVH3Ikcrp55Qp2/BJbuMjy5Nwqc="
-  "resolved" "https://registry.npmjs.org/nomnom/-/nomnom-1.8.1.tgz"
-  "version" "1.8.1"
-  dependencies:
-    "chalk" "~0.4.0"
-    "underscore" "~1.6.0"
 
 "nopt@^4.0.1":
   "integrity" "sha512-CvaGwVMztSMJLOeXPrez7fyfObdZqNUK1cPAEzLHrTybIua9pMdmmPR5YwtfNftIOMv3DPUhFaxsZMNTQO20Kg=="
@@ -9984,7 +9915,7 @@
   "resolved" "https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.4.tgz"
   "version" "1.1.4"
 
-"repeat-string@^1.5.0", "repeat-string@^1.6.1":
+"repeat-string@^1.6.1":
   "integrity" "sha1-jcrkcOHIirwtYA//Sndihtp15jc="
   "resolved" "https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz"
   "version" "1.6.1"
@@ -10190,7 +10121,7 @@
   "version" "1.3.3"
 
 "rw@~0.1.4":
-  "integrity" "sha1-SQPL2AJIrg7eaFv1j9I2p6mymj4="
+  "integrity" "sha512-vSj3D96kMcjNyqPcp65wBRIDImGSrUuMxngNNxvw8MQaO+aQ6llzRPH7XcJy5zrpb3wU++045+Uz/IDIM684iw=="
   "resolved" "https://registry.npmjs.org/rw/-/rw-0.1.4.tgz"
   "version" "0.1.4"
 
@@ -11107,7 +11038,15 @@
     "is-fullwidth-code-point" "^1.0.0"
     "strip-ansi" "^3.0.0"
 
-"string-width@^1.0.2 || 2 || 3 || 4", "string-width@^2.0.0", "string-width@^2.1.0", "string-width@^2.1.1":
+"string-width@^1.0.2 || 2 || 3 || 4", "string-width@^2.1.0", "string-width@^2.1.1":
+  "integrity" "sha512-nOqH59deCq9SRHlxq1Aw85Jnt4w6KvLKqWVik6oA9ZklXLNIOlqg4F2yrT1MVaTjAqvVwdfeZ7w7aCvJD7ugkw=="
+  "resolved" "https://registry.npmjs.org/string-width/-/string-width-2.1.1.tgz"
+  "version" "2.1.1"
+  dependencies:
+    "is-fullwidth-code-point" "^2.0.0"
+    "strip-ansi" "^4.0.0"
+
+"string-width@^2.0.0":
   "integrity" "sha512-nOqH59deCq9SRHlxq1Aw85Jnt4w6KvLKqWVik6oA9ZklXLNIOlqg4F2yrT1MVaTjAqvVwdfeZ7w7aCvJD7ugkw=="
   "resolved" "https://registry.npmjs.org/string-width/-/string-width-2.1.1.tgz"
   "version" "2.1.1"
@@ -11199,11 +11138,6 @@
   "version" "6.0.1"
   dependencies:
     "ansi-regex" "^5.0.1"
-
-"strip-ansi@~0.1.0":
-  "integrity" "sha1-OeipjQRNFQZgq+SmgIrPcLt7yZE="
-  "resolved" "https://registry.npmjs.org/strip-ansi/-/strip-ansi-0.1.1.tgz"
-  "version" "0.1.1"
 
 "strip-bom@^2.0.0":
   "integrity" "sha512-kwrX1y7czp1E69n2ajbG65mIo9dqvJ+8aBQXOGVxqwvNbsXdFM6Lq37dLAY3mknUwru8CfcCbfOLL/gMo+fi3g=="
@@ -11305,7 +11239,7 @@
   "resolved" "https://registry.npmjs.org/supports-color/-/supports-color-2.0.0.tgz"
   "version" "2.0.0"
 
-"supports-color@^5.0.0", "supports-color@^5.3.0":
+"supports-color@^5.3.0":
   "integrity" "sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow=="
   "resolved" "https://registry.npmjs.org/supports-color/-/supports-color-5.5.0.tgz"
   "version" "5.5.0"
@@ -11609,9 +11543,9 @@
     "punycode" "^2.1.0"
 
 "traverse@~0.6.6":
-  "integrity" "sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc="
-  "resolved" "https://registry.npmjs.org/traverse/-/traverse-0.6.6.tgz"
-  "version" "0.6.6"
+  "integrity" "sha512-/y956gpUo9ZNCb99YjxG7OaslxZWHfCHAUUfshwqOXmxUIvqLjVO581BT+gM59+QV9tFe6/CGG53tsA1Y7RSdg=="
+  "resolved" "https://registry.npmjs.org/traverse/-/traverse-0.6.7.tgz"
+  "version" "0.6.7"
 
 "tree-kill@^1.2.2", "tree-kill@1.2.2":
   "integrity" "sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A=="
@@ -11764,11 +11698,6 @@
   "resolved" "https://registry.npmjs.org/underscore/-/underscore-1.13.6.tgz"
   "version" "1.13.6"
 
-"underscore@~1.6.0":
-  "integrity" "sha512-z4o1fvKUojIWh9XuaVLUDdf86RQiq13AC1dmHbTpoyuu+bquHms76v16CjycCbec87J7z0k//SiQVk0sMdFmpQ=="
-  "resolved" "https://registry.npmjs.org/underscore/-/underscore-1.6.0.tgz"
-  "version" "1.6.0"
-
 "unicode-canonical-property-names-ecmascript@^2.0.0":
   "integrity" "sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ=="
   "resolved" "https://registry.npmjs.org/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-2.0.0.tgz"
@@ -11820,13 +11749,6 @@
   "version" "2.0.2"
   dependencies:
     "imurmurhash" "^0.1.4"
-
-"unist-util-stringify-position@^2.0.0":
-  "integrity" "sha512-3faScn5I+hy9VleOq/qNbAd6pAx7iH5jYBMS9I1HgQVijz/4mv5Bvw5iw1sC/90CODiKo81G/ps8AJrISn687g=="
-  "resolved" "https://registry.npmjs.org/unist-util-stringify-position/-/unist-util-stringify-position-2.0.3.tgz"
-  "version" "2.0.3"
-  dependencies:
-    "@types/unist" "^2.0.2"
 
 "universalify@^0.1.0":
   "integrity" "sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg=="
@@ -11982,46 +11904,6 @@
     "assert-plus" "^1.0.0"
     "core-util-is" "1.0.2"
     "extsprintf" "^1.2.0"
-
-"vfile-message@^2.0.0":
-  "integrity" "sha512-DjssxRGkMvifUOJre00juHoP9DPWuzjxKuMDrhNbk2TdaYYBNMStsNhEOt3idrtI12VQYM/1+iM0KOzXi4pxwQ=="
-  "resolved" "https://registry.npmjs.org/vfile-message/-/vfile-message-2.0.4.tgz"
-  "version" "2.0.4"
-  dependencies:
-    "@types/unist" "^2.0.0"
-    "unist-util-stringify-position" "^2.0.0"
-
-"vfile-reporter@^5.1.1":
-  "integrity" "sha512-b15sTuss1wOPWVlyWOvu+n6wGJ/eTYngz3uqMLimQvxZ+Q5oFQGYZZP1o3dR9sk58G5+wej0UPCZSwQBX/mzrQ=="
-  "resolved" "https://registry.npmjs.org/vfile-reporter/-/vfile-reporter-5.1.2.tgz"
-  "version" "5.1.2"
-  dependencies:
-    "repeat-string" "^1.5.0"
-    "string-width" "^2.0.0"
-    "supports-color" "^5.0.0"
-    "unist-util-stringify-position" "^2.0.0"
-    "vfile-sort" "^2.1.2"
-    "vfile-statistics" "^1.1.0"
-
-"vfile-sort@^2.1.2":
-  "integrity" "sha512-tAyUqD2R1l/7Rn7ixdGkhXLD3zsg+XLAeUDUhXearjfIcpL1Hcsj5hHpCoy/gvfK/Ws61+e972fm0F7up7hfYA=="
-  "resolved" "https://registry.npmjs.org/vfile-sort/-/vfile-sort-2.2.2.tgz"
-  "version" "2.2.2"
-
-"vfile-statistics@^1.1.0":
-  "integrity" "sha512-lXhElVO0Rq3frgPvFBwahmed3X03vjPF8OcjKMy8+F1xU/3Q3QU3tKEDp743SFtb74PdF0UWpxPvtOP0GCLheA=="
-  "resolved" "https://registry.npmjs.org/vfile-statistics/-/vfile-statistics-1.1.4.tgz"
-  "version" "1.1.4"
-
-"vfile@^4.0.0":
-  "integrity" "sha512-O6AE4OskCG5S1emQ/4gl8zK586RqA3srz3nfK/Viy0UPToBc5Trp9BVFb1u0CjsKrAWwnpr4ifM/KBXPWwJbCA=="
-  "resolved" "https://registry.npmjs.org/vfile/-/vfile-4.2.1.tgz"
-  "version" "4.2.1"
-  dependencies:
-    "@types/unist" "^2.0.0"
-    "is-buffer" "^2.0.0"
-    "unist-util-stringify-position" "^2.0.0"
-    "vfile-message" "^2.0.0"
 
 "visualwidth@~0.0.1":
   "integrity" "sha512-mO7Gjg3o47WC+vMtBgNiupdhVnKYxMZXuZJ+ctT3bGPd1JlzWM4X7DGHN6OiYaT5RrcdJ1Ls/hasM4TzoHbZRw=="
@@ -12494,7 +12376,7 @@
   "resolved" "https://registry.npmjs.org/xregexp/-/xregexp-2.0.0.tgz"
   "version" "2.0.0"
 
-"xtend@^4.0.1", "xtend@>=4.0.0 <4.1.0-0":
+"xtend@^4.0.2", "xtend@>=4.0.0 <4.1.0-0":
   "integrity" "sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ=="
   "resolved" "https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz"
   "version" "4.0.2"
