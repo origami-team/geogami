@@ -6,6 +6,7 @@ import { GamesService } from '../../../services/games.service';
 
 // VR world
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/services/auth-service.service';
 
 @Component({
   selector: 'app-edit-game-list',
@@ -20,10 +21,15 @@ export class EditGameListPage implements OnInit {
   // VR world
   isVirtualWorld: boolean = false;
 
+  // to show star icon for content admin
+  user = this.authService.getUserValue();
+  userRole: String = "user";
+
   constructor(
     public navCtrl: NavController,
     private gamesService: GamesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
@@ -34,6 +40,11 @@ export class EditGameListPage implements OnInit {
         this.isVirtualWorld = true;
       }
     });
+
+    // Check user role
+    if (this.user) {
+      this.userRole = this.user['roles'][0];
+    }
 
     this.gamesService.getUserGames().then((res) => {
       // Get either real or VE agmes based on selected environment 
