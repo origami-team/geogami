@@ -99,7 +99,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
-      renderer: "canvas",
+      renderer: "svg",
       autoplay: true,
       loop: true,
     };

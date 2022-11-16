@@ -32,7 +32,7 @@ export class PlayGameListPage implements OnInit {
   isVirtualWorld: boolean = false;
   // To be able to update games list and switch between segments 
   searchText: string = "";
-  selectedSegment: string = "all";
+  selectedSegment: string = "curated";
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
   user = this.authService.getUserValue();
@@ -74,14 +74,15 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
+    // Check if user
+    if (this.user) {
+      this.selectedSegment = "all"
+    }
+
     // Get games data from server
     this.getGamesData();
 
-    // Get user role
-    if (this.user) {
-      this.userRole = this.user['roles'][0];
-    }
-
+    
   }
 
   ngAfterViewInit(): void {
@@ -95,7 +96,10 @@ export class PlayGameListPage implements OnInit {
       //this.gamesTemp = cloneDeep(this.games);
       this.gamesTemp = this.games;
 
-      //console.log("games: ", this.games);
+      if(this.selectedSegment == "curated"){
+        // Filter data of selected segment
+        this.segmentChanged(this.selectedSegment)
+      }
     });
   }
 
@@ -241,15 +245,7 @@ export class PlayGameListPage implements OnInit {
         source: 'earthquakes',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#51bbd6' /* [
-            'step',
-            ['get', 'point_count'],
-            '#51bbd6',
-            100,
-            '#f1f075',
-            750,
-            '#f28cb1'
-          ]*/,
+          'circle-color': '#51bbd6',
           'circle-radius': [
             'step',
             ['get', 'point_count'],
@@ -259,7 +255,6 @@ export class PlayGameListPage implements OnInit {
             20, 30,
             25
           ],
-          //'circle-opacity': 0.9,
           "circle-opacity": 0,
           "circle-stroke-width": 12,
           "circle-stroke-color": '#51bbd6',
@@ -375,7 +370,7 @@ export class PlayGameListPage implements OnInit {
         // Get either real or VE agmes based on selected environment 
         this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
 
-        console.log("gamesWithLocs: ", this.gamesWithLocs);
+        // console.log("gamesWithLocs: ", this.gamesWithLocs);
 
         this.convertToGeoJson()
       });
