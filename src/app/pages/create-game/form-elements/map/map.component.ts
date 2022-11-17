@@ -144,7 +144,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         this._onChange(this.feature);
 
         // Temporary show loc of selected flag
-        console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
+        // console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
       }
 
       if (this.featureType == 'direction') {

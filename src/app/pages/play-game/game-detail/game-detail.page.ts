@@ -53,7 +53,7 @@ export class GameDetailPage implements OnInit {
           }
         })
         .finally(() => {
-          console.log(this.game);
+          // console.log(this.game);
           // this.activities = this.game.activities
           // this.points = this.activities[0].points
           // if(this.mapContainer.nativeElement) {
@@ -88,7 +88,7 @@ export class GameDetailPage implements OnInit {
   // }
 
   pointClick(point) {
-    console.log(point);
+    // console.log(point);
   }
 
   startGame() {

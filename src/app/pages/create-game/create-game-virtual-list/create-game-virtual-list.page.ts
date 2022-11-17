@@ -63,15 +63,15 @@ export class CreateGameVirtualListPage implements OnInit {
 
     this.gameFactory.getGame().then((game) => (this.game = game));
 
-    console.log("this.gameFactory.game: ",this.gameFactory.game);
+    // console.log("this.gameFactory.game: ",this.gameFactory.game);
   }
 
   ionViewWillEnter() {
   }
 
   async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
-    // console.log(task);
-    console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
+    // // console.log(task);
+    // console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -87,7 +87,7 @@ export class CreateGameVirtualListPage implements OnInit {
 
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    // console.log("data:", data);
+    // // console.log("data:", data);
     if (data != undefined) {
       if (task != null) {
         if (!task._id) {
@@ -105,28 +105,28 @@ export class CreateGameVirtualListPage implements OnInit {
   addTaskToGame(task) {
     this.game = this.gameFactory.addTask(task);
 
-    console.log("this.game.tasks: ",this.game.tasks);
+    // console.log("this.game.tasks: ",this.game.tasks);
   }
 
   deleteTask(taskID) {
-    console.log("deleting taskID:", taskID);
+    // console.log("deleting taskID:", taskID);
     this.game = this.gameFactory.removeTask(taskID);
   }
 
   updateTask(taskID, task) {
-    console.log("updating taskID:", taskID);
+    // console.log("updating taskID:", taskID);
     this.game = this.gameFactory.updateTask(taskID, task);
-    console.log("this.game:", this.game);
+    // console.log("this.game:", this.game);
   }
 
   doReorder(ev: any) {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
-    console.log("Dragged from index", ev.detail.from, "to", ev.detail.to);
+    // console.log("Dragged from index", ev.detail.from, "to", ev.detail.to);
 
     // Before complete is called with the items they will remain in the
     // order before the drag
-    console.log("Before complete", this.game.tasks);
+    // console.log("Before complete", this.game.tasks);
 
     // Finish the reorder and position the item in the DOM based on
     // where the gesture ended. Update the items variable to the
@@ -135,12 +135,12 @@ export class CreateGameVirtualListPage implements OnInit {
 
     this.gameFactory.applyReorder(this.game.tasks);
 
-    console.log(this.game.tasks);
+    // console.log(this.game.tasks);
 
     ev.detail.complete(true);
 
     // After complete is called the items will be in the new order
-    console.log("After complete", this.game.tasks);
+    // console.log("After complete", this.game.tasks);
   }
 
   toggleReorder() {
@@ -148,7 +148,7 @@ export class CreateGameVirtualListPage implements OnInit {
   }
 
   navigateToOverview() {
-    console.log("navigate");
+    // console.log("navigate");
 
     let bundle = {
       isVRWorld: this.isVirtualWorld,
