@@ -61,7 +61,7 @@ export class GamesOverviewPage implements OnInit {
   }
 
   playGame(game) {
-    console.log('Playing ', game);
+    // console.log('Playing ', game);
   }
 
 

@@ -333,7 +333,7 @@
   <ion-card class="overlay success" *ngIf="staticShowSuccess">
     <h3>{{ "PlayGame.congratulations" | translate }}</h3>
     <p>{{ "PlayGame.finished" | translate }}</p>
-    <div lottie [options]="lottieConfig" style="width: 33rem; height: 20rem;"></div>
+    <div class="lottie-style" lottie [options]="lottieConfig"></div>
     <ion-button
       color="primary"
       (click)="navigateHome()"

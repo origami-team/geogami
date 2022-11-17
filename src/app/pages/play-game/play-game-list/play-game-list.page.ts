@@ -124,7 +124,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   gameClick(game: any) {
-    console.log(game);
+    // console.log(game);
     this.navCtrl.navigateForward(`play-game/game-detail/${game._id}`);
   }
 
@@ -132,7 +132,7 @@ export class PlayGameListPage implements OnInit {
   segmentChanged(segVal) {  //--- ToDo check duplicate code and create a func for it
     // if mine is selected
     if (segVal == "mine") {
-      // console.log("mine"); //temp
+      // // console.log("mine"); //temp
       this.games = this.gamesTemp.filter(game => game.user == this.user['_id']);
 
       // to update shown games based on search phrase
@@ -155,7 +155,7 @@ export class PlayGameListPage implements OnInit {
       }
     }
     else if (segVal == "curated") { // if all is selected
-      //console.log("curated");
+      //// console.log("curated");
       this.games = this.gamesTemp.filter(game => game.isCuratedGame == true);
 
       // to update shown games based on search phrase
@@ -321,7 +321,7 @@ export class PlayGameListPage implements OnInit {
         this.game_name = e.features[0].properties.name;
         this.game_place = e.features[0].properties.place;
         this.game_numTasks = e.features[0].properties.task_num;
-        //console.log('properties: ', e.features[0].properties)
+        //// console.log('properties: ', e.features[0].properties)
 
         // Ensure that if the map is zoomed out such that
         // multiple copies of the feature are visible, the
@@ -367,13 +367,13 @@ export class PlayGameListPage implements OnInit {
       this.isListTabSelected = false;
 
       if(!this.map){
-        // console.log("isListTabSelected: ", this.isListTabSelected);
+        // // console.log("isListTabSelected: ", this.isListTabSelected);
         // get minimal games with locs
         this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
           // Get either real or VE agmes based on selected environment 
           this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
   
-          // console.log("gamesWithLocs: ", this.gamesWithLocs);
+          // // console.log("gamesWithLocs: ", this.gamesWithLocs);
   
           this.convertToGeoJson()
         });
@@ -386,14 +386,14 @@ export class PlayGameListPage implements OnInit {
   openListTap() {
     if (!this.isListTabSelected) {
       this.isListTabSelected = true;
-      // console.log("isListTabSelected: ", this.isListTabSelected);
+      // // console.log("isListTabSelected: ", this.isListTabSelected);
     }
   }
 
   async convertToGeoJson() {
     let convertedData = []
 
-    //console.log("convertedData: ", convertedData)
+    //// console.log("convertedData: ", convertedData)
 
     this.gamesWithLocs.forEach(game => {
       if (game.coords) {
@@ -413,14 +413,14 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
-    console.log("convertedData: ", convertedData)
+    // console.log("convertedData: ", convertedData)
     this.showGamesOnMap(convertedData);
   }
 
   showGamesOnMap(gamesListGeoJson) {
 
     if (!this.map) {
-      console.log("Create map ////////////");
+      // console.log("Create map ////////////");
       this.initMap(gamesListGeoJson);
     }
     // no need for it since we can hide the map
@@ -430,7 +430,7 @@ export class PlayGameListPage implements OnInit {
       this.map.removeLayer(`clusters`);
       this.map.removeSource("clusters");
 
-      console.log("Else ////////////");
+      // console.log("Else ////////////");
 
       this.map.addSource('clusters', {
         'type': 'geojson',

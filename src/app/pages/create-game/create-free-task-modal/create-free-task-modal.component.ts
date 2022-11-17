@@ -71,7 +71,7 @@ export class CreateFreeTaskModalComponent implements OnInit {
         showMarker: true,
       };
 
-      console.log(this.task);
+      // console.log(this.task);
 
       // todo --- check it out
       // this.settingsChange();

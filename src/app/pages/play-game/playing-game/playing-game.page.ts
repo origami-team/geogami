@@ -733,7 +733,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   onMapClick(e, mapType) {
-    console.log(e);
+    // console.log(e);
     let clickDirection;
 
     if (this.task.answer.type == AnswerType.MAP_POINT) {
@@ -1056,7 +1056,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isVirtualWorld,
       this.initialAvatarLoc
     );
-    console.log(this.game);
+    // console.log(this.game);
 
     this.trackerService.addEvent({
       type: "INIT_GAME",
@@ -1069,7 +1069,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       // you are leaving the game area warning
       if (this.game.geofence) {
-        console.log("creating the subscription");
+        // console.log("creating the subscription");
         this.geolocationService
           .initGeofence(this.game.bbox.features[0])
           .subscribe((inGameBbox) => {
@@ -1113,7 +1113,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initTask() {
     this.panelMinimized = false;
 
-    console.log("Current task: ", this.task);
+    // console.log("Current task: ", this.task);
 
     this.trackerService.setTask(this.task);
 
@@ -1224,7 +1224,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       try {
         await this.zoomBounds();
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
 
@@ -1318,7 +1318,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.DRAW) {
-      console.log(" tasks info: ", this.task)
+      // console.log(" tasks info: ", this.task)
       if (this.task.settings.drawPointOnly !== undefined && this.task.settings.drawPointOnly) {
         this.DrawControl = this.DrawControl_point;
       } else {
@@ -1466,7 +1466,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async onOkClicked() {
 
-    console.log("onOkClicked//////")
+    // console.log("onOkClicked//////")
     const isCorrect = true;
     const answer: any = {};
 
@@ -1884,7 +1884,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   startGame() {
-    console.log(this.playersNames);
+    // console.log(this.playersNames);
     this.initGame();
     this.showPlayersNames = false;
   }

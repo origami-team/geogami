@@ -28,7 +28,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
+        // console.log(changes);
         this.questionChange.emit(changes.question.currentValue);
     }
 
@@ -38,7 +38,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     async showPopover(ev: any, key: string) {
         let text = this.translate.instant(key);
-        console.log(ev);
+        // console.log(ev);
         const popover = await this.popoverController.create({
             component: PopoverComponent,
             event: ev,
