@@ -3,5 +3,6 @@
     <string name="app_name">GeoGami</string>
     <string name="title_activity_main">GeoGami</string>
     <string name="package_name">com.ifgi.geogami</string>
+    <string name="fileprovider_authority">com.ifgi.geogami.fileprovider</string>
     <string name="custom_url_scheme">com.ifgi.geogami</string>
 </resources>
