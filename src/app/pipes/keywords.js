@@ -1,14 +1,14 @@
 export const mappings = [
   {
-    text: "Fahne",
-    tag: `<ion-text color="primary">Fahne<ion-chip color="primary">
-      <ion-icon name="flag"></ion-icon>
-    </ion-chip>
-  </ion-text>`,
-  },
-  {
     text: "Flag",
     tag: `<ion-text color="primary">Flag<ion-chip color="primary">
+      <ion-icon name="flag"></ion-icon>
+    </ion-chip>
+  </ion-text>`, 
+  },
+  {
+    text: "Fahne",
+    tag: `<ion-text color="primary">Fahne<ion-chip color="primary">
       <ion-icon name="flag"></ion-icon>
     </ion-chip>
   </ion-text>`,
