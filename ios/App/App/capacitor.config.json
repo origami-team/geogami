@@ -8,7 +8,5 @@
     "iosScheme": "https",
     "androidScheme": "https"
   },
-  "ios": {
-    "hideLogs": true
-  }
+  "hideLogs": true
 }
