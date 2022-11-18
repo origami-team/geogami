@@ -114,7 +114,7 @@ export class CreateTaskModalPage implements OnInit {
           case 2: this.tasks = cloneDeep(navtasksMultiplayers2);
             break;
           case 3: this.tasks = cloneDeep(navtasksMultiplayers3);
-          break;
+            break;
         }
         // console.log("////navtasksMultiplayers: ", this.tasks)
       }
@@ -127,7 +127,7 @@ export class CreateTaskModalPage implements OnInit {
           case 2: this.tasks = cloneDeep(themetasksMultiplayers2);
             break;
           case 3: this.tasks = cloneDeep(themetasksMultiplayers3);
-          break;
+            break;
         }
       }
     }
@@ -478,6 +478,20 @@ export class CreateTaskModalPage implements OnInit {
     ) {
       if (this.viewDirectionSetPosition == false) {
         this.task.question.direction.position = undefined;
+      }
+    }
+
+    // set audio if user chose all players have same audio
+    if (!this.isSinlgeMode) {
+      if (this.task.question[0].isAudioUnique) {
+        console.log("/// same questions ");
+        if (this.numPlayers == 3) {
+          this.task.question[2].audio = this.task.question[1].audio = this.task.question[0].audio;
+        } else {
+          this.task.question[1].audio = this.task.question[0].audio;
+        }
+      } else {
+        console.log("/// not equal questions");
       }
     }
 

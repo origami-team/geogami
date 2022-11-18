@@ -20,36 +20,35 @@
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
         <h5 style="margin-bottom: 10px;">
-        {{ "CreateGame.taskInstruction" | translate }}
-        <ion-icon name="information-circle" (click)="
+          {{ "CreateGame.taskInstruction" | translate }}
+          <ion-icon name="information-circle" (click)="
             showPopover($event, 'Popover.taskInstruction')">
-            </ion-icon>
-          </h5>
+          </ion-icon>
+        </h5>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content style="padding-bottom: 0;">
         <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
           <h5> Player ({{i+1}})</h5>
-            
+
           <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
         </div>
       </ion-card-content>
-    </ion-card>
 
-
-  </ng-container>
-  <!-- Markdown supported -->
-  <ion-text color="medium">
-    <p>
-      {{ "CreateGame.markdownSupported" | translate }}
-      <ion-icon name="information-circle" (click)="
+      <!-- Markdown supported -->
+      <ion-text color="medium">
+        <p> &nbsp;
+          {{ "CreateGame.markdownSupported" | translate }}
+          <ion-icon name="information-circle" (click)="
           showPopover(
             $event,
-            'Popover.markdown'
-          )
-        ">
-      </ion-icon>
-    </p>
-  </ion-text>
+            'Popover.markdown')">
+          </ion-icon>
+        </p>
+      </ion-text>
+    </ion-card>
+
+  </ng-container>
+
 </div>
 
 <!-- Task instruction - NavViaPhoto -->
@@ -95,6 +94,7 @@
       <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
     </div>
   </ng-container>
+
   <!-- Markdown supported -->
   <ion-text color="medium">
     <p>
@@ -111,19 +111,53 @@
 </div>
 
 <!-- Audio message -->
-<div>
-  <h5>
-    {{ "CreateGame.audioMessage" | translate }}
-    <ion-icon name="information-circle" (click)="
+<!-- Audio message - Single-player mode -->
+<ng-container *ngIf="isSinlgeMode">
+  <div>
+    <h5>
+      {{ "CreateGame.audioMessage" | translate }}
+      <ion-icon name="information-circle" (click)="
         showPopover(
           $event,
-          'Popover.audioMessage'
-        )
-      ">
-    </ion-icon>
-  </h5>
-  <app-audio-recorder [(audioSource)]="question.audio"></app-audio-recorder>
-</div>
+          'Popover.audioMessage')">
+      </ion-icon>
+    </h5>
+    <app-audio-recorder [(audioSource)]="question.audio"></app-audio-recorder>
+  </div>
+</ng-container>
+<!-- Audio message - Multi-player mode -->
+<ng-container *ngIf="!isSinlgeMode">
+  <ion-card style="color:black;">
+    <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+      <h5>
+        {{ "CreateGame.audioMessage" | translate }}
+        <ion-icon name="information-circle" (click)="
+            showPopover(
+              $event,
+              'Popover.audioMessage')">
+        </ion-icon>
+      </h5>
+
+      <ion-item lines="none" class="ion-no-padding">
+        <ion-label>
+          All players has same audio:
+        </ion-label>
+        <ion-toggle [(ngModel)]="isAudioUnique" (ngModelChange)="setAudioCommonality($event)">
+        </ion-toggle>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngFor="let e of [].constructor( (isAudioUnique ? numPlayers-2 : numPlayers) ); let i = index" style="margin-bottom: 20px;">
+        <h5> Player ({{i+1}})</h5>
+        <app-audio-recorder [(audioSource)]="question[i].audio"></app-audio-recorder>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+</ng-container>
+
+
+
 
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE">
   <h5>

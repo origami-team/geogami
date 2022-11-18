@@ -29,6 +29,9 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     questionTypeEnum = QuestionType;
     taskModeEnum = TaskMode;
 
+    // Multi-player mode
+    isAudioUnique = false;
+
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -50,5 +53,11 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
             componentProps: { text }
         });
         return await popover.present();
+    }
+
+    setAudioCommonality(){
+        console.log("audio common: ", this.isAudioUnique)
+        // This will allow us to set other players same to 1st when save task
+        this.question[0].isAudioUnique = this.isAudioUnique;
     }
 }

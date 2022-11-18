@@ -12,6 +12,7 @@ export class GameFactoryService {
 
   constructor(private storage: Storage) { }
 
+  // DoDo
   addGameInformation(data: any) {
     this.game = {
       ...this.game,
