@@ -250,15 +250,7 @@ export class PlayGameListPage implements OnInit {
         source: 'earthquakes',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#51bbd6' /* [
-            'step',
-            ['get', 'point_count'],
-            '#51bbd6',
-            100,
-            '#f1f075',
-            750,
-            '#f28cb1'
-          ]*/,
+          'circle-color': '#51bbd6',
           'circle-radius': [
             'step',
             ['get', 'point_count'],
@@ -268,7 +260,6 @@ export class PlayGameListPage implements OnInit {
             20, 30,
             25
           ],
-          //'circle-opacity': 0.9,
           "circle-opacity": 0,
           "circle-stroke-width": 12,
           "circle-stroke-color": '#51bbd6',
@@ -384,7 +375,7 @@ export class PlayGameListPage implements OnInit {
         // Get either real or VE agmes based on selected environment 
         this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
 
-        console.log("gamesWithLocs: ", this.gamesWithLocs);
+        // console.log("gamesWithLocs: ", this.gamesWithLocs);
 
         this.convertToGeoJson()
       });
