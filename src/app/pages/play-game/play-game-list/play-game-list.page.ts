@@ -81,9 +81,10 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
-    // Check if user
+    // Check user role
     if (this.user) {
-      this.selectedSegment = "all"
+      this.selectedSegment = "all";
+      this.userRole = this.user['roles'][0];
     }
 
     // Get games data from server
