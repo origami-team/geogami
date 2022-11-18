@@ -81,13 +81,15 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
-    // Get games data from server
-    this.getGamesData();
-
-    // Get user role
+    // Check if user
     if (this.user) {
       this.selectedSegment = "all"
     }
+
+    // Get games data from server
+    this.getGamesData();
+
+    
   }
 
   ngAfterViewInit(): void {
@@ -103,7 +105,10 @@ export class PlayGameListPage implements OnInit {
       this.gamesTemp = this.games;
       this.loading = true;
 
-      console.log("games: ", this.games);
+      if(this.selectedSegment == "curated"){
+        // Filter data of selected segment
+        this.segmentChanged(this.selectedSegment)
+      }
     });
   }
 
