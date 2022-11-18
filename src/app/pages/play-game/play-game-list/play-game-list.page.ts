@@ -238,7 +238,7 @@ export class PlayGameListPage implements OnInit {
       // Add a new source from our GeoJSON data and
       // set the 'cluster' option to true. GL-JS will
       // add the point_count property to your source data.
-      this.map.addSource('earthquakes', {
+      this.map.addSource('clusters', {
         type: 'geojson',
         data: {
           'type': 'FeatureCollection',
@@ -252,7 +252,7 @@ export class PlayGameListPage implements OnInit {
       this.map.addLayer({
         id: 'clusters',
         type: 'circle',
-        source: 'earthquakes',
+        source: 'clusters',
         filter: ['has', 'point_count'],
         paint: {
           'circle-color': '#51bbd6',
@@ -275,7 +275,7 @@ export class PlayGameListPage implements OnInit {
       this.map.addLayer({
         id: 'cluster-count',
         type: 'symbol',
-        source: 'earthquakes',
+        source: 'clusters',
         filter: ['has', 'point_count'],
         layout: {
           'text-field': '{point_count_abbreviated}',
@@ -284,11 +284,11 @@ export class PlayGameListPage implements OnInit {
         }
       });
 
-      // Add a layer showing game pont
+      // Add a layer showing game point
       this.map.addLayer({
         id: 'unclustered-point',
         type: 'symbol',
-        source: 'earthquakes',
+        source: 'clusters',
         filter: ['!', ['has', 'point_count']],
         layout: {
           "icon-image": "geogami-marker",
@@ -304,7 +304,7 @@ export class PlayGameListPage implements OnInit {
           layers: ['clusters']
         });
         const clusterId = features[0].properties.cluster_id;
-        this.map.getSource('earthquakes').getClusterExpansionZoom(
+        this.map.getSource('clusters').getClusterExpansionZoom(
           clusterId,
           (err, zoom) => {
             if (err) return;
@@ -372,24 +372,30 @@ export class PlayGameListPage implements OnInit {
   }
 
   async openMapTap() {
-    if (this.isListTabSelected) {
+    if (this.isListTabSelected ) {
       this.isListTabSelected = false;
 
-      // get minimal games with locs
-      this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
-        // Get either real or VE agmes based on selected environment 
-        this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+      if(!this.map){
+        // console.log("isListTabSelected: ", this.isListTabSelected);
+        // get minimal games with locs
+        this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
+          // Get either real or VE agmes based on selected environment 
+          this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
+  
+          // console.log("gamesWithLocs: ", this.gamesWithLocs);
+  
+          this.convertToGeoJson()
+        });
+      }
 
-        // console.log("gamesWithLocs: ", this.gamesWithLocs);
-
-        this.convertToGeoJson()
-      });
     }
+
   }
 
   openListTap() {
     if (!this.isListTabSelected) {
       this.isListTabSelected = true;
+      // console.log("isListTabSelected: ", this.isListTabSelected);
     }
   }
 
@@ -426,13 +432,16 @@ export class PlayGameListPage implements OnInit {
       console.log("Create map ////////////");
       this.initMap(gamesListGeoJson);
     }
-    else if (this.map.getLayer('places')) {
-      this.map.removeLayer(`places`);
-      this.map.removeSource("places");
+    // no need for it since we can hide the map
+    /* else if (this.map.getSource('clusters')) {
+      this.map.removeLayer(`cluster-count`);
+      this.map.removeLayer(`unclustered-point`);
+      this.map.removeLayer(`clusters`);
+      this.map.removeSource("clusters");
 
       console.log("Else ////////////");
 
-      this.map.addSource('places', {
+      this.map.addSource('clusters', {
         'type': 'geojson',
         'data': {
           'type': 'FeatureCollection',
@@ -440,19 +449,21 @@ export class PlayGameListPage implements OnInit {
         }
       });
 
-      // Add a layer showing the places.
+      // Add a layer showing the clusters.
       this.map.addLayer({
-        'id': 'places',
+        'id': 'clusters',
         type: "symbol",
-        'source': 'places',
+        'source': 'clusters',
         layout: {
           "icon-image": "geogami-marker",
           "icon-size": 0.65,
           "icon-offset": [0, 0],
           "icon-allow-overlap": true,
         }
-      });
-    }
+      }); 
+    }*/
 
   }
+
+  
 }

@@ -62,8 +62,7 @@
     <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
   </div>
 
-
-  <div #gamesMap class="map" *ngIf="!isListTabSelected"></div>
+  <div #gamesMap class="map" [ngStyle]= "{ 'display' : ( isListTabSelected ? 'none' : '' ) }"></div>
   <!-- map markers popup -->
   <div #popupContainer *ngIf="!isListTabSelected">
     <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place"
