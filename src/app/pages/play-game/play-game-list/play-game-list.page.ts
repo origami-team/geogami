@@ -32,7 +32,7 @@ export class PlayGameListPage implements OnInit {
   isVirtualWorld: boolean = false;
   // To be able to update games list and switch between segments 
   searchText: string = "";
-  selectedSegment: string = "all";
+  selectedSegment: string = "curated";
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
   user = this.authService.getUserValue();
@@ -86,9 +86,8 @@ export class PlayGameListPage implements OnInit {
 
     // Get user role
     if (this.user) {
-      this.userRole = this.user['roles'][0];
+      this.selectedSegment = "all"
     }
-
   }
 
   ngAfterViewInit(): void {
