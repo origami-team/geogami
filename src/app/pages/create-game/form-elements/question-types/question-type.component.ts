@@ -30,7 +30,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     taskModeEnum = TaskMode;
 
     // Multi-player mode
-    isAudioUnique = false;
+    isAudiosSame = false;
 
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
@@ -56,8 +56,8 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     }
 
     setAudioCommonality(){
-        console.log("audio common: ", this.isAudioUnique)
+        console.log("isAudiosSame: ", this.isAudiosSame)
         // This will allow us to set other players same to 1st when save task
-        this.question[0].isAudioUnique = this.isAudioUnique;
+        this.question[0].isAudiosSame = this.isAudiosSame;
     }
 }

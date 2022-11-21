@@ -2,8 +2,6 @@
 <div
   *ngIf="question.type != questionTypeEnum.NAV_INSTRUCTION_PHOTO && (question[0]== undefined || question[0].type!= questionTypeEnum.NAV_INSTRUCTION_PHOTO)">
 
-  <!-- temp: you may use ng-container -->
-
   <!-- Task instruction - Single-player mode -->
   <ng-container *ngIf="isSinlgeMode">
     <h5>
@@ -14,6 +12,17 @@
       </ion-icon>
     </h5>
     <ion-textarea autoGrow [(ngModel)]='question.text'></ion-textarea>
+    <!-- Markdown supported -->
+    <ion-text color="medium">
+      <p> &nbsp;
+        {{ "CreateGame.markdownSupported" | translate }}
+        <ion-icon name="information-circle" (click)="
+        showPopover(
+          $event,
+          'Popover.markdown')">
+        </ion-icon>
+      </p>
+    </ion-text>
   </ng-container>
   <!-- Task instruction - Multi-player mode -->
   <ng-container *ngIf="!isSinlgeMode">
@@ -33,7 +42,6 @@
           <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
         </div>
       </ion-card-content>
-
       <!-- Markdown supported -->
       <ion-text color="medium">
         <p> &nbsp;
@@ -110,6 +118,7 @@
   </ion-text>
 </div>
 
+
 <!-- Audio message -->
 <!-- Audio message - Single-player mode -->
 <ng-container *ngIf="isSinlgeMode">
@@ -142,12 +151,13 @@
         <ion-label>
           All players has same audio:
         </ion-label>
-        <ion-toggle [(ngModel)]="isAudioUnique" (ngModelChange)="setAudioCommonality($event)">
+        <ion-toggle [(ngModel)]="isAudiosSame" (ngModelChange)="setAudioCommonality($event)">
         </ion-toggle>
       </ion-item>
     </ion-card-header>
     <ion-card-content>
-      <div *ngFor="let e of [].constructor( (isAudioUnique ? numPlayers-2 : numPlayers) ); let i = index" style="margin-bottom: 20px;">
+      <div *ngFor="let e of [].constructor( (isAudiosSame ? numPlayers-2 : numPlayers) ); let i = index"
+        style="margin-bottom: 20px;">
         <h5> Player ({{i+1}})</h5>
         <app-audio-recorder [(audioSource)]="question[i].audio"></app-audio-recorder>
       </div>
@@ -157,17 +167,13 @@
 </ng-container>
 
 
-
-
 <div *ngIf="question.type == questionTypeEnum.MAP_FEATURE">
   <h5>
     {{ "CreateGame.objectLocation" | translate }}
     <ion-icon name="information-circle" (click)="
         showPopover(
           $event,
-          'Popover.objectLocation'
-        )
-      ">
+          'Popover.objectLocation')">
     </ion-icon>
   </h5>
   <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question.geometry"

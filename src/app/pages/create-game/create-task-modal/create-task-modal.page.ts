@@ -483,16 +483,15 @@ export class CreateTaskModalPage implements OnInit {
 
     // set audio if user chose all players have same audio
     if (!this.isSinlgeMode) {
-      if (this.task.question[0].isAudioUnique) {
-        console.log("/// same questions ");
+      if (this.task.question[0].isAudiosSame) {
+        console.log("/// same audios ");
         if (this.numPlayers == 3) {
           this.task.question[2].audio = this.task.question[1].audio = this.task.question[0].audio;
         } else {
           this.task.question[1].audio = this.task.question[0].audio;
         }
-      } else {
-        console.log("/// not equal questions");
-      }
+      } else
+        console.log("/// different audio");
     }
 
     this.modalController.dismiss({
