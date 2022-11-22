@@ -36,10 +36,12 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         // console.log("changes (QuestionTypeComponent): ", changes);
+        console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
         this.questionChange.emit(changes.question.currentValue);
     }
 
     ngOnInit() {
+        
 
     }
 
