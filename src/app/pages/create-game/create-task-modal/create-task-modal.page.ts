@@ -240,37 +240,63 @@ export class CreateTaskModalPage implements OnInit {
         this.showMultipleTries = false;
       }
     } else {
+      console.log("//// (onTaskSelected) 1a - this.tasks", this.tasks);
       this.objectQuestionSelect = Array.from(
         new Set(
           this.tasks
             .filter((t) => t.type == this.task.type)
-            .map((t) => t.question.type)
+            .map((t) => (this.isSinlgeMode ? t.question.type : t.question[0].type))  // DoDo
         )
       )
         .map((t) => ({ type: t as QuestionType, text: t }))
-        .sort(
+        .sort( // DoDo
           (a, b) =>
             this.objectQuestionTemplate.indexOf(a.type) -
             this.objectQuestionTemplate.indexOf(b.type)
         );
 
-      const similarTypes = cloneDeep(themetasks).filter(
-        (t) => t.type == this.task.type
-      );
+      console.log("//// (onTaskSelected) 1a - objectQuestionSelect", this.objectQuestionSelect);
 
-      const similarQ = similarTypes.filter(
-        (t) => t.question.type == this.task.question.type
-      );
+      // multi-player impl.
+      if (this.isSinlgeMode) {
+        const similarTypes = cloneDeep(themetasks).filter(
+          (t) => t.type == this.task.type
+        );
 
-      this.objectAnswerSelect = Array.from(
-        new Set(
-          similarQ.map((t) => ({
-            type: t.answer.type as AnswerType,
-            text: t.answer.type,
-          }))
-        )
-      );
+        const similarQ = similarTypes.filter(
+          (t) => t.question.type == this.task.question.type
+        );
+
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer.type as AnswerType,
+              text: t.answer.type,
+            }))
+          )
+        );
+      } else {
+        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
+          (t) => t.type == this.task.type
+        );
+        console.log("//// (onTaskSelected) 1b - similarTypes", similarTypes);
+
+        const similarQ = similarTypes.filter(
+          (t) => t.question[0].type == this.task.question[0].type
+        );
+        console.log("//// (onTaskSelected) 1c - similarQ", similarQ);
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer[0].type as AnswerType,
+              text: t.answer[0].type,
+            }))
+          )
+        );
+      }
+
     }
+
 
     if (
       this.task.type == "theme-direction" &&
@@ -289,7 +315,10 @@ export class CreateTaskModalPage implements OnInit {
   }
 
   onObjectQuestionSelectChange() {
+    console.log("//// o.q.s.c 0 - this.task.type", this.task.type);
     if (this.task.type != "free") {
+      console.log("//// o.q.s.c 1");
+
       const similarTypes = cloneDeep(themetasks).filter(
         (t) => t.type == this.task.type
       );

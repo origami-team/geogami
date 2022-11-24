@@ -102,7 +102,7 @@
         <h5 *ngIf="task.type == 'theme-direction'">{{ "CreateGame.direction" | translate }}</h5>
       </ion-text>
       <select 
-        [(ngModel)]="task.question.type" 
+        [(ngModel)]=" isSinlgeMode ? task.question.type : task.question[0].type" 
         (ngModelChange)="onObjectQuestionSelectChange($event)"
         interface="popover">
         <option 
@@ -118,7 +118,7 @@
       </ion-text>
       <select 
         interface="popover" 
-        [(ngModel)]="task.answer.type" 
+        [(ngModel)]=" isSinlgeMode ? task.answer.type : task.answer[0].type" 
         (ngModelChange)="onObjectAnswerSelectChange($event)">
         <option 
           [ngValue]="option.type" 

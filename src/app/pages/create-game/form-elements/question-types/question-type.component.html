@@ -102,7 +102,7 @@
       [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
   </div>
 
-  <!-- Mark object - Single-player -->
+  <!-- Mark object (TaskMode.NO_FEATURE) - Single-player -->
   <div *ngIf="question.mode == taskModeEnum.NO_FEATURE">
     <h5>
       {{ "CreateGame.objectLocation" | translate }}
@@ -386,7 +386,8 @@
     </ion-card>
   </div>
 
-  <!-- Mark object - Single-player -->
+  <!-- not yet -->
+  <!-- Mark object (TaskMode.NO_FEATURE) - Single-player -->
   <div *ngIf="question[0] != undefined && question[0].mode == taskModeEnum.NO_FEATURE">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
