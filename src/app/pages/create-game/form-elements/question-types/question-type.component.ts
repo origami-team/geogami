@@ -29,9 +29,6 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     questionTypeEnum = QuestionType;
     taskModeEnum = TaskMode;
 
-    // Multi-player mode
-    isAudiosSame = false;
-
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {

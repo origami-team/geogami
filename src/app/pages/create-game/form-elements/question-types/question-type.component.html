@@ -318,17 +318,19 @@
         </ion-icon>
       </h5>
 
+      <!-- Toggle to set differnt instruction for each player -->
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           All players has same audio:
         </ion-label>
-        <ion-toggle [(ngModel)]="question[0].isAudiosSame" (ngModelChange)="setAudioCommonality($event)">
+        <ion-toggle [(ngModel)]="question[0].allHasSameAudio">
         </ion-toggle>
       </ion-item>
+
     </ion-card-header>
     <ion-card-content>
       <!-- number of items based on whether all players have same task or not -->
-      <div *ngFor="let e of [].constructor( (question[0] && question[0].isAudiosSame ? 1 : numPlayers) ); let i = index"
+      <div *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameAudio ? 1 : numPlayers) ); let i = index"
         style="margin-bottom: 20px;">
         <h5> Player ({{i+1}})</h5>
         <app-audio-recorder [(audioSource)]="question[i].audio"></app-audio-recorder>
