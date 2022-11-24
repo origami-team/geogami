@@ -653,7 +653,7 @@ export class CreateTaskModalPage implements OnInit {
         ];
         this.task.answer[0].hints = hintsList;
         this.task.answer[1].hints = hintsList;
-        if(this.numPlayers == 3){
+        if (this.numPlayers == 3) {
           this.task.answer[2].hints = hintsList;
         }
 
@@ -723,7 +723,7 @@ export class CreateTaskModalPage implements OnInit {
       }
     }
 
-    // set audio if user chose all players have same audio
+    // set whether all palyers have same question and/or answer
     if (!this.isSinlgeMode) {
       if (this.task.question[0].allHasSameAudio) {
         console.log("/// same audios ");
@@ -731,8 +731,97 @@ export class CreateTaskModalPage implements OnInit {
         if (this.numPlayers == 3) {
           this.task.question[2].audio = this.task.question[0].audio;
         }
-      } else
-        console.log("/// different audio");
+      }
+
+      if (this.task.question[0].allHasSameInstruction) {
+        console.log("/// same Instruction ");
+        this.task.question[1].text = this.task.question[0].text;
+        if (this.numPlayers == 3) {
+          this.task.question[2].text = this.task.question[0].text;
+        }
+      }
+
+      if (this.task.question[0].allHasSameMarkObj) {
+        console.log("/// same mark obbject ");
+        this.task.question[1].geometry = this.task.question[0].geometry;
+        if (this.numPlayers == 3) {
+          this.task.question[2].geometry = this.task.question[0].geometry;
+        }
+      }
+
+      if (this.task.question[0].allHasSameInstPhoto) {
+        console.log("/// same mark obbject ");
+        this.task.question[1].text = this.task.question[0].text;
+        this.task.question[1].photo = this.task.question[0].photo;
+        if (this.numPlayers == 3) {
+          this.task.question[2].text = this.task.question[0].text;
+          this.task.question[2].photo = this.task.question[0].photo;
+        }
+      }
+
+      if (this.task.question[0].allHasSameMapMark) {
+        console.log("/// same map mark ");
+        this.task.question[1].geometry = this.task.question[0].geometry;
+        if (this.numPlayers == 3) {
+          this.task.question[2].geometry = this.task.question[0].geometry;
+        }
+      }
+
+      if (this.task.question[0].allHasSameMarkObjMode) {
+        console.log("/// same Mark object (TaskMode.NO_FEATURE)");
+        this.task.question[1].geometry = this.task.question[0].geometry;
+        if (this.numPlayers == 3) {
+          this.task.question[2].geometry = this.task.question[0].geometry;
+        }
+      }
+
+      if (this.task.question[0].allHasSamePhotoMarkObj) {
+        console.log("/// same Photo of the objec");
+        this.task.question[1].geometry = this.task.question[0].geometry;
+        this.task.question[1].photo = this.task.question[0].photo;
+
+        if (this.numPlayers == 3) {
+          this.task.question[2].geometry = this.task.question[0].geometry;
+          this.task.question[2].photo = this.task.question[0].photo;
+        }
+      }
+
+      if (this.task.question[0].allHasSameViewDirec) {
+        console.log("/// same view direction");
+        this.task.question[1].direction = this.task.question[0].direction;
+        if (this.numPlayers == 3) {
+          this.task.question[2].direction = this.task.question[0].direction;
+        }
+      }
+
+      if (this.task.question[0].allHasSameDirMap) {
+        console.log("/// same direction on map");
+        this.task.question[1].direction = this.task.question[0].direction;
+        if (this.numPlayers == 3) {
+          this.task.question[2].direction = this.task.question[0].direction;
+        }
+      }
+
+      if (this.task.question[0].allHasSamePhotoDirMap) {
+        console.log("/// same Photo and direction n map");
+        this.task.question[1].direction = this.task.question[0].direction;
+        this.task.question[1].photo = this.task.question[0].photo;
+
+        if (this.numPlayers == 3) {
+          this.task.question[2].direction = this.task.question[0].direction;
+          this.task.question[2].photo = this.task.question[0].photo;
+        }
+      }
+      
+      if (this.task.question[0].allHasSamePhotoTask) {
+        console.log("/// same Photo for the task");
+        this.task.question[1].photo = this.task.question[0].photo;
+
+        if (this.numPlayers == 3) {
+          this.task.question[2].photo = this.task.question[0].photo;
+        }
+      }
+
     }
 
     this.modalController.dismiss({

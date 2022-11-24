@@ -225,6 +225,7 @@
 <!-- ******************************* -->
 <!-- ****** Multi-player mode ****** -->
 <div *ngIf="!isSinlgeMode">
+
   <!-- Task instruction - NavToFlag & NavWithArrow & NavViaText - Multi-player mode-->
   <div *ngIf="question[0] != undefined && question[0].type != questionTypeEnum.NAV_INSTRUCTION_PHOTO">
     <ion-card style="color:black;">
@@ -235,9 +236,21 @@
           showPopover($event, 'Popover.taskInstruction')">
           </ion-icon>
         </h5>
+
+        <!-- Toggle to set differnt instruction for each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same instruction:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSameInstruction">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
       <ion-card-content style="padding-bottom: 0;">
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameInstruction ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5> Player ({{i+1}})</h5>
           <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
         </div>
@@ -259,7 +272,6 @@
 
   <!-- Task instruction - NavViaPhoto - Multi-player  -->
   <div *ngIf="question[0]!=undefined && question[0].type == questionTypeEnum.NAV_INSTRUCTION_PHOTO">
-
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
         <!-- DoDo: add translate -->
@@ -269,22 +281,29 @@
           showPopover($event, 'Popover.taskInstruction')">
           </ion-icon>
         </h5>
+
+        <!-- Toggle to set differnt instruction (photo) for each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same instruction:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSameInstPhoto">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
       <ion-card-content style="padding-bottom: 0;">
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameInstPhoto ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5>
             {{ "CreateGame.photo" | translate }} - player ({{i+1}})
-            <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.photo')" *ngIf="i==0">
-            </ion-icon>
+            <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.photo')" *ngIf="i==0"></ion-icon>
           </h5>
           <app-photo-upload [(photo)]="question[i].photo" [taskType]="taskType" theme="primary"></app-photo-upload>
           <h5>
             {{ "CreateGame.navInstruction" | translate }} - player ({{i+1}})
-            <ion-icon name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.navInstruction'
-        )" *ngIf="i==0">
+            <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.navInstruction')" *ngIf="i==0">
             </ion-icon>
           </h5>
           <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>
@@ -292,14 +311,10 @@
       </ion-card-content>
       <!-- Markdown supported -->
       <ion-text color="medium">
-        <p>
+        <p> &nbsp;
           {{ "CreateGame.markdownSupported" | translate }}
           <ion-icon name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.markdown'
-        )
-      ">
+        showPopover($event,'Popover.markdown')">
           </ion-icon>
         </p>
       </ion-text>
@@ -321,7 +336,7 @@
       <!-- Toggle to set differnt instruction for each player -->
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
-          All players has same audio:
+          All players have the same instruction:
         </ion-label>
         <ion-toggle [(ngModel)]="question[0].allHasSameAudio">
         </ion-toggle>
@@ -330,7 +345,8 @@
     </ion-card-header>
     <ion-card-content>
       <!-- number of items based on whether all players have same task or not -->
-      <div *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameAudio ? 1 : numPlayers) ); let i = index"
+      <div
+        *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameAudio ? 1 : numPlayers) ); let i = index"
         style="margin-bottom: 20px;">
         <h5> Player ({{i+1}})</h5>
         <app-audio-recorder [(audioSource)]="question[i].audio"></app-audio-recorder>
@@ -338,7 +354,7 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Mark object - Multi-player -->
+  <!-- Mark object (MAP_FEATURE) - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_FEATURE">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
@@ -350,20 +366,31 @@
             'Popover.objectLocation')">
           </ion-icon>
         </h5>
+
+        <!-- Toggle to set differnt mark object for each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same mark object:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSameMarkObj">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameMarkObj ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5 style="margin-bottom: 10px;">
             Player ({{i+1}})
           </h5>
-          <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[0].geometry"
+          <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[i].geometry"
             [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
         </div>
       </ion-card-content>
     </ion-card>
   </div>
 
-  <!-- not yet -->
   <!-- Map marking - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_FEATURE_FREE">
     <ion-card style="color:black;">
@@ -376,9 +403,21 @@
             'Popover.markedMap')">
           </ion-icon>
         </h5>
+
+        <!-- Toggle to set differnt map marking for each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same map marking:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSameMapMark">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
-      <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+      <ion-card-content style="padding-bottom: 0;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameMapMark ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5 style="margin-bottom: 10px;">
             Player ({{i+1}})
           </h5>
@@ -389,21 +428,30 @@
     </ion-card>
   </div>
 
-  <!-- Mark object (TaskMode.NO_FEATURE) - Multi-player -->
+  <!-- Mark object (TaskMode.NO_FEATURE) - theme->objectLocation->with text->Mark object - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].mode == taskModeEnum.NO_FEATURE">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
         <h5>
           {{ "CreateGame.objectLocation" | translate }}
-          <ion-icon name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.objectLocation')">
+          <ion-icon name="information-circle" (click)="showPopover($event,'Popover.objectLocation')">
           </ion-icon>
         </h5>
+
+        <!-- Toggle to set differnt Mark object (TaskMode.NO_FEATURE) for each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same mark object:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSameMarkObjMode">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameMarkObjMode ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5 style="margin-bottom: 10px;">
             Player ({{i+1}})
           </h5>
@@ -414,13 +462,30 @@
     </ion-card>
   </div>
 
-  <!-- Photo of the object - Multi-player -->
+  <!-- Photo of the object - theme->objectLocation-> as a photo-> Mark object - Multi-player -->
   <div *ngIf="question[0] != undefined &&  question[0].type == questionTypeEnum.MAP_FEATURE_PHOTO">
     <ion-card style="color:black;">
-      <!-- <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;"> -->
-      <!-- </ion-card-header> -->
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          Photo and mark object
+          <!-- <ion-icon name="information-circle" (click)="showPopover($event,'Popover.objectLocation')">
+          </ion-icon> -->
+        </h5>
+
+        <!-- Toggle to set differnt Photo of the objectfor each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same photo and mark object:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSamePhotoMarkObj">
+          </ion-toggle>
+        </ion-item>
+
+      </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 25px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSamePhotoMarkObj ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 25px;">
           <h5 style="margin-bottom: 12px; ">
             <p style="font-size: 16px;">Player ({{i+1}})</p>
           </h5>
@@ -434,7 +499,7 @@
             </ion-icon>
           </h5>
 
-          <app-photo-upload [(photo)]="question[0].photo" [taskType]="taskType"></app-photo-upload>
+          <app-photo-upload [(photo)]="question[i].photo" [taskType]="taskType"></app-photo-upload>
           <h5 style="margin-top: 10px; margin-bottom: 5px;">
             {{ "CreateGame.objectLocation" | translate }}
             <ion-icon name="information-circle" (click)="
@@ -443,14 +508,14 @@
             'Popover.objectLocation')" *ngIf="i==0">
             </ion-icon>
           </h5>
-          <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[0].geometry"
+          <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[i].geometry"
             [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
         </div>
       </ion-card-content>
     </ion-card>
   </div>
 
-  <!-- Viewing direction - Multi-player -->
+  <!-- Viewing direction - theme->directionDetermination->indicatedByArrow - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_DIRECTION">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
@@ -462,13 +527,25 @@
             'Popover.destinationDirection')">
           </ion-icon>
         </h5>
+
+        <!-- Toggle to set differnt Photo of the viewing direction of each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same viewing direction:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSameViewDirec">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameViewDirec ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5 style="margin-bottom: 10px;">
             Player ({{i+1}})
           </h5>
-          <app-map featureType="direction" [(feature)]="question[0].direction" [isVirtualWorld]="isVirtualWorld"
+          <app-map featureType="direction" [(feature)]="question[i].direction" [isVirtualWorld]="isVirtualWorld"
             [isVRMirrored]="isVRMirrored">
           </app-map>
         </div>
@@ -476,8 +553,7 @@
     </ion-card>
   </div>
 
-
-  <!-- Direction on the map - Multi-player -->
+  <!-- Direction on the map - theme->directionDetermination->shownOnMap - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_DIRECTION_MARKER">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
@@ -486,18 +562,27 @@
           <ion-icon name="information-circle" (click)="
           showPopover(
             $event,
-            'Popover.directionMap'
-          )
-        ">
+            'Popover.directionMap')">
           </ion-icon>
         </h5>
+        <!-- Toggle to set differnt direction on the map for each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same direction on the map:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSameDirMap">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameDirMap ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5 style="margin-bottom: 10px;">
             Player ({{i+1}})
           </h5>
-          <app-map featureType="direction" [(feature)]="question.direction" [isVirtualWorld]="isVirtualWorld"
+          <app-map featureType="direction" [(feature)]="question[i].direction" [isVirtualWorld]="isVirtualWorld"
             [isVRMirrored]="isVRMirrored">
           </app-map>
         </div>
@@ -505,13 +590,30 @@
     </ion-card>
   </div>
 
-  <!-- Photo of the direction - Multi-player -->
+  <!-- Photo of the direction - theme->directionDetermination->displayedWithPhoto - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_DIRECTION_PHOTO">
     <ion-card style="color:black;">
-      <!-- <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;"> -->
-      <!-- </ion-card-header> -->
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          Photo and direction on the map
+          <!-- <ion-icon name="information-circle" (click)="showPopover($event,'Popover.objectLocation')">
+          </ion-icon> -->
+        </h5>
+
+        <!-- Toggle to set differnt Photo of the objectfor each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same photo and direction on map:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSamePhotoDirMap">
+          </ion-toggle>
+        </ion-item>
+
+      </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 25px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSamePhotoDirMap ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 25px;">
           <h5 style="margin-bottom: 12px; ">
             <p style="font-size: 16px;">Player ({{i+1}})</p>
           </h5>
@@ -525,7 +627,7 @@
             </ion-icon>
           </h5>
 
-          <app-photo-upload [(photo)]="question[0].photo" [taskType]="taskType"></app-photo-upload>
+          <app-photo-upload [(photo)]="question[i].photo" [taskType]="taskType"></app-photo-upload>
           <h5 style="margin-top: 10px; margin-bottom: 5px;">
             {{ "CreateGame.directionMap" | translate }}
             <ion-icon name="information-circle" (click)="showPopover(
@@ -533,13 +635,13 @@
               'Popover.directionMap')" *ngIf="i==0">
             </ion-icon>
           </h5>
-          <app-map featureType="direction" [(feature)]="question[0].direction"></app-map>
+          <app-map featureType="direction" [(feature)]="question[i].direction"></app-map>
         </div>
       </ion-card-content>
     </ion-card>
   </div>
 
-  <!-- Photo for the task - Multi-player -->
+  <!-- Photo for the task - theme->freeTasks->textAndPhoto - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.PHOTO">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
@@ -551,9 +653,20 @@
               'Popover.photo')">
           </ion-icon>
         </h5>
+        <!-- Toggle to set differnt Photo of the objectfor each player -->
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-label>
+            All players have the same photo for the task:
+          </ion-label>
+          <ion-toggle [(ngModel)]="question[0].allHasSamePhotoTask">
+          </ion-toggle>
+        </ion-item>
+
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+        <div
+          *ngFor="let e of [].constructor( (question[0] && question[0].allHasSamePhotoTask ? 1 : numPlayers) ); let i = index"
+          style="margin-bottom: 20px;">
           <h5 style="margin-bottom: 10px;">
             Player ({{i+1}})
           </h5>
