@@ -16,7 +16,6 @@ import { NavController } from "@ionic/angular";
 import { Game } from "src/app/models/game";
 import { GamesService } from "src/app/services/games.service";
 import { ActivatedRoute } from "@angular/router";
-import { CreateFreeTaskModalComponent } from "../../create-game/create-free-task-modal/create-free-task-modal.component";
 import { Task } from "src/app/models/task";
 import { UtilService } from "src/app/services/util.service";
 

@@ -14,7 +14,6 @@ import { CreateInfoModalComponent } from "./../create-info-modal/create-info-mod
 import { NavController } from "@ionic/angular";
 
 import { Game } from "src/app/models/game";
-import { CreateFreeTaskModalComponent } from "../create-free-task-modal/create-free-task-modal.component";
 
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";

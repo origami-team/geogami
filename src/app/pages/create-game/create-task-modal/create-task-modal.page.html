@@ -48,8 +48,8 @@
 
   <!-- Task type - themeatic -->
   <!-- (dodo) selectedTaskType -> selectedThemeType  -->
-  <select interface="popover" *ngIf="type != 'nav'" [compareWith]="taskTypeCompare" [(ngModel)]="selectedTaskType"
-    (ngModelChange)="onTaskTypeChange($event)">
+  <select interface="popover" *ngIf="type != 'nav'" [compareWith]="taskTypeCompare" [(ngModel)]="selectedThemeTaskType"
+    (ngModelChange)="onThemeTaskTypeChange($event)">
     <option [ngValue]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</option>
   </select>
   <!-- End of task type -->
@@ -169,19 +169,20 @@
       </ion-text>
       <!-- Single-player -->
       <ng-container *ngIf="isSinlgeMode">
-      <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
-        <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
-          {{ option.text | typeToText: task.type : true | translate}}</option>
-      </select>
+        <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
+          <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+            {{ option.text | typeToText: task.type : true | translate}}</option>
+        </select>
       </ng-container>
 
       <!-- Mutli-player -->
       <ng-container *ngIf="!isSinlgeMode">
-        <select interface="popover" [(ngModel)]="task.answer[0].type" (ngModelChange)="onObjectAnswerSelectChange($event)">
+        <select interface="popover" [(ngModel)]="task.answer[0].type"
+          (ngModelChange)="onObjectAnswerSelectChange($event)">
           <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
             {{ option.text | typeToText: task.type : true | translate}}</option>
         </select>
-        </ng-container>
+      </ng-container>
 
 
     </div>

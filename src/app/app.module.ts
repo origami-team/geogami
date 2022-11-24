@@ -18,7 +18,6 @@ import { FormsModule } from '@angular/forms';
 
 // Modals
 import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page';
-import { CreateFreeTaskModalComponent } from './pages/create-game/create-free-task-modal/create-free-task-modal.component';
 import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page';
 import { MapFeaturesModalPage } from './pages/create-game/map-features-modal/map-features-modal.page';
 import { CreateInfoModalComponent } from './pages/create-game/create-info-modal/create-info-modal.component';
@@ -68,7 +67,6 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
     AppComponent,
     PopoverComponent,
     CreateTaskModalPage,
-    CreateFreeTaskModalComponent,
     MapFeaturesModalPage,
     CreateModuleModalPage,
     CreateInfoModalComponent,
@@ -87,7 +85,6 @@ const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.co
   entryComponents: [
     PopoverComponent,
     CreateTaskModalPage,
-    CreateFreeTaskModalComponent,
     MapFeaturesModalPage,
     CreateModuleModalPage,
     CreateInfoModalComponent,

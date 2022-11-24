@@ -86,7 +86,7 @@ export class CreateTaskModalPage implements OnInit {
     }
   ];
 
-  selectedTaskType: any;
+  selectedThemeTaskType: any;
 
   objectQuestionTemplate = [
     QuestionType.MAP_FEATURE,
@@ -134,7 +134,7 @@ export class CreateTaskModalPage implements OnInit {
 
     if (this.task == null) {
       this.task = this.tasks[0];
-      this.selectedTaskType = this.taskTypes[0];
+      this.selectedThemeTaskType = this.taskTypes[0];
 
       this.task.settings = {
         feedback: true,
@@ -150,23 +150,23 @@ export class CreateTaskModalPage implements OnInit {
       this.settingsChange();
     } else {
       if (this.task.type.includes("loc")) {
-        this.selectedTaskType = this.taskTypes[0];
+        this.selectedThemeTaskType = this.taskTypes[0];
       }
       if (this.task.type.includes("object")) {
-        this.selectedTaskType = this.taskTypes[1];
+        this.selectedThemeTaskType = this.taskTypes[1];
       }
       if (this.task.type.includes("direction")) {
-        this.selectedTaskType = this.taskTypes[2];
+        this.selectedThemeTaskType = this.taskTypes[2];
       }
       if (this.task.type.includes("free")) {
-        this.selectedTaskType = this.taskTypes[3];
+        this.selectedThemeTaskType = this.taskTypes[3];
       }
     }
     // this.onTaskSelected(this.task);
     this.onTaskSelected(cloneDeep(this.task));
   }
 
-  onTaskTypeChange(taskType) {
+  onThemeTaskTypeChange(taskType) {
     if (taskType.type == 1) {
       this.task = this.tasks[0];
     } else if (taskType.type == 2) {
@@ -326,7 +326,7 @@ export class CreateTaskModalPage implements OnInit {
 
 
     } else {
-      console.log("//// (onTaskSelected) 1a - this.tasks", this.tasks);
+      // console.log("//// (onTaskSelected) 1a - this.tasks", this.tasks);
       this.objectQuestionSelect = Array.from(
         new Set(
           this.tasks
