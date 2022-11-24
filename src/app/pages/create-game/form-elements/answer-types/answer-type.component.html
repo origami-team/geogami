@@ -1,6 +1,8 @@
-<!-- Destination map view (Start)-->
-<!-- Destination map view - Single-player mode -->
-<ng-container *ngIf="isSinlgeMode">
+<!-- ******************************* -->
+<!-- ****** Single-player mode ****** -->
+<div *ngIf="isSinlgeMode">
+
+  <!-- Destination map view - Single-player mode -->
   <div *ngIf="answer.type == answerTypeEnum.POSITION">
     <h5>
       {{ "CreateGame.destination" | translate }}
@@ -15,10 +17,79 @@
     <app-map featureType="point" drawTheme="nav" [(feature)]="answer.position" [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored" [isSinlgeMode]="isSinlgeMode"></app-map>
   </div>
-</ng-container>
 
-<!-- Destination map view - Multi-player mode -->
-<ng-container *ngIf="!isSinlgeMode">
+  <!-- Mutiple choice (photo) - Single-player mode -->
+  <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
+    <h5>
+      {{ "CreateGame.multipleChoice" | translate }}
+      <ion-icon name="information-circle" (click)="
+        showPopover(
+          $event,
+          'Popover.photoMC')">
+      </ion-icon>
+    </h5>
+    <app-photo-upload-multiple-choice [(photos)]="answer.photos" [(hints)]="answer.hints" [taskType]="taskType"
+      [feedback]="settings.feedback && settings.multipleTries">
+    </app-photo-upload-multiple-choice>
+  </div>
+
+  <!-- Mutiple choice (text) - Single-player mode -->
+  <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
+    <h5>
+      {{ "CreateGame.multipleChoice" | translate }}
+      <ion-icon *ngIf="!settings.feedback" name="information-circle" (click)="
+        showPopover(
+          $event,
+          'Popover.textMC'
+        )
+      ">
+      </ion-icon>
+      <ion-icon *ngIf="settings.feedback" name="information-circle" (click)="
+        showPopover(
+          $event,
+          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.'
+        )
+      ">
+      </ion-icon>
+    </h5>
+    <app-multiple-choice-text [(answers)]="answer.choices" [(hints)]="answer.hints"
+      [feedback]="settings.feedback && settings.multipleTries"></app-multiple-choice-text>
+  </div>
+
+  <!-- Correct answer (number) - Single-player mode -->
+  <div *ngIf="answer.type == answerTypeEnum.NUMBER">
+    <h5>
+      {{ "CreateGame.correctNumber" | translate }}
+      <ion-icon name="information-circle" (click)="
+        showPopover($event, 'Popover.number')">
+      </ion-icon>
+    </h5>
+    <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
+  </div>
+
+  <!-- Feedback (by marking the direction on the map) - Single-player mode -->
+  <div *ngIf="answer.type == answerTypeEnum.MAP_DIRECTION || answer.type == answerTypeEnum.DIRECTION">
+    <div *ngIf="settings.feedback && settings.multipleTries">
+      <ion-text>
+        <h5>Feedback</h5>
+      </ion-text>
+      <!-- DoDo : translate -->
+      <ion-label>Abweichung &lt; 45°</ion-label>
+      <ion-textarea autoGrow [(ngModel)]="answer.hints[0]"></ion-textarea>
+      <ion-label>Abweichung &gt; 45° und &lt; 135°</ion-label>
+      <ion-textarea autoGrow [(ngModel)]="answer.hints[1]"></ion-textarea>
+      <ion-label>Abweichung &gt; 135°</ion-label>
+      <ion-textarea autoGrow [(ngModel)]="answer.hints[2]"></ion-textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- ******************************* -->
+<!-- ****** Multi-player mode ****** -->
+<div *ngIf="!isSinlgeMode">
+
+  <!-- Destination map view - Multi-player mode -->
   <div *ngIf="answer[0].type == answerTypeEnum.POSITION">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
@@ -27,9 +98,7 @@
           <ion-icon name="information-circle" (click)="
             showPopover(
               $event,
-              'Popover.flag'
-            )
-          ">
+              'Popover.flag')">
           </ion-icon>
         </h5>
       </ion-card-header>
@@ -44,68 +113,112 @@
       </ion-card-content>
     </ion-card>
   </div>
-</ng-container>
-<!-- Destination map view (End) -->
 
-<div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
-  <h5>
-    {{ "CreateGame.multipleChoice" | translate }}
-    <ion-icon name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.photoMC'
-        )
-      ">
-    </ion-icon>
-  </h5>
-  <app-photo-upload-multiple-choice [(photos)]="answer.photos" [(hints)]="answer.hints" [taskType]="taskType"
-    [feedback]="settings.feedback && settings.multipleTries">
-  </app-photo-upload-multiple-choice>
-</div>
-
-<div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
-  <h5>
-    {{ "CreateGame.multipleChoice" | translate }}
-    <ion-icon *ngIf="!settings.feedback" name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.textMC'
-        )
-      ">
-    </ion-icon>
-    <ion-icon *ngIf="settings.feedback" name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.'
-        )
-      ">
-    </ion-icon>
-  </h5>
-  <app-multiple-choice-text [(answers)]="answer.choices" [(hints)]="answer.hints"
-    [feedback]="settings.feedback && settings.multipleTries"></app-multiple-choice-text>
-</div>
-
-<div *ngIf="answer.type == answerTypeEnum.NUMBER">
-  <h5>
-    {{ "CreateGame.correctNumber" | translate }}
-    <ion-icon name="information-circle" (click)="
-        showPopover($event, 'Popover.number')
-      ">
-    </ion-icon>
-  </h5>
-  <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
-</div>
-
-<div *ngIf="answer.type == answerTypeEnum.MAP_DIRECTION || answer.type == answerTypeEnum.DIRECTION">
-  <div *ngIf="settings.feedback && settings.multipleTries">
-    <ion-text>
-      <h5>Feedback</h5>
-    </ion-text>
-    <ion-label>Abweichung &lt; 45°</ion-label>
-    <ion-textarea autoGrow [(ngModel)]="answer.hints[0]"></ion-textarea>
-    <ion-label>Abweichung &gt; 45° und &lt; 135°</ion-label>
-    <ion-textarea autoGrow [(ngModel)]="answer.hints[1]"></ion-textarea>
-    <ion-label>Abweichung &gt; 135°</ion-label>
-    <ion-textarea autoGrow [(ngModel)]="answer.hints[2]"></ion-textarea>
+  <!-- Mutiple choice (photo) - Multi-player mode -->
+  <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.MULTIPLE_CHOICE">
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          {{ "CreateGame.multipleChoice" | translate }}
+          <ion-icon name="information-circle" (click)="
+            showPopover(
+              $event,
+              'Popover.photoMC')">
+          </ion-icon>
+        </h5>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5 style="margin-bottom: 10px;">
+            Player ({{i+1}})
+          </h5>
+          <app-photo-upload-multiple-choice [(photos)]="answer[i].photos" [(hints)]="answer[i].hints"
+            [taskType]="taskType" [feedback]="settings.feedback && settings.multipleTries">
+          </app-photo-upload-multiple-choice>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
+
+  <!-- Mutiple choice (text) - Multi-player mode -->
+  <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          {{ "CreateGame.multipleChoice" | translate }}
+          <ion-icon *ngIf="!settings.feedback" name="information-circle" (click)="
+            showPopover(
+              $event,
+              'Popover.textMC')">
+          </ion-icon>
+          <ion-icon *ngIf="settings.feedback" name="information-circle"
+            (click)="
+        showPopover(
+          $event,
+          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.')">
+          </ion-icon>
+        </h5>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5 style="margin-bottom: 10px;">
+            Player ({{i+1}})
+          </h5>
+          <app-multiple-choice-text [(answers)]="answer[0].choices" [(hints)]="answer[0].hints"
+            [feedback]="settings.feedback && settings.multipleTries"></app-multiple-choice-text>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Correct answer (number) - Multi-player mode -->
+  <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.NUMBER">
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          {{ "CreateGame.correctNumber" | translate }}
+          <ion-icon name="information-circle" (click)="
+            showPopover($event, 'Popover.number')">
+          </ion-icon>
+        </h5>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5 style="margin-bottom: 10px;">
+            Player ({{i+1}})
+          </h5>
+          <ion-input type="number" [(ngModel)]="answer[i].number"></ion-input>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Feedback (by marking the direction on the map) - Multi-player mode -->
+  <!-- DoDo : translate -->
+  <div *ngIf="answer[0].type == answerTypeEnum.MAP_DIRECTION || answer[0].type == answerTypeEnum.DIRECTION">
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <ion-text>
+          <h5>
+            Feedback
+          </h5>
+        </ion-text>
+
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5 style="margin-bottom: 10px;">
+            Player ({{i+1}})
+          </h5>
+          <ion-label>Abweichung &lt; 45°</ion-label>
+          <ion-textarea autoGrow [(ngModel)]="answer[i].hints[0]"></ion-textarea>
+          <ion-label>Abweichung &gt; 45° und &lt; 135°</ion-label>
+          <ion-textarea autoGrow [(ngModel)]="answer[i].hints[1]"></ion-textarea>
+          <ion-label>Abweichung &gt; 135°</ion-label>
+          <ion-textarea autoGrow [(ngModel)]="answer[i].hints[2]"></ion-textarea>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
 </div>

@@ -174,19 +174,77 @@ export class CreateTaskModalPage implements OnInit {
     } else if (taskType.type == 3) {
       this.task = this.tasks[7];
     } else {
-      this.task = {
-        //name: 'Freie Aufgabe??',
-        name: this.translate.instant("Tasktypes.freeTask"),
-        type: "free",
-        category: "theme",
-        question: {
-          type: QuestionType.TEXT,
-          text: "",
-        },
-        answer: {
-          type: AnswerType.MULTIPLE_CHOICE,
-        },
-      };
+      if (this.isSinlgeMode) {
+        this.task = {
+          name: this.translate.instant("Tasktypes.freeTask"),
+          type: "free",
+          category: "theme",
+          question: {
+            type: QuestionType.TEXT,
+            text: "",
+          },
+          answer: {
+            type: AnswerType.MULTIPLE_CHOICE,
+          },
+        };
+      } else {
+        if (this.numPlayers == 2) {
+          this.task = {
+            name: this.translate.instant("Tasktypes.freeTask"),
+            type: "free",
+            category: "theme",
+            question: [
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              },
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              }
+            ],
+            answer: [
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              },
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              }
+            ],
+          };
+        } else {
+          this.task = {
+            name: this.translate.instant("Tasktypes.freeTask"),
+            type: "free",
+            category: "theme",
+            question: [
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              },
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              },
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              }
+            ],
+            answer: [
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              },
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              },
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              }
+            ],
+          };
+        }
+      }
     }
     this.onTaskSelected(this.task);
   }
@@ -213,32 +271,60 @@ export class CreateTaskModalPage implements OnInit {
 
     this.mapFeatures = this.task.mapFeatures;
 
+
+    /*  */
     if (this.task.type == "free") {
       this.objectQuestionSelect = this.freeQuestionSelect.map((t) => ({
         type: t as QuestionType,
         text: t,
       }));
+      // console.log("//// objectQuestionSelect:  ", this.objectQuestionSelect)
       this.objectAnswerSelect = this.freeAnswerSelect.map((t) => ({
         type: t as AnswerType,
         text: t,
       }));
+      // console.log("//// objectAnswerSelect:  ", this.objectAnswerSelect)
 
-      if (
-        this.task.answer.type == AnswerType.PHOTO ||
-        this.task.answer.type == AnswerType.TEXT
-      ) {
-        this.task.settings.feedback = false;
-        this.task.settings.multipleTries = false;
-        this.showFeedback = false;
-        this.showMultipleTries = false;
+      /* single-player */
+      if (this.isSinlgeMode) {
+
+        if (
+          this.task.answer.type == AnswerType.PHOTO ||
+          this.task.answer.type == AnswerType.TEXT
+        ) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
+
+        if (this.task.answer.type == AnswerType.DRAW) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
+      } else {
+        /* multi-player */
+        if (
+          this.task.answer[0].type == AnswerType.PHOTO ||
+          this.task.answer[0].type == AnswerType.TEXT
+        ) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
+
+        if (this.task.answer[0].type == AnswerType.DRAW) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
       }
 
-      if (this.task.answer.type == AnswerType.DRAW) {
-        this.task.settings.feedback = false;
-        this.task.settings.multipleTries = false;
-        this.showFeedback = false;
-        this.showMultipleTries = false;
-      }
+
     } else {
       console.log("//// (onTaskSelected) 1a - this.tasks", this.tasks);
       this.objectQuestionSelect = Array.from(
@@ -256,6 +342,7 @@ export class CreateTaskModalPage implements OnInit {
         );
 
       console.log("//// (onTaskSelected) 1a - objectQuestionSelect", this.objectQuestionSelect);
+
 
       // multi-player impl.
       if (this.isSinlgeMode) {
@@ -275,6 +362,22 @@ export class CreateTaskModalPage implements OnInit {
             }))
           )
         );
+
+        if (
+          this.task.type == "theme-direction" &&
+          this.task.question.type == "TEXT" &&
+          this.task.answer.type == "MAP_DIRECTION"
+        ) {
+          if (this.task.question.direction == undefined) {
+            this.task.question.direction = {};
+          }
+          if (this.task.question.direction.position != undefined) {
+            this.viewDirectionSetPosition = true;
+          } else {
+            this.viewDirectionSetPosition = false;
+          }
+        }
+
       } else {
         const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
           (t) => t.type == this.task.type
@@ -293,94 +396,167 @@ export class CreateTaskModalPage implements OnInit {
             }))
           )
         );
+
+        if (
+          this.task.type == "theme-direction" &&
+          this.task.question[0].type == "TEXT" &&
+          this.task.answer[0].type == "MAP_DIRECTION"
+        ) {
+          if (this.task.question[0].direction == undefined) {
+            this.task.question[0].direction = {};
+          }
+          if (this.task.question[0].direction.position != undefined) {
+            this.viewDirectionSetPosition = true;
+          } else {
+            this.viewDirectionSetPosition = false;
+          }
+        }
       }
 
-    }
-
-
-    if (
-      this.task.type == "theme-direction" &&
-      this.task.question.type == "TEXT" &&
-      this.task.answer.type == "MAP_DIRECTION"
-    ) {
-      if (this.task.question.direction == undefined) {
-        this.task.question.direction = {};
-      }
-      if (this.task.question.direction.position != undefined) {
-        this.viewDirectionSetPosition = true;
-      } else {
-        this.viewDirectionSetPosition = false;
-      }
     }
   }
 
+  /* on selecting a  */
   onObjectQuestionSelectChange() {
     console.log("//// o.q.s.c 0 - this.task.type", this.task.type);
-    if (this.task.type != "free") {
-      console.log("//// o.q.s.c 1");
 
-      const similarTypes = cloneDeep(themetasks).filter(
-        (t) => t.type == this.task.type
-      );
+    if (this.isSinlgeMode) {
+      if (this.task.type != "free") {
+        // console.log("//// o.q.s.c 1 - free");
 
-      const similarQ = similarTypes.filter(
-        (t) => t.question.type == this.task.question.type
-      );
+        const similarTypes = cloneDeep(themetasks).filter(
+          (t) => t.type == this.task.type
+        );
 
-      this.onTaskSelected(similarQ[0]);
+        const similarQ = similarTypes.filter(
+          (t) => t.question.type == this.task.question.type
+        );
 
-      this.objectAnswerSelect = Array.from(
-        new Set(
-          similarQ.map((t) => ({
-            type: t.answer.type as AnswerType,
-            text: t.answer.type,
-          }))
-        )
-      );
+        this.onTaskSelected(similarQ[0]);
 
-      if (this.task.question.type == QuestionType.MAP_DIRECTION) {
-        this.task.settings.multipleTries = false;
-        this.showMultipleTries = false;
-      } else {
-        this.task.settings.multipleTries = true;
-        this.showMultipleTries = true;
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer.type as AnswerType,
+              text: t.answer.type,
+            }))
+          )
+        );
+
+        if (this.task.question.type == QuestionType.MAP_DIRECTION) {
+          this.task.settings.multipleTries = false;
+          this.showMultipleTries = false;
+        } else {
+          this.task.settings.multipleTries = true;
+          this.showMultipleTries = true;
+        }
+      }
+    } else {
+      if (this.task.type != "free") {
+        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) => t.question[0].type == this.task.question[0].type
+        );
+
+        console.log("//// o.q.s.c 4 - free");
+
+        this.onTaskSelected(similarQ[0]);
+
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer[0].type as AnswerType,
+              text: t.answer[0].type,
+            }))
+          )
+        );
+
+        if (this.task.question[0].type == QuestionType.MAP_DIRECTION) {
+          this.task.settings.multipleTries = false;
+          this.showMultipleTries = false;
+        } else {
+          this.task.settings.multipleTries = true;
+          this.showMultipleTries = true;
+        }
       }
     }
+
   }
 
   onObjectAnswerSelectChange() {
-    if (this.task.type != "free") {
-      const similarTypes = cloneDeep(themetasks).filter(
-        (t) => t.type == this.task.type
-      );
+    if (this.isSinlgeMode) {
+      // Single-player impl
+      if (this.task.type != "free") {
+        const similarTypes = cloneDeep(themetasks).filter(
+          (t) => t.type == this.task.type
+        );
 
-      const similarQ = similarTypes.filter(
-        (t) =>
-          t.question.type == this.task.question.type &&
-          t.answer.type == this.task.answer.type
-      );
+        const similarQ = similarTypes.filter(
+          (t) =>
+            t.question.type == this.task.question.type &&
+            t.answer.type == this.task.answer.type
+        );
 
-      this.onTaskSelected(similarQ[0]);
-    }
+        this.onTaskSelected(similarQ[0]);
+      }
 
-    if (
-      this.task.answer.type == AnswerType.PHOTO ||
-      this.task.answer.type == AnswerType.TEXT
-    ) {
-      this.task.settings.feedback = false;
-      this.task.settings.multipleTries = false;
-      this.showFeedback = false;
-      this.showMultipleTries = false;
-    } else if (this.task.answer.type == AnswerType.DRAW) {
-      this.task.settings.feedback = false;
-      this.task.settings.multipleTries = false;
-      this.showFeedback = false;
-      this.showMultipleTries = false;
+      if (
+        this.task.answer.type == AnswerType.PHOTO ||
+        this.task.answer.type == AnswerType.TEXT
+      ) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      } else if (this.task.answer.type == AnswerType.DRAW) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      } else {
+        this.task.settings.feedback = true;
+        this.task.settings.multipleTries = true;
+        this.showFeedback = true;
+        this.showMultipleTries = true;
+      }
     } else {
-      this.task.settings.feedback = true;
-      this.task.settings.multipleTries = true;
-      this.showFeedback = true;
-      this.showMultipleTries = true;
+      // Multi-player impl
+      if (this.task.type != "free") {
+        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) =>
+            t.question[0].type == this.task.question[0].type &&
+            t.answer[0].type == this.task.answer[0].type
+        );
+
+        this.onTaskSelected(similarQ[0]);
+      }
+
+      if (
+        this.task.answer[0].type == AnswerType.PHOTO ||
+        this.task.answer[0].type == AnswerType.TEXT
+      ) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      } else if (this.task.answer[0].type == AnswerType.DRAW) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      } else {
+        this.task.settings.feedback = true;
+        this.task.settings.multipleTries = true;
+        this.showFeedback = true;
+        this.showMultipleTries = true;
+      }
     }
   }
 
@@ -424,30 +600,67 @@ export class CreateTaskModalPage implements OnInit {
       this.showMultipleTries = false;
     }
 
-    if (
-      this.task.answer.mode == TaskMode.NAV_ARROW ||
-      this.task.question.type == QuestionType.NAV_INSTRUCTION ||
-      this.task.question.type == QuestionType.NAV_INSTRUCTION_PHOTO ||
-      this.task.answer.type == AnswerType.PHOTO ||
-      (this.task.type == "nav-flag" && !this.task.settings.confirmation)
-    ) {
-      this.task.settings.multipleTries = false;
+    // Add answer hints for feedback of MAP_DIRECTION type
+    // Disable multipleTries of somr tasks inluding (nav-tasks, ....)
+    if (this.isSinlgeMode) {
+      if (
+        this.task.answer.mode == TaskMode.NAV_ARROW ||
+        this.task.question.type == QuestionType.NAV_INSTRUCTION ||
+        this.task.question.type == QuestionType.NAV_INSTRUCTION_PHOTO ||
+        this.task.answer.type == AnswerType.PHOTO ||
+        (this.task.type == "nav-flag" && !this.task.settings.confirmation)
+      ) {
+        this.task.settings.multipleTries = false;
 
-      this.showMultipleTries = false;
+        this.showMultipleTries = false;
+      }
+
+      if (
+        (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) &&
+        this.task.settings.feedback &&
+        this.task.settings.multipleTries &&
+        !this.task.answer.hints
+      ) {
+        this.task.answer.hints = [
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+        ];
+      }
+    } else {
+      if (
+        this.task.answer[0].mode == TaskMode.NAV_ARROW ||
+        this.task.question[0].type == QuestionType.NAV_INSTRUCTION ||
+        this.task.question[0].type == QuestionType.NAV_INSTRUCTION_PHOTO ||
+        this.task.answer[0].type == AnswerType.PHOTO ||
+        (this.task.type == "nav-flag" && !this.task.settings.confirmation)
+      ) {
+        this.task.settings.multipleTries = false;
+
+        this.showMultipleTries = false;
+      }
+
+      if (
+        (this.task.answer[0].type == AnswerType.MAP_DIRECTION || this.task.answer[0].type === AnswerType.DIRECTION) &&
+        this.task.settings.feedback &&
+        this.task.settings.multipleTries &&
+        !this.task.answer[0].hints
+      ) {
+        let hintsList = [
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+        ];
+        this.task.answer[0].hints = hintsList;
+        this.task.answer[1].hints = hintsList;
+        if(this.numPlayers == 3){
+          this.task.answer[2].hints = hintsList;
+        }
+
+      }
     }
 
-    if (
-      (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) &&
-      this.task.settings.feedback &&
-      this.task.settings.multipleTries &&
-      !this.task.answer.hints
-    ) {
-      this.task.answer.hints = [
-        "Probiere es noch einmal",
-        "Probiere es noch einmal",
-        "Probiere es noch einmal",
-      ];
-    }
+
   }
 
   selectCompare(task1, task2) {

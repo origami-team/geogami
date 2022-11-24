@@ -41,7 +41,6 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        
 
     }
 
@@ -55,11 +54,5 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
             componentProps: { text }
         });
         return await popover.present();
-    }
-
-    setAudioCommonality(){
-        console.log("isAudiosSame: ", this.isAudiosSame)
-        // This will allow us to set other players same to 1st when save task
-        this.question[0].isAudiosSame = this.isAudiosSame;
     }
 }

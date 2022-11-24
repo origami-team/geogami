@@ -322,12 +322,13 @@
         <ion-label>
           All players has same audio:
         </ion-label>
-        <ion-toggle [(ngModel)]="isAudiosSame" (ngModelChange)="setAudioCommonality($event)">
+        <ion-toggle [(ngModel)]="question[0].isAudiosSame" (ngModelChange)="setAudioCommonality($event)">
         </ion-toggle>
       </ion-item>
     </ion-card-header>
     <ion-card-content>
-      <div *ngFor="let e of [].constructor( (isAudiosSame ? numPlayers-2 : numPlayers) ); let i = index"
+      <!-- number of items based on whether all players have same task or not -->
+      <div *ngFor="let e of [].constructor( (question[0] && question[0].isAudiosSame ? 1 : numPlayers) ); let i = index"
         style="margin-bottom: 20px;">
         <h5> Player ({{i+1}})</h5>
         <app-audio-recorder [(audioSource)]="question[i].audio"></app-audio-recorder>
@@ -361,7 +362,7 @@
   </div>
 
   <!-- not yet -->
-  <!-- Map marking - Single-player -->
+  <!-- Map marking - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_FEATURE_FREE">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
@@ -386,8 +387,7 @@
     </ion-card>
   </div>
 
-  <!-- not yet -->
-  <!-- Mark object (TaskMode.NO_FEATURE) - Single-player -->
+  <!-- Mark object (TaskMode.NO_FEATURE) - Multi-player -->
   <div *ngIf="question[0] != undefined && question[0].mode == taskModeEnum.NO_FEATURE">
     <ion-card style="color:black;">
       <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
@@ -412,10 +412,155 @@
     </ion-card>
   </div>
 
+  <!-- Photo of the object - Multi-player -->
+  <div *ngIf="question[0] != undefined &&  question[0].type == questionTypeEnum.MAP_FEATURE_PHOTO">
+    <ion-card style="color:black;">
+      <!-- <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;"> -->
+      <!-- </ion-card-header> -->
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 25px;">
+          <h5 style="margin-bottom: 12px; ">
+            <p style="font-size: 16px;">Player ({{i+1}})</p>
+          </h5>
+
+          <h5 style="margin-bottom: 5px;">
+            {{ "CreateGame.objectPhoto" | translate }}
+            <ion-icon name="information-circle" (click)="
+          showPopover(
+            $event,
+            'Popover.objectPhoto')" *ngIf="i==0">
+            </ion-icon>
+          </h5>
+
+          <app-photo-upload [(photo)]="question[0].photo" [taskType]="taskType"></app-photo-upload>
+          <h5 style="margin-top: 10px; margin-bottom: 5px;">
+            {{ "CreateGame.objectLocation" | translate }}
+            <ion-icon name="information-circle" (click)="
+          showPopover(
+            $event,
+            'Popover.objectLocation')" *ngIf="i==0">
+            </ion-icon>
+          </h5>
+          <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[0].geometry"
+            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Viewing direction - Multi-player -->
+  <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_DIRECTION">
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          {{ "CreateGame.destinationDirection" | translate }}
+          <ion-icon name="information-circle" (click)="
+          showPopover(
+            $event,
+            'Popover.destinationDirection')">
+          </ion-icon>
+        </h5>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5 style="margin-bottom: 10px;">
+            Player ({{i+1}})
+          </h5>
+          <app-map featureType="direction" [(feature)]="question[0].direction" [isVirtualWorld]="isVirtualWorld"
+            [isVRMirrored]="isVRMirrored">
+          </app-map>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
 
+  <!-- Direction on the map - Multi-player -->
+  <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_DIRECTION_MARKER">
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          {{ "CreateGame.directionMap" | translate }}
+          <ion-icon name="information-circle" (click)="
+          showPopover(
+            $event,
+            'Popover.directionMap'
+          )
+        ">
+          </ion-icon>
+        </h5>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5 style="margin-bottom: 10px;">
+            Player ({{i+1}})
+          </h5>
+          <app-map featureType="direction" [(feature)]="question.direction" [isVirtualWorld]="isVirtualWorld"
+            [isVRMirrored]="isVRMirrored">
+          </app-map>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
+  <!-- Photo of the direction - Multi-player -->
+  <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.MAP_DIRECTION_PHOTO">
+    <ion-card style="color:black;">
+      <!-- <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;"> -->
+      <!-- </ion-card-header> -->
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 25px;">
+          <h5 style="margin-bottom: 12px; ">
+            <p style="font-size: 16px;">Player ({{i+1}})</p>
+          </h5>
 
+          <h5 style="margin-bottom: 5px;">
+            {{ "CreateGame.photoDirection" | translate }}
+            <ion-icon name="information-circle" (click)="
+            showPopover(
+              $event,
+              'Popover.photoDirection')" *ngIf="i==0">
+            </ion-icon>
+          </h5>
+
+          <app-photo-upload [(photo)]="question[0].photo" [taskType]="taskType"></app-photo-upload>
+          <h5 style="margin-top: 10px; margin-bottom: 5px;">
+            {{ "CreateGame.directionMap" | translate }}
+            <ion-icon name="information-circle" (click)="showPopover(
+              $event,
+              'Popover.directionMap')" *ngIf="i==0">
+            </ion-icon>
+          </h5>
+          <app-map featureType="direction" [(feature)]="question[0].direction"></app-map>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Photo for the task - Multi-player -->
+  <div *ngIf="question[0] != undefined && question[0].type == questionTypeEnum.PHOTO">
+    <ion-card style="color:black;">
+      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+        <h5>
+          {{ "CreateGame.photoTask" | translate }}
+          <ion-icon name="information-circle" (click)="
+            showPopover(
+              $event,
+              'Popover.photo')">
+          </ion-icon>
+        </h5>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
+          <h5 style="margin-bottom: 10px;">
+            Player ({{i+1}})
+          </h5>
+          <app-photo-upload [(photo)]="question[i].photo" [taskType]="taskType">
+          </app-photo-upload>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
 
 </div>
