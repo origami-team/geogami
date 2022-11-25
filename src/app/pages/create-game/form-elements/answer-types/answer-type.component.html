@@ -87,8 +87,8 @@
 
   <!-- Destination map view - Multi-player mode -->
   <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.POSITION">
-    <ion-card style="color:black;">
-      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+    <ion-card class="multiPlayer-card">
+      <ion-card-header>
         <h5>
           {{ "CreateGame.destination" | translate }}
           <ion-icon name="information-circle" (click)="
@@ -107,8 +107,8 @@
 
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor(numPlayers); let i = index" style="margin-bottom: 20px;">
-          <h5 style="margin-bottom: 10px;">
+        <div *ngFor="let e of [].constructor( (answer[0] && answer[0].allHasSameDes ? 1 : numPlayers) ); let i = index">
+          <h5>
             Player ({{i+1}})
           </h5>
           <app-map featureType="point" drawTheme="nav" [(feature)]="answer[i].position"
@@ -120,8 +120,8 @@
 
   <!-- Mutiple choice (photo) - theme->freeTasks->textAndPhoto->selectingPhoto - Multi-player mode -->
   <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.MULTIPLE_CHOICE">
-    <ion-card style="color:black;">
-      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+    <ion-card class="multiPlayer-card">
+      <ion-card-header>
         <h5>
           {{ "CreateGame.multipleChoice" | translate }}
           <ion-icon name="information-circle" (click)="
@@ -143,9 +143,8 @@
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameMultiChoicePhoto ? 1 : numPlayers) ); let i = index"
-          style="margin-bottom: 20px;">
-          <h5 style="margin-bottom: 10px;">
+          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameMultiChoicePhoto ? 1 : numPlayers) ); let i = index">
+          <h5>
             Player ({{i+1}})
           </h5>
           <app-photo-upload-multiple-choice [(photos)]="answer[i].photos" [(hints)]="answer[i].hints"
@@ -158,8 +157,8 @@
 
   <!-- Mutiple choice (text) - theme->freeTasks->text->choosingTextAnswer - Multi-player mode -->
   <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
-    <ion-card style="color:black;">
-      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+    <ion-card class="multiPlayer-card">
+      <ion-card-header>
         <h5>
           {{ "CreateGame.multipleChoice" | translate }}
           <ion-icon *ngIf="!settings.feedback" name="information-circle" (click)="
@@ -185,9 +184,8 @@
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameMultiChoiceText ? 1 : numPlayers) ); let i = index"
-          style="margin-bottom: 20px;">
-          <h5 style="margin-bottom: 10px;">
+          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameMultiChoiceText ? 1 : numPlayers) ); let i = index">
+          <h5 >
             Player ({{i+1}})
           </h5>
           <app-multiple-choice-text [(answers)]="answer[i].choices" [(hints)]="answer[i].hints"
@@ -199,8 +197,8 @@
 
   <!-- Correct answer (number) - theme->freeTasks->text->enteringNumber - Multi-player mode -->
   <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.NUMBER">
-    <ion-card style="color:black;">
-      <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+    <ion-card class="multiPlayer-card">
+      <ion-card-header>
         <h5>
           {{ "CreateGame.correctNumber" | translate }}
           <ion-icon name="information-circle" (click)="
@@ -220,9 +218,8 @@
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameCorrAnswer ? 1 : numPlayers) ); let i = index"
-          style="margin-bottom: 20px;">
-          <h5 style="margin-bottom: 10px;">
+          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameCorrAnswer ? 1 : numPlayers) ); let i = index">
+          <h5>
             Player ({{i+1}})
           </h5>
           <ion-input type="number" [(ngModel)]="answer[i].number"></ion-input>
@@ -235,8 +232,8 @@
   <!-- DoDo : translate -->
   <div *ngIf="answer[0].type == answerTypeEnum.MAP_DIRECTION || answer[0].type == answerTypeEnum.DIRECTION">
     <div *ngIf="settings.feedback && settings.multipleTries">
-      <ion-card style="color:black;">
-        <ion-card-header style="color:black; font-size: medium; padding-top: 0.6rem;">
+      <ion-card class="multiPlayer-card">
+        <ion-card-header>
           <ion-text>
             <h5>
               Feedback
@@ -255,9 +252,8 @@
         </ion-card-header>
         <ion-card-content>
           <div
-            *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameDirfeedback ? 1 : numPlayers) ); let i = index"
-            style="margin-bottom: 20px;">
-            <h5 style="margin-bottom: 10px;">
+            *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameDirfeedback ? 1 : numPlayers) ); let i = index">
+            <h5>
               Player ({{i+1}})
             </h5>
             <ion-label>Abweichung &lt; 45°</ion-label>
