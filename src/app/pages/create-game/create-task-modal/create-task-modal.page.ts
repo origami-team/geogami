@@ -601,7 +601,8 @@ export class CreateTaskModalPage implements OnInit {
     }
 
     // Add answer hints for feedback of MAP_DIRECTION type
-    // Disable multipleTries of somr tasks inluding (nav-tasks, ....)
+    // Disable multipleTries of some tasks inluding (nav-tasks, ....)
+    // DoDo : add them in a model as with navtasks and themetasks
     if (this.isSinlgeMode) {
       if (
         this.task.answer.mode == TaskMode.NAV_ARROW ||
@@ -651,10 +652,10 @@ export class CreateTaskModalPage implements OnInit {
           "Probiere es noch einmal",
           "Probiere es noch einmal",
         ];
-        this.task.answer[0].hints = hintsList;
-        this.task.answer[1].hints = hintsList;
+        this.task.answer[0].hints = cloneDeep(hintsList);
+        this.task.answer[1].hints = cloneDeep(hintsList);
         if (this.numPlayers == 3) {
-          this.task.answer[2].hints = hintsList;
+          this.task.answer[2].hints = cloneDeep(hintsList);
         }
 
       }
@@ -819,6 +820,59 @@ export class CreateTaskModalPage implements OnInit {
 
         if (this.numPlayers == 3) {
           this.task.question[2].photo = this.task.question[0].photo;
+        }
+      }
+      
+      if (this.task.answer[0].allHasSameDes) {
+        console.log("/// same allHasSameDes");
+        this.task.answer[1].position = this.task.answer[0].position;
+
+        if (this.numPlayers == 3) {
+          this.task.answer[2].position = this.task.answer[0].position;
+        }
+      }
+      
+      if (this.task.answer[0].allHaveSameMultiChoicePhoto) {
+        console.log("/// same allHaveSameMultiChoicePhoto");
+        this.task.answer[1].hints = this.task.answer[0].hints;
+        this.task.answer[1].photos = this.task.answer[0].photos;
+
+        if (this.numPlayers == 3) {
+          this.task.answer[2].hints = this.task.answer[0].hints;
+          this.task.answer[2].photos = this.task.answer[0].photos;
+        }
+      }
+      
+      if (this.task.answer[0].allHaveSameMultiChoiceText) {
+        console.log("/// same allHaveSameMultiChoiceText");
+        this.task.answer[1].hints = this.task.answer[0].hints;
+        this.task.answer[1].choices = this.task.answer[0].choices;
+
+        if (this.numPlayers == 3) {
+          this.task.answer[2].hints = this.task.answer[0].hints;
+          this.task.answer[2].choices = this.task.answer[0].choices;
+        }
+      }
+      
+      if (this.task.answer[0].allHaveSameCorrAnswer) {
+        console.log("/// same allHaveSameCorrAnswer");
+        this.task.answer[1].number = this.task.answer[0].number;
+
+        if (this.numPlayers == 3) {
+          this.task.answer[2].number = this.task.answer[0].number;
+        }
+      }
+      
+      if (this.task.answer[0].allHaveSameDirfeedback) {
+        console.log("/// same feedbak");
+        this.task.answer[1].hints[0] = this.task.answer[0].hints[0];
+        this.task.answer[1].hints[1] = this.task.answer[0].hints[1];
+        this.task.answer[1].hints[2] = this.task.answer[0].hints[2];
+
+        if (this.numPlayers == 3) {
+          this.task.answer[2].hints[0] = this.task.answer[0].hints[0];
+          this.task.answer[2].hints[1] = this.task.answer[0].hints[1];
+          this.task.answer[2].hints[2] = this.task.answer[0].hints[2];
         }
       }
 
