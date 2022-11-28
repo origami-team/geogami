@@ -100,7 +100,7 @@ export class CreateTaskModalPage implements OnInit {
   viewDirectionSetPosition = false;
 
   // mutiplayer - collaboration methods
-  collaborationMethodTypes: any[] = [
+  collaborationTypes: any[] = [
     {
       type: "1-1",
       text: "Each player has a unique task instruction (1-1)"
@@ -157,7 +157,7 @@ export class CreateTaskModalPage implements OnInit {
       this.selectedThemeTaskType = this.taskTypes[0];
       // mutli-player
       if (!this.isSinlgeMode) {
-        this.selectedCollType = this.collaborationMethodTypes[0];
+        this.selectedCollType = this.collaborationTypes[0];
       }
 
       this.task.settings = {
@@ -188,7 +188,9 @@ export class CreateTaskModalPage implements OnInit {
 
       // mutli-player
       if (!this.isSinlgeMode) {
-        this.selectedCollType = this.task.CollMethodType;
+        // as we only store type in db without text we need to retreive it using index
+        let index = this.collaborationTypes.findIndex(el => el.type == this.task.CollaborationType);
+        this.selectedCollType = this.collaborationTypes[index];
       }
     }
     // this.onTaskSelected(this.task);
@@ -370,9 +372,6 @@ export class CreateTaskModalPage implements OnInit {
             this.objectQuestionTemplate.indexOf(b.type)
         );
 
-      console.log("//// (onTaskSelected) 1a - objectQuestionSelect", this.objectQuestionSelect);
-
-
       // multi-player impl.
       if (this.isSinlgeMode) {
         const similarTypes = cloneDeep(themetasks).filter(
@@ -411,12 +410,11 @@ export class CreateTaskModalPage implements OnInit {
         const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
           (t) => t.type == this.task.type
         );
-        console.log("//// (onTaskSelected) 1b - similarTypes", similarTypes);
 
         const similarQ = similarTypes.filter(
           (t) => t.question[0].type == this.task.question[0].type
         );
-        console.log("//// (onTaskSelected) 1c - similarQ", similarQ);
+
         this.objectAnswerSelect = Array.from(
           new Set(
             similarQ.map((t) => ({
@@ -489,8 +487,6 @@ export class CreateTaskModalPage implements OnInit {
         const similarQ = similarTypes.filter(
           (t) => t.question[0].type == this.task.question[0].type
         );
-
-        console.log("//// o.q.s.c 4 - free");
 
         this.onTaskSelected(similarQ[0]);
 
@@ -750,7 +746,9 @@ export class CreateTaskModalPage implements OnInit {
     // set whether all palyers have same question and/or answer
     if (!this.isSinlgeMode) {
       // save coll method type
-      this.task.CollMethodType = this.selectedCollType;
+      console.log("// this.selectedCollType.type: ", this.selectedCollType.type);
+      
+      this.task.CollaborationType = this.selectedCollType.type;
 
       // only for sequential and free choice
       if(this.selectedCollType.type == 'FreeChoice'){
@@ -904,7 +902,7 @@ export class CreateTaskModalPage implements OnInit {
             this.task.answer[2].hints[2] = this.task.answer[0].hints[2];
           }
         }
-        
+
       }
       
 

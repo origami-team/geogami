@@ -41,28 +41,13 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
             console.log("changes (changes.question.currentValue): ", changes);
             if(changes.question){
                 this.questionChange.emit(changes.question.currentValue);
-            } else if (changes.collaborationType){
-                // this.onCollTypeChange(changes.collaborationType.currentValue);
             }
-
         }
-
     }
 
     /* multi-player */
     onCollTypeChange(collType: any){
-        console.log("collType:", collType)
-        if (collType == '1-1') {
-            // this.question[0].allHaveSameInstruction = false;
-/*             this.question[0].allHasSameInstPhoto = false;
-            this.question[0].allHasSameAudio = false;
-            this.question[0].allHasSameMarkObj = false; */
-        } else if (collType == 'sequential') {
-            /* this.question[0].allHaveSameInstruction = true;
-            this.question[0].allHasSameInstPhoto = true;
-            this.question[0].allHasSameAudio = true;
-            this.question[0].allHasSameMarkObj = true; */
-        }
+        console.log("collType:", collType);
 
     }
 

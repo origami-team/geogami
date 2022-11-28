@@ -63,11 +63,6 @@ export class EditGameListPage implements OnInit {
       this.userRole = this.user['roles'][0];
     }
 
-    // Check user role
-    if (this.user) {
-      this.userRole = this.user['roles'][0];
-    }
-
     this.gamesService.getUserGames().then((res) => {
       // Get either real or VE agmes based on selected environment 
       this.games = res.filter(game => game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined)).reverse();

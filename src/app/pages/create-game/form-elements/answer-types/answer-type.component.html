@@ -97,7 +97,7 @@
         </h5>
 
         <!-- Toggle to set differnt destinations -->
-        <ion-item lines="none" class="ion-no-padding">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
           <ion-label>
             All players have the same destination:
           </ion-label>
@@ -107,8 +107,8 @@
 
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor( (answer[0] && answer[0].allHasSameDes ? 1 : numPlayers) ); let i = index">
-          <h5>
+        <div *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHasSameDes) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+          <h5 *ngIf="collaborationType != 'sequential'">
             Player ({{i+1}})
           </h5>
           <app-map featureType="point" drawTheme="nav" [(feature)]="answer[i].position"
@@ -132,7 +132,7 @@
         </h5>
 
         <!-- Toggle to set differnt multiple choices (photo) -->
-        <ion-item lines="none" class="ion-no-padding">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
           <ion-label>
             All players have the same multiple choice:
           </ion-label>
@@ -143,8 +143,8 @@
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameMultiChoicePhoto ? 1 : numPlayers) ); let i = index">
-          <h5>
+          *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameMultiChoicePhoto) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+          <h5 *ngIf="collaborationType != 'sequential'">
             Player ({{i+1}})
           </h5>
           <app-photo-upload-multiple-choice [(photos)]="answer[i].photos" [(hints)]="answer[i].hints"
@@ -173,7 +173,7 @@
         </h5>
 
         <!-- Toggle to set differnt multiple choices (text) -->
-        <ion-item lines="none" class="ion-no-padding">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
           <ion-label>
             All players have the same multiple choice:
           </ion-label>
@@ -184,8 +184,8 @@
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameMultiChoiceText ? 1 : numPlayers) ); let i = index">
-          <h5 >
+          *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameMultiChoiceText) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+          <h5 *ngIf="collaborationType != 'sequential'">
             Player ({{i+1}})
           </h5>
           <app-multiple-choice-text [(answers)]="answer[i].choices" [(hints)]="answer[i].hints"
@@ -207,7 +207,7 @@
         </h5>
 
         <!-- Toggle to set differnt correct answers -->
-        <ion-item lines="none" class="ion-no-padding">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
           <ion-label>
             All players have the same correct answer:
           </ion-label>
@@ -218,8 +218,8 @@
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameCorrAnswer ? 1 : numPlayers) ); let i = index">
-          <h5>
+          *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameCorrAnswer) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+          <h5 *ngIf="collaborationType != 'sequential'">
             Player ({{i+1}})
           </h5>
           <ion-input type="number" [(ngModel)]="answer[i].number"></ion-input>
@@ -241,7 +241,7 @@
           </ion-text>
 
           <!-- Toggle to set differnt multiple choices (text) -->
-          <ion-item lines="none" class="ion-no-padding">
+          <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
             <ion-label>
               All players have the same feedback:
             </ion-label>
@@ -252,8 +252,8 @@
         </ion-card-header>
         <ion-card-content>
           <div
-            *ngFor="let e of [].constructor( (answer[0] && answer[0].allHaveSameDirfeedback ? 1 : numPlayers) ); let i = index">
-            <h5>
+            *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameDirfeedback) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+            <h5 *ngIf="collaborationType != 'sequential'">
               Player ({{i+1}})
             </h5>
             <ion-label>Abweichung &lt; 45°</ion-label>

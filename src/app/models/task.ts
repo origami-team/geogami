@@ -11,6 +11,7 @@ export interface Task {
   question: any;
   settings: any;
   type: string;
+  CollaborationType: string;
 }
 
 // export class Task {

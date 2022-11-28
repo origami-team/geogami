@@ -197,10 +197,10 @@
     <ion-text>
       <h5>Collaboration method</h5>
     </ion-text>
-    <select interface="popover" *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompare"
+    <select interface="popover" placeholder="Auswählen" [compareWith]="selectCompare"
       [(ngModel)]="selectedCollType">
-      <option [ngValue]="collMethod" *ngFor="let collMethod of collaborationMethodTypes">
-        {{collMethod.text}}
+      <option [ngValue]="collType" *ngFor="let collType of collaborationTypes">
+        {{collType.text}}
       </option>
     </select>
   </div>
@@ -247,7 +247,7 @@
     <!-- Destination -->
     <answer-type [(answer)]="task.answer" [taskType]="task.category" [settings]="task.settings"
       [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSinlgeMode?numPlayers:1)"
-      [isSinlgeMode]="isSinlgeMode">
+      [isSinlgeMode]="isSinlgeMode" [collaborationType]=" isSinlgeMode? undefined :selectedCollType.type">
     </answer-type>
   </div>
 
