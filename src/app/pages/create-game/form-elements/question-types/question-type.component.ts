@@ -23,6 +23,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     // Multi-player Mode
     @Input() numPlayers: Number;
     @Input() isSinlgeMode: Number;
+    @Input() collaborationType: any;
 
     @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
 
@@ -33,8 +34,36 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         // console.log("changes (QuestionTypeComponent): ", changes);
-        console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
-        this.questionChange.emit(changes.question.currentValue);
+        if (this.isSinlgeMode) {
+            console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
+            this.questionChange.emit(changes.question.currentValue);
+        } else {
+            console.log("changes (changes.question.currentValue): ", changes);
+            if(changes.question){
+                this.questionChange.emit(changes.question.currentValue);
+            } else if (changes.collaborationType){
+                // this.onCollTypeChange(changes.collaborationType.currentValue);
+            }
+
+        }
+
+    }
+
+    /* multi-player */
+    onCollTypeChange(collType: any){
+        console.log("collType:", collType)
+        if (collType == '1-1') {
+            // this.question[0].allHaveSameInstruction = false;
+/*             this.question[0].allHasSameInstPhoto = false;
+            this.question[0].allHasSameAudio = false;
+            this.question[0].allHasSameMarkObj = false; */
+        } else if (collType == 'sequential') {
+            /* this.question[0].allHaveSameInstruction = true;
+            this.question[0].allHasSameInstPhoto = true;
+            this.question[0].allHasSameAudio = true;
+            this.question[0].allHasSameMarkObj = true; */
+        }
+
     }
 
     ngOnInit() {

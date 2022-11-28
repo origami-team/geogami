@@ -48,7 +48,7 @@
 
   <!-- Task type - themeatic -->
   <!-- (dodo) selectedTaskType -> selectedThemeType  -->
-  <select interface="popover" *ngIf="type != 'nav'" [compareWith]="taskTypeCompare" [(ngModel)]="selectedThemeTaskType"
+  <select interface="popover" *ngIf="type != 'nav'" [compareWith]="selectCompare" [(ngModel)]="selectedThemeTaskType"
     (ngModelChange)="onThemeTaskTypeChange($event)">
     <option [ngValue]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</option>
   </select>
@@ -84,7 +84,6 @@
       </ion-text>
     </ion-card-content>
   </ion-card>
-  <!-- End of show Information about selected type -->
 
   <!-- More options of thematic types-->
   <div *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
@@ -139,7 +138,9 @@
     </div>
   </div>
 
+  <!-- Thematic tasks - Free tasks - The player answers & Question type -->
   <div *ngIf="task.type == 'free'">
+    <!-- Thematic tasks - Question type -->
     <div>
       <ion-text>
         <h5>{{ "CreateGame.questiontype" | translate }}</h5>
@@ -163,7 +164,9 @@
 
     </div>
 
+    <!-- Thematic tasks - The player answers -->
     <div>
+
       <ion-text>
         <h5>{{ "CreateGame.playerAnswers" | translate }}</h5>
       </ion-text>
@@ -184,15 +187,31 @@
         </select>
       </ng-container>
 
-
     </div>
   </div>
   <!-- End of more options of thematic types-->
 
+  <!-- >>>>>***** -->
+  <!-- Collaboration method - multiplayer - nav -->
+  <div *ngIf="!isSinlgeMode">
+    <ion-text>
+      <h5>Collaboration method</h5>
+    </ion-text>
+    <select interface="popover" *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompare"
+      [(ngModel)]="selectedCollType">
+      <option [ngValue]="collMethod" *ngFor="let collMethod of collaborationMethodTypes">
+        {{collMethod.text}}
+      </option>
+    </select>
+  </div>
+  <!-- <<<<<***** -->
+
+  <!-- Task instruction -->
   <div>
     <!-- Task instruction, markdown support, audio message ... -->
     <question-type [(question)]="task.question" [taskType]="task.category" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSinlgeMode?numPlayers:1)" [isSinlgeMode]="isSinlgeMode">
+      [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSinlgeMode?numPlayers:1)" [isSinlgeMode]="isSinlgeMode"
+      [collaborationType]=" isSinlgeMode? undefined :selectedCollType.type">
     </question-type>
 
     <!-- Search Area -->

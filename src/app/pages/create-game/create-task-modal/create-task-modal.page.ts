@@ -99,6 +99,26 @@ export class CreateTaskModalPage implements OnInit {
 
   viewDirectionSetPosition = false;
 
+  // mutiplayer - collaboration methods
+  collaborationMethodTypes: any[] = [
+    {
+      type: "1-1",
+      text: "Each player has a unique task instruction (1-1)"
+    }, {
+      type: "sequential",
+      text: "All players have same task instruction (sequential)"
+    }, /* {
+      type: "leader-follower",
+      text: "Only one player can see the instruction (leader & follower)"
+    }, */ {
+      type: "FreeChoice",
+      text: "Free choice"
+    }
+  ];
+  // selectedcollMethodType: any;
+  selectedCollType: any;
+
+
   constructor(
     public modalController: ModalController,
     public popoverController: PopoverController,
@@ -135,6 +155,10 @@ export class CreateTaskModalPage implements OnInit {
     if (this.task == null) {
       this.task = this.tasks[0];
       this.selectedThemeTaskType = this.taskTypes[0];
+      // mutli-player
+      if (!this.isSinlgeMode) {
+        this.selectedCollType = this.collaborationMethodTypes[0];
+      }
 
       this.task.settings = {
         feedback: true,
@@ -160,6 +184,11 @@ export class CreateTaskModalPage implements OnInit {
       }
       if (this.task.type.includes("free")) {
         this.selectedThemeTaskType = this.taskTypes[3];
+      }
+
+      // mutli-player
+      if (!this.isSinlgeMode) {
+        this.selectedCollType = this.task.CollMethodType;
       }
     }
     // this.onTaskSelected(this.task);
@@ -671,13 +700,6 @@ export class CreateTaskModalPage implements OnInit {
     return task1.type == task2.type;
   }
 
-  taskTypeCompare(task1, task2) {
-    if (task1 == null || task2 == null) {
-      return false;
-    }
-    return task1.type == task2.type;
-  }
-
   async presentMapFeaturesModal() {
     const modal = await this.modalController.create({
       component: MapFeaturesModalPage,
@@ -724,157 +746,167 @@ export class CreateTaskModalPage implements OnInit {
       }
     }
 
+    /* multi-player */
     // set whether all palyers have same question and/or answer
     if (!this.isSinlgeMode) {
-      if (this.task.question[0].allHasSameAudio) {
-        console.log("/// same audios ");
-        this.task.question[1].audio = this.task.question[0].audio;
-        if (this.numPlayers == 3) {
-          this.task.question[2].audio = this.task.question[0].audio;
+      // save coll method type
+      this.task.CollMethodType = this.selectedCollType;
+
+      // only for sequential and free choice
+      if(this.selectedCollType.type == 'FreeChoice'){
+
+        if (this.task.question[0].allHasSameAudio) {
+          console.log("/// same audios ");
+          this.task.question[1].audio = this.task.question[0].audio;
+          if (this.numPlayers == 3) {
+            this.task.question[2].audio = this.task.question[0].audio;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSameInstruction) {
-        console.log("/// same Instruction ");
-        this.task.question[1].text = this.task.question[0].text;
-        if (this.numPlayers == 3) {
-          this.task.question[2].text = this.task.question[0].text;
+  
+        if (this.task.question[0].allHaveSameInstruction) {
+          console.log("/// same Instruction ");
+          this.task.question[1].text = this.task.question[0].text;
+          if (this.numPlayers == 3) {
+            this.task.question[2].text = this.task.question[0].text;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSameMarkObj) {
-        console.log("/// same mark obbject ");
-        this.task.question[1].geometry = this.task.question[0].geometry;
-        if (this.numPlayers == 3) {
-          this.task.question[2].geometry = this.task.question[0].geometry;
+  
+        if (this.task.question[0].allHasSameMarkObj) {
+          console.log("/// same mark obbject ");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSameInstPhoto) {
-        console.log("/// same mark obbject ");
-        this.task.question[1].text = this.task.question[0].text;
-        this.task.question[1].photo = this.task.question[0].photo;
-        if (this.numPlayers == 3) {
-          this.task.question[2].text = this.task.question[0].text;
-          this.task.question[2].photo = this.task.question[0].photo;
+  
+        if (this.task.question[0].allHasSameInstPhoto) {
+          console.log("/// same mark obbject ");
+          this.task.question[1].text = this.task.question[0].text;
+          this.task.question[1].photo = this.task.question[0].photo;
+          if (this.numPlayers == 3) {
+            this.task.question[2].text = this.task.question[0].text;
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSameMapMark) {
-        console.log("/// same map mark ");
-        this.task.question[1].geometry = this.task.question[0].geometry;
-        if (this.numPlayers == 3) {
-          this.task.question[2].geometry = this.task.question[0].geometry;
+  
+        if (this.task.question[0].allHasSameMapMark) {
+          console.log("/// same map mark ");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSameMarkObjMode) {
-        console.log("/// same Mark object (TaskMode.NO_FEATURE)");
-        this.task.question[1].geometry = this.task.question[0].geometry;
-        if (this.numPlayers == 3) {
-          this.task.question[2].geometry = this.task.question[0].geometry;
+  
+        if (this.task.question[0].allHasSameMarkObjMode) {
+          console.log("/// same Mark object (TaskMode.NO_FEATURE)");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSamePhotoMarkObj) {
-        console.log("/// same Photo of the objec");
-        this.task.question[1].geometry = this.task.question[0].geometry;
-        this.task.question[1].photo = this.task.question[0].photo;
-
-        if (this.numPlayers == 3) {
-          this.task.question[2].geometry = this.task.question[0].geometry;
-          this.task.question[2].photo = this.task.question[0].photo;
+  
+        if (this.task.question[0].allHasSamePhotoMarkObj) {
+          console.log("/// same Photo of the objec");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          this.task.question[1].photo = this.task.question[0].photo;
+  
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSameViewDirec) {
-        console.log("/// same view direction");
-        this.task.question[1].direction = this.task.question[0].direction;
-        if (this.numPlayers == 3) {
-          this.task.question[2].direction = this.task.question[0].direction;
+  
+        if (this.task.question[0].allHasSameViewDirec) {
+          console.log("/// same view direction");
+          this.task.question[1].direction = this.task.question[0].direction;
+          if (this.numPlayers == 3) {
+            this.task.question[2].direction = this.task.question[0].direction;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSameDirMap) {
-        console.log("/// same direction on map");
-        this.task.question[1].direction = this.task.question[0].direction;
-        if (this.numPlayers == 3) {
-          this.task.question[2].direction = this.task.question[0].direction;
+  
+        if (this.task.question[0].allHasSameDirMap) {
+          console.log("/// same direction on map");
+          this.task.question[1].direction = this.task.question[0].direction;
+          if (this.numPlayers == 3) {
+            this.task.question[2].direction = this.task.question[0].direction;
+          }
         }
-      }
-
-      if (this.task.question[0].allHasSamePhotoDirMap) {
-        console.log("/// same Photo and direction n map");
-        this.task.question[1].direction = this.task.question[0].direction;
-        this.task.question[1].photo = this.task.question[0].photo;
-
-        if (this.numPlayers == 3) {
-          this.task.question[2].direction = this.task.question[0].direction;
-          this.task.question[2].photo = this.task.question[0].photo;
+  
+        if (this.task.question[0].allHasSamePhotoDirMap) {
+          console.log("/// same Photo and direction n map");
+          this.task.question[1].direction = this.task.question[0].direction;
+          this.task.question[1].photo = this.task.question[0].photo;
+  
+          if (this.numPlayers == 3) {
+            this.task.question[2].direction = this.task.question[0].direction;
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
         }
+  
+        if (this.task.question[0].allHasSamePhotoTask) {
+          console.log("/// same Photo for the task");
+          this.task.question[1].photo = this.task.question[0].photo;
+  
+          if (this.numPlayers == 3) {
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
+        }
+  
+        if (this.task.answer[0].allHasSameDes) {
+          console.log("/// same allHasSameDes");
+          this.task.answer[1].position = this.task.answer[0].position;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].position = this.task.answer[0].position;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameMultiChoicePhoto) {
+          console.log("/// same allHaveSameMultiChoicePhoto");
+          this.task.answer[1].hints = this.task.answer[0].hints;
+          this.task.answer[1].photos = this.task.answer[0].photos;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].hints = this.task.answer[0].hints;
+            this.task.answer[2].photos = this.task.answer[0].photos;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameMultiChoiceText) {
+          console.log("/// same allHaveSameMultiChoiceText");
+          this.task.answer[1].hints = this.task.answer[0].hints;
+          this.task.answer[1].choices = this.task.answer[0].choices;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].hints = this.task.answer[0].hints;
+            this.task.answer[2].choices = this.task.answer[0].choices;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameCorrAnswer) {
+          console.log("/// same allHaveSameCorrAnswer");
+          this.task.answer[1].number = this.task.answer[0].number;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].number = this.task.answer[0].number;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameDirfeedback) {
+          console.log("/// same feedbak");
+          this.task.answer[1].hints[0] = this.task.answer[0].hints[0];
+          this.task.answer[1].hints[1] = this.task.answer[0].hints[1];
+          this.task.answer[1].hints[2] = this.task.answer[0].hints[2];
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].hints[0] = this.task.answer[0].hints[0];
+            this.task.answer[2].hints[1] = this.task.answer[0].hints[1];
+            this.task.answer[2].hints[2] = this.task.answer[0].hints[2];
+          }
+        }
+        
       }
       
-      if (this.task.question[0].allHasSamePhotoTask) {
-        console.log("/// same Photo for the task");
-        this.task.question[1].photo = this.task.question[0].photo;
-
-        if (this.numPlayers == 3) {
-          this.task.question[2].photo = this.task.question[0].photo;
-        }
-      }
-      
-      if (this.task.answer[0].allHasSameDes) {
-        console.log("/// same allHasSameDes");
-        this.task.answer[1].position = this.task.answer[0].position;
-
-        if (this.numPlayers == 3) {
-          this.task.answer[2].position = this.task.answer[0].position;
-        }
-      }
-      
-      if (this.task.answer[0].allHaveSameMultiChoicePhoto) {
-        console.log("/// same allHaveSameMultiChoicePhoto");
-        this.task.answer[1].hints = this.task.answer[0].hints;
-        this.task.answer[1].photos = this.task.answer[0].photos;
-
-        if (this.numPlayers == 3) {
-          this.task.answer[2].hints = this.task.answer[0].hints;
-          this.task.answer[2].photos = this.task.answer[0].photos;
-        }
-      }
-      
-      if (this.task.answer[0].allHaveSameMultiChoiceText) {
-        console.log("/// same allHaveSameMultiChoiceText");
-        this.task.answer[1].hints = this.task.answer[0].hints;
-        this.task.answer[1].choices = this.task.answer[0].choices;
-
-        if (this.numPlayers == 3) {
-          this.task.answer[2].hints = this.task.answer[0].hints;
-          this.task.answer[2].choices = this.task.answer[0].choices;
-        }
-      }
-      
-      if (this.task.answer[0].allHaveSameCorrAnswer) {
-        console.log("/// same allHaveSameCorrAnswer");
-        this.task.answer[1].number = this.task.answer[0].number;
-
-        if (this.numPlayers == 3) {
-          this.task.answer[2].number = this.task.answer[0].number;
-        }
-      }
-      
-      if (this.task.answer[0].allHaveSameDirfeedback) {
-        console.log("/// same feedbak");
-        this.task.answer[1].hints[0] = this.task.answer[0].hints[0];
-        this.task.answer[1].hints[1] = this.task.answer[0].hints[1];
-        this.task.answer[1].hints[2] = this.task.answer[0].hints[2];
-
-        if (this.numPlayers == 3) {
-          this.task.answer[2].hints[0] = this.task.answer[0].hints[0];
-          this.task.answer[2].hints[1] = this.task.answer[0].hints[1];
-          this.task.answer[2].hints[2] = this.task.answer[0].hints[2];
-        }
-      }
 
     }
 
