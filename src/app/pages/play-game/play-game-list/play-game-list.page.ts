@@ -377,12 +377,10 @@ export class PlayGameListPage implements OnInit {
 
       if(!this.map){
         // console.log("isListTabSelected: ", this.isListTabSelected);
-        // get minimal games with locs
+        // get minimal games with locs for games map view
         this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
           // Get either real or VE agmes based on selected environment 
-          this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
-  
-          // console.log("gamesWithLocs: ", this.gamesWithLocs);
+          this.gamesWithLocs = gameswithlocs;
   
           this.convertToGeoJson()
         });
