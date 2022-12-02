@@ -730,171 +730,207 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (Capacitor.isNative) {
       Plugins.CapacitorKeepScreenOn.enable();
     }
+
+    // To disable map interations
+    this.enableDisableMapInteraction(false);
+  }
+
+  /* To disable map interations until player check 'share data box' and press done */
+  enableDisableMapInteraction(enable: boolean) {
+    if (!enable) {
+      this.map.scrollZoom.disable();
+      this.map.boxZoom.disable();
+      this.map.doubleClickZoom.disable();
+      // disable map rotation using right click + drag
+      this.map.dragRotate.disable();
+      // disable map rotation using touch rotation gesture
+      this.map.touchZoomRotate.disable();
+      this.map.dragPan.disable();
+      this.map.keyboard.disable();
+      this.map.touchZoomRotate.disable();
+
+    } else {
+      this.map.scrollZoom.enable();
+      this.map.boxZoom.enable();
+      this.map.doubleClickZoom.enable();
+      // disable map rotation using right click + drag
+      this.map.dragRotate.enable();
+      // disable map rotation using touch rotation gesture
+      this.map.touchZoomRotate.enable();
+      this.map.dragPan.enable();
+      this.map.keyboard.enable();
+      this.map.touchZoomRotate.enable();
+    }
   }
 
   onMapClick(e, mapType) {
     console.log(e);
-    let clickDirection;
 
-    if (this.task.answer.type == AnswerType.MAP_POINT) {
-      if (
-        this.isZoomedToTaskMapPoint ||
-        this.task.mapFeatures.zoombar != "task"
-      ) {
-        const pointFeature = this.helperService._toGeoJSONPoint(
-          e.lngLat.lng,
-          e.lngLat.lat
-        );
+    /* Disable map click until player check 'share data box' and press done */
+    if (!this.showPlayersNames) {
+      let clickDirection;
 
-        if (this.map.getSource("marker-point")) {
-          this.map.getSource("marker-point").setData(pointFeature);
+      if (this.task.answer.type == AnswerType.MAP_POINT) {
+        if (
+          this.isZoomedToTaskMapPoint ||
+          this.task.mapFeatures.zoombar != "task"
+        ) {
+          const pointFeature = this.helperService._toGeoJSONPoint(
+            e.lngLat.lng,
+            e.lngLat.lat
+          );
+
+          if (this.map.getSource("marker-point")) {
+            this.map.getSource("marker-point").setData(pointFeature);
+          } else {
+            this.map.addSource("marker-point", {
+              type: "geojson",
+              data: pointFeature,
+            });
+          }
+
+          if (!this.map.getLayer("marker-point")) {
+            this.map.addLayer({
+              id: "marker-point",
+              type: "symbol",
+              source: "marker-point",
+              layout: {
+                "icon-image": "marker-editor",
+                "icon-size": 0.65,
+                "icon-anchor": "bottom",
+              },
+            });
+          }
         } else {
-          this.map.addSource("marker-point", {
-            type: "geojson",
-            data: pointFeature,
+          this.isZoomedToTaskMapPoint = true;
+          this.map.flyTo({
+            center: [e.lngLat.lng, e.lngLat.lat],
+            zoom: 18,
+            // padding: {
+            //   top: 80,
+            //   bottom: 620,
+            //   left: 40,
+            //   right: 40
+            // },
+            // duration: 1000
           });
         }
-
-        if (!this.map.getLayer("marker-point")) {
-          this.map.addLayer({
-            id: "marker-point",
-            type: "symbol",
-            source: "marker-point",
-            layout: {
-              "icon-image": "marker-editor",
-              "icon-size": 0.65,
-              "icon-anchor": "bottom",
-            },
-          });
-        }
-      } else {
-        this.isZoomedToTaskMapPoint = true;
-        this.map.flyTo({
-          center: [e.lngLat.lng, e.lngLat.lat],
-          zoom: 18,
-          // padding: {
-          //   top: 80,
-          //   bottom: 620,
-          //   left: 40,
-          //   right: 40
-          // },
-          // duration: 1000
-        });
       }
-    }
 
-    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      if (
-        this.isZoomedToTaskMapPoint ||
-        this.task.mapFeatures.zoombar != "task"
-      ) {
-        if (this.task.question.direction?.position) {
-          this.clickDirection = this.helperService.bearing(
-            this.task.question.direction.position.geometry.coordinates[1],
-            this.task.question.direction.position.geometry.coordinates[0],
-            e.lngLat.lat,
-            e.lngLat.lng
-          );
-        } else {
-          this.clickDirection = this.helperService.bearing(
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
-            e.lngLat.lat,
-            e.lngLat.lng
-          );
-        }
-        clickDirection = this.clickDirection;
-        if (!this.map.getLayer("viewDirectionClick")) {
+      if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+        if (
+          this.isZoomedToTaskMapPoint ||
+          this.task.mapFeatures.zoombar != "task"
+        ) {
           if (this.task.question.direction?.position) {
-            this.map.addSource("viewDirectionClick", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates:
-                  this.task.question.direction.position.geometry.coordinates,
-              },
-            });
+            this.clickDirection = this.helperService.bearing(
+              this.task.question.direction.position.geometry.coordinates[1],
+              this.task.question.direction.position.geometry.coordinates[0],
+              e.lngLat.lat,
+              e.lngLat.lng
+            );
           } else {
-            this.map.addSource("viewDirectionClick", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates: [
-                  (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
-                  (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
-                ],
+            this.clickDirection = this.helperService.bearing(
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+              e.lngLat.lat,
+              e.lngLat.lng
+            );
+          }
+          clickDirection = this.clickDirection;
+          if (!this.map.getLayer("viewDirectionClick")) {
+            if (this.task.question.direction?.position) {
+              this.map.addSource("viewDirectionClick", {
+                type: "geojson",
+                data: {
+                  type: "Point",
+                  coordinates:
+                    this.task.question.direction.position.geometry.coordinates,
+                },
+              });
+            } else {
+              this.map.addSource("viewDirectionClick", {
+                type: "geojson",
+                data: {
+                  type: "Point",
+                  coordinates: [
+                    (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+                    (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+                  ],
+                },
+              });
+            }
+            this.map.addLayer({
+              id: "viewDirectionClick",
+              source: "viewDirectionClick",
+              type: "symbol",
+              layout: {
+                "icon-image": "view-direction-task",
+                "icon-size": 0.65,
+                "icon-offset": [0, -8],
               },
             });
+            if (this.map.getLayer("viewDirectionClickGeolocate")) {
+              this.map.removeLayer("viewDirectionClickGeolocate");
+              this.map.removeSource("viewDirectionClickGeolocate");
+            } else {
+              this.geolocateControl.setType(GeolocateType.None);
+            }
           }
-          this.map.addLayer({
-            id: "viewDirectionClick",
-            source: "viewDirectionClick",
-            type: "symbol",
-            layout: {
-              "icon-image": "view-direction-task",
-              "icon-size": 0.65,
-              "icon-offset": [0, -8],
-            },
+          this.map.setLayoutProperty(
+            "viewDirectionClick",
+            "icon-rotate",
+            this.clickDirection - this.map.getBearing()
+          );
+        } else {
+          this.isZoomedToTaskMapPoint = true;
+          const center = this.task.question.direction?.position
+            ? this.task.question.direction.position.geometry.coordinates
+            : [
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+            ];
+          this.map.flyTo({
+            center,
+            zoom: 18,
+            // padding: {
+            //   top: 80,
+            //   bottom: 620,
+            //   left: 40,
+            //   right: 40
+            // },
+            // duration: 1000
           });
-          if (this.map.getLayer("viewDirectionClickGeolocate")) {
-            this.map.removeLayer("viewDirectionClickGeolocate");
-            this.map.removeSource("viewDirectionClickGeolocate");
-          } else {
-            this.geolocateControl.setType(GeolocateType.None);
-          }
         }
-        this.map.setLayoutProperty(
-          "viewDirectionClick",
-          "icon-rotate",
-          this.clickDirection - this.map.getBearing()
-        );
-      } else {
-        this.isZoomedToTaskMapPoint = true;
-        const center = this.task.question.direction?.position
-          ? this.task.question.direction.position.geometry.coordinates
-          : [
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
-          ];
-        this.map.flyTo({
-          center,
-          zoom: 18,
-          // padding: {
-          //   top: 80,
-          //   bottom: 620,
-          //   left: 40,
-          //   right: 40
-          // },
-          // duration: 1000
-        });
       }
+
+      this.trackerService.addEvent({
+        type: "ON_MAP_CLICKED",
+        clickPosition: {
+          latitude: e.lngLat.lat,
+          longitude: e.lngLat.lng,
+        },
+        clickDirection,
+        map: mapType,
+        answer: this.feedbackControl.getMapClickAnswer(
+          {
+            selectedPhoto: this.selectedPhoto,
+            isCorrectPhotoSelected: this.isCorrectPhotoSelected,
+            selectedChoice: this.selectedChoice,
+            isCorrectChoiceSelected: this.isCorrectChoiceSelected,
+            photo: this.photo,
+            photoURL: this.photoURL,
+            directionBearing: this.directionBearing,
+            compassHeading: this.compassHeading,
+            clickDirection: this.clickDirection,
+            numberInput: this.numberInput,
+            textInput: this.textInput,
+          },
+          [e.lngLat.lng, e.lngLat.lat]
+        ),
+      });
     }
 
-    this.trackerService.addEvent({
-      type: "ON_MAP_CLICKED",
-      clickPosition: {
-        latitude: e.lngLat.lat,
-        longitude: e.lngLat.lng,
-      },
-      clickDirection,
-      map: mapType,
-      answer: this.feedbackControl.getMapClickAnswer(
-        {
-          selectedPhoto: this.selectedPhoto,
-          isCorrectPhotoSelected: this.isCorrectPhotoSelected,
-          selectedChoice: this.selectedChoice,
-          isCorrectChoiceSelected: this.isCorrectChoiceSelected,
-          photo: this.photo,
-          photoURL: this.photoURL,
-          directionBearing: this.directionBearing,
-          compassHeading: this.compassHeading,
-          clickDirection: this.clickDirection,
-          numberInput: this.numberInput,
-          textInput: this.textInput,
-        },
-        [e.lngLat.lng, e.lngLat.lat]
-      ),
-    });
   }
 
   calcBounds(task: any): mapboxgl.LngLatBounds {
@@ -1364,6 +1400,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
       PlayingGamePage.showSuccess = true;
+
+      // To disable map interations
+      this.enableDisableMapInteraction(false);
 
       // VR world (disconnect socket connection when tasks are done)
       if (this.isVirtualWorld) {
@@ -1887,6 +1926,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     console.log(this.playersNames);
     this.initGame();
     this.showPlayersNames = false;
+    this.enableDisableMapInteraction(true);
   }
 
   /**
