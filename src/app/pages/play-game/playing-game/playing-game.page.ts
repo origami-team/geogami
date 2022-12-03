@@ -453,6 +453,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     ],
   });
 
+
+  /* multi-player */
+  isSingleMode: boolean = true;
+  playerNo = 1;
+  /*
+  1. check if game is multi
+  2. create a function than assign player name form socket server 
+   */
+
   ngOnInit() {
     Plugins.Keyboard.addListener("keyboardDidHide", async () => {
       this.map.resize();
@@ -469,6 +478,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored });
   }
 
+  connectSocketIO_MultiPlayer() {
+    // this.socket.connect();
+    /* MultiUsers in Parallel impl. */
+    this.socket.emit("newGame", this.gameCode);
+  }
+
   disconnectSocketIO() {
     this.socket.disconnect();
   }
@@ -480,6 +495,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.gameCode = JSON.parse(params.bundle).gameCode;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
@@ -499,6 +515,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           // Check game type either real or VR world
           if (game.isVRWorld !== undefined && game.isVRWorld != false) {
             this.connectSocketIO();
+          }
+
+          if (!this.isSingleMode) {
+            console.log("///isSingleMode: ", this.isSingleMode);
+            this.socket.connect();
+            //this.connectSocketIO_MultiPlayer();
           }
         });
     });
@@ -1081,7 +1103,105 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   async initGame() {
-    this.task = this.game.tasks[this.taskIndex];
+    /* multiplayer */
+    if (this.isSingleMode) {
+      this.task = this.game.tasks[this.taskIndex];
+    } else {
+
+      // add to a function
+      this.game.tasks.forEach(task => {
+
+        switch (task.collaborationType) {
+          case "1-1":
+            task.answer = task.answer[this.playerNo - 1]
+            task.question = task.question[this.playerNo - 1]
+            break;
+          case "sequential":
+            task.answer = task.answer[0]
+            task.question = task.question[0]
+            break;
+          case "freeChoice":
+            // with free choice start with assigning each player answer/questoin 
+            // as in (1-1) to avoid adding else condition in the following code
+            let tempAnswer = task.answer[this.playerNo - 1]
+            let tempQuestion = task.question[this.playerNo - 1]
+
+            /* Question types */
+            if (task.question[0].allHaveSameInstruction) {
+              tempQuestion.text = task.question[0].text;
+            }
+            if (task.question[0].allHaveSameAudio) {
+              tempQuestion.audio = task.question[0].audio;
+            }
+            if (task.question[0].allHasSameMarkObj) {
+              tempQuestion.geometry = task.question[0].geometry;
+            }
+            if (task.question[0].allHasSameInstPhoto) {
+              tempQuestion.text = task.question[0].text;
+              tempQuestion.photo = task.question[0].photo;
+            }
+            if (task.question[0].allHasSameMapMark) {
+              tempQuestion.geometry = task.question[0].geometry;
+            }
+            if (task.question[0].allHasSameMarkObjMode) {
+              tempQuestion.geometry = task.question[0].geometry;
+            }
+            if (task.question[0].allHasSamePhotoMarkObj) {
+              tempQuestion.geometry = task.question[0].geometry;
+              tempQuestion.photo = task.question[0].photo;
+            }
+            if (task.question[0].allHasSameViewDirec) {
+              tempQuestion.direction = task.question[0].direction;
+            }
+
+            if (task.question[0].allHasSameDirMap) {
+              tempQuestion.direction = task.question[0].direction;
+            }
+
+            if (task.question[0].allHasSamePhotoDirMap) {
+              tempQuestion.direction = task.question[0].direction;
+              tempQuestion.photo = task.question[0].photo;
+
+            }
+            if (task.question[0].allHasSamePhotoTask) {
+              tempQuestion.photo = task.question[0].photo;
+            }
+
+            /* Answer types */
+            if (task.answer[0].allHasSameDes) {
+              tempAnswer.position = task.answer[0].position;
+            }
+            if (task.answer[0].allHaveSameMultiChoicePhoto) {
+              tempAnswer.hints = task.answer[0].hints;
+              tempAnswer.photos = task.answer[0].photos;
+            }
+            if (task.answer[0].allHaveSameMultiChoiceText) {
+              tempAnswer.hints = task.answer[0].hints;
+              tempAnswer.choices = task.answer[0].choices;
+            }
+            if (task.answer[0].allHaveSameCorrAnswer) {
+              tempAnswer.number = task.answer[0].number;
+            }
+            if (task.answer[0].allHaveSameDirfeedback) {
+              tempAnswer.hints[0] = task.answer[0].hints[0];
+              tempAnswer.hints[1] = task.answer[0].hints[1];
+              tempAnswer.hints[2] = task.answer[0].hints[2];
+            }
+
+            // assign temp answer/question to task
+            task.answer = tempAnswer
+            task.question = tempQuestion
+            break;
+        }
+
+      });
+
+      this.task = this.game.tasks[this.taskIndex];
+
+      // console.log("////this.task: ", this.task)
+    }
+
+
     this.trackerService.updateTaskNo(this.taskIndex + 1, this.task.category) // to update taskNo stored in waypoints
     this.feedbackControl.setTask(this.task);
     await this.trackerService.init(

@@ -30,6 +30,10 @@ export class GameDetailPage implements OnInit {
   isVRMirrored: boolean = false;
   gameCode: string = "";
 
+  // multiplayer
+  teacherCode: string = "";
+  isSingleMode: boolean = true;
+
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
     private gamesService: GamesService,
@@ -51,9 +55,19 @@ export class GameDetailPage implements OnInit {
               this.isVRMirrored = true;
             }
           }
+
+          /* multi-player */
+          if (game.isMultiplayerGame !== undefined) {
+            this.isSingleMode = !game.isMultiplayerGame;
+          }
+
         })
         .finally(() => {
-          console.log(this.game);
+          console.log("game: ", this.game);
+
+
+
+
           // this.activities = this.game.activities
           // this.points = this.activities[0].points
           // if(this.mapContainer.nativeElement) {
@@ -96,7 +110,8 @@ export class GameDetailPage implements OnInit {
       id: this.game._id,
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
-      gameCode: this.gameCode
+      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode),
+      isSingleMode: this.isSingleMode
     }
     this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
   }

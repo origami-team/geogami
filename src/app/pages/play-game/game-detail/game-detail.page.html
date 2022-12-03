@@ -38,6 +38,23 @@
     </ion-card-content>
   </ion-card>
 
+<!-- multi-player impl. -->
+<!-- DoDo: change it to qr code scan -->
+  <!-- <ion-card *ngIf="isVirtualWorld"> -->
+    <ion-card *ngIf="!isSingleMode">
+      <!-- <div #map class="map"></div> -->
+      <ion-card-header>
+        <ion-card-title> Enter teacher code
+          <!-- <ion-icon name="information-circle"
+            (click)="showPopover($event, 'Popover.gameConnectionInfo')">
+          </ion-icon> -->
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input placeholder="Enter teacher code" [(ngModel)]="teacherCode"></ion-input>
+      </ion-card-content>
+    </ion-card>
+
 </ion-content>
 
 <ion-footer>

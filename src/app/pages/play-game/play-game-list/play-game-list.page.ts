@@ -90,7 +90,6 @@ export class PlayGameListPage implements OnInit {
     // Get games data from server
     this.getGamesData();
 
-    
   }
 
   ngAfterViewInit(): void {
@@ -100,13 +99,12 @@ export class PlayGameListPage implements OnInit {
   getGamesData() {
     this.gamesService.getGames(true).then(res => res.content).then(games => {
       // Get either real or VE agmes based on selected environment 
-      this.games = games.filter(game => 
+      this.games = games.filter(game =>
         (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
-      //this.gamesTemp = cloneDeep(this.games);
       this.gamesTemp = this.games;
       this.loading = true;
 
-      if(this.selectedSegment == "curated"){
+      if (this.selectedSegment == "curated") {
         // Filter data of selected segment
         this.segmentChanged(this.selectedSegment)
       }
@@ -372,16 +370,16 @@ export class PlayGameListPage implements OnInit {
   }
 
   async openMapTap() {
-    if (this.isListTabSelected ) {
+    if (this.isListTabSelected) {
       this.isListTabSelected = false;
 
-      if(!this.map){
+      if (!this.map) {
         // console.log("isListTabSelected: ", this.isListTabSelected);
         // get minimal games with locs for games map view
         this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
           // Get either real or VE agmes based on selected environment 
           this.gamesWithLocs = gameswithlocs;
-  
+
           this.convertToGeoJson()
         });
       }
@@ -463,5 +461,4 @@ export class PlayGameListPage implements OnInit {
 
   }
 
-  
 }
