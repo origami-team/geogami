@@ -51,7 +51,7 @@
     "@types/dom-mediacapture-record": "^1.0.7",
     "angular-pipes": "^10.0.0",
     "capacitor-keep-screen-on": "^0.0.4",
-    "capacitor-voice-recorder": "^0.1.4",
+    "capacitor-voice-recorder": "^4.0.0",
     "cordova-android": "^11.0.0",
     "cordova-browser": "6.0.0",
     "cordova-ios": "^6.2.0",
