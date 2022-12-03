@@ -111,7 +111,7 @@ export class CreateTaskModalPage implements OnInit {
       type: "leader-follower",
       text: "Only one player can see the instruction (leader & follower)"
     }, */ {
-      type: "FreeChoice",
+      type: "freeChoice",
       text: "Free choice"
     }
   ];
@@ -189,7 +189,7 @@ export class CreateTaskModalPage implements OnInit {
       // mutli-player
       if (!this.isSinlgeMode) {
         // as we only store type in db without text we need to retreive it using index
-        let index = this.collaborationTypes.findIndex(el => el.type == this.task.CollaborationType);
+        let index = this.collaborationTypes.findIndex(el => el.type == this.task.collaborationType);
         this.selectedCollType = this.collaborationTypes[index];
       }
     }
@@ -748,19 +748,12 @@ export class CreateTaskModalPage implements OnInit {
       // save coll method type
       console.log("// this.selectedCollType.type: ", this.selectedCollType.type);
       
-      this.task.CollaborationType = this.selectedCollType.type;
+      this.task.collaborationType = this.selectedCollType.type;
 
       // only for sequential and free choice
-      if(this.selectedCollType.type == 'FreeChoice'){
+      if(this.selectedCollType.type == 'freeChoice'){
 
-        if (this.task.question[0].allHasSameAudio) {
-          console.log("/// same audios ");
-          this.task.question[1].audio = this.task.question[0].audio;
-          if (this.numPlayers == 3) {
-            this.task.question[2].audio = this.task.question[0].audio;
-          }
-        }
-  
+        /* Question types */
         if (this.task.question[0].allHaveSameInstruction) {
           console.log("/// same Instruction ");
           this.task.question[1].text = this.task.question[0].text;
@@ -768,7 +761,13 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].text = this.task.question[0].text;
           }
         }
-  
+        if (this.task.question[0].allHaveSameAudio) {
+          console.log("/// same audios ");
+          this.task.question[1].audio = this.task.question[0].audio;
+          if (this.numPlayers == 3) {
+            this.task.question[2].audio = this.task.question[0].audio;
+          }
+        }
         if (this.task.question[0].allHasSameMarkObj) {
           console.log("/// same mark obbject ");
           this.task.question[1].geometry = this.task.question[0].geometry;
@@ -776,7 +775,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].geometry = this.task.question[0].geometry;
           }
         }
-  
         if (this.task.question[0].allHasSameInstPhoto) {
           console.log("/// same mark obbject ");
           this.task.question[1].text = this.task.question[0].text;
@@ -786,7 +784,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].photo = this.task.question[0].photo;
           }
         }
-  
         if (this.task.question[0].allHasSameMapMark) {
           console.log("/// same map mark ");
           this.task.question[1].geometry = this.task.question[0].geometry;
@@ -794,7 +791,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].geometry = this.task.question[0].geometry;
           }
         }
-  
         if (this.task.question[0].allHasSameMarkObjMode) {
           console.log("/// same Mark object (TaskMode.NO_FEATURE)");
           this.task.question[1].geometry = this.task.question[0].geometry;
@@ -802,7 +798,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].geometry = this.task.question[0].geometry;
           }
         }
-  
         if (this.task.question[0].allHasSamePhotoMarkObj) {
           console.log("/// same Photo of the objec");
           this.task.question[1].geometry = this.task.question[0].geometry;
@@ -813,7 +808,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].photo = this.task.question[0].photo;
           }
         }
-  
         if (this.task.question[0].allHasSameViewDirec) {
           console.log("/// same view direction");
           this.task.question[1].direction = this.task.question[0].direction;
@@ -821,7 +815,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].direction = this.task.question[0].direction;
           }
         }
-  
         if (this.task.question[0].allHasSameDirMap) {
           console.log("/// same direction on map");
           this.task.question[1].direction = this.task.question[0].direction;
@@ -829,7 +822,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].direction = this.task.question[0].direction;
           }
         }
-  
         if (this.task.question[0].allHasSamePhotoDirMap) {
           console.log("/// same Photo and direction n map");
           this.task.question[1].direction = this.task.question[0].direction;
@@ -840,7 +832,6 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].photo = this.task.question[0].photo;
           }
         }
-  
         if (this.task.question[0].allHasSamePhotoTask) {
           console.log("/// same Photo for the task");
           this.task.question[1].photo = this.task.question[0].photo;
@@ -849,7 +840,8 @@ export class CreateTaskModalPage implements OnInit {
             this.task.question[2].photo = this.task.question[0].photo;
           }
         }
-  
+
+        /* Answer types */
         if (this.task.answer[0].allHasSameDes) {
           console.log("/// same allHasSameDes");
           this.task.answer[1].position = this.task.answer[0].position;

@@ -11,7 +11,7 @@ export interface Task {
   question: any;
   settings: any;
   type: string;
-  CollaborationType: string;
+  collaborationType: string;
 }
 
 // export class Task {

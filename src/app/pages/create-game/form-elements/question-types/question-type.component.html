@@ -238,7 +238,7 @@
         </h5>
 
         <!-- Toggle to set differnt instruction for each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same instruction:
           </ion-label>
@@ -283,7 +283,7 @@
         </h5>
 
         <!-- Toggle to set differnt instruction (photo) for each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same instruction:
           </ion-label>
@@ -333,11 +333,11 @@
       </h5>
 
       <!-- Toggle to set differnt instruction for each player -->
-      <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+      <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
         <ion-label>
           All players have the same instruction:
         </ion-label>
-        <ion-toggle [(ngModel)]="question[0].allHasSameAudio">
+        <ion-toggle [(ngModel)]="question[0].allHaveSameAudio">
         </ion-toggle>
       </ion-item>
 
@@ -345,7 +345,7 @@
     <ion-card-content>
       <!-- number of items based on whether all players have same task or not -->
       <div
-        *ngFor="let e of [].constructor( (question[0] && question[0].allHasSameAudio || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+        *ngFor="let e of [].constructor( (question[0] && question[0].allHaveSameAudio || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
         <h5 *ngIf="collaborationType != 'sequential'"> Player ({{i+1}})</h5>
         <app-audio-recorder [(audioSource)]="question[i].audio"></app-audio-recorder>
       </div>
@@ -364,7 +364,7 @@
         </h5>
 
         <!-- Toggle to set differnt mark object for each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same mark object:
           </ion-label>
@@ -400,7 +400,7 @@
         </h5>
 
         <!-- Toggle to set differnt map marking for each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same map marking:
           </ion-label>
@@ -433,7 +433,7 @@
         </h5>
 
         <!-- Toggle to set differnt Mark object (TaskMode.NO_FEATURE) for each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same mark object:
           </ion-label>
@@ -466,7 +466,7 @@
         </h5>
 
         <!-- Toggle to set differnt Photo of the objectfor each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same photo and mark object:
           </ion-label>
@@ -522,7 +522,7 @@
         </h5>
 
         <!-- Toggle to set differnt Photo of the viewing direction of each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same viewing direction:
           </ion-label>
@@ -558,7 +558,7 @@
           </ion-icon>
         </h5>
         <!-- Toggle to set differnt direction on the map for each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same direction on the map:
           </ion-label>
@@ -592,7 +592,7 @@
         </h5>
 
         <!-- Toggle to set differnt Photo of the objectfor each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same photo and direction on map:
           </ion-label>
@@ -645,7 +645,7 @@
           </ion-icon>
         </h5>
         <!-- Toggle to set differnt Photo of the objectfor each player -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'FreeChoice'">
+        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
           <ion-label>
             All players have the same photo for the task:
           </ion-label>
