@@ -72,6 +72,7 @@ import { Socket } from 'ngx-socket-io';
 import { AvatarPosition } from 'src/app/models/avatarPosition'
 import { Coords } from 'src/app/models/coords'
 import { TranslateService } from "@ngx-translate/core";
+import { UtilService } from "src/app/services/util.service";
 
 @Component({
   selector: "app-playing-game",
@@ -95,7 +96,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private geolocationService: OrigamiGeolocationService,
     private orientationService: OrigamiOrientationService,
     private socket: Socket,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private utilService: UtilService
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -456,7 +458,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   /* multi-player */
   isSingleMode: boolean = true;
-  playerNo:number = 1;
+  numPlayers = 1;
+  playerNo: number = 1;
   joinedPlayersCount = 0;
   /*
   1. check if game is multi
@@ -485,22 +488,38 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.socket.on('assignPlayerNumber', (data) => {
       console.log("// data from socket: ", data)
-        this.playerNo = this.joinedPlayersCount = data.playerNo;
+      this.playerNo = this.joinedPlayersCount = data.playerNo;
     });
 
-    this.socket.on('PlayerJoined', (data) => {
+    this.socket.on('playerJoined', (data) => {
       console.log("// PlayerJoined: (number of players so far) ", data)
       this.joinedPlayersCount = data.joinedPlayersCount;
     });
 
+    this.socket.on('gamePlayersFull', (data) => {
+      console.log("// PlayerJoined: (number of players so far) ", data)
+      // show toast msg
+      this.utilService.showToast(data.msg, "dark", 3500)
+    });
+
     /* Enroll user in teacher's dedicated room. */
-    this.socket.emit("joinGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
+    this.socket.emit("joinGame", { gameCode: this.gameCode, gameNumPlayers: this.numPlayers });
   }
 
   disconnectSocketIO() {
     this.socket.disconnect();
   }
 
+  disconnectSocketIO_MultiPlayer() {
+    this.socket.disconnect();
+  }
+
+  ionViewWillLeave(){
+    // Disconnect server when leaving playing page
+    if(!this.isSingleMode){
+      this.disconnectSocketIO_MultiPlayer();
+    }
+  }
   ionViewWillEnter() {
     // VR world
     // to seperate realworld games from VR ones in view
@@ -531,6 +550,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           }
 
           if (!this.isSingleMode) {
+            this.numPlayers = game.numPlayers;
+            console.log("///numPlayers: ", this.numPlayers);
             console.log("///isSingleMode: ", this.isSingleMode);
             // this.socket.connect();
             this.connectSocketIO_MultiPlayer();
