@@ -93,7 +93,7 @@
         <h5 *ngIf="task.type == 'theme-direction'">{{ "CreateGame.direction" | translate }}</h5>
       </ion-text>
       <!-- Single-player -->
-      <ng-container *ngIf="isSinlgeMode">
+      <ng-container *ngIf="isSingleMode">
         <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
           interface="popover">
           <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
@@ -102,7 +102,7 @@
       </ng-container>
 
       <!-- Multi-player -->
-      <ng-container *ngIf="!isSinlgeMode">
+      <ng-container *ngIf="!isSingleMode">
         <select [(ngModel)]="task.question[0].type" (ngModelChange)="onObjectQuestionSelectChange($event)"
           interface="popover">
           <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
@@ -117,7 +117,7 @@
       </ion-text>
 
       <!-- Single-player -->
-      <ng-container *ngIf="isSinlgeMode">
+      <ng-container *ngIf="isSingleMode">
         <select interface="popover" [(ngModel)]=" task.answer.type"
           (ngModelChange)="onObjectAnswerSelectChange($event)">
           <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
@@ -126,7 +126,7 @@
       </ng-container>
 
       <!-- Multi-player -->
-      <ng-container *ngIf="!isSinlgeMode">
+      <ng-container *ngIf="!isSingleMode">
         <select interface="popover" [(ngModel)]="task.answer[0].type"
           (ngModelChange)="onObjectAnswerSelectChange($event)">
           <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
@@ -146,7 +146,7 @@
         <h5>{{ "CreateGame.questiontype" | translate }}</h5>
       </ion-text>
       <!-- Single-player -->
-      <ng-container *ngIf="isSinlgeMode">
+      <ng-container *ngIf="isSingleMode">
         <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
           interface="popover">
           <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
@@ -154,7 +154,7 @@
         </select>
       </ng-container>
       <!-- Multi-player -->
-      <ng-container *ngIf="!isSinlgeMode">
+      <ng-container *ngIf="!isSingleMode">
         <select [(ngModel)]="task.question[0].type" (ngModelChange)="onObjectQuestionSelectChange($event)"
           interface="popover">
           <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
@@ -171,7 +171,7 @@
         <h5>{{ "CreateGame.playerAnswers" | translate }}</h5>
       </ion-text>
       <!-- Single-player -->
-      <ng-container *ngIf="isSinlgeMode">
+      <ng-container *ngIf="isSingleMode">
         <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
           <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
             {{ option.text | typeToText: task.type : true | translate}}</option>
@@ -179,7 +179,7 @@
       </ng-container>
 
       <!-- Mutli-player -->
-      <ng-container *ngIf="!isSinlgeMode">
+      <ng-container *ngIf="!isSingleMode">
         <select interface="popover" [(ngModel)]="task.answer[0].type"
           (ngModelChange)="onObjectAnswerSelectChange($event)">
           <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
@@ -193,7 +193,7 @@
 
   <!-- >>>>>***** -->
   <!-- Collaboration method - multiplayer - nav -->
-  <div *ngIf="!isSinlgeMode">
+  <div *ngIf="!isSingleMode">
     <ion-text>
       <h5>Collaboration method</h5>
     </ion-text>
@@ -210,8 +210,8 @@
   <div>
     <!-- Task instruction, markdown support, audio message ... -->
     <question-type [(question)]="task.question" [taskType]="task.category" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSinlgeMode?numPlayers:1)" [isSinlgeMode]="isSinlgeMode"
-      [collaborationType]=" isSinlgeMode? undefined :selectedCollType.type">
+      [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSingleMode?numPlayers:1)" [isSingleMode]="isSingleMode"
+      [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
     </question-type>
 
     <!-- Search Area -->
@@ -246,8 +246,8 @@
 
     <!-- Destination -->
     <answer-type [(answer)]="task.answer" [taskType]="task.category" [settings]="task.settings"
-      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSinlgeMode?numPlayers:1)"
-      [isSinlgeMode]="isSinlgeMode" [collaborationType]=" isSinlgeMode? undefined :selectedCollType.type">
+      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSingleMode?numPlayers:1)"
+      [isSingleMode]="isSingleMode" [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
     </answer-type>
   </div>
 

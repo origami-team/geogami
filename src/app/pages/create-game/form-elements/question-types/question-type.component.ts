@@ -22,7 +22,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     // Multi-player Mode
     @Input() numPlayers: Number;
-    @Input() isSinlgeMode: Number;
+    @Input() isSingleMode: Number;
     @Input() collaborationType: any;
 
     @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
@@ -34,7 +34,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         // console.log("changes (QuestionTypeComponent): ", changes);
-        if (this.isSinlgeMode) {
+        if (this.isSingleMode) {
             console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
             this.questionChange.emit(changes.question.currentValue);
         } else {

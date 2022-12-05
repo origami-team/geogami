@@ -52,7 +52,7 @@ export class PlayGameListPage implements OnInit {
 
   // no need for it
   // Multiplyar impl. (get values from retreived game data)
-  /* isSinlgeMode: boolean = true;
+  /* isSingleMode: boolean = true;
   numPlayers : number = 1; */
 
 

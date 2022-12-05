@@ -1,5 +1,5 @@
 <!-- ****** Single-player mode ****** -->
-<div *ngIf="isSinlgeMode">
+<div *ngIf="isSingleMode">
   <!-- Task instruction - NavToFlag & NavWithArrow & NavViaText - Single-player mode-->
   <div *ngIf="question.type != questionTypeEnum.NAV_INSTRUCTION_PHOTO">
     <h5>
@@ -224,7 +224,7 @@
 
 <!-- ******************************* -->
 <!-- ****** Multi-player mode ****** -->
-<div *ngIf="!isSinlgeMode">
+<div *ngIf="!isSingleMode">
 
   <!-- Task instruction - NavToFlag & NavWithArrow & NavViaText - Multi-player mode-->
   <div *ngIf="question[0] != undefined && question[0].type != questionTypeEnum.NAV_INSTRUCTION_PHOTO">

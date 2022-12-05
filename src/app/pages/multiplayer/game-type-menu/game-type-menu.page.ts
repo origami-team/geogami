@@ -30,7 +30,7 @@ export class GameTypeMenuPage implements OnInit {
 
     let bundle = {
       isRealWorld: this.isRealWorld,
-      isSinlgeMode: true
+      isSingleMode: true
     }
     this.navCtrl.navigateForward(`create-game/${JSON.stringify(bundle)}`);
   }
@@ -40,7 +40,7 @@ export class GameTypeMenuPage implements OnInit {
 
     let bundle = {
       isRealWorld: this.isRealWorld,
-      isSinlgeMode: false
+      isSingleMode: false
     }    
     this.navCtrl.navigateForward(`create-game/${JSON.stringify(bundle)}`);
 

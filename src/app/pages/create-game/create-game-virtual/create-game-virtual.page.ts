@@ -11,7 +11,7 @@ export class CreateGameVirtualPage implements OnInit {
 
   // Multiplyar impl.
   isRealWorld: boolean = true;
-  isSinlgeMode: boolean = true;
+  isSingleMode: boolean = true;
 
   constructor(public navCtrl: NavController) { }
 
@@ -28,7 +28,7 @@ export class CreateGameVirtualPage implements OnInit {
 
     let bundle = {
       isRealWorld: false,
-      isSinlgeMode: true // unitil multi-player impl is added in VE
+      isSingleMode: true // unitil multi-player impl is added in VE
     }
     this.navCtrl.navigateForward(`edit-game-list/${JSON.stringify(bundle)}`);
 

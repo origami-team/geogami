@@ -1,6 +1,6 @@
 <!-- ******************************* -->
 <!-- ****** Single-player mode ****** -->
-<div *ngIf="isSinlgeMode">
+<div *ngIf="isSingleMode">
 
   <!-- Destination map view - Single-player mode -->
   <div *ngIf="answer.type == answerTypeEnum.POSITION">
@@ -11,7 +11,7 @@
       </ion-icon>
     </h5>
     <app-map featureType="point" drawTheme="nav" [(feature)]="answer.position" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored" [isSinlgeMode]="isSinlgeMode"></app-map>
+      [isVRMirrored]="isVRMirrored" [isSingleMode]="isSingleMode"></app-map>
   </div>
 
   <!-- Mutiple choice (photo) - Single-player mode -->
@@ -83,7 +83,7 @@
 
 <!-- ******************************* -->
 <!-- ****** Multi-player mode ****** -->
-<div *ngIf="!isSinlgeMode">
+<div *ngIf="!isSingleMode">
 
   <!-- Destination map view - Multi-player mode -->
   <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.POSITION">

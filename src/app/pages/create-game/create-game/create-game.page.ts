@@ -15,7 +15,7 @@ export class CreateGamePage implements OnInit {
 
   // To hold received parametres vlaues via route
   isRealWorld: boolean = true;
-  isSinlgeMode: boolean = true;
+  isSingleMode: boolean = true;
   bundle: any;
 
   constructor(public navCtrl: NavController, private route: ActivatedRoute) { }
@@ -26,13 +26,13 @@ export class CreateGamePage implements OnInit {
       console.log("params.bundle1: ", params.bundle)
       if (params.bundle != "userRole") {
         this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-        this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+        this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
 
       }
 
       this.bundle = {
         isRealWorld: this.isRealWorld,
-        isSinlgeMode: this.isSinlgeMode
+        isSingleMode: this.isSingleMode
       }
     });
 
@@ -49,7 +49,7 @@ export class CreateGamePage implements OnInit {
     // DoDo update impl of user role
     /* this.bundle = {
       isRealWorld: this.isRealWorld,
-      isSinlgeMode: this.isSinlgeMode
+      isSingleMode: this.isSingleMode
     } */
 
     this.navCtrl.navigateForward(`edit-game-list/${JSON.stringify(this.bundle)}`);

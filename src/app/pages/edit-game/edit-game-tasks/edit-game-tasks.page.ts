@@ -36,7 +36,7 @@ export class EditGameTasksPage implements OnInit {
 
   // Multiplyar impl.
   isRealWorld: boolean = true;
-  isSinlgeMode: boolean = true;
+  isSingleMode: boolean = true;
   numPlayers = 1;
   // bundle: any;
 
@@ -62,7 +62,7 @@ export class EditGameTasksPage implements OnInit {
     // Get selected env. and game type
     this.route.params.subscribe((params) => {
       this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
       let game_id = JSON.parse(params.bundle).game_id;
 
       this.isVirtualWorld = !this.isRealWorld;
@@ -136,7 +136,7 @@ export class EditGameTasksPage implements OnInit {
   async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, 
   isVRMirrored: boolean = this.isVRMirrored,
   numPlayers: number = this.numPlayers,
-    isSinlgeMode: boolean = this.isSinlgeMode) {
+    isSingleMode: boolean = this.isSingleMode) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -149,7 +149,7 @@ export class EditGameTasksPage implements OnInit {
         isVirtualWorld,  // added to view VR world map instead of real map if true
         isVRMirrored,
         numPlayers,
-        isSinlgeMode
+        isSingleMode
       },
     });
 

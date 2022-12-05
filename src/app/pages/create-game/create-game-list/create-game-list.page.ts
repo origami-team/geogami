@@ -39,7 +39,7 @@ export class CreateGameListPage implements OnInit {
   // To hold received parametres vlaues via route
   // Multiplayer mode 
   isRealWorld: boolean = false;
-  isSinlgeMode: boolean = false; // used to show number of players card in multiplayer mode
+  isSingleMode: boolean = false; // used to show number of players card in multiplayer mode
   bundle: any;
   numPlayers = 3;
 
@@ -62,7 +62,7 @@ export class CreateGameListPage implements OnInit {
     // Get selected env. and game type
     this.route.params.subscribe((params) => {
       this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
     });
 
     this.gameFactory.getGame().then((game) => {
@@ -114,7 +114,7 @@ export class CreateGameListPage implements OnInit {
     task: any = null,
     isVirtualWorld: boolean = this.isVirtualWorld,
     numPlayers: number = this.numPlayers,
-    isSinlgeMode: boolean = this.isSinlgeMode) {
+    isSingleMode: boolean = this.isSingleMode) {
     // console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -126,7 +126,7 @@ export class CreateGameListPage implements OnInit {
         task,
         isVirtualWorld,
         numPlayers,
-        isSinlgeMode
+        isSingleMode
       },
     });
 
@@ -203,8 +203,8 @@ export class CreateGameListPage implements OnInit {
       isVRWorld: !this.isRealWorld, // DoDo update it in overview to isRealWorld
       isVRMirrored: false, // update code so you don't have to send it if realworld is false
       //isRealWorld: this.isRealWorld,
-      isSinlgeMode: this.isSinlgeMode,
-      numPlayers: (this.isSinlgeMode ? undefined : this.numPlayers)
+      isSingleMode: this.isSingleMode,
+      numPlayers: (this.isSingleMode ? undefined : this.numPlayers)
     }
 
     this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(this.bundle)}`);

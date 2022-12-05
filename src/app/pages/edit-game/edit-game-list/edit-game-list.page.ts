@@ -23,7 +23,7 @@ export class EditGameListPage implements OnInit {
 
   // Multiplyar impl.
   isRealWorld: boolean = true;
-  isSinlgeMode: boolean = true;
+  isSingleMode: boolean = true;
   // bundle: any;
   
   // to show star icon for content admin
@@ -43,7 +43,7 @@ export class EditGameListPage implements OnInit {
     // Get selected env. and game type
     this.route.params.subscribe((params) => {
       this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
 
       this.isVirtualWorld = !this.isRealWorld;
 
@@ -95,7 +95,7 @@ export class EditGameListPage implements OnInit {
 
     let bundle = {
       isRealWorld: this.isRealWorld,
-      isSinlgeMode: this.isSinlgeMode,
+      isSingleMode: this.isSingleMode,
       game_id: game._id
     }
     

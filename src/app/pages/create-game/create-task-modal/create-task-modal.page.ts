@@ -42,7 +42,7 @@ export class CreateTaskModalPage implements OnInit {
 
   // Multi-player Mode
   @Input() numPlayers: Number;
-  @Input() isSinlgeMode: boolean;
+  @Input() isSingleMode: boolean;
 
   tasks: any[] = [];
 
@@ -127,7 +127,7 @@ export class CreateTaskModalPage implements OnInit {
 
   ngOnInit() {
     if (this.type == "nav") {
-      if (this.isSinlgeMode) {
+      if (this.isSingleMode) {
         this.tasks = cloneDeep(navtasks);
       } else {
         switch (this.numPlayers) {
@@ -140,7 +140,7 @@ export class CreateTaskModalPage implements OnInit {
       }
 
     } else {
-      if (this.isSinlgeMode) {
+      if (this.isSingleMode) {
         this.tasks = cloneDeep(themetasks);
       } else {
         switch (this.numPlayers) {
@@ -156,7 +156,7 @@ export class CreateTaskModalPage implements OnInit {
       this.task = this.tasks[0];
       this.selectedThemeTaskType = this.taskTypes[0];
       // mutli-player
-      if (!this.isSinlgeMode) {
+      if (!this.isSingleMode) {
         this.selectedCollType = this.collaborationTypes[0];
       }
 
@@ -187,7 +187,7 @@ export class CreateTaskModalPage implements OnInit {
       }
 
       // mutli-player
-      if (!this.isSinlgeMode) {
+      if (!this.isSingleMode) {
         // as we only store type in db without text we need to retreive it using index
         let index = this.collaborationTypes.findIndex(el => el.type == this.task.collaborationType);
         this.selectedCollType = this.collaborationTypes[index];
@@ -205,7 +205,7 @@ export class CreateTaskModalPage implements OnInit {
     } else if (taskType.type == 3) {
       this.task = this.tasks[7];
     } else {
-      if (this.isSinlgeMode) {
+      if (this.isSingleMode) {
         this.task = {
           name: this.translate.instant("Tasktypes.freeTask"),
           type: "free",
@@ -317,7 +317,7 @@ export class CreateTaskModalPage implements OnInit {
       // console.log("//// objectAnswerSelect:  ", this.objectAnswerSelect)
 
       /* single-player */
-      if (this.isSinlgeMode) {
+      if (this.isSingleMode) {
 
         if (
           this.task.answer.type == AnswerType.PHOTO ||
@@ -362,7 +362,7 @@ export class CreateTaskModalPage implements OnInit {
         new Set(
           this.tasks
             .filter((t) => t.type == this.task.type)
-            .map((t) => (this.isSinlgeMode ? t.question.type : t.question[0].type))  // DoDo
+            .map((t) => (this.isSingleMode ? t.question.type : t.question[0].type))  // DoDo
         )
       )
         .map((t) => ({ type: t as QuestionType, text: t }))
@@ -373,7 +373,7 @@ export class CreateTaskModalPage implements OnInit {
         );
 
       // multi-player impl.
-      if (this.isSinlgeMode) {
+      if (this.isSingleMode) {
         const similarTypes = cloneDeep(themetasks).filter(
           (t) => t.type == this.task.type
         );
@@ -447,7 +447,7 @@ export class CreateTaskModalPage implements OnInit {
   onObjectQuestionSelectChange() {
     console.log("//// o.q.s.c 0 - this.task.type", this.task.type);
 
-    if (this.isSinlgeMode) {
+    if (this.isSingleMode) {
       if (this.task.type != "free") {
         // console.log("//// o.q.s.c 1 - free");
 
@@ -512,7 +512,7 @@ export class CreateTaskModalPage implements OnInit {
   }
 
   onObjectAnswerSelectChange() {
-    if (this.isSinlgeMode) {
+    if (this.isSingleMode) {
       // Single-player impl
       if (this.task.type != "free") {
         const similarTypes = cloneDeep(themetasks).filter(
@@ -628,7 +628,7 @@ export class CreateTaskModalPage implements OnInit {
     // Add answer hints for feedback of MAP_DIRECTION type
     // Disable multipleTries of some tasks inluding (nav-tasks, ....)
     // DoDo : add them in a model as with navtasks and themetasks
-    if (this.isSinlgeMode) {
+    if (this.isSingleMode) {
       if (
         this.task.answer.mode == TaskMode.NAV_ARROW ||
         this.task.question.type == QuestionType.NAV_INSTRUCTION ||
@@ -744,7 +744,7 @@ export class CreateTaskModalPage implements OnInit {
 
     /* multi-player */
     // set whether all palyers have same question and/or answer
-    if (!this.isSinlgeMode) {
+    if (!this.isSingleMode) {
       // save coll method type
       console.log("// this.selectedCollType.type: ", this.selectedCollType.type);
       

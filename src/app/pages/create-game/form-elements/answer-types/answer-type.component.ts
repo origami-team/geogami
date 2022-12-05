@@ -28,7 +28,7 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
 
   // Multi-player Mode
   @Input() numPlayers: Number;
-  @Input() isSinlgeMode: boolean;
+  @Input() isSingleMode: boolean;
   @Input() collaborationType: any;
 
   @Output() answerChange: EventEmitter<any> = new EventEmitter<any>(true);
@@ -38,7 +38,7 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
   constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.isSinlgeMode) {
+    if (this.isSingleMode) {
       // console.log("changes (answerTypeComponent): ", changes);
       this.answerChange.emit(changes.answer.currentValue);
     }else {

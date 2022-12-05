@@ -63,7 +63,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   user = this.authService.getUserValue();
 
   // Multiplayer mode 
-  isSinlgeMode: boolean = false; // used to show number of players card in multiplayer mode
+  isSingleMode: boolean = false; // used to show number of players card in multiplayer mode
   numPlayers: Number = 1;
 
   errorMsg: String;
@@ -95,7 +95,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       //this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-      this.isSinlgeMode = JSON.parse(params.bundle).isSinlgeMode;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
       this.numPlayers = JSON.parse(params.bundle).numPlayers;
     });
 
@@ -408,8 +408,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
       isVRMirrored: this.isVRMirrored,
       isVisible: true,                    // new game is visible by default
       isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
-      isMultiplayerGame: !this.isSinlgeMode,
-      numPlayers : (!this.isSinlgeMode ? this.numPlayers : undefined )
+      isMultiplayerGame: !this.isSingleMode,
+      numPlayers : (!this.isSingleMode ? this.numPlayers : undefined )
 
     });
     console.log(this.gameFactory.game);

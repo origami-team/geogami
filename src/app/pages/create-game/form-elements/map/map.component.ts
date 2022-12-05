@@ -60,7 +60,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   // Multi-player Mode
   // DoDo check the error you are getting @Input() allPlayersFeatures
   // @Input() allPlayersFeatures: []; // to be able to view flages of all players in each map view
-  @Input() isSinlgeMode: boolean; // to use it in `ngOnChanges`
+  @Input() isSingleMode: boolean; // to use it in `ngOnChanges`
 
 
   constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
@@ -69,13 +69,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.remove();
   }
   ngOnInit(): void { 
-    // console.log('// isSinlgeMode (map comp): ', this.isSinlgeMode)
+    // console.log('// isSingleMode (map comp): ', this.isSingleMode)
   }
 
   // Compare the input feature value before and after change task type
   // to keep flags on map 
   ngOnChanges(changes: SimpleChanges): void {
-    // if (this.isSinlgeMode) {
+    // if (this.isSingleMode) {
       if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
         this.featureChange.emit(changes.feature.previousValue);
       }
