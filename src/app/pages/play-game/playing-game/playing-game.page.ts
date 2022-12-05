@@ -456,7 +456,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   /* multi-player */
   isSingleMode: boolean = true;
-  playerNo = 1;
+  playerNo:number = 1;
+  joinedPlayersCount = 0;
   /*
   1. check if game is multi
   2. create a function than assign player name form socket server 
@@ -475,13 +476,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   connectSocketIO() {
     this.socket.connect();
     /* MultiUsers in Parallel impl. */
-    this.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored });
+    this.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
   }
 
+  // ToDo (DoDo) : put it in a service and use behaviours to update values
   connectSocketIO_MultiPlayer() {
-    // this.socket.connect();
-    /* MultiUsers in Parallel impl. */
-    this.socket.emit("newGame", this.gameCode);
+    this.socket.connect();
+
+    this.socket.on('assignPlayerNumber', (data) => {
+      console.log("// data from socket: ", data)
+        this.playerNo = this.joinedPlayersCount = data.playerNo;
+    });
+
+    this.socket.on('PlayerJoined', (data) => {
+      console.log("// PlayerJoined: (number of players so far) ", data)
+      this.joinedPlayersCount = data.joinedPlayersCount;
+    });
+
+    /* Enroll user in teacher's dedicated room. */
+    this.socket.emit("joinGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
   }
 
   disconnectSocketIO() {
@@ -519,8 +532,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
           if (!this.isSingleMode) {
             console.log("///isSingleMode: ", this.isSingleMode);
-            this.socket.connect();
-            //this.connectSocketIO_MultiPlayer();
+            // this.socket.connect();
+            this.connectSocketIO_MultiPlayer();
           }
         });
     });
