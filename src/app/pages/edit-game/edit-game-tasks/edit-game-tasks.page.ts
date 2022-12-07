@@ -236,6 +236,9 @@ export class EditGameTasksPage implements OnInit {
         );
         // this.gameFactory.flushGame();
       }
+    })
+    .catch((e) => {
+      console.error(e);
     });
   }
 

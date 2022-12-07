@@ -87,4 +87,13 @@ export class GamesService {
       .get(`${environment.apiURL}/appversion/current`)
       .toPromise();
   }
+
+  /* uploadTrack(data): Promise<any> {
+    return this.http
+    .post(`${environment.apiURL}/track`, data, {
+      headers: this.createHeaders(),
+      observe: 'response',
+    }
+    ).toPromise();
+  } */
 }

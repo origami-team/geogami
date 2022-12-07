@@ -461,6 +461,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   numPlayers = 1;
   playerNo: number = 1;
   joinedPlayersCount = 0;
+  trackDataStatus: any;
+  storedGameTrack_id: string;
+
   /*
   1. check if game is multi
   2. create a function than assign player name form socket server 
@@ -487,17 +490,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.socket.connect();
 
     this.socket.on('assignPlayerNumber', (data) => {
-      console.log("// data from socket: ", data)
+      // console.log("playerNo from socket: ", data)
+      // this.playerNo = this.joinedPlayersCount = data.playerNo;
       this.playerNo = this.joinedPlayersCount = data.playerNo;
     });
 
     this.socket.on('playerJoined', (data) => {
-      console.log("// PlayerJoined: (number of players so far) ", data)
+      // console.log("PlayerJoined: (number of players so far) ", data)
       this.joinedPlayersCount = data.joinedPlayersCount;
     });
 
     this.socket.on('gamePlayersFull', (data) => {
-      console.log("// PlayerJoined: (number of players so far) ", data)
       // show toast msg
       this.utilService.showToast(data.msg, "dark", 3500)
     });
@@ -514,9 +517,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.socket.disconnect();
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave() {
     // Disconnect server when leaving playing page
-    if(!this.isSingleMode){
+    if (!this.isSingleMode) {
       this.disconnectSocketIO_MultiPlayer();
     }
   }
@@ -1232,7 +1235,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       this.task = this.game.tasks[this.taskIndex];
 
-      // console.log("////this.task: ", this.task)
     }
 
 
@@ -1244,7 +1246,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map,
       this.playersNames,
       this.isVirtualWorld,
-      this.initialAvatarLoc
+      this.initialAvatarLoc,
+      this.isSingleMode, // multiplayer - track
+      this.numPlayers,
+      this.playerNo
     );
     console.log(this.game);
 
@@ -1569,11 +1574,50 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       // store collected data in database only when user agree in the begining of the game
       if (this.shareData_cbox) {
-        this.trackerService.uploadTrack().then((res) => {
-          if (res.status == 201) {
-            this.uploadDone = true;
-          }
-        });
+
+        if (this.isSingleMode) {
+          this.trackerService.uploadTrack().then((res) => {
+            if (res.status == 201) {
+              this.uploadDone = true;
+              console.log("res (single)", res);
+            }
+          });
+        } else {
+          /* Multiplayer */
+          /* Request gmae track status from socket server 
+           * check wether game track is already stored by one of the players */
+          this.socket.emit("checkIsGameTrackStored", this.gameCode, (response) => {
+            this.trackDataStatus = response.trackDataStatus;
+
+            // if game track not stored yet
+            if (!this.trackDataStatus.status) {
+              /* store multiplayer tracks on server */
+              this.trackerService.uploadTrack().then((res) => {
+                if (res.status == 201) {
+                  this.uploadDone = true;
+                  // console.log("game id (multi)", res.body["content"]._id);
+                  this.storedGameTrack_id = res.body["content"]._id;
+                  /* Update game track staus in socket server */
+                  this.socket.emit("updateGameTrackStauts", { roomName: this.gameCode, storedTrack_id: this.storedGameTrack_id });
+                }
+              });
+            } else {
+              // if game aready stored
+              // console.log("game track already stored: ", this.trackDataStatus)
+
+              /* update stored multiplayer tracks on server*/
+              this.trackerService.uploadTrack(true, this.trackDataStatus.track_id).then((res) => {
+                if (res.status == 201) {
+                  this.uploadDone = true;
+                  console.log("game id (multi)", res.body["content"]._id);
+                  this.storedGameTrack_id = res.body["content"]._id;
+                }
+              });
+            }
+
+          });
+        }
+
       }
 
       if (Capacitor.isNative) {
