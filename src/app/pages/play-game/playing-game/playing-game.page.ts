@@ -463,6 +463,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   joinedPlayersCount = 0;
   trackDataStatus: any;
   storedGameTrack_id: string;
+  waitPlayersPanel = true;
 
   /*
   1. check if game is multi
@@ -493,11 +494,21 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // console.log("playerNo from socket: ", data)
       // this.playerNo = this.joinedPlayersCount = data.playerNo;
       this.playerNo = this.joinedPlayersCount = data.playerNo;
+
+      if (this.joinedPlayersCount == this.numPlayers) {
+        this.waitPlayersPanel = false;
+        this.showPlayersNames = true;
+      }
     });
 
     this.socket.on('playerJoined', (data) => {
       // console.log("PlayerJoined: (number of players so far) ", data)
       this.joinedPlayersCount = data.joinedPlayersCount;
+
+      if (this.joinedPlayersCount == this.numPlayers) {
+        this.waitPlayersPanel = false;
+        this.showPlayersNames = true;
+      }
     });
 
     this.socket.on('gamePlayersFull', (data) => {
@@ -534,7 +545,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
-    this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc)
+    if (this.isVRMirrored) {
+      this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc);
+    }
 
     this.game = null;
     this.game = new Game(0, 'Loading...', '', false, [], false, false, 1, false, false, false, false, false, false);
@@ -556,12 +569,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.numPlayers = game.numPlayers;
             console.log("///numPlayers: ", this.numPlayers);
             console.log("///isSingleMode: ", this.isSingleMode);
-            // this.socket.connect();
+            // connect to socket server
             this.connectSocketIO_MultiPlayer();
+            // hide enter player name panel
+            this.showPlayersNames = false;
           }
         });
     });
 
+    // Initialize map and subscribe location
+    this.initializeMap();
+  }
+
+  /* Initialize map and subscribe location */
+  initializeMap() {
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
     // if (environment.production) {
@@ -823,7 +844,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   onMapClick(e, mapType) {
-    console.log(e);
+    // console.log(e);
 
     /* Disable map click until player check 'share data box' and press done */
     if (!this.showPlayersNames) {
@@ -2122,6 +2143,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   startGame() {
     console.log(this.playersNames);
+    // this.subscripePosition(); // For Realworld / VE
     this.initGame();
     this.showPlayersNames = false;
     this.enableDisableMapInteraction(true);
