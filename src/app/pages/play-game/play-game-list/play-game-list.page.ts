@@ -97,7 +97,8 @@ export class PlayGameListPage implements OnInit {
 
   // Get games data from server
   getGamesData() {
-    this.gamesService.getGames(true).then(res => res.content).then(games => {
+    // Only content admin can view multi-players games
+    this.gamesService.getGames(true, this.userRole=="contentAdmin" ).then(res => res.content).then(games => {
       // Get either real or VE agmes based on selected environment 
       this.games = games.filter(game =>
         (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
@@ -114,7 +115,8 @@ export class PlayGameListPage implements OnInit {
   // ToDo: update the functions
   doRefresh(event) {
     // Get games data from server
-    this.gamesService.getGames(true).then(res => res.content).then(games => {
+    // Only content admin can view multi-players games
+    this.gamesService.getGames(true, this.userRole=="contentAdmin").then(res => res.content).then(games => {
       // Get either real or VE agmes based on selected environment 
       this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
       //this.gamesTemp = cloneDeep(this.games);
