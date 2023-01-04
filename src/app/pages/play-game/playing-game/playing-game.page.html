@@ -202,11 +202,24 @@
     {{ "PlayGame.GPSaccuracy" | translate }} {{ lastKnownPosition?.coords.accuracy.toFixed(2) }} m
   </p>
 
-  <!-- Put player on hold until all players join the game -->
+  <!-- Put player on hold until all players join the game (multiplayer)-->
   <ion-card class="wait-panel" *ngIf="waitPlayersPanel && !isSingleMode">
-    <h3 class="panel-header">Please wait until all players join the game</h3>
+    
+    <h3 class="panel-header" style="text-align: left;">Please wait until all players join the game</h3>  
+
+    <!-- smiles icons -->
+    <div class="smiles-style">
+      <ion-img 
+        *ngFor="let player of [].constructor(numPlayers); let i = index" 
+        [src]=" joinedPlayersCount>=i+1 ? '/assets/icons-multi/smile-yellow.png':'/assets/icons-multi/smile-white.png'"
+        style="width: 60px">
+      </ion-img>
+    </div>
+
     <h3 class="panel-content">{{joinedPlayersCount}} / {{numPlayers}}</h3>
 
+    <ion-progress-bar type="indeterminate" color="primary"></ion-progress-bar>
+  
   </ion-card>
 
   <!-- player name and share data agreement -->
