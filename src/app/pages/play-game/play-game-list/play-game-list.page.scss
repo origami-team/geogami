@@ -55,3 +55,48 @@ ion-tab-bar {
   border-radius: 5px;
   margin: 0px;
 }
+
+// select game env. and mode
+.select-style {
+  margin-right: 0.5%;
+  margin-left: 0.5%;
+
+  >div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    >ion-label {
+      font-size: 18px;
+      //font-weight: bold;
+    }
+
+    >select {
+      width: 70%;
+      height: fit-content;
+    }
+  }
+}
+
+// less than 630px
+@media only screen and (max-width: 630px) {
+  .select-style {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    >div {
+      //display: flex;
+      display: block;
+
+      >select {
+        // width: 150px;
+        width: 42vw;
+        margin-top: 2px;
+      }
+
+    }
+
+  }
+}
+/*  */
