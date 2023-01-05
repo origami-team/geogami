@@ -14,16 +14,16 @@
   <div class="select-style">
     <div>
       <ion-label> Game environment </ion-label>
-      <select interface="popover">
-        <option Value="real-world"> Real world </option>
-        <option Value="virtual-env"> Virtual env. </option>
+      <select interface="popover" [(ngModel)]="gameEnvSelected" (change)="filterGamesEnv($event.target.value)">
+        <option value="real-world"> Real world </option>
+        <option value="virtual-env"> Virtual env. </option>
       </select>
     </div>
     <div>
       <ion-label> Game mode </ion-label>
-      <select interface="popover">
-        <option Value="single-player"> Single player </option>
-        <option Value="multi-player"> Multiplayer </option>
+      <select interface="popover" [(ngModel)]="gameModeSelected" (change)="filterGamesMode($event.target.value)" >
+        <option value="single-player"> Single player </option>
+        <option value="multi-player"> Multiplayer </option>
       </select>
     </div>
   </div>
@@ -61,7 +61,7 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
-    <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary">
+    <ion-card *ngFor="let game of games_view" (click)="gameClick(game)" detail color="secondary">
       <ion-card-header>
         <ion-item lines="none" color="secondary">
           <ion-label>
@@ -79,7 +79,7 @@
   </ng-container>
 
   <!-- show this message only when my games section is selected and there're no games were created by logged user -->
-  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && games.length == 0">
+  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && games_view.length == 0">
     <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
   </div>
 
