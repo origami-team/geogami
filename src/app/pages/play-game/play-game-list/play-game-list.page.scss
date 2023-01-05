@@ -37,6 +37,10 @@ ion-tab-bar {
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+
+  >h1{
+    text-align: center;
+  }
 }
 
 .selectedTab {

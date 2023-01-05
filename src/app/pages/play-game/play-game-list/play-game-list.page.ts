@@ -30,8 +30,9 @@ export class PlayGameListPage implements OnInit {
   all_games_segment: any;
   gamesWithLocs: any;
 
-  gameEnvSelected = 'real-world';  // (default) game mode select
-  gameModeSelected = 'single-player';  // (default) game mode select
+  gameEnvSelected = 'real';  // (default) game mode select
+  gameModeSelected = 'single';  // (default) game mode select
+  isMutiplayerGame = undefined;
 
   // VR world
   isVirtualWorld: boolean = false;
@@ -111,10 +112,8 @@ export class PlayGameListPage implements OnInit {
 
       // this.loading = true;
 
-      if (this.selectedSegment == "curated") {
-        // Filter data of selected segment
-        this.segmentChanged(this.selectedSegment)
-      }
+      // Filter data of selected segment
+      this.segmentChanged(this.selectedSegment)
     });
   }
 
@@ -127,7 +126,7 @@ export class PlayGameListPage implements OnInit {
       this.filterGamesEnv(this.gameEnvSelected);
 
       // Filter data of selected segment
-      this.segmentChanged(this.selectedSegment)
+      //this.segmentChanged(this.selectedSegment)
     }).finally(() => event.target.complete());;
   }
 
@@ -137,7 +136,6 @@ export class PlayGameListPage implements OnInit {
   }
 
   gameClick(game: any) {
-    console.log(game);
     this.navCtrl.navigateForward(`play-game/game-detail/${game._id}`);
   }
 
@@ -145,22 +143,20 @@ export class PlayGameListPage implements OnInit {
   segmentChanged(segVal) {  //--- ToDo check duplicate code and create a func for it
     // if mine is selected
     if (segVal == "mine") {
-      // console.log("mine"); //temp
-      this.games_view = this.all_games_segment.filter(game => game.user == this.user['_id']);
+      this.games_view = this.all_games_segment.filter(game => game.user == this.user['_id'] && game.isMultiplayerGame == this.isMutiplayerGame);
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();
 
     } else if (segVal == "all") { // if all is selected
       //onsole.log("all"); //temp
-      this.games_view = this.all_games_segment;
+      this.games_view = this.all_games_segment.filter(game => game.isMultiplayerGame == this.isMutiplayerGame);;
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();
     }
     else if (segVal == "curated") { // if curated is selected
-      //console.log("curated");
-      this.games_view = this.all_games_segment.filter(game => game.isCuratedGame == true);
+      this.games_view = this.all_games_segment.filter(game => game.isCuratedGame == true && game.isMultiplayerGame == this.isMutiplayerGame);
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();
@@ -376,7 +372,6 @@ export class PlayGameListPage implements OnInit {
       this.isListTabSelected = false;
 
       if (!this.map) {
-        // console.log("isListTabSelected: ", this.isListTabSelected);
         // get minimal games with locs for games map view
         this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
           // Get either real or VE agmes based on selected environment 
@@ -393,14 +388,11 @@ export class PlayGameListPage implements OnInit {
   openListTap() {
     if (!this.isListTabSelected) {
       this.isListTabSelected = true;
-      // console.log("isListTabSelected: ", this.isListTabSelected);
     }
   }
 
   async convertToGeoJson() {
     let convertedData = []
-
-    //console.log("convertedData: ", convertedData)
 
     this.gamesWithLocs.forEach(game => {
       if (game.coords) {
@@ -420,14 +412,14 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
-    console.log("convertedData: ", convertedData)
+    // console.log("convertedData: ", convertedData)
     this.showGamesOnMap(convertedData);
   }
 
   showGamesOnMap(gamesListGeoJson) {
 
     if (!this.map) {
-      console.log("Create map ////////////");
+      // console.log("Create map ////////////");
       this.initMap(gamesListGeoJson);
     }
     // no need for it since we can hide the map
@@ -464,8 +456,12 @@ export class PlayGameListPage implements OnInit {
   }
 
   /* on game environment change OR refresh*/
-  filterGamesEnv(value: string) {
-    if (value == "real-world") {
+  filterGamesEnv(envVal: string) {
+    // first, update game mode to single player
+    this.gameModeSelected = 'single';
+    this.isMutiplayerGame = undefined;
+    // then, check game env.
+    if (envVal == "real") {
       this.filterRealWorldGames();
     } else {
       this.filterVirtualEnvGames();
@@ -476,36 +472,34 @@ export class PlayGameListPage implements OnInit {
   }
 
   filterRealWorldGames() {
-    this.games_view = this.games_res.filter(game =>
-      // (!this.isVirtualWorld && game.isVRWorld == undefined)
+    this.all_games_segment = this.games_res.filter(game =>
       (game.isVRWorld == false || game.isVRWorld == undefined)
     ).reverse();
-    // to be used in segments
-    this.all_games_segment = this.games_view;
   }
 
   filterVirtualEnvGames() {
-    console.log(this.games_res);
-    this.games_view = this.games_res.filter(game =>
+    this.all_games_segment = this.games_res.filter(game =>
       (game.isVRWorld == true)
     ).reverse();
-    // to be used in segments
-    this.all_games_segment = this.games_view;
   }
 
-  /* on game mode change */
-  filterGamesMode(value: string) {
-    console.log("onModeChange:", value)
-    if (value == "single-player") {
+  /***  on game mode change ***/
+  filterGamesMode(modeVal: string) {    
+    if (modeVal == "single") {
+      this.isMutiplayerGame = undefined;
+
       this.games_view = this.all_games_segment.filter(game =>
-        (game.isMultiplayerGame != true)
+        (game.isMultiplayerGame == undefined)
       ).reverse();
+
       // Filter data of selected segment
       this.segmentChanged(this.selectedSegment)
     } else {
+      this.isMutiplayerGame = true;
       this.games_view = this.all_games_segment.filter(game =>
         (game.isMultiplayerGame == true)
       ).reverse();
+
       // Filter data of selected segment
       this.segmentChanged(this.selectedSegment)
     }

@@ -15,14 +15,14 @@
     <div>
       <ion-label> Game environment </ion-label>
       <select interface="popover" [(ngModel)]="gameEnvSelected" (change)="filterGamesEnv($event.target.value)">
-        <option value="real-world"> Real world </option>
-        <option value="virtual-env"> Virtual env. </option>
+        <option value="real"> Real world </option>
+        <option value="virtual"> Virtual env. </option>
       </select>
     </div>
     <div>
       <ion-label> Game mode </ion-label>
       <select interface="popover" [(ngModel)]="gameModeSelected" (change)="filterGamesMode($event.target.value)" >
-        <option value="single-player"> Single player </option>
+        <option value="single"> Single player </option>
         <option value="multi-player"> Multiplayer </option>
       </select>
     </div>
@@ -79,8 +79,12 @@
   </ng-container>
 
   <!-- show this message only when my games section is selected and there're no games were created by logged user -->
-  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && games_view.length == 0">
+  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && (games_view && games_view.length == 0)">
     <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
+  </div>
+
+  <div class="emptygamecontent" *ngIf="['curated', 'all'].includes(selectedSegment) && ( games_view && games_view.length == 0)">
+    <h1> Empty list!</h1>
   </div>
 
   <div #gamesMap class="map" [ngStyle]="{ 'display' : ( isListTabSelected ? 'none' : '' ) }"></div>
@@ -106,7 +110,7 @@
           <!-- <ion-badge>6</ion-badge> -->
         </ion-tab-button>
 
-        <ion-tab-button (click)="openMapTap()" class="{{!isListTabSelected?'selectedTab': ''}}">
+        <ion-tab-button (click)="openMapTap()" class="{{!isListTabSelected?'selectedTab': ''}}" [disabled]="gameEnvSelected == 'virtual'">
           <ion-icon name="map"></ion-icon>
           <ion-label>Map</ion-label>
         </ion-tab-button>
