@@ -16,7 +16,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'play-game/play-game-list/:worldType',
+    path: 'play-game/play-game-list',
     loadChildren: () =>
       import('./pages/play-game/play-game-list/play-game-list.module').then(
         (m) => m.PlayGameListPageModule

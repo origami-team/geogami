@@ -11,19 +11,27 @@
 <ion-content class="ion-padding">
 
   <!-- select game env. and mode -->
-  <div class="select-style">
+  <div class="select-style" *ngIf="isListTabSelected">
     <div>
-      <ion-label> Game environment </ion-label>
+      <ion-label> Game environment
+        <ion-icon name="information-circle"
+          (click)="utilService.showPopover($event, 'Choose between playing GeoGami outside (real world) or indoor (virtual environment)')">
+        </ion-icon>
+      </ion-label>
       <select interface="popover" [(ngModel)]="gameEnvSelected" (change)="filterGamesEnv($event.target.value)">
         <option value="real"> Real world </option>
-        <option value="virtual"> Virtual env. </option>
+        <option value="virtual" [disabled]="userRole!='contentAdmin'"> Virtual env. {{ userRole != 'contentAdmin' ? '( only scholars have access )':''}} </option>
       </select>
     </div>
     <div>
-      <ion-label> Game mode </ion-label>
-      <select interface="popover" [(ngModel)]="gameModeSelected" (change)="filterGamesMode($event.target.value)" >
+      <ion-label> Game mode
+        <ion-icon name="information-circle"
+          (click)="utilService.showPopover($event, 'Choose between playing GeoGami indivisually or with a group. Minium number of players of a mutliplayer mode is 2')">
+        </ion-icon>
+      </ion-label>
+      <select interface="popover" [(ngModel)]="gameModeSelected" (change)="filterGamesMode($event.target.value)">
         <option value="single"> Single player </option>
-        <option value="multi-player"> Multiplayer </option>
+        <option value="multi-player" [disabled]="userRole!='contentAdmin'"> Multiplayer {{ userRole != 'contentAdmin' ? '( only scholars have access )':''}} </option>
       </select>
     </div>
   </div>
@@ -83,7 +91,8 @@
     <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
   </div>
 
-  <div class="emptygamecontent" *ngIf="['curated', 'all'].includes(selectedSegment) && ( games_view && games_view.length == 0)">
+  <div class="emptygamecontent"
+    *ngIf="['curated', 'all'].includes(selectedSegment) && ( games_view && games_view.length == 0)">
     <h1> Empty list!</h1>
   </div>
 
@@ -99,7 +108,7 @@
 </ion-content>
 
 
-<ion-footer *ngIf="!isVirtualWorld">
+<ion-footer>
   <ion-toolbar>
     <ion-tabs>
       <ion-tab-bar slot="bottom">
@@ -110,7 +119,8 @@
           <!-- <ion-badge>6</ion-badge> -->
         </ion-tab-button>
 
-        <ion-tab-button (click)="openMapTap()" class="{{!isListTabSelected?'selectedTab': ''}}" [disabled]="gameEnvSelected == 'virtual'">
+        <ion-tab-button (click)="openMapTap()" class="{{!isListTabSelected?'selectedTab': ''}}"
+          [disabled]="gameEnvSelected == 'virtual'">
           <ion-icon name="map"></ion-icon>
           <ion-label>Map</ion-label>
         </ion-tab-button>

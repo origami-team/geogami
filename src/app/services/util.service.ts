@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, PopoverController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { PopoverComponent } from "src/app/popover/popover.component";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,9 @@ export class UtilService {
 
   constructor(
     private toastCtr: ToastController,
-    private alertCtr: AlertController) {
+    private alertCtr: AlertController,
+    public popoverController: PopoverController
+  ) {
     this.isOnline$ = new BehaviorSubject(true);
   }
 
@@ -26,7 +29,7 @@ export class UtilService {
     toast.present();
   }
 
-  async showToastBtn(msg, colorV = "dark", durationV = 3000){
+  async showToastBtn(msg, colorV = "dark", durationV = 3000) {
     const toast = await this.toastCtr.create({
       message: msg,
       color: colorV,
@@ -66,7 +69,7 @@ export class UtilService {
     await alert.present();
   }
 
-
+  /* set and get network connection status */
   getIsOnlineValue() {
     return this.isOnline$.getValue();
   }
@@ -74,6 +77,18 @@ export class UtilService {
   setIsOnlineValue(val) {
     return this.isOnline$.next(val);
   }
+
+  /* showPopover without translation */
+  async showPopover(ev: any, text: string) {
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
+  }
+  /*  */
 }
 
 

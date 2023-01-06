@@ -34,8 +34,6 @@ export class PlayGameListPage implements OnInit {
   gameModeSelected = 'single';  // (default) game mode select
   isMutiplayerGame = undefined;
 
-  // VR world
-  isVirtualWorld: boolean = false;
   // To be able to update games list and switch between segments 
   searchText: string = "";
   selectedSegment: string = "curated";
@@ -77,15 +75,6 @@ export class PlayGameListPage implements OnInit {
       this.utilService.showAlertNoConnection();
       // return;
     }
-
-
-    // VR world
-    // to seperate realworld games from VR ones in view
-    this.route.params.subscribe((params) => {
-      if (params.worldType === "VRWorld") {
-        this.isVirtualWorld = true;
-      }
-    });
 
     // Check user role
     if (this.user) {
