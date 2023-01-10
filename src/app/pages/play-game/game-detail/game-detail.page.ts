@@ -2,7 +2,6 @@ import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
-
 import mapboxgl from 'mapbox-gl';
 
 import { GamesService } from '../../../services/games.service';
