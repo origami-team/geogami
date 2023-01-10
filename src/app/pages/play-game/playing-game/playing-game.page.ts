@@ -512,7 +512,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     /* Join player in teacher's dedicated room */
-    this.socketService.socket.emit("joinGame", { gameCode: this.gameCode, gameNumPlayers: this.numPlayers });
+    this.socketService.socket.emit("joinGame", this.gameCode);
   }
 
   disconnectSocketIO() {
