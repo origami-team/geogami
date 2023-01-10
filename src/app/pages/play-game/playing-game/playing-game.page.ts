@@ -66,13 +66,12 @@ import { OrigamiOrientationService } from "src/app/services/origami-orientation.
 import { throttle } from "rxjs/operators";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-
-// VR world
-import { Socket } from 'ngx-socket-io';
+import { SocketService } from "src/app/services/socket.service";
 import { AvatarPosition } from 'src/app/models/avatarPosition'
 import { Coords } from 'src/app/models/coords'
 import { TranslateService } from "@ngx-translate/core";
 import { UtilService } from "src/app/services/util.service";
+
 
 @Component({
   selector: "app-playing-game",
@@ -95,7 +94,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private geolocationService: OrigamiGeolocationService,
     private orientationService: OrigamiOrientationService,
-    private socket: Socket,
+    private socketService: SocketService,
     private translate: TranslateService,
     private utilService: UtilService
   ) {
@@ -480,28 +479,29 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   }
 
+  // With VR env only (single player)
   connectSocketIO() {
-    this.socket.connect();
+    this.socketService.socket.connect();
     /* MultiUsers in Parallel impl. */
-    this.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
+    this.socketService.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
   }
 
-  // ToDo (DoDo) : put it in a service and use behaviours to update values
-  connectSocketIO_MultiPlayer() {
-    this.socket.connect();
-
-    this.socket.on('assignPlayerNumber', (data) => {
+  /********/
+  /* initialize SocketIO (multiplayer) */
+  joinTeacherRoom_MultiPlayer() {
+    this.socketService.socket.on('assignPlayerNumber', (data) => {
       // console.log("playerNo from socket: ", data)
-      // this.playerNo = this.joinedPlayersCount = data.playerNo;
+      /* player number = number of players already joined the room */
       this.playerNo = this.joinedPlayersCount = data.playerNo;
 
+      /* if all players joined the game, remove waiting panel */
       if (this.joinedPlayersCount == this.numPlayers) {
         this.waitPlayersPanel = false;
         this.showPlayersNames = true;
       }
     });
 
-    this.socket.on('playerJoined', (data) => {
+    this.socketService.socket.on('playerJoined', (data) => {
       // console.log("PlayerJoined: (number of players so far) ", data)
       this.joinedPlayersCount = data.joinedPlayersCount;
 
@@ -511,21 +511,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     });
 
-    this.socket.on('gamePlayersFull', (data) => {
-      // show toast msg
-      this.utilService.showToast(data.msg, "dark", 3500)
-    });
-
-    /* Enroll user in teacher's dedicated room. */
-    this.socket.emit("joinGame", { gameCode: this.gameCode, gameNumPlayers: this.numPlayers });
+    /* Join player in teacher's dedicated room */
+    this.socketService.socket.emit("joinGame", { gameCode: this.gameCode, gameNumPlayers: this.numPlayers });
   }
 
   disconnectSocketIO() {
-    this.socket.disconnect();
+    this.socketService.socket.disconnect();
   }
 
   disconnectSocketIO_MultiPlayer() {
-    this.socket.disconnect();
+    this.socketService.socket.disconnect();
   }
 
   ionViewWillLeave() {
@@ -570,7 +565,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             console.log("///numPlayers: ", this.numPlayers);
             console.log("///isSingleMode: ", this.isSingleMode);
             // connect to socket server
-            this.connectSocketIO_MultiPlayer();
+            this.joinTeacherRoom_MultiPlayer();
             // hide enter player name panel
             this.showPlayersNames = false;
           }
@@ -1607,7 +1602,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           /* Multiplayer */
           /* Request gmae track status from socket server 
            * check wether game track is already stored by one of the players */
-          this.socket.emit("checkIsGameTrackStored", this.gameCode, (response) => {
+          this.socketService.socket.emit("checkGameStatus", this.gameCode, (response) => {
             this.trackDataStatus = response.trackDataStatus;
 
             // if game track not stored yet
@@ -1619,7 +1614,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   // console.log("game id (multi)", res.body["content"]._id);
                   this.storedGameTrack_id = res.body["content"]._id;
                   /* Update game track staus in socket server */
-                  this.socket.emit("updateGameTrackStauts", { roomName: this.gameCode, storedTrack_id: this.storedGameTrack_id });
+                  this.socketService.socket.emit("updateGameTrackStauts", { roomName: this.gameCode, storedTrack_id: this.storedGameTrack_id });
                 }
               });
             } else {

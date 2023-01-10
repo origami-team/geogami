@@ -11,6 +11,8 @@ import { environment } from 'src/environments/environment';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
 import { TranslateService } from '@ngx-translate/core';
+import { SocketService } from 'src/app/services/socket.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-game-detail',
@@ -33,13 +35,17 @@ export class GameDetailPage implements OnInit {
   // multiplayer
   teacherCode: string = "";
   isSingleMode: boolean = true;
+  numPlayers = 2;
 
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
     private gamesService: GamesService,
     public popoverController: PopoverController,
-    private translate: TranslateService) { }
+    private translate: TranslateService,
+    private socketService: SocketService,
+    private utilService: UtilService) { }
 
+  /******/
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.gamesService.getGame(params.id)
@@ -59,6 +65,9 @@ export class GameDetailPage implements OnInit {
           /* multi-player */
           if (game.isMultiplayerGame !== undefined) {
             this.isSingleMode = !game.isMultiplayerGame;
+            this.numPlayers = game.numPlayers;
+            /* connect to socket server (multiplayer) */
+            this.connectSocketIO_MultiPlayer();
           }
 
         })
@@ -76,6 +85,12 @@ export class GameDetailPage implements OnInit {
         });
     });
 
+  }
+
+  /******/
+  /* connect to SocketIO (multiplayer) */
+  connectSocketIO_MultiPlayer() {
+    this.socketService.socket.connect();
   }
 
   // initMap() {
@@ -113,7 +128,20 @@ export class GameDetailPage implements OnInit {
       gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode),
       isSingleMode: this.isSingleMode
     }
-    this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+
+    if (this.isSingleMode) {
+      this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+    } else {
+      /* if multi player mode, check whether room is not yet full. then allow player to join game in playing page */
+      this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode, gameNumPlayers: this.numPlayers }, (response) => {
+        if (response.isRoomFull) {
+          /* show toast msg */
+          this.utilService.showToast(`Sorry this game accepts only ${this.numPlayers} players.`, "dark", 3500);
+        } else {
+          this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+        }
+      });
+    }
   }
 
   async showPopover(ev: any, key: string) {
@@ -127,5 +155,4 @@ export class GameDetailPage implements OnInit {
     });
     return await popover.present();
   }
-
 }
