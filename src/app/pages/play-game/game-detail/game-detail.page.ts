@@ -26,10 +26,13 @@ export class GameDetailPage implements OnInit {
   activities: any[];
   points: any[];
 
+  shareData_cbox = true;
+
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
   gameCode: string = "";
+  playerName: string = "";
 
   // multiplayer
   teacherCode: string = "";
@@ -125,7 +128,9 @@ export class GameDetailPage implements OnInit {
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
       gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode),
-      isSingleMode: this.isSingleMode
+      isSingleMode: this.isSingleMode,
+      playerName: this.playerName,
+      shareData_cbox: this.shareData_cbox
     }
 
     if (this.isSingleMode) {
