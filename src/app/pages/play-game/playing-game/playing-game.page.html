@@ -204,13 +204,12 @@
 
   <!-- Put player on hold until all players join the game (multiplayer)-->
   <ion-card class="wait-panel" *ngIf="waitPlayersPanel && !isSingleMode">
-    
-    <h3 class="panel-header" style="text-align: left;">Please wait until all players join the game</h3>  
+
+    <h3 class="panel-header" style="text-align: left;">Please wait until all players join the game</h3>
 
     <!-- smiles icons -->
     <div class="smiles-style">
-      <ion-img 
-        *ngFor="let player of [].constructor(numPlayers); let i = index" 
+      <ion-img *ngFor="let player of [].constructor(numPlayers); let i = index"
         [src]=" joinedPlayersCount>=i+1 ? '/assets/icons-multi/smile-yellow.png':'/assets/icons-multi/smile-white.png'"
         style="width: 60px">
       </ion-img>
@@ -219,22 +218,22 @@
     <h3 class="panel-content">{{joinedPlayersCount}} / {{numPlayers}}</h3>
 
     <ion-progress-bar type="indeterminate" color="primary"></ion-progress-bar>
-  
+
   </ion-card>
 
   <!-- player name and share data agreement -->
-  <ion-card class="overlay player-name" *ngIf="showPlayersNames">
-    <h3>{{ "PlayGame.playersNames" | translate }}</h3>
+  <!--    xxxxx No need to have multi players names   xxxx -->
+  <!--<ion-card class="overlay player-name" *ngIf="showPlayersNames">
+     <h3>{{ "PlayGame.playersNames" | translate }}</h3>
     <ion-item lines="none" *ngFor="let name of playersNames; let i = index; trackBy:indexTracker">
-      <!--       <ion-label class="player-counter" slot="start">{{i + 1}}</ion-label> -->
+            <ion-label class="player-counter" slot="start">{{i + 1}}</ion-label>
       <ion-input type="text" [(ngModel)]="playersNames[i]"></ion-input>
       <ion-icon slot="end" name="trash" (click)="removePlayer(i)"></ion-icon>
     </ion-item>
-
-    <!-- No need to have multi players names -->
-    <!-- <ion-button (click)="addPlayer()" size="small">
+    
+    <ion-button (click)="addPlayer()" size="small">
       <ion-icon name="add"></ion-icon>
-    </ion-button> -->
+    </ion-button>
 
     <ion-item lines="none">
       <ion-label text-wrap>{{ "PlayGame.shareDataAgreement" | translate }}</ion-label>
@@ -244,8 +243,8 @@
     <ion-item lines="none">
       <ion-button slot="end" size="default" [disabled]="!loaded" (click)="startGame()">{{ "General.done" | translate }}
       </ion-button>
-    </ion-item>
-  </ion-card>
+    </ion-item> 
+  </ion-card>-->
 
   <app-feedback #feedback></app-feedback>
 

@@ -130,7 +130,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   game: Game;
   playersNames: string[] = [""];
-  showPlayersNames = true;
+  // showPlayersNames = true;
 
   map: mapboxgl.Map;
   waypointMarker: mapboxgl.Marker;
@@ -223,7 +223,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   DrawControl: any;
 
   // share data approval
-  shareData_cbox = true;
+  shareDataBox = true;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
@@ -457,12 +457,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   /* multi-player */
   isSingleMode: boolean = true;
-  numPlayers = 1;
+  numPlayers = 0;
   playerNo: number = 1;
   joinedPlayersCount = 0;
   trackDataStatus: any;
   storedGameTrack_id: string;
-  waitPlayersPanel = true;
+  waitPlayersPanel = false;
 
   /*
   1. check if game is multi
@@ -488,26 +488,28 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   /********/
   /* initialize SocketIO (multiplayer) */
-  joinTeacherRoom_MultiPlayer() {
+  joinGame_MultiPlayer() {
+    /* when I join */
     this.socketService.socket.on('assignPlayerNumber', (data) => {
-      // console.log("playerNo from socket: ", data)
+      console.log("playerNo from socket: ", data)
       /* player number = number of players already joined the room */
       this.playerNo = this.joinedPlayersCount = data.playerNo;
 
       /* if all players joined the game, remove waiting panel */
       if (this.joinedPlayersCount == this.numPlayers) {
         this.waitPlayersPanel = false;
-        this.showPlayersNames = true;
+        // this.startGame(); ToDo: as last player get the responce quickly, there is no time to load map. (update it) one solution could be to ad promise in load map func after separate it 
       }
     });
 
+    /* when someone join */
     this.socketService.socket.on('playerJoined', (data) => {
-      // console.log("PlayerJoined: (number of players so far) ", data)
+      console.log("PlayerJoined: (number of players so far) ", data)
       this.joinedPlayersCount = data.joinedPlayersCount;
 
       if (this.joinedPlayersCount == this.numPlayers) {
         this.waitPlayersPanel = false;
-        this.showPlayersNames = true;
+        this.startGame();
       }
     });
 
@@ -537,6 +539,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.gameCode = JSON.parse(params.bundle).gameCode;
       this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
+      this.playersNames[0] = JSON.parse(params.bundle).playerName;
+      this.shareDataBox = JSON.parse(params.bundle).shareData_cbox;
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
@@ -561,13 +565,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           }
 
           if (!this.isSingleMode) {
+            this.waitPlayersPanel = true;
             this.numPlayers = game.numPlayers;
             console.log("///numPlayers: ", this.numPlayers);
             console.log("///isSingleMode: ", this.isSingleMode);
             // connect to socket server
-            this.joinTeacherRoom_MultiPlayer();
+            this.joinGame_MultiPlayer();
+
             // hide enter player name panel
-            this.showPlayersNames = false;
+            // this.showPlayersNames = false;
           }
         });
     });
@@ -754,6 +760,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.map.addImage("landmark-marker", image);
         }
       );
+    
+      // ToDO: update it using callback
+      if(this.isSingleMode  || this.playerNo == this.numPlayers){
+        this.startGame();
+      }
     });
 
     this.map.on("click", (e) => this.onMapClick(e, "standard"));
@@ -842,7 +853,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // console.log(e);
 
     /* Disable map click until player check 'share data box' and press done */
-    if (!this.showPlayersNames) {
+    if (!this.waitPlayersPanel) {
       let clickDirection;
 
       if (this.task.answer.type == AnswerType.MAP_POINT) {
@@ -1589,7 +1600,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
 
       // store collected data in database only when user agree in the begining of the game
-      if (this.shareData_cbox) {
+      if (this.shareDataBox) {
 
         if (this.isSingleMode) {
           this.trackerService.uploadTrack().then((res) => {
@@ -2140,7 +2151,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     console.log(this.playersNames);
     // this.subscripePosition(); // For Realworld / VE
     this.initGame();
-    this.showPlayersNames = false;
+    // this.showPlayersNames = false;
     this.enableDisableMapInteraction(true);
   }
 

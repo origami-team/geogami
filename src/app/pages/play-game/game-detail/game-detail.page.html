@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="play-game/play-game-list" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button color=dark defaultHref="play-game/play-game-list"
+        text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
     <ion-buttons slot="primary"></ion-buttons>
@@ -9,13 +10,15 @@
 </ion-header>
 
 <ion-content>
+
   <ion-card>
     <!-- <div #map class="map"></div> -->
     <ion-card-header>
       <ion-card-title *ngIf="game">{{ game.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content *ngIf="game">
-      {{ game.tasks.length }} {{ game.tasks.length == 1 ? ['General.task' | translate ] : ['General.tasks' | translate ]}}
+      {{ game.tasks.length }} {{ game.tasks.length == 1 ? ['General.task' | translate ] : ['General.tasks' | translate
+      ]}}
       <div>
         <span *ngFor="let task of game.tasks" class="dot" [class.nav]="task.category.includes('nav')"
           [class.theme]="task.category.includes('theme')" [class.free]="task.category.includes('free')"
@@ -24,12 +27,12 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- virtual environment -->
   <ion-card *ngIf="isVirtualWorld">
     <!-- <div #map class="map"></div> -->
     <ion-card-header>
       <ion-card-title> {{ "PlayGame.gameConnection" | translate }}
-        <ion-icon name="information-circle"
-          (click)="showPopover($event, 'Popover.gameConnectionInfo')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.gameConnectionInfo')">
         </ion-icon>
       </ion-card-title>
     </ion-card-header>
@@ -38,27 +41,49 @@
     </ion-card-content>
   </ion-card>
 
-<!-- multi-player impl. -->
-<!-- DoDo: change it to qr code scan -->
+  <ion-card>
+    <!-- <div #map class="map"></div> -->
+    <ion-card-header>
+      <ion-card-title> Enter your name
+        <!-- <ion-icon name="information-circle"
+          (click)="showPopover($event, 'Popover.gameConnectionInfo')">
+        </ion-icon> -->
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input placeholder="Player name (required)" [(ngModel)]="playerName"></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- multi-player impl. -->
+  <!-- DoDo: change it to qr code scan -->
   <!-- <ion-card *ngIf="isVirtualWorld"> -->
-    <ion-card *ngIf="!isSingleMode">
-      <!-- <div #map class="map"></div> -->
-      <ion-card-header>
-        <ion-card-title> Enter teacher code
-          <!-- <ion-icon name="information-circle"
+  <ion-card *ngIf="!isSingleMode">
+    <!-- <div #map class="map"></div> -->
+    <ion-card-header>
+      <ion-card-title> Enter teacher code
+        <!-- <ion-icon name="information-circle"
             (click)="showPopover($event, 'Popover.gameConnectionInfo')">
           </ion-icon> -->
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-input placeholder="Enter teacher code" [(ngModel)]="teacherCode"></ion-input>
-      </ion-card-content>
-    </ion-card>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input placeholder="Enter teacher code (required)" [(ngModel)]="teacherCode"></ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-item lines="none">
+      <ion-label text-wrap style="font-weight: bold;">{{ "PlayGame.shareDataAgreement" | translate }}</ion-label>
+      <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
+    </ion-item>
+  </ion-card>
 
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="block" (click)="startGame()" [disabled]="gameCode.length==5||!isVirtualWorld?false:true">{{ "General.start" | translate }}</ion-button>
+    <ion-button expand="block" (click)="startGame()" [disabled]="gameCode.length==5||!isVirtualWorld?false:true">{{
+      "General.start" | translate }}</ion-button>
   </ion-toolbar>
 </ion-footer>
