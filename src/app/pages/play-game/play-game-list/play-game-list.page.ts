@@ -139,7 +139,7 @@ export class PlayGameListPage implements OnInit {
 
     } else if (segVal == "all") { // if all is selected
       //onsole.log("all"); //temp
-      this.games_view = this.all_games_segment.filter(game => game.isMultiplayerGame == this.isMutiplayerGame);;
+      this.games_view = this.all_games_segment.filter(game => game.isMultiplayerGame == this.isMutiplayerGame);
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();

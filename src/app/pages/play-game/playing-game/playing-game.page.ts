@@ -760,9 +760,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.map.addImage("landmark-marker", image);
         }
       );
-    
+
       // ToDO: update it using callback
-      if(this.isSingleMode  || this.playerNo == this.numPlayers){
+      if (this.isSingleMode || this.playerNo == this.numPlayers) {
         this.startGame();
       }
     });

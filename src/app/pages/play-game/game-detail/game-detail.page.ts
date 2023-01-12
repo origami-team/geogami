@@ -12,6 +12,7 @@ import { PopoverComponent } from 'src/app/popover/popover.component';
 import { TranslateService } from '@ngx-translate/core';
 import { SocketService } from 'src/app/services/socket.service';
 import { UtilService } from 'src/app/services/util.service';
+import { AuthService } from 'src/app/services/auth-service.service';
 
 @Component({
   selector: 'app-game-detail',
@@ -38,6 +39,8 @@ export class GameDetailPage implements OnInit {
   teacherCode: string = "";
   isSingleMode: boolean = true;
   numPlayers = 2;
+  user = this.authService.getUserValue();
+  userId = ""; // mutliplayer
 
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -45,7 +48,9 @@ export class GameDetailPage implements OnInit {
     public popoverController: PopoverController,
     private translate: TranslateService,
     private socketService: SocketService,
-    private utilService: UtilService) { }
+    private utilService: UtilService,
+    private authService: AuthService
+  ) { }
 
   /******/
   ngOnInit() {
@@ -74,10 +79,13 @@ export class GameDetailPage implements OnInit {
 
         })
         .finally(() => {
-          console.log("game: ", this.game);
+          //console.log("game: ", this.game);
 
-
-
+          /* initialize user id and teacher code*/
+          if (this.user) {
+            this.userId = this.user['_id'];
+            this.teacherCode = this.userId + '-' + this.game.name;
+          }
 
           // this.activities = this.game.activities
           // this.points = this.activities[0].points
@@ -86,7 +94,6 @@ export class GameDetailPage implements OnInit {
           // }
         });
     });
-
   }
 
   /******/
