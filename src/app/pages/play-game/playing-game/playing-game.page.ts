@@ -470,10 +470,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
    */
 
   ngOnInit() {
-    Plugins.Keyboard.addListener("keyboardDidHide", async () => {
-      this.map.resize();
-      await this.zoomBounds();
-    });
+    if (Capacitor.platform !== "web") {
+      Plugins.Keyboard.addListener("keyboardDidHide", async () => {
+        this.map.resize();
+        await this.zoomBounds();
+      });
+    }
 
     PlayingGamePage.showSuccess = false;
 
