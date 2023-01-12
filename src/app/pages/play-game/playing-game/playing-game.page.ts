@@ -406,6 +406,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     ],
   });
 
+  // ToDo : update style source
   // Draw control only point enabled
   DrawControl_point = new MapboxDraw({
     displayControlsDefault: false,
@@ -413,45 +414,43 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       point: true,
       trash: true,
     },
+    // styles:['../../../../assets/mapStyles/drawControlPoint.json'
+    // styles: environment.mapStyle + 'drawControlPoint.json'
     styles: [
       {
-        id: "gl-draw-point-inactive",
-        type: "circle",
-        filter: [
+        "id": "gl-draw-point-inactive",
+        "type": "circle",
+        "filter": [
           "all",
           ["==", "active", "false"],
           ["==", "$type", "Point"],
           ["==", "meta", "feature"],
-          ["!=", "mode", "static"],
+          ["!=", "mode", "static"]
         ],
-        paint: {
+        "paint": {
           "circle-radius": 8,
-          "circle-color": getComputedStyle(
-            document.documentElement
-          ).getPropertyValue("--ion-color-secondary"),
+          "circle-color": "#3dc2ff",
           "circle-stroke-width": 4,
-          "circle-stroke-color": "#fff",
-        },
+          "circle-stroke-color": "#fff"
+        }
       },
       {
-        id: "gl-draw-point-active",
-        type: "circle",
-        filter: [
+        "id": "gl-draw-point-active",
+        "type": "circle",
+        "filter": [
           "all",
           ["==", "$type", "Point"],
           ["!=", "meta", "midpoint"],
-          ["==", "active", "true"],
+          ["==", "active", "true"]
         ],
-        paint: {
+        "paint": {
           "circle-radius": 8,
-          "circle-color": getComputedStyle(
-            document.documentElement
-          ).getPropertyValue("--ion-color-secondary"),
+          "circle-color": "#3dc2ff",
           "circle-stroke-width": 6,
-          "circle-stroke-color": "#fff",
-        },
-      },
-    ],
+          "circle-stroke-color": "#fff"
+        }
+      }
+    ]
   });
 
 
@@ -478,7 +477,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     PlayingGamePage.showSuccess = false;
-
   }
 
   // With VR env only (single player)
@@ -516,7 +514,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     /* Join player in teacher's dedicated room */
-    this.socketService.socket.emit("joinGame", this.gameCode);
+    this.socketService.socket.emit("joinGame", { roomName: this.gameCode, playerName: this.playersNames[0] });
   }
 
   disconnectSocketIO() {
