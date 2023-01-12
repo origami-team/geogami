@@ -91,12 +91,12 @@ export class PlayGameListPage implements OnInit {
 
   // Get games data from server
   getGamesData() {
-    // Only content admin can view multi-players games
+    /* Only content admin can view multi-players games */
     this.gamesService.getGames(true, this.userRole == "contentAdmin").then(res => res.content).then(games => {
       // Get either real or VE agmes based on selected environment 
       this.games_res = games;
 
-      // filter real world games (default)
+      /* filter real world games (default) - as it represents the initial view */
       this.filterRealWorldGames();
 
       // this.loading = true;
@@ -111,11 +111,9 @@ export class PlayGameListPage implements OnInit {
     // Get games data from server
     // Only content admin can view multi-players games
     this.gamesService.getGames(true, this.userRole == "contentAdmin").then(res => res.content).then(games => {
-      // Get either real or VE agmes based on selected environment 
-      this.filterGamesEnv(this.gameEnvSelected);
+      this.games_res = games;
 
-      // Filter data of selected segment
-      //this.segmentChanged(this.selectedSegment)
+      this.filterGamesEnv(this.gameEnvSelected);
     }).finally(() => event.target.complete());;
   }
 
@@ -446,10 +444,10 @@ export class PlayGameListPage implements OnInit {
 
   /* on game environment change OR refresh*/
   filterGamesEnv(envVal: string) {
-    // first, update game mode to single player
+    /* first, update game mode to single player */
     this.gameModeSelected = 'single';
     this.isMutiplayerGame = undefined;
-    // then, check game env.
+    /* then, check game env. */
     if (envVal == "real") {
       this.filterRealWorldGames();
     } else {
