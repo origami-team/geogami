@@ -27,20 +27,7 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- virtual environment -->
-  <ion-card *ngIf="isVirtualWorld">
-    <!-- <div #map class="map"></div> -->
-    <ion-card-header>
-      <ion-card-title> {{ "PlayGame.gameConnection" | translate }}
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.gameConnectionInfo')">
-        </ion-icon>
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-input placeholder="{{ 'PlayGame.pl_EnterCode' | translate }}" [(ngModel)]="gameCode"></ion-input>
-    </ion-card-content>
-  </ion-card>
-
+  <!-- Enter name -->
   <ion-card>
     <!-- <div #map class="map"></div> -->
     <ion-card-header>
@@ -54,6 +41,20 @@
       <ion-input placeholder="Player name (required)" [(ngModel)]="playerName"></ion-input>
     </ion-card-content>
   </ion-card>
+
+    <!-- virtual environment -->
+    <ion-card *ngIf="isVirtualWorld">
+      <!-- <div #map class="map"></div> -->
+      <ion-card-header>
+        <ion-card-title> {{ "PlayGame.gameConnection" | translate }}
+          <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.gameConnectionInfo')">
+          </ion-icon>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input placeholder="{{ 'PlayGame.pl_EnterCode' | translate }}" [(ngModel)]="gameCode"></ion-input>
+      </ion-card-content>
+    </ion-card>
 
   <!-- multi-player impl. -->
   <!-- DoDo: change it to qr code scan -->

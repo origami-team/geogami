@@ -62,9 +62,8 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   // curated filter
   isCuratedGame = false;
-  // to set curated gmaes only by admins (geogami team)
+  // to set curated games only by admins (geogami team)
   userRole: String = "";
-  user = this.authService.getUserValue();
 
   errorMsg: String;
 
@@ -232,8 +231,8 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   ngOnInit() {
     // Get user role
-    if(this.user){
-      this.userRole = this.user['roles'][0];
+    if (this.authService.getUserValue) {
+      this.userRole = this.authService.getUserRole();
     }
   }
 

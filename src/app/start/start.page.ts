@@ -52,10 +52,10 @@ export class StartPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    // if device is not connected to internet, show notification
-    if (!this.utilService.getIsOnlineValue()) {
+    /* if device is not connected to internet, show notification */
+    /* if (!this.utilService.getIsOnlineValue()) {
       return;
-    }
+    } */
 
     // get current app version
     Plugins.Device.getInfo().then((device) => (this.device = device));
@@ -177,7 +177,8 @@ export class StartPage implements OnInit {
 
   }
 
-  // convert version value to int
+  /************/
+  /* convert version value to int */
   versionToInt(VersionInString) {
     let v = VersionInString.split('.');
     console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);

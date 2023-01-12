@@ -11,7 +11,6 @@ import { AuthService } from '../../../services/auth-service.service';
 import { environment } from 'src/environments/environment';
 
 import mapboxgl from "mapbox-gl";
-import { cloneDeep } from "lodash";
 import { UtilService } from 'src/app/services/util.service';
 // import {} from environment.mapStyle + 'realWorld.json'
 
@@ -39,7 +38,8 @@ export class PlayGameListPage implements OnInit {
   selectedSegment: string = "curated";
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
-  user = this.authService.getUserValue();
+  userId: String = "";
+  user = this.authService.getUser();
 
   isVRMirrored: boolean = false; // temp
   map: mapboxgl.Map;
@@ -69,17 +69,18 @@ export class PlayGameListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    // if device is not connected to internet, show notification
+    /* if device is not connected to internet, show notification */
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
       // return;
     }
 
-    // Check user role
-    if (this.user) {
+    /* Check whther user is registerd. if yes, get role and id */
+    if (this.authService.getUserValue()) {
       this.selectedSegment = "all";
-      this.userRole = this.user['roles'][0];
+      this.userRole = this.authService.getUserRole();
+      this.userId = this.authService.getUserId();
     }
 
     // Get games data from server
@@ -130,7 +131,7 @@ export class PlayGameListPage implements OnInit {
   segmentChanged(segVal) {  //--- ToDo check duplicate code and create a func for it
     // if mine is selected
     if (segVal == "mine") {
-      this.games_view = this.all_games_segment.filter(game => game.user == this.user['_id'] && game.isMultiplayerGame == this.isMutiplayerGame);
+      this.games_view = this.all_games_segment.filter(game => game.user == this.userId && game.isMultiplayerGame == this.isMutiplayerGame);
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();
@@ -169,7 +170,7 @@ export class PlayGameListPage implements OnInit {
       )
     } else if (this.selectedSegment == "mine") {
       this.games_view = this.all_games_segment.filter(game =>
-        (game.user == this.user['_id']) &&
+        (game.user == this.userId) &&
         (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
           || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
       )

@@ -27,7 +27,6 @@ export class EditGameListPage implements OnInit {
   // bundle: any;
   
   // to show star icon for content admin
-  user = this.authService.getUserValue();
   userRole: String = "user";
 
   
@@ -59,8 +58,8 @@ export class EditGameListPage implements OnInit {
     }); */
 
     // Check user role
-    if (this.user) {
-      this.userRole = this.user['roles'][0];
+    if (this.authService.getUserValue) {
+      this.userRole = this.authService.getUserRole();
     }
 
     this.gamesService.getUserGames().then((res) => {

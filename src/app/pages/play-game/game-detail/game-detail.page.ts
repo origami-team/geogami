@@ -39,8 +39,6 @@ export class GameDetailPage implements OnInit {
   teacherCode: string = "";
   isSingleMode: boolean = true;
   numPlayers = 2;
-  user = this.authService.getUserValue();
-  userId = ""; // mutliplayer
 
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -82,9 +80,8 @@ export class GameDetailPage implements OnInit {
           //console.log("game: ", this.game);
 
           /* initialize user id and teacher code*/
-          if (this.user) {
-            this.userId = this.user['_id'];
-            this.teacherCode = this.userId + '-' + this.game.name;
+          if ( !this.isSingleMode && this.authService.getUserValue()) {
+            this.teacherCode = this.authService.getUserId() + '-' + this.game.name;
           }
 
           // this.activities = this.game.activities

@@ -48,6 +48,16 @@ export class AuthService {
     return this.user$.next(user);
   }
 
+  /* additional functions */
+  getUserRole(){
+    return this.getUserValue()['roles'][0]
+  }
+
+  getUserId(){
+    return this.getUserValue()['_id']
+  }
+  /*  */
+
   getLoginPageOpen() {
     return this.loginPageOpen$.asObservable();
   }
