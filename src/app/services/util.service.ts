@@ -9,6 +9,7 @@ import { PopoverComponent } from "src/app/popover/popover.component";
 export class UtilService {
 
   private isOnline$: BehaviorSubject<boolean>;
+  private qrCode$: BehaviorSubject<string>;
 
   constructor(
     private toastCtr: ToastController,
@@ -16,6 +17,7 @@ export class UtilService {
     public popoverController: PopoverController
   ) {
     this.isOnline$ = new BehaviorSubject(true);
+    this.qrCode$ = new BehaviorSubject("");
   }
 
   async showToast(msg, colorV = "dark", durationV = 3000, cssStyle = false) {
@@ -76,6 +78,19 @@ export class UtilService {
 
   setIsOnlineValue(val) {
     return this.isOnline$.next(val);
+  }
+
+  /* set and get network connection status */
+  getQRCode() {
+    return this.qrCode$.asObservable();
+  }
+
+  getQRCodeValue() {
+    return this.qrCode$.getValue();
+  }
+
+  setQRCodeValue(val) {
+    return this.qrCode$.next(val);
   }
 
   /* showPopover without translation */

@@ -1,12 +1,7 @@
 import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
-
-import mapboxgl from 'mapbox-gl';
-
 import { GamesService } from '../../../services/games.service';
-import { environment } from 'src/environments/environment';
-
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -80,7 +75,7 @@ export class GameDetailPage implements OnInit {
           //console.log("game: ", this.game);
 
           /* initialize user id and teacher code*/
-          if ( !this.isSingleMode && this.authService.getUserValue()) {
+          if (!this.isSingleMode && this.authService.getUserValue()) {
             this.teacherCode = this.authService.getUserId() + '-' + this.game.name;
           }
 
@@ -90,6 +85,11 @@ export class GameDetailPage implements OnInit {
           //   this.initMap()
           // }
         });
+    });
+
+    this.utilService.getQRCode().subscribe((qrCode) => {
+      this.teacherCode = qrCode;
+      console.log("game-detail:", qrCode)
     });
   }
 
@@ -163,4 +163,11 @@ export class GameDetailPage implements OnInit {
     });
     return await popover.present();
   }
+
+  /* open barcode scanner */
+  /* to scan qr code */
+  openBarcodeScanner() {
+    this.navCtrl.navigateForward('barcode-scanner');
+  }
+
 }

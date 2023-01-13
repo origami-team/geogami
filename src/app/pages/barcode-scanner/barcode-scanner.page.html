@@ -1,0 +1,24 @@
+<ion-header hidden="true">
+  <ion-toolbar>
+    <ion-title>barcode-scanner</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-button (click)=startScan()>
+    <ion-icon name="scan" slot="start"></ion-icon>
+    start scann
+  </ion-button>
+
+  <ion-button (click)=stopScan()>
+    stop scan
+  </ion-button>
+
+  <div class="scan-box">
+    <div class='scanner'></div>
+  </div>
+
+  <p class="info">Place game barcode inside the viewfinder box to scan it.</p>
+
+</ion-content>

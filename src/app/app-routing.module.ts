@@ -195,6 +195,10 @@ const routes: Routes = [
     path: 'game-type-menu/:worldType',
     loadChildren: () => import('./pages/multiplayer/game-type-menu/game-type-menu.module').then( m => m.GameTypeMenuPageModule)
   },
+  {
+    path: 'barcode-scanner',
+    loadChildren: () => import('./pages/barcode-scanner/barcode-scanner.module').then( m => m.BarcodeScannerPageModule)
+  },
 ];
 @NgModule({
   imports: [
