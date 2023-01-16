@@ -89,7 +89,6 @@ export class GameDetailPage implements OnInit {
 
     this.utilService.getQRCode().subscribe((qrCode) => {
       this.teacherCode = qrCode;
-      console.log("game-detail:", qrCode)
     });
   }
 
@@ -131,7 +130,7 @@ export class GameDetailPage implements OnInit {
       id: this.game._id,
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
-      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode),
+      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[^a-zA-Z0-9 -]/g, '')),
       isSingleMode: this.isSingleMode,
       playerName: this.playerName,
       shareData_cbox: this.shareData_cbox
@@ -141,7 +140,7 @@ export class GameDetailPage implements OnInit {
       this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
     } else {
       /* if multi player mode, check whether room is not yet full. then allow player to join game in playing page */
-      this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode, gameNumPlayers: this.numPlayers }, (response) => {
+      this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode.replace(/[^a-zA-Z0-9 -]/g, ''), gameNumPlayers: this.numPlayers }, (response) => {
         if (response.isRoomFull) {
           /* show toast msg */
           this.utilService.showToast(`Sorry this game accepts only ${this.numPlayers} players.`, "dark", 3500);

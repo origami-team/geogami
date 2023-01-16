@@ -72,7 +72,8 @@
       <!-- <ion-input placeholder="Enter teacher code (required)" disabled="true" [(ngModel)]="teacherCode"></ion-input> -->
       <!-- to use -->
       <!-- <ion-input disabled="true" [(ngModel)]="teacherCode"></ion-input> -->
-      <ion-input *ngIf="teacherCode" placeholder="Scan instructor barcode (required)" disabled="true" [(ngModel)]="teacherCode" ></ion-input>
+      <!-- <ion-input *ngIf="teacherCode" placeholder="Scan instructor barcode (required)" disabled="true" [(ngModel)]="teacherCode" ></ion-input> --> <!-- alternative-->
+      <ion-input placeholder="Scan instructor barcode (required)" [(ngModel)]="teacherCode" ></ion-input>
 
       <div style="text-align: center">
         <ion-button (click)=openBarcodeScanner() slot="end">
@@ -97,7 +98,7 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="block" (click)="startGame()" [disabled]="gameCode.length==5||!isVirtualWorld?false:true">{{
+    <ion-button expand="block" (click)="startGame()" [disabled]="!playerName || (!teacherCode && !isSingleMode)">{{
       "General.start" | translate }}</ion-button>
   </ion-toolbar>
 </ion-footer>
