@@ -99,7 +99,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     });
 
     // Get user role
-    if (this.authService.getUserValue) {
+    if (this.authService.getUserValue()) {
       this.userRole = this.authService.getUserRole();
     }
   }

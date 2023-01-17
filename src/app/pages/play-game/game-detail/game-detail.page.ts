@@ -35,7 +35,6 @@ export class GameDetailPage implements OnInit {
   isSingleMode: boolean = true;
   numPlayers = 2;
   userRole: String = "";
-  user = this.authService.getUserValue(); // to avoid getting null error when used directly in if condition.
 
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -51,7 +50,7 @@ export class GameDetailPage implements OnInit {
   ngOnInit() {
 
     // Get user role
-    if (this.user) {
+    if (this.authService.getUserValue()) {
       this.userRole = this.authService.getUserRole();
     }
 
@@ -80,20 +79,12 @@ export class GameDetailPage implements OnInit {
 
         })
         .finally(() => {
-          //console.log("game: ", this.game);
-
           /* initialize user id and teacher code*/
           if (!this.isSingleMode && this.authService.getUserValue()) {
             this.teacherCode = this.authService.getUserId() + '-' + this.game.name;
             // console.log('teacher code -> game name', this.teacherCode.)
             //610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
           }
-
-          // this.activities = this.game.activities
-          // this.points = this.activities[0].points
-          // if(this.mapContainer.nativeElement) {
-          //   this.initMap()
-          // }
         });
     });
 
@@ -107,29 +98,6 @@ export class GameDetailPage implements OnInit {
   connectSocketIO_MultiPlayer() {
     this.socketService.socket.connect();
   }
-
-  // initMap() {
-  //   mapboxgl.accessToken = environment.mapboxAccessToken;
-  //   const map = new mapboxgl.Map({
-  //     container: this.mapContainer.nativeElement,
-  //     style: 'mapbox://styles/mapbox/streets-v9',
-  //   });
-
-
-  //   map.on('load', () => {
-  //     const tasks = this.game.tasks;
-  //     // const markers = activity.points.map(point => new mapboxgl.Marker().setLngLat([point.lng, point.lat]).addTo(map))
-
-  //     var bounds = new mapboxgl.LngLatBounds();
-
-  //     tasks.forEach((task) => {
-  //       if (task.settings.point)
-  //         bounds.extend(task.settings.point.geometry.coordinates);
-  //     });
-
-  //     map.fitBounds(bounds, { padding: 40, duration: 2000 });
-  //   })
-  // }
 
   pointClick(point) {
     console.log(point);

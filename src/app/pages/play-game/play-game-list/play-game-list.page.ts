@@ -77,7 +77,7 @@ export class PlayGameListPage implements OnInit {
     }
 
     /* Check whther user is registerd. if yes, get role and id */
-    if (this.authService.getUserValue()) {
+    if (this.user) {
       this.selectedSegment = "all";
       this.userRole = this.authService.getUserRole();
       this.userId = this.authService.getUserId();

@@ -58,7 +58,7 @@ export class EditGameListPage implements OnInit {
     }); */
 
     // Check user role
-    if (this.authService.getUserValue) {
+    if (this.authService.getUserValue()) {
       this.userRole = this.authService.getUserRole();
     }
 
