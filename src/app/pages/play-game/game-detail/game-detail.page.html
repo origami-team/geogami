@@ -28,8 +28,7 @@
   </ion-card>
 
   <!-- Enter name -->
-  <ion-card>
-    <!-- <div #map class="map"></div> -->
+  <ion-card *ngIf="userRole != 'contentAdmin'">
     <ion-card-header>
       <ion-card-title> Enter your name
         <!-- <ion-icon name="information-circle"
@@ -44,7 +43,6 @@
 
   <!-- virtual environment -->
   <ion-card *ngIf="isVirtualWorld">
-    <!-- <div #map class="map"></div> -->
     <ion-card-header>
       <ion-card-title> {{ "PlayGame.gameConnection" | translate }}
         <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.gameConnectionInfo')">
@@ -56,34 +54,14 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- multi-player impl. -->
-  <!-- DoDo: change it to qr code scan -->
-  <!-- <ion-card *ngIf="isVirtualWorld"> -->
-  <ion-card *ngIf="!isSingleMode">
-    <!-- <div #map class="map"></div> -->
+  <!-- only viewed by instructor -->
+  <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
     <ion-card-header>
-      <ion-card-title> Scan instructor code
-        <ion-icon name="information-circle"
-            (click)="showPopover($event, 'You can get it from the instructor')">
-          </ion-icon>
+      <ion-card-title> Ask expected players to scan the below QR code to join the game.
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <!-- <ion-input placeholder="Enter teacher code (required)" disabled="true" [(ngModel)]="teacherCode"></ion-input> -->
-      <!-- to use -->
-      <!-- <ion-input disabled="true" [(ngModel)]="teacherCode"></ion-input> -->
-      <!-- <ion-input *ngIf="teacherCode" placeholder="Scan instructor barcode (required)" disabled="true" [(ngModel)]="teacherCode" ></ion-input> --> <!-- alternative-->
-      <ion-input placeholder="Scan instructor barcode (required)" [(ngModel)]="teacherCode" ></ion-input>
-
-      <div style="text-align: center">
-        <ion-button (click)=openBarcodeScanner() slot="end">
-          <!-- <ion-button (click)=presentBarcodeScannerModal() slot="end"> -->
-          <ion-icon name="scan" slot="start"></ion-icon>
-          scan code
-        </ion-button>
-      </div>
-
-
+      <ion-img src="../../../../assets/temp/qrcode.png"></ion-img>
     </ion-card-content>
   </ion-card>
 

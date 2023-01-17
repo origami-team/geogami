@@ -1,19 +1,28 @@
-<ion-header hidden="true">
+<!-- <ion-header>
   <ion-toolbar>
     <ion-title>barcode-scanner</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+    </ion-buttons>
+    <ion-title> Scan Game barcode</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-button (click)=startScan()>
+  <!-- <ion-button (click)=startScan()>
     <ion-icon name="scan" slot="start"></ion-icon>
     start scann
   </ion-button>
 
   <ion-button (click)=stopScan()>
     stop scan
-  </ion-button>
+  </ion-button> -->
 
   <div class="scan-box">
     <div class='scanner'></div>

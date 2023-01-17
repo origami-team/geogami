@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { BarcodeScannerPageRoutingModule } from './barcode-scanner-routing.module';
 
 import { BarcodeScannerPage } from './barcode-scanner.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    TranslateModule,
     BarcodeScannerPageRoutingModule
   ],
   declarations: [BarcodeScannerPage]

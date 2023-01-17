@@ -18,23 +18,24 @@ export class BarcodeScannerPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.startScan();
   }
 
-  ngAfterViewInit() {
+  ionViewWillEnter() {
     console.log("ngAfterViewInit");
     BarcodeScanner.prepare();
+    this.startScan();
   }
 
   ngOnDestroy() {
     this.stopScan();
   }
 
+  /**********/
   // tutorial: https://www.youtube.com/watch?v=8GXfjDUCYjU
   async startScan() {
     const allowed = await this.checkPermission()
     if (allowed) {
-      console.log("🚀 allowed")
+      // console.log("🚀 allowed")
 
       /* make background of WebView transparent, another step is adding some style to global.scss */
       BarcodeScanner.hideBackground();
@@ -43,23 +44,24 @@ export class BarcodeScannerPage implements OnInit {
       /* specified qr-code */
       const result = await BarcodeScanner.startScan({ targetedFormats: ['QR_CODE'] }); // start scanning and wait for a result
 
-      // if the result has content
+      /* if the result has content */
       if (result.hasContent) {
         console.log(result.content); // log the raw scanned content
         /* show toast msg */
-        this.utilService.showToast(`Qr-Code: ${result.content}`, "dark", 3500);
+        // this.utilService.showToast(`Qr-Code: ${result.content}`, "dark", 3500);
 
         this.utilService.setQRCodeValue(result.content);
 
-        this.navCtrl.back();
+        this.navCtrl.navigateForward(`play-game/game-detail/${result.content.slice(25)}`);
       }
     }
   }
 
+  /********/
   async stopScan() {
     BarcodeScanner.showBackground();
     document.querySelector('body').classList.remove('scanner-active');
-
+    /* stop scan */
     BarcodeScanner.stopScan();
   };
 

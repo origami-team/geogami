@@ -34,6 +34,8 @@ export class GameDetailPage implements OnInit {
   teacherCode: string = "";
   isSingleMode: boolean = true;
   numPlayers = 2;
+  userRole: String = "";
+  user = this.authService.getUserValue(); // to avoid getting null error when used directly in if condition.
 
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -47,6 +49,12 @@ export class GameDetailPage implements OnInit {
 
   /******/
   ngOnInit() {
+
+    // Get user role
+    if (this.user) {
+      this.userRole = this.authService.getUserRole();
+    }
+
     this.route.params.subscribe(params => {
       this.gamesService.getGame(params.id)
         .then(res => res.content)
@@ -63,8 +71,8 @@ export class GameDetailPage implements OnInit {
           }
 
           /* multi-player */
-          if (game.isMultiplayerGame !== undefined) {
-            this.isSingleMode = !game.isMultiplayerGame;
+          if (game.isMultiplayerGame == true) {
+            this.isSingleMode = false;
             this.numPlayers = game.numPlayers;
             /* connect to socket server (multiplayer) */
             this.connectSocketIO_MultiPlayer();
@@ -77,6 +85,8 @@ export class GameDetailPage implements OnInit {
           /* initialize user id and teacher code*/
           if (!this.isSingleMode && this.authService.getUserValue()) {
             this.teacherCode = this.authService.getUserId() + '-' + this.game.name;
+            // console.log('teacher code -> game name', this.teacherCode.)
+            //610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
           }
 
           // this.activities = this.game.activities
@@ -130,7 +140,8 @@ export class GameDetailPage implements OnInit {
       id: this.game._id,
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
-      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[^a-zA-Z0-9 -]/g, '')),
+      /* replace is used to get rid of special charachters, so values can be sent via routing */
+      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
       isSingleMode: this.isSingleMode,
       playerName: this.playerName,
       shareData_cbox: this.shareData_cbox
@@ -140,7 +151,7 @@ export class GameDetailPage implements OnInit {
       this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
     } else {
       /* if multi player mode, check whether room is not yet full. then allow player to join game in playing page */
-      this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode.replace(/[^a-zA-Z0-9 -]/g, ''), gameNumPlayers: this.numPlayers }, (response) => {
+      this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''), gameNumPlayers: this.numPlayers }, (response) => {
         if (response.isRoomFull) {
           /* show toast msg */
           this.utilService.showToast(`Sorry this game accepts only ${this.numPlayers} players.`, "dark", 3500);

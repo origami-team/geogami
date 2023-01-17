@@ -92,17 +92,7 @@ export class StartPage implements OnInit {
   }
 
   navigateGamesOverviewPage() {
-    // disable unregistered users from playing using the virtual world
-/*     if (['admin', 'contentAdmin'].includes(this.userRole)) {
-      this.navCtrl.navigateForward('play-game/play-game-menu');
-    } else {
-      this.navCtrl.navigateForward(`play-game/play-game-list/${"RealWorld"}`);
-    } */
-
-    // enable unregistered users to play using the virtual world
-    // this.navCtrl.navigateForward('play-game/play-game-menu');
-
-    this.navCtrl.navigateForward(`play-game/play-game-list`);
+    this.navCtrl.navigateForward(`play-game/play-game-menu`);
   }
 
   navigateCreatePage() {
