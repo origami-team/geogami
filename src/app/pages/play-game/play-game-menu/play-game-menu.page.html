@@ -8,26 +8,28 @@
 </ion-header>
 
 <ion-content>
-  <ion-card id="create_card_create" (click)=navigateToRealGameListPage() color="secondary">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="globe"></ion-icon>{{ "GameList.realWorld" | translate }}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      {{ "PlayGame.realWorldDescription" | translate }}
-    </ion-card-content>
-  </ion-card>
 
-  <ion-card id="create_card_create" (click)=navigateToVirtualGameListPage() color="secondary">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="tv"></ion-icon>{{ "GameList.virtualWorld" | translate }}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      {{ "PlayGame.virtualWorldDescription" | translate }}
-    </ion-card-content>
-  </ion-card>
+  <!-- to scan multiplayer game code -->
+  <ion-card (click)=navigateToPlayGameListPage() color="secondary">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon name="search-outline"></ion-icon> Find a Game
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    Select a game from list.
+  </ion-card-content>
+</ion-card>
+
+<ion-card (click)=navigateBarcodeScannerPage() color="secondary">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon name="qr-code-outline"></ion-icon> Scan Code
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    Scan game code provided by instructor
+  </ion-card-content>
+</ion-card>
 
 </ion-content>
