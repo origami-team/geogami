@@ -91,8 +91,12 @@ export class StartPage implements OnInit {
     console.log(e);
   }
 
-  navigateGamesOverviewPage() {
-    this.navCtrl.navigateForward(`play-game/play-game-menu`);
+  navigateGamesPlayPage() {
+    if(Capacitor.platform =="web"){
+      this.navCtrl.navigateForward(`play-game/play-game-list`);
+    } else{
+      this.navCtrl.navigateForward(`play-game/play-game-menu`);
+    }
   }
 
   navigateCreatePage() {

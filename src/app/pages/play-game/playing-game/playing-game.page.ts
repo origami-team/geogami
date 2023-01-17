@@ -502,7 +502,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     });
 
-    /* when someone join */
+    /* when someone else join */
     this.socketService.socket.on('playerJoined', (data) => {
       console.log("PlayerJoined: (number of players so far) ", data)
       this.joinedPlayersCount = data.joinedPlayersCount;
@@ -1585,6 +1585,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
+
+      /* multiplayer */
+      /* change player status in socket server to finished tasks */
+      if(!this.isSingleMode){
+        this.socketService.socket.emit("changePlayerStauts", "finished tasks");
+      }
+      
       PlayingGamePage.showSuccess = true;
 
       // To disable map interations

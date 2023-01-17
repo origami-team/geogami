@@ -47,6 +47,7 @@ export class TrackerService {
   private playersNames_list;
   private waypoints_list;
   private events_list;
+  private deviceInfo_list;
 
 
   private map: any;
@@ -234,40 +235,30 @@ export class TrackerService {
     this.playersNames_list = new Array(this.numPlayers);
     this.waypoints_list = new Array(this.numPlayers);
     this.events_list = new Array(this.numPlayers);
+    this.deviceInfo_list = new Array(this.numPlayers);
 
     /* (multiplayer) 2. assign current player tracks in corresponding element */
     if (!this.isSingleMode && !isGameTrackStored) {
       this.playersNames_list[this.playerNo - 1] = this.players[0];
       this.waypoints_list[this.playerNo - 1] = this.waypoints;
       this.events_list[this.playerNo - 1] = this.events;
+      this.deviceInfo_list[this.playerNo - 1] = this.getDeviceInfo(this.device);
     }
 
     const data = {
-      /* (multiplayer) 3. send game track is and player no if track is already exitied in socket server room then update player's corresponding track data */
+      /* (multiplayer) 3. send game track id and player no if track is already exitied in socket server room then update player's corresponding track data */
       _id: (isGameTrackStored ? gameTrack_Id : undefined),
       playerNo: (isGameTrackStored ? this.playerNo : undefined),
       game: this.game,
       name: this.gameName,
       start: this.start,
       end: new Date().toISOString(),
-      device: {
-        model: this.device.model,
-        platform: this.device.platform,
-        operatingSystem: this.device.operatingSystem,
-        osVersion: this.device.osVersion,
-        isVirtual: this.device.isVirtual,
-        appName: this.device.appName,
-        appVersion: this.device.appVersion,
-        appBuild: this.device.appBuild,
-        appId: this.device.appId,
-        device_name: this.device.name,
-        device_manufacturer: this.device.manufacturer,
-      },
+      device: (this.isSingleMode || isGameTrackStored ? this.getDeviceInfo(this.device) : this.deviceInfo_list),
       waypoints: (this.isSingleMode || isGameTrackStored ? this.waypoints : this.waypoints_list),
       events: (this.isSingleMode || isGameTrackStored ? this.events : this.events_list),
       answers: null,
       players: (this.isSingleMode || isGameTrackStored ? this.players : this.playersNames_list),
-      playersCount: this.players.length,
+      playersCount: (this.isSingleMode ? this.players.length : undefined), // To Do: you may delete it.
       isMultiplayerGame: (!this.isSingleMode ? true : undefined),
       numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
     };
@@ -321,7 +312,8 @@ export class TrackerService {
           observe: 'response',
         }
         ).toPromise();
-    } else {
+    } 
+    else {
       /* (multiplayer) 5. b) update existed tracks (multiplayer) */
       console.log("//update existed tracks (multiplayer)");
       return this.http
@@ -338,6 +330,24 @@ export class TrackerService {
   updateTaskNo(taskNo, taskCategory) {
     this.taskNo = taskNo;
     this.taskCategory = taskCategory;
+  }
+
+
+  /* return device info */
+  getDeviceInfo(device) {
+    return {
+      model: device.model,
+      platform: device.platform,
+      operatingSystem: device.operatingSystem,
+      osVersion: device.osVersion,
+      isVirtual: device.isVirtual,
+      appName: device.appName,
+      appVersion: device.appVersion,
+      appBuild: device.appBuild,
+      appId: device.appId,
+      device_name: device.name,
+      device_manufacturer: device.manufacturer,
+    }
   }
 
 }

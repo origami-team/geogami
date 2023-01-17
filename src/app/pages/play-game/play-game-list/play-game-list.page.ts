@@ -39,7 +39,7 @@ export class PlayGameListPage implements OnInit {
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
   userId: String = "";
-  user = this.authService.getUser();
+  user = this.authService.getUserValue();
 
   isVRMirrored: boolean = false; // temp
   map: mapboxgl.Map;
