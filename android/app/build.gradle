@@ -6,8 +6,8 @@ android {
         applicationId "com.ifgi.geogami"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 30
-        versionCode 12
-        versionName "1.0.3"
+        versionCode 13
+        versionName "1.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,9 +19,6 @@ android {
 }
 
 repositories {
-    maven {
-        url  "https://dl.bintray.com/ionic-team/capacitor"
-    }
     flatDir{
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
     }
@@ -35,10 +32,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
-
-    implementation 'com.android.support:design:23.2.1'
-
-    implementation 'com.google.android.material:material:1.0.0'
 }
 
 apply from: 'capacitor.build.gradle'
