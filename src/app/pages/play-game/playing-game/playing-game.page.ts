@@ -481,7 +481,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   // With VR env only (single player)
   connectSocketIO() {
-    this.socketService.socket.connect();
+    // this.socketService.socket.connect(); // aleady connected in game-detail-page
     /* MultiUsers in Parallel impl. */
     this.socketService.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
   }
@@ -1589,7 +1589,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       /* multiplayer */
       /* change player status in socket server to finished tasks */
       if(!this.isSingleMode){
-        this.socketService.socket.emit("changePlayerStauts", "finished tasks");
+        this.socketService.socket.emit("changePlayerConnectionStauts", "finished tasks");
       }
       
       PlayingGamePage.showSuccess = true;
@@ -1866,6 +1866,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   ngOnDestroy() { }
 
   navigateHome() {
+    
+    if(!this.isSingleMode && this.waitPlayersPanel){
+      this.navCtrl.back();
+    }
+
     if (!this.isVirtualWorld) {
       this.positionSubscription.unsubscribe(); //
       this.deviceOrientationSubscription.unsubscribe();

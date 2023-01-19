@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="play-game/play-game-list"
+      <ion-back-button color=dark defaultHref="/"
         text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
@@ -65,11 +65,38 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+  <ion-card *ngIf="userRole != 'contentAdmin' || isSingleMode">
     <ion-item lines="none">
       <ion-label text-wrap style="font-weight: bold;">{{ "PlayGame.shareDataAgreement" | translate }}</ion-label>
       <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
     </ion-item>
+  </ion-card>
+
+  <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
+    <ion-card-header>
+      <ion-card-title> List of players:
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content *ngFor="let e of [].constructor(numPlayers); let i = index">
+
+      <ion-label *ngIf="playersData[i]" style="font-weight: bold; font-size: large; color: black;">
+        p{{ i+1 }}: {{playersData[i].name}} (
+          <span [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':'red'}">
+            {{playersData[i].connectionStatus}}
+          </span>
+        )
+      </ion-label>
+
+      <ion-label *ngIf="!playersData[i]" style="font-weight: bold; font-size: large; color: black;">
+        p{{ i+1 }}: ------ (
+          <span style="color: blue;">
+            not connected yet
+          </span>
+        )
+      </ion-label>
+
+    </ion-card-content>
   </ion-card>
 
 </ion-content>

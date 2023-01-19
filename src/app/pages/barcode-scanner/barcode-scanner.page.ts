@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 const { BarcodeScanner, SupportedFormat } = Plugins;
 import { Plugins } from "@capacitor/core";
 import { ModalController, NavController } from '@ionic/angular';
+import { SocketService } from 'src/app/services/socket.service';
 import { UtilService } from 'src/app/services/util.service';
 
 @Component({
@@ -14,14 +15,20 @@ export class BarcodeScannerPage implements OnInit {
   constructor(
     private utilService: UtilService,
     public modalController: ModalController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private socketService: SocketService
   ) { }
 
   ngOnInit() {
   }
 
   ionViewWillEnter() {
-    console.log("ngAfterViewInit");
+    /* in case user has joined room and pressed back button */
+    if(this.socketService.socket){
+      this.socketService.socket.disconnect();
+    }
+
+    /* prepare then start scanning */
     BarcodeScanner.prepare();
     this.startScan();
   }

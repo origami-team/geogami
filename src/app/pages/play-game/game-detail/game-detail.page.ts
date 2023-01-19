@@ -36,6 +36,9 @@ export class GameDetailPage implements OnInit {
   numPlayers = 2;
   userRole: String = "";
 
+  playersData = [];
+  
+
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
     private gamesService: GamesService,
@@ -73,17 +76,21 @@ export class GameDetailPage implements OnInit {
           if (game.isMultiplayerGame == true) {
             this.isSingleMode = false;
             this.numPlayers = game.numPlayers;
-            /* connect to socket server (multiplayer) */
-            this.connectSocketIO_MultiPlayer();
           }
 
         })
         .finally(() => {
           /* initialize user id and teacher code*/
           if (!this.isSingleMode && this.authService.getUserValue()) {
-            this.teacherCode = this.authService.getUserId() + '-' + this.game.name;
-            // console.log('teacher code -> game name', this.teacherCode.)
+            this.teacherCode = this.authService.getUserId() + '-' + this.game._id;
+            console.log('teacher code -> game name', this.teacherCode)
             //610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
+          }
+
+          /* multi-player */
+          if (this.game.isMultiplayerGame == true) {
+            /* connect to socket server (multiplayer) */
+            this.connectSocketIO_MultiPlayer();
           }
         });
     });
@@ -97,6 +104,17 @@ export class GameDetailPage implements OnInit {
   /* connect to SocketIO (multiplayer) */
   connectSocketIO_MultiPlayer() {
     this.socketService.socket.connect();
+
+    if (this.userRole == "contentAdmin") {
+      /* get players status when they join or disconnect from socket server */
+      this.socketService.socket.on('onPlayerConnectionStatusChange', (playersData) => {
+        console.log("(connectSocketIO_MultiPlayer) playersData: ", playersData)
+        this.playersData = playersData;
+      });
+
+      /* Join instructor */
+      this.socketService.socket.emit("joinGame", { roomName: this.teacherCode, playerName: null });
+    }
   }
 
   pointClick(point) {

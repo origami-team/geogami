@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 
 import mapboxgl from "mapbox-gl";
 import { UtilService } from 'src/app/services/util.service';
+import { SocketService } from 'src/app/services/socket.service';
 // import {} from environment.mapStyle + 'realWorld.json'
 
 
@@ -65,7 +66,8 @@ export class PlayGameListPage implements OnInit {
     private gamesService: GamesService,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private socketService: SocketService
   ) { }
 
   ngOnInit() {
@@ -85,6 +87,13 @@ export class PlayGameListPage implements OnInit {
 
     // Get games data from server
     this.getGamesData();
+  }
+
+  ionViewWillEnter() {
+    /* in case user has joined room and pressed back button */
+    if (this.socketService.socket) {
+      this.socketService.socket.disconnect();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -472,7 +481,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   /***  on game mode change ***/
-  filterGamesMode(modeVal: string) {    
+  filterGamesMode(modeVal: string) {
     if (modeVal == "single") {
       this.isMutiplayerGame = undefined;
 
