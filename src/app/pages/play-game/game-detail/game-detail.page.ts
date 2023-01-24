@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SocketService } from 'src/app/services/socket.service';
 import { UtilService } from 'src/app/services/util.service';
 import { AuthService } from 'src/app/services/auth-service.service';
+import { Storage } from "@ionic/storage";
 
 @Component({
   selector: 'app-game-detail',
@@ -35,9 +36,13 @@ export class GameDetailPage implements OnInit {
   isSingleMode: boolean = true;
   numPlayers = 2;
   userRole: String = "";
+  bundle: any = {};
 
   playersData = [];
-  
+  isRejoin = false;
+  sPlayerNo: number; // stored player no used when rejoin
+  cJoindPlayersCount = 0; // received from socket server, used when rejoin
+
 
   constructor(public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -46,7 +51,8 @@ export class GameDetailPage implements OnInit {
     private translate: TranslateService,
     private socketService: SocketService,
     private utilService: UtilService,
-    private authService: AuthService
+    private authService: AuthService,
+    private storage: Storage
   ) { }
 
   /******/
@@ -122,7 +128,7 @@ export class GameDetailPage implements OnInit {
   }
 
   startGame() {
-    let bundle = {
+    this.bundle = {
       id: this.game._id,
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
@@ -130,24 +136,80 @@ export class GameDetailPage implements OnInit {
       gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
       isSingleMode: this.isSingleMode,
       playerName: this.playerName,
-      shareData_cbox: this.shareData_cbox
+      shareData_cbox: this.shareData_cbox,
+      isRejoin: (!this.isSingleMode ? this.isRejoin : undefined),
+      sPlayerNo: this.sPlayerNo,
+      cJoindPlayersCount: this.cJoindPlayersCount
     }
 
     if (this.isSingleMode) {
-      this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+      this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
     } else {
-      /* if multi player mode, check whether room is not yet full. then allow player to join game in playing page */
-      this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''), gameNumPlayers: this.numPlayers }, (response) => {
-        if (response.isRoomFull) {
-          /* show toast msg */
-          this.utilService.showToast(`Sorry this game accepts only ${this.numPlayers} players.`, "dark", 3500);
-        } else {
-          this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+      //this.checkAbilityToJoinGame(bundle);
+      this.storage.get("savedPlayerInfo").then((data) => {
+        if (data) {
+          console.log("🚀 (game-detail) savedPlayerInfo: ", data);
+
+          /* 1. if saved player room name equal and player name equal stroed player name   */
+          if (data.roomName == this.teacherCode && data['playerName'] == this.playerName) {
+            console.log("(game-detail) savedPlayerInfo - (same game): ", data);
+            /* 2. check if user was accidentally disconnected */
+            this.socketService.socket.emit("checkPlayerPreviousJoin", data, (response) => {
+
+              console.log("🚀 (game-detail) savedPlayerInfo: data", data);
+              console.log("🚀 (game-detail) savedPlayerInfo: response", response);
+
+              if (response.isDisconnected) {
+                this.isRejoin = true;
+                this.playerName = data['playerName'];
+                this.sPlayerNo = data['playerNo'];
+                this.cJoindPlayersCount = response.joinedPlayersCount;
+
+                /* show toast msg */
+                this.utilService.showToast(`player found disconnected`);
+                console.log("🚀🚀 (game-detail) - bundle1", this.bundle)
+                console.log("🚀🚀 (game-detail) - player found disconnected")
+                this.bundle = {
+                  id: this.game._id,
+                  isVRWorld: this.isVirtualWorld,
+                  isVRMirrored: this.isVRMirrored,
+                  /* replace is used to get rid of special charachters, so values can be sent via routing */
+                  gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
+                  isSingleMode: this.isSingleMode,
+                  playerName: this.playerName,
+                  shareData_cbox: this.shareData_cbox,
+                  isRejoin: (!this.isSingleMode ? this.isRejoin : undefined),
+                  sPlayerNo: this.sPlayerNo,
+                  cJoindPlayersCount: this.cJoindPlayersCount
+                }
+                console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
+
+                /* note: if player found in socket server, no need to check room availability */ // Here
+                this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
+
+              } else {
+                this.utilService.showToast(`player not found`);
+                console.log("🚀🚀 (game-detail) - player not found")
+                this.checkAbilityToJoinGame(this.bundle);
+              }
+            });
+
+          } else {
+            console.log("🚀 (game-detail) savedPlayerInfo: No previous info found for this game");
+            this.checkAbilityToJoinGame(this.bundle);
+          }
+        }
+        /* if no previous info found */
+        else {
+          console.log("🚀 (game-detail)  no previous info found in this device");
+          this.checkAbilityToJoinGame(this.bundle);
         }
       });
+
     }
   }
 
+  /***************************************/
   async showPopover(ev: any, key: string) {
     let text = this.translate.instant(key);
 
@@ -162,8 +224,22 @@ export class GameDetailPage implements OnInit {
 
   /* open barcode scanner */
   /* to scan qr code */
+  /******************/
   openBarcodeScanner() {
     this.navCtrl.navigateForward('barcode-scanner');
+  }
+
+  /**********************************/
+  checkAbilityToJoinGame(bundle: any) {
+    /* if multi player mode, check whether room is not yet full. then allow player to join game in playing page */
+    this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''), gameNumPlayers: this.numPlayers }, (response) => {
+      if (response.isRoomFull) {
+        /* show toast msg */
+        this.utilService.showToast(`Sorry this game accepts only ${this.numPlayers} players.`, "dark", 3500);
+      } else {
+        this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+      }
+    });
   }
 
 }

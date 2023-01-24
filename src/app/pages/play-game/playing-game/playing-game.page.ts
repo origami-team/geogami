@@ -72,6 +72,8 @@ import { Coords } from 'src/app/models/coords'
 import { TranslateService } from "@ngx-translate/core";
 import { UtilService } from "src/app/services/util.service";
 
+import { Storage } from "@ionic/storage";
+
 
 @Component({
   selector: "app-playing-game",
@@ -79,43 +81,6 @@ import { UtilService } from "src/app/services/util.service";
   styleUrls: ["./playing-game.page.scss"],
 })
 export class PlayingGamePage implements OnInit, OnDestroy {
-  constructor(
-    private route: ActivatedRoute,
-    public modalController: ModalController,
-    public toastController: ToastController,
-    private gamesService: GamesService,
-    public navCtrl: NavController,
-    private changeDetectorRef: ChangeDetectorRef,
-    private OSMService: OsmService,
-    private trackerService: TrackerService,
-    public alertController: AlertController,
-    public platform: Platform,
-    public helperService: HelperService,
-    private sanitizer: DomSanitizer,
-    private geolocationService: OrigamiGeolocationService,
-    private orientationService: OrigamiOrientationService,
-    private socketService: SocketService,
-    private translate: TranslateService,
-    private utilService: UtilService
-  ) {
-    this.lottieConfig = {
-      path: "assets/lottie/star-success.json",
-      renderer: "svg",
-      autoplay: true,
-      loop: true,
-    };
-    // this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
-    this.primaryColor = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue("--ion-color-primary");
-    this.secondaryColor = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue("--ion-color-secondary");
-  }
-
-  get staticShowSuccess() {
-    return PlayingGamePage.showSuccess;
-  }
 
   // treshold to trigger location arrive
   public static triggerTreshold: Number = 20;
@@ -453,7 +418,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     ]
   });
 
-
   /* multi-player */
   isSingleMode: boolean = true;
   numPlayers = 0;
@@ -462,11 +426,49 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   trackDataStatus: any;
   storedGameTrack_id: string;
   waitPlayersPanel = false;
+  isRejoin = false;
+  sPlayerNo = 0;
+  cJoindPlayersCount = 0;
 
-  /*
-  1. check if game is multi
-  2. create a function than assign player name form socket server 
-   */
+
+  constructor(
+    private route: ActivatedRoute,
+    public modalController: ModalController,
+    public toastController: ToastController,
+    private gamesService: GamesService,
+    public navCtrl: NavController,
+    private changeDetectorRef: ChangeDetectorRef,
+    private OSMService: OsmService,
+    private trackerService: TrackerService,
+    public alertController: AlertController,
+    public platform: Platform,
+    public helperService: HelperService,
+    private sanitizer: DomSanitizer,
+    private geolocationService: OrigamiGeolocationService,
+    private orientationService: OrigamiOrientationService,
+    private socketService: SocketService,
+    private translate: TranslateService,
+    private utilService: UtilService,
+    private storage: Storage
+  ) {
+    this.lottieConfig = {
+      path: "assets/lottie/star-success.json",
+      renderer: "svg",
+      autoplay: true,
+      loop: true,
+    };
+    // this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
+    this.primaryColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--ion-color-primary");
+    this.secondaryColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--ion-color-secondary");
+  }
+
+  get staticShowSuccess() {
+    return PlayingGamePage.showSuccess;
+  }
 
   ngOnInit() {
     if (Capacitor.platform !== "web") {
@@ -479,68 +481,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     PlayingGamePage.showSuccess = false;
   }
 
-  // With VR env only (single player)
-  connectSocketIO() {
-    // this.socketService.socket.connect(); // aleady connected in game-detail-page
-    /* MultiUsers in Parallel impl. */
-    this.socketService.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
-  }
-
-  /********/
-  /* initialize SocketIO (multiplayer) */
-  joinGame_MultiPlayer() {
-    /* when I join */
-    this.socketService.socket.on('assignPlayerNumber', (data) => {
-      console.log("playerNo from socket: ", data)
-      /* player number = number of players already joined the room */
-      this.playerNo = this.joinedPlayersCount = data.playerNo;
-
-      /* if all players joined the game, remove waiting panel */
-      if (this.joinedPlayersCount == this.numPlayers) {
-        this.waitPlayersPanel = false;
-        // this.startGame(); ToDo: as last player get the responce quickly, there is no time to load map. (update it) one solution could be to ad promise in load map func after separate it 
-      }
-    });
-
-    /* when someone else join */
-    this.socketService.socket.on('playerJoined', (data) => {
-      console.log("PlayerJoined: (number of players so far) ", data)
-      this.joinedPlayersCount = data.joinedPlayersCount;
-
-      if (this.joinedPlayersCount == this.numPlayers) {
-        this.waitPlayersPanel = false;
-        this.startGame();
-      }
-    });
-
-    /* Join player in teacher's dedicated room */
-    this.socketService.socket.emit("joinGame", { roomName: this.gameCode, playerName: this.playersNames[0] });
-  }
-
-  disconnectSocketIO() {
-    this.socketService.socket.disconnect();
-  }
-
-  disconnectSocketIO_MultiPlayer() {
-    this.socketService.socket.disconnect();
-  }
-
-  ionViewWillLeave() {
-    // Disconnect server when leaving playing page
-    if (!this.isSingleMode) {
-      this.disconnectSocketIO_MultiPlayer();
-    }
-  }
   ionViewWillEnter() {
     // VR world
     // to seperate realworld games from VR ones in view
     this.route.params.subscribe((params) => {
+      console.log("(play-game) params.bundle", params.bundle)
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.gameCode = JSON.parse(params.bundle).gameCode;
       this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
       this.playersNames[0] = JSON.parse(params.bundle).playerName;
       this.shareDataBox = JSON.parse(params.bundle).shareData_cbox;
+      this.isRejoin = JSON.parse(params.bundle).isRejoin;
+      this.sPlayerNo = JSON.parse(params.bundle).sPlayerNo;
+      this.cJoindPlayersCount = JSON.parse(params.bundle).cJoindPlayersCount;
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
@@ -565,21 +519,92 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           }
 
           if (!this.isSingleMode) {
-            this.waitPlayersPanel = true;
             this.numPlayers = game.numPlayers;
-            console.log("///numPlayers: ", this.numPlayers);
-            console.log("///isSingleMode: ", this.isSingleMode);
-            // connect to socket server
-            this.joinGame_MultiPlayer();
+            this.waitPlayersPanel = true;
 
-            // hide enter player name panel
-            // this.showPlayersNames = false;
+            /* when join for first time */
+            if (!this.isRejoin) {
+              // connect to socket server
+              this.joinGame_MultiPlayer();
+            } 
+            /* when rejoin */
+            else {
+              this.playerNo = this.sPlayerNo;
+              this.joinedPlayersCount = this.cJoindPlayersCount;
+              if (this.joinedPlayersCount == this.numPlayers) {
+                this.waitPlayersPanel = false;
+              }
+            }
           }
         });
     });
 
     // Initialize map and subscribe location
     this.initializeMap();
+  }
+
+  ionViewWillLeave() {
+    // Disconnect server when leaving playing-page
+    if (!this.isSingleMode) {
+      this.disconnectSocketIO_MultiPlayer();
+    }
+  }
+
+  // With VR env only (single player)
+  connectSocketIO() {
+    // this.socketService.socket.connect(); // aleady connected in game-detail-page
+    /* MultiUsers in Parallel impl. */
+    this.socketService.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
+  }
+
+  /********/
+  /* initialize SocketIO (multiplayer) */
+  joinGame_MultiPlayer() {
+    if (!this.isRejoin) {
+      /* when I join */
+      this.socketService.socket.on('assignPlayerNumber', (data) => {
+        console.log("playerNo from socket: ", data)
+        /* player number = number of players already joined the room */
+        this.playerNo = this.joinedPlayersCount = data.playerNo;
+  
+        // temp
+        /* store player no and name in storage */
+        this.storage.set("savedPlayerInfo", { playerName: this.playersNames[0], playerNo: this.playerNo, roomName: this.gameCode })
+        //console.log("JoinData: ", )
+        console.log("🚀 (play-game) savedPlayerInfo - JoinData: ", new Date(new Date()));
+  
+        /* if all players joined the game, remove waiting panel */
+        if (this.joinedPlayersCount == this.numPlayers) {
+          this.waitPlayersPanel = false;
+          // this.startGame(); ToDo: as last player get the responce quickly, there is no time to load map. (update it) one solution could be to add promise in load map func after separate it 
+        }
+      });
+    }
+
+    /* when someone else join */
+    this.socketService.socket.on('playerJoined', (data) => {
+      console.log("PlayerJoined: (number of players so far) ", data)
+      this.joinedPlayersCount = data.joinedPlayersCount;
+
+      if (this.joinedPlayersCount == this.numPlayers) {
+        this.waitPlayersPanel = false;
+        this.startGame();
+      }
+    });
+
+    /* if player is not rejoining */
+    if (!this.isRejoin) {
+      /* Join player in teacher's dedicated room */
+      this.socketService.socket.emit("joinGame", { roomName: this.gameCode, playerName: this.playersNames[0] });
+    }
+  }
+
+  disconnectSocketIO() {
+    this.socketService.socket.disconnect();
+  }
+
+  disconnectSocketIO_MultiPlayer() {
+    this.socketService.socket.disconnect();
   }
 
   /* Initialize map and subscribe location */
@@ -762,7 +787,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       );
 
       // ToDO: update it using callback
-      if (this.isSingleMode || this.playerNo == this.numPlayers) {
+      /* in case joined player is last */
+      /* with rejoin playerno might no be last one to join therefore we use count received from socker server instead  */
+      if (this.isSingleMode || this.playerNo == this.numPlayers || (this.isRejoin && this.joinedPlayersCount == this.numPlayers)) {
         this.startGame();
       }
     });
@@ -1588,10 +1615,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       /* multiplayer */
       /* change player status in socket server to finished tasks */
-      if(!this.isSingleMode){
+      if (!this.isSingleMode) {
         this.socketService.socket.emit("changePlayerConnectionStauts", "finished tasks");
+        /* remove stored player info used to rejoin */
+        this.storage.remove("savedPlayerInfo"); 
       }
-      
+
       PlayingGamePage.showSuccess = true;
 
       // To disable map interations

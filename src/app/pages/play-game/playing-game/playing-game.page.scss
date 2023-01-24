@@ -381,7 +381,8 @@ ion-label.player-counter {
   z-index: 11;
   text-align: center;
   padding: 1rem;
-  // margin: 0;
+  margin-right: -50%;
+  margin: 0px;
 
   @media (max-width: 576px) {
     width: 90%;
@@ -406,11 +407,12 @@ ion-label.player-counter {
   }
 }
 
-/* multiplayer */ 
-.smiles-style{
+/* multiplayer */
+.smiles-style {
   display: flex;
   justify-content: center;
   gap: 15%;
   margin-bottom: 40px;
 }
+
 /*  */

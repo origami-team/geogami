@@ -28,7 +28,8 @@
   </ion-card>
 
   <!-- Enter name -->
-  <ion-card *ngIf="userRole != 'contentAdmin'">
+  <ion-card *ngIf="userRole != 'contentAdmin' || isSingleMode">
+  <!-- <ion-card> -->
     <ion-card-header>
       <ion-card-title> Enter your name
         <!-- <ion-icon name="information-circle"
@@ -82,7 +83,7 @@
 
       <ion-label *ngIf="playersData[i]" style="font-weight: bold; font-size: large; color: black;">
         p{{ i+1 }}: {{playersData[i].name}} (
-          <span [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':'red'}">
+          <span [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':(playersData[i].connectionStatus=='disconnected'?'red':'blue')}">
             {{playersData[i].connectionStatus}}
           </span>
         )
