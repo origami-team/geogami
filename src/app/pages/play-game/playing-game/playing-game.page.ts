@@ -558,12 +558,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       let c_events = this.trackerService.getEvents();
       /* to store player no, name and room name */
       let c_playerInfo = {
-        playerName: this.playersNames[0], 
-        playerNo: this.playerNo, 
+        playerName: this.playersNames[0],
+        playerNo: this.playerNo,
         roomName: this.gameCode
       }
-
-      this.storage.set("savedTracksData", {s_playerInfo: c_playerInfo  ,s_Waypoints: c_waypoints, s_events: c_events, s_TaskNo: this.taskIndex });
+      this.storage.set("savedTracksData", { s_playerInfo: c_playerInfo, s_Waypoints: c_waypoints, s_events: c_events, s_taskNo: this.taskIndex });
     }
   }
 
@@ -1337,12 +1336,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     } else {
       /* retreive tasks events and waypoints */
       this.storage.get("savedTracksData").then((data) => {
-        console.log("(play-game) s_events: ", data.s_events)
+        if (data) {
+          console.log("(play-game) s_events: ", data.s_events)
 
-        if (data && data.s_events) {
-          this.trackerService.setEvents(data.s_events);
-          console.log("(play-game) s_events[0]: ", data.s_events[0])
-          this.trackerService.setWaypoints(data.s_Waypoints);
+          if (data && data.s_events) {
+            this.trackerService.setEvents(data.s_events);
+            console.log("(play-game) s_events[0]: ", data.s_events[0])
+            this.trackerService.setWaypoints(data.s_Waypoints);
+          }
         }
       })
     }

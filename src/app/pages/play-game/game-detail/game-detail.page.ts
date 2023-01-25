@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { GamesService } from '../../../services/games.service';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from 'src/app/popover/popover.component';
@@ -39,9 +39,6 @@ export class GameDetailPage implements OnInit {
   bundle: any = {};
 
   playersData = [];
-  isRejoin = false;
-  sPlayerNo: number; // stored player no used when rejoin
-  cJoindPlayersCount = 0; // received from socket server, used when rejoin
 
 
   constructor(public navCtrl: NavController,
@@ -52,12 +49,12 @@ export class GameDetailPage implements OnInit {
     private socketService: SocketService,
     private utilService: UtilService,
     private authService: AuthService,
-    private storage: Storage
+    private storage: Storage,
+    private alertController: AlertController
   ) { }
 
   /******/
   ngOnInit() {
-
     // Get user role
     if (this.authService.getUserValue()) {
       this.userRole = this.authService.getUserRole();
@@ -120,6 +117,9 @@ export class GameDetailPage implements OnInit {
 
       /* Join instructor */
       this.socketService.socket.emit("joinGame", { roomName: this.teacherCode, playerName: null });
+    } else {
+      /* check if there's uncompleted game session */
+      this.checkSavedGameSession();
     }
   }
 
@@ -142,65 +142,10 @@ export class GameDetailPage implements OnInit {
     if (this.isSingleMode) {
       this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
     } else {
-      
-      //this.checkAbilityToJoinGame(bundle);
-      /* retreive tracks and player info of previous uncompleted game session */
-      this.storage.get("savedTracksData").then((data) => {
-        if (data) {
-          /* 1. if saved player room name equal and player name equal stroed player name   */
-          if (data.s_playerInfo['roomName'] == this.teacherCode && data.s_playerInfo['playerName'] == this.playerName) {
-            console.log("🚀 (game-detail) savedPlayerInfo - (same game name and player): ");
-            
-            /* 2. check if user was accidentally disconnected */
-            this.socketService.socket.emit("checkPlayerPreviousJoin", data.s_playerInfo, (response) => {
-              if (response.isDisconnected) {
-                this.isRejoin = true;
-                this.playerName = data.s_playerInfo['playerName'];
-                this.sPlayerNo = data.s_playerInfo['playerNo'];
-                this.cJoindPlayersCount = response.joinedPlayersCount;
+      /* check whether game is full beofore join game */
+      this.checkAbilityToJoinGame(this.bundle);
 
-                /* retreive task index of previous game state */
-
-                  console.log("🚀🚀 (game-detail) - bundle1", this.bundle)
-                  console.log("🚀🚀🚀 (game-detail) - player found disconnected")
-                  this.bundle = {
-                    id: this.game._id,
-                    isVRWorld: this.isVirtualWorld,
-                    isVRMirrored: this.isVRMirrored,
-                    /* replace is used to get rid of special charachters, so values can be sent via routing */
-                    gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
-                    isSingleMode: this.isSingleMode,
-                    playerName: this.playerName,
-                    shareData_cbox: this.shareData_cbox,
-                    isRejoin: (!this.isSingleMode ? this.isRejoin : undefined),
-                    sPlayerNo: this.sPlayerNo,
-                    cJoindPlayersCount: this.cJoindPlayersCount,
-                    sTaskNo: data.s_TaskNo
-                  }
-                  console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
-
-                  /* note: if player found in socket server, no need to check room availability */
-                  this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
-
-                //})
-              } else {
-                console.log("🚀🚀 (game-detail) - player not found")
-                this.checkAbilityToJoinGame(this.bundle);
-              }
-            });
-
-          } else {
-            console.log("🚀 (game-detail) savedPlayerInfo: No previous info found for this game");
-            this.checkAbilityToJoinGame(this.bundle);
-          }
-        }
-        /* if no previous info found */
-        else {
-          console.log("🚀 (game-detail)  no previous info found in this device");
-          this.checkAbilityToJoinGame(this.bundle);
-        }
-      });
-
+      // this.checkSavedGameSession();
     }
   }
 
@@ -224,6 +169,10 @@ export class GameDetailPage implements OnInit {
     this.navCtrl.navigateForward('barcode-scanner');
   }
 
+  /*************************/
+  /* multiplayer functions */
+  /*************************/
+
   /**********************************/
   checkAbilityToJoinGame(bundle: any) {
     /* if multi player mode, check whether room is not yet full. then allow player to join game in playing page */
@@ -233,6 +182,80 @@ export class GameDetailPage implements OnInit {
         this.utilService.showToast(`Sorry this game accepts only ${this.numPlayers} players.`, "dark", 3500);
       } else {
         this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+      }
+    });
+  }
+
+  /************************************************************************/
+  async showAlertResumeGame(s_playerName, s_playerNo, s_taskNo, c_JoinedPlayersCount) {
+    const alert = await this.alertController.create({
+      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
+      header: "Resume game?",
+      //subHeader: 'Important message',
+      message: "Do you want to resume previous game session?",
+      buttons: [
+        {
+          text: "No",
+          handler: () => {
+            // Do nothing
+          }
+        },
+        {
+          text: "Yes",
+          handler: () => {
+            /* retreive task index of previous game state */
+            console.log("🚀🚀🚀 (game-detail) - player found disconnected")
+            this.bundle = {
+              id: this.game._id,
+              isVRWorld: this.isVirtualWorld,
+              isVRMirrored: this.isVRMirrored,
+              /* replace is used to get rid of special charachters, so values can be sent via routing */
+              gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
+              isSingleMode: this.isSingleMode,
+              playerName: s_playerName,
+              shareData_cbox: this.shareData_cbox,
+              isRejoin: true,
+              sPlayerNo: s_playerNo,
+              cJoindPlayersCount: c_JoinedPlayersCount,
+              sTaskNo: s_taskNo
+            }
+            console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
+
+            /* note: if player found in socket server, no need to check room availability */
+            this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  checkSavedGameSession() {
+    console.log("🚀-- (game-detail) checkSavedGameSession");
+
+    /* retreive tracks and player info of previous uncompleted game session */
+    this.storage.get("savedTracksData").then((tracksData) => {
+      if (tracksData) {
+        /* 1. if saved player room name equal and player name equal stroed player name   */
+        // if (tracksData.s_playerInfo['roomName'] == this.teacherCode && tracksData.s_playerInfo['playerName'] == this.playerName) {
+        if (tracksData.s_playerInfo['roomName'] == this.teacherCode) {
+          console.log("🚀 (game-detail) savedPlayerInfo - (same game name and player): ", tracksData);
+
+          /* 2. check if user was accidentally disconnected */
+          this.socketService.socket.emit("checkPlayerPreviousJoin", tracksData.s_playerInfo, (response) => {
+            if (response.isDisconnected) {
+              /* allow user to choose whether to resume game or not */
+              this.showAlertResumeGame(tracksData.s_playerInfo['playerName'], tracksData.s_playerInfo['playerNo'], tracksData.s_taskNo, response.joinedPlayersCount);
+
+            } else {
+              console.log("🚀🚀 (game-detail) - player not found")
+              //this.checkAbilityToJoinGame(this.bundle);
+            }
+          });
+        } else {
+          console.log("🚀 (game-detail) savedPlayerInfo: No previous info found for this game");
+          // this.checkAbilityToJoinGame(this.bundle);
+        }
       }
     });
   }
