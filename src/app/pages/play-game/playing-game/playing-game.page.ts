@@ -531,8 +531,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             } else {                             /* when rejoin */
               this.playerNo = this.sPlayerNo;
               this.joinedPlayersCount = this.cJoindPlayersCount;
-              this.taskIndex = this.sTaskNo; 
-              console.log("(play-game) staskno: ", this.taskIndex);
+              this.taskIndex = this.sTaskNo;
 
               if (this.joinedPlayersCount == this.numPlayers) {
                 this.waitPlayersPanel = false;
@@ -557,21 +556,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (!PlayingGamePage.showSuccess) {
       let c_waypoints = this.trackerService.getWaypoints();
       let c_events = this.trackerService.getEvents();
+      /* to store player no, name and room name */
+      let c_playerInfo = {
+        playerName: this.playersNames[0], 
+        playerNo: this.playerNo, 
+        roomName: this.gameCode
+      }
 
-      this.storage.set("savedTracksData", { s_Waypoints: c_waypoints, s_events: c_events, s_TaskNo: this.taskIndex });
-
-      console.log("🚀 (play-game) ionViewWillLeave: (waypoints temp)", c_waypoints)
-      console.log("🚀 (play-game) ionViewWillLeave: (events temp)", c_events)
-      console.log("🚀 (play-game) ionViewWillLeave: (task Index)", this.taskIndex)
-    } else{ 
-      // temp
-      console.log("🚀 (play-game) ionViewWillLeave: players solved all tasks)")
-      this.storage.remove("savedTracksData");
+      this.storage.set("savedTracksData", {s_playerInfo: c_playerInfo  ,s_Waypoints: c_waypoints, s_events: c_events, s_TaskNo: this.taskIndex });
     }
   }
 
-  ngOnDestroy(){
-    
+  ngOnDestroy() {
+
   }
 
   // With VR env only (single player)
@@ -593,9 +590,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
         // temp
         /* store player no and name in storage */
-        this.storage.set("savedPlayerInfo", { playerName: this.playersNames[0], playerNo: this.playerNo, roomName: this.gameCode })
+        // this.storage.set("savedPlayerInfo", { playerName: this.playersNames[0], playerNo: this.playerNo, roomName: this.gameCode })
         //console.log("JoinData: ", )
-        console.log("🚀 (play-game) savedPlayerInfo - JoinData: ", new Date(new Date()));
+        //console.log("🚀 (play-game) savedPlayerInfo - JoinData: ", new Date(new Date()));
 
         /* if all players joined the game, remove waiting panel */
         if (this.joinedPlayersCount == this.numPlayers) {
@@ -1658,7 +1655,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (!this.isSingleMode) {
         this.socketService.socket.emit("changePlayerConnectionStauts", "finished tasks");
         /* remove stored player info used to rejoin */
-        this.storage.remove("savedPlayerInfo");
+        this.storage.remove("savedTracksData");
       }
 
       PlayingGamePage.showSuccess = true;

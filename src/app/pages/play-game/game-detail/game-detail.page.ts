@@ -142,35 +142,27 @@ export class GameDetailPage implements OnInit {
     if (this.isSingleMode) {
       this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
     } else {
+      
       //this.checkAbilityToJoinGame(bundle);
-      this.storage.get("savedPlayerInfo").then((data) => {
+      /* retreive tracks and player info of previous uncompleted game session */
+      this.storage.get("savedTracksData").then((data) => {
         if (data) {
-          console.log("🚀 (game-detail) savedPlayerInfo: ", data);
-
           /* 1. if saved player room name equal and player name equal stroed player name   */
-          if (data.roomName == this.teacherCode && data['playerName'] == this.playerName) {
-            console.log("(game-detail) savedPlayerInfo - (same game): ", data);
+          if (data.s_playerInfo['roomName'] == this.teacherCode && data.s_playerInfo['playerName'] == this.playerName) {
+            console.log("🚀 (game-detail) savedPlayerInfo - (same game name and player): ");
+            
             /* 2. check if user was accidentally disconnected */
-            this.socketService.socket.emit("checkPlayerPreviousJoin", data, (response) => {
-
-              console.log("🚀 (game-detail) savedPlayerInfo: data", data);
-              console.log("🚀 (game-detail) savedPlayerInfo: response", response);
-
+            this.socketService.socket.emit("checkPlayerPreviousJoin", data.s_playerInfo, (response) => {
               if (response.isDisconnected) {
                 this.isRejoin = true;
-                this.playerName = data['playerName'];
-                this.sPlayerNo = data['playerNo'];
+                this.playerName = data.s_playerInfo['playerName'];
+                this.sPlayerNo = data.s_playerInfo['playerNo'];
                 this.cJoindPlayersCount = response.joinedPlayersCount;
 
                 /* retreive task index of previous game state */
-                this.storage.get("savedTracksData").then((data) => {
 
-                  console.log("(game-detail) savedTracksData1:", data.s_TaskNo)
-
-                  /* show toast msg */
-                  this.utilService.showToast(`player found disconnected`);
                   console.log("🚀🚀 (game-detail) - bundle1", this.bundle)
-                  console.log("🚀🚀 (game-detail) - player found disconnected")
+                  console.log("🚀🚀🚀 (game-detail) - player found disconnected")
                   this.bundle = {
                     id: this.game._id,
                     isVRWorld: this.isVirtualWorld,
@@ -190,9 +182,8 @@ export class GameDetailPage implements OnInit {
                   /* note: if player found in socket server, no need to check room availability */
                   this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
 
-                })
+                //})
               } else {
-                // this.utilService.showToast(`player not found`);
                 console.log("🚀🚀 (game-detail) - player not found")
                 this.checkAbilityToJoinGame(this.bundle);
               }
