@@ -87,7 +87,7 @@ export class GameDetailPage implements OnInit {
         })
         .finally(() => {
           /* initialize user id and teacher code*/
-          if (!this.isSingleMode && this.authService.getUserValue()) {
+          if (!this.isSingleMode && this.authService.getUserValue() && this.userRole == 'contentAdmin') {
             this.teacherCode = this.authService.getUserId() + '-' + this.game._id;
             console.log('teacher code -> game name', this.teacherCode)
             //610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
@@ -137,9 +137,6 @@ export class GameDetailPage implements OnInit {
       isSingleMode: this.isSingleMode,
       playerName: this.playerName,
       shareData_cbox: this.shareData_cbox,
-      isRejoin: (!this.isSingleMode ? this.isRejoin : undefined),
-      sPlayerNo: this.sPlayerNo,
-      cJoindPlayersCount: this.cJoindPlayersCount
     }
 
     if (this.isSingleMode) {
@@ -165,30 +162,37 @@ export class GameDetailPage implements OnInit {
                 this.sPlayerNo = data['playerNo'];
                 this.cJoindPlayersCount = response.joinedPlayersCount;
 
-                /* show toast msg */
-                this.utilService.showToast(`player found disconnected`);
-                console.log("🚀🚀 (game-detail) - bundle1", this.bundle)
-                console.log("🚀🚀 (game-detail) - player found disconnected")
-                this.bundle = {
-                  id: this.game._id,
-                  isVRWorld: this.isVirtualWorld,
-                  isVRMirrored: this.isVRMirrored,
-                  /* replace is used to get rid of special charachters, so values can be sent via routing */
-                  gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
-                  isSingleMode: this.isSingleMode,
-                  playerName: this.playerName,
-                  shareData_cbox: this.shareData_cbox,
-                  isRejoin: (!this.isSingleMode ? this.isRejoin : undefined),
-                  sPlayerNo: this.sPlayerNo,
-                  cJoindPlayersCount: this.cJoindPlayersCount
-                }
-                console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
+                /* retreive task index of previous game state */
+                this.storage.get("savedTracksData").then((data) => {
 
-                /* note: if player found in socket server, no need to check room availability */ // Here
-                this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
+                  console.log("(game-detail) savedTracksData1:", data.s_TaskNo)
 
+                  /* show toast msg */
+                  this.utilService.showToast(`player found disconnected`);
+                  console.log("🚀🚀 (game-detail) - bundle1", this.bundle)
+                  console.log("🚀🚀 (game-detail) - player found disconnected")
+                  this.bundle = {
+                    id: this.game._id,
+                    isVRWorld: this.isVirtualWorld,
+                    isVRMirrored: this.isVRMirrored,
+                    /* replace is used to get rid of special charachters, so values can be sent via routing */
+                    gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
+                    isSingleMode: this.isSingleMode,
+                    playerName: this.playerName,
+                    shareData_cbox: this.shareData_cbox,
+                    isRejoin: (!this.isSingleMode ? this.isRejoin : undefined),
+                    sPlayerNo: this.sPlayerNo,
+                    cJoindPlayersCount: this.cJoindPlayersCount,
+                    sTaskNo: data.s_TaskNo
+                  }
+                  console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
+
+                  /* note: if player found in socket server, no need to check room availability */
+                  this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
+
+                })
               } else {
-                this.utilService.showToast(`player not found`);
+                // this.utilService.showToast(`player not found`);
                 console.log("🚀🚀 (game-detail) - player not found")
                 this.checkAbilityToJoinGame(this.bundle);
               }

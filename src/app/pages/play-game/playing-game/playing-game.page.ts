@@ -429,6 +429,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   isRejoin = false;
   sPlayerNo = 0;
   cJoindPlayersCount = 0;
+  sTaskNo = 0;
 
 
   constructor(
@@ -481,6 +482,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     PlayingGamePage.showSuccess = false;
   }
 
+  /******************/
   ionViewWillEnter() {
     // VR world
     // to seperate realworld games from VR ones in view
@@ -495,6 +497,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.isRejoin = JSON.parse(params.bundle).isRejoin;
       this.sPlayerNo = JSON.parse(params.bundle).sPlayerNo;
       this.cJoindPlayersCount = JSON.parse(params.bundle).cJoindPlayersCount;
+      this.sTaskNo = JSON.parse(params.bundle).sTaskNo;
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
@@ -522,15 +525,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.numPlayers = game.numPlayers;
             this.waitPlayersPanel = true;
 
-            /* when join for first time */
-            if (!this.isRejoin) {
+            if (!this.isRejoin) {               /* when join for first time */
               // connect to socket server
               this.joinGame_MultiPlayer();
-            } 
-            /* when rejoin */
-            else {
+            } else {                             /* when rejoin */
               this.playerNo = this.sPlayerNo;
               this.joinedPlayersCount = this.cJoindPlayersCount;
+              this.taskIndex = this.sTaskNo; 
+              console.log("(play-game) staskno: ", this.taskIndex);
+
               if (this.joinedPlayersCount == this.numPlayers) {
                 this.waitPlayersPanel = false;
               }
@@ -543,11 +546,32 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.initializeMap();
   }
 
+  /******************/
   ionViewWillLeave() {
     // Disconnect server when leaving playing-page
     if (!this.isSingleMode) {
       this.disconnectSocketIO_MultiPlayer();
     }
+
+    /* if player left game without solving all tasks, save game events, waypoints and taskno (to be restored when resume game) */
+    if (!PlayingGamePage.showSuccess) {
+      let c_waypoints = this.trackerService.getWaypoints();
+      let c_events = this.trackerService.getEvents();
+
+      this.storage.set("savedTracksData", { s_Waypoints: c_waypoints, s_events: c_events, s_TaskNo: this.taskIndex });
+
+      console.log("🚀 (play-game) ionViewWillLeave: (waypoints temp)", c_waypoints)
+      console.log("🚀 (play-game) ionViewWillLeave: (events temp)", c_events)
+      console.log("🚀 (play-game) ionViewWillLeave: (task Index)", this.taskIndex)
+    } else{ 
+      // temp
+      console.log("🚀 (play-game) ionViewWillLeave: players solved all tasks)")
+      this.storage.remove("savedTracksData");
+    }
+  }
+
+  ngOnDestroy(){
+    
   }
 
   // With VR env only (single player)
@@ -566,13 +590,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         console.log("playerNo from socket: ", data)
         /* player number = number of players already joined the room */
         this.playerNo = this.joinedPlayersCount = data.playerNo;
-  
+
         // temp
         /* store player no and name in storage */
         this.storage.set("savedPlayerInfo", { playerName: this.playersNames[0], playerNo: this.playerNo, roomName: this.gameCode })
         //console.log("JoinData: ", )
         console.log("🚀 (play-game) savedPlayerInfo - JoinData: ", new Date(new Date()));
-  
+
         /* if all players joined the game, remove waiting panel */
         if (this.joinedPlayersCount == this.numPlayers) {
           this.waitPlayersPanel = false;
@@ -1307,9 +1331,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     );
     console.log(this.game);
 
-    this.trackerService.addEvent({
-      type: "INIT_GAME",
-    });
+    /* if rejoin game using previous game session data, use sotred events and waypoints */
+    if (!this.isRejoin) {
+      /* add init game event */
+      this.trackerService.addEvent({
+        type: "INIT_GAME",
+      });
+    } else {
+      /* retreive tasks events and waypoints */
+      this.storage.get("savedTracksData").then((data) => {
+        console.log("(play-game) s_events: ", data.s_events)
+
+        if (data && data.s_events) {
+          this.trackerService.setEvents(data.s_events);
+          console.log("(play-game) s_events[0]: ", data.s_events[0])
+          this.trackerService.setWaypoints(data.s_Waypoints);
+        }
+      })
+    }
+
     await this.initTask();
 
     if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
@@ -1618,7 +1658,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (!this.isSingleMode) {
         this.socketService.socket.emit("changePlayerConnectionStauts", "finished tasks");
         /* remove stored player info used to rejoin */
-        this.storage.remove("savedPlayerInfo"); 
+        this.storage.remove("savedPlayerInfo");
       }
 
       PlayingGamePage.showSuccess = true;
@@ -1892,14 +1932,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.targetHeading = 360 - (this.compassHeading - bearing);
   }
 
-  ngOnDestroy() { }
-
   navigateHome() {
-    
-    if(!this.isSingleMode && this.waitPlayersPanel){
-      this.navCtrl.back();
-    }
-
     if (!this.isVirtualWorld) {
       this.positionSubscription.unsubscribe(); //
       this.deviceOrientationSubscription.unsubscribe();

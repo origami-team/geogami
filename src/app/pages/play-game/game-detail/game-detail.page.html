@@ -1,8 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/"
-        text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
     <ion-buttons slot="primary"></ion-buttons>
@@ -29,7 +28,7 @@
 
   <!-- Enter name -->
   <ion-card *ngIf="userRole != 'contentAdmin' || isSingleMode">
-  <!-- <ion-card> -->
+    <!-- <ion-card> -->
     <ion-card-header>
       <ion-card-title> Enter your name
         <!-- <ion-icon name="information-circle"
@@ -62,7 +61,7 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content style="display: flex; justify-content: center;">
-      <ion-img style="width: 50%;" src="../../../../assets/temp/qrcode.png"></ion-img>
+      <ion-img style="width: 40%;" src="../../../../assets/temp/qrcode.png"></ion-img>
     </ion-card-content>
   </ion-card>
 
@@ -83,17 +82,18 @@
 
       <ion-label *ngIf="playersData[i]" style="font-weight: bold; font-size: large; color: black;">
         p{{ i+1 }}: {{playersData[i].name}} (
-          <span [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':(playersData[i].connectionStatus=='disconnected'?'red':'blue')}">
-            {{playersData[i].connectionStatus}}
-          </span>
+        <span
+          [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':(playersData[i].connectionStatus=='disconnected'?'red':'blue')}">
+          {{playersData[i].connectionStatus}}
+        </span>
         )
       </ion-label>
 
       <ion-label *ngIf="!playersData[i]" style="font-weight: bold; font-size: large; color: black;">
         p{{ i+1 }}: ------ (
-          <span style="color: blue;">
-            not connected yet
-          </span>
+        <span style="color: blue;">
+          not connected yet
+        </span>
         )
       </ion-label>
 
@@ -102,7 +102,7 @@
 
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="userRole!='contentAdmin'">
   <ion-toolbar>
     <ion-button expand="block" (click)="startGame()" [disabled]="!playerName || (!teacherCode && !isSingleMode)">{{
       "General.start" | translate }}</ion-button>

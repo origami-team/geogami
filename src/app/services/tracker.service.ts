@@ -196,6 +196,22 @@ export class TrackerService {
     }
   }
 
+  getWaypoints() {
+    return this.waypoints;
+  }
+
+  setWaypoints(s_Waypoints) {
+    this.waypoints = s_Waypoints;
+  }
+
+  getEvents() {
+    return this.events;
+  }
+
+  setEvents(s_events) {
+    this.events = s_events;
+  }
+
   addEvent(event) {
     this.events.push({
       ...event,
@@ -302,28 +318,7 @@ export class TrackerService {
     /* End of store game tracks locally */
 
     /* (multiplayer) 5. Store tracks on server */
-    if (!isGameTrackStored) {
-      /* (multiplayer) 5. a) store new track if not stored yet (multiplayer) */
-      // (single player) store new track 
-      console.log("store new track (single player) / tracks (multiplayer)");
-      return this.http
-        .post(`${environment.apiURL}/track`, data, {
-          headers: this.createHeaders(),
-          observe: 'response',
-        }
-        ).toPromise();
-    } 
-    else {
-      /* (multiplayer) 5. b) update existed tracks (multiplayer) */
-      console.log("//update existed tracks (multiplayer)");
-      return this.http
-        .put(`${environment.apiURL}/track`, data, {
-          headers: this.createHeaders(),
-          observe: 'response',
-        }
-        ).toPromise();
-    }
-
+    return this.storeMultiplayerTracks(data, isGameTrackStored)
   }
 
   // update task number and cateogory
@@ -350,4 +345,30 @@ export class TrackerService {
     }
   }
 
+  /**********************************/
+  /* Store/update multiplayer tracks */
+  /* multiplayer */
+  /**********************************/
+  storeMultiplayerTracks(data: any, isGameTrackStored: boolean) {
+    if (!isGameTrackStored) {
+      /* (multiplayer) 5. a) store new track if not stored yet (multiplayer) */
+      // (single player) store new track 
+      console.log("store new track (single player) / tracks (multiplayer)");
+      return this.http
+        .post(`${environment.apiURL}/track`, data, {
+          headers: this.createHeaders(),
+          observe: 'response',
+        }).toPromise();
+    }
+    else {
+      /* (multiplayer) 5. b) update existed tracks (multiplayer) */
+      console.log("//update existed tracks (multiplayer)");
+      return this.http
+        .put(`${environment.apiURL}/track`, data, {
+          headers: this.createHeaders(),
+          observe: 'response',
+        }).toPromise();
+    }
+  }
+  /* */
 }
