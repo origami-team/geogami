@@ -129,14 +129,9 @@ export class GameDetailPage implements OnInit {
 
   startGame() {
     this.bundle = {
-      id: this.game._id,
-      isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored,
-      /* replace is used to get rid of special charachters, so values can be sent via routing */
-      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
-      isSingleMode: this.isSingleMode,
+      ...this.prepareRouteParams(),
       playerName: this.playerName,
-      shareData_cbox: this.shareData_cbox,
+      isRejoin: false,
     }
 
     if (this.isSingleMode) {
@@ -162,16 +157,29 @@ export class GameDetailPage implements OnInit {
     return await popover.present();
   }
 
-  /* open barcode scanner */
-  /* to scan qr code */
-  /******************/
-  openBarcodeScanner() {
-    this.navCtrl.navigateForward('barcode-scanner');
+  /*****************/
+  prepareRouteParams() {
+    return {
+      id: this.game._id,
+      isVRWorld: this.isVirtualWorld,
+      isVRMirrored: this.isVRMirrored,
+      /* replace is used to get rid of special charachters, so values can be sent via routing */
+      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
+      isSingleMode: this.isSingleMode,
+      shareData_cbox: this.shareData_cbox
+    }
   }
 
+  
   /*************************/
   /* multiplayer functions */
   /*************************/
+
+    /* open barcode scanner - to scan qr code */
+  /********************/
+  openBarcodeScanner() {
+    this.navCtrl.navigateForward('barcode-scanner');
+  }
 
   /**********************************/
   checkAbilityToJoinGame(bundle: any) {
@@ -205,16 +213,10 @@ export class GameDetailPage implements OnInit {
           handler: () => {
             /* retreive task index of previous game state */
             console.log("🚀🚀🚀 (game-detail) - player found disconnected")
-            this.bundle = {
-              id: this.game._id,
-              isVRWorld: this.isVirtualWorld,
-              isVRMirrored: this.isVRMirrored,
-              /* replace is used to get rid of special charachters, so values can be sent via routing */
-              gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
-              isSingleMode: this.isSingleMode,
-              playerName: s_playerName,
-              shareData_cbox: this.shareData_cbox,
+            this.bundle = this.bundle = {
+              ...this.prepareRouteParams(),
               isRejoin: true,
+              playerName: s_playerName,
               sPlayerNo: s_playerNo,
               cJoindPlayersCount: c_JoinedPlayersCount,
               sTaskNo: s_taskNo
