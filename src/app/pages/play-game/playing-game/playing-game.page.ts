@@ -612,6 +612,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     });
 
+    /* when instructor request players real time location */
+    this.socketService.socket.on('requestPlayersLocation', () => {
+      console.log("(game-paly) requestPlayersLocation1")
+
+      this.socketService.socket.emit("updatePlayersLocation", {
+        roomName: this.gameCode,
+        playerLoc: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude],
+        playerNo: this.playerNo,
+        //playerName: this.playersNames[0]
+      });
+
+      console.log("(game-paly) requestPlayersLocation2")
+    });
+
     /* if player is not rejoining */
     if (!this.isRejoin) {
       /* Join player in teacher's dedicated room */

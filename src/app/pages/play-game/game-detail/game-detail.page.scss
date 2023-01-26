@@ -1,5 +1,5 @@
 .map {
-    height: 15rem;
+    height: 30rem;
     width: 100%;
 }
 
@@ -13,13 +13,43 @@
     &.nav {
         background-color: var(--ion-color-primary);
     }
+
     &.theme {
         background-color: var(--ion-color-secondary);
     }
+
     &.free {
         background-color: var(--ion-color-tertiary);
     }
+
     &.info {
         background-color: var(--ion-color-warning);
     }
+}
+
+
+/* map card */
+.showLocsBtn {
+    position: absolute;
+    bottom: 2.4rem;
+    margin: 0;
+    left: 50%;
+    // font-size: x-small;
+    transform: translateX(-50%);
+}
+
+.showLocsLabel {
+    position: absolute;
+    top: 1rem;
+    right: 0rem;
+    margin: 0;
+    // left: 50%;
+    // font-size: x-small;
+    transform: translateX(-25%);
+    background: white;
+    opacity: 85%;
+    border: solid 1px;
+    border-radius: 5px;
+    padding: 7px 15px 13px 7px;
+    z-index: 10;
 }

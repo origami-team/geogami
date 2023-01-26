@@ -9,6 +9,8 @@ import { SocketService } from 'src/app/services/socket.service';
 import { UtilService } from 'src/app/services/util.service';
 import { AuthService } from 'src/app/services/auth-service.service';
 import { Storage } from "@ionic/storage";
+import { environment } from 'src/environments/environment';
+import mapboxgl from "mapbox-gl";
 
 @Component({
   selector: 'app-game-detail',
@@ -17,7 +19,8 @@ import { Storage } from "@ionic/storage";
 })
 export class GameDetailPage implements OnInit {
 
-  @ViewChild('map') mapContainer;
+  @ViewChild('mointorMap') mapContainer;
+
 
   game: any;
   activities: any[];
@@ -37,6 +40,8 @@ export class GameDetailPage implements OnInit {
   numPlayers = 2;
   userRole: String = "";
   bundle: any = {};
+  map: mapboxgl.Map;
+  cirColor = ['danger', 'success', 'primary'];
 
   playersData = [];
 
@@ -95,6 +100,9 @@ export class GameDetailPage implements OnInit {
             /* connect to socket server (multiplayer) */
             this.connectSocketIO_MultiPlayer();
           }
+
+          // temp
+          this.initMonitoringMap();
         });
     });
 
@@ -115,8 +123,16 @@ export class GameDetailPage implements OnInit {
         this.playersData = playersData;
       });
 
+      /* get players locations */
+      this.socketService.socket.on('updateInstrunctorMapView', (playerData) => {
+        console.log("(updateInstrunctorMapView) playerLoc: ", playerData)
+      });
+
       /* Join instructor */
       this.socketService.socket.emit("joinGame", { roomName: this.teacherCode, playerName: null });
+
+      /* show monitoring map */
+      // this.initMonitoringMap();
     } else {
       /* check if there's uncompleted game session */
       this.checkSavedGameSession();
@@ -170,12 +186,12 @@ export class GameDetailPage implements OnInit {
     }
   }
 
-  
+
   /*************************/
   /* multiplayer functions */
   /*************************/
 
-    /* open barcode scanner - to scan qr code */
+  /* open barcode scanner - to scan qr code */
   /********************/
   openBarcodeScanner() {
     this.navCtrl.navigateForward('barcode-scanner');
@@ -238,6 +254,7 @@ export class GameDetailPage implements OnInit {
     /* retreive tracks and player info of previous uncompleted game session */
     this.storage.get("savedTracksData").then((tracksData) => {
       if (tracksData) {
+        // console.log("tracksData: ", tracksData);
         /* 1. if saved player room name equal and player name equal stroed player name   */
         // if (tracksData.s_playerInfo['roomName'] == this.teacherCode && tracksData.s_playerInfo['playerName'] == this.playerName) {
         if (tracksData.s_playerInfo['roomName'] == this.teacherCode) {
@@ -260,6 +277,36 @@ export class GameDetailPage implements OnInit {
         }
       }
     });
+  }
+
+  initMonitoringMap() {
+    mapboxgl.accessToken = environment.mapboxAccessToken;
+    this.map = new mapboxgl.Map({
+      container: this.mapContainer.nativeElement,
+      style: environment.mapStyle + 'realWorld.json',
+      center: [8, 51.8],
+      zoom: 3,
+      minZoom: 2,
+      maxZoom: 18  // to avoid error
+    });
+
+    // disable map rotation using right click + drag
+    this.map.dragRotate.disable();
+    // disable map rotation using touch rotation gesture
+    this.map.touchZoomRotate.disableRotation();
+    // Add zomm in/out controls
+    this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+  }
+
+  /*  */
+  showPlayerLocs() {
+    if (this.socketService.socket) {
+      console.log("🚀 showPlayerLocs");
+      this.socketService.socket.emit("requestPlayersLocation", this.teacherCode);
+
+    } else { // temp
+      console.log("🚀 showPlayerLocs else temp");
+    }
   }
 
 }
