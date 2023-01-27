@@ -613,7 +613,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     /* when instructor request players real time location */
-    this.socketService.socket.on('requestPlayersLocation', () => {
+    this.socketService.socket.on('requestPlayerLocation', () => {
       console.log("(game-paly) requestPlayersLocation1")
 
       this.socketService.socket.emit("updatePlayersLocation", {

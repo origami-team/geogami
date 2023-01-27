@@ -42,6 +42,10 @@ export class GameDetailPage implements OnInit {
   bundle: any = {};
   map: mapboxgl.Map;
   cirColor = ['danger', 'success', 'primary'];
+  pointsColor = ['red', 'green', 'blue'];
+  playersLocsFeatures = [];     // for storing palyers features received from socket server
+  // to disable 'show player location' btn when player locs are displayed
+  showLocsBtn = true;
 
   playersData = [];
 
@@ -92,7 +96,10 @@ export class GameDetailPage implements OnInit {
           if (!this.isSingleMode && this.authService.getUserValue() && this.userRole == 'contentAdmin') {
             this.teacherCode = this.authService.getUserId() + '-' + this.game._id;
             console.log('teacher code -> game name', this.teacherCode)
-            //610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
+            //ex(teacherId+gameId): 610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
+
+            // initialize map
+            this.initMonitoringMap();
           }
 
           /* multi-player */
@@ -100,9 +107,6 @@ export class GameDetailPage implements OnInit {
             /* connect to socket server (multiplayer) */
             this.connectSocketIO_MultiPlayer();
           }
-
-          // temp
-          this.initMonitoringMap();
         });
     });
 
@@ -126,6 +130,27 @@ export class GameDetailPage implements OnInit {
       /* get players locations */
       this.socketService.socket.on('updateInstrunctorMapView', (playerData) => {
         console.log("(updateInstrunctorMapView) playerLoc: ", playerData)
+        
+        // impl.
+        /* check if player loc is not stored yet. this to avoid duplicate entries */
+        if (this.playersLocsFeatures.length == 0 || this.playersLocsFeatures.find((feature) => feature.properties.playerNo != playerData.playerNo)) {
+          this.playersLocsFeatures.push(
+            {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Point',
+                'coordinates': playerData.playerLoc
+              },
+              'properties': {
+                'pColor': this.pointsColor[playerData.playerNo - 1],
+                'playerNo': playerData.playerNo
+              }
+            }
+          )
+
+          // update source data of points map layer
+          this.updateMapView();
+        }
       });
 
       /* Join instructor */
@@ -296,16 +321,87 @@ export class GameDetailPage implements OnInit {
     this.map.touchZoomRotate.disableRotation();
     // Add zomm in/out controls
     this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+
+    this.map.on('load', () => {
+      this.map.addSource('points', {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': this.playersLocsFeatures
+        }
+      });
+
+      // Add a symbol layer
+      this.map.addLayer({
+        'id': 'points',
+        'type': 'circle',
+        'source': 'points',
+        paint: {
+          "circle-radius": 8,
+          // "circle-color": 'red',
+          "circle-color": ['get', 'pColor'],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "black",
+        },
+      });
+
+      // hide points layer
+      this.map.setLayoutProperty('points', 'visibility', 'none');
+    });
+
+
   }
 
-  /*  */
+  /* show locs on map view on click then hide them after few secs */
   showPlayerLocs() {
+    /* remove old locs */
+    this.playersLocsFeatures = [];
     if (this.socketService.socket) {
-      console.log("🚀 showPlayerLocs");
+      // console.log("🚀 (game-detail) showPlayerLocs");
       this.socketService.socket.emit("requestPlayersLocation", this.teacherCode);
 
-    } else { // temp
-      console.log("🚀 showPlayerLocs else temp");
+      //disable button and show points layer
+      this.showHideLocs();
+      // hide locs and show btn after 5 secs
+      setTimeout(() => {
+        //this.showHideLocs();
+      }, 6000)
+    } else {
+      console.log("🚀 (game-detail) socket is undefined");
+    }
+
+  }
+
+  /* to update players locs data */
+  updateMapView() {
+    if (this.map && this.map.getLayer('points')) {
+      this.map.getSource('points').setData({
+        type: 'FeatureCollection',
+        features: this.playersLocsFeatures
+      });
+
+      // zoom to 1st location in list
+      if(this.playersLocsFeatures.length !=0 ){
+        this.map.flyTo({
+          center: this.playersLocsFeatures[0].geometry.coordinates,
+          zoom: 14,
+          speed: 3
+        });
+      }
+
+    } else {
+      console.log('🚀 (game-detail) updateMapView: map is undefined')
+    }
+  }
+
+  /* to show and hide locs points on map view  */
+  showHideLocs() {
+    if (this.map.getLayoutProperty('points', 'visibility') == 'none') {
+      this.map.setLayoutProperty('points', 'visibility', 'visible');
+      this.showLocsBtn = false;
+    } else {
+      this.map.setLayoutProperty('points', 'visibility', 'none');
+      this.showLocsBtn = true;
     }
   }
 
