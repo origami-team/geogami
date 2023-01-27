@@ -364,7 +364,7 @@ export class GameDetailPage implements OnInit {
       this.showHideLocs();
       // hide locs and show btn after 5 secs
       setTimeout(() => {
-        //this.showHideLocs();
+        this.showHideLocs();
       }, 6000)
     } else {
       console.log("🚀 (game-detail) socket is undefined");
