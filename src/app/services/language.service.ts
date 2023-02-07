@@ -36,8 +36,8 @@ export class LanguageService {
 
   getLangauges() {
     return [
-      { value: 'de', img: '🇩🇪' },
-      { value: 'en', img: '🇺🇸' },
+      { value: 'de', img: '🇩🇪', text: 'Deutsch' },
+      { value: 'en', img: '🇺🇸', text: 'English' },
       //{ value: 'pt', img: '🇵🇹' },
     ];
   }

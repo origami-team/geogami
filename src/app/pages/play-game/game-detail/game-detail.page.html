@@ -101,6 +101,7 @@
   </ion-card>
 
 
+  <!-- Monitor players on map -->
   <ion-card [ngStyle]="{ 'display' : ( userRole=='contentAdmin' && !isSingleMode ? '' : 'none' ) }">
     <ion-card-header>
       <ion-card-title> Monitor players location
@@ -115,7 +116,7 @@
             <ion-icon style="font-size: 16px; opacity: 100%;" [color]="cirColor[i]" name="ellipse"></ion-icon> p{{ i+1 }}: {{playersData[i].name}}
           </ion-label>
   
-          <ion-label *ngIf="!playersData[i]" style="font-weight: bold; font-size: large; color: black;">
+          <ion-label *ngIf="!playersData[i]" style="font-size: large; color: black;">
             <ion-icon style="font-size: 16px;" [color]="cirColor[i]" name="ellipse"></ion-icon> P{{ i+1 }}: ------
           </ion-label>
         </div>

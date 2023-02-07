@@ -13,7 +13,7 @@
   <!-- select game env. and mode -->
   <div class="select-style" *ngIf="isListTabSelected">
     <div>
-      <ion-label> Game environment
+      <ion-label> <span class="cat-title-style">Game environment </span> 
         <ion-icon name="information-circle"
           (click)="utilService.showPopover($event, 'Choose between playing GeoGami outside (real world) or indoor (virtual environment)')">
         </ion-icon>
@@ -24,7 +24,7 @@
       </select>
     </div>
     <div>
-      <ion-label> Game mode
+      <ion-label> <span class="cat-title-style">Game mode </span>
         <ion-icon name="information-circle"
           (click)="utilService.showPopover($event, 'Choose between playing GeoGami indivisually or with a group. Minium number of players of a mutliplayer mode is 2')">
         </ion-icon>

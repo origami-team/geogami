@@ -38,7 +38,7 @@ ion-tab-bar {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 
-  >h1{
+  >h1 {
     text-align: center;
   }
 }
@@ -82,7 +82,7 @@ ion-tab-bar {
   }
 }
 
-// less than 630px
+// less than 630px tablet
 @media only screen and (max-width: 630px) {
   .select-style {
     display: flex;
@@ -98,9 +98,29 @@ ion-tab-bar {
         width: 42vw;
         margin-top: 2px;
       }
-
     }
+  }
+}
 
+// for phone
+@media only screen and (max-width: 375px) {
+  .select-style {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    >div {
+      display: block;
+
+      >select {
+        width: 42vw;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  .cat-title-style {
+    font-size: 16px;
   }
 }
 /*  */
