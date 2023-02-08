@@ -57,11 +57,20 @@
   <!-- only viewed by instructor -->
   <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
     <ion-card-header>
-      <ion-card-title> Ask expected players to scan the below QR code to join the game.
+      <ion-card-title> Ask players to scan the below QR code to join the game.
       </ion-card-title>
     </ion-card-header>
     <ion-card-content style="display: flex; justify-content: center;">
-      <ion-img style="width: 40%;" src="../../../../assets/temp/qrcode.png"></ion-img>
+      <!-- <ion-img style="width: 40%;" src="../../../../assets/temp/qrcode.png"></ion-img> -->
+      <div style="width: 70%; text-align: center;">
+        <ngx-qrcode
+          elementType="img" 
+          [value]="teacherCode" 
+          cssClass="qr-code"
+          errorCorrectionLevel="L">
+        </ngx-qrcode>
+      </div>
+
     </ion-card-content>
   </ion-card>
 
@@ -113,19 +122,23 @@
       <div id="main" class="showLocsLabel">
         <div *ngFor="let e of [].constructor(numPlayers); let i = index">
           <ion-label *ngIf="playersData[i]" style=" font-size: large; color: black;">
-            <ion-icon style="font-size: 16px; opacity: 100%;" [color]="cirColor[i]" name="ellipse"></ion-icon> p{{ i+1 }}: {{playersData[i].name}}
+            <ion-icon style="font-size: 16px; opacity: 100%;" [color]="cirColor[i]" name="ellipse"></ion-icon> p{{ i+1
+            }}: {{playersData[i].name}}
           </ion-label>
-  
+
           <ion-label *ngIf="!playersData[i]" style="font-size: large; color: black;">
             <ion-icon style="font-size: 16px;" [color]="cirColor[i]" name="ellipse"></ion-icon> P{{ i+1 }}: ------
           </ion-label>
         </div>
       </div>
-      
+
 
       <div #mointorMap class="map"></div>
 
-      <ion-button class="showLocsBtnStyle" (click)="showPlayerLocs()" [ngStyle]="{ 'display' : ( !showLocsBtn ? 'none' : '' ) }">Show players location</ion-button>
+      <ion-button 
+        class="showLocsBtnStyle" 
+        (click)="showPlayerLocs()"
+        [ngStyle]="{ 'display' : ( !showLocsBtn ? 'none' : '' ) }">Show players location</ion-button>
 
     </ion-card-content>
   </ion-card>

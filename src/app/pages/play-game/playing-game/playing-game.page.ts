@@ -672,6 +672,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
 
     this.geolocationService.init(this.isVirtualWorld);
+    // Fix this issue
     this.orientationService.init(this.isVirtualWorld);
 
     if (!this.isVirtualWorld) {
@@ -824,7 +825,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       /* in case joined player is last */
       /* with rejoin playerno might no be last one to join therefore we use count received from socker server instead  */
       if (this.isSingleMode || this.playerNo == this.numPlayers || (this.isRejoin && this.joinedPlayersCount == this.numPlayers)) {
-        this.startGame();
+        setTimeout(() => {
+          this.startGame();
+        }, 200);
       }
     });
 
@@ -859,6 +862,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (!this.isVirtualWorld) {
       this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe(
         (heading: number) => {
+          // console.log("......deviceOrientationSubscription (heading): ",  heading);
           this.compassHeading = heading;
           this.targetHeading = 360 - (this.compassHeading - this.heading);
           this.indicatedDirection = this.compassHeading - this.directionBearing;
@@ -1946,7 +1950,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   navigateHome() {
     if (!this.isVirtualWorld) {
-      this.positionSubscription.unsubscribe(); //
+      this.positionSubscription.unsubscribe();
       this.deviceOrientationSubscription.unsubscribe();
     } else {
       this.disconnectSocketIO();
@@ -1978,9 +1982,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.orientationService.clear();
 
-    // this.map.remove();
+    this.map.remove();
     this.navCtrl.navigateRoot('/');
-    //this.streetSectionControl.remove();  // duplicate
   }
 
   togglePanel() {

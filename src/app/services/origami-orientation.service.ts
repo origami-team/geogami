@@ -18,7 +18,7 @@ export class OrigamiOrientationService {
   public orientationSubscription: Observable<number>;
   private orientationSubscriber: Subscriber<number>;
 
-  deviceOrientationSubscription: any;
+  deviceOrientationSubscription: Subscription;
 
   // VR world
   public avatarOrientationSubscription: Observable<any>;
@@ -53,6 +53,7 @@ export class OrigamiOrientationService {
 
     if (!isVirtualWorld) {
       this.orientationSubscription = new Observable((subscriber: Subscriber<number>) => {
+        // console.log("......orientationSubscription (subscriber): ",  subscriber);
         this.orientationSubscriber = subscriber;
       }).pipe(shareReplay());
     } else {
@@ -70,12 +71,20 @@ export class OrigamiOrientationService {
   }
 
   clear() {
-    window.removeEventListener('deviceorientation', this.handleDeviceOrientation, true);
-    window.removeEventListener('deviceorientationabsolute', this.handleDeviceOrientation, true);
-
+    // issue still open: https://github.com/danielsogl/awesome-cordova-plugins/issues/3537
+    if (this.platform.is('mobile') && this.platform.is('capacitor') && !this.platform.is('mobileweb')) {
+    } else {
+      if (this.platform.is('android')) {
+        window.removeEventListener('deviceorientationabsolute', this.handleDeviceOrientation, true);
+      }else{
+        window.removeEventListener('deviceorientation', this.handleDeviceOrientation, true);
+      }
+    }
+    
     //--- ToDo
     if (!this.isVirtualWorld) {
       this.orientationSubscriber.unsubscribe();
+      this.deviceOrientationSubscription.unsubscribe();
     }
   }
 }
