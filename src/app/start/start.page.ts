@@ -94,7 +94,7 @@ export class StartPage implements OnInit {
 
   navigateGamesOverviewPage() {
     // disable unregistered users from playing using the virtual world
-    if (['admin', 'contentAdmin'].includes(this.userRole)) {
+    if (['admin', 'contentAdmin', 'scholar'].includes(this.userRole)) {
       this.navCtrl.navigateForward('play-game/play-game-menu');
     } else {
       this.navCtrl.navigateForward(`play-game/play-game-list/${"RealWorld"}`);
