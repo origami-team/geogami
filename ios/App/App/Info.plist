@@ -39,9 +39,7 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<!-- <string>To be able to use camera.</string> -->
 	<string>GeoGami benötigt Zugriff auf deine Kamera.</string>
-	<!-- <string>GeoGami benötigt Zugriff auf deine Kamera um Aufgaben mit Bildern zu versehen.</string> -->
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Deine Position wird für das Spiel selbst sowie für die Auswertung deiner Spielperformance genutzt.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
