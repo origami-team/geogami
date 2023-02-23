@@ -60,10 +60,6 @@ export function createTranslateLoader(http: HttpClient) {
 * Using sockit.IO for receiving data from VR App
 */
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-// import { PopupComponent } from './components/popup/popup.component';
-// const config: SocketIoConfig = { url: 'https://vr-app-multi-players.herokuapp.com/', options: {} }; // multi users at once
-// const config: SocketIoConfig = { url: 'https://goegami-ve.azurewebsites.net/', options: {} }; // azure server
-// const config: SocketIoConfig = { url: 'http://localhost:3005/', options: {} }; // local server - branch (multiplayer - realworld - V1)
 const config: SocketIoConfig = { url: 'https://goegami-ve.azurewebsites.net/', options: {} }; // azure server - branch (multiplayer - realworld - V1)
 
 

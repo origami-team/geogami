@@ -15,11 +15,3 @@ body.scanner-active {
     --background: transparent;
     --ion-background-color: transparent;
 }
-
-/* qr code generator */
-.qr-code {
-    > img {
-        width: 60% !important;
-    }
-
-}
