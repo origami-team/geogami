@@ -42,7 +42,7 @@
   </ion-card>
 
   <!-- virtual environment -->
-  <ion-card *ngIf="isVirtualWorld">
+<!--   <ion-card *ngIf="isVirtualWorld">
     <ion-card-header>
       <ion-card-title> {{ "PlayGame.gameConnection" | translate }}
         <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.gameConnectionInfo')">
@@ -52,7 +52,7 @@
     <ion-card-content>
       <ion-input placeholder="{{ 'PlayGame.pl_EnterCode' | translate }}" [(ngModel)]="gameCode"></ion-input>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 
   <!-- only viewed by instructor -->
   <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
@@ -118,7 +118,6 @@
     </ion-card-header>
 
     <ion-card-content>
-
       <div id="main" class="showLocsLabel">
         <div *ngFor="let e of [].constructor(numPlayers); let i = index">
           <ion-label *ngIf="playersData[i]" style=" font-size: large; color: black;">
@@ -139,13 +138,13 @@
         class="showLocsBtnStyle" 
         (click)="showPlayerLocs()"
         [ngStyle]="{ 'display' : ( !showLocsBtn ? 'none' : '' ) }">Show players location</ion-button>
-
     </ion-card-content>
   </ion-card>
 
 </ion-content>
 
 <ion-footer *ngIf="userRole!='contentAdmin'">
+<!-- <ion-footer> -->
   <ion-toolbar>
     <ion-button expand="block" (click)="startGame()" [disabled]="!playerName || (!teacherCode && !isSingleMode)">{{
       "General.start" | translate }}</ion-button>

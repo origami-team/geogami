@@ -156,7 +156,7 @@ export class GameDetailPage implements OnInit {
         }
       });
 
-      /* Join instructor */
+      /* Join instructor only */
       this.socketService.socket.emit("joinGame", { roomName: this.teacherCode, playerName: null });
 
       /* show monitoring map */
@@ -208,7 +208,8 @@ export class GameDetailPage implements OnInit {
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: this.isVRMirrored,
       /* replace is used to get rid of special charachters, so values can be sent via routing */
-      gameCode: (this.isSingleMode ? this.gameCode : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
+      /* changed game code to be player name in signle mode game. This will allow V.E app to be conected based on player name which is easier that recalling code entered */
+      gameCode: (this.isSingleMode ? this.playerName : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
       isSingleMode: this.isSingleMode,
       shareData_cbox: this.shareData_cbox
     }
@@ -227,7 +228,7 @@ export class GameDetailPage implements OnInit {
 
   /**********************************/
   checkAbilityToJoinGame(bundle: any) {
-    /* if multi player mode, check whether room is not yet full. then allow player to join game in playing page */
+    /* if multi player mode, check whether room is not yet full. then allow player to join game in playing-page page */
     this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''), gameNumPlayers: this.numPlayers }, (response) => {
       if (response.isRoomFull) {
         /* show toast msg */
@@ -296,12 +297,10 @@ export class GameDetailPage implements OnInit {
 
             } else {
               console.log("🚀🚀 (game-detail) - player not found")
-              //this.checkAbilityToJoinGame(this.bundle);
             }
           });
         } else {
           console.log("🚀 (game-detail) savedPlayerInfo: No previous info found for this game");
-          // this.checkAbilityToJoinGame(this.bundle);
         }
       }
     });

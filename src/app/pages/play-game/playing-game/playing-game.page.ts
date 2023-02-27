@@ -130,7 +130,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   avatarPositionSubscription: Subscription;
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
-  initialAvatarLoc: any;
+  initialAvatarLoc : any;
   currentSecond: number = 0;
   gameCode: string = "";
 
@@ -501,7 +501,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     });
 
     // Set the intial avatar location (in either normal or mirrored version)
-    if (this.isVRMirrored) {
+    if (this.isVirtualWorld) {
       this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc);
     }
 
@@ -521,6 +521,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.connectSocketIO();
           }
 
+          /* only for multi-player game */
           if (!this.isSingleMode) {
             this.numPlayers = game.numPlayers;
             this.waitPlayersPanel = true;
@@ -541,7 +542,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         });
     });
 
-    // Initialize map and subscribe location
+    /* Initialize map and subscribe location */
     this.initializeMap();
   }
 
@@ -572,9 +573,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   // With VR env only (single player)
   connectSocketIO() {
-    // this.socketService.socket.connect(); // aleady connected in game-detail-page
-    /* MultiUsers in Parallel impl. */
-    this.socketService.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld": this.isVRMirrored });
+    /* Sinlge user V.E. impl. */
+    // ToDo: with many envs you can use env. id instead
+    this.socketService.socket.connect();
+    this.socketService.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored });
   }
 
   /********/
