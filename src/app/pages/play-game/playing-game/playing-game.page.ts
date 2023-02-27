@@ -1849,7 +1849,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.showCorrectPositionModal = true;
       setTimeout(() => {
         this.showCorrectPositionModal = false;
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -1875,7 +1875,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.showCorrectPositionModal = true;
       setTimeout(() => {
         this.showCorrectPositionModal = false;
-      }, 3000);
+      }, 2000);
       return;
     }
 
