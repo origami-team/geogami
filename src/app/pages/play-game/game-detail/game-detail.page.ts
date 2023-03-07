@@ -389,7 +389,7 @@ export class GameDetailPage implements OnInit {
       if(this.playersLocsFeatures.length !=0 ){
         this.map.flyTo({
           center: this.playersLocsFeatures[0].geometry.coordinates,
-          zoom: 15,
+          zoom: (this.map.getZoom()< 15 ? 15: this.map.getZoom()),
           speed: 3
         });
       }
