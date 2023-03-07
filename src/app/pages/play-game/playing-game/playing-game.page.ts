@@ -130,7 +130,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   avatarPositionSubscription: Subscription;
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
-  initialAvatarLoc : any;
+  initialAvatarLoc: any;
   currentSecond: number = 0;
   gameCode: string = "";
 
@@ -534,9 +534,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.joinedPlayersCount = this.cJoindPlayersCount;
               this.taskIndex = this.sTaskNo;
 
+              /* in case rejoin happens while waiting for players to join */
               if (this.joinedPlayersCount == this.numPlayers) {
                 this.waitPlayersPanel = false;
               }
+
+              /* (socket listener) on instructor request players real time location */
+              this.onRequestPlayerLocationByInstructor();
+              /* (socket listener) on joining game by other players */
+              this.onPlayerJoinGame();
             }
           }
         });
@@ -583,50 +589,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   /* initialize SocketIO (multiplayer) */
   joinGame_MultiPlayer() {
     if (!this.isRejoin) {
-      /* when I join */
-      this.socketService.socket.on('assignPlayerNumber', (data) => {
-        console.log("playerNo from socket: ", data)
-        /* player number = number of players already joined the room */
-        this.playerNo = this.joinedPlayersCount = data.playerNo;
-
-        // temp
-        /* store player no and name in storage */
-        // this.storage.set("savedPlayerInfo", { playerName: this.playersNames[0], playerNo: this.playerNo, roomName: this.gameCode })
-        //console.log("JoinData: ", )
-        //console.log("🚀 (play-game) savedPlayerInfo - JoinData: ", new Date(new Date()));
-
-        /* if all players joined the game, remove waiting panel */
-        if (this.joinedPlayersCount == this.numPlayers) {
-          this.waitPlayersPanel = false;
-          // this.startGame(); ToDo: as last player get the responce quickly, there is no time to load map. (update it) one solution could be to add promise in load map func after separate it 
-        }
-      });
+      /* (socket listener) on assign number to myself  */
+      this.onAssignPlayerNumber();
     }
 
-    /* when someone else join */
-    this.socketService.socket.on('playerJoined', (data) => {
-      console.log("PlayerJoined: (number of players so far) ", data)
-      this.joinedPlayersCount = data.joinedPlayersCount;
+    /* on joining game by other players */
+    this.onPlayerJoinGame();
 
-      if (this.joinedPlayersCount == this.numPlayers) {
-        this.waitPlayersPanel = false;
-        this.startGame();
-      }
-    });
-
-    /* when instructor request players real time location */
-    this.socketService.socket.on('requestPlayerLocation', () => {
-      console.log("(game-paly) requestPlayersLocation1")
-
-      this.socketService.socket.emit("updatePlayersLocation", {
-        roomName: this.gameCode,
-        playerLoc: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude],
-        playerNo: this.playerNo,
-        //playerName: this.playersNames[0]
-      });
-
-      console.log("(game-paly) requestPlayersLocation2")
-    });
+    /* (socket listener) on instructor request players real time location */
+    this.onRequestPlayerLocationByInstructor();
 
     /* if player is not rejoining */
     if (!this.isRejoin) {
@@ -640,6 +611,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   disconnectSocketIO_MultiPlayer() {
+    /* remove all listners to avoid duplicate listenres after rejoining game */
+    this.socketService.socket.removeAllListeners();
+    /*  dissconnect socket server*/
     this.socketService.socket.disconnect();
   }
 
@@ -1963,7 +1937,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.geolocationService.clear();
 
-    this.trackerService.clear();
+    /* condition to refrain clear track service in multiplayer mode while waiting for other players */
+    if (this.isSingleMode || (!this.isSingleMode && !this.waitPlayersPanel)) {
+      this.trackerService.clear();
+    }
 
     this.rotationControl.remove();
     this.viewDirectionControl.remove();
@@ -2268,4 +2245,55 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }).length > 0
     );
   }
+
+  /*-------------------------------------*/
+  /*  Socket server listeners - Multiplayer*/
+  /*-------------------------------------*/
+
+  /* Request player location by instructor */
+  onRequestPlayerLocationByInstructor() {
+    /* when instructor request players real time location */
+    this.socketService.socket.on('requestPlayerLocation', () => {
+      console.log("(game-paly) requestPlayersLocation1")
+      console.log("(game-paly) requestPlayersLocation1, this.lastKnownPosition", this.lastKnownPosition)
+
+      this.socketService.socket.emit("updatePlayersLocation", {
+        roomName: this.gameCode,
+        playerLoc: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude],
+        playerNo: this.playerNo,
+        //playerName: this.playersNames[0]
+      });
+
+      console.log("(game-paly) requestPlayersLocation2")
+    });
+  }
+
+  /* on assign number to myself  */
+  onAssignPlayerNumber() {
+    this.socketService.socket.on('assignPlayerNumber', (data) => {
+      console.log("playerNo from socket: ", data)
+
+      /* player number equal number of players already joined the room */
+      this.playerNo = this.joinedPlayersCount = data.playerNo;
+
+      /* if all players joined the game, remove waiting panel */
+      if (this.joinedPlayersCount == this.numPlayers) {
+        this.waitPlayersPanel = false;
+      }
+    });
+  }
+
+  /* on joining game by other players */
+  onPlayerJoinGame() {
+    this.socketService.socket.on('playerJoined', (data) => {
+      console.log("PlayerJoined: (number of players so far) ", data)
+      this.joinedPlayersCount = data.joinedPlayersCount;
+
+      if (this.joinedPlayersCount == this.numPlayers) {
+        this.waitPlayersPanel = false;
+        this.startGame();
+      }
+    });
+  }
+
 }
