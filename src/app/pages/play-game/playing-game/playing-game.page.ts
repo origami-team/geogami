@@ -6,18 +6,22 @@ import {
   ElementRef,
   OnDestroy,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import mapboxgl from "mapbox-gl";
+
 import {
   Plugins,
   GeolocationPosition,
   Capacitor,
   CameraResultType,
   CameraSource,
+  AppState
 } from "@capacitor/core";
+// const {App} = Plugins;
+
 import {
   ModalController,
   NavController,
@@ -450,7 +454,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private socketService: SocketService,
     private translate: TranslateService,
     private utilService: UtilService,
-    private storage: Storage
+    private storage: Storage,
+    private router: Router
   ) {
     this.lottieConfig = {
       path: "assets/lottie/star-success.json",
@@ -472,10 +477,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // console.log('ngOnInit');
     if (Capacitor.platform !== "web") {
       Plugins.Keyboard.addListener("keyboardDidHide", async () => {
         this.map.resize();
         await this.zoomBounds();
+      });
+
+      /* Important to rejoin connection to socket server if app went to background */
+      // To do for single mode and multi mode
+      Plugins.App.removeAllListeners();     /* To avoid multiple listeners */
+      Plugins.App.addListener('appStateChange', (state: AppState) => {
+        /* info: (this.router.url.split('/')[2] == "playing-game") is to make sure this impl. only applied to play-game-page */
+        /* info: (!this.isSingleMode) is to apply it only with multiplayer */
+        if (!state.isActive && (this.router.url.split('/')[2] == "playing-game" && !this.isSingleMode)) {
+          // console.log('App state changed. Is not active?');
+          this.ionViewWillLeave();
+          /* navigate home */
+          this.navCtrl.navigateRoot('/');
+        }
       });
     }
 
@@ -484,7 +504,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   /******************/
   ionViewWillEnter() {
-    // VR world
     // to seperate realworld games from VR ones in view
     this.route.params.subscribe((params) => {
       console.log("(play-game) params.bundle", params.bundle)
@@ -573,8 +592,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ionViewDidLeave() {
+    // console.log("ionViewDidLeave")
+  }
 
+  ngOnDestroy() {
+    // console.log(" ngOnDestroy")
   }
 
   // With VR env only (single player)
@@ -855,6 +878,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (Capacitor.isNative) {
+      /* To keep screen on */
       Plugins.CapacitorKeepScreenOn.enable();
     }
 
