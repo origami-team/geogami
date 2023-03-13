@@ -20,7 +20,8 @@ export class CreateGameMenuPage implements OnInit {
   }
 
   navigateCreateVirtualGamePage() {
-    this.navCtrl.navigateForward('create-game-virtual');
+    this.navCtrl.navigateForward(`game-type-menu/${"Vir.Env."}`);
+    // this.navCtrl.navigateForward('create-game-virtual');
   }
   
 }

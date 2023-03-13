@@ -390,7 +390,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     // Remove extra spaces from game name
     this.game.name = this.game.name.trim();
 
-    if(this.game.name == ""){
+    if (this.game.name == "") {
       this.errorMsg = this.translate.instant("SaveGame.enterValidGameName")
       this.showNameError = true;
       return;
@@ -407,8 +407,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
       isVRMirrored: this.isVRMirrored,
       isVisible: true,                    // new game is visible by default
       isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
-      isMultiplayerGame: !this.isSingleMode,
-      numPlayers : (!this.isSingleMode ? this.numPlayers : undefined )
+      isMultiplayerGame: (!this.isSingleMode ? true : undefined),
+      numPlayers: (!this.isSingleMode ? this.numPlayers : undefined)
 
     });
     console.log(this.gameFactory.game);

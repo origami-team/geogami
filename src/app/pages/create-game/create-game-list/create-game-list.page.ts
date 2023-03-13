@@ -110,7 +110,8 @@ export class CreateGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav",
+  async presentTaskModal(
+    type: string = "nav",
     task: any = null,
     isVirtualWorld: boolean = this.isVirtualWorld,
     numPlayers: number = this.numPlayers,
