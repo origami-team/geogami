@@ -96,7 +96,7 @@ export class EditGameTasksPage implements OnInit {
             console.log("/// numPlayers: ", this.numPlayers);
           }
 
-          
+
 
 
 
@@ -133,9 +133,9 @@ export class EditGameTasksPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, 
-  isVRMirrored: boolean = this.isVRMirrored,
-  numPlayers: number = this.numPlayers,
+  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld,
+    isVRMirrored: boolean = this.isVRMirrored,
+    numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode) {
     console.log(task);
 
@@ -237,18 +237,13 @@ export class EditGameTasksPage implements OnInit {
         // this.gameFactory.flushGame();
       }
     })
-    .catch((e) => {
-      console.error(e);
-    });
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   navigateBack() {
     this.gameFactory.flushGame();
-    if (!this.isVirtualWorld) {
-      // this.navCtrl.navigateBack("create-game");
-      this.navCtrl.back();
-    } else {
-      this.navCtrl.navigateBack("create-game-virtual");
-    }
+    this.navCtrl.back();
   }
 }

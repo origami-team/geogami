@@ -274,9 +274,9 @@ export class TrackerService {
       events: (this.isSingleMode || isGameTrackStored ? this.events : this.events_list),
       answers: null,
       players: (this.isSingleMode || isGameTrackStored ? this.players : this.playersNames_list),
-      playersCount: (this.isSingleMode ? this.players.length : undefined), // To Do: you may delete it.
+      playersCount: (this.isSingleMode ? 1 : this.numPlayers ), // To Do: you may delete it.
       isMultiplayerGame: (!this.isSingleMode ? true : undefined),
-      numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
+      // numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
     };
 
     console.log(data);

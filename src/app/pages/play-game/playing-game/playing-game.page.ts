@@ -604,8 +604,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   connectSocketIO() {
     /* Sinlge user V.E. impl. */
     // ToDo: with many envs you can use env. id instead
-    this.socketService.socket.connect();
-    this.socketService.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored });
+    if (this.isSingleMode) {
+      this.socketService.socket.connect();
+    }
+
+    /* wiht Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) */
+    this.socketService.socket.emit("newGame", { gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), "isVRWorld_1": !this.isVRMirrored });
   }
 
   /********/
@@ -2283,7 +2287,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       this.socketService.socket.emit("updatePlayersLocation", {
         roomName: this.gameCode,
-        playerLoc: [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude],
+        playerLoc: (
+          !this.isVirtualWorld ?
+          [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude] :
+          [this.avatarLastKnownPosition.coords.longitude, this.avatarLastKnownPosition.coords.latitude]
+        ),
         playerNo: this.playerNo,
         //playerName: this.playersNames[0]
       });

@@ -386,7 +386,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.utilService.showAlertNoConnection();
       // return;
     }
-    
+
     // Remove extra spaces from game name
     this.game.name = this.game.name.trim();
 
@@ -404,11 +404,12 @@ export class CreateGameOverviewPage implements AfterViewInit {
       geofence: this.geofence,
       place: this.game.place,
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored,
+      isVRMirrored: (this.isVirtualWorld ? this.isVRMirrored : undefined),      /* to hide it with real world games */
       isVisible: true,                    // new game is visible by default
       isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
       isMultiplayerGame: (!this.isSingleMode ? true : undefined),
       numPlayers: (!this.isSingleMode ? this.numPlayers : undefined)
+      // playersCount: (!this.isSingleMode ? this.numPlayers : 1)     // ToDo: update it in server
 
     });
     console.log(this.gameFactory.game);

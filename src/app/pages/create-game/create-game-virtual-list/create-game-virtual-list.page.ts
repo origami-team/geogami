@@ -1,3 +1,5 @@
+/* ToDo: I may delete this page */
+
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { IonReorderGroup } from "@ionic/angular";
 
@@ -35,6 +37,8 @@ export class CreateGameVirtualListPage implements OnInit {
   isVirtualWorld: boolean = true;
   isVRMirrored: boolean = false;
 
+  isSingleMode: boolean = true; // always true, as it;s only used by V.E. single
+
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   // dismiss modal on hardware back button
@@ -62,13 +66,18 @@ export class CreateGameVirtualListPage implements OnInit {
 
     this.gameFactory.getGame().then((game) => (this.game = game));
 
-    console.log("this.gameFactory.game: ",this.gameFactory.game);
+    console.log("this.gameFactory.game: ", this.gameFactory.game);
   }
 
   ionViewWillEnter() {
   }
 
-  async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
+  async presentTaskModal(
+    type: string = "nav",
+    task: any = null,
+    isVirtualWorld:boolean = this.isVirtualWorld, 
+    isVRMirrored: boolean = this.isVRMirrored,
+    isSingleMode: boolean = this.isSingleMode) {     /* only for single Vir. Env.*/
     // console.log(task);
     console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
 
@@ -80,7 +89,8 @@ export class CreateGameVirtualListPage implements OnInit {
         type,
         task,
         isVirtualWorld,
-        isVRMirrored
+        isVRMirrored,
+        isSingleMode
       },
     });
 
@@ -104,7 +114,7 @@ export class CreateGameVirtualListPage implements OnInit {
   addTaskToGame(task) {
     this.game = this.gameFactory.addTask(task);
 
-    console.log("this.game.tasks: ",this.game.tasks);
+    console.log("this.game.tasks: ", this.game.tasks);
   }
 
   deleteTask(taskID) {
@@ -151,7 +161,8 @@ export class CreateGameVirtualListPage implements OnInit {
 
     let bundle = {
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored
+      isVRMirrored: this.isVRMirrored,
+      isSingleMode: this.isSingleMode
     }
     this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
   }

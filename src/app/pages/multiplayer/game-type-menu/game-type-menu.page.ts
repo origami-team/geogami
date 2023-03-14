@@ -21,6 +21,8 @@ export class GameTypeMenuPage implements OnInit {
 
         // temp
         console.log("isRealWorld: ", this.isRealWorld);
+      } else {
+        this.isRealWorld = false;
       }
     });
   }
@@ -32,6 +34,8 @@ export class GameTypeMenuPage implements OnInit {
       isRealWorld: this.isRealWorld,
       isSingleMode: true
     }
+
+    /* fpr both real and Vir.Emv. */
     this.navCtrl.navigateForward(`create-game/${JSON.stringify(bundle)}`);
   }
 
@@ -42,6 +46,8 @@ export class GameTypeMenuPage implements OnInit {
       isRealWorld: this.isRealWorld,
       isSingleMode: false
     }    
+
+    /* fpr both real and Vir.Emv. */
     this.navCtrl.navigateForward(`create-game/${JSON.stringify(bundle)}`);
 
   }

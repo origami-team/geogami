@@ -184,7 +184,7 @@ const routes: Routes = [
       m => m.PlayGameMenuPageModule)
   },
   {
-    path: 'create-game-virtual-menu',
+    path: 'create-game-virtual-menu/:bundle',
     loadChildren: () => import('./pages/create-game/create-game-virtual-menu/create-game-virtual-menu.module').then( m => m.CreateGameVirtualMenuPageModule)
   },
   {

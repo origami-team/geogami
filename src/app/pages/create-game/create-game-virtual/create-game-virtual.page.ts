@@ -1,3 +1,4 @@
+/* ToDo: I may delete this page */
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { NavigationOptions } from '@ionic/angular/providers/nav-controller';
@@ -18,6 +19,7 @@ export class CreateGameVirtualPage implements OnInit {
   ngOnInit() {
   }
 
+  // temp : check it out
   navigateCreateVirtualGamePage() {
     this.navCtrl.navigateForward('create-game-virtual-menu');
   }
@@ -28,7 +30,7 @@ export class CreateGameVirtualPage implements OnInit {
 
     let bundle = {
       isRealWorld: false,
-      isSingleMode: true // unitil multi-player impl is added in VE
+      isSingleMode: true // until multi-player impl. is added in VE
     }
     this.navCtrl.navigateForward(`edit-game-list/${JSON.stringify(bundle)}`);
 

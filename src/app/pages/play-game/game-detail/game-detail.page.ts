@@ -307,14 +307,24 @@ export class GameDetailPage implements OnInit {
   }
 
   initMonitoringMap() {
+    // Set bounds of VR world 
+    var bounds = [
+      [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
+      [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates (lng,lat)
+    ];
+
     mapboxgl.accessToken = environment.mapboxAccessToken;
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: environment.mapStyle + 'realWorld.json',
-      center: [8, 51.8],
-      zoom: 3,
+      // style: environment.mapStyle + 'realWorld.json',
+      style: (this.isVirtualWorld ?
+        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
+        environment.mapStyle + 'realWorld.json'),
+      // center: [8, 51.8],
+      center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       minZoom: 2,
-      maxZoom: 18  // to avoid error
+      maxZoom: 18,  // to avoid error
+      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
     });
 
     // disable map rotation using right click + drag

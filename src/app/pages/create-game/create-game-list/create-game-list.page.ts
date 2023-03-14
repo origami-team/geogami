@@ -32,13 +32,13 @@ export class CreateGameListPage implements OnInit {
   game: Game;
   reorder: Boolean = false;
 
-  isVirtualWorld: boolean = false;
-
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   // To hold received parametres vlaues via route
   // Multiplayer mode 
   isRealWorld: boolean = false;
+  isVRMirrored: boolean = false;
+  virEnvType: string; // new to store vir env type
   isSingleMode: boolean = false; // used to show number of players card in multiplayer mode
   bundle: any;
   numPlayers = 3;
@@ -63,11 +63,22 @@ export class CreateGameListPage implements OnInit {
     this.route.params.subscribe((params) => {
       this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
       this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
+
+      /* only with Vir. Env. */
+      if (!this.isRealWorld) {
+        /* to check if VR version is mirrored */
+        this.route.params.subscribe((params) => {
+          this.virEnvType = JSON.parse(params.bundle).virEnvType;
+          if (this.virEnvType === "VR_type_B") {
+            this.isVRMirrored = true;
+          }
+        });
+      }
     });
 
     this.gameFactory.getGame().then((game) => {
       // It could happen that game data is stored from edit game page
-      // here we clean game data if it is realted to existed game. 
+      // here we clean game data if it is related to existed game. 
       // otheriwse we get `name already exists` error
       if (game._id != 0) {
         this.gameFactory.flushGame(); // clear game data
@@ -113,7 +124,8 @@ export class CreateGameListPage implements OnInit {
   async presentTaskModal(
     type: string = "nav",
     task: any = null,
-    isVirtualWorld: boolean = this.isVirtualWorld,
+    isVirtualWorld: boolean = !this.isRealWorld,
+    isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode) {
     // console.log(task);
@@ -126,6 +138,7 @@ export class CreateGameListPage implements OnInit {
         type,
         task,
         isVirtualWorld,
+        isVRMirrored,
         numPlayers,
         isSingleMode
       },
