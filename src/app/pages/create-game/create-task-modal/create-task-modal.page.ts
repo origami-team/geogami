@@ -39,6 +39,7 @@ export class CreateTaskModalPage implements OnInit {
   // VR world
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
+  @Input() virEnvType: string;
 
   // Multi-player Mode
   @Input() numPlayers: Number;
@@ -703,7 +704,8 @@ export class CreateTaskModalPage implements OnInit {
       componentProps: {
         features: this.mapFeatures,
         isVirtualWorld: this.isVirtualWorld,
-        isVRMirrored: this.isVRMirrored
+        isVRMirrored: this.isVRMirrored,
+        virEnvType: this.virEnvType
       }
     });
     await modal.present();

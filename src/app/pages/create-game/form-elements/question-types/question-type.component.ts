@@ -19,6 +19,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     // VR world
     @Input() isVirtualWorld: boolean;
     @Input() isVRMirrored: boolean;
+    @Input() virEnvType: string;
 
     // Multi-player Mode
     @Input() numPlayers: Number;

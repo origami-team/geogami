@@ -37,13 +37,14 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   // VR world
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
+  @Input() virEnvType: string;
 
   constructor(
     public modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef,
     private translate: TranslateService,
     public popoverController: PopoverController
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.features == undefined) {
@@ -69,9 +70,10 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ?
+      /* style: (this.isVirtualWorld ?
         (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'),
+        environment.mapStyle + 'realWorld.json'), */
+      style: environment.mapStyle + this.virEnvType+".json",
       center: this.isVirtualWorld
         ? [0.005810510811 / 2, 0.006827038669 / 2]
         : [8, 51.8],

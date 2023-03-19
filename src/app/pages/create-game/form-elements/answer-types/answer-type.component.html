@@ -11,7 +11,7 @@
       </ion-icon>
     </h5>
     <app-map featureType="point" drawTheme="nav" [(feature)]="answer.position" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored" [isSingleMode]="isSingleMode"></app-map>
+      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [isSingleMode]="isSingleMode"></app-map>
   </div>
 
   <!-- Mutiple choice (photo) - Single-player mode -->
@@ -112,7 +112,7 @@
             Player ({{i+1}})
           </h5>
           <app-map featureType="point" drawTheme="nav" [(feature)]="answer[i].position"
-            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [allPlayersFeatures]="answer"></app-map>
+            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [allPlayersFeatures]="answer"></app-map>
         </div>
       </ion-card-content>
     </ion-card>

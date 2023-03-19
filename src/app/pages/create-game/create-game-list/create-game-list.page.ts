@@ -127,7 +127,8 @@ export class CreateGameListPage implements OnInit {
     isVirtualWorld: boolean = !this.isRealWorld,
     isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
-    isSingleMode: boolean = this.isSingleMode) {
+    isSingleMode: boolean = this.isSingleMode,
+    virEnvType: string= this.virEnvType) {
     // console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -139,6 +140,7 @@ export class CreateGameListPage implements OnInit {
         task,
         isVirtualWorld,
         isVRMirrored,
+        virEnvType,
         numPlayers,
         isSingleMode
       },
@@ -216,6 +218,7 @@ export class CreateGameListPage implements OnInit {
     this.bundle = {
       isVRWorld: !this.isRealWorld, // DoDo update it in overview to isRealWorld
       isVRMirrored: false, // update code so you don't have to send it if realworld is false
+      virEnvType: this.virEnvType,
       //isRealWorld: this.isRealWorld,
       isSingleMode: this.isSingleMode,
       numPlayers: (this.isSingleMode ? undefined : this.numPlayers)

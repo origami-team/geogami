@@ -29,18 +29,24 @@ export class CreateGameVirtualMenuPage implements OnInit {
       this.bundle = {
         isRealWorld: this.isRealWorld,
         isSingleMode: this.isSingleMode,
-        virEnvType: "VR_type_A"
+        // virEnvType: "VR_type_A"
+        virEnvType: "VirEnv_1"
       }
     });
   }
 
   navigateCreateVRGameTypeA() {
-    this.bundle.virEnvType = "VR_type_A";
+    this.bundle.virEnvType = "VirEnv_1";
     this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
   }
 
   navigateCreateVRGameTypeB() {
-    this.bundle.virEnvType = "VR_type_B";
+    this.bundle.virEnvType = "VirEnv_2";
+    this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
+  }
+
+  navigateCreateVRGameTypeC() {
+    this.bundle.virEnvType = "VirEnv_3";
     this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
   }
 

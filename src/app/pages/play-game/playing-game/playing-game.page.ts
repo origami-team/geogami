@@ -131,6 +131,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false; // for multi VR designs 
+  virEnvType: string = null;
   avatarPositionSubscription: Subscription;
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
@@ -525,7 +526,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     this.game = null;
-    this.game = new Game(0, 'Loading...', '', false, [], false, false, 1, false, false, false, false, false, false);
+    this.game = new Game(0, 'Loading...', '', false, [], false, false, 1, false, false, false, false, "", false, false);
     this.route.params.subscribe((params) => {
       this.gamesService
         .getGame(JSON.parse(params.bundle).id)
@@ -535,6 +536,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.loaded = true;
 
           // VR world
+          // Check game type either real or VR world
+          if (game.virEnvType !== undefined) {
+            this.virEnvType = game.virEnvType;
+            // console.log("--1---game.virEnvType---: ", this.virEnvType)
+          }
+
           // Check game type either real or VR world
           if (game.isVRWorld !== undefined && game.isVRWorld != false) {
             this.connectSocketIO();
@@ -564,11 +571,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.onPlayerJoinGame();
             }
           }
+
+          /* Initialize map and subscribe location */
+          this.initializeMap();
         });
     });
 
     /* Initialize map and subscribe location */
-    this.initializeMap();
+    // this.initializeMap();
   }
 
   /******************/
@@ -608,8 +618,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.socketService.socket.connect();
     }
 
-    /* wiht Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) */
-    this.socketService.socket.emit("newGame", { gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), "isVRWorld_1": !this.isVRMirrored });
+    /* wiht Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) 
+        - now vir env name is sent instead of boolion
+    */
+    this.socketService.socket.emit("newGame", {
+      gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), VirEnvType: this.virEnvType, isSingleMode : this.isSingleMode
+    });
   }
 
   /********/
@@ -664,9 +678,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ?
-        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'),
+      style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxZoom: 18,

@@ -82,7 +82,7 @@
       </ion-icon>
     </h5>
     <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question.geometry"
-      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
   </div>
 
   <!-- not yet -->
@@ -99,7 +99,7 @@
       </ion-icon>
     </h5>
     <app-map featureType="geometry-free" drawTheme="searchArea" [(feature)]="question.geometry"
-      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
   </div>
 
   <!-- Mark object (TaskMode.NO_FEATURE) - Single-player -->
@@ -142,7 +142,7 @@
       </ion-icon>
     </h5>
     <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question.geometry"
-      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
   </div>
 
   <!-- Viewing direction - Single-player -->
@@ -174,7 +174,7 @@
       </ion-icon>
     </h5>
     <app-map featureType="direction" [(feature)]="question.direction" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored"></app-map>
+      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
   </div>
 
   <!-- Photo of the direction - Single-player -->
@@ -380,7 +380,7 @@
             Player ({{i+1}})
           </h5>
           <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[i].geometry"
-            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
         </div>
       </ion-card-content>
     </ion-card>
@@ -416,7 +416,7 @@
             Player ({{i+1}})
           </h5>
           <app-map featureType="geometry-free" drawTheme="searchArea" [(feature)]="question[i].geometry"
-            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
         </div>
       </ion-card-content>
     </ion-card>
@@ -449,7 +449,7 @@
             Player ({{i+1}})
           </h5>
           <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[i].geometry"
-            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
         </div>
       </ion-card-content>
     </ion-card>
@@ -502,7 +502,7 @@
             </ion-icon>
           </h5>
           <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="question[i].geometry"
-            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
         </div>
       </ion-card-content>
     </ion-card>
@@ -538,7 +538,7 @@
             Player ({{i+1}})
           </h5>
           <app-map featureType="direction" [(feature)]="question[i].direction" [isVirtualWorld]="isVirtualWorld"
-            [isVRMirrored]="isVRMirrored">
+            [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType">
           </app-map>
         </div>
       </ion-card-content>
@@ -574,7 +574,7 @@
             Player ({{i+1}})
           </h5>
           <app-map featureType="direction" [(feature)]="question[i].direction" [isVirtualWorld]="isVirtualWorld"
-            [isVRMirrored]="isVRMirrored">
+            [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType">
           </app-map>
         </div>
       </ion-card-content>

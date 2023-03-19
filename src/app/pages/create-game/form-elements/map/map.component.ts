@@ -49,6 +49,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   // VR world
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
+  @Input() virEnvType: string;
 
   showDirectionMarker = false;
   directionMarkerPosition: any;
@@ -144,9 +145,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ?
+      /* style: (this.isVirtualWorld ?
         (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'),
+        environment.mapStyle + 'realWorld.json'), */
+        style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.005810510811 / 2, 0.006827038669 / 2] : [8, 51.8]),
       zoom: (this.isVirtualWorld ? 16.5 : 2),
       maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max

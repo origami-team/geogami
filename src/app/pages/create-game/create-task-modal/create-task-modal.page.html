@@ -210,7 +210,7 @@
   <div>
     <!-- Task instruction, markdown support, audio message ... -->
     <question-type [(question)]="task.question" [taskType]="task.category" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSingleMode?numPlayers:1)" [isSingleMode]="isSingleMode"
+      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [numPlayers]="(!isSingleMode?numPlayers:1)" [isSingleMode]="isSingleMode"
       [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
     </question-type>
 
@@ -225,7 +225,7 @@
         </h5>
       </ion-text>
       <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="task.question.area"
-        [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+        [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
     </div>
 
     <!-- Set location by tapping on the map -->
@@ -240,13 +240,13 @@
         </ion-toggle>
       </ion-item>
       <app-map featureType="point" markerType="circle" [(feature)]="task.question.direction.position"
-        *ngIf="viewDirectionSetPosition" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored">
+        *ngIf="viewDirectionSetPosition" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType">
       </app-map>
     </div>
 
     <!-- Destination -->
     <answer-type [(answer)]="task.answer" [taskType]="task.category" [settings]="task.settings"
-      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [numPlayers]="(!isSingleMode?numPlayers:1)"
+      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [numPlayers]="(!isSingleMode?numPlayers:1)"
       [isSingleMode]="isSingleMode" [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
     </answer-type>
   </div>

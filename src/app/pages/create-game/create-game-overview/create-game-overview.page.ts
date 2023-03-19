@@ -55,6 +55,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
+  virEnvType: string; // new to store vir env type
 
   // curated filter
   isCuratedGame = false;
@@ -93,6 +94,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     this.route.params.subscribe((params) => {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
+      this.virEnvType = JSON.parse(params.bundle).virEnvType;
       //this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
       this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
       this.numPlayers = JSON.parse(params.bundle).numPlayers;
@@ -405,6 +407,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       place: this.game.place,
       isVRWorld: this.isVirtualWorld,
       isVRMirrored: (this.isVirtualWorld ? this.isVRMirrored : undefined),      /* to hide it with real world games */
+      virEnvType: this.virEnvType,      /* to store vir env name */
       isVisible: true,                    // new game is visible by default
       isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
       isMultiplayerGame: (!this.isSingleMode ? true : undefined),
