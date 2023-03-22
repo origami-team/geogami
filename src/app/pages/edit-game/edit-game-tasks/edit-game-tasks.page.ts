@@ -33,6 +33,7 @@ export class EditGameTasksPage implements OnInit {
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
+  virEnvType: string; // new to store vir env type
 
   // Multiplyar impl.
   isRealWorld: boolean = true;
@@ -87,6 +88,7 @@ export class EditGameTasksPage implements OnInit {
 
           // check if game is VE 2 (mirrored)
           if (!this.isRealWorld) {
+            this.virEnvType = game.virEnvType;
             if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
               this.isVRMirrored = true;
             }
@@ -133,10 +135,14 @@ export class EditGameTasksPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld,
+  async presentTaskModal(
+    type: string = "nav", 
+    task: Task = null, 
+    isVirtualWorld: boolean = this.isVirtualWorld,
     isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
-    isSingleMode: boolean = this.isSingleMode) {
+    isSingleMode: boolean = this.isSingleMode,
+    virEnvType: string= this.virEnvType) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
@@ -148,6 +154,7 @@ export class EditGameTasksPage implements OnInit {
         task,
         isVirtualWorld,  // added to view VR world map instead of real map if true
         isVRMirrored,
+        virEnvType,
         numPlayers,
         isSingleMode
       },
