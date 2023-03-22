@@ -520,11 +520,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.sTaskNo = JSON.parse(params.bundle).sTaskNo;
     });
 
-    // Set the intial avatar location (in either normal or mirrored version)
-    if (this.isVirtualWorld) {
-      this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc);
-    }
-
     this.game = null;
     this.game = new Game(0, 'Loading...', '', false, [], false, false, 1, false, false, false, false, "", false, false);
     this.route.params.subscribe((params) => {
@@ -540,6 +535,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           if (game.virEnvType !== undefined) {
             this.virEnvType = game.virEnvType;
             // console.log("--1---game.virEnvType---: ", this.virEnvType)
+          }
+
+          // Set the intial avatar location (in either normal or mirrored version)
+          if (this.isVirtualWorld) {
+            this.initialAvatarLoc = environment.virEnvProperties[this.virEnvType].initialPosition;
+            // console.log("---initialAvatarLoc---:", this.initialAvatarLoc)
           }
 
           // Check game type either real or VR world
@@ -622,7 +623,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         - now vir env name is sent instead of boolion
     */
     this.socketService.socket.emit("newGame", {
-      gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), VirEnvType: this.virEnvType, isSingleMode : this.isSingleMode
+      gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), virEnvType: this.virEnvType, isSingleMode: this.isSingleMode
     });
   }
 
@@ -670,19 +671,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     //     : "mapbox://styles/mapbox/streets-v9"
     // }
 
-    // Set bounds of VR world 
-    var bounds = [
-      [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
-      [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates (lng,lat)
-    ];
-
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxZoom: 18,
-      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
+      maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
     });
 
 
@@ -2301,8 +2296,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         roomName: this.gameCode,
         playerLoc: (
           !this.isVirtualWorld ?
-          [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude] :
-          [this.avatarLastKnownPosition.coords.longitude, this.avatarLastKnownPosition.coords.latitude]
+            [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude] :
+            [this.avatarLastKnownPosition.coords.longitude, this.avatarLastKnownPosition.coords.latitude]
         ),
         playerNo: this.playerNo,
         //playerName: this.playersNames[0]
