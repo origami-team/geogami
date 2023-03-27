@@ -136,6 +136,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
   initialAvatarLoc: any;
+  initialAvatarDir: number;
   currentSecond: number = 0;
   gameCode: string = "";
 
@@ -539,8 +540,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
           // Set the intial avatar location (in either normal or mirrored version)
           if (this.isVirtualWorld) {
-            this.initialAvatarLoc = environment.virEnvProperties[this.virEnvType].initialPosition;
-            // console.log("---initialAvatarLoc---:", this.initialAvatarLoc)
+            /* check first task initial location */
+            if (this.game.tasks[0] && this.game.tasks[0].question.initialAvatarPosition != undefined) {
+              console.log("🚀 ~ PlayingGamePage ~ .then ~ initialAvatarLoc:")
+              this.initialAvatarLoc = {
+                lng: this.game.tasks[0].question.initialAvatarPosition.position.geometry.coordinates[0],
+                lat: this.game.tasks[0].question.initialAvatarPosition.position.geometry.coordinates[1]
+              };
+              this.initialAvatarDir = this.game.tasks[0].question.initialAvatarPosition.bearing;
+            } else {
+              this.initialAvatarLoc = environment.virEnvProperties[this.virEnvType].initialPosition;
+              this.initialAvatarDir = 0;
+            }
           }
 
           // Check game type either real or VR world
@@ -624,6 +635,21 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     */
     this.socketService.socket.emit("newGame", {
       gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), virEnvType: this.virEnvType, isSingleMode: this.isSingleMode
+    });
+
+    /* To update avatar initial position */
+    // this.socketService.socket.on('requestAvatarInitialPosition', this.deliverInitialAvatarPosition);
+    this.socketService.socket.once('requestAvatarInitialPosition', () => {
+      // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
+      const initialAvatarPosition = this.task.question.initialAvatarPosition;     //* to avoid using cookies
+      if (initialAvatarPosition != undefined) {
+        // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on2222 ~ initialAvatarPosition:", initialAvatarPosition)
+        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+          initialPosition: [initialAvatarPosition.position.geometry.coordinates[0] * 111000,
+          initialAvatarPosition.position.geometry.coordinates[1] * 112000],
+          initialRotation: initialAvatarPosition.bearing
+        });
+      }
     });
   }
 
@@ -781,7 +807,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.geolocationService,
         this.orientationService,
         this.isVirtualWorld,
-        this.initialAvatarLoc
+        this.initialAvatarLoc,
+        this.initialAvatarDir
       );
       this.panControl = new PanControl(
         this.map,
@@ -1436,6 +1463,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.trackerService.addEvent({
       type: "INIT_TASK",
     });
+
+    /* set avatar initial position */
+    if (this.isVirtualWorld) {
+      console.log("🚀 ~ initTask ~ socketService:")
+      if (this.task.question.initialAvatarPosition != undefined) {
+        console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
+        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+          initialPosition: [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
+          this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000],
+          initialRotation: this.task.question.initialAvatarPosition.bearing
+        });
+      }
+    }
 
     if (this.task.settings?.accuracy) {
       PlayingGamePage.triggerTreshold = this.task.settings.accuracy;

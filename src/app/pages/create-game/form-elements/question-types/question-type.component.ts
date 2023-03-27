@@ -31,6 +31,8 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     questionTypeEnum = QuestionType;
     taskModeEnum = TaskMode;
 
+    initialAvatarPosMapView = false;
+
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {

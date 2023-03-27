@@ -154,7 +154,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
     });
 
-    this.map.addControl(new SatControl());
+    /* Show satelitte control only with real world */
+    if(!this.isVirtualWorld){
+      this.map.addControl(new SatControl());
+    }
+
     this.map.addControl(new mapboxgl.NavigationControl());
 
     this.map.on('click', e => {
@@ -173,6 +177,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
       if (this.featureType == 'direction') {
 
+        /* To add view direction marker only once */
         if (!this.showDirectionMarker) {
           this.directionMarkerPosition = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
           this.map.addSource('viewDirectionClick', {

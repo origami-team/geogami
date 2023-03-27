@@ -161,6 +161,26 @@
       [isVRMirrored]="isVRMirrored"></app-map>
   </div>
 
+  <ion-item class="ion-no-padding">
+    <h5>
+      Set avatar initial position and direction 🧍‍♂️
+      <ion-icon name="information-circle" (click)="
+            showPopover(
+              $event,
+              'Set avatar initial position and direction'
+            )
+          ">
+      </ion-icon>
+    </h5>
+    <ion-toggle color="danger" [(ngModel)]="initialAvatarPosMapView"></ion-toggle>
+  </ion-item>
+
+  <!-- set avatar initial position and direction - Single-player -->
+  <div *ngIf="isVirtualWorld && initialAvatarPosMapView">
+    <app-map featureType="direction" [(feature)]="question.initialAvatarPosition" [isVirtualWorld]="isVirtualWorld"
+      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
+  </div>
+
   <!-- Direction on the map - Single-player -->
   <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_MARKER">
     <h5>
@@ -249,7 +269,6 @@
       </ion-card-header>
       <ion-card-content style="padding-bottom: 0;">
         <div
-          
           *ngFor="let e of [].constructor( ( (question[0] && question[0].allHaveSameInstruction) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
           <h5 *ngIf="collaborationType != 'sequential'"> Player ({{i+1}})</h5>
           <ion-textarea autoGrow [(ngModel)]='question[i].text'></ion-textarea>

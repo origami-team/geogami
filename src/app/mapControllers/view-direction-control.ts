@@ -26,14 +26,17 @@ export class ViewDirectionControl {
     // VR world
     isVirtualWorld: boolean = false;
     initialAvatarLoc: any;
+    initialAvatarDir: number;
     private avatarPositionSubscription: Subscription;
     private avatarOrientationSubscription: Subscription;
 
     constructor(map: MapboxMap, private geolocationService: OrigamiGeolocationService, private orientationService: OrigamiOrientationService,
-        isVirtualWorld: boolean, initialAvatarLoc: any) {
+        isVirtualWorld: boolean, initialAvatarLoc: any, initialAvatarDir: number) {
         this.map = map;
         this.isVirtualWorld = isVirtualWorld;
         this.initialAvatarLoc = initialAvatarLoc;
+        this.initialAvatarDir = initialAvatarDir;
+        console.log("🚀 ~ ViewDirectionControl ~ initialAvatarLoc:", initialAvatarLoc)
 
         if (!isVirtualWorld) {
             this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(
@@ -69,21 +72,24 @@ export class ViewDirectionControl {
                     }
                 });
 
-                this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(avatarHeading => {
-                    if (this.map.getLayer('viewDirection')) {
-                        this.map.setLayoutProperty(
-                            'viewDirection',
-                            'icon-rotate',
-                            avatarHeading - this.map.getBearing()
-                        );
-                    }
-                });
+            this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(avatarHeading => {
+                if (this.map.getLayer('viewDirection')) {
+                    this.map.setLayoutProperty(
+                        'viewDirection',
+                        'icon-rotate',
+                        avatarHeading - this.map.getBearing()
+                    );
+                }
+            });
         }
 
         this.map.loadImage(
             '/assets/icons/directionv2.png',
             (error, image) => {
                 if (error) throw error;
+
+                //* if image already exist remove it
+                // if (this.map.hasImage('view-direction')) this.map.removeImage('view-direction');
 
                 this.map.addImage('view-direction', image);
 
@@ -101,7 +107,8 @@ export class ViewDirectionControl {
                     layout: {
                         'icon-image': 'view-direction',
                         'icon-size': 0.65,
-                        'icon-offset': [0, -8]
+                        'icon-offset': [0, -8],
+                        'icon-rotate': (this.isVirtualWorld ? this.initialAvatarDir : 0),           //* V.E.: to control initial avatar rotation 
                     }
                 });
                 this.map.setLayoutProperty('viewDirection', 'visibility', 'none');
