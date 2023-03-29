@@ -176,7 +176,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       }
 
       if (this.featureType == 'direction') {
-
         /* To add view direction marker only once */
         if (!this.showDirectionMarker) {
           this.directionMarkerPosition = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);

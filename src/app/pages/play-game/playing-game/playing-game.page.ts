@@ -868,7 +868,30 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     });
 
-    this.map.on("click", (e) => this.onMapClick(e, "standard"));
+    /* temp */
+    this.map.on('zoom', () => {
+      const currentZoom = this.map.getZoom();
+      // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
+      /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
+      if (environment.virEnvProperties[this.virEnvType].zoomInLayer) {
+        if (currentZoom <= 17.5 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/"+this.virEnvType+".png") {
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/"+this.virEnvType+".png");
+        } else if (currentZoom > 17.5 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/"+this.virEnvType+"b.png") {
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/"+this.virEnvType+"_zoom2.png");
+        }
+      }
+    });
+
+    /* (V.E.): to be able to reload marker when style is changed in realtime */
+    this.map.on('style.load', () => {
+      console.log("🚀 ~ PlayingGamePage ~ this.map.on ~ style.load:")
+
+    });
+    /*  */
+
+    this.map.on("click", (e) => {
+      // this.onMapClick(e, "standard")
+    });
 
     this.map.on("rotate", () => {
       if (this.map.getLayer("viewDirectionTask")) {
@@ -922,6 +945,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     // To disable map interations
     this.enableDisableMapInteraction(false);
+  }
+
+  /* (V.E.): t load view dir. marker after changing style */
+  // ToDo: update it to include all markers and layers- maybe find a way to copy all layers form one ma style to another
+  async updateMapStyleOverlayLayer(styleOverlayUrlPath) {
+    let newStyle = this.map.getStyle();
+    newStyle.sources.overlay.url = styleOverlayUrlPath;
+    this.map.setStyle(newStyle);
   }
 
   /* To disable map interations until player check 'share data box' and press done */
