@@ -153,10 +153,12 @@ export class CreateTaskModalPage implements OnInit {
       }
     }
 
+    //* in case the task is already created
     if (this.task == null) {
       this.task = this.tasks[0];
       this.selectedThemeTaskType = this.taskTypes[0];
-      // mutli-player
+      
+      // (mutli-player): 1-1 is the default collaboration type
       if (!this.isSingleMode) {
         this.selectedCollType = this.collaborationTypes[0];
       }
@@ -187,9 +189,9 @@ export class CreateTaskModalPage implements OnInit {
         this.selectedThemeTaskType = this.taskTypes[3];
       }
 
-      // mutli-player
+      //* (mutli-player): when task is not null, retreive selected coll. type
       if (!this.isSingleMode) {
-        // as we only store type in db without text we need to retreive it using index
+        //* as we only store type in db without text we need to retreive it using index
         let index = this.collaborationTypes.findIndex(el => el.type == this.task.collaborationType);
         this.selectedCollType = this.collaborationTypes[index];
       }
@@ -742,6 +744,12 @@ export class CreateTaskModalPage implements OnInit {
       if (this.viewDirectionSetPosition == false) {
         this.task.question.direction.position = undefined;
       }
+    }
+
+    //* inlclude vir. env. type in task data
+    if(this.isVirtualWorld){
+      this.task.virEnvType = this.virEnvType;
+      console.log("🚀 ~ CreateTaskModalPage ~ dismissModal ~ this.virEnvType:", this.virEnvType)
     }
 
     /* multi-player */

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { GameFactoryService } from 'src/app/services/game-factory.service';
 
 @Component({
   selector: 'app-create-game-virtual-menu',
@@ -18,7 +19,8 @@ export class CreateGameVirtualMenuPage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private gameFactory: GameFactoryService) { }
 
   ngOnInit() {
     // Get selected env. and game type
@@ -33,6 +35,9 @@ export class CreateGameVirtualMenuPage implements OnInit {
         virEnvType: "VirEnv_1"
       }
     });
+
+    //* To make sure that game is clear when choosing another vir. env. (no need for it now)
+    // this.gameFactory.flushGame(); // clear game data
   }
 
   navigateCreateVRGameTypeA() {

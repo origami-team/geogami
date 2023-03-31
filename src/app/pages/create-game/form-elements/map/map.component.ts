@@ -82,7 +82,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
           this.featureChange.emit(changes.feature.previousValue);
         }
-      } else if (changes.virEnvType.currentValue !=undefined && changes.virEnvType.previousValue !=undefined) {            //* when virEnvType is changed
+      } else if (changes.virEnvType && changes.virEnvType.currentValue !=undefined && changes.virEnvType.previousValue !=undefined) {            //* when virEnvType is changed
         console.log("changes (changes.virEnvType): ", changes.virEnvType.currentValue);
         this.virEnvType = changes.virEnvType.currentValue
 

@@ -555,9 +555,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           }
 
           // Check game type either real or VR world
-          /* if (game.isVRWorld !== undefined && game.isVRWorld != false) {
-            this.connectSocketIO();
-          } */
+          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+            this.connectSocketIO(this.game.tasks[0]);
+          }
 
           /* only for multi-player game */
           if (!this.isSingleMode) {
@@ -622,8 +622,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // console.log(" ngOnDestroy")
   }
 
-  // With VR env only (single player)
-  connectSocketIO() {
+  // With VR env only
+  connectSocketIO(task) {
     /* Sinlge user V.E. impl. */
     // ToDo: with many envs you can use env. id instead
     if (this.isSingleMode) {
@@ -634,7 +634,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         - now vir env name is sent instead of boolion
     */
     this.socketService.socket.emit("newGame", {
-      gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), virEnvType: (this.task.virEnvType?this.task.virEnvType:this.virEnvType), isSingleMode: this.isSingleMode
+      gameCode: (
+        this.isSingleMode ? this.gameCode : this.playersNames[0]
+      ),
+      virEnvType: (
+        task.virEnvType ? task.virEnvType : this.virEnvType
+      ),
+      isSingleMode: this.isSingleMode,
+      defaultVirEnvType: (this.game.defaultVirEnvType ? this.game.defaultVirEnvType : null)     //* this is used to defrentiate between new vir games that supprt initial position impl
     });
 
     /* To update avatar initial position */
@@ -644,7 +651,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       const initialAvatarPosition = this.task.question.initialAvatarPosition;     //* to avoid using cookies
       if (initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
         // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on2222 ~ initialAvatarPosition:", initialAvatarPosition)
-        
+
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
           initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
           this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
@@ -1306,11 +1313,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /* multiplayer */
     if (this.isSingleMode) {
       this.task = this.game.tasks[this.taskIndex];
-
-      if (this.game.isVRWorld !== undefined && this.game.isVRWorld != false) {
-        this.connectSocketIO();
-      }
-
     } else {
 
       // add to a function
