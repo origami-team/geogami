@@ -76,10 +76,21 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   // Compare the input feature value before and after change task type
   // to keep flags on map 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("ngOnChanges (mapComponent): ", changes);
     // if (this.isSingleMode) {
-      if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
-        this.featureChange.emit(changes.feature.previousValue);
+      if (changes.answer) {     //* we need to add it "if condtionns" to specify what to change
+        if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
+          this.featureChange.emit(changes.feature.previousValue);
+        }
+      } else if (changes.virEnvType.currentValue !=undefined && changes.virEnvType.previousValue !=undefined) {            //* when virEnvType is changed
+        console.log("changes (changes.virEnvType): ", changes.virEnvType.currentValue);
+        this.virEnvType = changes.virEnvType.currentValue
+
+        let newStyle = this.map.getStyle();
+        newStyle.sources.overlay.url = "assets/vir_envs_layers/"+this.virEnvType+".png";
+        this.map.setStyle(newStyle);
       }
+      
     /*}
      else {
       // Multi-player Mode
@@ -150,8 +161,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         environment.mapStyle + 'realWorld.json'), */
         style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.005810510811 / 2, 0.006827038669 / 2] : [8, 51.8]),
-      zoom: (this.isVirtualWorld ? 16.5 : 2),
-      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
+      zoom: (this.isVirtualWorld ? 15.5 : 2),
+      // maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
+      maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
     });
 
     /* Show satelitte control only with real world */

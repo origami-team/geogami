@@ -20,6 +20,18 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <!-- (Vir. Env.): enable teacher to choose a vir. env. -->
+  <ion-item class="ion-no-padding">
+    <h5>Choose a virtual world</h5>
+    <select [(ngModel)]="virEnvType" interface="popover" style="width: 30%;">
+      <option ngValue="VirEnv_1"> VirEnv_1 </option>
+      <option ngValue="VirEnv_2"> VirEnv_2</option>
+      <option ngValue="VirEnv_3"> VirEnv_3</option>
+    </select>
+  </ion-item>
+  <!--  -->
+
   <ion-card color="primary" *ngIf="task.category == 'nav'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
@@ -197,8 +209,7 @@
     <ion-text>
       <h5>Collaboration method</h5>
     </ion-text>
-    <select interface="popover" placeholder="Auswählen" [compareWith]="selectCompare"
-      [(ngModel)]="selectedCollType">
+    <select interface="popover" placeholder="Auswählen" [compareWith]="selectCompare" [(ngModel)]="selectedCollType">
       <option [ngValue]="collType" *ngFor="let collType of collaborationTypes">
         {{collType.text}}
       </option>
@@ -209,8 +220,14 @@
   <!-- Task instruction -->
   <div>
     <!-- Task instruction, markdown support, audio message ... -->
-    <question-type [(question)]="task.question" [taskType]="task.category" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [numPlayers]="(!isSingleMode?numPlayers:1)" [isSingleMode]="isSingleMode"
+    <question-type 
+      [(question)]="task.question" 
+      [taskType]="task.category" 
+      [isVirtualWorld]="isVirtualWorld"
+      [isVRMirrored]="isVRMirrored" 
+      [virEnvType]="virEnvType" 
+      [numPlayers]="(!isSingleMode?numPlayers:1)"
+      [isSingleMode]="isSingleMode" 
       [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
     </question-type>
 
@@ -240,14 +257,23 @@
         </ion-toggle>
       </ion-item>
       <app-map featureType="point" markerType="circle" [(feature)]="task.question.direction.position"
-        *ngIf="viewDirectionSetPosition" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType">
+        *ngIf="viewDirectionSetPosition" 
+        [isVirtualWorld]="isVirtualWorld" 
+        [isVRMirrored]="isVRMirrored"
+        [virEnvType]="virEnvType">
       </app-map>
     </div>
 
     <!-- Destination -->
-    <answer-type [(answer)]="task.answer" [taskType]="task.category" [settings]="task.settings"
-      [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [numPlayers]="(!isSingleMode?numPlayers:1)"
-      [isSingleMode]="isSingleMode" [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
+    <answer-type 
+      [(answer)]="task.answer" 
+      [taskType]="task.category" 
+      [settings]="task.settings"
+      [isVirtualWorld]="isVirtualWorld" 
+      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"
+      [numPlayers]="(!isSingleMode?numPlayers:1)" 
+      [isSingleMode]="isSingleMode"
+      [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
     </answer-type>
   </div>
 

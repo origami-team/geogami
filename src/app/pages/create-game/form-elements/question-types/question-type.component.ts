@@ -36,25 +36,31 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        // console.log("changes (QuestionTypeComponent): ", changes);
+        console.log("changes (changes): ", changes);
         if (this.isSingleMode) {
-            console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
-            this.questionChange.emit(changes.question.currentValue);
+            // console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
+            if (changes.answer) {
+                this.questionChange.emit(changes.question.currentValue);
+            }
         } else {
-            console.log("changes (changes.question.currentValue): ", changes);
-            if(changes.question){
+            // console.log("changes (changes.question.currentValue): ", changes);
+            if (changes.answer) {
                 this.questionChange.emit(changes.question.currentValue);
             }
         }
     }
 
     /* multi-player */
-    onCollTypeChange(collType: any){
+    onCollTypeChange(collType: any) {
         console.log("collType:", collType);
 
     }
 
     ngOnInit() {
+        if(this.isVirtualWorld && this.question && this.question.initialAvatarPosition){
+            console.log("----question: ", this.question)
+            this.initialAvatarPosMapView = true;
+        }
 
     }
 

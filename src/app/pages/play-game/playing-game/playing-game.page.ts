@@ -555,9 +555,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           }
 
           // Check game type either real or VR world
-          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+          /* if (game.isVRWorld !== undefined && game.isVRWorld != false) {
             this.connectSocketIO();
-          }
+          } */
 
           /* only for multi-player game */
           if (!this.isSingleMode) {
@@ -634,7 +634,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         - now vir env name is sent instead of boolion
     */
     this.socketService.socket.emit("newGame", {
-      gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), virEnvType: this.virEnvType, isSingleMode: this.isSingleMode
+      gameCode: (this.isSingleMode ? this.gameCode : this.playersNames[0]), virEnvType: (this.task.virEnvType?this.task.virEnvType:this.virEnvType), isSingleMode: this.isSingleMode
     });
 
     /* To update avatar initial position */
@@ -642,12 +642,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.socketService.socket.once('requestAvatarInitialPosition', () => {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
       const initialAvatarPosition = this.task.question.initialAvatarPosition;     //* to avoid using cookies
-      if (initialAvatarPosition != undefined) {
+      if (initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
         // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on2222 ~ initialAvatarPosition:", initialAvatarPosition)
+        
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-          initialPosition: [initialAvatarPosition.position.geometry.coordinates[0] * 111000,
-          initialAvatarPosition.position.geometry.coordinates[1] * 112000],
-          initialRotation: initialAvatarPosition.bearing
+          initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
+          this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
+          initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
+          virEnvType: this.task.virEnvType
         });
       }
     });
@@ -702,7 +704,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
-      maxZoom: 18,
+      maxZoom: (this.isVirtualWorld ? 18.5 : 18),
       maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
     });
 
@@ -874,10 +876,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
       /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
       if (environment.virEnvProperties[this.virEnvType].zoomInLayer) {
-        if (currentZoom <= 17.5 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/"+this.virEnvType+".png") {
-          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/"+this.virEnvType+".png");
-        } else if (currentZoom > 17.5 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/"+this.virEnvType+"b.png") {
-          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/"+this.virEnvType+"_zoom2.png");
+        if (currentZoom <= 18.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png");
+        } else if (currentZoom > 18.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + "b.png") {
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom2.png");
         }
       }
     });
@@ -1304,6 +1306,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /* multiplayer */
     if (this.isSingleMode) {
       this.task = this.game.tasks[this.taskIndex];
+
+      if (this.game.isVRWorld !== undefined && this.game.isVRWorld != false) {
+        this.connectSocketIO();
+      }
+
     } else {
 
       // add to a function
@@ -1498,12 +1505,23 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /* set avatar initial position */
     if (this.isVirtualWorld) {
       console.log("🚀 ~ initTask ~ socketService:")
-      if (this.task.question.initialAvatarPosition != undefined) {
+      // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
+
+      //* update vir env map overlay layer
+      if (this.task.virEnvType != undefined && this.task.virEnvType != this.virEnvType) {
+        console.log("🚀 ~-- initTask ~ this.task.virEnvType != this.virEnvType:")
+        this.virEnvType = this.task.virEnvType;
+        this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png");
+      }
+
+      //* send inital loc, dir and vir env type
+      if (this.task.virEnvType != undefined) {
         console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-          initialPosition: [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
-          this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000],
-          initialRotation: this.task.question.initialAvatarPosition.bearing
+          initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
+          this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
+          initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
+          virEnvType: this.task.virEnvType
         });
       }
     }

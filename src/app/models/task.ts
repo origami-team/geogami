@@ -12,6 +12,7 @@ export interface Task {
   settings: any;
   type: string;
   collaborationType: string;
+  virEnvType: string;           //* to be used in having multiple vir. envs in a single game 
 }
 
 // export class Task {

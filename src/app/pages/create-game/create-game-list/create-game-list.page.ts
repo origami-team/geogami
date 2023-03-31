@@ -38,7 +38,7 @@ export class CreateGameListPage implements OnInit {
   // Multiplayer mode 
   isRealWorld: boolean = false;
   isVRMirrored: boolean = false;
-  virEnvType: string; // new to store vir env type
+  virEnvType: string; // new to store vir env type (default layer)
   isSingleMode: boolean = false; // used to show number of players card in multiplayer mode
   bundle: any;
   numPlayers = 3;
@@ -128,7 +128,7 @@ export class CreateGameListPage implements OnInit {
     isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode,
-    virEnvType: string= this.virEnvType) {
+    virEnvType: string= (task?task.virEnvType:this.virEnvType)) {
     // console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
