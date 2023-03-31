@@ -549,6 +549,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               };
               this.initialAvatarDir = this.game.tasks[0].question.initialAvatarPosition.bearing;
             } else {
+              //* in case task doesn't have intitial positoin, use default one
               this.initialAvatarLoc = environment.virEnvProperties[this.virEnvType].initialPosition;
               this.initialAvatarDir = 0;
             }
@@ -640,25 +641,21 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       virEnvType: (
         task.virEnvType ? task.virEnvType : this.virEnvType
       ),
-      isSingleMode: this.isSingleMode,
-      defaultVirEnvType: (this.game.defaultVirEnvType ? this.game.defaultVirEnvType : null)     //* this is used to defrentiate between new vir games that supprt initial position impl
+      isSingleMode: this.isSingleMode
     });
 
     /* To update avatar initial position */
     // this.socketService.socket.on('requestAvatarInitialPosition', this.deliverInitialAvatarPosition);
     this.socketService.socket.once('requestAvatarInitialPosition', () => {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
-      const initialAvatarPosition = this.task.question.initialAvatarPosition;     //* to avoid using cookies
-      if (initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
-        // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on2222 ~ initialAvatarPosition:", initialAvatarPosition)
 
-        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-          initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
-          this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
-          initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
-          virEnvType: this.task.virEnvType
-        });
-      }
+      //* if task doesn't hahve initial positoin send null and if no virenvtype is found send deafult one
+      this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+        initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
+        this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
+        initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
+        virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
+      });
     });
   }
 
@@ -1516,16 +1513,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png");
       }
 
+
+      // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
+
       //* send inital loc, dir and vir env type
-      if (this.task.virEnvType != undefined) {
-        console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
-        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-          initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
-          this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
-          initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
-          virEnvType: this.task.virEnvType
-        });
-      }
+      //* if task doesn't hahve initial positoin send null and if no virenvtype is found send deafult one
+      this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+        initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
+        this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
+        initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
+        virEnvType: this.task.virEnvType
+      });
     }
 
     if (this.task.settings?.accuracy) {
