@@ -650,11 +650,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.socketService.socket.on('requestAvatarInitialPosition', () => {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
 
-      //* if task doesn't have initial positoin send null and if no virenvtype is found send deafult one
+      //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
       this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-        initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
-        this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
-        initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
+        initialPosition: (this.task.question.initialAvatarPosition ?
+          [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
+          [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
+        initialRotation: (this.task.question.initialAvatarPosition ?
+          this.task.question.initialAvatarPosition.bearing :
+          0), //* send 0 as we only check if initial position equal null, in virEnv App
         virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
       });
     });
@@ -1514,15 +1517,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png");
       }
 
+      console.log("🚀 ~ initTask2:")
+
 
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
 
       //* send inital loc, dir and vir env type
       //* if task doesn't hahve initial positoin send null and if no virenvtype is found send deafult one
       this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-        initialPosition: (this.task.question.initialAvatarPosition ? [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
-        this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] : null),
-        initialRotation: (this.task.question.initialAvatarPosition ? this.task.question.initialAvatarPosition.bearing : null),
+        initialPosition: (this.task.question.initialAvatarPosition ?
+          [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
+          null),
+        initialRotation: (this.task.question.initialAvatarPosition ?
+          this.task.question.initialAvatarPosition.bearing :
+          null),
         virEnvType: this.task.virEnvType
       });
     }
