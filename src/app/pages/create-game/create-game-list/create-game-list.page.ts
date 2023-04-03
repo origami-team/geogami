@@ -128,7 +128,8 @@ export class CreateGameListPage implements OnInit {
     isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode,
-    virEnvType: string= (task?task.virEnvType:this.virEnvType)) {
+    //* if task doesn't have a virEnvType send the default one
+    virEnvType: string = (task.virEnvType ? task.virEnvType : this.virEnvType)) {
     // console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
