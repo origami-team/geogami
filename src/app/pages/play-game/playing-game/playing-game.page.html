@@ -5,7 +5,8 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="game">{{ game.name }}</ion-title>
+    <!-- to show player name on top view -->
+    <ion-title *ngIf="game">{{ game.name }} ({{playersNames[0]}})</ion-title>
     <ion-buttons slot="end">
       <ion-button *ngIf="taskIndex>0" color="dark" (click)="previousTask()">
         <ion-icon name="arrow-back-outline"></ion-icon>
