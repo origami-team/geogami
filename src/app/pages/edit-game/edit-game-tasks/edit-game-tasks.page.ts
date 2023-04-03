@@ -137,13 +137,13 @@ export class EditGameTasksPage implements OnInit {
 
   async presentTaskModal(
     type: string = "nav",
-    task: Task = null,
+    task: any = null,
     isVirtualWorld: boolean = this.isVirtualWorld,
     isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode,
     //* if task doesn't have a virEnvType send the default one
-    virEnvType: string = (task.virEnvType ? task.virEnvType : this.virEnvType)) {
+    virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
     console.log(task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
