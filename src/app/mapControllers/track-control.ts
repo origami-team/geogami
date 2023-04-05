@@ -109,20 +109,24 @@ export class TrackControl {
     // keep track permanent impl.
     addPermanentTrack(taskId, path = this.path){
         // console.log("(track) P index:", taskId,"path: ",path)
-        this.map.addSource(`permanentTrack${taskId}`, { type: 'geojson', data: path });
-        this.map.addLayer({
-            id: `permanentTrack${taskId}`,
-            type: 'line',
-            source: `permanentTrack${taskId}`,
-            paint: {
-                'line-color': "#fbff00", // warning color (yellow)
-                'line-opacity': 0.5,
-                'line-width': 5
-            },
-            layout: {
-                'line-cap': 'round'
-            }
-        });
+
+        //* to avoid error caused when swaping between tasks
+        if(this.map.getLayer(`permanentTrack${taskId}`)){
+            this.map.addSource(`permanentTrack${taskId}`, { type: 'geojson', data: path });
+            this.map.addLayer({
+                id: `permanentTrack${taskId}`,
+                type: 'line',
+                source: `permanentTrack${taskId}`,
+                paint: {
+                    'line-color': "#fbff00", // warning color (yellow)
+                    'line-opacity': 0.5,
+                    'line-width': 5
+                },
+                layout: {
+                    'line-cap': 'round'
+                }
+            });
+        }
     }
     
     // keep track temporary impl.

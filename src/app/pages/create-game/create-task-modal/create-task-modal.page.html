@@ -22,7 +22,7 @@
 <ion-content class="ion-padding">
 
   <!-- (Vir. Env.): enable teacher to choose a vir. env. -->
-  <ion-item class="ion-no-padding">
+  <ion-item *ngIf="isVirtualWorld" class="ion-no-padding">
     <h5>Choose a virtual world</h5>
     <select [(ngModel)]="virEnvType" interface="popover" style="width: 30%;">
       <option ngValue="VirEnv_1"> VirEnv_1 </option>
