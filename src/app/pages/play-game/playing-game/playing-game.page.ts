@@ -711,12 +711,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
-      center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
+      center: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].center : [8, 51.8]),
       zoom: 2,
-      maxZoom: (this.isVirtualWorld ? 18.5 : 18),
+      maxZoom: (this.isVirtualWorld ? 19.5 : 18),
       maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
     });
-
 
     this.geolocationService.init(this.isVirtualWorld);
     // Fix this issue
@@ -886,9 +885,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
       if (environment.virEnvProperties[this.virEnvType].zoomInLayer) {
         if (currentZoom <= 18.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
-          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png");
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png", false);
         } else if (currentZoom > 18.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + "b.png") {
-          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom2.png");
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom2.png", false);
         }
       }
     });
@@ -901,7 +900,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /*  */
 
     this.map.on("click", (e) => {
-      // this.onMapClick(e, "standard")
+/*       console.log("🚀 ~ playing-game.page.ts~ this.map.on on(click)~ e:", e.lngLat)
+      console.log("🚀 ~ playing-game.page.ts~ this.map.on on(click)~ e:", e.lngLat.lng * 111000)
+      console.log("🚀 ~ playing-game.page.ts~ this.map.on on(click)~ e:", e.lngLat.lat * 112000) */
+      
+      this.onMapClick(e, "standard")
     });
 
     this.map.on("rotate", () => {
@@ -960,8 +963,21 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   /* (V.E.): t load view dir. marker after changing style */
   // ToDo: update it to include all markers and layers- maybe find a way to copy all layers form one ma style to another
-  async updateMapStyleOverlayLayer(styleOverlayUrlPath) {
+  async updateMapStyleOverlayLayer(styleOverlayUrlPath, changeVirEnv) {
     let newStyle = this.map.getStyle();
+
+    //* update layer image
+    newStyle.sources.overlay.url = "assets/vir_envs_layers/"+this.virEnvType+".png";
+
+    if(changeVirEnv){
+      //* update layer dimensions
+      newStyle.sources.overlay.coordinates = environment.virEnvProperties[this.virEnvType].overlayCoords;
+      //* update maxBounds
+      this.map.setMaxBounds(environment.virEnvProperties[this.virEnvType].bounds)
+      //* update zoom level to 2
+      this.map.setZoom(2);
+    }
+
     newStyle.sources.overlay.url = styleOverlayUrlPath;
     this.map.setStyle(newStyle);
   }
@@ -1515,7 +1531,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.task.virEnvType != undefined && this.task.virEnvType != this.virEnvType) {
         console.log("🚀 ~-- initTask ~ this.task.virEnvType != this.virEnvType:")
         this.virEnvType = this.task.virEnvType;
-        this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png");
+        this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png", true);
       }
 
       console.log("🚀 ~ initTask2:")
