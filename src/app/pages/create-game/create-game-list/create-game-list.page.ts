@@ -130,7 +130,7 @@ export class CreateGameListPage implements OnInit {
     isSingleMode: boolean = this.isSingleMode,
     //* if task doesn't have a virEnvType send the default one
     virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
-    // console.log(task);
+      console.log("🚀 ~ EditGameTasksPage ~ task:", task)
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:

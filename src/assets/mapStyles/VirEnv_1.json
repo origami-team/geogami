@@ -32,7 +32,7 @@
       "source": "mapbox",
       "source-layer": "water",
       "type": "fill",
-      "paint": { "fill-color": "#c7fabf" }
+      "paint": { "fill-color": "#CAFEC2" }
     },
     {
       "id": "boundaries",

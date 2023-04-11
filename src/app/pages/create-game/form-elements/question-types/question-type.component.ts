@@ -39,12 +39,12 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
         console.log("changes (changes): ", changes);
         if (this.isSingleMode) {
             // console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
-            if (changes.answer) {
+            if (changes.question) {
                 this.questionChange.emit(changes.question.currentValue);
             }
         } else {
             // console.log("changes (changes.question.currentValue): ", changes);
-            if (changes.answer) {
+            if (changes.question) {
                 this.questionChange.emit(changes.question.currentValue);
             }
         }

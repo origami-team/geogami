@@ -87,7 +87,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         this.virEnvType = changes.virEnvType.currentValue
 
         let newStyle = this.map.getStyle();
+        //* update layer image
         newStyle.sources.overlay.url = "assets/vir_envs_layers/"+this.virEnvType+".png";
+        //* update layer dimensions
+        newStyle.sources.overlay.coordinates = environment.virEnvProperties[this.virEnvType].overlayCoords;
+
         this.map.setStyle(newStyle);
       }
       

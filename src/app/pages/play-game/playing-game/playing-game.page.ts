@@ -541,7 +541,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           // Set the intial avatar location (in either normal or mirrored version)
           if (this.isVirtualWorld) {
             /* check first task initial location */
-            if (this.game.tasks[0] && this.game.tasks[0].question.initialAvatarPosition != undefined) {
+            //* the last condtion is for hte case when you delete initial position
+            if (this.game.tasks[0] && this.game.tasks[0].question.initialAvatarPosition != undefined && this.game.tasks[0].question.initialAvatarPosition.position != undefined) {
               console.log("🚀 ~ PlayingGamePage ~ .then ~ initialAvatarLoc:")
               this.initialAvatarLoc = {
                 lng: this.game.tasks[0].question.initialAvatarPosition.position.geometry.coordinates[0],
@@ -652,7 +653,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
       this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-        initialPosition: (this.task.question.initialAvatarPosition ?
+        initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
           [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
           [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
         initialRotation: (this.task.question.initialAvatarPosition ?
@@ -1523,11 +1524,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
 
       //* send inital loc, dir and vir env type
-      //* if task doesn't hahve initial positoin send null and if no virenvtype is found send deafult one
+      //* if task doesn't hahve initial positoin send env default initial position and 
+      //* if no virEnvType is found send deafult one
       this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-        initialPosition: (this.task.question.initialAvatarPosition ?
+        initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
           [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
-          null),
+          [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
         initialRotation: (this.task.question.initialAvatarPosition ?
           this.task.question.initialAvatarPosition.bearing :
           null),
