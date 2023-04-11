@@ -650,17 +650,27 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // this.socketService.socket.once('requestAvatarInitialPosition', () => {
     this.socketService.socket.on('requestAvatarInitialPosition', () => {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
+      if (this.avatarLastKnownPosition != undefined) {  // when reopen vir env app
+        //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
+        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+          initialPosition: 
+            [this.avatarLastKnownPosition.coords.longitude * 111000, this.avatarLastKnownPosition.coords.latitude * 112000] ,
+          initialRotation: this.indicatedDirection, //* send lastknown dir
+          virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
+        });
+      } else {
+        //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
+        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+          initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
+            [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
+            [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
+          initialRotation: (this.task.question.initialAvatarPosition ?
+            this.task.question.initialAvatarPosition.bearing :
+            0), //* send 0 as we only check if initial position equal null, in virEnv App
+          virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
+        });
+      }
 
-      //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
-      this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-        initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
-          [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
-          [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
-        initialRotation: (this.task.question.initialAvatarPosition ?
-          this.task.question.initialAvatarPosition.bearing :
-          0), //* send 0 as we only check if initial position equal null, in virEnv App
-        virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
-      });
     });
   }
 
@@ -900,10 +910,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /*  */
 
     this.map.on("click", (e) => {
-/*       console.log("🚀 ~ playing-game.page.ts~ this.map.on on(click)~ e:", e.lngLat)
-      console.log("🚀 ~ playing-game.page.ts~ this.map.on on(click)~ e:", e.lngLat.lng * 111000)
-      console.log("🚀 ~ playing-game.page.ts~ this.map.on on(click)~ e:", e.lngLat.lat * 112000) */
-      
       this.onMapClick(e, "standard")
     });
 
@@ -967,9 +973,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     let newStyle = this.map.getStyle();
 
     //* update layer image
-    newStyle.sources.overlay.url = "assets/vir_envs_layers/"+this.virEnvType+".png";
+    newStyle.sources.overlay.url = "assets/vir_envs_layers/" + this.virEnvType + ".png";
 
-    if(changeVirEnv){
+    if (changeVirEnv) {
       //* update layer dimensions
       newStyle.sources.overlay.coordinates = environment.virEnvProperties[this.virEnvType].overlayCoords;
       //* update maxBounds
