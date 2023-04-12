@@ -653,8 +653,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.avatarLastKnownPosition != undefined) {  // when reopen vir env app
         //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-          initialPosition: 
-            [this.avatarLastKnownPosition.coords.longitude * 111000, this.avatarLastKnownPosition.coords.latitude * 112000] ,
+          initialPosition:
+            [this.avatarLastKnownPosition.coords.longitude * 111000, this.avatarLastKnownPosition.coords.latitude * 112000],
           initialRotation: this.indicatedDirection, //* send lastknown dir
           virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
         });
@@ -1883,6 +1883,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.task = this.game.tasks[this.taskIndex];
     this.trackerService.updateTaskNo(this.taskIndex + 1, this.task.category) // to update taskNo stored in waypoints
     this.feedbackControl.setTask(this.task);
+
+    //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
+    if (this.isVirtualWorld) {
+      this.avatarLastKnownPosition = undefined;
+    }
+
     this.initTask();
   }
 
@@ -1911,6 +1917,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       this.task = this.game.tasks[this.taskIndex];
       this.feedbackControl.setTask(this.task);
+
+      //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
+      if (this.isVirtualWorld) {
+        this.avatarLastKnownPosition = undefined;
+      }
+
       this.initTask();
     }
   }
