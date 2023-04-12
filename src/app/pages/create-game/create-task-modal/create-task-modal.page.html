@@ -23,11 +23,12 @@
 
   <!-- (Vir. Env.): enable teacher to choose a vir. env. -->
   <ion-item *ngIf="isVirtualWorld" class="ion-no-padding">
-    <h5>Choose a virtual world</h5>
+    <h5>Choose a virtual world</h5> &nbsp;&nbsp;
     <select [(ngModel)]="virEnvType" interface="popover" style="width: 30%;">
       <option ngValue="VirEnv_1"> VirEnv_1 </option>
       <option ngValue="VirEnv_2"> VirEnv_2</option>
-      <option ngValue="VirEnv_3"> VirEnv_3</option>
+      <option ngValue="VirEnv_3"> Zoom Pre Initial</option>
+      <option ngValue="VirEnv_4"> Zoom Pre Final</option>
     </select>
   </ion-item>
   <!--  -->
