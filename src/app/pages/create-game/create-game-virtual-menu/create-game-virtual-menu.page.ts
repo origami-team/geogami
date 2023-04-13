@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { GameFactoryService } from 'src/app/services/game-factory.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-create-game-virtual-menu',
@@ -16,6 +17,8 @@ export class CreateGameVirtualMenuPage implements OnInit {
   bundle: any;
   virEnvType: string; // new var. to store vir env type
 
+  //* get virual environment meta data
+  virEnvTypes = environment.virEnvsLayers;
 
   constructor(
     public navCtrl: NavController,
@@ -40,19 +43,10 @@ export class CreateGameVirtualMenuPage implements OnInit {
     // this.gameFactory.flushGame(); // clear game data
   }
 
-  navigateCreateVRGameTypeA() {
-    this.bundle.virEnvType = "VirEnv_1";
+  navigateCreateVRGame(virEnvType) {
+  console.log("🚀 ~ CreateGameVirtualMenuPage ~ navigateCreateVRGame ~ virEnvType:", virEnvType)
+    this.bundle.virEnvType = virEnvType;
     this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
-  }
-
-  navigateCreateVRGameTypeB() {
-    this.bundle.virEnvType = "VirEnv_2";
-    this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
-  }
-
-  navigateCreateVRGameTypeC() {
-    this.bundle.virEnvType = "VirEnv_3";
-    this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
-  }
+  } 
 
 }

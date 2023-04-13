@@ -7,19 +7,18 @@
   </ion-toolbar>
 </ion-header>
 
- <ion-content>
+<ion-content>
 
-  <ion-card class="welcome-card" (click)=navigateCreateVRGameTypeA()>
-<!--     <ion-img src='https://i.imgur.com/SvU6G4d.png'></ion-img>  -->    
-    <ion-img src='assets/vir_envs_layers/VirEnv_1.png'></ion-img>
-  </ion-card>
+  <ng-container *ngFor="let virEnv of virEnvTypes; index as i">
 
-  <ion-card class="welcome-card" (click)=navigateCreateVRGameTypeB()>
-    <ion-img src='assets/vir_envs_layers/VirEnv_2.png'></ion-img>
-  </ion-card>
+    <ion-card (click)=navigateCreateVRGame(virEnv.layerName)>
+      <ion-card-header>
+        <img src= "{{virEnv.img_url}}" />
+        <ion-card-subtitle> {{virEnv.EnvName}} </ion-card-subtitle>
+        <!-- <ion-card-title>pre</ion-card-title> -->
+      </ion-card-header>
 
-  <ion-card class="welcome-card" (click)=navigateCreateVRGameTypeC()>
-    <ion-img src='assets/vir_envs_layers/VirEnv_3.png'></ion-img>
-  </ion-card>
+    </ion-card>
+  </ng-container>
 
 </ion-content>
