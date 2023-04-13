@@ -897,7 +897,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         if (currentZoom <= 18.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
           this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png", false);
         } else if (currentZoom > 18.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + "b.png") {
-          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom2.png", false);
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png", false);
         }
       }
     });
