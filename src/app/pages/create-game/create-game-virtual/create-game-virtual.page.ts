@@ -32,7 +32,7 @@ export class CreateGameVirtualPage implements OnInit {
       isRealWorld: false,
       isSingleMode: true // until multi-player impl. is added in VE
     }
-    this.navCtrl.navigateForward(`edit-game-list/${JSON.stringify(bundle)}`);
+    this.navCtrl.navigateForward(`edit-game-list`);
 
   }
 

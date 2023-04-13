@@ -38,22 +38,17 @@ export class CreateGamePage implements OnInit {
     // this.navCtrl.navigateForward('create-game/create-game-list');
     
     /* only whit Vir Env. -> to be able to choose between two env.s */
-    if(!this.isRealWorld){
+    /* if(!this.isRealWorld){
       this.navCtrl.navigateForward(`create-game-virtual-menu/${JSON.stringify(this.bundle)}`);
     } else{
       this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
-    }
+    } */
+
+    this.navCtrl.navigateForward('create-game-menu');
   }
 
   navigateEditGame() {
-    // this.navCtrl.navigateForward(`edit-game-list/${"RealWorld"}`);
-    // DoDo update impl of user role
-    /* this.bundle = {
-      isRealWorld: this.isRealWorld,
-      isSingleMode: this.isSingleMode
-    } */
-
-    this.navCtrl.navigateForward(`edit-game-list/${JSON.stringify(this.bundle)}`);
+    this.navCtrl.navigateForward(`edit-game-list`);
   }
 
 }

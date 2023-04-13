@@ -100,11 +100,14 @@ export class StartPage implements OnInit {
   }
 
   navigateCreatePage() {
-    if (this.userRole != undefined && (this.userRole == "admin" || this.userRole == "contentAdmin" || this.userRole == "scholar")) {
+    /* if (this.userRole != undefined && (this.userRole == "admin" || this.userRole == "contentAdmin" || this.userRole == "scholar")) {
       this.navCtrl.navigateForward('create-game-menu');
     } else {
       this.navCtrl.navigateForward(`create-game/${"userRole"}`);
-    }
+    } */
+
+    //* ToDo update it (remove bundle)
+    this.navCtrl.navigateForward(`create-game/${"userRole"}`);
   }
 
   navigateShowroomPage() {

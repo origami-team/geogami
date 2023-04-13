@@ -69,7 +69,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'edit-game-list/:bundle',
+    path: 'edit-game-list',
     loadChildren: () =>
       import('./pages/edit-game/edit-game-list/edit-game-list.module').then(
         (m) => m.EditGameListPageModule

@@ -135,11 +135,11 @@ export const environment = {
     },{
       EnvName: "Zoom Pre Easy",
       layerName: "VirEnv_4",
-      img_url: "assets/vir_envs_layers/VirEnv_4.png"
+      img_url: "assets/vir_envs_layers/VirEnv_4_zoom1.png"
     },{
       EnvName: "Zoom Pre Difficult",
       layerName: "VirEnv_5",
-      img_url: "assets/vir_envs_layers/VirEnv_5.png"
+      img_url: "assets/vir_envs_layers/VirEnv_5_zoom1.png"
     }/* ,{
       name: "VirEnv_1",
       img_url: "VirEnv_6"

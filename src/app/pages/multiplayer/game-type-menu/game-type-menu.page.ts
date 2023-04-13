@@ -36,7 +36,14 @@ export class GameTypeMenuPage implements OnInit {
     }
 
     /* fpr both real and Vir.Emv. */
-    this.navCtrl.navigateForward(`create-game/${JSON.stringify(bundle)}`);
+    if(this.isRealWorld){
+      this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(bundle)}`);
+    } else {
+      this.navCtrl.navigateForward(`create-game-virtual-menu/${JSON.stringify(bundle)}`);
+    }
+
+
+    
   }
 
   navCreateMultiPlayerGamePage() {
@@ -48,7 +55,13 @@ export class GameTypeMenuPage implements OnInit {
     }    
 
     /* fpr both real and Vir.Emv. */
-    this.navCtrl.navigateForward(`create-game/${JSON.stringify(bundle)}`);
+    if(this.isRealWorld){
+      this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(bundle)}`);
+    } else {
+      this.navCtrl.navigateForward(`create-game-virtual-menu/${JSON.stringify(bundle)}`);
+    }
+
+    
 
   }
 
