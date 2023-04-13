@@ -9,28 +9,60 @@
 
 
 <ion-content class="ion-padding">
+
+  <!-- select game env. and mode -->
+  <div class="select-style">
+    <div>
+      <ion-label> <span class="cat-title-style"> Game environment </span>
+      </ion-label>
+      <select interface="popover" [(ngModel)]="gameEnvSelected" (change)="filterGamesEnv($event.target.value)">
+        <option value="real"> Real world </option>
+
+        <!-- allow scholars to view virtual environment mode -->
+        <option value="virtual" [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"> Virtual env. {{
+          !['admin', 'contentAdmin', 'scholar'].includes(userRole) ? '( only scholars have access )':''}} </option>
+      </select>
+    </div>
+    <div>
+      <ion-label> <span class="cat-title-style">Game mode </span>
+      </ion-label>
+      <select interface="popover" [(ngModel)]="gameModeSelected" (change)="filterGamesMode($event.target.value)">
+        <option value="single"> Single player </option>
+        <option value="multi-player" [disabled]="userRole!='contentAdmin'"> Multiplayer {{ userRole != 'contentAdmin' ?
+          '( only scholars have access )':''}} </option>
+      </select>
+    </div>
+  </div>
+  <!--  -->
+
   <h5>{{ "GameList.chooseGameList" | translate }}</h5>
+
+  <!-- searchbar -->
   <ion-searchbar (ionChange)="filterList($event)"></ion-searchbar>
 
+  <!-- refresher -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngFor="let game of games" (click)="gameClick(game)" detail color="secondary" >
+  <ion-card *ngFor="let game of games_view" (click)="gameClick(game)" detail color="secondary">
     <ion-card-header>
       <ion-item lines="none" color="secondary">
-      <ion-label>
-        <h2><ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> - </span> {{ game.name }}</h2>
-      </ion-label>
-      <!-- <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
-      <ion-label slot="end" *ngIf="game.isMultiplayerGame && game.isMultiplayerGame == true" class="numplayersCard"> {{game.numPlayers}} players</ion-label>
-      <ion-icon slot="end" *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
-    </ion-item>
+        <ion-label>
+          <h2><ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
+            </span> {{ game.name }}</h2>
+        </ion-label>
+        <!-- <ion-icon name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+        <ion-label slot="end" *ngIf="game.isMultiplayerGame && game.isMultiplayerGame == true" class="numplayersCard">
+          {{game.numPlayers}} players</ion-label>
+        <!-- <ion-icon slot="end" *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star"
+          [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+      </ion-item>
     </ion-card-header>
   </ion-card>
 
-    <!-- show this message only when there're no games were created by logged user -->
-    <div class="emptygamecontent" *ngIf="showEmptyInfo">
-      <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
-    </div>
+  <!-- show this message only when there're no games were created by logged user -->
+  <div class="emptygamecontent" *ngIf="showEmptyInfo">
+    <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
+  </div>
 </ion-content>

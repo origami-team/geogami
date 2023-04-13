@@ -120,14 +120,15 @@ export class PlayGameListPage implements OnInit {
   doRefresh(event) {
     // Get games data from server
     // Only content admin can view multi-players games
-    this.gamesService.getGames(true, this.userRole == "contentAdmin").then(res => res.content).then(games => {
-      this.games_res = games;
+    this.gamesService.getGames(true, this.userRole == "contentAdmin")
+      .then(res => res.content).then(games => {
+        this.games_res = games;
+        this.filterGamesEnv(this.gameEnvSelected);
 
-      this.filterGamesEnv(this.gameEnvSelected);
-    }).finally(() => event.target.complete());;
+      }).finally(() => event.target.complete());;
   }
 
-  // search function
+  //* update shown games based on search phrase 
   filterList(event) {
     this.filterSelectedSegementList(event.detail.value);
   }
