@@ -143,10 +143,9 @@
 
 </ion-content>
 
-<ion-footer *ngIf="userRole!='contentAdmin'">
-<!-- <ion-footer> -->
+<ion-footer *ngIf="(userRole != 'contentAdmin' && !isSingleMode)  || isSingleMode">
   <ion-toolbar>
-    <ion-button expand="block" (click)="startGame()" [disabled]="!playerName || (!teacherCode && !isSingleMode)">{{
+    <ion-button expand="block" (click)="startGame()" [disabled]="!playerName">{{
       "General.start" | translate }}</ion-button>
   </ion-toolbar>
 </ion-footer>
