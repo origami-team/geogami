@@ -21,7 +21,7 @@
       <select interface="popover" [(ngModel)]="gameEnvSelected" (change)="filterGamesEnv($event.target.value)">
         <option value="real"> Real world </option>
         
-        <!-- allow scholars to view virtual environment node -->
+        <!-- allow scholars to view virtual environment mode -->
         <option value="virtual" [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"> Virtual env. {{ !['admin', 'contentAdmin', 'scholar'].includes(userRole) ? '( only scholars have access )':''}} </option>
       </select>
     </div>
