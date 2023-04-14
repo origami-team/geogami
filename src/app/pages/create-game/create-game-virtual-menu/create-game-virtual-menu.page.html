@@ -9,16 +9,16 @@
 
 <ion-content>
 
-  <ng-container *ngFor="let virEnv of virEnvTypes; index as i">
+  <div class="menu-cards">
 
-    <ion-card (click)=navigateCreateVRGame(virEnv.layerName)>
+    <ion-card *ngFor="let virEnv of virEnvTypes; index as i" (click)=navigateCreateVRGame(virEnv.layerName)>
       <ion-card-header>
-        <img src= "{{virEnv.img_url}}" />
+        <img style="height: 20%;" src= "{{virEnv.img_url}}" />
         <ion-card-subtitle> {{virEnv.EnvName}} </ion-card-subtitle>
         <!-- <ion-card-title>pre</ion-card-title> -->
       </ion-card-header>
 
     </ion-card>
-  </ng-container>
+  </div>
 
 </ion-content>

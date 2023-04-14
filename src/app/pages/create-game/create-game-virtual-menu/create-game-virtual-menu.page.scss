@@ -17,24 +17,44 @@
 
 ion-card {
   text-align: center;
-  //  display: flex;
   width: 20% !important;
-  display:inline-table;
 }
 
-/* .welcome-card {
-  // display: flex;
-  // flex-direction: column;
-  // 1justify-content: space-between;
-  display:inline-table;
-} */
+.menu-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  // align-content: space-between;
+  align-items: last baseline;
+  // display:inline-table;
+  flex-wrap: wrap;
+  gap: 3%;
+  
+}
 
-@media only screen and (min-width: 575px) {
+//* for font size
+@media only screen and (max-width: 700px) {
+
+  ion-card-subtitle{
+    font-size: 12px;
+  }
+  ion-card {
+    width: 25% !important;
+  }
+}
+
+@media only screen and (max-width: 575px) {
   ion-card-title>ion-icon {
     position: absolute;
     left: 0;
     top: -15px;
     font-size: 6rem;
     transform: rotate(-10deg);
+  }
+  ion-card-subtitle{
+    font-size: 10px;
+  }
+  ion-card {
+    width: 28% !important;
   }
 }
