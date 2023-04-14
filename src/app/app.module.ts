@@ -49,7 +49,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { Network } from '@ionic-native/network/ngx';
 
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+// import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -61,6 +61,7 @@ export function createTranslateLoader(http: HttpClient) {
 */
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 const config: SocketIoConfig = { url: 'https://goegami-ve.azurewebsites.net/', options: {} }; // azure server - branch (multiplayer - realworld - V1)
+// const config: SocketIoConfig = { url: 'http://192.168.178.28:3005/', options: {} }; // azure server - branch (multiplayer - realworld - V1)
 
 
 @NgModule({
@@ -116,7 +117,7 @@ const config: SocketIoConfig = { url: 'https://goegami-ve.azurewebsites.net/', o
     }),
     MarkdownModule.forRoot(),
     BrowserAnimationsModule,
-    NgxQRCodeModule
+    // NgxQRCodeModule
     // FormControl
   ],
   providers: [
