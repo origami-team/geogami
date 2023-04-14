@@ -77,7 +77,7 @@ export const environment = {
       zoomInLayer1: "VirEnv_3_zoom1"
     },
     "VirEnv_4": {
-      name: "Zoom Pre Easy",
+      name: "Zoom - Pre Easy",
       initialPosition: {
         lng: 101.13 / 111000,
         lat: 68.69 / 112000
@@ -97,7 +97,7 @@ export const environment = {
       zoomInLayer1: "VirEnv_4_zoom1"
     },
     "VirEnv_5": {
-      name: "Zoom Pre Difficult",
+      name: "Zoom - Pre Difficult",
       initialPosition: {
         lng: 101.13 / 111000,
         lat: 68.69 / 112000
@@ -115,6 +115,25 @@ export const environment = {
       ],
       zoom: 19,
       zoomInLayer1: "VirEnv_5_zoom1"
+    },
+    "VirEnv_6": {
+      name: "Location Marker - Post Test Difficult",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
     }
 
   },
@@ -140,10 +159,11 @@ export const environment = {
       EnvName: "Zoom Pre Difficult",
       layerName: "VirEnv_5",
       img_url: "assets/vir_envs_layers/VirEnv_5_zoom1.png"
-    }/* ,{
-      name: "VirEnv_1",
-      img_url: "VirEnv_6"
-    }, */
+    },{
+      EnvName: "Location Marker - Post Test Difficult",
+      layerName: "VirEnv_6",
+      img_url: "assets/vir_envs_layers/VirEnv_6.png"
+    }
 
   ],
   mapStyle: '../../../../assets/mapStyles/'

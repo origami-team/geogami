@@ -136,8 +136,10 @@ export class EditGameListPage implements OnInit {
     this.isMutiplayerGame = undefined;
     /* then, check game env. */
     if (envVal == "real") {
+      this.isRealWorld = true;
       this.filterRealWorldGames();
     } else {
+      this.isRealWorld = false;
       this.filterVirtualEnvGames();
     }
   }
@@ -146,12 +148,13 @@ export class EditGameListPage implements OnInit {
   filterGamesMode(modeVal: string) {
     if (modeVal == "single") {
       this.isMutiplayerGame = undefined;
-
+      this.isSingleMode = true;     //* for next page
       this.games_view = this.games_res.filter(game =>
         (game.isMultiplayerGame == undefined)
       ).reverse();
     } else {
       this.isMutiplayerGame = true;
+      this.isSingleMode = false;      //* for next page
       this.games_view = this.games_res.filter(game =>
         (game.isMultiplayerGame == true)
       ).reverse();
