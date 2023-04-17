@@ -20,6 +20,7 @@ import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
 import { ActivatedRoute } from "@angular/router";
 import { Storage } from "@ionic/storage";
+import { UtilService } from "src/app/services/util.service";
 
 @Component({
   selector: "app-create-game-list",
@@ -56,6 +57,7 @@ export class CreateGameListPage implements OnInit {
     public popoverController: PopoverController,
     private translate: TranslateService,
     private route: ActivatedRoute,
+    private utilService: UtilService
   ) { }
 
   async ngOnInit() {
@@ -130,7 +132,7 @@ export class CreateGameListPage implements OnInit {
     isSingleMode: boolean = this.isSingleMode,
     //* if task doesn't have a virEnvType send the default one
     virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
-      console.log("🚀 ~ EditGameTasksPage ~ task:", task)
+    console.log("🚀 ~ EditGameTasksPage ~ task:", task)
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -215,6 +217,12 @@ export class CreateGameListPage implements OnInit {
 
   navigateToOverview() {
     //console.log("navigate");
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      // show no connection notification
+      this.utilService.showAlertNoConnection();
+      return;
+    }
 
     this.bundle = {
       isVRWorld: !this.isRealWorld, // DoDo update it in overview to isRealWorld

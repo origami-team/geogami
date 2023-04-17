@@ -386,7 +386,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      // return;
+      return;
     }
 
     // Remove extra spaces from game name

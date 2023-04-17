@@ -223,12 +223,12 @@ export class EditGameTasksPage implements OnInit {
     this.reorder = !this.reorder;
   }
 
-  uploadGame() {
+  navigateToOverview() {
     // if device is not connected to internet, show notification
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      // return;
+      return;
     }
 
     let bundle = {
