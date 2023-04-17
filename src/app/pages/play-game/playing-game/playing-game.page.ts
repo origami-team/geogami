@@ -1546,12 +1546,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
 
       //* send inital loc, dir and vir env type
-      //* if task doesn't hahve initial positoin send env default initial position and 
+      //* if task doesn't hahve initial positoin send null to keep avatar current position
       //* if no virEnvType is found send deafult one
       this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
         initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
           [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
-          [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
+          null),
         initialRotation: (this.task.question.initialAvatarPosition ?
           this.task.question.initialAvatarPosition.bearing :
           null),
