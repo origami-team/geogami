@@ -13,7 +13,7 @@
 
     <ion-card *ngFor="let virEnv of virEnvTypes; index as i" (click)=navigateCreateVRGame(virEnv.layerName)>
       <ion-card-header>
-        <img style="height: 20%;" src= "{{virEnv.img_url}}" />
+        <img src= "{{virEnv.img_url}}" />
         <ion-card-subtitle> {{virEnv.EnvName}} </ion-card-subtitle>
         <!-- <ion-card-title>pre</ion-card-title> -->
       </ion-card-header>

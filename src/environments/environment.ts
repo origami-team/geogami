@@ -117,7 +117,7 @@ export const environment = {
       zoomInLayer1: "VirEnv_5_zoom1"
     },
     "VirEnv_6": {
-      name: "Location Marker - Post Test Difficult",
+      name: "Location Marker - Post Difficult",
       initialPosition: {
         lng: 100.9 / 111000,
         lat: 60.76 / 112000
@@ -136,7 +136,7 @@ export const environment = {
       zoom: 19
     },
     "VirEnv_7": {
-      name: "Location Marker - Post Test Easy",
+      name: "Location Marker - Post Easy",
       initialPosition: {
         lng: 100.9 / 111000,
         lat: 60.76 / 112000

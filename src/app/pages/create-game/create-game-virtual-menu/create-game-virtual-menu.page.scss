@@ -18,6 +18,7 @@
 ion-card {
   text-align: center;
   width: 20% !important;
+  // height: 20% !important;
 }
 
 .menu-cards {
@@ -44,13 +45,13 @@ ion-card {
 }
 
 @media only screen and (max-width: 575px) {
-  ion-card-title>ion-icon {
+/*   ion-card-title>ion-icon {
     position: absolute;
     left: 0;
     top: -15px;
     font-size: 6rem;
     transform: rotate(-10deg);
-  }
+  } */
   ion-card-subtitle{
     font-size: 10px;
   }
