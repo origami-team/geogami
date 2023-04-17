@@ -35,7 +35,7 @@ export class OrigamiOrientationService {
       // native
       this.deviceOrientationSubscription = this.deviceOrientation
         .watchHeading({
-          frequency: 1000      // upadte it every second
+          frequency: 10       //* setting it to one second will affect the compass functionality
         })
         .subscribe((data: DeviceOrientationCompassHeading) => {
           this.orientationSubscriber.next(data.magneticHeading);
