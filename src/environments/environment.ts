@@ -134,6 +134,101 @@ export const environment = {
         [0.001583738739 + 0.001, 0.0017125625 + 0.001]
       ],
       zoom: 19
+    },
+    "VirEnv_7": {
+      name: "Location Marker - Post Test Easy",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_8": {
+      name: "Location Marker - Pre Test Difficult",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_9": {
+      name: "Location Marker - Pre Test Easy",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_10": {
+      name: "Location Marker - Training 1",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_11": {
+      name: "Location Marker - Training",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
     }
 
   },
@@ -147,19 +242,19 @@ export const environment = {
       EnvName: "VirEnv_2",
       layerName: "VirEnv_2",
       img_url: "assets/vir_envs_layers/VirEnv_2.png"
-    },{
+    }, {
       EnvName: "Zoom Pre - Initial",
       layerName: "VirEnv_3",
       img_url: "assets/vir_envs_layers/VirEnv_3.png"
-    },{
+    }, {
       EnvName: "Zoom Pre Easy",
       layerName: "VirEnv_4",
       img_url: "assets/vir_envs_layers/VirEnv_4_zoom1.png"
-    },{
+    }, {
       EnvName: "Zoom Pre Difficult",
       layerName: "VirEnv_5",
       img_url: "assets/vir_envs_layers/VirEnv_5_zoom1.png"
-    },{
+    }, {
       EnvName: "Location Marker - Post Test Difficult",
       layerName: "VirEnv_6",
       img_url: "assets/vir_envs_layers/VirEnv_6.png"

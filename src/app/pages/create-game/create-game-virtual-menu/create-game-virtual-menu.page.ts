@@ -35,7 +35,7 @@ export class CreateGameVirtualMenuPage implements OnInit {
         isRealWorld: this.isRealWorld,
         isSingleMode: this.isSingleMode,
         // virEnvType: "VR_type_A"
-        virEnvType: "VirEnv_1"
+        virEnvType: "VirEnv_1"      // Defualt env.
       }
     });
 
