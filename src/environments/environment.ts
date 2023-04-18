@@ -255,9 +255,13 @@ export const environment = {
       layerName: "VirEnv_5",
       img_url: "assets/vir_envs_layers/VirEnv_5_zoom1.png"
     }, {
-      EnvName: "Location Marker - Post Test Difficult",
+      EnvName: "Location Marker - Post Difficult",
       layerName: "VirEnv_6",
       img_url: "assets/vir_envs_layers/VirEnv_6.png"
+    }, {
+      EnvName: "Location Marker - Post Easy",
+      layerName: "VirEnv_7",
+      img_url: "assets/vir_envs_layers/VirEnv_7.png"
     }
 
   ],

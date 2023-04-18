@@ -24,16 +24,16 @@
   <!-- (Vir. Env.): enable teacher to choose a vir. env. -->
   <ion-item *ngIf="isVirtualWorld" class="ion-no-padding">
     <h5>Choose a virtual world</h5> &nbsp;&nbsp;
-    <select [(ngModel)]="virEnvType" interface="popover" style="width: 30%;">
+    <select [(ngModel)]="virEnvType" interface="popover">
       <option ngValue="VirEnv_1"> VirEnv_1 </option>
       <option ngValue="VirEnv_2"> VirEnv_2</option>
       <option ngValue="VirEnv_3"> Zoom Pre Initial</option>
       <option ngValue="VirEnv_4"> Zoom Pre Easy</option>
       <option ngValue="VirEnv_5"> Zoom Pre Difficult</option>
-      <option ngValue="VirEnv_6"> Location Marker - Post Test Difficult</option>
-      <!-- <option ngValue="VirEnv_7"> Location Marker - Post Test Easy</option>
-      <option ngValue="VirEnv_8"> Location Marker - Pre Test Difficult</option>
-      <option ngValue="VirEnv_9"> Location Marker - Pre Test Easy</option>
+      <option ngValue="VirEnv_6"> Location Marker - Post Difficult</option>
+       <option ngValue="VirEnv_7"> Location Marker - Post Easy</option>
+      <!--<option ngValue="VirEnv_8"> Location Marker - Pre Difficult</option>
+      <option ngValue="VirEnv_9"> Location Marker - Pre Easy</option>
       <option ngValue="VirEnv_10"> Location Marker - Training 1</option>
       <option ngValue="VirEnv_11"> Location Marker - Training 2</option> -->
     </select>
