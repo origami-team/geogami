@@ -68,9 +68,6 @@ export class EditGameOverviewPage implements AfterViewInit {
   errorMsg: String;
 
 
-  errorMsg: String;
-
-
   constructor(
     public popoverController: PopoverController,
     public navCtrl: NavController,
