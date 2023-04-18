@@ -324,7 +324,7 @@ export class PlayGameListPage implements OnInit {
         this.game_name = e.features[0].properties.name;
         this.game_place = e.features[0].properties.place;
         this.game_numTasks = e.features[0].properties.task_num;
-        //console.log('properties: ', e.features[0].properties)
+        //// console.log('properties: ', e.features[0].properties)
 
         // Ensure that if the map is zoomed out such that
         // multiple copies of the feature are visible, the
@@ -366,7 +366,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   async openMapTap() {
-    if (this.isListTabSelected) {
+    if (this.isListTabSelected ) {
       this.isListTabSelected = false;
 
       if (!this.map) {
@@ -386,6 +386,7 @@ export class PlayGameListPage implements OnInit {
   openListTap() {
     if (!this.isListTabSelected) {
       this.isListTabSelected = true;
+      // // console.log("isListTabSelected: ", this.isListTabSelected);
     }
   }
 
@@ -427,7 +428,7 @@ export class PlayGameListPage implements OnInit {
       this.map.removeLayer(`clusters`);
       this.map.removeSource("clusters");
 
-      console.log("Else ////////////");
+      // console.log("Else ////////////");
 
       this.map.addSource('clusters', {
         'type': 'geojson',

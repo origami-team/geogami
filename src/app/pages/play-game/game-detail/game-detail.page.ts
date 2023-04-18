@@ -168,7 +168,7 @@ export class GameDetailPage implements OnInit {
   }
 
   pointClick(point) {
-    console.log(point);
+    // console.log(point);
   }
 
   startGame() {

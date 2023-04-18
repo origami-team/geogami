@@ -1445,7 +1445,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.numPlayers,
       this.playerNo
     );
-    console.log(this.game);
+    // console.log(this.game);
 
     /* if rejoin game using previous game session data, use sotred events and waypoints */
     if (!this.isRejoin) {
@@ -1476,7 +1476,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       // you are leaving the game area warning
       if (this.game.geofence) {
-        console.log("creating the subscription");
+        // console.log("creating the subscription");
         this.geolocationService
           .initGeofence(this.game.bbox.features[0])
           .subscribe((inGameBbox) => {
@@ -1520,7 +1520,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initTask() {
     this.panelMinimized = false;
 
-    console.log("Current task: ", this.task);
+    // console.log("Current task: ", this.task);
 
     this.trackerService.setTask(this.task);
 
@@ -1662,7 +1662,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       try {
         await this.zoomBounds();
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
 
@@ -1756,7 +1756,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.DRAW) {
-      console.log(" tasks info: ", this.task)
+      // console.log(" tasks info: ", this.task)
       if (this.task.settings.drawPointOnly !== undefined && this.task.settings.drawPointOnly) {
         this.DrawControl = this.DrawControl_point;
       } else {
@@ -1967,7 +1967,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async onOkClicked() {
 
-    console.log("onOkClicked//////")
+    // console.log("onOkClicked//////")
     const isCorrect = true;
     const answer: any = {};
 

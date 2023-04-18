@@ -105,7 +105,6 @@
             lines="none"
             *ngFor="let task of game.tasks; index as i"
           >
-
             <!-- show task number -->
             <ion-avatar slot="start">
               <div class="mymarker">
@@ -126,7 +125,6 @@
             <ion-avatar slot="start" *ngIf="task.category.includes('info')">
               <div class="mymarker invisible"></div>
             </ion-avatar> -->
-
 
             <ion-chip *ngIf="task.category.includes('nav')" color="primary" (click)="presentTaskModal('nav', task)">
               <ion-label>

@@ -232,7 +232,7 @@ export class TrackerService {
         rotationCount: this.rotationCounter,
       },
     });
-    console.log(this.events);
+    // console.log(this.events);
   }
 
   /*  */
@@ -279,7 +279,7 @@ export class TrackerService {
       // numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
     };
 
-    console.log(data);
+    // console.log(data);
 
     // Plugins.Geolocation.clearWatch({ id: this.positionWatch });
     if (!this.isVirtualWorld) {
@@ -298,9 +298,9 @@ export class TrackerService {
         directory: FilesystemDirectory.Documents,
         recursive: true, // like mkdir -p
       });
-      console.log('Created dir', ret);
+      // console.log('Created dir', ret);
     } catch (e) {
-      console.log('Unable to make directory', e);
+      // console.log('Unable to make directory', e);
     }
     // 2. store tracks locally
     try {
@@ -311,7 +311,7 @@ export class TrackerService {
         directory: FilesystemDirectory.Documents,
         encoding: FilesystemEncoding.UTF8,
       });
-      console.log('Wrote file', result);
+      // console.log('Wrote file', result);
     } catch (e) {
       console.error('Unable to write file', e);
     }
