@@ -988,7 +988,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map.setStyle(newStyle);
   }
 
-  /* To disable map interations until player check 'share data box' and press done */
+  /* To disable map interations until player press done */
   enableDisableMapInteraction(enable: boolean) {
     if (!enable) {
       this.map.scrollZoom.disable();
