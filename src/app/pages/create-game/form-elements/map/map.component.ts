@@ -49,6 +49,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   // VR world
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
+  @Input() virEnvType: string;
 
   showDirectionMarker = false;
   directionMarkerPosition: any;
@@ -57,18 +58,51 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   map: mapboxgl.Map;
   draw: MapboxDraw;
 
+  // Multi-player Mode
+  // DoDo check the error you are getting @Input() allPlayersFeatures
+  // @Input() allPlayersFeatures: []; // to be able to view flages of all players in each map view
+  @Input() isSingleMode: boolean; // to use it in `ngOnChanges`
+
 
   constructor(private changeDetectorRef: ChangeDetectorRef, public helperService: HelperService) { }
 
   ngOnDestroy(): void {
     this.map.remove();
   }
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    // console.log('// isSingleMode (map comp): ', this.isSingleMode)
+  }
 
+  // Compare the input feature value before and after change task type
+  // to keep flags on map 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
-      this.featureChange.emit(changes.feature.previousValue);
-    }
+    console.log("ngOnChanges (mapComponent): ", changes);
+    // if (this.isSingleMode) {
+      if (changes.answer) {     //* we need to add it "if condtionns" to specify what to change
+        if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
+          this.featureChange.emit(changes.feature.previousValue);
+        }
+      } else if (changes.virEnvType && changes.virEnvType.currentValue !=undefined && changes.virEnvType.previousValue !=undefined) {            //* when virEnvType is changed
+        console.log("changes (changes.virEnvType): ", changes.virEnvType.currentValue);
+        this.virEnvType = changes.virEnvType.currentValue
+
+        let newStyle = this.map.getStyle();
+        //* update layer image
+        newStyle.sources.overlay.url = "assets/vir_envs_layers/"+this.virEnvType+".png";
+        //* update layer dimensions
+        newStyle.sources.overlay.coordinates = environment.virEnvProperties[this.virEnvType].overlayCoords;
+
+        this.map.setStyle(newStyle);
+      }
+      
+    /*}
+     else {
+      // Multi-player Mode
+      if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
+        this.featureChange.emit(changes.feature.previousValue);
+      }
+    } */
+
   }
 
   ngAfterViewInit(): void {
@@ -126,18 +160,28 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ?
+      /* style: (this.isVirtualWorld ?
         (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'),
+        environment.mapStyle + 'realWorld.json'), */
+        style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.005810510811 / 2, 0.006827038669 / 2] : [8, 51.8]),
-      zoom: (this.isVirtualWorld ? 16.5 : 2),
-      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
+      zoom: (this.isVirtualWorld ? 15.5 : 2),
+      // maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
+      maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
     });
 
-    this.map.addControl(new SatControl());
+    /* Show satelitte control only with real world */
+    if(!this.isVirtualWorld){
+      this.map.addControl(new SatControl());
+    }
+
     this.map.addControl(new mapboxgl.NavigationControl());
 
     this.map.on('click', e => {
+
+      // temp
+      // console.log("allPlayersFeatures", this.allPlayersFeatures)
+
       if (this.featureType == 'point') {
         this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
         this.featureChange.emit(this.feature);
@@ -148,7 +192,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       }
 
       if (this.featureType == 'direction') {
-
+        /* To add view direction marker only once */
         if (!this.showDirectionMarker) {
           this.directionMarkerPosition = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
           this.map.addSource('viewDirectionClick', {

@@ -55,15 +55,18 @@ export class CreateGameOverviewPage implements AfterViewInit {
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
+  virEnvType: string; // new to store vir env type
 
   // curated filter
   isCuratedGame = false;
   // to set curated gmaes only by admins (geogami team)
   userRole: String = "";
-  user = this.authService.getUserValue();
+
+  // Multiplayer mode 
+  isSingleMode: boolean = false; // used to show number of players card in multiplayer mode
+  numPlayers: Number = 1;
 
   errorMsg: String;
-
 
   constructor(
     public popoverController: PopoverController,
@@ -90,11 +93,15 @@ export class CreateGameOverviewPage implements AfterViewInit {
     this.route.params.subscribe((params) => {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
+      this.virEnvType = JSON.parse(params.bundle).virEnvType;
+      //this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
+      this.numPlayers = JSON.parse(params.bundle).numPlayers;
     });
 
     // Get user role
-    if(this.user){
-      this.userRole = this.user['roles'][0];
+    if (this.authService.getUserValue()) {
+      this.userRole = this.authService.getUserRole();
     }
   }
 
@@ -118,8 +125,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: (this.isVirtualWorld ?
-          (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-          environment.mapStyle + 'realWorld.json'),
+        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
+        environment.mapStyle + 'realWorld.json'),
       center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
       zoom: 2,
       maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
@@ -378,19 +385,22 @@ export class CreateGameOverviewPage implements AfterViewInit {
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      // return;
+      return;
     }
   
     // Remove extra spaces from game name
     this.game.name = this.game.name.trim();
 
-    if(this.game.name == ""){
+    // Remove extra spaces from game name
+    this.game.name = this.game.name.trim();
+
+    if (this.game.name == "") {
       this.errorMsg = this.translate.instant("SaveGame.enterValidGameName")
       this.showNameError = true;
       return;
     }
-    
-    // // console.log("///Game to be uploaded: ", this.game);
+
+    // console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : null,
@@ -398,9 +408,13 @@ export class CreateGameOverviewPage implements AfterViewInit {
       geofence: this.geofence,
       place: this.game.place,
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored,
+      isVRMirrored: (this.isVirtualWorld ? this.isVRMirrored : undefined),      /* to hide it with real world games */
+      virEnvType: this.virEnvType,      /* to store vir env name */
       isVisible: true,                    // new game is visible by default
-      isCuratedGame: this.isCuratedGame  // to set whether game can be viewed in curated filter list
+      isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
+      isMultiplayerGame: (!this.isSingleMode ? true : undefined),
+      numPlayers: (!this.isSingleMode ? this.numPlayers : undefined)
+      // playersCount: (!this.isSingleMode ? this.numPlayers : 1)     // ToDo: update it in server
 
     });
     // console.log(this.gameFactory.game);

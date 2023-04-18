@@ -1,3 +1,5 @@
+/* ToDo: I may delete this page */
+
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { IonReorderGroup } from "@ionic/angular";
 
@@ -14,7 +16,6 @@ import { CreateInfoModalComponent } from "./../create-info-modal/create-info-mod
 import { NavController } from "@ionic/angular";
 
 import { Game } from "src/app/models/game";
-import { CreateFreeTaskModalComponent } from "../create-free-task-modal/create-free-task-modal.component";
 
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
@@ -35,6 +36,8 @@ export class CreateGameVirtualListPage implements OnInit {
 
   isVirtualWorld: boolean = true;
   isVRMirrored: boolean = false;
+
+  isSingleMode: boolean = true; // always true, as it;s only used by V.E. single
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
@@ -63,15 +66,20 @@ export class CreateGameVirtualListPage implements OnInit {
 
     this.gameFactory.getGame().then((game) => (this.game = game));
 
-    // console.log("this.gameFactory.game: ",this.gameFactory.game);
+    console.log("this.gameFactory.game: ", this.gameFactory.game);
   }
 
   ionViewWillEnter() {
   }
 
-  async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
-    // // console.log(task);
-    // console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
+  async presentTaskModal(
+    type: string = "nav",
+    task: any = null,
+    isVirtualWorld:boolean = this.isVirtualWorld, 
+    isVRMirrored: boolean = this.isVRMirrored,
+    isSingleMode: boolean = this.isSingleMode) {     /* only for single Vir. Env.*/
+    // console.log(task);
+    console.log("type: ", type, "task: ", task, "--isVR: ", isVirtualWorld);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -81,7 +89,8 @@ export class CreateGameVirtualListPage implements OnInit {
         type,
         task,
         isVirtualWorld,
-        isVRMirrored
+        isVRMirrored,
+        isSingleMode
       },
     });
 
@@ -105,7 +114,7 @@ export class CreateGameVirtualListPage implements OnInit {
   addTaskToGame(task) {
     this.game = this.gameFactory.addTask(task);
 
-    // console.log("this.game.tasks: ",this.game.tasks);
+    console.log("this.game.tasks: ", this.game.tasks);
   }
 
   deleteTask(taskID) {
@@ -152,7 +161,8 @@ export class CreateGameVirtualListPage implements OnInit {
 
     let bundle = {
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored
+      isVRMirrored: this.isVRMirrored,
+      isSingleMode: this.isSingleMode
     }
     this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
   }

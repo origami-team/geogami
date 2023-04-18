@@ -40,6 +40,15 @@ export class TrackerService {
   private avatarOrientationSubscription: Subscription;
   initialAvatarLoc: any;
 
+  // Multiplayer
+  private isSingleMode: boolean = true;
+  private numPlayers: number = 1;
+  private playerNo: number = 2;
+  private playersNames_list;
+  private waypoints_list;
+  private events_list;
+  private deviceInfo_list;
+
 
   private map: any;
 
@@ -60,10 +69,13 @@ export class TrackerService {
     private orientationService: OrigamiOrientationService
   ) { }
 
-  async init(gameID, name, map: any, players: string[], isVirtualWorld: boolean, initialAvatarLoc: any) {
+  async init(gameID, name, map: any, players: string[], isVirtualWorld: boolean, initialAvatarLoc: any, isSingleMode: boolean, numPlayers: number, playerNo: number) {
 
     this.isVirtualWorld = isVirtualWorld;
     this.initialAvatarLoc = initialAvatarLoc;
+    this.isSingleMode = isSingleMode;
+    this.numPlayers = numPlayers;
+    this.playerNo = playerNo;
 
     if (!isVirtualWorld) {
       this.positionWatch = this.geolocateService.geolocationSubscription.subscribe(
@@ -184,6 +196,22 @@ export class TrackerService {
     }
   }
 
+  getWaypoints() {
+    return this.waypoints;
+  }
+
+  setWaypoints(s_Waypoints) {
+    this.waypoints = s_Waypoints;
+  }
+
+  getEvents() {
+    return this.events;
+  }
+
+  setEvents(s_events) {
+    this.events = s_events;
+  }
+
   addEvent(event) {
     this.events.push({
       ...event,
@@ -207,6 +235,7 @@ export class TrackerService {
     // console.log(this.events);
   }
 
+  /*  */
   createHeaders() {
     let headers = new HttpHeaders();
     const token = window.localStorage.getItem('bg_accesstoken');
@@ -217,30 +246,37 @@ export class TrackerService {
     return headers;
   }
 
-  async uploadTrack() {
+  async uploadTrack(isGameTrackStored: boolean = false, gameTrack_Id: string = undefined) {
+    /* (multiplayer) 1. create dynamic arrays based on game number of player 2,3,4 */
+    this.playersNames_list = new Array(this.numPlayers);
+    this.waypoints_list = new Array(this.numPlayers);
+    this.events_list = new Array(this.numPlayers);
+    this.deviceInfo_list = new Array(this.numPlayers);
+
+    /* (multiplayer) 2. assign current player tracks in corresponding element */
+    if (!this.isSingleMode && !isGameTrackStored) {
+      this.playersNames_list[this.playerNo - 1] = this.players[0];
+      this.waypoints_list[this.playerNo - 1] = this.waypoints;
+      this.events_list[this.playerNo - 1] = this.events;
+      this.deviceInfo_list[this.playerNo - 1] = this.getDeviceInfo(this.device);
+    }
+
     const data = {
+      /* (multiplayer) 3. send game track id and player no if track is already exitied in socket server room then update player's corresponding track data */
+      _id: (isGameTrackStored ? gameTrack_Id : undefined),
+      playerNo: (isGameTrackStored ? this.playerNo : undefined),
       game: this.game,
       name: this.gameName,
       start: this.start,
       end: new Date().toISOString(),
-      device: {
-        model :this.device.model,
-        platform :this.device.platform,
-        operatingSystem :this.device.operatingSystem,
-        osVersion :this.device.osVersion,
-        isVirtual :this.device.isVirtual,
-        appName :this.device.appName,
-        appVersion :this.device.appVersion,
-        appBuild :this.device.appBuild,
-        appId :this.device.appId,
-        device_name :this.device.name,
-        device_manufacturer :this.device.manufacturer,
-       },
-      waypoints: this.waypoints,
-      events: this.events,
+      device: (this.isSingleMode || isGameTrackStored ? this.getDeviceInfo(this.device) : this.deviceInfo_list),
+      waypoints: (this.isSingleMode || isGameTrackStored ? this.waypoints : this.waypoints_list),
+      events: (this.isSingleMode || isGameTrackStored ? this.events : this.events_list),
       answers: null,
-      players: this.players,
-      playersCount: this.players.length,
+      players: (this.isSingleMode || isGameTrackStored ? this.players : this.playersNames_list),
+      playersCount: (this.isSingleMode ? 1 : this.numPlayers ), // To Do: you may delete it.
+      isMultiplayerGame: (!this.isSingleMode ? true : undefined),
+      // numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
     };
 
     // console.log(data);
@@ -254,7 +290,8 @@ export class TrackerService {
       this.avatarPositionWatch.unsubscribe();
     }
 
-
+    /* (multiplayer) 4.Store game tracks locally to view it in (analyze-game-list) */
+    // 1. create directory
     try {
       const ret = await Plugins.Filesystem.mkdir({
         path: 'origami/tracks',
@@ -265,7 +302,7 @@ export class TrackerService {
     } catch (e) {
       // console.log('Unable to make directory', e);
     }
-
+    // 2. store tracks locally
     try {
       const result = await Plugins.Filesystem.writeFile({
         path: `origami/tracks/${this.gameName.replace(/ /g, '_')}-${this.start
@@ -278,21 +315,60 @@ export class TrackerService {
     } catch (e) {
       console.error('Unable to write file', e);
     }
+    /* End of store game tracks locally */
 
-    // return new Promise(() => { })
-
-    return this.http
-      .post(`${environment.apiURL}/track`, data, {
-        headers: this.createHeaders(),
-        observe: 'response',
-      })
-      .toPromise();
+    /* (multiplayer) 5. Store tracks on server */
+    return this.storeMultiplayerTracks(data, isGameTrackStored)
   }
 
   // update task number and cateogory
-  updateTaskNo(taskNo, taskCategory){
+  updateTaskNo(taskNo, taskCategory) {
     this.taskNo = taskNo;
     this.taskCategory = taskCategory;
   }
 
+
+  /* return device info */
+  getDeviceInfo(device) {
+    return {
+      model: device.model,
+      platform: device.platform,
+      operatingSystem: device.operatingSystem,
+      osVersion: device.osVersion,
+      isVirtual: device.isVirtual,
+      appName: device.appName,
+      appVersion: device.appVersion,
+      appBuild: device.appBuild,
+      appId: device.appId,
+      device_name: device.name,
+      device_manufacturer: device.manufacturer,
+    }
+  }
+
+  /**********************************/
+  /* Store/update multiplayer tracks */
+  /* multiplayer */
+  /**********************************/
+  storeMultiplayerTracks(data: any, isGameTrackStored: boolean) {
+    if (!isGameTrackStored) {
+      /* (multiplayer) 5. a) store new track if not stored yet (multiplayer) */
+      // (single player) store new track 
+      console.log("store new track (single player) / tracks (multiplayer)");
+      return this.http
+        .post(`${environment.apiURL}/track`, data, {
+          headers: this.createHeaders(),
+          observe: 'response',
+        }).toPromise();
+    }
+    else {
+      /* (multiplayer) 5. b) update existed tracks (multiplayer) */
+      console.log("//update existed tracks (multiplayer)");
+      return this.http
+        .put(`${environment.apiURL}/track`, data, {
+          headers: this.createHeaders(),
+          observe: 'response',
+        }).toPromise();
+    }
+  }
+  /* */
 }

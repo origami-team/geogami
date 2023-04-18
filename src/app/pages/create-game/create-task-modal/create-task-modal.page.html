@@ -20,12 +20,33 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <!-- (Vir. Env.): enable teacher to choose a vir. env. -->
+  <ion-item *ngIf="isVirtualWorld" class="ion-no-padding">
+    <h5>Choose a virtual world</h5> &nbsp;&nbsp;
+    <select [(ngModel)]="virEnvType" interface="popover" style="width: 30%;">
+      <option ngValue="VirEnv_1"> VirEnv_1 </option>
+      <option ngValue="VirEnv_2"> VirEnv_2</option>
+      <option ngValue="VirEnv_3"> Zoom Pre Initial</option>
+      <option ngValue="VirEnv_4"> Zoom Pre Easy</option>
+      <option ngValue="VirEnv_5"> Zoom Pre Difficult</option>
+      <option ngValue="VirEnv_6"> Location Marker - Post Test Difficult</option>
+      <!-- <option ngValue="VirEnv_7"> Location Marker - Post Test Easy</option>
+      <option ngValue="VirEnv_8"> Location Marker - Pre Test Difficult</option>
+      <option ngValue="VirEnv_9"> Location Marker - Pre Test Easy</option>
+      <option ngValue="VirEnv_10"> Location Marker - Training 1</option>
+      <option ngValue="VirEnv_11"> Location Marker - Training 2</option> -->
+    </select>
+  </ion-item>
+  <!--  -->
+
   <ion-card color="primary" *ngIf="task.category == 'nav'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
       {{ "Tasktypes.navigationtasksDescription" | translate }}
     </ion-card-content>
   </ion-card>
+
   <ion-card color="secondary" *ngIf="task.category == 'theme'">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
@@ -33,32 +54,27 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Task type - navigation -->
+  <!-- (dodo) task -> selectedNavTaskType  -->
   <ion-text>
     <h5>{{ "General.tasktype" | translate }}</h5>
   </ion-text>
-  <select
-    interface="popover"
-    *ngIf="type == 'nav'"
-    placeholder="Auswählen"
-    [compareWith]="selectCompare"
-    [(ngModel)]="task"
-    (ngModelChange)="onTaskSelected($event)"
-  >
+  <select interface="popover" *ngIf="type == 'nav'" placeholder="Auswählen" [compareWith]="selectCompare"
+    [(ngModel)]="task" (ngModelChange)="onTaskSelected($event)">
     <option [ngValue]="myTask" *ngFor="let myTask of tasks">
       {{ myTask.name | translate }}
     </option>
   </select>
 
-  <select
-    interface="popover"
-    *ngIf="type != 'nav'"
-    [compareWith]="taskTypeCompare"
-    [(ngModel)]="selectedTaskType"
-    (ngModelChange)="onTaskTypeChange($event)"
-  >
+  <!-- Task type - themeatic -->
+  <!-- (dodo) selectedTaskType -> selectedThemeType  -->
+  <select interface="popover" *ngIf="type != 'nav'" [compareWith]="selectCompare" [(ngModel)]="selectedThemeTaskType"
+    (ngModelChange)="onThemeTaskTypeChange($event)">
     <option [ngValue]="tt" *ngFor="let tt of taskTypes">{{ tt.text }}</option>
   </select>
+  <!-- End of task type -->
 
+  <!-- Show Information about selected type -->
   <ion-card color="medium">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
@@ -89,194 +105,236 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- More options of thematic types-->
   <div *ngIf="task.type == 'theme-object' || task.type == 'theme-direction'">
     <div>
       <ion-text>
         <h5 *ngIf="task.type == 'theme-object'">{{ "CreateGame.object" | translate }}</h5>
         <h5 *ngIf="task.type == 'theme-direction'">{{ "CreateGame.direction" | translate }}</h5>
       </ion-text>
-      <select 
-        [(ngModel)]="task.question.type" 
-        (ngModelChange)="onObjectQuestionSelectChange($event)"
-        interface="popover">
-        <option 
-        [ngValue]="option.type" 
-        *ngFor="let option of objectQuestionSelect"
-        >
-          {{ option.text | typeToText: task.type : false | translate }}</option>
-      </select>
+      <!-- Single-player -->
+      <ng-container *ngIf="isSingleMode">
+        <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
+          interface="popover">
+          <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
+            {{ option.text | typeToText: task.type : false | translate }}</option>
+        </select>
+      </ng-container>
+
+      <!-- Multi-player -->
+      <ng-container *ngIf="!isSingleMode">
+        <select [(ngModel)]="task.question[0].type" (ngModelChange)="onObjectQuestionSelectChange($event)"
+          interface="popover">
+          <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
+            {{ option.text | typeToText: task.type : false | translate }}</option>
+        </select>
+      </ng-container>
+
     </div>
     <div>
       <ion-text>
         <h5>{{ "CreateGame.playerAnswers" | translate }}</h5>
       </ion-text>
-      <select 
-        interface="popover" 
-        [(ngModel)]="task.answer.type" 
-        (ngModelChange)="onObjectAnswerSelectChange($event)">
-        <option 
-          [ngValue]="option.type" 
-          *ngFor="let option of objectAnswerSelect">
-          {{ option.text | typeToText: task.type : true | translate }}</option>
-      </select>
+
+      <!-- Single-player -->
+      <ng-container *ngIf="isSingleMode">
+        <select interface="popover" [(ngModel)]=" task.answer.type"
+          (ngModelChange)="onObjectAnswerSelectChange($event)">
+          <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+            {{ option.text | typeToText: task.type : true | translate }}</option>
+        </select>
+      </ng-container>
+
+      <!-- Multi-player -->
+      <ng-container *ngIf="!isSingleMode">
+        <select interface="popover" [(ngModel)]="task.answer[0].type"
+          (ngModelChange)="onObjectAnswerSelectChange($event)">
+          <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+            {{ option.text | typeToText: task.type : true | translate }}</option>
+        </select>
+      </ng-container>
+
+
     </div>
   </div>
 
+  <!-- Thematic tasks - Free tasks - The player answers & Question type -->
   <div *ngIf="task.type == 'free'">
+    <!-- Thematic tasks - Question type -->
     <div>
       <ion-text>
         <h5>{{ "CreateGame.questiontype" | translate }}</h5>
       </ion-text>
-      <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
-        interface="popover">
-        <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
-          {{ option.text | typeToText: task.type : false | translate }}</option>
-      </select>
+      <!-- Single-player -->
+      <ng-container *ngIf="isSingleMode">
+        <select [(ngModel)]="task.question.type" (ngModelChange)="onObjectQuestionSelectChange($event)"
+          interface="popover">
+          <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
+            {{ option.text | typeToText: task.type : false | translate }}</option>
+        </select>
+      </ng-container>
+      <!-- Multi-player -->
+      <ng-container *ngIf="!isSingleMode">
+        <select [(ngModel)]="task.question[0].type" (ngModelChange)="onObjectQuestionSelectChange($event)"
+          interface="popover">
+          <option [ngValue]="option.type" *ngFor="let option of objectQuestionSelect">
+            {{ option.text | typeToText: task.type : false | translate }}</option>
+        </select>
+      </ng-container>
+
     </div>
+
+    <!-- Thematic tasks - The player answers -->
     <div>
+
       <ion-text>
         <h5>{{ "CreateGame.playerAnswers" | translate }}</h5>
       </ion-text>
-      <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
-        <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
-          {{ option.text | typeToText: task.type : true | translate}}</option>
-      </select>
+      <!-- Single-player -->
+      <ng-container *ngIf="isSingleMode">
+        <select interface="popover" [(ngModel)]="task.answer.type" (ngModelChange)="onObjectAnswerSelectChange($event)">
+          <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+            {{ option.text | typeToText: task.type : true | translate}}</option>
+        </select>
+      </ng-container>
+
+      <!-- Mutli-player -->
+      <ng-container *ngIf="!isSingleMode">
+        <select interface="popover" [(ngModel)]="task.answer[0].type"
+          (ngModelChange)="onObjectAnswerSelectChange($event)">
+          <option [ngValue]="option.type" *ngFor="let option of objectAnswerSelect">
+            {{ option.text | typeToText: task.type : true | translate}}</option>
+        </select>
+      </ng-container>
+
     </div>
   </div>
+  <!-- End of more options of thematic types-->
 
+  <!-- >>>>>***** -->
+  <!-- Collaboration method - multiplayer - nav -->
+  <div *ngIf="!isSingleMode">
+    <ion-text>
+      <h5>Collaboration method</h5>
+    </ion-text>
+    <select interface="popover" placeholder="Auswählen" [compareWith]="selectCompare" [(ngModel)]="selectedCollType">
+      <option [ngValue]="collType" *ngFor="let collType of collaborationTypes">
+        {{collType.text}}
+      </option>
+    </select>
+  </div>
+  <!-- <<<<<***** -->
+
+  <!-- Task instruction -->
   <div>
-    <question-type [(question)]="task.question" [taskType]="task.category" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></question-type>
+    <!-- Task instruction, markdown support, audio message ... -->
+    <question-type 
+      [(question)]="task.question" 
+      [taskType]="task.category" 
+      [isVirtualWorld]="isVirtualWorld"
+      [isVRMirrored]="isVRMirrored" 
+      [virEnvType]="virEnvType" 
+      [numPlayers]="(!isSingleMode?numPlayers:1)"
+      [isSingleMode]="isSingleMode" 
+      [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
+    </question-type>
+
     <!-- Search Area -->
     <div *ngIf="task.type == 'theme-loc' || task.type == 'theme-object'">
       <ion-text>
         <h5>{{ "CreateGame.searchArea" | translate }}
           <ion-label>
-            <ion-icon name="information-circle"
-              (click)="showPopover($event, 'Popover.searchArea')">
+            <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.searchArea')">
             </ion-icon>
           </ion-label>
         </h5>
       </ion-text>
-      <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="task.question.area" [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored"></app-map>
+      <app-map featureType="geometry" drawTheme="searchArea" [(feature)]="task.question.area"
+        [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
     </div>
-    <div
-      *ngIf="task.type == 'theme-direction' && task.question.type == 'TEXT' && task.answer.type == 'MAP_DIRECTION'"
-    >
+
+    <!-- Set location by tapping on the map -->
+    <div *ngIf="task.type == 'theme-direction' && task.question.type == 'TEXT' && task.answer.type == 'MAP_DIRECTION'">
       <ion-item lines="none">
-        <ion-label> 
+        <ion-label>
           {{ "CreateGame.setLocation" | translate }}
-          <ion-icon 
-            name="information-circle"
-            (click)="showPopover($event, 'Popover.markLocation')">
+          <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.markLocation')">
           </ion-icon>
         </ion-label>
         <ion-toggle color="secondary" [(ngModel)]="viewDirectionSetPosition">
         </ion-toggle>
       </ion-item>
-      <app-map 
-        featureType="point" 
-        markerType="circle" 
-        [(feature)]="task.question.direction.position"
+      <app-map featureType="point" markerType="circle" [(feature)]="task.question.direction.position"
         *ngIf="viewDirectionSetPosition" 
         [isVirtualWorld]="isVirtualWorld" 
-        [isVRMirrored]="isVRMirrored">
+        [isVRMirrored]="isVRMirrored"
+        [virEnvType]="virEnvType">
       </app-map>
     </div>
+
+    <!-- Destination -->
     <answer-type 
       [(answer)]="task.answer" 
-      [taskType]="task.category"
-      [settings]="task.settings" 
+      [taskType]="task.category" 
+      [settings]="task.settings"
       [isVirtualWorld]="isVirtualWorld" 
-      [isVRMirrored]="isVRMirrored">
+      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"
+      [numPlayers]="(!isSingleMode?numPlayers:1)" 
+      [isSingleMode]="isSingleMode"
+      [collaborationType]=" isSingleMode? undefined :selectedCollType.type">
     </answer-type>
   </div>
 
+  <!-- Additional settings -->
   <div *ngIf="task.settings">
     <ion-text>
       <h5>{{ "CreateGame.addSettings" | translate }}</h5>
     </ion-text>
     <ion-item lines="none" *ngIf="task.type == 'nav-flag'">
-      <ion-label> 
+      <ion-label>
         {{ "CreateGame.confirmation" | translate }}
-        <ion-icon 
-          name="information-circle"
-          (click)="showPopover($event, 'Popover.confirmLocation')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.confirmLocation')">
         </ion-icon>
       </ion-label>
-      <ion-toggle
-        [(ngModel)]="task.settings.confirmation"
-        (ngModelChange)="settingsChange($event)"
-      ></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.confirmation" (ngModelChange)="settingsChange($event)"></ion-toggle>
     </ion-item>
-    <ion-item 
-      lines="none" 
-      *ngIf="task.type == 'nav-text' || task.type == 'nav-photo'">
+    <ion-item lines="none" *ngIf="task.type == 'nav-text' || task.type == 'nav-photo'">
       <ion-label>
         {{ "CreateGame.showFlag" | translate }}
-        <ion-icon 
-          name="information-circle"
-          (click)="showPopover($event, 'Popover.showFlag')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.showFlag')">
         </ion-icon>
       </ion-label>
-      <ion-toggle
-        [(ngModel)]="task.settings.showMarker"
-        (ngModelChange)="settingsChange()"
-      ></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.showMarker" (ngModelChange)="settingsChange()"></ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="showFeedback">
       <ion-label>
         {{ "CreateGame.feedback" | translate }}
-        <ion-icon 
-          name="information-circle"
-          (click)="showPopover($event, 'Popover.showFeedback')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.showFeedback')">
         </ion-icon>
       </ion-label>
-      <ion-toggle
-        [(ngModel)]="task.settings.feedback"
-        [color]="task.category == 'nav' ? 'primary' : 'secondary'"
-        (ngModelChange)="feedbackChange()"
-      ></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.feedback" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+        (ngModelChange)="feedbackChange()"></ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="showMultipleTries">
       <ion-label>
         {{ "CreateGame.severalTrials" | translate }}
-        <ion-icon 
-          name="information-circle"
-          (click)="showPopover($event, 'Popover.severalAttempts')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.severalAttempts')">
         </ion-icon>
       </ion-label>
-      <ion-toggle
-        [(ngModel)]="task.settings.multipleTries"
-        [color]="task.category == 'nav' ? 'primary' : 'secondary'"
-        [disabled]="!task.settings.feedback"
-        (ngModelChange)="settingsChange()"
-      >
+      <ion-toggle [(ngModel)]="task.settings.multipleTries" [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+        [disabled]="!task.settings.feedback" (ngModelChange)="settingsChange()">
       </ion-toggle>
     </ion-item>
-    <ion-item
-      lines="none"
-      *ngIf="task.category == 'nav' && task.settings.showMarker && task.type != 'nav-arrow'"
-    >
-      <ion-label
-        > {{ "CreateGame.keepFlag" | translate }}
-        <ion-icon
-          name="information-circle"
-          (click)="showPopover($event, 'Popover.keepFlag')"
-        >
+    <ion-item lines="none" *ngIf="task.category == 'nav' && task.settings.showMarker && task.type != 'nav-arrow'">
+      <ion-label> {{ "CreateGame.keepFlag" | translate }}
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.keepFlag')">
         </ion-icon>
       </ion-label>
-      <ion-toggle
-        [(ngModel)]="task.settings.keepMarker"
-        [color]="primary"
-      ></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.keepMarker" [color]="primary"></ion-toggle>
     </ion-item>
     <ion-item lines="none" *ngIf="task.answer.type === 'DRAW'">
-      <ion-label
-        >{{ "DrawSetting.keepMappingOption" | translate }}
-        <ion-icon
-          name="information-circle"
-          (click)="showPopover($event, 'Popover.showMappingView')"
-        >
+      <ion-label>{{ "DrawSetting.keepMappingOption" | translate }}
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.showMappingView')">
         </ion-icon>
       </ion-label>
       <select interface="popover" [(ngModel)]="task.settings.keepDrawing">
@@ -291,51 +349,24 @@
       <ion-toggle color="danger" [(ngModel)]="task.settings.drawPointOnly"></ion-toggle>
     </ion-item>
 
-    <ion-item 
-      lines="none" 
-      *ngIf="task.type != 'theme-object' && task.type != 'theme-direction' && task.type != 'free'">
+    <ion-item lines="none" *ngIf="task.type != 'theme-object' && task.type != 'theme-direction' && task.type != 'free'">
       <ion-label>
         {{ "CreateGame.accuracy" | translate }}
-        <ion-icon 
-          name="information-circle"
-          (click)="showPopover($event, 'Popover.accuracy')">
+        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.accuracy')">
         </ion-icon>
       </ion-label>
-      <ion-range
-        [(ngModel)]="task.settings.accuracy"
-        min="0"
-        max="50"
-        [step]="step"
-        snaps
-        [color]="task.category == 'nav' ? 'primary' : 'secondary'"
-        ticks
-        pin
-        (ngModelChange)="rangeChange()"
-      >
+      <ion-range [(ngModel)]="task.settings.accuracy" min="0" max="50" [step]="step" snaps
+        [color]="task.category == 'nav' ? 'primary' : 'secondary'" ticks pin (ngModelChange)="rangeChange()">
         <ion-label slot="start">0m</ion-label>
-        <ion-icon
-          slot="start"
-          size="small"
-          [color]="task.category == 'nav' ? 'primary' : 'secondary'"
-          name="locate"
-        >
+        <ion-icon slot="start" size="small" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate">
         </ion-icon>
-        <ion-icon
-          slot="end"
-          [color]="task.category == 'nav' ? 'primary' : 'secondary'"
-          name="locate"
-        ></ion-icon>
+        <ion-icon slot="end" [color]="task.category == 'nav' ? 'primary' : 'secondary'" name="locate"></ion-icon>
         <ion-label slot="end">50m</ion-label>
       </ion-range>
     </ion-item>
   </div>
 
-  <ion-item
-    detail
-    lines="none"
-    (click)="presentMapFeaturesModal()"
-    *ngIf="task.type != 'nav-arrow'"
-  >
+  <ion-item detail lines="none" (click)="presentMapFeaturesModal()" *ngIf="task.type != 'nav-arrow'">
     <ion-label> {{ "General.mapfeatures" | translate }} </ion-label>
   </ion-item>
 </ion-content>

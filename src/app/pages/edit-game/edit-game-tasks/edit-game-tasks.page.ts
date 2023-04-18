@@ -16,16 +16,15 @@ import { NavController } from "@ionic/angular";
 import { Game } from "src/app/models/game";
 import { GamesService } from "src/app/services/games.service";
 import { ActivatedRoute } from "@angular/router";
-import { CreateFreeTaskModalComponent } from "../../create-game/create-free-task-modal/create-free-task-modal.component";
 import { Task } from "src/app/models/task";
 import { UtilService } from "src/app/services/util.service";
 
 @Component({
-  selector: "app-edit-game-list",
-  templateUrl: "./edit-game-list.page.html",
-  styleUrls: ["./edit-game-list.page.scss"],
+  selector: "app-edit-game-tasks", // edit-game-tasks
+  templateUrl: "./edit-game-tasks.page.html",
+  styleUrls: ["./edit-game-tasks.page.scss"],
 })
-export class EditGameListPage implements OnInit {
+export class EditGameTasksPage implements OnInit {
   // name: String;
   // tasks: any[] = [];
   game: Game;
@@ -34,6 +33,13 @@ export class EditGameListPage implements OnInit {
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
+  virEnvType: string; // new to store vir env type
+
+  // Multiplyar impl.
+  isRealWorld: boolean = true;
+  isSingleMode: boolean = true;
+  numPlayers = 1;
+  // bundle: any;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
@@ -42,6 +48,7 @@ export class EditGameListPage implements OnInit {
   private async overrideHardwareBackAction($event: any) {
     await this.modalController.dismiss();
   }
+
 
   constructor(
     private gameFactory: GameFactoryService,
@@ -53,9 +60,18 @@ export class EditGameListPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Get selected env. and game type
     this.route.params.subscribe((params) => {
+      this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
+      let game_id = JSON.parse(params.bundle).game_id;
+
+      this.isVirtualWorld = !this.isRealWorld;
+
+
+      // Get data of selected game via game_id
       this.gamesService
-        .getGame(params.id)
+        .getGame(game_id)
         .then((res) => res.content)
         .then((game) => {
           this.game = game;
@@ -63,12 +79,29 @@ export class EditGameListPage implements OnInit {
           this.gameFactory.addGameInformation(this.game);
 
           // VR world
-          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+          /* if (game.isVRWorld !== undefined && game.isVRWorld != false) {
             this.isVirtualWorld = true;
             if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
               this.isVRMirrored = true;
             }
+          } */
+
+          // check if game is VE 2 (mirrored)
+          if (!this.isRealWorld) {
+            this.virEnvType = game.virEnvType;
+            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
+              this.isVRMirrored = true;
+            }
+          } else {
+            // Get num of players
+            this.numPlayers = game.numPlayers;
+            console.log("/// numPlayers: ", this.numPlayers);
           }
+
+
+
+
+
         });
     });
   }
@@ -102,8 +135,16 @@ export class EditGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: Task = null, isVirtualWorld: boolean = this.isVirtualWorld, isVRMirrored: boolean = this.isVRMirrored) {
-    // console.log(task);
+  async presentTaskModal(
+    type: string = "nav",
+    task: any = null,
+    isVirtualWorld: boolean = this.isVirtualWorld,
+    isVRMirrored: boolean = this.isVRMirrored,
+    numPlayers: number = this.numPlayers,
+    isSingleMode: boolean = this.isSingleMode,
+    //* if task doesn't have a virEnvType send the default one
+    virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
+    console.log("🚀 ~ EditGameTasksPage ~ task:", task)
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -113,7 +154,10 @@ export class EditGameListPage implements OnInit {
         type,
         task,
         isVirtualWorld,  // added to view VR world map instead of real map if true
-        isVRMirrored
+        isVRMirrored,
+        virEnvType,
+        numPlayers,
+        isSingleMode
       },
     });
 
@@ -167,7 +211,7 @@ export class EditGameListPage implements OnInit {
 
     this.gameFactory.applyReorder(this.game.tasks);
 
-    // console.log(this.game.tasks);
+    // console.log("this.game", this.game.tasks);
 
     ev.detail.complete(true);
 
@@ -179,15 +223,14 @@ export class EditGameListPage implements OnInit {
     this.reorder = !this.reorder;
   }
 
-  uploadGame() {
+  navigateToOverview() {
     // if device is not connected to internet, show notification
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
-      // return;
+      return;
     }
 
-    
     let bundle = {
       game_id: this.game._id,
       isVRWorld: this.isVirtualWorld,
@@ -201,15 +244,14 @@ export class EditGameListPage implements OnInit {
         );
         // this.gameFactory.flushGame();
       }
-    });
+    })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   navigateBack() {
     this.gameFactory.flushGame();
-    if (!this.isVirtualWorld) {
-      this.navCtrl.navigateBack("create-game");
-    } else {
-      this.navCtrl.navigateBack("create-game-virtual");
-    }
+    this.navCtrl.back();
   }
 }

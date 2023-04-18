@@ -1,32 +1,61 @@
 .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*   .logo {
     margin-top: 30px;
     max-width: 280px;
   
     @media only screen and (max-width: 575px) {
       max-width: 180px;
     }
-  }
+  } */
+
+
+
+ion-card {
+  text-align: center;
+  width: 20% !important;
+  // height: 20% !important;
+}
+
+.menu-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  // align-content: space-between;
+  align-items: last baseline;
+  // display:inline-table;
+  flex-wrap: wrap;
+  gap: 3%;
   
+}
+
+//* for font size
+@media only screen and (max-width: 700px) {
+
+  ion-card-subtitle{
+    font-size: 12px;
+  }
   ion-card {
-    text-align: center;
-    //display: flex;
-    display:inline-table;
-    width: 10% !important;
+    width: 25% !important;
   }
-  
-  @media only screen and (min-width: 575px) {
-    ion-card-title > ion-icon {
-      position: absolute;
-      left: 0;
-      top: -15px;
-      font-size: 6rem;
-      transform: rotate(-10deg);
-    }
+}
+
+@media only screen and (max-width: 575px) {
+/*   ion-card-title>ion-icon {
+    position: absolute;
+    left: 0;
+    top: -15px;
+    font-size: 6rem;
+    transform: rotate(-10deg);
+  } */
+  ion-card-subtitle{
+    font-size: 10px;
   }
-  
+  ion-card {
+    width: 28% !important;
+  }
+}

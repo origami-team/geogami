@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
@@ -13,12 +14,12 @@ export class PlayGameMenuPage implements OnInit {
   ngOnInit() {
   }
 
-  navigateToRealGameListPage() {
-    this.navCtrl.navigateForward(`play-game/play-game-list/${"RealWorld"}`);
+  navigateToPlayGameListPage() {
+    this.navCtrl.navigateForward(`play-game/play-game-list`);
   }
 
-  navigateToVirtualGameListPage() {
-    this.navCtrl.navigateForward(`play-game/play-game-list/${"VRWorld"}`);
+  navigateBarcodeScannerPage() {
+    this.navCtrl.navigateForward(`barcode-scanner`);
   }
 
 }

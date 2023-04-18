@@ -7,6 +7,7 @@ export interface IUser { //--- ToDo
     type: string;
     value: string;
   };
+  // ToDo: update it to be list
   role: {
     type: string;
     value: string;

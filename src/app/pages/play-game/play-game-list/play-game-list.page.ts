@@ -11,8 +11,8 @@ import { AuthService } from '../../../services/auth-service.service';
 import { environment } from 'src/environments/environment';
 
 import mapboxgl from "mapbox-gl";
-import { cloneDeep } from "lodash";
 import { UtilService } from 'src/app/services/util.service';
+import { SocketService } from 'src/app/services/socket.service';
 // import {} from environment.mapStyle + 'realWorld.json'
 
 
@@ -25,28 +25,40 @@ export class PlayGameListPage implements OnInit {
   @ViewChild("gamesMap") mapContainer;
   @ViewChild("popupContainer") popupContainer: any;
 
-  games: any;
-  gamesTemp: any;
+  games_res: any;
+  games_view: any;  // for viewing based on filter games_res
+  all_games_segment: any;
   gamesWithLocs: any;
-  // VR world
-  isVirtualWorld: boolean = false;
+
+  gameEnvSelected = 'real';  // (default) game mode select
+  gameModeSelected = 'single';  // (default) game mode select
+  isMutiplayerGame = undefined;
+
   // To be able to update games list and switch between segments 
   searchText: string = "";
   selectedSegment: string = "curated";
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
+  userId: String = "";
   user = this.authService.getUserValue();
 
   isVRMirrored: boolean = false; // temp
   map: mapboxgl.Map;
   isListTabSelected: boolean = true;
 
-  //temp
+  // Map popup
   popup: any;
   game_id: any;
   game_name: any;
   game_place: any;
   game_numTasks: any;
+
+  // loading = false;
+
+  // no need for it
+  // Multiplyar impl. (get values from retreived game data)
+  /* isSingleMode: boolean = true;
+  numPlayers : number = 1; */
 
 
   constructor(
@@ -54,36 +66,34 @@ export class PlayGameListPage implements OnInit {
     private gamesService: GamesService,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private socketService: SocketService
   ) { }
 
   ngOnInit() {
-    // if device is not connected to internet, show notification
+    /* if device is not connected to internet, show notification */
     if (!this.utilService.getIsOnlineValue()) {
       // show no connection notification
       this.utilService.showAlertNoConnection();
       // return;
     }
 
-    
-    // VR world
-    // to seperate realworld games from VR ones in view
-    this.route.params.subscribe((params) => {
-      if (params.worldType === "VRWorld") {
-        this.isVirtualWorld = true;
-      }
-    });
-
-    // Check user role
+    /* Check whther user is registerd. if yes, get role and id */
     if (this.user) {
       this.selectedSegment = "all";
-      this.userRole = this.user['roles'][0];
+      this.userRole = this.authService.getUserRole();
+      this.userId = this.authService.getUserId();
     }
 
     // Get games data from server
     this.getGamesData();
+  }
 
-    
+  ionViewWillEnter() {
+    /* in case user has joined room and pressed back button */
+    if (this.socketService.socket) {
+      this.socketService.socket.disconnect();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -91,40 +101,39 @@ export class PlayGameListPage implements OnInit {
 
   // Get games data from server
   getGamesData() {
-    this.gamesService.getGames(true).then(res => res.content).then(games => {
+    /* Only content admin can view multi-players games */
+    this.gamesService.getGames(true, this.userRole == "contentAdmin").then(res => res.content).then(games => {
       // Get either real or VE agmes based on selected environment 
-      this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
-      //this.gamesTemp = cloneDeep(this.games);
-      this.gamesTemp = this.games;
+      this.games_res = games;
 
-      if(this.selectedSegment == "curated"){
-        // Filter data of selected segment
-        this.segmentChanged(this.selectedSegment)
-      }
+      /* filter real world games (default) - as it represents the initial view */
+      this.filterRealWorldGames();
+
+      // this.loading = true;
+
+      // Filter data of selected segment
+      this.segmentChanged(this.selectedSegment)
     });
   }
 
   // ToDo: update the functions
   doRefresh(event) {
     // Get games data from server
-    this.gamesService.getGames(true).then(res => res.content).then(games => {
-      // Get either real or VE agmes based on selected environment 
-      this.games = games.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
-      //this.gamesTemp = cloneDeep(this.games);
-      this.gamesTemp = this.games;
+    // Only content admin can view multi-players games
+    this.gamesService.getGames(true, this.userRole == "contentAdmin")
+      .then(res => res.content).then(games => {
+        this.games_res = games;
+        this.filterGamesEnv(this.gameEnvSelected);
 
-      // Filter data of selected segment
-      this.segmentChanged(this.selectedSegment)
-    }).finally(() => event.target.complete());;
+      }).finally(() => event.target.complete());;
   }
 
-  // search function
+  //* update shown games based on search phrase 
   filterList(event) {
     this.filterSelectedSegementList(event.detail.value);
   }
 
   gameClick(game: any) {
-    // console.log(game);
     this.navCtrl.navigateForward(`play-game/game-detail/${game._id}`);
   }
 
@@ -132,58 +141,52 @@ export class PlayGameListPage implements OnInit {
   segmentChanged(segVal) {  //--- ToDo check duplicate code and create a func for it
     // if mine is selected
     if (segVal == "mine") {
-      // // console.log("mine"); //temp
-      this.games = this.gamesTemp.filter(game => game.user == this.user['_id']);
+      this.games_view = this.all_games_segment.filter(game => game.user == this.userId && game.isMultiplayerGame == this.isMutiplayerGame);
 
       // to update shown games based on search phrase
-      if (this.searchText != "") {
-        this.games = this.games.filter(game =>
-        (game.name.toLowerCase().includes(this.searchText.toLowerCase())
-          || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
-        )
-      }
+      this.updateGamesListSearchPhrase();
+
     } else if (segVal == "all") { // if all is selected
       //onsole.log("all"); //temp
-      this.games = this.gamesTemp;
+      this.games_view = this.all_games_segment.filter(game => game.isMultiplayerGame == this.isMutiplayerGame);
 
       // to update shown games based on search phrase
-      if (this.searchText != "") {
-        this.games = this.games.filter(game =>
-        (game.name.toLowerCase().includes(this.searchText.toLowerCase())
-          || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
-        )
-      }
+      this.updateGamesListSearchPhrase();
     }
-    else if (segVal == "curated") { // if all is selected
-      //// console.log("curated");
-      this.games = this.gamesTemp.filter(game => game.isCuratedGame == true);
+    else if (segVal == "curated") { // if curated is selected
+      this.games_view = this.all_games_segment.filter(game => game.isCuratedGame == true && game.isMultiplayerGame == this.isMutiplayerGame);
 
       // to update shown games based on search phrase
-      if (this.searchText != "") {
-        this.games = this.games.filter(game =>
-        (game.name.toLowerCase().includes(this.searchText.toLowerCase())
-          || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
-        )
-      }
+      this.updateGamesListSearchPhrase();
+    }
+  }
+
+  /* update shown games based on search phrase */
+  updateGamesListSearchPhrase() {
+    if (this.searchText != "") {
+      this.games_view = this.games_view.filter(game =>
+      (game.name.toLowerCase().includes(this.searchText.toLowerCase())
+        || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
+      )
     }
   }
 
   // update list after selecting a segment
   filterSelectedSegementList(searchPhrase) {
     if (this.selectedSegment == "all") {
-      this.games = this.gamesTemp.filter(game =>
+      this.games_view = this.all_games_segment.filter(game =>
       (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
         || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
       )
     } else if (this.selectedSegment == "mine") {
-      this.games = this.gamesTemp.filter(game =>
-        (game.user == this.user['_id']) &&
+      this.games_view = this.all_games_segment.filter(game =>
+        (game.user == this.userId) &&
         (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
           || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
       )
     }
     else if (this.selectedSegment == "curated") {
-      this.games = this.gamesTemp.filter(game =>
+      this.games_view = this.all_games_segment.filter(game =>
         (game.isCuratedGame == true) &&
         (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
           || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
@@ -366,15 +369,12 @@ export class PlayGameListPage implements OnInit {
     if (this.isListTabSelected ) {
       this.isListTabSelected = false;
 
-      if(!this.map){
-        // // console.log("isListTabSelected: ", this.isListTabSelected);
-        // get minimal games with locs
+      if (!this.map) {
+        // get minimal games with locs for games map view
         this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
           // Get either real or VE agmes based on selected environment 
-          this.gamesWithLocs = gameswithlocs.filter(game => (game.isVRWorld == this.isVirtualWorld || (!this.isVirtualWorld && game.isVRWorld == undefined))).reverse();
-  
-          // // console.log("gamesWithLocs: ", this.gamesWithLocs);
-  
+          this.gamesWithLocs = gameswithlocs;
+
           this.convertToGeoJson()
         });
       }
@@ -392,8 +392,6 @@ export class PlayGameListPage implements OnInit {
 
   async convertToGeoJson() {
     let convertedData = []
-
-    //// console.log("convertedData: ", convertedData)
 
     this.gamesWithLocs.forEach(game => {
       if (game.coords) {
@@ -456,5 +454,54 @@ export class PlayGameListPage implements OnInit {
 
   }
 
-  
+  /* on game environment change OR refresh*/
+  filterGamesEnv(envVal: string) {
+    /* first, update game mode to single player */
+    this.gameModeSelected = 'single';
+    this.isMutiplayerGame = undefined;
+    /* then, check game env. */
+    if (envVal == "real") {
+      this.filterRealWorldGames();
+    } else {
+      this.filterVirtualEnvGames();
+    }
+
+    // Filter data of selected segment
+    this.segmentChanged(this.selectedSegment)
+  }
+
+  filterRealWorldGames() {
+    this.all_games_segment = this.games_res.filter(game =>
+      (game.isVRWorld == false || game.isVRWorld == undefined)
+    ).reverse();
+  }
+
+  filterVirtualEnvGames() {
+    this.all_games_segment = this.games_res.filter(game =>
+      (game.isVRWorld == true)
+    ).reverse();
+  }
+
+  /***  on game mode change ***/
+  filterGamesMode(modeVal: string) {
+    if (modeVal == "single") {
+      this.isMutiplayerGame = undefined;
+
+      this.games_view = this.all_games_segment.filter(game =>
+        (game.isMultiplayerGame == undefined)
+      ).reverse();
+
+      // Filter data of selected segment
+      this.segmentChanged(this.selectedSegment)
+    } else {
+      this.isMutiplayerGame = true;
+      this.games_view = this.all_games_segment.filter(game =>
+        (game.isMultiplayerGame == true)
+      ).reverse();
+
+      // Filter data of selected segment
+      this.segmentChanged(this.selectedSegment)
+    }
+  }
+
 }

@@ -6,18 +6,22 @@ import {
   ElementRef,
   OnDestroy,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { GamesService } from "../../../services/games.service";
 import { OsmService } from "../../../services/osm.service";
 import { TrackerService } from "../../../services/tracker.service";
 import mapboxgl from "mapbox-gl";
+
 import {
   Plugins,
   GeolocationPosition,
   Capacitor,
   CameraResultType,
   CameraSource,
+  AppState
 } from "@capacitor/core";
+// const {App} = Plugins;
+
 import {
   ModalController,
   NavController,
@@ -66,12 +70,14 @@ import { OrigamiOrientationService } from "src/app/services/origami-orientation.
 import { throttle } from "rxjs/operators";
 
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-
-// VR world
-import { Socket } from 'ngx-socket-io';
+import { SocketService } from "src/app/services/socket.service";
 import { AvatarPosition } from 'src/app/models/avatarPosition'
 import { Coords } from 'src/app/models/coords'
 import { TranslateService } from "@ngx-translate/core";
+import { UtilService } from "src/app/services/util.service";
+
+import { Storage } from "@ionic/storage";
+
 
 @Component({
   selector: "app-playing-game",
@@ -79,42 +85,6 @@ import { TranslateService } from "@ngx-translate/core";
   styleUrls: ["./playing-game.page.scss"],
 })
 export class PlayingGamePage implements OnInit, OnDestroy {
-  constructor(
-    private route: ActivatedRoute,
-    public modalController: ModalController,
-    public toastController: ToastController,
-    private gamesService: GamesService,
-    public navCtrl: NavController,
-    private changeDetectorRef: ChangeDetectorRef,
-    private OSMService: OsmService,
-    private trackerService: TrackerService,
-    public alertController: AlertController,
-    public platform: Platform,
-    public helperService: HelperService,
-    private sanitizer: DomSanitizer,
-    private geolocationService: OrigamiGeolocationService,
-    private orientationService: OrigamiOrientationService,
-    private socket: Socket,
-    private translate: TranslateService
-  ) {
-    this.lottieConfig = {
-      path: "assets/lottie/star-success.json",
-      renderer: "svg",
-      autoplay: true,
-      loop: true,
-    };
-    // this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
-    this.primaryColor = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue("--ion-color-primary");
-    this.secondaryColor = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue("--ion-color-secondary");
-  }
-
-  get staticShowSuccess() {
-    return PlayingGamePage.showSuccess;
-  }
 
   // treshold to trigger location arrive
   public static triggerTreshold: Number = 20;
@@ -129,7 +99,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   game: Game;
   playersNames: string[] = [""];
-  showPlayersNames = true;
+  // showPlayersNames = true;
 
   map: mapboxgl.Map;
   waypointMarker: mapboxgl.Marker;
@@ -161,10 +131,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // VR world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false; // for multi VR designs 
+  virEnvType: string = null;
   avatarPositionSubscription: Subscription;
   avatarLastKnownPosition: AvatarPosition;
   avatarOrientationSubscription: Subscription;
   initialAvatarLoc: any;
+  initialAvatarDir: number;
   currentSecond: number = 0;
   gameCode: string = "";
 
@@ -222,7 +194,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   DrawControl: any;
 
   // share data approval
-  shareData_cbox = true;
+  shareDataBox = true;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
@@ -405,6 +377,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     ],
   });
 
+  // ToDo : update style source
   // Draw control only point enabled
   DrawControl_point = new MapboxDraw({
     displayControlsDefault: false,
@@ -412,81 +385,144 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       point: true,
       trash: true,
     },
+    // styles:['../../../../assets/mapStyles/drawControlPoint.json'
+    // styles: environment.mapStyle + 'drawControlPoint.json'
     styles: [
       {
-        id: "gl-draw-point-inactive",
-        type: "circle",
-        filter: [
+        "id": "gl-draw-point-inactive",
+        "type": "circle",
+        "filter": [
           "all",
           ["==", "active", "false"],
           ["==", "$type", "Point"],
           ["==", "meta", "feature"],
-          ["!=", "mode", "static"],
+          ["!=", "mode", "static"]
         ],
-        paint: {
+        "paint": {
           "circle-radius": 8,
-          "circle-color": getComputedStyle(
-            document.documentElement
-          ).getPropertyValue("--ion-color-secondary"),
+          "circle-color": "#3dc2ff",
           "circle-stroke-width": 4,
-          "circle-stroke-color": "#fff",
-        },
+          "circle-stroke-color": "#fff"
+        }
       },
       {
-        id: "gl-draw-point-active",
-        type: "circle",
-        filter: [
+        "id": "gl-draw-point-active",
+        "type": "circle",
+        "filter": [
           "all",
           ["==", "$type", "Point"],
           ["!=", "meta", "midpoint"],
-          ["==", "active", "true"],
+          ["==", "active", "true"]
         ],
-        paint: {
+        "paint": {
           "circle-radius": 8,
-          "circle-color": getComputedStyle(
-            document.documentElement
-          ).getPropertyValue("--ion-color-secondary"),
+          "circle-color": "#3dc2ff",
           "circle-stroke-width": 6,
-          "circle-stroke-color": "#fff",
-        },
-      },
-    ],
+          "circle-stroke-color": "#fff"
+        }
+      }
+    ]
   });
 
+  /* multi-player */
+  isSingleMode: boolean = true;
+  numPlayers = 0;
+  playerNo: number = 1;
+  joinedPlayersCount = 0;
+  trackDataStatus: any;
+  storedGameTrack_id: string;
+  waitPlayersPanel = false;
+  isRejoin = false;
+  sPlayerNo = 0;
+  cJoindPlayersCount = 0;
+  sTaskNo = 0;
+
+
+  constructor(
+    private route: ActivatedRoute,
+    public modalController: ModalController,
+    public toastController: ToastController,
+    private gamesService: GamesService,
+    public navCtrl: NavController,
+    private changeDetectorRef: ChangeDetectorRef,
+    private OSMService: OsmService,
+    private trackerService: TrackerService,
+    public alertController: AlertController,
+    public platform: Platform,
+    public helperService: HelperService,
+    private sanitizer: DomSanitizer,
+    private geolocationService: OrigamiGeolocationService,
+    private orientationService: OrigamiOrientationService,
+    private socketService: SocketService,
+    private translate: TranslateService,
+    private utilService: UtilService,
+    private storage: Storage,
+    private router: Router
+  ) {
+    this.lottieConfig = {
+      path: "assets/lottie/star-success.json",
+      renderer: "svg",
+      autoplay: true,
+      loop: true,
+    };
+    // this.audioPlayer.src = 'assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3'
+    this.primaryColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--ion-color-primary");
+    this.secondaryColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--ion-color-secondary");
+  }
+
+  get staticShowSuccess() {
+    return PlayingGamePage.showSuccess;
+  }
+
   ngOnInit() {
-    Plugins.Keyboard.addListener("keyboardDidHide", async () => {
-      this.map.resize();
-      await this.zoomBounds();
-    });
+    // console.log('ngOnInit');
+    if (Capacitor.platform !== "web") {
+      Plugins.Keyboard.addListener("keyboardDidHide", async () => {
+        this.map.resize();
+        await this.zoomBounds();
+      });
+
+      /* Important to rejoin connection to socket server if app went to background */
+      // To do for single mode and multi mode
+      Plugins.App.removeAllListeners();     /* To avoid multiple listeners */
+      Plugins.App.addListener('appStateChange', (state: AppState) => {
+        /* info: (this.router.url.split('/')[2] == "playing-game") is to make sure this impl. only applied to play-game-page */
+        /* info: (!this.isSingleMode) is to apply it only with multiplayer */
+        if (!state.isActive && (this.router.url.split('/')[2] == "playing-game" && !this.isSingleMode)) {
+          // console.log('App state changed. Is not active?');
+          this.ionViewWillLeave();
+          /* navigate home */
+          this.navCtrl.navigateRoot('/');
+        }
+      });
+    }
 
     PlayingGamePage.showSuccess = false;
-
   }
 
-  connectSocketIO() {
-    this.socket.connect();
-    /* MultiUsers in Parallel impl. */
-    this.socket.emit("newGame", { gameCode: this.gameCode, "isVRWorld_1": !this.isVRMirrored });
-  }
-
-  disconnectSocketIO() {
-    this.socket.disconnect();
-  }
-
+  /******************/
   ionViewWillEnter() {
-    // VR world
     // to seperate realworld games from VR ones in view
     this.route.params.subscribe((params) => {
+      console.log("(play-game) params.bundle", params.bundle)
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.gameCode = JSON.parse(params.bundle).gameCode;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
+      this.playersNames[0] = JSON.parse(params.bundle).playerName;
+      this.shareDataBox = JSON.parse(params.bundle).shareData_cbox;
+      this.isRejoin = JSON.parse(params.bundle).isRejoin;
+      this.sPlayerNo = JSON.parse(params.bundle).sPlayerNo;
+      this.cJoindPlayersCount = JSON.parse(params.bundle).cJoindPlayersCount;
+      this.sTaskNo = JSON.parse(params.bundle).sTaskNo;
     });
 
-    // Set the intial avatar location (in either normal or mirrored version)
-    this.initialAvatarLoc = (this.isVRMirrored ? environment.initialAvatarLoc_MirroredVersion : environment.initialAvatarLoc)
-
     this.game = null;
-    this.game = new Game(0, 'Loading...', '', false, [], false, false, false, false, false, false, false);
+    this.game = new Game(0, 'Loading...', '', false, [], false, false, 1, false, false, false, false, "", false, false);
     this.route.params.subscribe((params) => {
       this.gamesService
         .getGame(JSON.parse(params.bundle).id)
@@ -497,12 +533,181 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
           // VR world
           // Check game type either real or VR world
-          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
-            this.connectSocketIO();
+          if (game.virEnvType !== undefined) {
+            this.virEnvType = game.virEnvType;
+            // console.log("--1---game.virEnvType---: ", this.virEnvType)
           }
+
+          // Set the intial avatar location (in either normal or mirrored version)
+          if (this.isVirtualWorld) {
+            /* check first task initial location */
+            //* the last condtion is for hte case when you delete initial position
+            if (this.game.tasks[0] && this.game.tasks[0].question.initialAvatarPosition != undefined && this.game.tasks[0].question.initialAvatarPosition.position != undefined) {
+              console.log("🚀 ~ PlayingGamePage ~ .then ~ initialAvatarLoc:")
+              this.initialAvatarLoc = {
+                lng: this.game.tasks[0].question.initialAvatarPosition.position.geometry.coordinates[0],
+                lat: this.game.tasks[0].question.initialAvatarPosition.position.geometry.coordinates[1]
+              };
+              this.initialAvatarDir = this.game.tasks[0].question.initialAvatarPosition.bearing;
+            } else {
+              //* in case task doesn't have intitial positoin, use default one
+              this.initialAvatarLoc = environment.virEnvProperties[this.virEnvType].initialPosition;
+              this.initialAvatarDir = 0;
+            }
+          }
+
+          // Check game type either real or VR world
+          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+            this.connectSocketIO(this.game.tasks[0]);
+          }
+
+          /* only for multi-player game */
+          if (!this.isSingleMode) {
+            this.numPlayers = game.numPlayers;
+            this.waitPlayersPanel = true;
+
+            if (!this.isRejoin) {               /* when join for first time */
+              // connect to socket server
+              this.joinGame_MultiPlayer();
+            } else {                             /* when rejoin */
+              this.playerNo = this.sPlayerNo;
+              this.joinedPlayersCount = this.cJoindPlayersCount;
+              this.taskIndex = this.sTaskNo;
+
+              /* in case rejoin happens while waiting for players to join */
+              if (this.joinedPlayersCount == this.numPlayers) {
+                this.waitPlayersPanel = false;
+              }
+
+              /* (socket listener) on instructor request players real time location */
+              this.onRequestPlayerLocationByInstructor();
+              /* (socket listener) on joining game by other players */
+              this.onPlayerJoinGame();
+            }
+          }
+
+          /* Initialize map and subscribe location */
+          this.initializeMap();
         });
     });
 
+    /* Initialize map and subscribe location */
+    // this.initializeMap();
+  }
+
+  /******************/
+  ionViewWillLeave() {
+    // Disconnect server when leaving playing-page
+    if (!this.isSingleMode) {
+      this.disconnectSocketIO_MultiPlayer();
+    }
+
+    /* if player left game without solving all tasks, save game events, waypoints and taskno (to be restored when resume game) */
+    if (!PlayingGamePage.showSuccess) {
+      let c_waypoints = this.trackerService.getWaypoints();
+      let c_events = this.trackerService.getEvents();
+      /* to store player no, name and room name */
+      let c_playerInfo = {
+        playerName: this.playersNames[0],
+        playerNo: this.playerNo,
+        roomName: this.gameCode
+      }
+      this.storage.set("savedTracksData", { s_playerInfo: c_playerInfo, s_Waypoints: c_waypoints, s_events: c_events, s_taskNo: this.taskIndex });
+    }
+  }
+
+  ionViewDidLeave() {
+    // console.log("ionViewDidLeave")
+  }
+
+  ngOnDestroy() {
+    // console.log(" ngOnDestroy")
+  }
+
+  // With VR env only
+  connectSocketIO(task) {
+    /* Sinlge user V.E. impl. */
+    // ToDo: with many envs you can use env. id instead
+    if (this.isSingleMode) {
+      this.socketService.socket.connect();
+    }
+
+    /* wiht Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) 
+        - now vir env name is sent instead of boolion
+    */
+    this.socketService.socket.emit("newGame", {
+      gameCode: (
+        this.isSingleMode ? this.gameCode : this.playersNames[0]
+      ),
+      virEnvType: (
+        task.virEnvType ? task.virEnvType : this.virEnvType
+      ),
+      isSingleMode: this.isSingleMode
+    });
+
+    /* To update avatar initial position */
+    // this.socketService.socket.on('requestAvatarInitialPosition', this.deliverInitialAvatarPosition);
+    // this.socketService.socket.once('requestAvatarInitialPosition', () => {
+    this.socketService.socket.on('requestAvatarInitialPosition', () => {
+      // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
+      if (this.avatarLastKnownPosition != undefined) {  // when reopen vir env app
+        //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
+        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+          initialPosition:
+            [this.avatarLastKnownPosition.coords.longitude * 111000, this.avatarLastKnownPosition.coords.latitude * 112000],
+          initialRotation: this.indicatedDirection, //* send lastknown dir
+          virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
+        });
+      } else {
+        //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
+        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+          initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
+            [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
+            [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
+          initialRotation: (this.task.question.initialAvatarPosition ?
+            this.task.question.initialAvatarPosition.bearing :
+            0), //* send 0 as we only check if initial position equal null, in virEnv App
+          virEnvType: (this.task.virEnvType ? this.task.virEnvType : this.virEnvType)
+        });
+      }
+
+    });
+  }
+
+  /********/
+  /* initialize SocketIO (multiplayer) */
+  joinGame_MultiPlayer() {
+    if (!this.isRejoin) {
+      /* (socket listener) on assign number to myself  */
+      this.onAssignPlayerNumber();
+    }
+
+    /* on joining game by other players */
+    this.onPlayerJoinGame();
+
+    /* (socket listener) on instructor request players real time location */
+    this.onRequestPlayerLocationByInstructor();
+
+    /* if player is not rejoining */
+    if (!this.isRejoin) {
+      /* Join player in teacher's dedicated room */
+      this.socketService.socket.emit("joinGame", { roomName: this.gameCode, playerName: this.playersNames[0] });
+    }
+  }
+
+  disconnectSocketIO() {
+    this.socketService.socket.disconnect();
+  }
+
+  disconnectSocketIO_MultiPlayer() {
+    /* remove all listners to avoid duplicate listenres after rejoining game */
+    this.socketService.socket.removeAllListeners();
+    /*  dissconnect socket server*/
+    this.socketService.socket.disconnect();
+  }
+
+  /* Initialize map and subscribe location */
+  initializeMap() {
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
     // if (environment.production) {
@@ -513,25 +718,17 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     //     : "mapbox://styles/mapbox/streets-v9"
     // }
 
-    // Set bounds of VR world 
-    var bounds = [
-      [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
-      [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates (lng,lat)
-    ];
-
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ?
-          (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-          environment.mapStyle + 'realWorld.json'),
-      center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
+      style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
+      center: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].center : [8, 51.8]),
       zoom: 2,
-      maxZoom: 18,
-      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
+      maxZoom: (this.isVirtualWorld ? 19.5 : 18),
+      maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
     });
 
-
     this.geolocationService.init(this.isVirtualWorld);
+    // Fix this issue
     this.orientationService.init(this.isVirtualWorld);
 
     if (!this.isVirtualWorld) {
@@ -630,7 +827,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.geolocationService,
         this.orientationService,
         this.isVirtualWorld,
-        this.initialAvatarLoc
+        this.initialAvatarLoc,
+        this.initialAvatarDir
       );
       this.panControl = new PanControl(
         this.map,
@@ -679,9 +877,41 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.map.addImage("landmark-marker", image);
         }
       );
+
+      // ToDO: update it using callback
+      /* in case joined player is last */
+      /* with rejoin playerno might no be last one to join therefore we use count received from socker server instead  */
+      if (this.isSingleMode || this.playerNo == this.numPlayers || (this.isRejoin && this.joinedPlayersCount == this.numPlayers)) {
+        setTimeout(() => {
+          this.startGame();
+        }, 200);
+      }
     });
 
-    this.map.on("click", (e) => this.onMapClick(e, "standard"));
+    /* temp */
+    this.map.on('zoom', () => {
+      const currentZoom = this.map.getZoom();
+      // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
+      /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
+      if (environment.virEnvProperties[this.virEnvType].zoomInLayer1) {
+        if (currentZoom <= 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png", false);
+        } else if (currentZoom > 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + "b.png") {
+          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png", false);
+        }
+      }
+    });
+
+    /* (V.E.): to be able to reload marker when style is changed in realtime */
+    this.map.on('style.load', () => {
+      console.log("🚀 ~ PlayingGamePage ~ this.map.on ~ style.load:")
+
+    });
+    /*  */
+
+    this.map.on("click", (e) => {
+      this.onMapClick(e, "standard")
+    });
 
     this.map.on("rotate", () => {
       if (this.map.getLayer("viewDirectionTask")) {
@@ -712,6 +942,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (!this.isVirtualWorld) {
       this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe(
         (heading: number) => {
+          // console.log("......deviceOrientationSubscription (heading): ",  heading);
           this.compassHeading = heading;
           this.targetHeading = 360 - (this.compassHeading - this.heading);
           this.indicatedDirection = this.compassHeading - this.directionBearing;
@@ -728,173 +959,231 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (Capacitor.isNative) {
+      /* To keep screen on */
       Plugins.CapacitorKeepScreenOn.enable();
+    }
+
+    // To disable map interations
+    this.enableDisableMapInteraction(false);
+  }
+
+  /* (V.E.): t load view dir. marker after changing style */
+  // ToDo: update it to include all markers and layers- maybe find a way to copy all layers form one ma style to another
+  async updateMapStyleOverlayLayer(styleOverlayUrlPath, changeVirEnv) {
+    let newStyle = this.map.getStyle();
+
+    //* update layer image
+    newStyle.sources.overlay.url = "assets/vir_envs_layers/" + this.virEnvType + ".png";
+
+    if (changeVirEnv) {
+      //* update layer dimensions
+      newStyle.sources.overlay.coordinates = environment.virEnvProperties[this.virEnvType].overlayCoords;
+      //* update maxBounds
+      this.map.setMaxBounds(environment.virEnvProperties[this.virEnvType].bounds)
+      //* update zoom level to 2
+      this.map.setZoom(2);
+    }
+
+    newStyle.sources.overlay.url = styleOverlayUrlPath;
+    this.map.setStyle(newStyle);
+  }
+
+  /* To disable map interations until player press done */
+  enableDisableMapInteraction(enable: boolean) {
+    if (!enable) {
+      this.map.scrollZoom.disable();
+      this.map.boxZoom.disable();
+      this.map.doubleClickZoom.disable();
+      // disable map rotation using right click + drag
+      this.map.dragRotate.disable();
+      // disable map rotation using touch rotation gesture
+      this.map.touchZoomRotate.disable();
+      this.map.dragPan.disable();
+      this.map.keyboard.disable();
+      this.map.touchZoomRotate.disable();
+
+    } else {
+      this.map.scrollZoom.enable();
+      this.map.boxZoom.enable();
+      this.map.doubleClickZoom.enable();
+      // disable map rotation using right click + drag
+      this.map.dragRotate.enable();
+      // disable map rotation using touch rotation gesture
+      this.map.touchZoomRotate.enable();
+      this.map.dragPan.enable();
+      this.map.keyboard.enable();
+      this.map.touchZoomRotate.enable();
     }
   }
 
   onMapClick(e, mapType) {
     // console.log(e);
-    let clickDirection;
 
-    if (this.task.answer.type == AnswerType.MAP_POINT) {
-      if (
-        this.isZoomedToTaskMapPoint ||
-        this.task.mapFeatures.zoombar != "task"
-      ) {
-        const pointFeature = this.helperService._toGeoJSONPoint(
-          e.lngLat.lng,
-          e.lngLat.lat
-        );
+    /* Disable map click until player check 'share data box' and press done */
+    if (!this.waitPlayersPanel) {
+      let clickDirection;
 
-        if (this.map.getSource("marker-point")) {
-          this.map.getSource("marker-point").setData(pointFeature);
+      if (this.task.answer.type == AnswerType.MAP_POINT) {
+        if (
+          this.isZoomedToTaskMapPoint ||
+          this.task.mapFeatures.zoombar != "task"
+        ) {
+          const pointFeature = this.helperService._toGeoJSONPoint(
+            e.lngLat.lng,
+            e.lngLat.lat
+          );
+
+          if (this.map.getSource("marker-point")) {
+            this.map.getSource("marker-point").setData(pointFeature);
+          } else {
+            this.map.addSource("marker-point", {
+              type: "geojson",
+              data: pointFeature,
+            });
+          }
+
+          if (!this.map.getLayer("marker-point")) {
+            this.map.addLayer({
+              id: "marker-point",
+              type: "symbol",
+              source: "marker-point",
+              layout: {
+                "icon-image": "marker-editor",
+                "icon-size": 0.65,
+                "icon-anchor": "bottom",
+              },
+            });
+          }
         } else {
-          this.map.addSource("marker-point", {
-            type: "geojson",
-            data: pointFeature,
+          this.isZoomedToTaskMapPoint = true;
+          this.map.flyTo({
+            center: [e.lngLat.lng, e.lngLat.lat],
+            zoom: 18,
+            // padding: {
+            //   top: 80,
+            //   bottom: 620,
+            //   left: 40,
+            //   right: 40
+            // },
+            // duration: 1000
           });
         }
-
-        if (!this.map.getLayer("marker-point")) {
-          this.map.addLayer({
-            id: "marker-point",
-            type: "symbol",
-            source: "marker-point",
-            layout: {
-              "icon-image": "marker-editor",
-              "icon-size": 0.65,
-              "icon-anchor": "bottom",
-            },
-          });
-        }
-      } else {
-        this.isZoomedToTaskMapPoint = true;
-        this.map.flyTo({
-          center: [e.lngLat.lng, e.lngLat.lat],
-          zoom: 18,
-          // padding: {
-          //   top: 80,
-          //   bottom: 620,
-          //   left: 40,
-          //   right: 40
-          // },
-          // duration: 1000
-        });
       }
-    }
 
-    if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
-      if (
-        this.isZoomedToTaskMapPoint ||
-        this.task.mapFeatures.zoombar != "task"
-      ) {
-        if (this.task.question.direction?.position) {
-          this.clickDirection = this.helperService.bearing(
-            this.task.question.direction.position.geometry.coordinates[1],
-            this.task.question.direction.position.geometry.coordinates[0],
-            e.lngLat.lat,
-            e.lngLat.lng
-          );
-        } else {
-          this.clickDirection = this.helperService.bearing(
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
-            e.lngLat.lat,
-            e.lngLat.lng
-          );
-        }
-        clickDirection = this.clickDirection;
-        if (!this.map.getLayer("viewDirectionClick")) {
+      if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+        if (
+          this.isZoomedToTaskMapPoint ||
+          this.task.mapFeatures.zoombar != "task"
+        ) {
           if (this.task.question.direction?.position) {
-            this.map.addSource("viewDirectionClick", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates:
-                  this.task.question.direction.position.geometry.coordinates,
-              },
-            });
+            this.clickDirection = this.helperService.bearing(
+              this.task.question.direction.position.geometry.coordinates[1],
+              this.task.question.direction.position.geometry.coordinates[0],
+              e.lngLat.lat,
+              e.lngLat.lng
+            );
           } else {
-            this.map.addSource("viewDirectionClick", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates: [
-                  (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
-                  (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
-                ],
+            this.clickDirection = this.helperService.bearing(
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+              e.lngLat.lat,
+              e.lngLat.lng
+            );
+          }
+          clickDirection = this.clickDirection;
+          if (!this.map.getLayer("viewDirectionClick")) {
+            if (this.task.question.direction?.position) {
+              this.map.addSource("viewDirectionClick", {
+                type: "geojson",
+                data: {
+                  type: "Point",
+                  coordinates:
+                    this.task.question.direction.position.geometry.coordinates,
+                },
+              });
+            } else {
+              this.map.addSource("viewDirectionClick", {
+                type: "geojson",
+                data: {
+                  type: "Point",
+                  coordinates: [
+                    (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+                    (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+                  ],
+                },
+              });
+            }
+            this.map.addLayer({
+              id: "viewDirectionClick",
+              source: "viewDirectionClick",
+              type: "symbol",
+              layout: {
+                "icon-image": "view-direction-task",
+                "icon-size": 0.65,
+                "icon-offset": [0, -8],
               },
             });
+            if (this.map.getLayer("viewDirectionClickGeolocate")) {
+              this.map.removeLayer("viewDirectionClickGeolocate");
+              this.map.removeSource("viewDirectionClickGeolocate");
+            } else {
+              this.geolocateControl.setType(GeolocateType.None);
+            }
           }
-          this.map.addLayer({
-            id: "viewDirectionClick",
-            source: "viewDirectionClick",
-            type: "symbol",
-            layout: {
-              "icon-image": "view-direction-task",
-              "icon-size": 0.65,
-              "icon-offset": [0, -8],
-            },
+          this.map.setLayoutProperty(
+            "viewDirectionClick",
+            "icon-rotate",
+            this.clickDirection - this.map.getBearing()
+          );
+        } else {
+          this.isZoomedToTaskMapPoint = true;
+          const center = this.task.question.direction?.position
+            ? this.task.question.direction.position.geometry.coordinates
+            : [
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
+              (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
+            ];
+          this.map.flyTo({
+            center,
+            zoom: 18,
+            // padding: {
+            //   top: 80,
+            //   bottom: 620,
+            //   left: 40,
+            //   right: 40
+            // },
+            // duration: 1000
           });
-          if (this.map.getLayer("viewDirectionClickGeolocate")) {
-            this.map.removeLayer("viewDirectionClickGeolocate");
-            this.map.removeSource("viewDirectionClickGeolocate");
-          } else {
-            this.geolocateControl.setType(GeolocateType.None);
-          }
         }
-        this.map.setLayoutProperty(
-          "viewDirectionClick",
-          "icon-rotate",
-          this.clickDirection - this.map.getBearing()
-        );
-      } else {
-        this.isZoomedToTaskMapPoint = true;
-        const center = this.task.question.direction?.position
-          ? this.task.question.direction.position.geometry.coordinates
-          : [
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude),
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
-          ];
-        this.map.flyTo({
-          center,
-          zoom: 18,
-          // padding: {
-          //   top: 80,
-          //   bottom: 620,
-          //   left: 40,
-          //   right: 40
-          // },
-          // duration: 1000
-        });
       }
+
+      this.trackerService.addEvent({
+        type: "ON_MAP_CLICKED",
+        clickPosition: {
+          latitude: e.lngLat.lat,
+          longitude: e.lngLat.lng,
+        },
+        clickDirection,
+        map: mapType,
+        answer: this.feedbackControl.getMapClickAnswer(
+          {
+            selectedPhoto: this.selectedPhoto,
+            isCorrectPhotoSelected: this.isCorrectPhotoSelected,
+            selectedChoice: this.selectedChoice,
+            isCorrectChoiceSelected: this.isCorrectChoiceSelected,
+            photo: this.photo,
+            photoURL: this.photoURL,
+            directionBearing: this.directionBearing,
+            compassHeading: this.compassHeading,
+            clickDirection: this.clickDirection,
+            numberInput: this.numberInput,
+            textInput: this.textInput,
+          },
+          [e.lngLat.lng, e.lngLat.lat]
+        ),
+      });
     }
 
-    this.trackerService.addEvent({
-      type: "ON_MAP_CLICKED",
-      clickPosition: {
-        latitude: e.lngLat.lat,
-        longitude: e.lngLat.lng,
-      },
-      clickDirection,
-      map: mapType,
-      answer: this.feedbackControl.getMapClickAnswer(
-        {
-          selectedPhoto: this.selectedPhoto,
-          isCorrectPhotoSelected: this.isCorrectPhotoSelected,
-          selectedChoice: this.selectedChoice,
-          isCorrectChoiceSelected: this.isCorrectChoiceSelected,
-          photo: this.photo,
-          photoURL: this.photoURL,
-          directionBearing: this.directionBearing,
-          compassHeading: this.compassHeading,
-          clickDirection: this.clickDirection,
-          numberInput: this.numberInput,
-          textInput: this.textInput,
-        },
-        [e.lngLat.lng, e.lngLat.lat]
-      ),
-    });
   }
 
   calcBounds(task: any): mapboxgl.LngLatBounds {
@@ -1045,7 +1334,104 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   async initGame() {
-    this.task = this.game.tasks[this.taskIndex];
+    /* multiplayer */
+    if (this.isSingleMode) {
+      this.task = this.game.tasks[this.taskIndex];
+    } else {
+
+      // add to a function
+      this.game.tasks.forEach(task => {
+
+        switch (task.collaborationType) {
+          case "1-1":
+            task.answer = task.answer[this.playerNo - 1]
+            task.question = task.question[this.playerNo - 1]
+            break;
+          case "sequential":
+            task.answer = task.answer[0]
+            task.question = task.question[0]
+            break;
+          case "freeChoice":
+            // with free choice start with assigning each player answer/questoin 
+            // as in (1-1) to avoid adding else condition in the following code
+            let tempAnswer = task.answer[this.playerNo - 1]
+            let tempQuestion = task.question[this.playerNo - 1]
+
+            /* Question types */
+            if (task.question[0].allHaveSameInstruction) {
+              tempQuestion.text = task.question[0].text;
+            }
+            if (task.question[0].allHaveSameAudio) {
+              tempQuestion.audio = task.question[0].audio;
+            }
+            if (task.question[0].allHasSameMarkObj) {
+              tempQuestion.geometry = task.question[0].geometry;
+            }
+            if (task.question[0].allHasSameInstPhoto) {
+              tempQuestion.text = task.question[0].text;
+              tempQuestion.photo = task.question[0].photo;
+            }
+            if (task.question[0].allHasSameMapMark) {
+              tempQuestion.geometry = task.question[0].geometry;
+            }
+            if (task.question[0].allHasSameMarkObjMode) {
+              tempQuestion.geometry = task.question[0].geometry;
+            }
+            if (task.question[0].allHasSamePhotoMarkObj) {
+              tempQuestion.geometry = task.question[0].geometry;
+              tempQuestion.photo = task.question[0].photo;
+            }
+            if (task.question[0].allHasSameViewDirec) {
+              tempQuestion.direction = task.question[0].direction;
+            }
+
+            if (task.question[0].allHasSameDirMap) {
+              tempQuestion.direction = task.question[0].direction;
+            }
+
+            if (task.question[0].allHasSamePhotoDirMap) {
+              tempQuestion.direction = task.question[0].direction;
+              tempQuestion.photo = task.question[0].photo;
+
+            }
+            if (task.question[0].allHasSamePhotoTask) {
+              tempQuestion.photo = task.question[0].photo;
+            }
+
+            /* Answer types */
+            if (task.answer[0].allHasSameDes) {
+              tempAnswer.position = task.answer[0].position;
+            }
+            if (task.answer[0].allHaveSameMultiChoicePhoto) {
+              tempAnswer.hints = task.answer[0].hints;
+              tempAnswer.photos = task.answer[0].photos;
+            }
+            if (task.answer[0].allHaveSameMultiChoiceText) {
+              tempAnswer.hints = task.answer[0].hints;
+              tempAnswer.choices = task.answer[0].choices;
+            }
+            if (task.answer[0].allHaveSameCorrAnswer) {
+              tempAnswer.number = task.answer[0].number;
+            }
+            if (task.answer[0].allHaveSameDirfeedback) {
+              tempAnswer.hints[0] = task.answer[0].hints[0];
+              tempAnswer.hints[1] = task.answer[0].hints[1];
+              tempAnswer.hints[2] = task.answer[0].hints[2];
+            }
+
+            // assign temp answer/question to task
+            task.answer = tempAnswer
+            task.question = tempQuestion
+            break;
+        }
+
+      });
+
+      this.task = this.game.tasks[this.taskIndex];
+
+    }
+
+
     this.trackerService.updateTaskNo(this.taskIndex + 1, this.task.category) // to update taskNo stored in waypoints
     this.feedbackControl.setTask(this.task);
     await this.trackerService.init(
@@ -1054,13 +1440,34 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map,
       this.playersNames,
       this.isVirtualWorld,
-      this.initialAvatarLoc
+      this.initialAvatarLoc,
+      this.isSingleMode, // multiplayer - track
+      this.numPlayers,
+      this.playerNo
     );
     // console.log(this.game);
 
-    this.trackerService.addEvent({
-      type: "INIT_GAME",
-    });
+    /* if rejoin game using previous game session data, use sotred events and waypoints */
+    if (!this.isRejoin) {
+      /* add init game event */
+      this.trackerService.addEvent({
+        type: "INIT_GAME",
+      });
+    } else {
+      /* retreive tasks events and waypoints */
+      this.storage.get("savedTracksData").then((data) => {
+        if (data) {
+          console.log("(play-game) s_events: ", data.s_events)
+
+          if (data && data.s_events) {
+            this.trackerService.setEvents(data.s_events);
+            console.log("(play-game) s_events[0]: ", data.s_events[0])
+            this.trackerService.setWaypoints(data.s_Waypoints);
+          }
+        }
+      })
+    }
+
     await this.initTask();
 
     if (this.game.bbox != undefined && this.game.bbox?.features?.length > 0) {
@@ -1120,6 +1527,37 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.trackerService.addEvent({
       type: "INIT_TASK",
     });
+
+    /* set avatar initial position */
+    if (this.isVirtualWorld) {
+      console.log("🚀 ~ initTask ~ socketService:")
+      // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
+
+      //* update vir env map overlay layer
+      if (this.task.virEnvType != undefined && this.task.virEnvType != this.virEnvType) {
+        console.log("🚀 ~-- initTask ~ this.task.virEnvType != this.virEnvType:")
+        this.virEnvType = this.task.virEnvType;
+        this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png", true);
+      }
+
+      console.log("🚀 ~ initTask2:")
+
+
+      // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
+
+      //* send inital loc, dir and vir env type
+      //* if task doesn't hahve initial positoin send null to keep avatar current position
+      //* if no virEnvType is found send deafult one
+      this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+        initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
+          [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
+          null),
+        initialRotation: (this.task.question.initialAvatarPosition ?
+          this.task.question.initialAvatarPosition.bearing :
+          null),
+        virEnvType: this.task.virEnvType
+      });
+    }
 
     if (this.task.settings?.accuracy) {
       PlayingGamePage.triggerTreshold = this.task.settings.accuracy;
@@ -1363,7 +1801,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
     if (this.taskIndex > this.game.tasks.length - 1) {
+
+      /* multiplayer */
+      /* change player status in socket server to finished tasks */
+      if (!this.isSingleMode) {
+        this.socketService.socket.emit("changePlayerConnectionStauts", "finished tasks");
+        /* remove stored player info used to rejoin */
+        this.storage.remove("savedTracksData");
+      }
+
       PlayingGamePage.showSuccess = true;
+
+      // To disable map interations
+      this.enableDisableMapInteraction(false);
 
       // VR world (disconnect socket connection when tasks are done)
       if (this.isVirtualWorld) {
@@ -1375,12 +1825,51 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       });
 
       // store collected data in database only when user agree in the begining of the game
-      if (this.shareData_cbox) {
-        this.trackerService.uploadTrack().then((res) => {
-          if (res.status == 201) {
-            this.uploadDone = true;
-          }
-        });
+      if (this.shareDataBox) {
+
+        if (this.isSingleMode) {
+          this.trackerService.uploadTrack().then((res) => {
+            if (res.status == 201) {
+              this.uploadDone = true;
+              console.log("res (single)", res);
+            }
+          });
+        } else {
+          /* Multiplayer */
+          /* Request gmae track status from socket server 
+           * check wether game track is already stored by one of the players */
+          this.socketService.socket.emit("checkGameStatus", this.gameCode, (response) => {
+            this.trackDataStatus = response.trackDataStatus;
+
+            // if game track not stored yet
+            if (!this.trackDataStatus.status) {
+              /* store multiplayer tracks on server */
+              this.trackerService.uploadTrack().then((res) => {
+                if (res.status == 201) {
+                  this.uploadDone = true;
+                  // console.log("game id (multi)", res.body["content"]._id);
+                  this.storedGameTrack_id = res.body["content"]._id;
+                  /* Update game track staus in socket server */
+                  this.socketService.socket.emit("updateGameTrackStauts", { roomName: this.gameCode, storedTrack_id: this.storedGameTrack_id });
+                }
+              });
+            } else {
+              // if game aready stored
+              // console.log("game track already stored: ", this.trackDataStatus)
+
+              /* update stored multiplayer tracks on server*/
+              this.trackerService.uploadTrack(true, this.trackDataStatus.track_id).then((res) => {
+                if (res.status == 201) {
+                  this.uploadDone = true;
+                  console.log("game id (multi)", res.body["content"]._id);
+                  this.storedGameTrack_id = res.body["content"]._id;
+                }
+              });
+            }
+
+          });
+        }
+
       }
 
       if (Capacitor.isNative) {
@@ -1394,6 +1883,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.task = this.game.tasks[this.taskIndex];
     this.trackerService.updateTaskNo(this.taskIndex + 1, this.task.category) // to update taskNo stored in waypoints
     this.feedbackControl.setTask(this.task);
+
+    //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
+    if (this.isVirtualWorld) {
+      this.avatarLastKnownPosition = undefined;
+    }
+
     this.initTask();
   }
 
@@ -1422,6 +1917,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       this.task = this.game.tasks[this.taskIndex];
       this.feedbackControl.setTask(this.task);
+
+      //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
+      if (this.isVirtualWorld) {
+        this.avatarLastKnownPosition = undefined;
+      }
+
       this.initTask();
     }
   }
@@ -1491,7 +1992,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.showCorrectPositionModal = true;
       setTimeout(() => {
         this.showCorrectPositionModal = false;
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -1517,7 +2018,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.showCorrectPositionModal = true;
       setTimeout(() => {
         this.showCorrectPositionModal = false;
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -1592,11 +2093,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.targetHeading = 360 - (this.compassHeading - bearing);
   }
 
-  ngOnDestroy() { }
-
   navigateHome() {
     if (!this.isVirtualWorld) {
-      this.positionSubscription.unsubscribe(); //
+      this.positionSubscription.unsubscribe();
       this.deviceOrientationSubscription.unsubscribe();
     } else {
       this.disconnectSocketIO();
@@ -1607,7 +2106,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.geolocationService.clear();
 
-    this.trackerService.clear();
+    /* condition to refrain clear track service in multiplayer mode while waiting for other players */
+    if (this.isSingleMode || (!this.isSingleMode && !this.waitPlayersPanel)) {
+      this.trackerService.clear();
+    }
 
     this.rotationControl.remove();
     this.viewDirectionControl.remove();
@@ -1628,9 +2130,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.orientationService.clear();
 
-    // this.map.remove();
+    this.map.remove();
     this.navCtrl.navigateRoot('/');
-    //this.streetSectionControl.remove();  // duplicate
   }
 
   togglePanel() {
@@ -1884,9 +2385,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   startGame() {
-    // console.log(this.playersNames);
+    console.log(this.playersNames);
+    // this.subscripePosition(); // For Realworld / VE
     this.initGame();
-    this.showPlayersNames = false;
+    // this.showPlayersNames = false;
+    this.enableDisableMapInteraction(true);
   }
 
   /**
@@ -1911,4 +2414,59 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }).length > 0
     );
   }
+
+  /*-------------------------------------*/
+  /*  Socket server listeners - Multiplayer*/
+  /*-------------------------------------*/
+
+  /* Request player location by instructor */
+  onRequestPlayerLocationByInstructor() {
+    /* when instructor request players real time location */
+    this.socketService.socket.on('requestPlayerLocation', () => {
+      console.log("(game-paly) requestPlayersLocation1")
+      console.log("(game-paly) requestPlayersLocation1, this.lastKnownPosition", this.lastKnownPosition)
+
+      this.socketService.socket.emit("updatePlayersLocation", {
+        roomName: this.gameCode,
+        playerLoc: (
+          !this.isVirtualWorld ?
+            [this.lastKnownPosition.coords.longitude, this.lastKnownPosition.coords.latitude] :
+            [this.avatarLastKnownPosition.coords.longitude, this.avatarLastKnownPosition.coords.latitude]
+        ),
+        playerNo: this.playerNo,
+        //playerName: this.playersNames[0]
+      });
+
+      console.log("(game-paly) requestPlayersLocation2")
+    });
+  }
+
+  /* on assign number to myself  */
+  onAssignPlayerNumber() {
+    this.socketService.socket.on('assignPlayerNumber', (data) => {
+      console.log("playerNo from socket: ", data)
+
+      /* player number equal number of players already joined the room */
+      this.playerNo = this.joinedPlayersCount = data.playerNo;
+
+      /* if all players joined the game, remove waiting panel */
+      if (this.joinedPlayersCount == this.numPlayers) {
+        this.waitPlayersPanel = false;
+      }
+    });
+  }
+
+  /* on joining game by other players */
+  onPlayerJoinGame() {
+    this.socketService.socket.on('playerJoined', (data) => {
+      console.log("PlayerJoined: (number of players so far) ", data)
+      this.joinedPlayersCount = data.joinedPlayersCount;
+
+      if (this.joinedPlayersCount == this.numPlayers) {
+        this.waitPlayersPanel = false;
+        this.startGame();
+      }
+    });
+  }
+
 }

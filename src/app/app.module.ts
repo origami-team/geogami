@@ -18,7 +18,6 @@ import { FormsModule } from '@angular/forms';
 
 // Modals
 import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page';
-import { CreateFreeTaskModalComponent } from './pages/create-game/create-free-task-modal/create-free-task-modal.component';
 import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page';
 import { MapFeaturesModalPage } from './pages/create-game/map-features-modal/map-features-modal.page';
 import { CreateInfoModalComponent } from './pages/create-game/create-info-modal/create-info-modal.component';
@@ -50,6 +49,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { Network } from '@ionic-native/network/ngx';
 
+// import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -59,15 +60,14 @@ export function createTranslateLoader(http: HttpClient) {
 * Using sockit.IO for receiving data from VR App
 */
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-// import { PopupComponent } from './components/popup/popup.component';
-const config: SocketIoConfig = { url: 'https://geogami-ve-singlemode.azurewebsites.net/', options: {} }; // multi single users at once
+const config: SocketIoConfig = { url: 'https://goegami-ve.azurewebsites.net/', options: {} }; // azure server - branch (multiplayer - realworld - V1)
+
 
 @NgModule({
   declarations: [
     AppComponent,
     PopoverComponent,
     CreateTaskModalPage,
-    CreateFreeTaskModalComponent,
     MapFeaturesModalPage,
     CreateModuleModalPage,
     CreateInfoModalComponent,
@@ -86,7 +86,6 @@ const config: SocketIoConfig = { url: 'https://geogami-ve-singlemode.azurewebsit
   entryComponents: [
     PopoverComponent,
     CreateTaskModalPage,
-    CreateFreeTaskModalComponent,
     MapFeaturesModalPage,
     CreateModuleModalPage,
     CreateInfoModalComponent,
@@ -117,6 +116,7 @@ const config: SocketIoConfig = { url: 'https://geogami-ve-singlemode.azurewebsit
     }),
     MarkdownModule.forRoot(),
     BrowserAnimationsModule,
+    // NgxQRCodeModule
     // FormControl
   ],
   providers: [

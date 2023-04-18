@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener, ChangeDetectorRef } from "@angular/core";
 import { IonReorderGroup } from "@ionic/angular";
 
 import mapboxgl from "mapbox-gl";
@@ -14,11 +14,13 @@ import { CreateInfoModalComponent } from "./../create-info-modal/create-info-mod
 import { NavController } from "@ionic/angular";
 
 import { Game } from "src/app/models/game";
-import { CreateFreeTaskModalComponent } from "../create-free-task-modal/create-free-task-modal.component";
 
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
+import { ActivatedRoute } from "@angular/router";
+import { Storage } from "@ionic/storage";
+import { UtilService } from "src/app/services/util.service";
 
 @Component({
   selector: "app-create-game-list",
@@ -31,9 +33,16 @@ export class CreateGameListPage implements OnInit {
   game: Game;
   reorder: Boolean = false;
 
-  isVirtualWorld: boolean = false;
-
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
+
+  // To hold received parametres vlaues via route
+  // Multiplayer mode 
+  isRealWorld: boolean = false;
+  isVRMirrored: boolean = false;
+  virEnvType: string; // new to store vir env type (default layer)
+  isSingleMode: boolean = false; // used to show number of players card in multiplayer mode
+  bundle: any;
+  numPlayers = 3;
 
   // dismiss modal on hardware back button
   @HostListener("document:ionBackButton", ["$event"])
@@ -45,14 +54,33 @@ export class CreateGameListPage implements OnInit {
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
     private navCtrl: NavController,
-    public popoverController: PopoverController, 
-    private translate: TranslateService
-    ) {}
+    public popoverController: PopoverController,
+    private translate: TranslateService,
+    private route: ActivatedRoute,
+    private utilService: UtilService
+  ) { }
 
   async ngOnInit() {
+    // Get selected env. and game type
+    this.route.params.subscribe((params) => {
+      this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
+      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
+
+      /* only with Vir. Env. */
+      if (!this.isRealWorld) {
+        /* to check if VR version is mirrored */
+        this.route.params.subscribe((params) => {
+          this.virEnvType = JSON.parse(params.bundle).virEnvType;
+          if (this.virEnvType === "VR_type_B") {
+            this.isVRMirrored = true;
+          }
+        });
+      }
+    });
+
     this.gameFactory.getGame().then((game) => {
       // It could happen that game data is stored from edit game page
-      // here we clean game data if it is realted to existed game. 
+      // here we clean game data if it is related to existed game. 
       // otheriwse we get `name already exists` error
       if (game._id != 0) {
         this.gameFactory.flushGame(); // clear game data
@@ -62,7 +90,8 @@ export class CreateGameListPage implements OnInit {
       }
 
     });
-    // // console.log("this.gameFactory.game: ", this.gameFactory.game);
+    //console.log("this.gameFactory.game: ", this.gameFactory.game);
+
   }
 
   ionViewWillEnter() {
@@ -94,8 +123,16 @@ export class CreateGameListPage implements OnInit {
     // });
   }
 
-  async presentTaskModal(type: string = "nav", task: any = null, isVirtualWorld: boolean = this.isVirtualWorld) {
-    // // console.log(task);
+  async presentTaskModal(
+    type: string = "nav",
+    task: any = null,
+    isVirtualWorld: boolean = !this.isRealWorld,
+    isVRMirrored: boolean = this.isVRMirrored,
+    numPlayers: number = this.numPlayers,
+    isSingleMode: boolean = this.isSingleMode,
+    //* if task doesn't have a virEnvType send the default one
+    virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
+    console.log("🚀 ~ EditGameTasksPage ~ task:", task)
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -104,7 +141,11 @@ export class CreateGameListPage implements OnInit {
       componentProps: {
         type,
         task,
-        isVirtualWorld
+        isVirtualWorld,
+        isVRMirrored,
+        virEnvType,
+        numPlayers,
+        isSingleMode
       },
     });
 
@@ -175,18 +216,29 @@ export class CreateGameListPage implements OnInit {
   }
 
   navigateToOverview() {
-    //// console.log("navigate");
-    
-    let bundle = {
-      isVRWorld: false,
-      isVRMirrored: false
+    //console.log("navigate");
+    // if device is not connected to internet, show notification
+    if (!this.utilService.getIsOnlineValue()) {
+      // show no connection notification
+      this.utilService.showAlertNoConnection();
+      return;
     }
-    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
+
+    this.bundle = {
+      isVRWorld: !this.isRealWorld, // DoDo update it in overview to isRealWorld
+      isVRMirrored: false, // update code so you don't have to send it if realworld is false
+      virEnvType: this.virEnvType,
+      //isRealWorld: this.isRealWorld,
+      isSingleMode: this.isSingleMode,
+      numPlayers: (this.isSingleMode ? undefined : this.numPlayers)
+    }
+
+    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(this.bundle)}`);
   }
 
   async showPopover(ev: any, key: string) {
     let text = this.translate.instant(key);
-    
+
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

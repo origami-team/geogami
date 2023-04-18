@@ -304,6 +304,10 @@ button.alert-button.alert-button-update {
   font-size: 15px;
 }
 
+/*
+ * style of lottie
+ * -------------------------------------------
+ */
 // For phone
 .lottie-style {
   /* width: 13rem;
@@ -318,5 +322,46 @@ button.alert-button.alert-button-update {
   .lottie-style {
     width: 33rem;
     height: 20rem;
+  }
+}
+
+
+.multiPlayer-card {
+
+  color: black;
+
+  >ion-card-header {
+    color: black;
+    font-size: medium;
+    padding-top: 0.6rem;
+  }
+
+  >ion-card-content {
+
+    >div {
+      margin-bottom: 20px;
+
+      >h5 {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+
+/* qr code generator */
+.qr-code {
+  >img {
+    width: 25% !important;
+  }
+}
+
+// less than 830px tablet & phone
+@media only screen and (max-width: 830px) {
+  /* qr code generator */
+  .qr-code {
+    >img {
+      width: 60% !important;
+    }
   }
 }

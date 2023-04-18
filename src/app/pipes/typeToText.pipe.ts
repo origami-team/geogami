@@ -39,6 +39,7 @@ export class TypeToTextPipe implements PipeTransform {
       return "QuestionType.byMarkingDirectionOnMap";
     }
 
+    // DoDo
     if (taskType == "free") {
       if (value === "PHOTO" && answer) {
         return "QuestionType.byTakingPhoto";

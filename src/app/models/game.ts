@@ -8,10 +8,13 @@ export class Game {
     public tracking: boolean,
     public tasks: Task[],
     public bbox: any,
+    public isMultiplayerGame: boolean,
+    public numPlayers: number,
     public mapSectionVisible: boolean,
     public geofence: boolean,
     public isVRWorld: boolean,
     public isVRMirrored: boolean,
+    public virEnvType: string,
     public isVisible: boolean,
     public isCuratedGame: boolean
   ) { }

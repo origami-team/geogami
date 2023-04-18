@@ -24,9 +24,10 @@ export class GamesService {
     return headers;
   }
 
-  getGames(minimal: boolean = false): Promise<any> {
+  getGames(minimal: boolean = false, contentAdmin: boolean = false): Promise<any> {
+    // Only content admin can view multi-players games
     return this.http
-      .get(`${environment.apiURL}/game/all/?${minimal ? "minimal" : ""}`)
+      .get(`${environment.apiURL}/game/all/?${minimal ? "minimal" : ""}&${contentAdmin ? "contentAdmin" : ""}`)
       .toPromise();
   }
 
@@ -87,4 +88,13 @@ export class GamesService {
       .get(`${environment.apiURL}/appversion/current`)
       .toPromise();
   }
+
+  /* uploadTrack(data): Promise<any> {
+    return this.http
+    .post(`${environment.apiURL}/track`, data, {
+      headers: this.createHeaders(),
+      observe: 'response',
+    }
+    ).toPromise();
+  } */
 }

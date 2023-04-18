@@ -1,8 +1,12 @@
 <ion-content fullscreen>
 
   <ion-item lines="none">
-    <ion-select [placeholder]="selected=='de'? '🇩🇪': '🇺🇸'" (ionChange)="changeLng($event.detail.value);"
-      interface="customPopoverOptions" interface="popover" [ngModel]="selected">
+    <ion-select 
+      [placeholder]="selected=='de'? '🇩🇪': '🇺🇸'" 
+      (ionChange)="changeLng($event.detail.value);"
+      interface="customPopoverOptions" 
+      interface="popover" 
+      [ngModel]="selected">
 
       <ng-container *ngFor="let lang of languages">
         <ion-select-option value="{{lang.value}}">{{lang.img}}</ion-select-option>
@@ -13,7 +17,7 @@
 
   <img src="assets/icons/icon.png" class="logo center" />
 
-  <ion-card id="start_card_play" (click)="navigateGamesOverviewPage()" color="secondary">
+  <ion-card id="start_card_play" (click)="navigateGamesPlayPage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="game-controller"></ion-icon> {{ "Start.playMode" | translate }}
@@ -31,7 +35,7 @@
     <ion-card-content> {{ "Start.developModeDescription" | translate }} </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="(user | async)?.roles && (user | async)?.roles.includes('admin')" id="start_card_analyze"
+  <ion-card *ngIf="(user | async)?.roles && ['admin', 'contentAdmin'].includes( (user | async)?.roles[0] )" id="start_card_analyze"
     (click)="navigateAnalyzePage()" color="secondary">
     <ion-card-header>
       <ion-card-title>
@@ -60,7 +64,7 @@
   </ion-card>
 
   <!--  -->
-  <ion-card *ngIf="(user | async)?.username && (user | async)?.roles.includes('admin')" id="user_management" (click)="navigateUserManagement()" color="secondary">
+  <ion-card *ngIf="(user | async)?.username && ['admin', 'contentAdmin'].includes( (user | async)?.roles[0] )" id="user_management" (click)="navigateUserManagement()" color="secondary">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="people-outline"></ion-icon> User Management 
@@ -90,7 +94,7 @@
   </ion-card>
 
   <div class="ion-text-center" *ngIf="device && device.appBuild">
-    <p>V. {{device.appVersion}} {{['admin', 'scholar'].includes( (user | async)?.roles[0])? "("+device.appBuild+")":""}}</p>
+    <p>V. {{device.appVersion}} {{['admin', 'contentAdmin'].includes( (user | async)?.roles[0])? "("+device.appBuild+")":""}}</p>
   </div>
 
 </ion-content>

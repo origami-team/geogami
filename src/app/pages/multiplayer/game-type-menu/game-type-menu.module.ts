@@ -1,30 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditGameListPage } from './edit-game-list.page';
+import { GameTypeMenuPageRoutingModule } from './game-type-menu-routing.module';
 
+import { GameTypeMenuPage } from './game-type-menu.page';
 import { TranslateModule } from '@ngx-translate/core';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: EditGameListPage
-  }
-];
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
+    GameTypeMenuPageRoutingModule,
     TranslateModule
   ],
-  declarations: [EditGameListPage],
-  providers: []
+  declarations: [GameTypeMenuPage]
 })
-export class EditGameListPageModule { }
+export class GameTypeMenuPageModule {}

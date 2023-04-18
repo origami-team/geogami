@@ -22,32 +22,47 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
   @Input() taskType: any;
   @Input() settings: any;
 
-    // VR world
-    @Input() isVirtualWorld: boolean;
-    @Input() isVRMirrored: boolean;
+  // VR world
+  @Input() isVirtualWorld: boolean;
+  @Input() isVRMirrored: boolean;
+  @Input() virEnvType: string;
 
-    @Output() answerChange: EventEmitter<any> = new EventEmitter<any>(true);
+  // Multi-player Mode
+  @Input() numPlayers: Number;
+  @Input() isSingleMode: boolean;
+  @Input() collaborationType: any;
+
+  @Output() answerChange: EventEmitter<any> = new EventEmitter<any>(true);
 
   answerTypeEnum = AnswerType;
 
-    constructor(public popoverController: PopoverController, private translate: TranslateService) { }
+  constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.answerChange.emit(changes.answer.currentValue);
+    if (this.isSingleMode) {
+      // console.log("changes (answerTypeComponent): ", changes);
+      if (changes.answer) {
+        this.answerChange.emit(changes.answer.currentValue);
+      }
+    } else {
+      if (changes.answer) {
+        this.answerChange.emit(changes.answer.currentValue);
+      }
+    }
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-    async showPopover(ev: any, key: string) {
-        let text = this.translate.instant(key);
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
 
-        // console.log(ev);
-        const popover = await this.popoverController.create({
-            component: PopoverComponent,
-            event: ev,
-            translucent: true,
-            componentProps: { text }
-        });
-        return await popover.present();
-    }
+    console.log(ev);
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text }
+    });
+    return await popover.present();
+  }
 }

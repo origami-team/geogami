@@ -21,6 +21,10 @@ import { QuestionType, AnswerType, TaskMode } from "src/app/models/types";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
+import { navtasksMultiplayers3 } from "src/app/models/navigation-tasks-multi_3_players";
+import { navtasksMultiplayers2 } from "src/app/models/navigation-tasks-multi_2_players";
+import { themetasksMultiplayers3 } from "src/app/models/theme-tasks-multi-3-players";
+import { themetasksMultiplayers2 } from "src/app/models/theme-tasks-multi-2-players";
 
 @Component({
   selector: "app-create-task-modal",
@@ -31,10 +35,15 @@ export class CreateTaskModalPage implements OnInit {
   @Input() gameName = "";
   @Input() type = "nav";
   @Input() task: any = {};
-  
+
   // VR world
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
+  @Input() virEnvType: string;
+
+  // Multi-player Mode
+  @Input() numPlayers: Number;
+  @Input() isSingleMode: boolean;
 
   tasks: any[] = [];
 
@@ -78,7 +87,7 @@ export class CreateTaskModalPage implements OnInit {
     }
   ];
 
-  selectedTaskType: any;
+  selectedThemeTaskType: any;
 
   objectQuestionTemplate = [
     QuestionType.MAP_FEATURE,
@@ -91,22 +100,68 @@ export class CreateTaskModalPage implements OnInit {
 
   viewDirectionSetPosition = false;
 
+  // mutiplayer - collaboration methods
+  collaborationTypes: any[] = [
+    {
+      type: "1-1",
+      text: "Each player has a unique task instruction (1-1)"
+    }, {
+      type: "sequential",
+      text: "All players have same task instruction (sequential)"
+    }, /* {
+      type: "leader-follower",
+      text: "Only one player can see the instruction (leader & follower)"
+    }, */ {
+      type: "freeChoice",
+      text: "Free choice"
+    }
+  ];
+  // selectedcollMethodType: any;
+  selectedCollType: any;
+
+
   constructor(
     public modalController: ModalController,
     public popoverController: PopoverController,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.type == "nav") {
-      this.tasks = cloneDeep(navtasks);
+      if (this.isSingleMode) {
+        this.tasks = cloneDeep(navtasks);
+      } else {
+        switch (this.numPlayers) {
+          case 2: this.tasks = cloneDeep(navtasksMultiplayers2);
+            break;
+          case 3: this.tasks = cloneDeep(navtasksMultiplayers3);
+            break;
+        }
+        // console.log("////navtasksMultiplayers: ", this.tasks)
+      }
+
     } else {
-      this.tasks = cloneDeep(themetasks);
+      if (this.isSingleMode) {
+        this.tasks = cloneDeep(themetasks);
+      } else {
+        switch (this.numPlayers) {
+          case 2: this.tasks = cloneDeep(themetasksMultiplayers2);
+            break;
+          case 3: this.tasks = cloneDeep(themetasksMultiplayers3);
+            break;
+        }
+      }
     }
 
+    //* in case the task is already created
     if (this.task == null) {
       this.task = this.tasks[0];
-      this.selectedTaskType = this.taskTypes[0];
+      this.selectedThemeTaskType = this.taskTypes[0];
+      
+      // (mutli-player): 1-1 is the default collaboration type
+      if (!this.isSingleMode) {
+        this.selectedCollType = this.collaborationTypes[0];
+      }
 
       this.task.settings = {
         feedback: true,
@@ -122,23 +177,30 @@ export class CreateTaskModalPage implements OnInit {
       this.settingsChange();
     } else {
       if (this.task.type.includes("loc")) {
-        this.selectedTaskType = this.taskTypes[0];
+        this.selectedThemeTaskType = this.taskTypes[0];
       }
       if (this.task.type.includes("object")) {
-        this.selectedTaskType = this.taskTypes[1];
+        this.selectedThemeTaskType = this.taskTypes[1];
       }
       if (this.task.type.includes("direction")) {
-        this.selectedTaskType = this.taskTypes[2];
+        this.selectedThemeTaskType = this.taskTypes[2];
       }
       if (this.task.type.includes("free")) {
-        this.selectedTaskType = this.taskTypes[3];
+        this.selectedThemeTaskType = this.taskTypes[3];
+      }
+
+      //* (mutli-player): when task is not null, retreive selected coll. type
+      if (!this.isSingleMode) {
+        //* as we only store type in db without text we need to retreive it using index
+        let index = this.collaborationTypes.findIndex(el => el.type == this.task.collaborationType);
+        this.selectedCollType = this.collaborationTypes[index];
       }
     }
     // this.onTaskSelected(this.task);
     this.onTaskSelected(cloneDeep(this.task));
   }
 
-  onTaskTypeChange(taskType) {
+  onThemeTaskTypeChange(taskType) {
     if (taskType.type == 1) {
       this.task = this.tasks[0];
     } else if (taskType.type == 2) {
@@ -146,24 +208,84 @@ export class CreateTaskModalPage implements OnInit {
     } else if (taskType.type == 3) {
       this.task = this.tasks[7];
     } else {
-      this.task = {
-        //name: 'Freie Aufgabe??',
-        name: this.translate.instant("Tasktypes.freeTask"),
-        type: "free",
-        category: "theme",
-        question: {
-          type: QuestionType.TEXT,
-          text: "",
-        },
-        answer: {
-          type: AnswerType.MULTIPLE_CHOICE,
-        },
-      };
+      if (this.isSingleMode) {
+        this.task = {
+          name: this.translate.instant("Tasktypes.freeTask"),
+          type: "free",
+          category: "theme",
+          question: {
+            type: QuestionType.TEXT,
+            text: "",
+          },
+          answer: {
+            type: AnswerType.MULTIPLE_CHOICE,
+          },
+        };
+      } else {
+        if (this.numPlayers == 2) {
+          this.task = {
+            name: this.translate.instant("Tasktypes.freeTask"),
+            type: "free",
+            category: "theme",
+            question: [
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              },
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              }
+            ],
+            answer: [
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              },
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              }
+            ],
+          };
+        } else {
+          this.task = {
+            name: this.translate.instant("Tasktypes.freeTask"),
+            type: "free",
+            category: "theme",
+            question: [
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              },
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              },
+              {
+                type: QuestionType.TEXT,
+                text: "",
+              }
+            ],
+            answer: [
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              },
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              },
+              {
+                type: AnswerType.MULTIPLE_CHOICE,
+              }
+            ],
+          };
+        }
+      }
     }
     this.onTaskSelected(this.task);
   }
 
   onTaskSelected(newValue) {
+    // console.log("//// newValue:", newValue)
+
     this.task = newValue;
 
     if (!this.task.settings || Object.keys(this.task.settings).length == 0) {
@@ -183,15 +305,231 @@ export class CreateTaskModalPage implements OnInit {
 
     this.mapFeatures = this.task.mapFeatures;
 
+
+    /*  */
     if (this.task.type == "free") {
       this.objectQuestionSelect = this.freeQuestionSelect.map((t) => ({
         type: t as QuestionType,
         text: t,
       }));
+      // console.log("//// objectQuestionSelect:  ", this.objectQuestionSelect)
       this.objectAnswerSelect = this.freeAnswerSelect.map((t) => ({
         type: t as AnswerType,
         text: t,
       }));
+      // console.log("//// objectAnswerSelect:  ", this.objectAnswerSelect)
+
+      /* single-player */
+      if (this.isSingleMode) {
+
+        if (
+          this.task.answer.type == AnswerType.PHOTO ||
+          this.task.answer.type == AnswerType.TEXT
+        ) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
+
+        if (this.task.answer.type == AnswerType.DRAW) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
+      } else {
+        /* multi-player */
+        if (
+          this.task.answer[0].type == AnswerType.PHOTO ||
+          this.task.answer[0].type == AnswerType.TEXT
+        ) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
+
+        if (this.task.answer[0].type == AnswerType.DRAW) {
+          this.task.settings.feedback = false;
+          this.task.settings.multipleTries = false;
+          this.showFeedback = false;
+          this.showMultipleTries = false;
+        }
+      }
+
+
+    } else {
+      // console.log("//// (onTaskSelected) 1a - this.tasks", this.tasks);
+      this.objectQuestionSelect = Array.from(
+        new Set(
+          this.tasks
+            .filter((t) => t.type == this.task.type)
+            .map((t) => (this.isSingleMode ? t.question.type : t.question[0].type))  // DoDo
+        )
+      )
+        .map((t) => ({ type: t as QuestionType, text: t }))
+        .sort( // DoDo
+          (a, b) =>
+            this.objectQuestionTemplate.indexOf(a.type) -
+            this.objectQuestionTemplate.indexOf(b.type)
+        );
+
+      // multi-player impl.
+      if (this.isSingleMode) {
+        const similarTypes = cloneDeep(themetasks).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) => t.question.type == this.task.question.type
+        );
+
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer.type as AnswerType,
+              text: t.answer.type,
+            }))
+          )
+        );
+
+        if (
+          this.task.type == "theme-direction" &&
+          this.task.question.type == "TEXT" &&
+          this.task.answer.type == "MAP_DIRECTION"
+        ) {
+          if (this.task.question.direction == undefined) {
+            this.task.question.direction = {};
+          }
+          if (this.task.question.direction.position != undefined) {
+            this.viewDirectionSetPosition = true;
+          } else {
+            this.viewDirectionSetPosition = false;
+          }
+        }
+
+      } else {
+        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) => t.question[0].type == this.task.question[0].type
+        );
+
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer[0].type as AnswerType,
+              text: t.answer[0].type,
+            }))
+          )
+        );
+
+        if (
+          this.task.type == "theme-direction" &&
+          this.task.question[0].type == "TEXT" &&
+          this.task.answer[0].type == "MAP_DIRECTION"
+        ) {
+          if (this.task.question[0].direction == undefined) {
+            this.task.question[0].direction = {};
+          }
+          if (this.task.question[0].direction.position != undefined) {
+            this.viewDirectionSetPosition = true;
+          } else {
+            this.viewDirectionSetPosition = false;
+          }
+        }
+      }
+
+    }
+  }
+
+  /* on selecting a  */
+  onObjectQuestionSelectChange() {
+    console.log("//// o.q.s.c 0 - this.task.type", this.task.type);
+
+    if (this.isSingleMode) {
+      if (this.task.type != "free") {
+        // console.log("//// o.q.s.c 1 - free");
+
+        const similarTypes = cloneDeep(themetasks).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) => t.question.type == this.task.question.type
+        );
+
+        this.onTaskSelected(similarQ[0]);
+
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer.type as AnswerType,
+              text: t.answer.type,
+            }))
+          )
+        );
+
+        if (this.task.question.type == QuestionType.MAP_DIRECTION) {
+          this.task.settings.multipleTries = false;
+          this.showMultipleTries = false;
+        } else {
+          this.task.settings.multipleTries = true;
+          this.showMultipleTries = true;
+        }
+      }
+    } else {
+      if (this.task.type != "free") {
+        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) => t.question[0].type == this.task.question[0].type
+        );
+
+        this.onTaskSelected(similarQ[0]);
+
+        this.objectAnswerSelect = Array.from(
+          new Set(
+            similarQ.map((t) => ({
+              type: t.answer[0].type as AnswerType,
+              text: t.answer[0].type,
+            }))
+          )
+        );
+
+        if (this.task.question[0].type == QuestionType.MAP_DIRECTION) {
+          this.task.settings.multipleTries = false;
+          this.showMultipleTries = false;
+        } else {
+          this.task.settings.multipleTries = true;
+          this.showMultipleTries = true;
+        }
+      }
+    }
+
+  }
+
+  onObjectAnswerSelectChange() {
+    if (this.isSingleMode) {
+      // Single-player impl
+      if (this.task.type != "free") {
+        const similarTypes = cloneDeep(themetasks).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) =>
+            t.question.type == this.task.question.type &&
+            t.answer.type == this.task.answer.type
+        );
+
+        this.onTaskSelected(similarQ[0]);
+      }
 
       if (
         this.task.answer.type == AnswerType.PHOTO ||
@@ -201,127 +539,52 @@ export class CreateTaskModalPage implements OnInit {
         this.task.settings.multipleTries = false;
         this.showFeedback = false;
         this.showMultipleTries = false;
-      }
-
-      if (this.task.answer.type == AnswerType.DRAW) {
+      } else if (this.task.answer.type == AnswerType.DRAW) {
         this.task.settings.feedback = false;
         this.task.settings.multipleTries = false;
         this.showFeedback = false;
         this.showMultipleTries = false;
-      }
-    } else {
-      this.objectQuestionSelect = Array.from(
-        new Set(
-          this.tasks
-            .filter((t) => t.type == this.task.type)
-            .map((t) => t.question.type)
-        )
-      )
-        .map((t) => ({ type: t as QuestionType, text: t }))
-        .sort(
-          (a, b) =>
-            this.objectQuestionTemplate.indexOf(a.type) -
-            this.objectQuestionTemplate.indexOf(b.type)
-        );
-
-      const similarTypes = cloneDeep(themetasks).filter(
-        (t) => t.type == this.task.type
-      );
-
-      const similarQ = similarTypes.filter(
-        (t) => t.question.type == this.task.question.type
-      );
-
-      this.objectAnswerSelect = Array.from(
-        new Set(
-          similarQ.map((t) => ({
-            type: t.answer.type as AnswerType,
-            text: t.answer.type,
-          }))
-        )
-      );
-    }
-
-    if (
-      this.task.type == "theme-direction" &&
-      this.task.question.type == "TEXT" &&
-      this.task.answer.type == "MAP_DIRECTION"
-    ) {
-      if (this.task.question.direction == undefined) {
-        this.task.question.direction = {};
-      }
-      if (this.task.question.direction.position != undefined) {
-        this.viewDirectionSetPosition = true;
       } else {
-        this.viewDirectionSetPosition = false;
-      }
-    }
-  }
-
-  onObjectQuestionSelectChange() {
-    if (this.task.type != "free") {
-      const similarTypes = cloneDeep(themetasks).filter(
-        (t) => t.type == this.task.type
-      );
-
-      const similarQ = similarTypes.filter(
-        (t) => t.question.type == this.task.question.type
-      );
-
-      this.onTaskSelected(similarQ[0]);
-
-      this.objectAnswerSelect = Array.from(
-        new Set(
-          similarQ.map((t) => ({
-            type: t.answer.type as AnswerType,
-            text: t.answer.type,
-          }))
-        )
-      );
-
-      if (this.task.question.type == QuestionType.MAP_DIRECTION) {
-        this.task.settings.multipleTries = false;
-        this.showMultipleTries = false;
-      } else {
+        this.task.settings.feedback = true;
         this.task.settings.multipleTries = true;
+        this.showFeedback = true;
         this.showMultipleTries = true;
       }
-    }
-  }
-
-  onObjectAnswerSelectChange() {
-    if (this.task.type != "free") {
-      const similarTypes = cloneDeep(themetasks).filter(
-        (t) => t.type == this.task.type
-      );
-
-      const similarQ = similarTypes.filter(
-        (t) =>
-          t.question.type == this.task.question.type &&
-          t.answer.type == this.task.answer.type
-      );
-
-      this.onTaskSelected(similarQ[0]);
-    }
-
-    if (
-      this.task.answer.type == AnswerType.PHOTO ||
-      this.task.answer.type == AnswerType.TEXT
-    ) {
-      this.task.settings.feedback = false;
-      this.task.settings.multipleTries = false;
-      this.showFeedback = false;
-      this.showMultipleTries = false;
-    } else if (this.task.answer.type == AnswerType.DRAW) {
-      this.task.settings.feedback = false;
-      this.task.settings.multipleTries = false;
-      this.showFeedback = false;
-      this.showMultipleTries = false;
     } else {
-      this.task.settings.feedback = true;
-      this.task.settings.multipleTries = true;
-      this.showFeedback = true;
-      this.showMultipleTries = true;
+      // Multi-player impl
+      if (this.task.type != "free") {
+        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
+          (t) => t.type == this.task.type
+        );
+
+        const similarQ = similarTypes.filter(
+          (t) =>
+            t.question[0].type == this.task.question[0].type &&
+            t.answer[0].type == this.task.answer[0].type
+        );
+
+        this.onTaskSelected(similarQ[0]);
+      }
+
+      if (
+        this.task.answer[0].type == AnswerType.PHOTO ||
+        this.task.answer[0].type == AnswerType.TEXT
+      ) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      } else if (this.task.answer[0].type == AnswerType.DRAW) {
+        this.task.settings.feedback = false;
+        this.task.settings.multipleTries = false;
+        this.showFeedback = false;
+        this.showMultipleTries = false;
+      } else {
+        this.task.settings.feedback = true;
+        this.task.settings.multipleTries = true;
+        this.showFeedback = true;
+        this.showMultipleTries = true;
+      }
     }
   }
 
@@ -365,40 +628,71 @@ export class CreateTaskModalPage implements OnInit {
       this.showMultipleTries = false;
     }
 
-    if (
-      this.task.answer.mode == TaskMode.NAV_ARROW ||
-      this.task.question.type == QuestionType.NAV_INSTRUCTION ||
-      this.task.question.type == QuestionType.NAV_INSTRUCTION_PHOTO ||
-      this.task.answer.type == AnswerType.PHOTO ||
-      (this.task.type == "nav-flag" && !this.task.settings.confirmation)
-    ) {
-      this.task.settings.multipleTries = false;
+    // Add answer hints for feedback of MAP_DIRECTION type
+    // Disable multipleTries of some tasks inluding (nav-tasks, ....)
+    // DoDo : add them in a model as with navtasks and themetasks
+    if (this.isSingleMode) {
+      if (
+        this.task.answer.mode == TaskMode.NAV_ARROW ||
+        this.task.question.type == QuestionType.NAV_INSTRUCTION ||
+        this.task.question.type == QuestionType.NAV_INSTRUCTION_PHOTO ||
+        this.task.answer.type == AnswerType.PHOTO ||
+        (this.task.type == "nav-flag" && !this.task.settings.confirmation)
+      ) {
+        this.task.settings.multipleTries = false;
 
-      this.showMultipleTries = false;
+        this.showMultipleTries = false;
+      }
+
+      if (
+        (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) &&
+        this.task.settings.feedback &&
+        this.task.settings.multipleTries &&
+        !this.task.answer.hints
+      ) {
+        this.task.answer.hints = [
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+        ];
+      }
+    } else {
+      if (
+        this.task.answer[0].mode == TaskMode.NAV_ARROW ||
+        this.task.question[0].type == QuestionType.NAV_INSTRUCTION ||
+        this.task.question[0].type == QuestionType.NAV_INSTRUCTION_PHOTO ||
+        this.task.answer[0].type == AnswerType.PHOTO ||
+        (this.task.type == "nav-flag" && !this.task.settings.confirmation)
+      ) {
+        this.task.settings.multipleTries = false;
+
+        this.showMultipleTries = false;
+      }
+
+      if (
+        (this.task.answer[0].type == AnswerType.MAP_DIRECTION || this.task.answer[0].type === AnswerType.DIRECTION) &&
+        this.task.settings.feedback &&
+        this.task.settings.multipleTries &&
+        !this.task.answer[0].hints
+      ) {
+        let hintsList = [
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+          "Probiere es noch einmal",
+        ];
+        this.task.answer[0].hints = cloneDeep(hintsList);
+        this.task.answer[1].hints = cloneDeep(hintsList);
+        if (this.numPlayers == 3) {
+          this.task.answer[2].hints = cloneDeep(hintsList);
+        }
+
+      }
     }
 
-    if (
-      (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) &&
-      this.task.settings.feedback &&
-      this.task.settings.multipleTries &&
-      !this.task.answer.hints
-    ) {
-      this.task.answer.hints = [
-        "Probiere es noch einmal",
-        "Probiere es noch einmal",
-        "Probiere es noch einmal",
-      ];
-    }
+
   }
 
   selectCompare(task1, task2) {
-    if (task1 == null || task2 == null) {
-      return false;
-    }
-    return task1.type == task2.type;
-  }
-
-  taskTypeCompare(task1, task2) {
     if (task1 == null || task2 == null) {
       return false;
     }
@@ -412,7 +706,8 @@ export class CreateTaskModalPage implements OnInit {
       componentProps: {
         features: this.mapFeatures,
         isVirtualWorld: this.isVirtualWorld,
-        isVRMirrored: this.isVRMirrored
+        isVRMirrored: this.isVRMirrored,
+        virEnvType: this.virEnvType
       }
     });
     await modal.present();
@@ -449,6 +744,170 @@ export class CreateTaskModalPage implements OnInit {
       if (this.viewDirectionSetPosition == false) {
         this.task.question.direction.position = undefined;
       }
+    }
+
+    //* inlclude vir. env. type in task data
+    if(this.isVirtualWorld){
+      this.task.virEnvType = this.virEnvType;
+      console.log("🚀 ~ CreateTaskModalPage ~ dismissModal ~ this.virEnvType:", this.virEnvType)
+    }
+
+    /* multi-player */
+    // set whether all palyers have same question and/or answer
+    if (!this.isSingleMode) {
+      // save coll method type
+      console.log("// this.selectedCollType.type: ", this.selectedCollType.type);
+      
+      this.task.collaborationType = this.selectedCollType.type;
+
+      // only for sequential and free choice
+      if(this.selectedCollType.type == 'freeChoice'){
+
+        /* Question types */
+        if (this.task.question[0].allHaveSameInstruction) {
+          console.log("/// same Instruction ");
+          this.task.question[1].text = this.task.question[0].text;
+          if (this.numPlayers == 3) {
+            this.task.question[2].text = this.task.question[0].text;
+          }
+        }
+        if (this.task.question[0].allHaveSameAudio) {
+          console.log("/// same audios ");
+          this.task.question[1].audio = this.task.question[0].audio;
+          if (this.numPlayers == 3) {
+            this.task.question[2].audio = this.task.question[0].audio;
+          }
+        }
+        if (this.task.question[0].allHasSameMarkObj) {
+          console.log("/// same mark obbject ");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+          }
+        }
+        if (this.task.question[0].allHasSameInstPhoto) {
+          console.log("/// same mark obbject ");
+          this.task.question[1].text = this.task.question[0].text;
+          this.task.question[1].photo = this.task.question[0].photo;
+          if (this.numPlayers == 3) {
+            this.task.question[2].text = this.task.question[0].text;
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
+        }
+        if (this.task.question[0].allHasSameMapMark) {
+          console.log("/// same map mark ");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+          }
+        }
+        if (this.task.question[0].allHasSameMarkObjMode) {
+          console.log("/// same Mark object (TaskMode.NO_FEATURE)");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+          }
+        }
+        if (this.task.question[0].allHasSamePhotoMarkObj) {
+          console.log("/// same Photo of the objec");
+          this.task.question[1].geometry = this.task.question[0].geometry;
+          this.task.question[1].photo = this.task.question[0].photo;
+  
+          if (this.numPlayers == 3) {
+            this.task.question[2].geometry = this.task.question[0].geometry;
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
+        }
+        if (this.task.question[0].allHasSameViewDirec) {
+          console.log("/// same view direction");
+          this.task.question[1].direction = this.task.question[0].direction;
+          if (this.numPlayers == 3) {
+            this.task.question[2].direction = this.task.question[0].direction;
+          }
+        }
+        if (this.task.question[0].allHasSameDirMap) {
+          console.log("/// same direction on map");
+          this.task.question[1].direction = this.task.question[0].direction;
+          if (this.numPlayers == 3) {
+            this.task.question[2].direction = this.task.question[0].direction;
+          }
+        }
+        if (this.task.question[0].allHasSamePhotoDirMap) {
+          console.log("/// same Photo and direction n map");
+          this.task.question[1].direction = this.task.question[0].direction;
+          this.task.question[1].photo = this.task.question[0].photo;
+  
+          if (this.numPlayers == 3) {
+            this.task.question[2].direction = this.task.question[0].direction;
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
+        }
+        if (this.task.question[0].allHasSamePhotoTask) {
+          console.log("/// same Photo for the task");
+          this.task.question[1].photo = this.task.question[0].photo;
+  
+          if (this.numPlayers == 3) {
+            this.task.question[2].photo = this.task.question[0].photo;
+          }
+        }
+
+        /* Answer types */
+        if (this.task.answer[0].allHasSameDes) {
+          console.log("/// same allHasSameDes");
+          this.task.answer[1].position = this.task.answer[0].position;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].position = this.task.answer[0].position;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameMultiChoicePhoto) {
+          console.log("/// same allHaveSameMultiChoicePhoto");
+          this.task.answer[1].hints = this.task.answer[0].hints;
+          this.task.answer[1].photos = this.task.answer[0].photos;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].hints = this.task.answer[0].hints;
+            this.task.answer[2].photos = this.task.answer[0].photos;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameMultiChoiceText) {
+          console.log("/// same allHaveSameMultiChoiceText");
+          this.task.answer[1].hints = this.task.answer[0].hints;
+          this.task.answer[1].choices = this.task.answer[0].choices;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].hints = this.task.answer[0].hints;
+            this.task.answer[2].choices = this.task.answer[0].choices;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameCorrAnswer) {
+          console.log("/// same allHaveSameCorrAnswer");
+          this.task.answer[1].number = this.task.answer[0].number;
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].number = this.task.answer[0].number;
+          }
+        }
+  
+        if (this.task.answer[0].allHaveSameDirfeedback) {
+          console.log("/// same feedbak");
+          this.task.answer[1].hints[0] = this.task.answer[0].hints[0];
+          this.task.answer[1].hints[1] = this.task.answer[0].hints[1];
+          this.task.answer[1].hints[2] = this.task.answer[0].hints[2];
+  
+          if (this.numPlayers == 3) {
+            this.task.answer[2].hints[0] = this.task.answer[0].hints[0];
+            this.task.answer[2].hints[1] = this.task.answer[0].hints[1];
+            this.task.answer[2].hints[2] = this.task.answer[0].hints[2];
+          }
+        }
+
+      }
+      
+
     }
 
     this.modalController.dismiss({

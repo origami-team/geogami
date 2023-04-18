@@ -9,7 +9,6 @@ import { AuthService } from '../services/auth-service.service';
 import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
-import { platform } from 'process';
 import { UtilService } from '../services/util.service';
 
 @Component({
@@ -53,10 +52,10 @@ export class StartPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    // if device is not connected to internet, show notification
-    if (!this.utilService.getIsOnlineValue()) {
+    /* if device is not connected to internet, show notification */
+    /* if (!this.utilService.getIsOnlineValue()) {
       return;
-    }
+    } */
 
     // get current app version
     Plugins.Device.getInfo().then((device) => (this.device = device));
@@ -92,27 +91,23 @@ export class StartPage implements OnInit {
     // console.log(e);
   }
 
-  navigateGamesOverviewPage() {
-    // disable unregistered users from playing using the virtual world
-    if (['admin', 'contentAdmin', 'scholar'].includes(this.userRole)) {
-      this.navCtrl.navigateForward('play-game/play-game-menu');
-    } else {
-      this.navCtrl.navigateForward(`play-game/play-game-list/${"RealWorld"}`);
+  navigateGamesPlayPage() {
+    if(Capacitor.platform =="web"){
+      this.navCtrl.navigateForward(`play-game/play-game-list`);
+    } else{
+      this.navCtrl.navigateForward(`play-game/play-game-menu`);
     }
-
-    // enable unregistered users to play using the virtual world
-    // this.navCtrl.navigateForward('play-game/play-game-menu');
-
   }
 
   navigateCreatePage() {
-    this.navCtrl.navigateForward('create-game-menu');
-
-    if (this.userRole != undefined && (this.userRole == "admin" || this.userRole == "scholar")) {
+    /* if (this.userRole != undefined && (this.userRole == "admin" || this.userRole == "contentAdmin" || this.userRole == "scholar")) {
       this.navCtrl.navigateForward('create-game-menu');
     } else {
-      this.navCtrl.navigateForward('create-game');
-    }
+      this.navCtrl.navigateForward(`create-game/${"userRole"}`);
+    } */
+
+    //* ToDo update it (remove bundle)
+    this.navCtrl.navigateForward(`create-game/${"userRole"}`);
   }
 
   navigateShowroomPage() {
@@ -179,7 +174,8 @@ export class StartPage implements OnInit {
 
   }
 
-  // convert version value to int
+  /************/
+  /* convert version value to int */
   versionToInt(VersionInString) {
     let v = VersionInString.split('.');
     // console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);

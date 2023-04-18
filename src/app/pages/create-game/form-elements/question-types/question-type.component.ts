@@ -19,20 +19,48 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     // VR world
     @Input() isVirtualWorld: boolean;
     @Input() isVRMirrored: boolean;
+    @Input() virEnvType: string;
+
+    // Multi-player Mode
+    @Input() numPlayers: Number;
+    @Input() isSingleMode: Number;
+    @Input() collaborationType: any;
 
     @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
 
     questionTypeEnum = QuestionType;
     taskModeEnum = TaskMode;
 
+    initialAvatarPosMapView = false;
+
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        // console.log(changes);
-        this.questionChange.emit(changes.question.currentValue);
+        console.log("changes (changes): ", changes);
+        if (this.isSingleMode) {
+            // console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
+            if (changes.question) {
+                this.questionChange.emit(changes.question.currentValue);
+            }
+        } else {
+            // console.log("changes (changes.question.currentValue): ", changes);
+            if (changes.question) {
+                this.questionChange.emit(changes.question.currentValue);
+            }
+        }
+    }
+
+    /* multi-player */
+    onCollTypeChange(collType: any) {
+        console.log("collType:", collType);
+
     }
 
     ngOnInit() {
+        if(this.isVirtualWorld && this.question && this.question.initialAvatarPosition){
+            console.log("----question: ", this.question)
+            this.initialAvatarPosMapView = true;
+        }
 
     }
 

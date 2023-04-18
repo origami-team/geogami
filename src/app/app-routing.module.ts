@@ -16,7 +16,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'play-game/play-game-list/:worldType',
+    path: 'play-game/play-game-list',
     loadChildren: () =>
       import('./pages/play-game/play-game-list/play-game-list.module').then(
         (m) => m.PlayGameListPageModule
@@ -37,7 +37,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'create-game',
+    path: 'create-game/:bundle',
     loadChildren: () =>
       import('./pages/create-game/create-game/create-game.module').then(
         (m) => m.CreateGamePageModule
@@ -53,7 +53,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'create-game/create-game-list',
+    path: 'create-game-list/:bundle',
     loadChildren: () =>
       import(
         './pages/create-game/create-game-list/create-game-list.module'
@@ -69,7 +69,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'edit-game-list/:worldType',
+    path: 'edit-game-list',
     loadChildren: () =>
       import('./pages/edit-game/edit-game-list/edit-game-list.module').then(
         (m) => m.EditGameListPageModule
@@ -77,10 +77,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'edit-game/:id',
+    path: 'edit-game-tasks/:bundle',
     loadChildren: () =>
-      import('./pages/edit-game/edit-game-tasks/edit-game-list.module').then(
-        (m) => m.EditGameListPageModule
+      import('./pages/edit-game/edit-game-tasks/edit-game-tasks.module').then(
+        (m) => m.EditGameTasksPageModule
       ),
     canActivate: [AuthGuard],
   },
@@ -184,12 +184,20 @@ const routes: Routes = [
       m => m.PlayGameMenuPageModule)
   },
   {
-    path: 'create-game-virtual-menu',
+    path: 'create-game-virtual-menu/:bundle',
     loadChildren: () => import('./pages/create-game/create-game-virtual-menu/create-game-virtual-menu.module').then( m => m.CreateGameVirtualMenuPageModule)
   },
   {
     path: 'user/user-management',
     loadChildren: () => import('./pages/user/user-management/user-management.module').then( m => m.UserManagementPageModule)
+  },
+  {
+    path: 'game-type-menu/:worldType',
+    loadChildren: () => import('./pages/multiplayer/game-type-menu/game-type-menu.module').then( m => m.GameTypeMenuPageModule)
+  },
+  {
+    path: 'barcode-scanner',
+    loadChildren: () => import('./pages/barcode-scanner/barcode-scanner.module').then( m => m.BarcodeScannerPageModule)
   },
 ];
 @NgModule({
