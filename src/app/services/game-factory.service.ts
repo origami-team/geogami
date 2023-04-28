@@ -18,7 +18,7 @@ export class GameFactoryService {
       ...this.game,
       ...data,
     };
-    console.log("New Game: ", this.game);
+    // console.log("New Game: ", this.game);
     this.storage.set("game", this.game);
   }
 
@@ -26,11 +26,11 @@ export class GameFactoryService {
     if (!task._id) {
       task._id = String(Math.floor(Date.now() / 1000));
     }
-    // console.log(task, index);
+    // // console.log(task, index);
     if (this.game.hasOwnProperty("tasks")) {
       // const newTaskArr = this.game.tasks;
       // newTaskArr.splice(index, 0, task);
-      // console.log(newTaskArr);
+      // // console.log(newTaskArr);
       this.game.tasks.push(task);
     } else {
       this.game = {
@@ -43,14 +43,14 @@ export class GameFactoryService {
   }
 
   removeTask(taskID: string) {
-    console.log(this.game.tasks);
+    // console.log(this.game.tasks);
     this.game.tasks = this.game.tasks.filter((t) => t._id != taskID);
     this.storage.set("game", this.game);
     return this.game;
   }
 
   updateTask(taskID: string, task: Task) {
-    console.log(task, taskID);
+    // console.log(task, taskID);
     if (task._id == undefined) {
       task._id = taskID;
     }
@@ -61,7 +61,7 @@ export class GameFactoryService {
 
       return t;
     });
-    console.log(this.game.tasks);
+    // console.log(this.game.tasks);
     this.storage.set("game", this.game);
     return this.game;
   }
@@ -73,7 +73,7 @@ export class GameFactoryService {
 
   async getGame(): Promise<Game> {
     return this.storage.get("game").then((val) => {
-      console.log(val);
+      // console.log(val);
       if (val != undefined) {
         this.game = val;
       } else if (!this.game) {
