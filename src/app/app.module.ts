@@ -61,6 +61,7 @@ export function createTranslateLoader(http: HttpClient) {
 */
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 const config: SocketIoConfig = { url: 'https://goegami-ve.azurewebsites.net/', options: {} }; // azure server - branch (multiplayer - realworld - V1)
+// const config: SocketIoConfig = { url: 'http://10.67.105.250:3005/', options: {} }; // azure server - branch (multiplayer - realworld - V1)
 
 
 @NgModule({
