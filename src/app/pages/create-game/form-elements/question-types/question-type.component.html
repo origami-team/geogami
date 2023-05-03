@@ -161,7 +161,7 @@
       [isVRMirrored]="isVRMirrored"></app-map>
   </div>
 
-  <ion-item class="ion-no-padding">
+  <ion-item class="ion-no-padding" *ngIf="isVirtualWorld">
     <h5>
       Set avatar initial position and direction 🧍‍♂️
       <ion-icon name="information-circle" (click)="
