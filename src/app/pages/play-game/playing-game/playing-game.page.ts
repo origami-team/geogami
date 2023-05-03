@@ -890,16 +890,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* temp */
     this.map.on('zoom', () => {
-      const currentZoom = this.map.getZoom();
-      // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
-      /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
-      if (environment.virEnvProperties[this.virEnvType].zoomInLayer1) {
-        if (currentZoom <= 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
-          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png", false);
-        } else if (currentZoom > 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + "b.png") {
-          this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png", false);
+      if (this.isVirtualWorld) {
+        const currentZoom = this.map.getZoom();
+        // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
+        /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
+        if (environment.virEnvProperties[this.virEnvType].zoomInLayer1) {
+          if (currentZoom <= 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
+            this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png", false);
+          } else if (currentZoom > 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + "b.png") {
+            this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png", false);
+          }
         }
       }
+
     });
 
     /* (V.E.): to be able to reload marker when style is changed in realtime */
