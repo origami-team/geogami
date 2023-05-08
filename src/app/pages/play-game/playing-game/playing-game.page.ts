@@ -632,9 +632,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.socketService.socket.connect();
     }
 
-    /* wiht Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) 
-        - now vir env name is sent instead of boolion
+    /* with Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) 
+        - now vir env name is sent instead of boolion (mirroed or normal)
     */
+   //* (with single & multiplayer -> here where user connect join a room )
     this.socketService.socket.emit("newGame", {
       gameCode: (
         this.isSingleMode ? this.gameCode : this.playersNames[0]
