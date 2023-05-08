@@ -229,7 +229,198 @@ export const environment = {
         [0.001583738739 + 0.001, 0.0017125625 + 0.001]
       ],
       zoom: 19
-    }
+    },
+    "VirEnv_12": {
+      name: "Map Rotation - Post Difficult",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_13": {
+      name: "Map Rotation - Post Easy 1",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_14": {
+      name: "Map Rotation - - Post Easy 2",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_15": {
+      name: "Map Rotation - Pre Difficult",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_16": {
+      name: "Map Rotation - Pre Easy 1",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_17": {
+      name: "Map Rotation - Pre Easy 2",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_18": {
+      name: "Map Rotation - Training 1",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_19": {
+      name: "Map Rotation - Training 2",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_20": {
+      name: "Map Rotation - Training 3",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    "VirEnv_21": {
+      name: "Map Rotation - Training 4",
+      initialPosition: {
+        lng: 100.9 / 111000,
+        lat: 60.76 / 112000
+      },
+      overlayCoords: [
+        [0.0002323873874, 0.0017125625],
+        [0.001583738739, 0.0017125625],
+        [0.001583738739, 0.0003759622302],
+        [0.0002323873874, 0.0003759622302]
+      ],
+      center: [0.001351351351 / 2, 0.001351351351 / 2],
+      bounds: [
+        [0.0002323873874 - 0.001, 0.0003759622302 - 0.0015],
+        [0.001583738739 + 0.001, 0.0017125625 + 0.001]
+      ],
+      zoom: 19
+    },
+    
 
   },
   virEnvsLayers: [
@@ -278,6 +469,46 @@ export const environment = {
       EnvName: "Location Marker - Training 2",
       layerName: "VirEnv_11",
       img_url: "assets/vir_envs_layers/VirEnv_11.png"
+    }, {
+      EnvName: "Map Rotation - Post Difficult",
+      layerName: "VirEnv_12",
+      img_url: "assets/vir_envs_layers/VirEnv_12.png"
+    }, {
+      EnvName: "Map Rotation - Post Easy 1",
+      layerName: "VirEnv_13",
+      img_url: "assets/vir_envs_layers/VirEnv_13.png"
+    }, {
+      EnvName: "Map Rotation - Post Easy 2",
+      layerName: "VirEnv_14",
+      img_url: "assets/vir_envs_layers/VirEnv_14.png"
+    }, {
+      EnvName: "Map Rotation - Pre Difficult",
+      layerName: "VirEnv_15",
+      img_url: "assets/vir_envs_layers/VirEnv_15.png"
+    }, {
+      EnvName: "Map Rotation - Pre Easy 1",
+      layerName: "VirEnv_16",
+      img_url: "assets/vir_envs_layers/VirEnv_16.png"
+    }, {
+      EnvName: "Map Rotation - Pre Easy 2",
+      layerName: "VirEnv_17",
+      img_url: "assets/vir_envs_layers/VirEnv_17.png"
+    }, {
+      EnvName: "Map Rotation - Training 1",
+      layerName: "VirEnv_18",
+      img_url: "assets/vir_envs_layers/VirEnv_18.png"
+    }, {
+      EnvName: "Map Rotation - Training 2",
+      layerName: "VirEnv_19",
+      img_url: "assets/vir_envs_layers/VirEnv_19.png"
+    }, {
+      EnvName: "Map Rotation - Training 3",
+      layerName: "VirEnv_20",
+      img_url: "assets/vir_envs_layers/VirEnv_20.png"
+    }, {
+      EnvName: "Map Rotation - Training 4",
+      layerName: "VirEnv_21",
+      img_url: "assets/vir_envs_layers/VirEnv_21.png"
     }
 
   ],
