@@ -25,6 +25,7 @@ import { navtasksMultiplayers3 } from "src/app/models/navigation-tasks-multi_3_p
 import { navtasksMultiplayers2 } from "src/app/models/navigation-tasks-multi_2_players";
 import { themetasksMultiplayers3 } from "src/app/models/theme-tasks-multi-3-players";
 import { themetasksMultiplayers2 } from "src/app/models/theme-tasks-multi-2-players";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-create-task-modal",
@@ -119,6 +120,9 @@ export class CreateTaskModalPage implements OnInit {
   // selectedcollMethodType: any;
   selectedCollType: any;
 
+
+  //* get virual environment meta data
+  virEnvTypesList = environment.virEnvsLayers;
 
   constructor(
     public modalController: ModalController,
