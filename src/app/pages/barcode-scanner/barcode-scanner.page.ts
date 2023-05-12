@@ -42,7 +42,7 @@ export class BarcodeScannerPage implements OnInit {
   async startScan() {
     /* const allowed = await this.checkPermission()
     if (allowed) {
-      // console.log("🚀 allowed")
+      // // console.log('🚀 allowed")
 
       //* make background of WebView transparent, another step is adding some style to global.scss
       BarcodeScanner.hideBackground();

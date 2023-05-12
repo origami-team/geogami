@@ -353,7 +353,7 @@ export class TrackerService {
     if (!isGameTrackStored) {
       /* (multiplayer) 5. a) store new track if not stored yet (multiplayer) */
       // (single player) store new track 
-      console.log("store new track (single player) / tracks (multiplayer)");
+      // console.log('store new track (single player) / tracks (multiplayer)");
       return this.http
         .post(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),
@@ -362,7 +362,7 @@ export class TrackerService {
     }
     else {
       /* (multiplayer) 5. b) update existed tracks (multiplayer) */
-      console.log("//update existed tracks (multiplayer)");
+      // console.log('//update existed tracks (multiplayer)");
       return this.http
         .put(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),

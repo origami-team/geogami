@@ -98,7 +98,7 @@ export class EditGameTasksPage implements OnInit {
           } else {
             // Get num of players
             this.numPlayers = game.numPlayers;
-            console.log("/// numPlayers: ", this.numPlayers);
+            // console.log('/// numPlayers: ", this.numPlayers);
           }
 
 
@@ -147,7 +147,7 @@ export class EditGameTasksPage implements OnInit {
     isSingleMode: boolean = this.isSingleMode,
     //* if task doesn't have a virEnvType send the default one
     virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
-    console.log("🚀 ~ EditGameTasksPage ~ task:", task)
+    // console.log('🚀 ~ EditGameTasksPage ~ task:", task)
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -188,12 +188,12 @@ export class EditGameTasksPage implements OnInit {
   }
 
   deleteTask(taskID) {
-    console.log("deleting", taskID);
+    // console.log('deleting", taskID);
     this.game = this.gameFactory.removeTask(taskID);
   }
 
   updateTask(taskID, task) {
-    console.log("updating", taskID);
+    // console.log('updating", taskID);
     this.game = this.gameFactory.updateTask(taskID, task);
     console.log(this.game);
   }
@@ -201,11 +201,11 @@ export class EditGameTasksPage implements OnInit {
   doReorder(ev: any) {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
-    console.log("Dragged from index", ev.detail.from, "to", ev.detail.to);
+    // console.log('Dragged from index", ev.detail.from, "to", ev.detail.to);
 
     // Before complete is called with the items they will remain in the
     // order before the drag
-    console.log("Before complete", this.game.tasks);
+    // console.log('Before complete", this.game.tasks);
 
     // Finish the reorder and position the item in the DOM based on
     // where the gesture ended. Update the items variable to the
@@ -214,12 +214,12 @@ export class EditGameTasksPage implements OnInit {
 
     this.gameFactory.applyReorder(this.game.tasks);
 
-    // console.log("this.game", this.game.tasks);
+    // // console.log('this.game", this.game.tasks);
 
     ev.detail.complete(true);
 
     // After complete is called the items will be in the new order
-    console.log("After complete", this.game.tasks);
+    // console.log('After complete", this.game.tasks);
   }
 
   toggleReorder() {

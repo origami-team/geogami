@@ -5,7 +5,7 @@
 
 module.exports = function (ctx) {
 
-    console.log("Attempting To Modify serve-config.js....")
+    // console.log('Attempting To Modify serve-config.js....")
 
     // Reference Dependencies
     var fs = ctx.requireCordovaModule('fs'),
@@ -50,7 +50,7 @@ module.exports = function (ctx) {
 
             // If Nothing Was Found/Removed/Spliced, No Need To Overwrite.
             if (!fileModifiedSuccessfully) {
-                console.log("No Changes to File: " + filePath);
+                // console.log('No Changes to File: " + filePath);
                 return;
             }
 

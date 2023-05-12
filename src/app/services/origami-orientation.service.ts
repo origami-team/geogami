@@ -53,7 +53,7 @@ export class OrigamiOrientationService {
 
     if (!isVirtualWorld) {
       this.orientationSubscription = new Observable((subscriber: Subscriber<number>) => {
-        // console.log("......orientationSubscription (subscriber): ",  subscriber);
+        // // console.log('......orientationSubscription (subscriber): ",  subscriber);
         this.orientationSubscriber = subscriber;
       }).pipe(shareReplay());
     } else {

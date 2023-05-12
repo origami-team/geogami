@@ -20,7 +20,7 @@ export class CreateGamePage implements OnInit {
   ngOnInit() {
     // Get selected env. and game type
     this.route.params.subscribe((params) => {
-      console.log("params.bundle1: ", params.bundle)
+      // console.log('params.bundle1: ", params.bundle)
       if (params.bundle != "userRole") {
         this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
         this.isSingleMode = JSON.parse(params.bundle).isSingleMode;

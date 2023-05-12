@@ -40,7 +40,7 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isSingleMode) {
-      // console.log("changes (answerTypeComponent): ", changes);
+      // // console.log('changes (answerTypeComponent): ", changes);
       if (changes.answer) {
         this.answerChange.emit(changes.answer.currentValue);
       }

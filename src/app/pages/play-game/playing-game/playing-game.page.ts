@@ -508,7 +508,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   ionViewWillEnter() {
     // to seperate realworld games from VR ones in view
     this.route.params.subscribe((params) => {
-      console.log("(play-game) params.bundle", params.bundle)
+      // console.log('(play-game) params.bundle", params.bundle)
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.gameCode = JSON.parse(params.bundle).gameCode;
@@ -535,7 +535,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           // Check game type either real or VR world
           if (game.virEnvType !== undefined) {
             this.virEnvType = game.virEnvType;
-            // console.log("--1---game.virEnvType---: ", this.virEnvType)
+            // // console.log('--1---game.virEnvType---: ", this.virEnvType)
           }
 
           // Set the intial avatar location (in either normal or mirrored version)
@@ -543,7 +543,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             /* check first task initial location */
             //* the last condtion is for hte case when you delete initial position
             if (this.game.tasks[0] && this.game.tasks[0].question.initialAvatarPosition != undefined && this.game.tasks[0].question.initialAvatarPosition.position != undefined) {
-              console.log("🚀 ~ PlayingGamePage ~ .then ~ initialAvatarLoc:")
+              // console.log('🚀 ~ PlayingGamePage ~ .then ~ initialAvatarLoc:")
               this.initialAvatarLoc = {
                 lng: this.game.tasks[0].question.initialAvatarPosition.position.geometry.coordinates[0],
                 lat: this.game.tasks[0].question.initialAvatarPosition.position.geometry.coordinates[1]
@@ -617,11 +617,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   ionViewDidLeave() {
-    // console.log("ionViewDidLeave")
+    // // console.log('ionViewDidLeave")
   }
 
   ngOnDestroy() {
-    // console.log(" ngOnDestroy")
+    // // console.log(' ngOnDestroy")
   }
 
   // With VR env only
@@ -650,7 +650,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // this.socketService.socket.on('requestAvatarInitialPosition', this.deliverInitialAvatarPosition);
     // this.socketService.socket.once('requestAvatarInitialPosition', () => {
     this.socketService.socket.on('requestAvatarInitialPosition', () => {
-      // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
+      // // console.log('🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
       if (this.avatarLastKnownPosition != undefined) {  // when reopen vir env app
         //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
@@ -893,7 +893,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map.on('zoom', () => {
       if (this.isVirtualWorld) {
         const currentZoom = this.map.getZoom();
-        // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
+        // // console.log('🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
         /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
         if (environment.virEnvProperties[this.virEnvType].zoomInLayer1) {
           if (currentZoom <= 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
@@ -908,7 +908,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* (V.E.): to be able to reload marker when style is changed in realtime */
     this.map.on('style.load', () => {
-      console.log("🚀 ~ PlayingGamePage ~ this.map.on ~ style.load:")
+      // console.log('🚀 ~ PlayingGamePage ~ this.map.on ~ style.load:")
 
     });
     /*  */
@@ -946,7 +946,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (!this.isVirtualWorld) {
       this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe(
         (heading: number) => {
-          // console.log("......deviceOrientationSubscription (heading): ",  heading);
+          // // console.log('......deviceOrientationSubscription (heading): ",  heading);
           this.compassHeading = heading;
           this.targetHeading = 360 - (this.compassHeading - this.heading);
           this.indicatedDirection = this.compassHeading - this.directionBearing;
@@ -1461,11 +1461,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       /* retreive tasks events and waypoints */
       this.storage.get("savedTracksData").then((data) => {
         if (data) {
-          console.log("(play-game) s_events: ", data.s_events)
+          // console.log('(play-game) s_events: ", data.s_events)
 
           if (data && data.s_events) {
             this.trackerService.setEvents(data.s_events);
-            console.log("(play-game) s_events[0]: ", data.s_events[0])
+            // console.log('(play-game) s_events[0]: ", data.s_events[0])
             this.trackerService.setWaypoints(data.s_Waypoints);
           }
         }
@@ -1480,7 +1480,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       // you are leaving the game area warning
       if (this.game.geofence) {
-        console.log("creating the subscription");
+        // console.log('creating the subscription");
         this.geolocationService
           .initGeofence(this.game.bbox.features[0])
           .subscribe((inGameBbox) => {
@@ -1524,7 +1524,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initTask() {
     this.panelMinimized = false;
 
-    console.log("Current task: ", this.task);
+    // console.log('Current task: ", this.task);
 
     this.trackerService.setTask(this.task);
 
@@ -1534,20 +1534,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* set avatar initial position */
     if (this.isVirtualWorld) {
-      console.log("🚀 ~ initTask ~ socketService:")
+      // console.log('🚀 ~ initTask ~ socketService:")
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
 
       //* update vir env map overlay layer
       if (this.task.virEnvType != undefined && this.task.virEnvType != this.virEnvType) {
-        console.log("🚀 ~-- initTask ~ this.task.virEnvType != this.virEnvType:")
+        // console.log('🚀 ~-- initTask ~ this.task.virEnvType != this.virEnvType:")
         this.virEnvType = this.task.virEnvType;
         this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png", true);
       }
 
-      console.log("🚀 ~ initTask2:")
+      // console.log('🚀 ~ initTask2:")
 
 
-      // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
+      // // console.log('🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
 
       //* send inital loc, dir and vir env type
       //* if task doesn't hahve initial positoin send null to keep avatar current position
@@ -1760,7 +1760,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     if (this.task.answer.type == AnswerType.DRAW) {
-      console.log(" tasks info: ", this.task)
+      // console.log(' tasks info: ", this.task)
       if (this.task.settings.drawPointOnly !== undefined && this.task.settings.drawPointOnly) {
         this.DrawControl = this.DrawControl_point;
       } else {
@@ -1835,7 +1835,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.trackerService.uploadTrack().then((res) => {
             if (res.status == 201) {
               this.uploadDone = true;
-              console.log("res (single)", res);
+              // console.log('res (single)", res);
             }
           });
         } else {
@@ -1851,7 +1851,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.trackerService.uploadTrack().then((res) => {
                 if (res.status == 201) {
                   this.uploadDone = true;
-                  // console.log("game id (multi)", res.body["content"]._id);
+                  // // console.log('game id (multi)", res.body["content"]._id);
                   this.storedGameTrack_id = res.body["content"]._id;
                   /* Update game track staus in socket server */
                   this.socketService.socket.emit("updateGameTrackStauts", { roomName: this.gameCode, storedTrack_id: this.storedGameTrack_id });
@@ -1859,13 +1859,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               });
             } else {
               // if game aready stored
-              // console.log("game track already stored: ", this.trackDataStatus)
+              // // console.log('game track already stored: ", this.trackDataStatus)
 
               /* update stored multiplayer tracks on server*/
               this.trackerService.uploadTrack(true, this.trackDataStatus.track_id).then((res) => {
                 if (res.status == 201) {
                   this.uploadDone = true;
-                  console.log("game id (multi)", res.body["content"]._id);
+                  // console.log('game id (multi)", res.body["content"]._id);
                   this.storedGameTrack_id = res.body["content"]._id;
                 }
               });
@@ -1971,7 +1971,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   async onOkClicked() {
 
-    console.log("onOkClicked//////")
+    // console.log('onOkClicked//////")
     const isCorrect = true;
     const answer: any = {};
 
@@ -2427,8 +2427,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   onRequestPlayerLocationByInstructor() {
     /* when instructor request players real time location */
     this.socketService.socket.on('requestPlayerLocation', () => {
-      console.log("(game-paly) requestPlayersLocation1")
-      console.log("(game-paly) requestPlayersLocation1, this.lastKnownPosition", this.lastKnownPosition)
+      // console.log('(game-paly) requestPlayersLocation1")
+      // console.log('(game-paly) requestPlayersLocation1, this.lastKnownPosition", this.lastKnownPosition)
 
       this.socketService.socket.emit("updatePlayersLocation", {
         roomName: this.gameCode,
@@ -2441,14 +2441,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         //playerName: this.playersNames[0]
       });
 
-      console.log("(game-paly) requestPlayersLocation2")
+      // console.log('(game-paly) requestPlayersLocation2")
     });
   }
 
   /* on assign number to myself  */
   onAssignPlayerNumber() {
     this.socketService.socket.on('assignPlayerNumber', (data) => {
-      console.log("playerNo from socket: ", data)
+      // console.log('playerNo from socket: ", data)
 
       /* player number equal number of players already joined the room */
       this.playerNo = this.joinedPlayersCount = data.playerNo;
@@ -2463,7 +2463,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   /* on joining game by other players */
   onPlayerJoinGame() {
     this.socketService.socket.on('playerJoined', (data) => {
-      console.log("PlayerJoined: (number of players so far) ", data)
+      // console.log('PlayerJoined: (number of players so far) ", data)
       this.joinedPlayersCount = data.joinedPlayersCount;
 
       if (this.joinedPlayersCount == this.numPlayers) {

@@ -75,7 +75,7 @@ export class AudioRecorderService {
           })
             .then((res) => res.json())
             .then((body) => {
-              console.log("data upload done");
+              // console.log('data upload done");
               resolve(body);
             });
         };

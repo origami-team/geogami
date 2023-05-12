@@ -17,11 +17,11 @@ export class PopupComponent implements OnInit {
   constructor(public navCtrl: NavController) { }
 
   ngOnInit(): void {
-    //console.log("gameName: ", this.gameName)
+    //// console.log('gameName: ", this.gameName)
   }
 
   playGame(){
-    // console.log("play pressed: ", this.gameName)
+    // // console.log('play pressed: ", this.gameName)
     this.navCtrl.navigateForward(`play-game/game-detail/${this.gameID}`);
 
   }
