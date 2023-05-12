@@ -1,12 +1,12 @@
 {
-	"appId": "com.ifgi.geogami",
-	"appName": "GeoGami",
-	"bundledWebRuntime": false,
-	"npmClient": "yarn",
-	"webDir": "www",
-	"server": {
-		"iosScheme": "https",
-		"androidScheme": "https"
-	},
-	"hideLogs": true
+  "appId": "com.ifgi.geogami",
+  "appName": "GeoGami",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "iosScheme": "https",
+    "androidScheme": "https"
+  },
+  "hideLogs": true
 }

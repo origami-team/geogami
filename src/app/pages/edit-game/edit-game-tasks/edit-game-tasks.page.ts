@@ -88,6 +88,9 @@ export class EditGameTasksPage implements OnInit {
 
           // check if game is VE 2 (mirrored)
           if (!this.isRealWorld) {
+            // Set num of players
+            this.numPlayers = game.numPlayers;
+            // Set virEnv Type
             this.virEnvType = game.virEnvType;
             if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
               this.isVRMirrored = true;
