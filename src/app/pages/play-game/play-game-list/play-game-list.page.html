@@ -22,7 +22,7 @@
         <option value="real"> Real world </option>
         
         <!-- allow scholars to view virtual environment mode -->
-        <option value="virtual" [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"> Virtual env. {{ !['admin', 'contentAdmin', 'scholar'].includes(userRole) ? '( only scholars have access )':''}} </option>
+        <option value="virtual" [disabled]="user==undefined"> Virtual env. {{ (!user ? '('+ ('GameList.logInToAccess' | translate) +')':'') }} </option>
       </select>
     </div>
     <div>
