@@ -86,7 +86,9 @@
                 "virtualWorld": "Virtuelle Welt",
                 "chooseGameList": "Wähle ein Spiel aus der Liste.",
                 "chooseGameMap": "Wähle ein Spiel aus der Karte.",
-                "logInToAccess": "Sie müssen sich anmelden, um Zugriff zu haben"
+                "logInToAccess": "Sie müssen sich anmelden, um Zugriff zu haben",
+                "players": "Spieler",
+                "tasks": "Aufgaben"
         },
         "CreateTasks": {
                 "combineTasks": "Liste der erstellten Aufgaben:",

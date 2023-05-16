@@ -411,7 +411,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
       isVisible: true,                    // new game is visible by default
       isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
       isMultiplayerGame: (!this.isSingleMode ? true : undefined),
-      numPlayers: (!this.isSingleMode ? this.numPlayers : undefined)
+      numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
+      tasksCount: this.game.tasks.length      //* add tasks counts to show it in play-game-list page
       // playersCount: (!this.isSingleMode ? this.numPlayers : 1)     // ToDo: update it in server
 
     });

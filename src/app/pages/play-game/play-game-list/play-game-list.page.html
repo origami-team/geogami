@@ -80,8 +80,10 @@
               </span> {{ game.name }}
             </h2>
           </ion-label>
-          <ion-label slot="end" *ngIf="game.isMultiplayerGame && game.isMultiplayerGame == true" class="numplayersCard">
-            {{game.numPlayers}} players
+          <ion-label slot="end" *ngIf="(game.isMultiplayerGame && game.isMultiplayerGame == true) || game.tasksCount" class="numplayersCard">
+            {{ (game.isMultiplayerGame && game.isMultiplayerGame)? game.numPlayers + " " + ("GameList.players" | translate) + " | ": ""}}
+            {{ (game.tasksCount)? game.tasksCount + " " +  ("GameList.tasks" | translate) : ""}}
+
           </ion-label>
           <!-- <ion-icon *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
         </ion-item>

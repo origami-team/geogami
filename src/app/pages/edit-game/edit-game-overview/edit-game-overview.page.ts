@@ -476,7 +476,8 @@ export class EditGameOverviewPage implements AfterViewInit {
       geofence: this.geofence,
       name: this.game.name,
       place: this.game.place,
-      isCuratedGame: this.isCuratedGame // to set whether game can be viewed in curated filter list
+      isCuratedGame: this.isCuratedGame,     // to set whether game can be viewed in curated filter list
+      tasksCount: this.game.tasks.length      //* it might happen that user add or remove tasks, so we need to update the tasks
     });
     console.log(this.gameFactory.game);
 
