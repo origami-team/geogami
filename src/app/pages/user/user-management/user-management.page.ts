@@ -46,7 +46,7 @@ export class UserManagementPage implements OnInit {
   initializeDataSource(usersData) {
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(usersData);
-    console.log("this.dataSource: ", this.dataSource)
+    // console.log('this.dataSource: ", this.dataSource)
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -54,15 +54,15 @@ export class UserManagementPage implements OnInit {
   // update user role
   async changeRole(roleValue, userEmail) {
     if (userEmail != undefined) {
-      console.log("userEmail1: ", userEmail)
-      console.log("roleValue1: ", roleValue)
+      // console.log('userEmail1: ", userEmail)
+      // console.log('roleValue1: ", roleValue)
 
       // update user role and change save icon color to blue
       this.users.find(user => {
         if (user.email == userEmail) {
           user.roleIsUpdated = true
           user.roles = [roleValue]
-          console.log("user: ", user)
+          // console.log('user: ", user)
           return user;
         }
       });

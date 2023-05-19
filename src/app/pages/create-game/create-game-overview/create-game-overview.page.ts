@@ -398,7 +398,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       return;
     }
 
-    // console.log("///Game to be uploaded: ", this.game);
+    // // console.log('///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : null,

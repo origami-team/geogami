@@ -75,7 +75,7 @@ export class EditGameListPage implements OnInit {
     this.gamesService.getUserGames().then(games => {
       this.games_res = games;
 
-      console.log("games_res: ", this.games_res)
+      // console.log('games_res: ", this.games_res)
 
       /* filter real world games (default) - as it represents the initial view */
       this.filterRealWorldGames();

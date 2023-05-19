@@ -36,14 +36,14 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     constructor(public popoverController: PopoverController, private translate: TranslateService) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log("changes (changes): ", changes);
+        // console.log('changes (changes): ", changes);
         if (this.isSingleMode) {
-            // console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
+            // // console.log('changes (changes.question.currentValue): ", changes.question.currentValue);
             if (changes.question) {
                 this.questionChange.emit(changes.question.currentValue);
             }
         } else {
-            // console.log("changes (changes.question.currentValue): ", changes);
+            // // console.log('changes (changes.question.currentValue): ", changes);
             if (changes.question) {
                 this.questionChange.emit(changes.question.currentValue);
             }
@@ -52,13 +52,13 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
     /* multi-player */
     onCollTypeChange(collType: any) {
-        console.log("collType:", collType);
+        // console.log('collType:", collType);
 
     }
 
     ngOnInit() {
         if(this.isVirtualWorld && this.question && this.question.initialAvatarPosition){
-            console.log("----question: ", this.question)
+            // console.log('----question: ", this.question)
             this.initialAvatarPosMapView = true;
         }
 

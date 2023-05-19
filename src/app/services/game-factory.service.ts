@@ -18,7 +18,7 @@ export class GameFactoryService {
       ...this.game,
       ...data,
     };
-    console.log("New Game: ", this.game);
+    // console.log('New Game: ", this.game);
     this.storage.set("game", this.game);
   }
 

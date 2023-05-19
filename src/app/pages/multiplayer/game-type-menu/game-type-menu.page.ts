@@ -20,7 +20,7 @@ export class GameTypeMenuPage implements OnInit {
         this.isRealWorld = true
 
         // temp
-        console.log("isRealWorld: ", this.isRealWorld);
+        // console.log('isRealWorld: ", this.isRealWorld);
       } else {
         this.isRealWorld = false;
       }
