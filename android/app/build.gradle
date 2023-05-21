@@ -7,7 +7,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 30
         versionCode 14
-        versionName "2.0.1"
+        versionName "2.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
