@@ -75,7 +75,7 @@ export class StartPage implements OnInit {
 
     // (translation) get languages
     this.languages = this.languageService.getLangauges();
-    // (translation) set selected language
+    // (translation) set selected language (no need for it)
     this.selected = this.languageService.selected;
 
     // Get user role

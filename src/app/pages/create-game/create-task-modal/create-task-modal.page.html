@@ -26,7 +26,7 @@
     <h5>Choose a virtual world</h5> &nbsp;&nbsp;
 
     <select [(ngModel)]="virEnvType" interface="popover">
-      <option *ngFor="let virEnvitem of virEnvTypesList" [ngValue]="virEnvitem.layerName">{{virEnvitem.envName}}</option>
+      <option *ngFor="let virEnvitem of virEnvTypesList; let i = index" [ngValue]="virEnvitem.layerName">{{i+1}}: {{virEnvitem.envName}}</option>
     </select>
 
   </ion-item>
