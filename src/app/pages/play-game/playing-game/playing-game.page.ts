@@ -77,6 +77,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { UtilService } from "src/app/services/util.service";
 
 import { Storage } from "@ionic/storage";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
 
 
 @Component({
@@ -551,7 +552,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.initialAvatarDir = this.game.tasks[0].question.initialAvatarPosition.bearing;
             } else {
               //* in case task doesn't have intitial positoin, use default one
-              this.initialAvatarLoc = environment.virEnvProperties[this.virEnvType].initialPosition;
+              this.initialAvatarLoc = virEnvLayers[this.virEnvType].initialPosition;
               this.initialAvatarDir = 0;
             }
           }
@@ -664,7 +665,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
           initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
             [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
-            [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
+            [virEnvLayers[this.virEnvType].initialPosition.lng * 111000, virEnvLayers[this.virEnvType].initialPosition.lat * 112000]),
           initialRotation: (this.task.question.initialAvatarPosition ?
             this.task.question.initialAvatarPosition.bearing :
             0), //* send 0 as we only check if initial position equal null, in virEnv App
@@ -722,10 +723,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: (this.isVirtualWorld ? environment.mapStyle + this.virEnvType + ".json" : environment.mapStyle + 'realWorld.json'),
-      center: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].center : [8, 51.8]),
+      center: (this.isVirtualWorld ? virEnvLayers[this.virEnvType].center : [8, 51.8]),
       zoom: 2,
       maxZoom: (this.isVirtualWorld ? 19.5 : 18),
-      maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
+      maxBounds: (this.isVirtualWorld ? virEnvLayers[this.virEnvType].bounds : null) // Sets bounds
     });
 
     this.geolocationService.init(this.isVirtualWorld);
@@ -895,7 +896,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         const currentZoom = this.map.getZoom();
         // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
         /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
-        if (environment.virEnvProperties[this.virEnvType].zoomInLayer1) {
+        if (virEnvLayers[this.virEnvType].zoomInLayer1) {
           if (currentZoom <= 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + ".png") {
             this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.virEnvType + ".png", false);
           } else if (currentZoom > 19.2 && this.map.getStyle().sources.overlay.url != "assets/vir_envs_layers/" + this.virEnvType + "b.png") {
@@ -981,9 +982,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (changeVirEnv) {
       //* update layer dimensions
-      newStyle.sources.overlay.coordinates = environment.virEnvProperties[this.virEnvType].overlayCoords;
+      newStyle.sources.overlay.coordinates = virEnvLayers[this.virEnvType].overlayCoords;
       //* update maxBounds
-      this.map.setMaxBounds(environment.virEnvProperties[this.virEnvType].bounds)
+      this.map.setMaxBounds(virEnvLayers[this.virEnvType].bounds)
       //* update zoom level to 2
       this.map.setZoom(2);
     }
@@ -1544,13 +1545,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.updateMapStyleOverlayLayer("assets/vir_envs_layers/" + this.task.virEnvType + ".png", true);
       }
 
-      /* console.log("🚀 ~ initTask2:")
-      console.log("🚀 ~ this.virEnvType: ", this.virEnvType)
-      console.log("🚀 ~ environment.virEnvProperties[this.virEnvType].initialPosition: ", environment.virEnvProperties[this.virEnvType].initialPosition) */
-
-
-      // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on33333 ~ initialAvatarPosition:", this.task.question.initialAvatarPosition)
-
       //* send inital loc, dir and vir env type
       //* if task doesn't hahve initial positoin send null to keep avatar current position. (?? Wrong if app env changed from 1 or 2 to others
       //* if no virEnvType is found send deafult one
@@ -1558,7 +1552,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         initialPosition: (this.task.question.initialAvatarPosition && this.task.question.initialAvatarPosition.position ?
           [this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000, this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000] :
           // null),
-          [environment.virEnvProperties[this.virEnvType].initialPosition.lng * 111000, environment.virEnvProperties[this.virEnvType].initialPosition.lat * 112000]),
+          [virEnvLayers[this.virEnvType].initialPosition.lng * 111000, virEnvLayers[this.virEnvType].initialPosition.lat * 112000]),
         initialRotation: (this.task.question.initialAvatarPosition ?
           this.task.question.initialAvatarPosition.bearing :
           null),

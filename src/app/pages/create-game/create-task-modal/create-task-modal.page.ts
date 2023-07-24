@@ -25,7 +25,7 @@ import { navtasksMultiplayers3 } from "src/app/models/navigation-tasks-multi_3_p
 import { navtasksMultiplayers2 } from "src/app/models/navigation-tasks-multi_2_players";
 import { themetasksMultiplayers3 } from "src/app/models/theme-tasks-multi-3-players";
 import { themetasksMultiplayers2 } from "src/app/models/theme-tasks-multi-2-players";
-import { environment } from "src/environments/environment";
+import { VirEnvHeaders } from "src/app/models/virEnvsHeader";
 
 @Component({
   selector: "app-create-task-modal",
@@ -75,17 +75,20 @@ export class CreateTaskModalPage implements OnInit {
   taskTypes: any[] = [
     {
       type: 1,
-      text: this.translate.instant("Tasktypes.selfLocation")
-    }, {
+      text: this.translate.instant("Tasktypes.selfLocation"),
+    },
+    {
       type: 2,
-      text: this.translate.instant("Tasktypes.objectLocation")
-    }, {
+      text: this.translate.instant("Tasktypes.objectLocation"),
+    },
+    {
       type: 3,
-      text: this.translate.instant("Tasktypes.directionDetermination")
-    }, {
+      text: this.translate.instant("Tasktypes.directionDetermination"),
+    },
+    {
       type: 4,
-      text: this.translate.instant("Tasktypes.freeTasks")
-    }
+      text: this.translate.instant("Tasktypes.freeTasks"),
+    },
   ];
 
   selectedThemeTaskType: any;
@@ -105,30 +108,31 @@ export class CreateTaskModalPage implements OnInit {
   collaborationTypes: any[] = [
     {
       type: "1-1",
-      text: "Each player has a unique task instruction (1-1)"
-    }, {
+      text: "Each player has a unique task instruction (1-1)",
+    },
+    {
       type: "sequential",
-      text: "All players have same task instruction (sequential)"
-    }, /* {
+      text: "All players have same task instruction (sequential)",
+    },
+    /* {
       type: "leader-follower",
       text: "Only one player can see the instruction (leader & follower)"
     }, */ {
       type: "freeChoice",
-      text: "Free choice"
-    }
+      text: "Free choice",
+    },
   ];
   // selectedcollMethodType: any;
   selectedCollType: any;
 
-
-  //* get virual environment meta data
-  virEnvTypesList = environment.virEnvsLayers;
+  //* get virual environment headers
+  virEnvTypesList = VirEnvHeaders;
 
   constructor(
     public modalController: ModalController,
     public popoverController: PopoverController,
     private translate: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit() {
     if (this.type == "nav") {
@@ -136,22 +140,25 @@ export class CreateTaskModalPage implements OnInit {
         this.tasks = cloneDeep(navtasks);
       } else {
         switch (this.numPlayers) {
-          case 2: this.tasks = cloneDeep(navtasksMultiplayers2);
+          case 2:
+            this.tasks = cloneDeep(navtasksMultiplayers2);
             break;
-          case 3: this.tasks = cloneDeep(navtasksMultiplayers3);
+          case 3:
+            this.tasks = cloneDeep(navtasksMultiplayers3);
             break;
         }
         // console.log("////navtasksMultiplayers: ", this.tasks)
       }
-
     } else {
       if (this.isSingleMode) {
         this.tasks = cloneDeep(themetasks);
       } else {
         switch (this.numPlayers) {
-          case 2: this.tasks = cloneDeep(themetasksMultiplayers2);
+          case 2:
+            this.tasks = cloneDeep(themetasksMultiplayers2);
             break;
-          case 3: this.tasks = cloneDeep(themetasksMultiplayers3);
+          case 3:
+            this.tasks = cloneDeep(themetasksMultiplayers3);
             break;
         }
       }
@@ -161,7 +168,7 @@ export class CreateTaskModalPage implements OnInit {
     if (this.task == null) {
       this.task = this.tasks[0];
       this.selectedThemeTaskType = this.taskTypes[0];
-      
+
       // (mutli-player): 1-1 is the default collaboration type
       if (!this.isSingleMode) {
         this.selectedCollType = this.collaborationTypes[0];
@@ -175,7 +182,7 @@ export class CreateTaskModalPage implements OnInit {
         showMarker: true,
         keepMarker: false,
         keepDrawing: "current",
-        drawPointOnly: false
+        drawPointOnly: false,
       };
 
       this.settingsChange();
@@ -196,7 +203,9 @@ export class CreateTaskModalPage implements OnInit {
       //* (mutli-player): when task is not null, retreive selected coll. type
       if (!this.isSingleMode) {
         //* as we only store type in db without text we need to retreive it using index
-        let index = this.collaborationTypes.findIndex(el => el.type == this.task.collaborationType);
+        let index = this.collaborationTypes.findIndex(
+          (el) => el.type == this.task.collaborationType
+        );
         this.selectedCollType = this.collaborationTypes[index];
       }
     }
@@ -239,7 +248,7 @@ export class CreateTaskModalPage implements OnInit {
               {
                 type: QuestionType.TEXT,
                 text: "",
-              }
+              },
             ],
             answer: [
               {
@@ -247,7 +256,7 @@ export class CreateTaskModalPage implements OnInit {
               },
               {
                 type: AnswerType.MULTIPLE_CHOICE,
-              }
+              },
             ],
           };
         } else {
@@ -267,7 +276,7 @@ export class CreateTaskModalPage implements OnInit {
               {
                 type: QuestionType.TEXT,
                 text: "",
-              }
+              },
             ],
             answer: [
               {
@@ -278,7 +287,7 @@ export class CreateTaskModalPage implements OnInit {
               },
               {
                 type: AnswerType.MULTIPLE_CHOICE,
-              }
+              },
             ],
           };
         }
@@ -301,14 +310,13 @@ export class CreateTaskModalPage implements OnInit {
         showMarker: true,
         keepMarker: false,
         keepDrawing: "current",
-        drawPointOnly: false
+        drawPointOnly: false,
       };
     }
 
     this.settingsChange();
 
     this.mapFeatures = this.task.mapFeatures;
-
 
     /*  */
     if (this.task.type == "free") {
@@ -325,7 +333,6 @@ export class CreateTaskModalPage implements OnInit {
 
       /* single-player */
       if (this.isSingleMode) {
-
         if (
           this.task.answer.type == AnswerType.PHOTO ||
           this.task.answer.type == AnswerType.TEXT
@@ -361,19 +368,20 @@ export class CreateTaskModalPage implements OnInit {
           this.showMultipleTries = false;
         }
       }
-
-
     } else {
       // console.log("//// (onTaskSelected) 1a - this.tasks", this.tasks);
       this.objectQuestionSelect = Array.from(
         new Set(
           this.tasks
             .filter((t) => t.type == this.task.type)
-            .map((t) => (this.isSingleMode ? t.question.type : t.question[0].type))  // DoDo
+            .map((t) =>
+              this.isSingleMode ? t.question.type : t.question[0].type
+            ) // DoDo
         )
       )
         .map((t) => ({ type: t as QuestionType, text: t }))
-        .sort( // DoDo
+        .sort(
+          // DoDo
           (a, b) =>
             this.objectQuestionTemplate.indexOf(a.type) -
             this.objectQuestionTemplate.indexOf(b.type)
@@ -412,11 +420,12 @@ export class CreateTaskModalPage implements OnInit {
             this.viewDirectionSetPosition = false;
           }
         }
-
       } else {
-        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
-          (t) => t.type == this.task.type
-        );
+        const similarTypes = cloneDeep(
+          this.numPlayers == 2
+            ? themetasksMultiplayers2
+            : themetasksMultiplayers3
+        ).filter((t) => t.type == this.task.type);
 
         const similarQ = similarTypes.filter(
           (t) => t.question[0].type == this.task.question[0].type
@@ -446,7 +455,6 @@ export class CreateTaskModalPage implements OnInit {
           }
         }
       }
-
     }
   }
 
@@ -487,9 +495,11 @@ export class CreateTaskModalPage implements OnInit {
       }
     } else {
       if (this.task.type != "free") {
-        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
-          (t) => t.type == this.task.type
-        );
+        const similarTypes = cloneDeep(
+          this.numPlayers == 2
+            ? themetasksMultiplayers2
+            : themetasksMultiplayers3
+        ).filter((t) => t.type == this.task.type);
 
         const similarQ = similarTypes.filter(
           (t) => t.question[0].type == this.task.question[0].type
@@ -515,7 +525,6 @@ export class CreateTaskModalPage implements OnInit {
         }
       }
     }
-
   }
 
   onObjectAnswerSelectChange() {
@@ -557,9 +566,11 @@ export class CreateTaskModalPage implements OnInit {
     } else {
       // Multi-player impl
       if (this.task.type != "free") {
-        const similarTypes = cloneDeep((this.numPlayers == 2 ? themetasksMultiplayers2 : themetasksMultiplayers3)).filter(
-          (t) => t.type == this.task.type
-        );
+        const similarTypes = cloneDeep(
+          this.numPlayers == 2
+            ? themetasksMultiplayers2
+            : themetasksMultiplayers3
+        ).filter((t) => t.type == this.task.type);
 
         const similarQ = similarTypes.filter(
           (t) =>
@@ -649,7 +660,8 @@ export class CreateTaskModalPage implements OnInit {
       }
 
       if (
-        (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) &&
+        (this.task.answer.type == AnswerType.MAP_DIRECTION ||
+          this.task.answer.type === AnswerType.DIRECTION) &&
         this.task.settings.feedback &&
         this.task.settings.multipleTries &&
         !this.task.answer.hints
@@ -674,7 +686,8 @@ export class CreateTaskModalPage implements OnInit {
       }
 
       if (
-        (this.task.answer[0].type == AnswerType.MAP_DIRECTION || this.task.answer[0].type === AnswerType.DIRECTION) &&
+        (this.task.answer[0].type == AnswerType.MAP_DIRECTION ||
+          this.task.answer[0].type === AnswerType.DIRECTION) &&
         this.task.settings.feedback &&
         this.task.settings.multipleTries &&
         !this.task.answer[0].hints
@@ -689,11 +702,8 @@ export class CreateTaskModalPage implements OnInit {
         if (this.numPlayers == 3) {
           this.task.answer[2].hints = cloneDeep(hintsList);
         }
-
       }
     }
-
-
   }
 
   selectCompare(task1, task2) {
@@ -711,8 +721,8 @@ export class CreateTaskModalPage implements OnInit {
         features: this.mapFeatures,
         isVirtualWorld: this.isVirtualWorld,
         isVRMirrored: this.isVRMirrored,
-        virEnvType: this.virEnvType
-      }
+        virEnvType: this.virEnvType,
+      },
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
@@ -751,22 +761,27 @@ export class CreateTaskModalPage implements OnInit {
     }
 
     //* inlclude vir. env. type in task data
-    if(this.isVirtualWorld){
+    if (this.isVirtualWorld) {
       this.task.virEnvType = this.virEnvType;
-      console.log("🚀 ~ CreateTaskModalPage ~ dismissModal ~ this.virEnvType:", this.virEnvType)
+      console.log(
+        "🚀 ~ CreateTaskModalPage ~ dismissModal ~ this.virEnvType:",
+        this.virEnvType
+      );
     }
 
     /* multi-player */
     // set whether all palyers have same question and/or answer
     if (!this.isSingleMode) {
       // save coll method type
-      console.log("// this.selectedCollType.type: ", this.selectedCollType.type);
-      
+      console.log(
+        "// this.selectedCollType.type: ",
+        this.selectedCollType.type
+      );
+
       this.task.collaborationType = this.selectedCollType.type;
 
       // only for sequential and free choice
-      if(this.selectedCollType.type == 'freeChoice'){
-
+      if (this.selectedCollType.type == "freeChoice") {
         /* Question types */
         if (this.task.question[0].allHaveSameInstruction) {
           console.log("/// same Instruction ");
@@ -816,7 +831,7 @@ export class CreateTaskModalPage implements OnInit {
           console.log("/// same Photo of the objec");
           this.task.question[1].geometry = this.task.question[0].geometry;
           this.task.question[1].photo = this.task.question[0].photo;
-  
+
           if (this.numPlayers == 3) {
             this.task.question[2].geometry = this.task.question[0].geometry;
             this.task.question[2].photo = this.task.question[0].photo;
@@ -840,7 +855,7 @@ export class CreateTaskModalPage implements OnInit {
           console.log("/// same Photo and direction n map");
           this.task.question[1].direction = this.task.question[0].direction;
           this.task.question[1].photo = this.task.question[0].photo;
-  
+
           if (this.numPlayers == 3) {
             this.task.question[2].direction = this.task.question[0].direction;
             this.task.question[2].photo = this.task.question[0].photo;
@@ -849,7 +864,7 @@ export class CreateTaskModalPage implements OnInit {
         if (this.task.question[0].allHasSamePhotoTask) {
           console.log("/// same Photo for the task");
           this.task.question[1].photo = this.task.question[0].photo;
-  
+
           if (this.numPlayers == 3) {
             this.task.question[2].photo = this.task.question[0].photo;
           }
@@ -859,59 +874,56 @@ export class CreateTaskModalPage implements OnInit {
         if (this.task.answer[0].allHasSameDes) {
           console.log("/// same allHasSameDes");
           this.task.answer[1].position = this.task.answer[0].position;
-  
+
           if (this.numPlayers == 3) {
             this.task.answer[2].position = this.task.answer[0].position;
           }
         }
-  
+
         if (this.task.answer[0].allHaveSameMultiChoicePhoto) {
           console.log("/// same allHaveSameMultiChoicePhoto");
           this.task.answer[1].hints = this.task.answer[0].hints;
           this.task.answer[1].photos = this.task.answer[0].photos;
-  
+
           if (this.numPlayers == 3) {
             this.task.answer[2].hints = this.task.answer[0].hints;
             this.task.answer[2].photos = this.task.answer[0].photos;
           }
         }
-  
+
         if (this.task.answer[0].allHaveSameMultiChoiceText) {
           console.log("/// same allHaveSameMultiChoiceText");
           this.task.answer[1].hints = this.task.answer[0].hints;
           this.task.answer[1].choices = this.task.answer[0].choices;
-  
+
           if (this.numPlayers == 3) {
             this.task.answer[2].hints = this.task.answer[0].hints;
             this.task.answer[2].choices = this.task.answer[0].choices;
           }
         }
-  
+
         if (this.task.answer[0].allHaveSameCorrAnswer) {
           console.log("/// same allHaveSameCorrAnswer");
           this.task.answer[1].number = this.task.answer[0].number;
-  
+
           if (this.numPlayers == 3) {
             this.task.answer[2].number = this.task.answer[0].number;
           }
         }
-  
+
         if (this.task.answer[0].allHaveSameDirfeedback) {
           console.log("/// same feedbak");
           this.task.answer[1].hints[0] = this.task.answer[0].hints[0];
           this.task.answer[1].hints[1] = this.task.answer[0].hints[1];
           this.task.answer[1].hints[2] = this.task.answer[0].hints[2];
-  
+
           if (this.numPlayers == 3) {
             this.task.answer[2].hints[0] = this.task.answer[0].hints[0];
             this.task.answer[2].hints[1] = this.task.answer[0].hints[1];
             this.task.answer[2].hints[2] = this.task.answer[0].hints[2];
           }
         }
-
       }
-      
-
     }
 
     this.modalController.dismiss({

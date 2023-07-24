@@ -23,8 +23,8 @@ import bbox from '@turf/bbox';
 import { searchArea } from './drawThemes';
 import { HelperService } from 'src/app/services/helper.service';
 import { SatControl } from './SatControl/SatControl';
-
 import { environment } from 'src/environments/environment';
+import { virEnvLayers } from 'src/app/models/virEnvsLayers';
 
 @Component({
   selector: 'app-map',
@@ -91,11 +91,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       //* update layer image
       newStyle.sources.overlay.url = "assets/vir_envs_layers/" + this.virEnvType + ".png";
       //* update layer dimensions
-      newStyle.sources.overlay.coordinates = environment.virEnvProperties[this.virEnvType].overlayCoords;
+      newStyle.sources.overlay.coordinates = virEnvLayers[this.virEnvType].overlayCoords;
       //* apply new style on map 
       this.map.setStyle(newStyle);
       //* update map max bounds
-      this.map.setMaxBounds(environment.virEnvProperties[this.virEnvType].bounds);
+      this.map.setMaxBounds(virEnvLayers[this.virEnvType].bounds);
     }
 
     /*}
@@ -170,7 +170,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       center: (this.isVirtualWorld ? [0.005810510811 / 2, 0.006827038669 / 2] : [8, 51.8]),
       zoom: (this.isVirtualWorld ? 15.5 : 2),
       // maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
-      maxBounds: (this.isVirtualWorld ? environment.virEnvProperties[this.virEnvType].bounds : null) // Sets bounds
+      maxBounds: (this.isVirtualWorld ? virEnvLayers[this.virEnvType].bounds : null) // Sets bounds
     });
 
     /* Show satelitte control only with real world */

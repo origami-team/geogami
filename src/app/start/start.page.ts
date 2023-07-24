@@ -6,7 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Capacitor, Plugins } from '@capacitor/core';
 import { AuthService } from '../services/auth-service.service';
-import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
 import { UtilService } from '../services/util.service';
@@ -59,6 +58,7 @@ export class StartPage implements OnInit {
 
     // get current app version
     Plugins.Device.getInfo().then((device) => (this.device = device));
+
     // get updated app version to notify user of app update
     this.gamesService.getAppVersion()
       .then(res => res.content)
