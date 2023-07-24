@@ -238,22 +238,42 @@ export const environment = {
       EnvName: "VirEnv_2",
       layerName: "VirEnv_2",
       img_url: "assets/vir_envs_layers/VirEnv_2.png"
-    },{
+    }, {
       EnvName: "Zoom Pre - Initial",
       layerName: "VirEnv_3",
       img_url: "assets/vir_envs_layers/VirEnv_3.png"
-    },{
+    }, {
       EnvName: "Zoom Pre Easy",
       layerName: "VirEnv_4",
       img_url: "assets/vir_envs_layers/VirEnv_4_zoom1.png"
-    },{
+    }, {
       EnvName: "Zoom Pre Difficult",
       layerName: "VirEnv_5",
       img_url: "assets/vir_envs_layers/VirEnv_5_zoom1.png"
-    },{
-      EnvName: "Location Marker - Post Test Difficult",
+    }, {
+      EnvName: "Location Marker - Post Difficult",
       layerName: "VirEnv_6",
       img_url: "assets/vir_envs_layers/VirEnv_6.png"
+    }, {
+      EnvName: "Location Marker - Post Easy",
+      layerName: "VirEnv_7",
+      img_url: "assets/vir_envs_layers/VirEnv_7.png"
+    }, {
+      EnvName: "Location Marker - Pre Difficult",
+      layerName: "VirEnv_8",
+      img_url: "assets/vir_envs_layers/VirEnv_8.png"
+    }, {
+      EnvName: "Location Marker - Pre Easy",
+      layerName: "VirEnv_9",
+      img_url: "assets/vir_envs_layers/VirEnv_9.png"
+    }, {
+      EnvName: "Location Marker - Training 1",
+      layerName: "VirEnv_10",
+      img_url: "assets/vir_envs_layers/VirEnv_10.png"
+    }, {
+      EnvName: "Location Marker - Training 2",
+      layerName: "VirEnv_11",
+      img_url: "assets/vir_envs_layers/VirEnv_11.png"
     }
 
   ],

@@ -60,7 +60,8 @@ export function createTranslateLoader(http: HttpClient) {
 * Using sockit.IO for receiving data from VR App
 */
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-const config: SocketIoConfig = { url: 'https://goegami-ve.azurewebsites.net/', options: {} }; // azure server - branch (multiplayer - realworld - V1)
+const config: SocketIoConfig = { url: 'https://api.origami.felixerdmann.com', options: {} }; // openstack server
+
 
 
 @NgModule({
