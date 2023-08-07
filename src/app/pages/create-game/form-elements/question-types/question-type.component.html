@@ -172,11 +172,11 @@
           ">
       </ion-icon>
     </h5>
-    <ion-toggle color="danger" [(ngModel)]="initialAvatarPosMapView"></ion-toggle>
+    <ion-toggle color="danger" [(ngModel)]="initialAvatarPositionStatus" (ngModelChange)="initialAvatarPosToggleChange()"></ion-toggle>
   </ion-item>
 
   <!-- set avatar initial position and direction - Single-player -->
-  <div *ngIf="isVirtualWorld && initialAvatarPosMapView">
+  <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
     <app-map featureType="direction" [(feature)]="question.initialAvatarPosition" [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType"></app-map>
   </div>
