@@ -25,8 +25,8 @@ export class GameDetailPage implements OnInit {
   game: any;
   activities: any[];
   points: any[];
-
-  shareData_cbox = true;
+  //* Default share data status
+  shareData_cbox = environment.shareData_status;
 
   // VR world
   isVirtualWorld: boolean = false;

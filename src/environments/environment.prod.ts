@@ -8,4 +8,6 @@ export const environment = {
   photoQuality: 10,
   // VR world
   mapStyle: "../../../../assets/mapStyles/",
+  //* Default share data status is false
+  shareData_cbox: false,
 };
