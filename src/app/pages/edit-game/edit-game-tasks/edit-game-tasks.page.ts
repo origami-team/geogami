@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
-import { IonReorderGroup } from "@ionic/angular";
+import { IonReorderGroup, Platform } from "@ionic/angular";
 
 import mapboxgl from "mapbox-gl";
 
@@ -56,7 +56,8 @@ export class EditGameTasksPage implements OnInit {
     private navCtrl: NavController,
     private gamesService: GamesService,
     private route: ActivatedRoute,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private platform: Platform      //* used in html
   ) { }
 
   ngOnInit() {

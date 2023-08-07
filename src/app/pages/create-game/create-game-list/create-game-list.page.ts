@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, ChangeDetectorRef } from "@angular/core";
-import { IonReorderGroup } from "@ionic/angular";
+import { IonReorderGroup, Platform } from "@ionic/angular";
 
 import mapboxgl from "mapbox-gl";
 
@@ -57,7 +57,8 @@ export class CreateGameListPage implements OnInit {
     public popoverController: PopoverController,
     private translate: TranslateService,
     private route: ActivatedRoute,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private platform: Platform,      //* used in html
   ) { }
 
   async ngOnInit() {
