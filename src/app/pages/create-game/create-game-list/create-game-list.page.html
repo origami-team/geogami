@@ -1,7 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>{{ "CreateGame.titleCreateGameList" | translate }}</ion-title>
     <ion-buttons slot="end">
@@ -15,90 +19,16 @@
 <ion-content class="ion-padding">
   <!-- <div id="create-game-map" class="map"></div> -->
 
-  <!-- Upper Add Button Row -->
-  <!-- <div class="ion-padding">
-    <div class="center">
-      <ion-chip color="primary" (click)="presentTaskModal('nav', 0)">
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div> -->
-
-  <!-- Old card style -->
-  <!-- <div *ngFor="let task of game.tasks; index as i">
-    <ion-card class="my-card" *ngIf="task.category.includes('nav')">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-avatar slot="start">
-            <div class="mymarker">
-              <p class="list">{{ i + 1 }}</p>
-            </div>
-          </ion-avatar>
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
-                <ion-chip color="primary" (click)="presentTaskModal('theme', 0)">
-                  <ion-label>{{ task.name }}</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card class="my-card" *ngIf="task.category.includes('theme')">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
-                <ion-chip color="secondary" (click)="presentTaskModal('theme')">
-                  <ion-label>{{ task.name }}</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <div class="center">
-      <ion-chip color="primary" (click)="presentTaskModal('nav', i + 1)">
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)="presentTaskModal('theme', i + 1)">
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div>
-  </div> -->
-
   <!-- Select number of players card -->
   <!-- Multi-player mode -->
   <ion-card color="light" *ngIf="!isSingleMode">
     <ion-card-content style="display: flex; justify-content: space-between">
       <ion-label>Select number of players </ion-label>
       <!-- DoDo l change color -->
-      <select  [(ngModel)]="numPlayers" interface="popover" style="width: 30%;">
-        <option [ngValue]="2"> Two </option>
-        <option [ngValue]="3"> Three</option>
-        <option [ngValue]="3" disabled> Four</option>
+      <select [(ngModel)]="numPlayers" interface="popover" style="width: 30%">
+        <option [ngValue]="2">Two</option>
+        <option [ngValue]="3">Three</option>
+        <option [ngValue]="3" disabled>Four</option>
       </select>
     </ion-card-content>
   </ion-card>
@@ -109,9 +39,16 @@
     <ion-card-content>
       <ion-text>{{ "CreateTasks.combineTasks" | translate }}</ion-text>
       <ion-list mode="ios" *ngIf="game">
-        <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!reorder">
-          <ion-item color="light" class="item-text-wrap" lines="none" *ngFor="let task of game.tasks; index as i">
-
+        <ion-reorder-group
+          (ionItemReorder)="doReorder($event)"
+          [disabled]="!reorder"
+        >
+          <ion-item
+            color="light"
+            class="item-text-wrap"
+            lines="none"
+            *ngFor="let task of game.tasks; index as i"
+          >
             <!-- show task number -->
             <ion-avatar slot="start">
               <div class="mymarker">
@@ -119,17 +56,7 @@
               </div>
             </ion-avatar>
 
-            <!-- Show task icon -->
-            <!-- <ion-avatar class="flag" slot="start" *ngIf="task.category.includes('nav')">
-              <img src="./../../../../assets/icons/target-flag.png" />
-            </ion-avatar> 
-            <ion-avatar slot="start" *ngIf="task.category.includes('theme')">
-              <div class="mymarker invisible"></div>
-            </ion-avatar>
-            <ion-avatar slot="start" *ngIf="task.category.includes('info')">
-              <div class="mymarker invisible"></div>
-            </ion-avatar>-->
-
+            <!-- Nav tasks -->
             <div
               *ngIf="task.category.includes('nav')"
               (click)="presentTaskModal('nav', task)"
@@ -141,29 +68,15 @@
                 </ion-label>
               </ion-chip>
 
-              <!-- ToDo: refactor it by adding it to component -->
               <!-- show extra info (env. type & question text) only with a specific width -->
-              <div
-                *ngIf="this.platform.width() > 735 && !isRealWorld"
-                style="display: inline"
-              >
-                <!-- Show vir. env. type -->
-                <ion-chip color="medium">
-                  <ion-label style="color: black">
-                    {{ task.virEnvType }}
-                  </ion-label>
-                </ion-chip>
-
-                <!-- Show question text -->
-                <ion-chip color="medium">
-                  <ion-label style="color: black">
-                    {{ task.question.text.substring(1, 30) }} {{
-                    task.question.text.length > 30 ? "..." : "" }}
-                  </ion-label>
-                </ion-chip>
-              </div>
+              <env-type-question-text
+                [isVirtualWorld]="isVirtualWorld"
+                [virEnvType]="task.virEnvType"
+                [questionText]="task.question.text"
+              ></env-type-question-text>
             </div>
 
+            <!-- Theme tasks -->
             <div
               *ngIf="task.category.includes('theme')"
               (click)="presentTaskModal('theme', task)"
@@ -175,27 +88,15 @@
                 </ion-label>
               </ion-chip>
 
-              <div
-                *ngIf="this.platform.width() > 735 && !isRealWorld"
-                style="display: inline"
-              >
-                <!-- Show vir. env. type -->
-                <ion-chip color="medium">
-                  <ion-label style="color: black">
-                    {{ task.virEnvType }}
-                  </ion-label>
-                </ion-chip>
-
-                <!-- Show question text -->
-                <ion-chip color="medium">
-                  <ion-label style="color: black">
-                    {{ task.question.text.substring(1, 30) }} {{
-                    task.question.text.length > 30 ? "..." : "" }}
-                  </ion-label>
-                </ion-chip>
-              </div>
+              <!-- show extra info (env. type & question text) only with a specific width -->
+              <env-type-question-text
+                [isVirtualWorld]="isVirtualWorld"
+                [virEnvType]="task.virEnvType"
+                [questionText]="task.question.text"
+              ></env-type-question-text>
             </div>
 
+            <!-- Info tasks -->
             <div
               *ngIf="task.category.includes('info')"
               (click)="presentTaskModal('info', task)"
@@ -207,30 +108,20 @@
                 </ion-label>
               </ion-chip>
 
-              <div
-                *ngIf="this.platform.width() > 735 && !isRealWorld"
-                style="display: inline"
-              >
-                <!-- Show vir. env. type -->
-                <ion-chip color="medium" >
-                  <ion-label style="color: black">
-                    {{ task.virEnvType }}
-                  </ion-label>
-                </ion-chip>
-
-                <!-- Show question text -->
-                <ion-chip color="medium" >
-                  <ion-label style="color: black">
-                    {{ task.question.text.substring(1, 30) }} {{
-                    task.question.text.length > 30 ? "..." : "" }}
-                  </ion-label>
-                </ion-chip>
-              </div>
+              <!-- show extra info (env. type & question text) only with a specific width -->
+              <env-type-question-text
+                [isVirtualWorld]="isVirtualWorld"
+                [virEnvType]="task.virEnvType"
+                [questionText]="task.question.text"
+              ></env-type-question-text>
             </div>
 
-
-
-            <ion-icon *ngIf="!reorder" slot="end" name="close" (click)="deleteTask(task._id)"></ion-icon>
+            <ion-icon
+              *ngIf="!reorder"
+              slot="end"
+              name="close"
+              (click)="deleteTask(task._id)"
+            ></ion-icon>
             <ion-reorder *ngIf="reorder" slot="end"></ion-reorder>
           </ion-item>
         </ion-reorder-group>
@@ -240,8 +131,12 @@
 
   <ion-card color="light">
     <ion-card-content>
-      <ion-text>{{ "CreateTasks.chooseComponents" | translate }}
-        <ion-icon name="information-circle" (click)="showPopover($event, 'Popover.chooseComponent')">
+      <ion-text
+        >{{ "CreateTasks.chooseComponents" | translate }}
+        <ion-icon
+          name="information-circle"
+          (click)="showPopover($event, 'Popover.chooseComponent')"
+        >
         </ion-icon>
       </ion-text>
 
@@ -262,16 +157,24 @@
 
         <!-- To enable swap tasks -->
         <ng-container *ngIf="game.tasks && game.tasks.length > 1">
-          <ion-chip color="dark" slot="end" *ngIf="!reorder" (click)="toggleReorder()">
+          <ion-chip
+            color="dark"
+            slot="end"
+            *ngIf="!reorder"
+            (click)="toggleReorder()"
+          >
             <ion-icon name="reorder-three"></ion-icon>
           </ion-chip>
-          <ion-chip color="dark" slot="end" *ngIf="reorder" (click)="toggleReorder()">
+          <ion-chip
+            color="dark"
+            slot="end"
+            *ngIf="reorder"
+            (click)="toggleReorder()"
+          >
             <ion-icon name="close"></ion-icon>
           </ion-chip>
         </ng-container>
-
       </ion-item>
-
     </ion-card-content>
   </ion-card>
 

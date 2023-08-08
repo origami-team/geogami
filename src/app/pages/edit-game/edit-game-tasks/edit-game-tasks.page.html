@@ -24,80 +24,6 @@
 <ion-content class="ion-padding">
   <!-- <div id="create-game-map" class="map"></div> -->
 
-  <!-- Upper Add Button Row -->
-  <!-- <div class="ion-padding">
-    <div class="center">
-      <ion-chip color="primary" (click)="presentTaskModal('nav', 0)">
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div> -->
-
-  <!-- Old card style -->
-  <!-- <div *ngFor="let task of game.tasks; index as i">
-    <ion-card class="my-card" *ngIf="task.category.includes('nav')">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-avatar slot="start">
-            <div class="mymarker">
-              <p class="list">{{ i + 1 }}</p>
-            </div>
-          </ion-avatar>
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
-                <ion-chip color="primary" (click)="presentTaskModal('theme', 0)">
-                  <ion-label>{{ task.name }}</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card class="my-card" *ngIf="task.category.includes('theme')">
-      <ion-card-content>
-        <ion-item class="item-text-wrap" lines="none">
-          <ion-label text-wrap class="ion-text-wrap">
-            <ion-list>
-              <ion-item lines="none">
-                <ion-icon slot="end" name="close" (click)="deleteTask(task.id)"></ion-icon>
-                <ion-chip color="secondary" (click)="presentTaskModal('theme')">
-                  <ion-label>{{ task.name }}</ion-label>
-                </ion-chip>
-              </ion-item>
-            </ion-list>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <div class="center">
-      <ion-chip color="primary" (click)="presentTaskModal('nav', i + 1)">
-        <ion-icon name="navigate"></ion-icon>
-      </ion-chip>
-      <ion-chip color="secondary" (click)="presentTaskModal('theme', i + 1)">
-        <ion-icon name="clipboard"></ion-icon>
-      </ion-chip>
-      <ion-chip color="tertiary" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="list"></ion-icon>
-      </ion-chip>
-      <ion-chip color="medium" (click)="presentTaskModal('theme', 0)">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-chip>
-    </div>
-  </div> -->
-
   <!-- New reorder list style -->
   <ion-card color="light">
     <ion-card-content>
@@ -120,20 +46,8 @@
               </div>
             </ion-avatar>
 
-            <!-- Show task icon -->
-            <!-- <ion-avatar
-              class="flag"
-              slot="start"
-              *ngIf="task.category.includes('nav')">
-              <img src="./../../../../assets/icons/target-flag.png" />
-            </ion-avatar>
-            <ion-avatar slot="start" *ngIf="task.category.includes('theme')">
-              <div class="mymarker invisible"></div>
-            </ion-avatar>
-            <ion-avatar slot="start" *ngIf="task.category.includes('info')">
-              <div class="mymarker invisible"></div>
-            </ion-avatar> -->
-
+            <!-- ToDo: there is a space to do refactoring by adding duplicated impl. in a single comp.  -->
+            <!-- Nav tasks -->
             <div
               *ngIf="task.category.includes('nav')"
               (click)="presentTaskModal('nav', task)"
@@ -145,29 +59,15 @@
                 </ion-label>
               </ion-chip>
 
-              <!-- ToDo: refactor it by adding it to component -->
               <!-- show extra info (env. type & question text) only with a specific width -->
-              <div
-                *ngIf="this.platform.width() > 735 && isVirtualWorld"
-                style="display: inline"
-              >
-                <!-- Show vir. env. type -->
-                <ion-chip color="medium" >
-                  <ion-label style="color: black">
-                    {{ task.virEnvType }}
-                  </ion-label>
-                </ion-chip>
-
-                <!-- Show question text -->
-                <ion-chip color="medium" >
-                  <ion-label style="color: black">
-                    {{ task.question.text.substring(1, 30) }} {{
-                    task.question.text.length > 30 ? "..." : "" }}
-                  </ion-label>
-                </ion-chip>
-              </div>
+              <env-type-question-text
+                [isVirtualWorld]="isVirtualWorld"
+                [virEnvType]="task.virEnvType"
+                [questionText]="task.question.text"
+              ></env-type-question-text>
             </div>
 
+            <!-- Theme tasks -->
             <div
               *ngIf="task.category.includes('theme')"
               (click)="presentTaskModal('theme', task)"
@@ -179,34 +79,15 @@
                 </ion-label>
               </ion-chip>
 
-              <!-- ToDo: refactor it by adding it to component -->
               <!-- show extra info (env. type & question text) only with a specific width -->
-              <div
-                *ngIf="this.platform.width() > 735 && isVirtualWorld"
-                style="display: inline"
-              >
-                <!-- Show vir. env. type -->
-                <ion-chip color="medium">
-                  <ion-label style="color: black">
-                    {{ task.virEnvType }}
-                  </ion-label>
-                </ion-chip>
-
-                <!-- Show question text -->
-                <ion-chip color="medium">
-                  <ion-label style="color: black">
-                    {{ task.question.text.substring(1, 30) }} {{
-                    task.question.text.length > 30 ? "..." : "" }}
-                  </ion-label>
-                </ion-chip>
-              </div>
+              <env-type-question-text
+                [isVirtualWorld]="isVirtualWorld"
+                [virEnvType]="task.virEnvType"
+                [questionText]="task.question.text"
+              ></env-type-question-text>
             </div>
-
-            <!-- <ion-chip *ngIf="task.category.includes('free')" color="tertiary" (click)="presentTaskModal('free', task)">
-              <ion-label>
-                <ion-icon name="rose"></ion-icon> {{ task.name }}
-              </ion-label>
-            </ion-chip> -->
+            
+            <!-- Info tasks -->
             <div
               *ngIf="task.category.includes('info')"
               (click)="presentTaskModal('info', task)"
@@ -218,27 +99,12 @@
                 </ion-label>
               </ion-chip>
 
-              <!-- ToDo: refactor it by adding it to component -->
               <!-- show extra info (env. type & question text) only with a specific width -->
-              <div
-                *ngIf="this.platform.width() > 735 && isVirtualWorld"
-                style="display: inline"
-              >
-                <!-- Show vir. env. type -->
-                <ion-chip color="medium" >
-                  <ion-label style="color: black">
-                    {{ task.virEnvType }}
-                  </ion-label>
-                </ion-chip>
-
-                <!-- Show question text -->
-                <ion-chip color="medium" >
-                  <ion-label style="color: black">
-                    {{ task.question.text.substring(1, 30) }} {{
-                    task.question.text.length > 30 ? "..." : "" }}
-                  </ion-label>
-                </ion-chip>
-              </div>
+              <env-type-question-text
+                [isVirtualWorld]="isVirtualWorld"
+                [virEnvType]="task.virEnvType"
+                [questionText]="task.question.text"
+              ></env-type-question-text>
             </div>
 
             <ion-icon

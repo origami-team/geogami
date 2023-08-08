@@ -35,7 +35,6 @@ import { MultipleChoiceTextComponent } from "./pages/create-game/form-elements/m
 import { TypeToTextPipe } from "./pipes/typeToText.pipe";
 import { LangTranslatePipe } from "./pipes/langTranslate";
 import { AudioRecorderComponent } from "./pages/create-game/form-elements/audio-recorder/audio-recorder.component";
-import { AudioPlayerComponent } from "./components/audio-player/audio-player.component";
 import { AudioPlayerModule } from "./components/audio-player/audio-player.module";
 
 import { MarkdownModule } from "ngx-markdown";
@@ -60,6 +59,7 @@ export function createTranslateLoader(http: HttpClient) {
  * Using sockit.IO for receiving data from VR App
  */
 import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
+import { EnvTypeQuestionTextModule } from "./components/env-type-question-text/env-type-question-text.module";
 
 const config: SocketIoConfig = { url: environment.socketIoURL, options: {} }; // openstack server
 
@@ -92,6 +92,7 @@ const config: SocketIoConfig = { url: environment.socketIoURL, options: {} }; //
   ],
   imports: [
     AudioPlayerModule,
+    EnvTypeQuestionTextModule,
     FormsModule,
     BrowserModule,
     HttpClientModule,
