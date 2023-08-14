@@ -58,3 +58,43 @@ export const VirEnv_22: Readonly<any> = {
     lat: 43.54 / 112000,
   },
 };
+
+export const VirEnv_34: Readonly<any> = {
+  //*NW,NE,SE,SW
+  overlayCoords: [
+    [0.000142711711711712, 0.00171399107142857],
+    [0.00167424324324324, 0.00171399107142857],
+    [0.00167424324324324, 0.000377401079136691],
+    [0.000142711711711712, 0.000377401079136691],
+  ],
+  bounds: [
+    //* Southwest coordinates (lng,lat)
+    [0.000142711711711712 - 0.001, 0.000377401079136691 - 0.0015],
+    //* Northeast coordinates (lng,lat)
+    [0.00167424324324324 + 0.001, 0.00171399107142857 + 0.001],
+  ],
+  initialPosition: {
+    lng: 120.47 / 111000,
+    lat: 65.5 / 112000,
+  },
+};
+
+export const VirEnv_36: Readonly<any> = {
+  //*NW,NE,SE,SW
+  overlayCoords: [
+    [0, 0.00338392857142857],
+    [0.00483783783783784, 0.00338392857142857],
+    [0.00483783783783784, 0],
+    [0, 0],
+  ],
+  bounds: [
+    //* Southwest coordinates (lng,lat)
+    [0 - 0.001, 0 - 0.0015],
+    //* Northeast coordinates (lng,lat)
+    [0.00483783783783784 + 0.001, 0.00338392857142857 + 0.001],
+  ],
+  initialPosition: {
+    lng: 235.01 / 111000,
+    lat: 48 / 112000,
+  },
+};

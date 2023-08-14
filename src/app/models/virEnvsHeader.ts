@@ -164,4 +164,24 @@ export const VirEnvHeaders: ReadonlyArray<any> = [
     layerName: "VirEnv_33",
     img_url: "assets/vir_envs_layers/VirEnv_33.png",
   },
+  {
+    envName: "Zoom - Post Easy",
+    layerName: "VirEnv_34",
+    img_url: "assets/vir_envs_layers/VirEnv_34.png",
+  },
+  {
+    envName: "Zoom - Post Difficult",
+    layerName: "VirEnv_35",
+    img_url: "assets/vir_envs_layers/VirEnv_35.png",
+  },
+  {
+    envName: "Zoom - Training 1",
+    layerName: "VirEnv_36",
+    img_url: "assets/vir_envs_layers/VirEnv_36.png",
+  },
+  {
+    envName: "Zoom - Training 2",
+    layerName: "VirEnv_37",
+    img_url: "assets/vir_envs_layers/VirEnv_37.png",
+  },
 ];

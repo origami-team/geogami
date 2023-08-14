@@ -966,7 +966,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
         if (virEnvLayers[this.virEnvType].zoomInLayer1) {
           if (
-            currentZoom <= 19.2 &&
+            currentZoom <= 17.2 &&
             this.map.getStyle().sources.overlay.url !=
               "assets/vir_envs_layers/" + this.virEnvType + ".png"
           ) {
@@ -975,7 +975,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               false
             );
           } else if (
-            currentZoom > 19.2 &&
+            currentZoom > 17.2 &&
             this.map.getStyle().sources.overlay.url !=
               "assets/vir_envs_layers/" + this.virEnvType + "b.png"
           ) {
@@ -1623,7 +1623,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async initTask() {
     this.panelMinimized = false;
 
-    console.log("Current task: ", this.task);
+    // console.log("Current task: ", this.task);
 
     this.trackerService.setTask(this.task);
 
