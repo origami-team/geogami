@@ -47,11 +47,11 @@ export class MapShowroomPage implements OnInit {
 
   constructor(private OSMService: OsmService, private deviceOrientation: DeviceOrientation) {
 
-  console.log('creating orientation subscribe...');
+  // console.log('creating orientation subscribe...');
     this.directionSubscribe = this.deviceOrientation.watchHeading().subscribe(
       (data: DeviceOrientationCompassHeading) => this.currentCompassData = data
     );
-  console.log('...done');
+  // console.log('...done');
 
 
     this._rotateTo = (e: DeviceOrientationEvent) => {
@@ -67,7 +67,7 @@ export class MapShowroomPage implements OnInit {
 
     this._viewDirection = (e: DeviceOrientationEvent) => {
       // this.map.rotateTo(e.alpha, { duration: 10 })
-    console.log(this.currentCompassData);
+    // console.log(this.currentCompassData);
 
       if (this.map.getSource('viewDirection') == undefined) {
         // this.map.addImage('view-direction', 'assets/icons/direction.png')

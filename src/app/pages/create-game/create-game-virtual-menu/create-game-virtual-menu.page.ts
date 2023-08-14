@@ -46,7 +46,7 @@ export class CreateGameVirtualMenuPage implements OnInit {
   }
 
   navigateCreateVRGame(virEnvType) {
-console.log("🚀 ~ CreateGameVirtualMenuPage ~ navigateCreateVRGame ~ virEnvType:", virEnvType)
+// console.log("🚀 ~ CreateGameVirtualMenuPage ~ navigateCreateVRGame ~ virEnvType:", virEnvType)
     this.bundle.virEnvType = virEnvType;
     this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
   } 

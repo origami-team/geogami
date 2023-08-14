@@ -36,7 +36,7 @@ export class ViewDirectionControl {
         this.isVirtualWorld = isVirtualWorld;
         this.initialAvatarLoc = initialAvatarLoc;
         this.initialAvatarDir = initialAvatarDir;
-    console.log("🚀 ~ ViewDirectionControl ~ initialAvatarLoc:", initialAvatarLoc)
+    // console.log("🚀 ~ ViewDirectionControl ~ initialAvatarLoc:", initialAvatarLoc)
 
         if (!isVirtualWorld) {
             this.positionSubscription = this.geolocationService.geolocationSubscription.subscribe(

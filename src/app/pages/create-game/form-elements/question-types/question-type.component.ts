@@ -45,14 +45,14 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-  console.log("changes (changes): ", changes);
+  // console.log("changes (changes): ", changes);
     if (this.isSingleMode) {
-      // console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
+      // // console.log("changes (changes.question.currentValue): ", changes.question.currentValue);
       if (changes.question) {
         this.questionChange.emit(changes.question.currentValue);
       }
     } else {
-      // console.log("changes (changes.question.currentValue): ", changes);
+      // // console.log("changes (changes.question.currentValue): ", changes);
       if (changes.question) {
         this.questionChange.emit(changes.question.currentValue);
       }
@@ -61,7 +61,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
   /* multi-player */
   onCollTypeChange(collType: any) {
-  console.log("collType:", collType);
+  // console.log("collType:", collType);
   }
 
   ngOnInit() {
@@ -70,7 +70,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
       this.question &&
       this.question.initialAvatarPosition
     ) {
-    console.log("----question: ", this.question);
+    // console.log("----question: ", this.question);
       this.initialAvatarPositionStatus = true;
     }
   }
@@ -87,7 +87,7 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
   async showPopover(ev: any, key: string) {
     let text = this.translate.instant(key);
-  console.log(ev);
+  // console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

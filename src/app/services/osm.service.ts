@@ -12,10 +12,10 @@ export class OsmService {
   constructor(private http: HttpClient) { }
 
   getStreetCoordinates(lat: number, lng: number, radius: number = 30) {
-  console.log(this.lastRequest - Date.now());
+  // console.log(this.lastRequest - Date.now());
     if (this.lastRequest == undefined || Date.now() - this.lastRequest > this.maxRequestInterval) {
       this.lastRequest = Date.now();
-    console.log('doing request');
+    // console.log('doing request');
       return this.http.get(`
           https://overpass-api.de/api/interpreter?data=[out:json];(way[highway~"^(primary|secondary|tertiary|residential)$"][name](around:${radius},${lat},${lng});>;);out;
         `).toPromise();

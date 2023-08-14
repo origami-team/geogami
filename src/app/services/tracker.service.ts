@@ -232,7 +232,7 @@ export class TrackerService {
         rotationCount: this.rotationCounter,
       },
     });
-console.log(this.events);
+// console.log(this.events);
   }
 
   /*  */
@@ -279,7 +279,7 @@ console.log(this.events);
       // numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
     };
 
-  console.log(data);
+  // console.log(data);
 
     // Plugins.Geolocation.clearWatch({ id: this.positionWatch });
     if (!this.isVirtualWorld) {
@@ -298,9 +298,9 @@ console.log(this.events);
         directory: FilesystemDirectory.Documents,
         recursive: true, // like mkdir -p
       });
-    console.log('Created dir', ret);
+    // console.log('Created dir', ret);
     } catch (e) {
-    console.log('Unable to make directory', e);
+    // console.log('Unable to make directory', e);
     }
     // 2. store tracks locally
     try {
@@ -311,7 +311,7 @@ console.log(this.events);
         directory: FilesystemDirectory.Documents,
         encoding: FilesystemEncoding.UTF8,
       });
-    console.log('Wrote file', result);
+    // console.log('Wrote file', result);
     } catch (e) {
       console.error('Unable to write file', e);
     }
@@ -353,7 +353,7 @@ console.log(this.events);
     if (!isGameTrackStored) {
       /* (multiplayer) 5. a) store new track if not stored yet (multiplayer) */
       // (single player) store new track 
-    console.log("store new track (single player) / tracks (multiplayer)");
+    // console.log("store new track (single player) / tracks (multiplayer)");
       return this.http
         .post(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),
@@ -362,7 +362,7 @@ console.log(this.events);
     }
     else {
       /* (multiplayer) 5. b) update existed tracks (multiplayer) */
-    console.log("//update existed tracks (multiplayer)");
+    // console.log("//update existed tracks (multiplayer)");
       return this.http
         .put(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),
