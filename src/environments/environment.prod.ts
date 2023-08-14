@@ -9,5 +9,5 @@ export const environment = {
   // VR world
   mapStyle: "../../../../assets/mapStyles/",
   //* Default share data status is false
-  shareData_cbox: false,
+  shareData_status: false,
 };
