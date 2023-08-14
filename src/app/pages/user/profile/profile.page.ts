@@ -66,7 +66,7 @@ export class ProfilePage implements OnInit {
           text: this._translate.instant("User.deleteAccount"),
           cssClass: 'alert-button-confirm',
           handler: () => {
-            console.log("user: ", this.user);
+          console.log("user: ", this.user);
             this.authService.DeleteAccountLogout(this.user);
           },
         },

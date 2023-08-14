@@ -114,7 +114,7 @@ export class LayerControl {
     try {
       this.map.removeControl(this.styleSwitcherControl);
     } catch (e) {
-      console.log(e);
+    console.log(e);
     }
     if (this.compare != null) {
       this.compare.remove();

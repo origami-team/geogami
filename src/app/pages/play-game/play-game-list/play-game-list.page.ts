@@ -427,7 +427,7 @@ export class PlayGameListPage implements OnInit {
       this.map.removeLayer(`clusters`);
       this.map.removeSource("clusters");
 
-      console.log("Else ////////////");
+    console.log("Else ////////////");
 
       this.map.addSource('clusters', {
         'type': 'geojson',

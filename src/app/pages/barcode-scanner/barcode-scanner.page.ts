@@ -53,7 +53,7 @@ export class BarcodeScannerPage implements OnInit {
 
       /* if the result has content */
       /* if (result.hasContent) {
-        console.log(result.content); // log the raw scanned content
+      console.log(result.content); // log the raw scanned content
         //* show toast msg
         // this.utilService.showToast(`Qr-Code: ${result.content}`, "dark", 3500);
 

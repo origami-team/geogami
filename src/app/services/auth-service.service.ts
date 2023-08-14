@@ -109,7 +109,7 @@ export class AuthService {
         this.router.navigate(['/user/login']);
       },
       (err) => {
-        console.log(err);
+      console.log(err);
         this.errorMessage$.next(err.error.msg);
         this.loading$.next(false);
       }
@@ -146,7 +146,7 @@ export class AuthService {
           this.router.navigate(['/user/reset-password'], { state: { email :email.email} });
         },
         (err) => {
-          console.log(err);
+        console.log(err);
           this.errorMessage$.next(err.error.message);
         }
       );
@@ -173,7 +173,7 @@ export class AuthService {
   }
 
   recoverSession(token) {
-    console.log('RECOVER');
+  console.log('RECOVER');
     this.refreshTokenInProgress$.next(true);
     this.http
       .post(this.AUTH_API_URL + '/user/refresh-auth', { token })

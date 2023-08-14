@@ -88,7 +88,7 @@ export class StartPage implements OnInit {
   }
 
   handleCardClick(e) {
-    console.log(e);
+console.log(e);
   }
 
   navigateGamesPlayPage() {
@@ -178,7 +178,7 @@ export class StartPage implements OnInit {
   /* convert version value to int */
   versionToInt(VersionInString) {
     let v = VersionInString.split('.');
-    console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);
+  console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);
     return (v[0] * 100 + v[1] * 10 + v[2] * 1)
   }
 }

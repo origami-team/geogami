@@ -93,7 +93,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   async showPopover(ev: any, key: string) {
     let text = this.translate.instant(key);
 
-    console.log(ev);
+  console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

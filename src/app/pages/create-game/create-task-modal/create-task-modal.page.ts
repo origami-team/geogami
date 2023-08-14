@@ -460,7 +460,7 @@ export class CreateTaskModalPage implements OnInit {
 
   /* on selecting a  */
   onObjectQuestionSelectChange() {
-    console.log("//// o.q.s.c 0 - this.task.type", this.task.type);
+  console.log("//// o.q.s.c 0 - this.task.type", this.task.type);
 
     if (this.isSingleMode) {
       if (this.task.type != "free") {
@@ -763,7 +763,7 @@ export class CreateTaskModalPage implements OnInit {
     //* inlclude vir. env. type in task data
     if (this.isVirtualWorld) {
       this.task.virEnvType = this.virEnvType;
-      console.log(
+    console.log(
         "🚀 ~ CreateTaskModalPage ~ dismissModal ~ this.virEnvType:",
         this.virEnvType
       );
@@ -773,7 +773,7 @@ export class CreateTaskModalPage implements OnInit {
     // set whether all palyers have same question and/or answer
     if (!this.isSingleMode) {
       // save coll method type
-      console.log(
+    console.log(
         "// this.selectedCollType.type: ",
         this.selectedCollType.type
       );
@@ -784,28 +784,28 @@ export class CreateTaskModalPage implements OnInit {
       if (this.selectedCollType.type == "freeChoice") {
         /* Question types */
         if (this.task.question[0].allHaveSameInstruction) {
-          console.log("/// same Instruction ");
+        console.log("/// same Instruction ");
           this.task.question[1].text = this.task.question[0].text;
           if (this.numPlayers == 3) {
             this.task.question[2].text = this.task.question[0].text;
           }
         }
         if (this.task.question[0].allHaveSameAudio) {
-          console.log("/// same audios ");
+        console.log("/// same audios ");
           this.task.question[1].audio = this.task.question[0].audio;
           if (this.numPlayers == 3) {
             this.task.question[2].audio = this.task.question[0].audio;
           }
         }
         if (this.task.question[0].allHasSameMarkObj) {
-          console.log("/// same mark obbject ");
+        console.log("/// same mark obbject ");
           this.task.question[1].geometry = this.task.question[0].geometry;
           if (this.numPlayers == 3) {
             this.task.question[2].geometry = this.task.question[0].geometry;
           }
         }
         if (this.task.question[0].allHasSameInstPhoto) {
-          console.log("/// same mark obbject ");
+        console.log("/// same mark obbject ");
           this.task.question[1].text = this.task.question[0].text;
           this.task.question[1].photo = this.task.question[0].photo;
           if (this.numPlayers == 3) {
@@ -814,21 +814,21 @@ export class CreateTaskModalPage implements OnInit {
           }
         }
         if (this.task.question[0].allHasSameMapMark) {
-          console.log("/// same map mark ");
+        console.log("/// same map mark ");
           this.task.question[1].geometry = this.task.question[0].geometry;
           if (this.numPlayers == 3) {
             this.task.question[2].geometry = this.task.question[0].geometry;
           }
         }
         if (this.task.question[0].allHasSameMarkObjMode) {
-          console.log("/// same Mark object (TaskMode.NO_FEATURE)");
+        console.log("/// same Mark object (TaskMode.NO_FEATURE)");
           this.task.question[1].geometry = this.task.question[0].geometry;
           if (this.numPlayers == 3) {
             this.task.question[2].geometry = this.task.question[0].geometry;
           }
         }
         if (this.task.question[0].allHasSamePhotoMarkObj) {
-          console.log("/// same Photo of the objec");
+        console.log("/// same Photo of the objec");
           this.task.question[1].geometry = this.task.question[0].geometry;
           this.task.question[1].photo = this.task.question[0].photo;
 
@@ -838,21 +838,21 @@ export class CreateTaskModalPage implements OnInit {
           }
         }
         if (this.task.question[0].allHasSameViewDirec) {
-          console.log("/// same view direction");
+        console.log("/// same view direction");
           this.task.question[1].direction = this.task.question[0].direction;
           if (this.numPlayers == 3) {
             this.task.question[2].direction = this.task.question[0].direction;
           }
         }
         if (this.task.question[0].allHasSameDirMap) {
-          console.log("/// same direction on map");
+        console.log("/// same direction on map");
           this.task.question[1].direction = this.task.question[0].direction;
           if (this.numPlayers == 3) {
             this.task.question[2].direction = this.task.question[0].direction;
           }
         }
         if (this.task.question[0].allHasSamePhotoDirMap) {
-          console.log("/// same Photo and direction n map");
+        console.log("/// same Photo and direction n map");
           this.task.question[1].direction = this.task.question[0].direction;
           this.task.question[1].photo = this.task.question[0].photo;
 
@@ -862,7 +862,7 @@ export class CreateTaskModalPage implements OnInit {
           }
         }
         if (this.task.question[0].allHasSamePhotoTask) {
-          console.log("/// same Photo for the task");
+        console.log("/// same Photo for the task");
           this.task.question[1].photo = this.task.question[0].photo;
 
           if (this.numPlayers == 3) {
@@ -872,7 +872,7 @@ export class CreateTaskModalPage implements OnInit {
 
         /* Answer types */
         if (this.task.answer[0].allHasSameDes) {
-          console.log("/// same allHasSameDes");
+        console.log("/// same allHasSameDes");
           this.task.answer[1].position = this.task.answer[0].position;
 
           if (this.numPlayers == 3) {
@@ -881,7 +881,7 @@ export class CreateTaskModalPage implements OnInit {
         }
 
         if (this.task.answer[0].allHaveSameMultiChoicePhoto) {
-          console.log("/// same allHaveSameMultiChoicePhoto");
+        console.log("/// same allHaveSameMultiChoicePhoto");
           this.task.answer[1].hints = this.task.answer[0].hints;
           this.task.answer[1].photos = this.task.answer[0].photos;
 
@@ -892,7 +892,7 @@ export class CreateTaskModalPage implements OnInit {
         }
 
         if (this.task.answer[0].allHaveSameMultiChoiceText) {
-          console.log("/// same allHaveSameMultiChoiceText");
+        console.log("/// same allHaveSameMultiChoiceText");
           this.task.answer[1].hints = this.task.answer[0].hints;
           this.task.answer[1].choices = this.task.answer[0].choices;
 
@@ -903,7 +903,7 @@ export class CreateTaskModalPage implements OnInit {
         }
 
         if (this.task.answer[0].allHaveSameCorrAnswer) {
-          console.log("/// same allHaveSameCorrAnswer");
+        console.log("/// same allHaveSameCorrAnswer");
           this.task.answer[1].number = this.task.answer[0].number;
 
           if (this.numPlayers == 3) {
@@ -912,7 +912,7 @@ export class CreateTaskModalPage implements OnInit {
         }
 
         if (this.task.answer[0].allHaveSameDirfeedback) {
-          console.log("/// same feedbak");
+        console.log("/// same feedbak");
           this.task.answer[1].hints[0] = this.task.answer[0].hints[0];
           this.task.answer[1].hints[1] = this.task.answer[0].hints[1];
           this.task.answer[1].hints[2] = this.task.answer[0].hints[2];

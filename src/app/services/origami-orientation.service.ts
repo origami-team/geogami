@@ -29,7 +29,7 @@ export class OrigamiOrientationService {
 
   init(isVirtualWorld: boolean) {
     this.isVirtualWorld = isVirtualWorld;
-    console.log(this.platform.platforms());
+  console.log(this.platform.platforms());
 
     if (this.platform.is('mobile') && this.platform.is('capacitor') && !this.platform.is('mobileweb')) {
       // native

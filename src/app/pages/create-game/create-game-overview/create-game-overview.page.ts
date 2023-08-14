@@ -371,7 +371,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
 
   async showTrackingInfo(ev: any, text: string) {
-    console.log(ev);
+  console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,
@@ -416,7 +416,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       // playersCount: (!this.isSingleMode ? this.numPlayers : 1)     // ToDo: update it in server
 
     });
-    console.log(this.gameFactory.game);
+  console.log(this.gameFactory.game);
 
     this.showUpload = true;
     this.gamesService
@@ -442,7 +442,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   async showPopover(ev: any, key: string) {
     let text = this.translate.instant(key);
 
-    console.log(ev);
+  console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,
