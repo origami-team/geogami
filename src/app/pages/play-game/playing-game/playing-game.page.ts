@@ -966,7 +966,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
         if (virEnvLayers[this.virEnvType].zoomInLayer1) {
           if (
-            currentZoom <= 17.2 &&
+            currentZoom <= 18 &&
             this.map.getStyle().sources.overlay.url !=
               "assets/vir_envs_layers/" + this.virEnvType + ".png"
           ) {
@@ -975,9 +975,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               false
             );
           } else if (
-            currentZoom > 17.2 &&
+            currentZoom > 18 &&
             this.map.getStyle().sources.overlay.url !=
-              "assets/vir_envs_layers/" + this.virEnvType + "b.png"
+              "assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png"
           ) {
             this.updateMapStyleOverlayLayer(
               "assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png",
