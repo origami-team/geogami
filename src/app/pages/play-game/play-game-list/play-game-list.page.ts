@@ -366,7 +366,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   async openMapTap() {
-    if (this.isListTabSelected) {
+    if (this.isListTabSelected ) {
       this.isListTabSelected = false;
 
       if (!this.map) {
@@ -386,6 +386,7 @@ export class PlayGameListPage implements OnInit {
   openListTap() {
     if (!this.isListTabSelected) {
       this.isListTabSelected = true;
+      // // console.log("isListTabSelected: ", this.isListTabSelected);
     }
   }
 
