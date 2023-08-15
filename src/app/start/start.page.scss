@@ -1,3 +1,9 @@
+.ios {
+  .shiftLanIOS{
+    padding-top: 7%;
+  }
+}
+
 .center {
   display: block;
   margin-left: auto;
@@ -5,7 +11,7 @@
 }
 
 .logo {
-  margin-top: 30px;
+  margin-top: 45px;
   max-width: 280px;
 
   @media only screen and (max-width: 575px) {
@@ -18,7 +24,7 @@ ion-card {
 }
 
 @media only screen and (min-width: 575px) {
-  ion-card-title > ion-icon {
+  ion-card-title>ion-icon {
     position: absolute;
     left: 0;
     top: -15px;
@@ -29,10 +35,12 @@ ion-card {
 
 ion-item {
   margin-top: 2%;
+
   // phone
   @media only screen and (max-width: 375px) {
     margin-top: 6%;
   }
+
   margin-right: 1%;
   float: right;
   //display: con;

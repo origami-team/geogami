@@ -1,68 +1,67 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { NgModule, APP_INITIALIZER } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { RouteReuseStrategy } from "@angular/router";
+import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
 import {
   HttpClientModule,
   HttpClient,
   HTTP_INTERCEPTORS,
-} from '@angular/common/http';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { PopoverComponent } from './popover/popover.component';
-import { FormsModule } from '@angular/forms';
+} from "@angular/common/http";
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
+import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { PopoverComponent } from "./popover/popover.component";
+import { FormsModule } from "@angular/forms";
 
 // Modals
-import { CreateTaskModalPage } from './pages/create-game/create-task-modal/create-task-modal.page';
-import { CreateModuleModalPage } from './pages/create-game/create-module-modal/create-module-modal.page';
-import { MapFeaturesModalPage } from './pages/create-game/map-features-modal/map-features-modal.page';
-import { CreateInfoModalComponent } from './pages/create-game/create-info-modal/create-info-modal.component';
+import { CreateTaskModalPage } from "./pages/create-game/create-task-modal/create-task-modal.page";
+import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/create-module-modal.page";
+import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
+import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
 
-import { DeviceOrientation } from '@ionic-native/device-orientation/ngx';
+import { DeviceOrientation } from "@ionic-native/device-orientation/ngx";
 
-import { IonicStorageModule } from '@ionic/storage';
-import { QuestionTypeComponent } from './pages/create-game/form-elements/question-types/question-type.component';
-import { AnswerTypeComponent } from './pages/create-game/form-elements/answer-types/answer-type.component';
-import { MapComponent } from './pages/create-game/form-elements/map/map.component';
-import { PhotoUploadMultipleChoiceComponent } from './pages/create-game/form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component';
-import { PhotoUploadComponent } from './pages/create-game/form-elements/photo-upload/photo-upload.component';
-import { MultipleChoiceTextComponent } from './pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component';
+import { IonicStorageModule } from "@ionic/storage";
+import { QuestionTypeComponent } from "./pages/create-game/form-elements/question-types/question-type.component";
+import { AnswerTypeComponent } from "./pages/create-game/form-elements/answer-types/answer-type.component";
+import { MapComponent } from "./pages/create-game/form-elements/map/map.component";
+import { PhotoUploadMultipleChoiceComponent } from "./pages/create-game/form-elements/photo-upload-multiple-choice/photo-upload-multiple-choice.component";
+import { PhotoUploadComponent } from "./pages/create-game/form-elements/photo-upload/photo-upload.component";
+import { MultipleChoiceTextComponent } from "./pages/create-game/form-elements/multiple-choice-text/multiple-choice-text.component";
 
-import { TypeToTextPipe } from './pipes/typeToText.pipe';
-import { LangTranslatePipe } from './pipes/langTranslate';
-import { AudioRecorderComponent } from './pages/create-game/form-elements/audio-recorder/audio-recorder.component';
-import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
-import { AudioPlayerModule } from './components/audio-player/audio-player.module';
+import { TypeToTextPipe } from "./pipes/typeToText.pipe";
+import { LangTranslatePipe } from "./pipes/langTranslate";
+import { AudioRecorderComponent } from "./pages/create-game/form-elements/audio-recorder/audio-recorder.component";
+import { AudioPlayerModule } from "./components/audio-player/audio-player.module";
 
-import { MarkdownModule } from 'ngx-markdown';
-import { TokenInterceptor } from './services/token-intercepor.service';
-import { HelperService } from './services/helper.service';
+import { MarkdownModule } from "ngx-markdown";
+import { TokenInterceptor } from "./services/token-intercepor.service";
+import { HelperService } from "./services/helper.service";
 
 // for angular material
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 // import {FormControl} from '@angular/forms';
 
 // import { Network } from '@awesome-cordova-plugins/network/ngx';
-import { Network } from '@ionic-native/network/ngx';
+import { Network } from "@ionic-native/network/ngx";
 
-// import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
 
 /* VR world
-* Using sockit.IO for receiving data from VR App
-*/
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-const config: SocketIoConfig = { url: 'https://api.origami.felixerdmann.com', options: {} }; // openstack server
+ * Using sockit.IO for receiving data from VR App
+ */
+import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
+import { EnvTypeQuestionTextModule } from "./components/env-type-question-text/env-type-question-text.module";
 
-
+const config: SocketIoConfig = { url: environment.socketIoURL, options: {} }; // openstack server
 
 @NgModule({
   declarations: [
@@ -93,6 +92,7 @@ const config: SocketIoConfig = { url: 'https://api.origami.felixerdmann.com', op
   ],
   imports: [
     AudioPlayerModule,
+    EnvTypeQuestionTextModule,
     FormsModule,
     BrowserModule,
     HttpClientModule,
@@ -100,24 +100,24 @@ const config: SocketIoConfig = { url: 'https://api.origami.felixerdmann.com', op
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useFactory: createTranslateLoader,
         deps: [HttpClient],
       },
     }),
     IonicModule.forRoot({
-      backButtonText: 'Zurück',
+      backButtonText: "Zurück",
     }),
     AppRoutingModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
+    ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
     }),
     IonicStorageModule.forRoot({
-      driverOrder: ['localstorage', 'indexeddb'],
+      driverOrder: ["localstorage", "indexeddb"],
     }),
     MarkdownModule.forRoot(),
     BrowserAnimationsModule,
-    // NgxQRCodeModule
+    NgxQRCodeModule,
     // FormControl
   ],
   providers: [
@@ -129,8 +129,8 @@ const config: SocketIoConfig = { url: 'https://api.origami.felixerdmann.com', op
       multi: true,
     },
     HelperService,
-    Network
+    Network,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

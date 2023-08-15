@@ -25,8 +25,8 @@ export class GameDetailPage implements OnInit {
   game: any;
   activities: any[];
   points: any[];
-
-  shareData_cbox = true;
+  //* Default share data status
+  shareData_cbox = environment.shareData_status;
 
   // VR world
   isVirtualWorld: boolean = false;
@@ -95,7 +95,7 @@ export class GameDetailPage implements OnInit {
           /* initialize user id and teacher code*/
           if (!this.isSingleMode && this.authService.getUserValue() && this.userRole == 'contentAdmin') {
             this.teacherCode = this.authService.getUserId() + '-' + this.game._id;
-            console.log('teacher code -> game name', this.teacherCode)
+          // console.log('teacher code -> game name', this.teacherCode)
             //ex(teacherId+gameId): 610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
 
             // initialize map
@@ -126,13 +126,13 @@ export class GameDetailPage implements OnInit {
     if (this.userRole == "contentAdmin") {
       /* get players status when they join or disconnect from socket server */
       this.socketService.socket.on('onPlayerConnectionStatusChange', (playersData) => {
-        console.log("(connectSocketIO_MultiPlayer) playersData: ", playersData)
+      // console.log("(connectSocketIO_MultiPlayer) playersData: ", playersData)
         this.playersData = playersData;
       });
 
       /* get players locations */
       this.socketService.socket.on('updateInstrunctorMapView', (playerData) => {
-        console.log("(updateInstrunctorMapView) playerLoc: ", playerData)
+      // console.log("(updateInstrunctorMapView) playerLoc: ", playerData)
         
         // impl.
         /* check if player loc is not stored yet. this to avoid duplicate entries */
@@ -168,7 +168,7 @@ export class GameDetailPage implements OnInit {
   }
 
   pointClick(point) {
-    // console.log(point);
+  // console.log(point);
   }
 
   startGame() {
@@ -257,7 +257,7 @@ export class GameDetailPage implements OnInit {
           text: "Yes",
           handler: () => {
             /* retreive task index of previous game state */
-            console.log("🚀🚀🚀 (game-detail) - player found disconnected")
+          // console.log("🚀🚀🚀 (game-detail) - player found disconnected")
             this.bundle = this.bundle = {
               ...this.prepareRouteParams(),
               isRejoin: true,
@@ -266,7 +266,7 @@ export class GameDetailPage implements OnInit {
               cJoindPlayersCount: c_JoinedPlayersCount,
               sTaskNo: s_taskNo
             }
-            console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
+          // console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
 
             /* note: if player found in socket server, no need to check room availability */
             this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
@@ -278,16 +278,16 @@ export class GameDetailPage implements OnInit {
   }
 
   checkSavedGameSession() {
-    console.log("🚀-- (game-detail) checkSavedGameSession");
+  // console.log("🚀-- (game-detail) checkSavedGameSession");
 
     /* retreive tracks and player info of previous uncompleted game session */
     this.storage.get("savedTracksData").then((tracksData) => {
       if (tracksData) {
-        // console.log("tracksData: ", tracksData);
+        // // console.log("tracksData: ", tracksData);
         /* 1. if saved player room name equal and player name equal stroed player name   */
         // if (tracksData.s_playerInfo['roomName'] == this.teacherCode && tracksData.s_playerInfo['playerName'] == this.playerName) {
         if (tracksData.s_playerInfo['roomName'] == this.teacherCode) {
-          console.log("🚀 (game-detail) savedPlayerInfo - (same game name and player): ", tracksData);
+        // console.log("🚀 (game-detail) savedPlayerInfo - (same game name and player): ", tracksData);
 
           /* 2. check if user was accidentally disconnected */
           this.socketService.socket.emit("checkPlayerPreviousJoin", tracksData.s_playerInfo, (response) => {
@@ -296,11 +296,11 @@ export class GameDetailPage implements OnInit {
               this.showAlertResumeGame(tracksData.s_playerInfo['playerName'], tracksData.s_playerInfo['playerNo'], tracksData.s_taskNo, response.joinedPlayersCount);
 
             } else {
-              console.log("🚀🚀 (game-detail) - player not found")
+            // console.log("🚀🚀 (game-detail) - player not found")
             }
           });
         } else {
-          console.log("🚀 (game-detail) savedPlayerInfo: No previous info found for this game");
+        // console.log("🚀 (game-detail) savedPlayerInfo: No previous info found for this game");
         }
       }
     });
@@ -372,7 +372,7 @@ export class GameDetailPage implements OnInit {
     /* remove old locs */
     this.playersLocsFeatures = [];
     if (this.socketService.socket) {
-      // console.log("🚀 (game-detail) showPlayerLocs");
+      // // console.log("🚀 (game-detail) showPlayerLocs");
       this.socketService.socket.emit("requestPlayersLocation", this.teacherCode);
 
       //disable button and show points layer
@@ -382,7 +382,7 @@ export class GameDetailPage implements OnInit {
         this.showHideLocs();
       }, 6000)
     } else {
-      console.log("🚀 (game-detail) socket is undefined");
+    // console.log("🚀 (game-detail) socket is undefined");
     }
 
   }
@@ -405,7 +405,7 @@ export class GameDetailPage implements OnInit {
       }
 
     } else {
-      console.log('🚀 (game-detail) updateMapView: map is undefined')
+    // console.log('🚀 (game-detail) updateMapView: map is undefined')
     }
   }
 

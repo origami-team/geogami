@@ -6,7 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Capacitor, Plugins } from '@capacitor/core';
 import { AuthService } from '../services/auth-service.service';
-import { IUser } from '../interfaces/iUser';
 import { LanguageService } from '../services/language.service';
 import { GamesService } from '../services/games.service';
 import { UtilService } from '../services/util.service';
@@ -59,6 +58,7 @@ export class StartPage implements OnInit {
 
     // get current app version
     Plugins.Device.getInfo().then((device) => (this.device = device));
+
     // get updated app version to notify user of app update
     this.gamesService.getAppVersion()
       .then(res => res.content)
@@ -75,7 +75,7 @@ export class StartPage implements OnInit {
 
     // (translation) get languages
     this.languages = this.languageService.getLangauges();
-    // (translation) set selected language
+    // (translation) set selected language (no need for it)
     this.selected = this.languageService.selected;
 
     // Get user role
@@ -88,7 +88,7 @@ export class StartPage implements OnInit {
   }
 
   handleCardClick(e) {
-    // console.log(e);
+// console.log(e);
   }
 
   navigateGamesPlayPage() {
@@ -178,7 +178,7 @@ export class StartPage implements OnInit {
   /* convert version value to int */
   versionToInt(VersionInString) {
     let v = VersionInString.split('.');
-    // console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);
+  // console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);
     return (v[0] * 100 + v[1] * 10 + v[2] * 1)
   }
 }

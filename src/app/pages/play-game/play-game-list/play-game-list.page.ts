@@ -91,7 +91,7 @@ export class PlayGameListPage implements OnInit {
 
   ionViewWillEnter() {
     /* in case user has joined room and pressed back button */
-    if (this.socketService.socket) {
+    if (this.socketService.socket.ioSocket.connected) {
       this.socketService.socket.disconnect();
     }
   }
@@ -411,14 +411,14 @@ export class PlayGameListPage implements OnInit {
       }
     });
 
-    // console.log("convertedData: ", convertedData)
+    // // console.log("convertedData: ", convertedData)
     this.showGamesOnMap(convertedData);
   }
 
   showGamesOnMap(gamesListGeoJson) {
 
     if (!this.map) {
-      // console.log("Create map ////////////");
+      // // console.log("Create map ////////////");
       this.initMap(gamesListGeoJson);
     }
     // no need for it since we can hide the map
@@ -428,7 +428,7 @@ export class PlayGameListPage implements OnInit {
       this.map.removeLayer(`clusters`);
       this.map.removeSource("clusters");
 
-      // console.log("Else ////////////");
+    // console.log("Else ////////////");
 
       this.map.addSource('clusters', {
         'type': 'geojson',

@@ -33,7 +33,7 @@ export class RegisterPage implements OnInit {
   }
 
   login() {
-    // console.log(this.loginForm.getRawValue());
+  // console.log(this.loginForm.getRawValue());
     this.authService.register(this.loginForm.getRawValue());
   }
 }

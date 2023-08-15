@@ -5,7 +5,7 @@
 
 module.exports = function (ctx) {
 
-    // console.log("Attempting To Modify serve-config.js....")
+  // console.log("Attempting To Modify serve-config.js....")
 
     // Reference Dependencies
     var fs = ctx.requireCordovaModule('fs'),
@@ -20,7 +20,7 @@ module.exports = function (ctx) {
         fs.stat(filePath, function (error, stat) {
 
             if (error) {
-                // console.log(error);
+              // console.log(error);
                 return;
             }
 
@@ -42,7 +42,7 @@ module.exports = function (ctx) {
             // Loop Through The Lines and Modify the Line/Item if it contains The sourceFileString
             for (var i = dataArray.length - 1; i >= 0; i--) {
                 if (dataArray[i].indexOf(sourceFileString) !== -1) {
-                    // console.log('Modifying line:' + dataArray[i]);
+                  // console.log('Modifying line:' + dataArray[i]);
                     dataArray[i] = targetFileString;
                     fileModifiedSuccessfully = true;
                 }
@@ -50,7 +50,7 @@ module.exports = function (ctx) {
 
             // If Nothing Was Found/Removed/Spliced, No Need To Overwrite.
             if (!fileModifiedSuccessfully) {
-                // console.log("No Changes to File: " + filePath);
+              // console.log("No Changes to File: " + filePath);
                 return;
             }
 

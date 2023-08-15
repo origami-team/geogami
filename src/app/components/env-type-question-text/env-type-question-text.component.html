@@ -1,0 +1,20 @@
+<!-- show extra info (env. type & question text) only with a specific width -->
+<div
+  *ngIf="this.platform.width() > 780"
+  style="display: inline"
+>
+  <!-- Show vir. env. type -->
+  <ion-chip *ngIf="isVirtualWorld" color="medium" htmlFor="test">
+    <ion-label style="color: black">
+      {{ virEnvType }}
+    </ion-label>
+  </ion-chip>
+  <!-- Show part of quesition text -->
+  <ion-chip color="medium" htmlFor="test">
+    <ion-label style="color: black">
+      <span style="font-weight: bold;">Question:</span>
+      {{ questionText.substring(0, 30) }}
+      {{ questionText.length > 30 ? "..." : "" }}
+    </ion-label>
+  </ion-chip>
+</div>

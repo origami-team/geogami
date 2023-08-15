@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { CreateGameListPage } from './create-game-list.page';
 
 import { TranslateModule } from '@ngx-translate/core';
-
+import { EnvTypeQuestionTextModule } from 'src/app/components/env-type-question-text/env-type-question-text.module';
 
 
 const routes: Routes = [
@@ -24,7 +24,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    TranslateModule
+    TranslateModule,
+    EnvTypeQuestionTextModule
   ],
   declarations: [CreateGameListPage],
   providers: []

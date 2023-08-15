@@ -1,24 +1,29 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ "CreateGame.titleCreateGameVirtualMenu" | translate }}</ion-title>
+    <ion-title
+      >{{ "CreateGame.titleCreateGameVirtualMenu" | translate }}</ion-title
+    >
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
   <div class="menu-cards">
-
-    <ion-card *ngFor="let virEnv of virEnvTypes; index as i" (click)=navigateCreateVRGame(virEnv.layerName)>
+    <ion-card
+      *ngFor="let virEnv of virEnvTypesList; index as i"
+      (click)="navigateCreateVRGame(virEnv.layerName)"
+    >
       <ion-card-header>
-        <img src= "{{virEnv.img_url}}" />
-        <ion-card-subtitle> {{virEnv.EnvName}} </ion-card-subtitle>
+        <img src="{{virEnv.img_url}}" />
+        <ion-card-subtitle>{{i+1}}: {{virEnv.envName}} </ion-card-subtitle>
         <!-- <ion-card-title>pre</ion-card-title> -->
       </ion-card-header>
-
     </ion-card>
   </div>
-
 </ion-content>

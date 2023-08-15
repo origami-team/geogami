@@ -1,24 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { VirEnvHeaders } from 'src/app/models/virEnvsHeader';
 import { GameFactoryService } from 'src/app/services/game-factory.service';
-import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-create-game-virtual-menu',
   templateUrl: './create-game-virtual-menu.page.html',
   styleUrls: ['./create-game-virtual-menu.page.scss'],
 })
-export class CreateGameVirtualMenuPage implements OnInit {
 
+export class CreateGameVirtualMenuPage implements OnInit {
   // Multiplayer mode 
   isRealWorld: boolean = false;
   isSingleMode: boolean = false;
   bundle: any;
   virEnvType: string; // new var. to store vir env type
 
-  //* get virual environment meta data
-  virEnvTypes = environment.virEnvsLayers;
+  //* get virual environment headers
+  virEnvTypesList = VirEnvHeaders;
+
 
   constructor(
     public navCtrl: NavController,
@@ -44,7 +46,7 @@ export class CreateGameVirtualMenuPage implements OnInit {
   }
 
   navigateCreateVRGame(virEnvType) {
-  console.log("🚀 ~ CreateGameVirtualMenuPage ~ navigateCreateVRGame ~ virEnvType:", virEnvType)
+// console.log("🚀 ~ CreateGameVirtualMenuPage ~ navigateCreateVRGame ~ virEnvType:", virEnvType)
     this.bundle.virEnvType = virEnvType;
     this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
   } 

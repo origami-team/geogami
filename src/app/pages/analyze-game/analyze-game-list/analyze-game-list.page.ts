@@ -48,7 +48,7 @@ export class AnalyzeGameListPage implements OnInit {
       directory: FilesystemDirectory.Documents,
       encoding: FilesystemEncoding.UTF8
     });
-    // console.log(contents);
+// console.log(contents);
 
     this.http.post(`${environment.apiURL}/track`, JSON.parse(contents.data), { observe: 'response' })
       .subscribe(response => alert(response.status + ' ' + response.statusText));
@@ -62,7 +62,7 @@ export class AnalyzeGameListPage implements OnInit {
           directory: FilesystemDirectory.Documents,
         });
       })
-      .catch(err => console.log('User aborted delete'))
+      .catch(err =>  console.log('User aborted delete'))
       .finally(async () => await this.getTracks());
   }
 

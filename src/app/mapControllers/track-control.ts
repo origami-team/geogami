@@ -108,7 +108,7 @@ export class TrackControl {
 
     // keep track permanent impl.
     addPermanentTrack(taskId, path = this.path){
-        // console.log("(track) P index:", taskId,"path: ",path)
+        // // console.log("(track) P index:", taskId,"path: ",path)
 
         //* to avoid error caused when swaping between tasks
         if(this.map.getLayer(`permanentTrack${taskId}`)){
