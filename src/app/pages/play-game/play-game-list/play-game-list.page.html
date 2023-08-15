@@ -22,7 +22,7 @@
         <option value="real"> Real world </option>
         
         <!-- allow scholars to view virtual environment mode -->
-        <option value="virtual" [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"> Virtual env. {{ !['admin', 'contentAdmin', 'scholar'].includes(userRole) ? '( only scholars have access )':''}} </option>
+        <option value="virtual" [disabled]="user==undefined"> Virtual env. {{ (!user ? '('+ ('GameList.logInToAccess' | translate) +')':'') }} </option>
       </select>
     </div>
     <div>
@@ -80,8 +80,10 @@
               </span> {{ game.name }}
             </h2>
           </ion-label>
-          <ion-label slot="end" *ngIf="game.isMultiplayerGame && game.isMultiplayerGame == true" class="numplayersCard">
-            {{game.numPlayers}} players
+          <ion-label slot="end" *ngIf="(game.isMultiplayerGame && game.isMultiplayerGame == true) || game.tasksCount" class="numplayersCard">
+            {{ (game.isMultiplayerGame && game.isMultiplayerGame)? game.numPlayers + " " + ("GameList.players" | translate) + " | ": ""}}
+            {{ (game.tasksCount)? game.tasksCount + " " +  ("GameList.tasks" | translate) : ""}}
+
           </ion-label>
           <!-- <ion-icon *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
         </ion-item>

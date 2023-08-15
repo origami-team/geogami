@@ -10,6 +10,7 @@ export class Game {
     public bbox: any,
     public isMultiplayerGame: boolean,
     public numPlayers: number,
+    public TasksCount: number,
     public mapSectionVisible: boolean,
     public geofence: boolean,
     public isVRWorld: boolean,

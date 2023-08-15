@@ -65,7 +65,7 @@ export class AudioRecorderService {
           // const audio: HTMLAudioElement = new Audio(audioUrl);
           // const play: Function = (): Promise<void> => audio.play();
 
-          // console.log(audioBlob, audioUrl);
+        // console.log(audioBlob, audioUrl);
 
           const formData = new FormData();
           formData.append("file", audioBlob);
@@ -75,7 +75,7 @@ export class AudioRecorderService {
           })
             .then((res) => res.json())
             .then((body) => {
-              // console.log("data upload done");
+            // console.log("data upload done");
               resolve(body);
             });
         };
@@ -84,7 +84,7 @@ export class AudioRecorderService {
       } else {
         Plugins.VoiceRecorder.stopRecording().then(
           async (result: RecordingData) => {
-            // console.log(result.value);
+          // console.log(result.value);
 
             const audio = new Audio(
               `data:audio/aac;base64,${result.value.recordDataBase64}`
@@ -100,7 +100,7 @@ export class AudioRecorderService {
             // const audio: HTMLAudioElement = new Audio(audioUrl);
             const play: Function = (): Promise<void> => audio.play();
 
-            // console.log(audioBlob, audioUrl);
+          // console.log(audioBlob, audioUrl);
 
             const formData = new FormData();
             formData.append("file", audioBlob);

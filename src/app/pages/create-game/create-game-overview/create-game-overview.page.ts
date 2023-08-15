@@ -370,7 +370,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
 
   async showTrackingInfo(ev: any, text: string) {
-    // console.log(ev);
+  // console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,
@@ -399,8 +399,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.showNameError = true;
       return;
     }
-
-    // console.log("///Game to be uploaded: ", this.game);
+    // // console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
       bbox: this.mapSection ? this.draw.getAll() : null,
@@ -413,11 +412,12 @@ export class CreateGameOverviewPage implements AfterViewInit {
       isVisible: true,                    // new game is visible by default
       isCuratedGame: this.isCuratedGame,  // to set whether game can be viewed in curated filter list
       isMultiplayerGame: (!this.isSingleMode ? true : undefined),
-      numPlayers: (!this.isSingleMode ? this.numPlayers : undefined)
+      numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
+      tasksCount: this.game.tasks.length      //* add tasks counts to show it in play-game-list page
       // playersCount: (!this.isSingleMode ? this.numPlayers : 1)     // ToDo: update it in server
 
     });
-    // console.log(this.gameFactory.game);
+  // console.log(this.gameFactory.game);
 
     this.showUpload = true;
     this.gamesService
@@ -443,7 +443,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   async showPopover(ev: any, key: string) {
     let text = this.translate.instant(key);
 
-    // console.log(ev);
+  // console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

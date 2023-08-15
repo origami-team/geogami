@@ -23,18 +23,18 @@ export class BarcodeScannerPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    /* in case user has joined room and pressed back button */
+    /* //* in case user has joined room and pressed back button
     if(this.socketService.socket){
       this.socketService.socket.disconnect();
     }
 
-    /* prepare then start scanning */
+    //* prepare then start scanning
     // BarcodeScanner.prepare();
-    this.startScan();
+    this.startScan(); */
   }
 
   ngOnDestroy() {
-    this.stopScan();
+    // this.stopScan();
   }
 
   /**********/
@@ -42,26 +42,26 @@ export class BarcodeScannerPage implements OnInit {
   async startScan() {
     /* const allowed = await this.checkPermission()
     if (allowed) {
-      // console.log("🚀 allowed")
+      // // console.log("🚀 allowed")
 
-      //* make background of WebView transparent, another step is adding some style to global.scss
-      BarcodeScanner.hideBackground();
+      /* make background of WebView transparent, another step is adding some style to global.scss */
+      // BarcodeScanner.hideBackground();
       document.querySelector('body').classList.add('scanner-active');
 
-      //* specified qr-code
-      const result = await BarcodeScanner.startScan({ targetedFormats: ['QR_CODE'] }); // start scanning and wait for a result
+      /* specified qr-code */
+      // const result = await BarcodeScanner.startScan({ targetedFormats: ['QR_CODE'] }); // start scanning and wait for a result
 
-      //* if the result has content
-      if (result.hasContent) {
-        console.log(result.content); // log the raw scanned content
+      /* if the result has content */
+      /* if (result.hasContent) {
+      // console.log(result.content); // log the raw scanned content
         //* show toast msg
         // this.utilService.showToast(`Qr-Code: ${result.content}`, "dark", 3500);
 
         this.utilService.setQRCodeValue(result.content);
 
         this.navCtrl.navigateForward(`play-game/game-detail/${result.content.slice(25)}`);
-      }
-    } */
+      } 
+    }*/
   }
 
   /********/
@@ -73,8 +73,8 @@ export class BarcodeScannerPage implements OnInit {
   };
 
   async checkPermission() {
-    /* return new Promise(async (resolve, rejects) => {
-      const status = await BarcodeScanner.checkPermission({ force: true });
+    return new Promise(async (resolve, rejects) => {
+      /* const status = await BarcodeScanner.checkPermission({ force: true });
       if (status.granted) {
         resolve(true);
       } else if (status.denied) {
@@ -82,7 +82,7 @@ export class BarcodeScannerPage implements OnInit {
         BarcodeScanner.openAppSettings();
       } else {
         resolve(false);
-      }
-    });*/
-  } 
+      } */
+    });
+  }
 }
