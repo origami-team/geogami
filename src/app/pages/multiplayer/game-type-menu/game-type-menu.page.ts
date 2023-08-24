@@ -41,9 +41,6 @@ export class GameTypeMenuPage implements OnInit {
     } else {
       this.navCtrl.navigateForward(`create-game-virtual-menu/${JSON.stringify(bundle)}`);
     }
-
-
-    
   }
 
   navCreateMultiPlayerGamePage() {

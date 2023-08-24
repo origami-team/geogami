@@ -33,7 +33,7 @@
       </ion-label>
       <select interface="popover" [(ngModel)]="gameModeSelected" (change)="filterGamesMode($event.target.value)">
         <option value="single"> Single player </option>
-        <option value="multi-player" [disabled]="userRole!='contentAdmin'"> Multiplayer {{ userRole != 'contentAdmin' ? '( only scholars have access )':''}} </option>
+        <option value="multi-player" [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"> Multiplayer {{ userRole != 'contentAdmin' ? '( only scholars have access )':''}} </option>
       </select>
     </div>
   </div>
