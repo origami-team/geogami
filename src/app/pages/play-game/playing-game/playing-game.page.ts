@@ -962,11 +962,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map.on("zoom", () => {
       if (this.isVirtualWorld) {
         const currentZoom = this.map.getZoom();
-        // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
+        console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
         /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
         if (virEnvLayers[this.virEnvType].zoomInLayer1) {
           if (
-            currentZoom <= 19 &&
+            // currentZoom < 17.2 &&
+            currentZoom < virEnvLayers[this.virEnvType].zoomThreashold &&
             this.map.getStyle().sources.overlay.url !=
               "assets/vir_envs_layers/" + this.virEnvType + ".png"
           ) {
@@ -975,7 +976,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               false
             );
           } else if (
-            currentZoom > 19 &&
+            // currentZoom > 17.5 &&
+            currentZoom > virEnvLayers[this.virEnvType].zoomThreashold &&
             this.map.getStyle().sources.overlay.url !=
               "assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png"
           ) {
