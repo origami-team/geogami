@@ -40,7 +40,7 @@ export class PlayGameListPage implements OnInit {
   // to disable mine segment for unlogged user
   userRole: String = "unloggedUser";
   userId: String = "";
-  user = this.authService.getUserValue();
+  user = this.authService.getUser();
 
   isVRMirrored: boolean = false; // temp
   map: mapboxgl.Map;
@@ -79,11 +79,14 @@ export class PlayGameListPage implements OnInit {
     }
 
     /* Check whther user is registerd. if yes, get role and id */
-    if (this.user) {
-      this.selectedSegment = "all";
-      this.userRole = this.authService.getUserRole();
-      this.userId = this.authService.getUserId();
-    }
+    // Get user role
+    this.user.subscribe((event) => {
+      if (event != null) {
+        this.selectedSegment = "all";
+        this.userRole = event["roles"][0];
+        this.userId = this.authService.getUserId();
+      }
+    });
 
     // Get games data from server
     this.getGamesData();
