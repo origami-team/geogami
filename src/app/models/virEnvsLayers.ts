@@ -9,7 +9,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_1.overlayCoords,
     bounds: VirEnv_1.bounds,
     center: [0.00001785714286 / 2, 0.002936936937 / 2],
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_2: {
     initialPosition: {
@@ -19,7 +19,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_1.overlayCoords,
     center: [0.00001785714286 / 2, 0.002936936937 / 2],
     bounds: VirEnv_1.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_3: {
     name: "Zoom Pre - Initial",
@@ -27,8 +27,9 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
     zoomInLayer1: "VirEnv_3_zoom1",
+    zoomThreashold: VirEnv_3.zoomThreashold,
   },
   VirEnv_4: {
     name: "Zoom - Pre Easy",
@@ -36,8 +37,9 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_4.overlayCoords,
     center: [0.001351351351 / 2, 0.001517857143 / 2],
     bounds: VirEnv_4.bounds,
-    zoom: 18,
+    zoom: 17,
     zoomInLayer1: "VirEnv_4_zoom1",
+    zoomThreashold: VirEnv_4.zoomThreashold,
   },
   VirEnv_5: {
     name: "Zoom - Pre Difficult",
@@ -45,8 +47,9 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_4.overlayCoords,
     center: [0.001351351351 / 2, 0.001517857143 / 2],
     bounds: VirEnv_4.bounds,
-    zoom: 18,
+    zoom: 17,
     zoomInLayer1: "VirEnv_5_zoom1",
+    zoomThreashold: VirEnv_4.zoomThreashold,
   },
   VirEnv_6: {
     name: "Location Marker - Post Difficult",
@@ -54,7 +57,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_7: {
     name: "Location Marker - Post Easy",
@@ -62,7 +65,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_8: {
     name: "Location Marker - Pre Test Difficult",
@@ -70,7 +73,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_9: {
     name: "Location Marker - Pre Test Easy",
@@ -78,7 +81,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_10: {
     name: "Location Marker - Training 1",
@@ -86,7 +89,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_11: {
     name: "Location Marker - Training",
@@ -94,7 +97,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_12: {
     name: "Map Rotation - Post Difficult",
@@ -102,7 +105,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_13: {
     name: "Map Rotation - Post Easy 1",
@@ -110,7 +113,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_14: {
     name: "Map Rotation - Post Easy 2",
@@ -118,7 +121,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_15: {
     name: "Map Rotation - Pre Difficult",
@@ -126,7 +129,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_16: {
     name: "Map Rotation - Pre Easy 1",
@@ -134,7 +137,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_17: {
     name: "Map Rotation - Pre Easy 2",
@@ -142,7 +145,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_18: {
     name: "Map Rotation - Training 1",
@@ -150,7 +153,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_19: {
     name: "Map Rotation - Training 2",
@@ -158,7 +161,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_20: {
     name: "Map Rotation - Training 3",
@@ -166,7 +169,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_21: {
     name: "Map Rotation - Training 4",
@@ -174,7 +177,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_3.overlayCoords,
     center: [0.001351351351 / 2, 0.001351351351 / 2],
     bounds: VirEnv_3.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_22: {
     name: "Landmarks - Post Difficult",
@@ -182,7 +185,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_23: {
     name: "Landmarks - ",
@@ -190,7 +193,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_24: {
     name: "Landmarks - ",
@@ -198,7 +201,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_25: {
     name: "Landmarks - ",
@@ -206,7 +209,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_26: {
     name: "Landmarks - ",
@@ -214,7 +217,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_27: {
     name: "Landmarks - ",
@@ -222,7 +225,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_28: {
     name: "Landmarks - ",
@@ -230,7 +233,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_29: {
     name: "MM - ",
@@ -238,7 +241,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_30: {
     name: "MM - ",
@@ -246,7 +249,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_31: {
     name: "MM - ",
@@ -254,7 +257,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_32: {
     name: "MM",
@@ -262,7 +265,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_33: {
     name: "MM - ",
@@ -270,7 +273,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_22.overlayCoords,
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
-    zoom: 18,
+    zoom: 17,
   },
   VirEnv_34: {
     name: "Zoom - Post Easy",
@@ -278,8 +281,9 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_34.overlayCoords,
     center: [0.001531531532 / 2, 0.001339285714 / 2],
     bounds: VirEnv_34.bounds,
-    zoom: 18,
+    zoom: 17,
     zoomInLayer1: "VirEnv_34_zoom1",
+    zoomThreashold: VirEnv_34.zoomThreashold,
   },
   VirEnv_35: {
     name: "Zoom - Post Difficult",
@@ -287,8 +291,9 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_34.overlayCoords,
     center: [0.001531531532 / 2, 0.001339285714 / 2],
     bounds: VirEnv_34.bounds,
-    zoom: 18,
+    zoom: 17,
     zoomInLayer1: "VirEnv_35_zoom1",
+    zoomThreashold: VirEnv_34.zoomThreashold,
   },
   VirEnv_36: {
     name: "Zoom - Training 1",
@@ -296,8 +301,9 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_36.overlayCoords,
     center: [0.004837837838 / 2, 0.003383928571 / 2],
     bounds: VirEnv_36.bounds,
-    zoom: 18,
+    zoom: 17,
     zoomInLayer1: "VirEnv_36_zoom1",
+    zoomThreashold: VirEnv_36.zoomThreashold,
   },
   VirEnv_37: {
     name: "Zoom - Training 2",
@@ -305,7 +311,8 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_36.overlayCoords,
     center: [0.004837837838 / 2, 0.003383928571 / 2],
     bounds: VirEnv_36.bounds,
-    zoom: 18,
+    zoom: 17,
     zoomInLayer1: "VirEnv_37_zoom1",
+    zoomThreashold: VirEnv_36.zoomThreashold,
   },
 };
