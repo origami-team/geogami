@@ -25,6 +25,7 @@ export const VirEnv_3: Readonly<any> = {
     lng: 100.9 / 111000,
     lat: 60.76 / 112000,
   },
+  zoomThreashold: 17.7,
 };
 export const VirEnv_4: Readonly<any> = {
   overlayCoords: [
@@ -41,6 +42,7 @@ export const VirEnv_4: Readonly<any> = {
     lng: 101.13 / 111000,
     lat: 68.69 / 112000,
   },
+  zoomThreashold: 17.7,
 };
 export const VirEnv_22: Readonly<any> = {
   overlayCoords: [
@@ -77,6 +79,7 @@ export const VirEnv_34: Readonly<any> = {
     lng: 120.47 / 111000,
     lat: 65.5 / 112000,
   },
+  zoomThreashold: 17.7,
 };
 
 export const VirEnv_36: Readonly<any> = {
@@ -89,12 +92,13 @@ export const VirEnv_36: Readonly<any> = {
   ],
   bounds: [
     //* Southwest coordinates (lng,lat)
-    [0 - 0.001, 0 - 0.0015],
+    [0 - 0.002, 0 - 0.0025],
     //* Northeast coordinates (lng,lat)
-    [0.00483783783783784 + 0.001, 0.00338392857142857 + 0.001],
+    [0.00483783783783784 + 0.002, 0.00338392857142857 + 0.002],
   ],
   initialPosition: {
     lng: 235.01 / 111000,
     lat: 48 / 112000,
   },
+  zoomThreashold: 17.2,
 };
