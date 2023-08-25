@@ -1,58 +1,95 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>{{ "PlayGame.titlePlayGameList" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="ion-padding">
-
   <!-- select game env. and mode -->
   <div class="select-style" *ngIf="isListTabSelected">
     <div>
-      <ion-label> <span class="cat-title-style">Game environment </span> 
-        <ion-icon name="information-circle"
-          (click)="utilService.showPopover($event, 'Choose between playing GeoGami outside (real world) or indoor (virtual environment)')">
+      <ion-label>
+        <span class="cat-title-style">Game environment </span>
+        <ion-icon
+          name="information-circle"
+          (click)="utilService.showPopover($event, 'Choose between playing GeoGami outside (real world) or indoor (virtual environment)')"
+        >
         </ion-icon>
       </ion-label>
-      <select interface="popover" [(ngModel)]="gameEnvSelected" (change)="filterGamesEnv($event.target.value)">
-        <option value="real"> Real world </option>
-        
+      <select
+        interface="popover"
+        [(ngModel)]="gameEnvSelected"
+        (change)="filterGamesEnv($event.target.value)"
+      >
+        <option value="real">Real world</option>
+
         <!-- allow scholars to view virtual environment mode -->
-        <option value="virtual" [disabled]="user==undefined"> Virtual env. {{ (!user ? '('+ ('GameList.logInToAccess' | translate) +')':'') }} </option>
+        <option value="virtual" [disabled]="user==undefined">
+          Virtual env. {{ (!user ? '('+ ('GameList.logInToAccess' | translate)
+          +')':'') }}
+        </option>
       </select>
     </div>
     <div>
-      <ion-label> <span class="cat-title-style">Game mode </span>
-        <ion-icon name="information-circle"
-          (click)="utilService.showPopover($event, 'Choose between playing GeoGami indivisually or with a group. Minium number of players of a mutliplayer mode is 2')">
+      <ion-label>
+        <span class="cat-title-style">Game mode </span>
+        <ion-icon
+          name="information-circle"
+          (click)="utilService.showPopover($event, 'Choose between playing GeoGami indivisually or with a group. Minium number of players of a mutliplayer mode is 2')"
+        >
         </ion-icon>
       </ion-label>
-      <select interface="popover" [(ngModel)]="gameModeSelected" (change)="filterGamesMode($event.target.value)">
-        <option value="single"> Single player </option>
-        <option value="multi-player" [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"> Multiplayer {{ userRole != 'contentAdmin' ? '( only scholars have access )':''}} </option>
+      <select
+        interface="popover"
+        [(ngModel)]="gameModeSelected"
+        (change)="filterGamesMode($event.target.value)"
+      >
+        <option value="single">Single player</option>
+        <option
+          value="multi-player"
+          [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"
+        >
+          Multiplayer {{ !['admin', 'contentAdmin',
+          'scholar'].includes(userRole)? "( only scholars have access )" : ''}}
+        </option>
       </select>
     </div>
   </div>
   <!--  -->
 
   <!-- segments -->
-  <h5 class="segment"> {{ (isListTabSelected ? "GameList.chooseGameList" : "GameList.chooseGameMap") | translate }}</h5>
+  <h5 class="segment">
+    {{ (isListTabSelected ? "GameList.chooseGameList" :
+    "GameList.chooseGameMap") | translate }}
+  </h5>
 
   <ng-container *ngIf="isListTabSelected">
-
     <!-- segment start -->
     <div class="segment">
-      <ion-segment (ionChange)="segmentChanged($event.detail.value)" [(ngModel)]="selectedSegment" color="dark">
+      <ion-segment
+        (ionChange)="segmentChanged($event.detail.value)"
+        [(ngModel)]="selectedSegment"
+        color="dark"
+      >
         <ion-segment-button value="{{ ( user ? 'all' : 'curated') }}">
-          <ion-label>{{ (user ? "PlayGame.allGames" : "PlayGame.curated") | translate }}</ion-label>
+          <ion-label
+            >{{ (user ? "PlayGame.allGames" : "PlayGame.curated") | translate
+            }}</ion-label
+          >
         </ion-segment-button>
 
         <ion-segment-button value="{{ (user ? 'curated' : 'all') }}">
-          <ion-label>{{ (user ? "PlayGame.curated" : "PlayGame.allGames") | translate }}</ion-label>
+          <ion-label
+            >{{ (user ? "PlayGame.curated" : "PlayGame.allGames") | translate
+            }}</ion-label
+          >
         </ion-segment-button>
 
         <!-- <ion-segment-button value="mine" *ngIf="userRole != 'unloggedUser'"> -->
@@ -64,26 +101,42 @@
     <!-- segment end -->
 
     <!-- searchbar -->
-    <ion-searchbar (ionChange)="filterList($event)" [(ngModel)]="searchText"></ion-searchbar>
+    <ion-searchbar
+      (ionChange)="filterList($event)"
+      [(ngModel)]="searchText"
+    ></ion-searchbar>
 
     <!-- refresher -->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
-    <ion-card *ngFor="let game of games_view" (click)="gameClick(game)" detail color="secondary">
+    <ion-card
+      *ngFor="let game of games_view"
+      (click)="gameClick(game)"
+      detail
+      color="secondary"
+    >
       <ion-card-header>
         <ion-item lines="none" color="secondary">
           <ion-label>
             <h2>
-              <ion-icon name="game-controller"></ion-icon><span *ngIf="game.place"><b>&nbsp;&nbsp;{{ game.place }}</b> -
-              </span> {{ game.name }}
+              <ion-icon name="game-controller"></ion-icon
+              ><span *ngIf="game.place"
+                ><b>&nbsp;&nbsp;{{ game.place }}</b> -
+              </span>
+              {{ game.name }}
             </h2>
           </ion-label>
-          <ion-label slot="end" *ngIf="(game.isMultiplayerGame && game.isMultiplayerGame == true) || game.tasksCount" class="numplayersCard">
-            {{ (game.isMultiplayerGame && game.isMultiplayerGame)? game.numPlayers + " " + ("GameList.players" | translate) + " | ": ""}}
-            {{ (game.tasksCount)? game.tasksCount + " " +  ("GameList.tasks" | translate) : ""}}
-
+          <ion-label
+            slot="end"
+            *ngIf="(game.isMultiplayerGame && game.isMultiplayerGame == true) || game.tasksCount"
+            class="numplayersCard"
+          >
+            {{ (game.isMultiplayerGame && game.isMultiplayerGame)?
+            game.numPlayers + " " + ("GameList.players" | translate) + " | ":
+            ""}} {{ (game.tasksCount)? game.tasksCount + " " + ("GameList.tasks"
+            | translate) : ""}}
           </ion-label>
           <!-- <ion-icon *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
         </ion-item>
@@ -92,44 +145,59 @@
   </ng-container>
 
   <!-- show this message only when my games section is selected and there're no games were created by logged user -->
-  <div class="emptygamecontent" *ngIf="selectedSegment =='mine' && (games_view && games_view.length == 0)">
-    <h1> {{ "PlayGame.emptyGamesList" | translate }} </h1>
+  <div
+    class="emptygamecontent"
+    *ngIf="selectedSegment =='mine' && (games_view && games_view.length == 0)"
+  >
+    <h1>{{ "PlayGame.emptyGamesList" | translate }}</h1>
   </div>
 
-  <div class="emptygamecontent"
-    *ngIf="['curated', 'all'].includes(selectedSegment) && ( games_view && games_view.length == 0)">
-    <h1> Empty list!</h1>
+  <div
+    class="emptygamecontent"
+    *ngIf="['curated', 'all'].includes(selectedSegment) && ( games_view && games_view.length == 0)"
+  >
+    <h1>Empty list!</h1>
   </div>
 
-  <div #gamesMap class="map" [ngStyle]="{ 'display' : ( isListTabSelected ? 'none' : '' ) }"></div>
+  <div
+    #gamesMap
+    class="map"
+    [ngStyle]="{ 'display' : ( isListTabSelected ? 'none' : '' ) }"
+  ></div>
   <!-- map markers popup -->
   <div #popupContainer *ngIf="!isListTabSelected">
-    <app-popup *ngIf="popup" [gameID]="game_id" [gameName]="game_name" [gamePlace]="game_place"
-      [NumTasks]="game_numTasks">
+    <app-popup
+      *ngIf="popup"
+      [gameID]="game_id"
+      [gameName]="game_name"
+      [gamePlace]="game_place"
+      [NumTasks]="game_numTasks"
+    >
     </app-popup>
   </div>
-
-
 </ion-content>
-
 
 <ion-footer>
   <ion-toolbar>
     <ion-tabs>
       <ion-tab-bar slot="bottom">
-
-        <ion-tab-button (click)="openListTap()" class="{{isListTabSelected?'selectedTab': ''}}">
+        <ion-tab-button
+          (click)="openListTap()"
+          class="{{isListTabSelected?'selectedTab': ''}}"
+        >
           <ion-icon name="list"></ion-icon>
           <ion-label>List</ion-label>
           <!-- <ion-badge>6</ion-badge> -->
         </ion-tab-button>
 
-        <ion-tab-button (click)="openMapTap()" class="{{!isListTabSelected?'selectedTab': ''}}"
-          [disabled]="gameEnvSelected == 'virtual'">
+        <ion-tab-button
+          (click)="openMapTap()"
+          class="{{!isListTabSelected?'selectedTab': ''}}"
+          [disabled]="gameEnvSelected == 'virtual'"
+        >
           <ion-icon name="map"></ion-icon>
           <ion-label>Map</ion-label>
         </ion-tab-button>
-
       </ion-tab-bar>
     </ion-tabs>
   </ion-toolbar>
