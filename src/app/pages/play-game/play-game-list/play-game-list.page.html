@@ -31,8 +31,8 @@
         <option value="real">Real world</option>
 
         <!-- allow scholars to view virtual environment mode -->
-        <option value="virtual" [disabled]="user==undefined">
-          Virtual env. {{ (!user ? '('+ ('GameList.logInToAccess' | translate)
+        <option value="virtual" [disabled]="userRole=='unloggedUser'">
+          Virtual env. {{ (userRole=='unloggedUser' ? '('+ ('GameList.logInToAccess' | translate)
           +')':'') }}
         </option>
       </select>
