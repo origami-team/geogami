@@ -1,7 +1,9 @@
+<!-- Note: I added (style="display: block") in (ion-back-button) to avoid disappearing the back button when reloading  see here: https://stackoverflow.com/questions/58563159/why-is-the-ion-back-button-not-shown-->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button
+        style="display: block"
         color="dark"
         (click)="navigateBack()"
         text="{{ 'General.back_button' | translate }}"

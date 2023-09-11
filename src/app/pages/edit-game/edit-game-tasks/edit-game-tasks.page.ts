@@ -1,18 +1,10 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { IonReorderGroup, Platform } from "@ionic/angular";
-
-import mapboxgl from "mapbox-gl";
-
 import { ModalController } from "@ionic/angular";
-
 import { GameFactoryService } from "../../../services/game-factory.service";
-
 import { CreateTaskModalPage } from "../../create-game/create-task-modal/create-task-modal.page";
-import { CreateModuleModalPage } from "../../create-game/create-module-modal/create-module-modal.page";
 import { CreateInfoModalComponent } from "../../create-game/create-info-modal/create-info-modal.component";
-
 import { NavController } from "@ionic/angular";
-
 import { Game } from "src/app/models/game";
 import { GamesService } from "src/app/services/games.service";
 import { ActivatedRoute } from "@angular/router";
@@ -256,6 +248,7 @@ export class EditGameTasksPage implements OnInit {
 
   navigateBack() {
     this.gameFactory.flushGame();
-    this.navCtrl.back();
+    // this.navCtrl.back();
+    this.navCtrl.navigateForward(`edit-game-list`);;
   }
 }
