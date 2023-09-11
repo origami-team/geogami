@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
@@ -11,7 +10,6 @@ import { PopoverController } from "@ionic/angular";
 import { NavController } from "@ionic/angular";
 
 import { Game } from "../../../models/game";
-import { Storage } from "@ionic/storage";
 
 import { GameFactoryService } from "../../../services/game-factory.service";
 
@@ -31,7 +29,7 @@ import { featureCollection } from "@turf/helpers";
 import { ActivatedRoute } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 // For getting user role
-import { AuthService } from '../../../services/auth-service.service';
+import { AuthService } from "../../../services/auth-service.service";
 import { UtilService } from "src/app/services/util.service";
 
 @Component({
@@ -64,9 +62,9 @@ export class EditGameOverviewPage implements AfterViewInit {
   isCuratedGame = false;
   // to set curated games only by admins (geogami team)
   userRole: String = "";
+  user = this.authService.getUser();
 
   errorMsg: String;
-
 
   constructor(
     public popoverController: PopoverController,
@@ -83,7 +81,7 @@ export class EditGameOverviewPage implements AfterViewInit {
       path: "assets/lottie/astronaut.json",
       renderer: "svg",
       autoplay: true,
-      loop: true
+      loop: true,
     };
 
     this.draw = new MapboxDraw({
@@ -231,9 +229,11 @@ export class EditGameOverviewPage implements AfterViewInit {
 
   ngOnInit() {
     // Get user role
-    if (this.authService.getUserValue()) {
-      this.userRole = this.authService.getUserRole();
-    }
+    this.user.subscribe((event) => {
+      if (event != null) {
+        this.userRole = event["roles"][0];
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -279,9 +279,11 @@ export class EditGameOverviewPage implements AfterViewInit {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: (this.isVirtualWorld ?
-        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'),
+      style: this.isVirtualWorld
+        ? this.isVRMirrored
+          ? environment.mapStyle + "virtualEnv_2.json"
+          : environment.mapStyle + "virtualEnv_1.json"
+        : environment.mapStyle + "realWorld.json",
       center: this.isVirtualWorld
         ? [0.00001785714286 / 2, 0.002936936937 / 2]
         : [8, 51.8],
@@ -464,8 +466,8 @@ export class EditGameOverviewPage implements AfterViewInit {
     // Remove extra spaces from game name
     this.game.name = this.game.name.trim();
 
-    if(this.game.name == ""){
-      this.errorMsg = this.translate.instant("SaveGame.enterValidGameName")
+    if (this.game.name == "") {
+      this.errorMsg = this.translate.instant("SaveGame.enterValidGameName");
       this.showNameError = true;
       return;
     }
@@ -476,8 +478,8 @@ export class EditGameOverviewPage implements AfterViewInit {
       geofence: this.geofence,
       name: this.game.name,
       place: this.game.place,
-      isCuratedGame: this.isCuratedGame,     // to set whether game can be viewed in curated filter list
-      tasksCount: this.game.tasks.length      //* it might happen that user add or remove tasks, so we need to update the tasks
+      isCuratedGame: this.isCuratedGame, // to set whether game can be viewed in curated filter list
+      tasksCount: this.game.tasks.length, //* it might happen that user add or remove tasks, so we need to update the tasks
     });
     console.log(this.gameFactory.game);
 

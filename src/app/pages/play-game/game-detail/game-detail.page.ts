@@ -1,26 +1,24 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AlertController, NavController } from '@ionic/angular';
-import { GamesService } from '../../../services/games.service';
-import { PopoverController } from '@ionic/angular';
-import { PopoverComponent } from 'src/app/popover/popover.component';
-import { TranslateService } from '@ngx-translate/core';
-import { SocketService } from 'src/app/services/socket.service';
-import { UtilService } from 'src/app/services/util.service';
-import { AuthService } from 'src/app/services/auth-service.service';
+import { Component, ViewChild, OnInit, AfterViewInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { AlertController, NavController } from "@ionic/angular";
+import { GamesService } from "../../../services/games.service";
+import { PopoverController } from "@ionic/angular";
+import { PopoverComponent } from "src/app/popover/popover.component";
+import { TranslateService } from "@ngx-translate/core";
+import { SocketService } from "src/app/services/socket.service";
+import { UtilService } from "src/app/services/util.service";
+import { AuthService } from "src/app/services/auth-service.service";
 import { Storage } from "@ionic/storage";
-import { environment } from 'src/environments/environment';
+import { environment } from "src/environments/environment";
 import mapboxgl from "mapbox-gl";
 
 @Component({
-  selector: 'app-game-detail',
-  templateUrl: './game-detail.page.html',
-  styleUrls: ['./game-detail.page.scss'],
+  selector: "app-game-detail",
+  templateUrl: "./game-detail.page.html",
+  styleUrls: ["./game-detail.page.scss"],
 })
 export class GameDetailPage implements OnInit {
-
-  @ViewChild('mointorMap') mapContainer;
-
+  @ViewChild("mointorMap") mapContainer;
 
   game: any;
   activities: any[];
@@ -39,18 +37,19 @@ export class GameDetailPage implements OnInit {
   isSingleMode: boolean = true;
   numPlayers = 2;
   userRole: String = "";
+  user = this.authService.getUser();
   bundle: any = {};
   map: mapboxgl.Map;
-  cirColor = ['danger', 'success', 'primary'];
-  pointsColor = ['red', 'green', 'blue'];
-  playersLocsFeatures = [];     // for storing palyers features received from socket server
+  cirColor = ["danger", "success", "primary"];
+  pointsColor = ["red", "green", "blue"];
+  playersLocsFeatures = []; // for storing palyers features received from socket server
   // to disable 'show player location' btn when player locs are displayed
   showLocsBtn = true;
 
   playersData = [];
 
-
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     private route: ActivatedRoute,
     private gamesService: GamesService,
     public popoverController: PopoverController,
@@ -60,19 +59,22 @@ export class GameDetailPage implements OnInit {
     private authService: AuthService,
     private storage: Storage,
     private alertController: AlertController
-  ) { }
+  ) {}
 
   /******/
   ngOnInit() {
     // Get user role
-    if (this.authService.getUserValue()) {
-      this.userRole = this.authService.getUserRole();
-    }
+    this.user.subscribe((event) => {
+      if (event != null) {
+        this.userRole = event["roles"][0];
+      }
+    });
 
-    this.route.params.subscribe(params => {
-      this.gamesService.getGame(params.id)
-        .then(res => res.content)
-        .then(game => {
+    this.route.params.subscribe((params) => {
+      this.gamesService
+        .getGame(params.id)
+        .then((res) => res.content)
+        .then((game) => {
           this.game = game;
 
           // VR world
@@ -89,13 +91,17 @@ export class GameDetailPage implements OnInit {
             this.isSingleMode = false;
             this.numPlayers = game.numPlayers;
           }
-
         })
         .finally(() => {
           /* initialize user id and teacher code*/
-          if (!this.isSingleMode && this.authService.getUserValue() && this.userRole == 'contentAdmin') {
-            this.teacherCode = this.authService.getUserId() + '-' + this.game._id;
-            console.log('teacher code -> game name', this.teacherCode)
+          if (
+            !this.isSingleMode &&
+            this.authService.getUserValue() &&
+            this.userRole == "contentAdmin"
+          ) {
+            this.teacherCode =
+              this.authService.getUserId() + "-" + this.game._id;
+            console.log("teacher code -> game name", this.teacherCode);
             //ex(teacherId+gameId): 610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
 
             // initialize map
@@ -125,31 +131,40 @@ export class GameDetailPage implements OnInit {
 
     if (this.userRole == "contentAdmin") {
       /* get players status when they join or disconnect from socket server */
-      this.socketService.socket.on('onPlayerConnectionStatusChange', (playersData) => {
-        console.log("(connectSocketIO_MultiPlayer) playersData: ", playersData)
-        this.playersData = playersData;
-      });
+      this.socketService.socket.on(
+        "onPlayerConnectionStatusChange",
+        (playersData) => {
+          console.log(
+            "(connectSocketIO_MultiPlayer) playersData: ",
+            playersData
+          );
+          this.playersData = playersData;
+        }
+      );
 
       /* get players locations */
-      this.socketService.socket.on('updateInstrunctorMapView', (playerData) => {
-        console.log("(updateInstrunctorMapView) playerLoc: ", playerData)
-        
+      this.socketService.socket.on("updateInstrunctorMapView", (playerData) => {
+        console.log("(updateInstrunctorMapView) playerLoc: ", playerData);
+
         // impl.
         /* check if player loc is not stored yet. this to avoid duplicate entries */
-        if (this.playersLocsFeatures.length == 0 || this.playersLocsFeatures.find((feature) => feature.properties.playerNo != playerData.playerNo)) {
-          this.playersLocsFeatures.push(
-            {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'Point',
-                'coordinates': playerData.playerLoc
-              },
-              'properties': {
-                'pColor': this.pointsColor[playerData.playerNo - 1],
-                'playerNo': playerData.playerNo
-              }
-            }
+        if (
+          this.playersLocsFeatures.length == 0 ||
+          this.playersLocsFeatures.find(
+            (feature) => feature.properties.playerNo != playerData.playerNo
           )
+        ) {
+          this.playersLocsFeatures.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: playerData.playerLoc,
+            },
+            properties: {
+              pColor: this.pointsColor[playerData.playerNo - 1],
+              playerNo: playerData.playerNo,
+            },
+          });
 
           // update source data of points map layer
           this.updateMapView();
@@ -157,7 +172,10 @@ export class GameDetailPage implements OnInit {
       });
 
       /* Join instructor only */
-      this.socketService.socket.emit("joinGame", { roomName: this.teacherCode, playerName: null });
+      this.socketService.socket.emit("joinGame", {
+        roomName: this.teacherCode,
+        playerName: null,
+      });
 
       /* show monitoring map */
       // this.initMonitoringMap();
@@ -176,10 +194,12 @@ export class GameDetailPage implements OnInit {
       ...this.prepareRouteParams(),
       playerName: this.playerName,
       isRejoin: false,
-    }
+    };
 
     if (this.isSingleMode) {
-      this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
+      this.navCtrl.navigateForward(
+        `play-game/playing-game/${JSON.stringify(this.bundle)}`
+      );
     } else {
       /* check whether game is full beofore join game */
       this.checkAbilityToJoinGame(this.bundle);
@@ -196,7 +216,7 @@ export class GameDetailPage implements OnInit {
       component: PopoverComponent,
       event: ev,
       translucent: true,
-      componentProps: { text }
+      componentProps: { text },
     });
     return await popover.present();
   }
@@ -209,12 +229,13 @@ export class GameDetailPage implements OnInit {
       isVRMirrored: this.isVRMirrored,
       /* replace is used to get rid of special charachters, so values can be sent via routing */
       /* changed game code to be player name in signle mode game. This will allow V.E app to be conected based on player name which is easier that recalling code entered */
-      gameCode: (this.isSingleMode ? this.playerName : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')),
+      gameCode: this.isSingleMode
+        ? this.playerName
+        : this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ""),
       isSingleMode: this.isSingleMode,
-      shareData_cbox: this.shareData_cbox
-    }
+      shareData_cbox: this.shareData_cbox,
+    };
   }
-
 
   /*************************/
   /* multiplayer functions */
@@ -223,24 +244,42 @@ export class GameDetailPage implements OnInit {
   /* open barcode scanner - to scan qr code */
   /********************/
   openBarcodeScanner() {
-    this.navCtrl.navigateForward('barcode-scanner');
+    this.navCtrl.navigateForward("barcode-scanner");
   }
 
   /**********************************/
   checkAbilityToJoinGame(bundle: any) {
     /* if multi player mode, check whether room is not yet full. then allow player to join game in playing-page page */
-    this.socketService.socket.emit("checkAbilityToJoinGame", { gameCode: this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ''), gameNumPlayers: this.numPlayers }, (response) => {
-      if (response.isRoomFull) {
-        /* show toast msg */
-        this.utilService.showToast(`Sorry this game accepts only ${this.numPlayers} players.`, "dark", 3500);
-      } else {
-        this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(bundle)}`);
+    this.socketService.socket.emit(
+      "checkAbilityToJoinGame",
+      {
+        gameCode: this.teacherCode.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ""),
+        gameNumPlayers: this.numPlayers,
+      },
+      (response) => {
+        if (response.isRoomFull) {
+          /* show toast msg */
+          this.utilService.showToast(
+            `Sorry this game accepts only ${this.numPlayers} players.`,
+            "dark",
+            3500
+          );
+        } else {
+          this.navCtrl.navigateForward(
+            `play-game/playing-game/${JSON.stringify(bundle)}`
+          );
+        }
       }
-    });
+    );
   }
 
   /************************************************************************/
-  async showAlertResumeGame(s_playerName, s_playerNo, s_taskNo, c_JoinedPlayersCount) {
+  async showAlertResumeGame(
+    s_playerName,
+    s_playerNo,
+    s_taskNo,
+    c_JoinedPlayersCount
+  ) {
     const alert = await this.alertController.create({
       backdropDismiss: false, // disable alert dismiss when backdrop is clicked
       header: "Resume game?",
@@ -251,28 +290,30 @@ export class GameDetailPage implements OnInit {
           text: "No",
           handler: () => {
             // Do nothing
-          }
+          },
         },
         {
           text: "Yes",
           handler: () => {
             /* retreive task index of previous game state */
-            console.log("🚀🚀🚀 (game-detail) - player found disconnected")
+            console.log("🚀🚀🚀 (game-detail) - player found disconnected");
             this.bundle = this.bundle = {
               ...this.prepareRouteParams(),
               isRejoin: true,
               playerName: s_playerName,
               sPlayerNo: s_playerNo,
               cJoindPlayersCount: c_JoinedPlayersCount,
-              sTaskNo: s_taskNo
-            }
-            console.log("🚀🚀 (game-detail) - bundle2", this.bundle)
+              sTaskNo: s_taskNo,
+            };
+            console.log("🚀🚀 (game-detail) - bundle2", this.bundle);
 
             /* note: if player found in socket server, no need to check room availability */
-            this.navCtrl.navigateForward(`play-game/playing-game/${JSON.stringify(this.bundle)}`);
-          }
-        }
-      ]
+            this.navCtrl.navigateForward(
+              `play-game/playing-game/${JSON.stringify(this.bundle)}`
+            );
+          },
+        },
+      ],
     });
     await alert.present();
   }
@@ -286,45 +327,62 @@ export class GameDetailPage implements OnInit {
         // console.log("tracksData: ", tracksData);
         /* 1. if saved player room name equal and player name equal stroed player name   */
         // if (tracksData.s_playerInfo['roomName'] == this.teacherCode && tracksData.s_playerInfo['playerName'] == this.playerName) {
-        if (tracksData.s_playerInfo['roomName'] == this.teacherCode) {
-          console.log("🚀 (game-detail) savedPlayerInfo - (same game name and player): ", tracksData);
+        if (tracksData.s_playerInfo["roomName"] == this.teacherCode) {
+          console.log(
+            "🚀 (game-detail) savedPlayerInfo - (same game name and player): ",
+            tracksData
+          );
 
           /* 2. check if user was accidentally disconnected */
-          this.socketService.socket.emit("checkPlayerPreviousJoin", tracksData.s_playerInfo, (response) => {
-            if (response.isDisconnected) {
-              /* allow user to choose whether to resume game or not */
-              this.showAlertResumeGame(tracksData.s_playerInfo['playerName'], tracksData.s_playerInfo['playerNo'], tracksData.s_taskNo, response.joinedPlayersCount);
-
-            } else {
-              console.log("🚀🚀 (game-detail) - player not found")
+          this.socketService.socket.emit(
+            "checkPlayerPreviousJoin",
+            tracksData.s_playerInfo,
+            (response) => {
+              if (response.isDisconnected) {
+                /* allow user to choose whether to resume game or not */
+                this.showAlertResumeGame(
+                  tracksData.s_playerInfo["playerName"],
+                  tracksData.s_playerInfo["playerNo"],
+                  tracksData.s_taskNo,
+                  response.joinedPlayersCount
+                );
+              } else {
+                console.log("🚀🚀 (game-detail) - player not found");
+              }
             }
-          });
+          );
         } else {
-          console.log("🚀 (game-detail) savedPlayerInfo: No previous info found for this game");
+          console.log(
+            "🚀 (game-detail) savedPlayerInfo: No previous info found for this game"
+          );
         }
       }
     });
   }
 
   initMonitoringMap() {
-    // Set bounds of VR world 
+    // Set bounds of VR world
     var bounds = [
       [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
-      [0.003717027207 + 0.002, 0.004459082914 + 0.002] // Northeast coordinates (lng,lat)
+      [0.003717027207 + 0.002, 0.004459082914 + 0.002], // Northeast coordinates (lng,lat)
     ];
 
     mapboxgl.accessToken = environment.mapboxAccessToken;
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       // style: environment.mapStyle + 'realWorld.json',
-      style: (this.isVirtualWorld ?
-        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'),
+      style: this.isVirtualWorld
+        ? this.isVRMirrored
+          ? environment.mapStyle + "virtualEnv_2.json"
+          : environment.mapStyle + "virtualEnv_1.json"
+        : environment.mapStyle + "realWorld.json",
       // center: [8, 51.8],
-      center: (this.isVirtualWorld ? [0.00001785714286 / 2, 0.002936936937 / 2] : [8, 51.8]),
+      center: this.isVirtualWorld
+        ? [0.00001785714286 / 2, 0.002936936937 / 2]
+        : [8, 51.8],
       minZoom: 2,
-      maxZoom: 18,  // to avoid error
-      maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds
+      maxZoom: 18, // to avoid error
+      maxBounds: this.isVirtualWorld ? bounds : null, // Sets bounds
     });
 
     // disable map rotation using right click + drag
@@ -332,39 +390,37 @@ export class GameDetailPage implements OnInit {
     // disable map rotation using touch rotation gesture
     this.map.touchZoomRotate.disableRotation();
     // Add zomm in/out controls
-    this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+    this.map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
 
-    this.map.on('load', () => {
-      this.map.addSource('points', {
-        'type': 'geojson',
-        'data': {
-          'type': 'FeatureCollection',
-          'features': this.playersLocsFeatures
-        }
+    this.map.on("load", () => {
+      this.map.addSource("points", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: this.playersLocsFeatures,
+        },
       });
 
       // Add a symbol layer
       this.map.addLayer({
-        'id': 'points',
-        'type': 'circle',
-        'source': 'points',
+        id: "points",
+        type: "circle",
+        source: "points",
         paint: {
           "circle-radius": 8,
           // "circle-color": 'red',
-          "circle-color": ['get', 'pColor'],
+          "circle-color": ["get", "pColor"],
           "circle-stroke-width": 1,
           "circle-stroke-color": "black",
         },
       });
 
       // hide points layer
-      this.map.setLayoutProperty('points', 'visibility', 'none');
+      this.map.setLayoutProperty("points", "visibility", "none");
 
       // to fix the issue of smaller zise map after loading- **this is due to adding ngstyle on card container**
       this.map.resize();
     });
-
-
   }
 
   /* show locs on map view on click then hide them after few secs */
@@ -373,51 +429,51 @@ export class GameDetailPage implements OnInit {
     this.playersLocsFeatures = [];
     if (this.socketService.socket) {
       // console.log("🚀 (game-detail) showPlayerLocs");
-      this.socketService.socket.emit("requestPlayersLocation", this.teacherCode);
+      this.socketService.socket.emit(
+        "requestPlayersLocation",
+        this.teacherCode
+      );
 
       //disable button and show points layer
       this.showHideLocs();
       // hide locs and show btn after 5 secs
       setTimeout(() => {
         this.showHideLocs();
-      }, 6000)
+      }, 6000);
     } else {
       console.log("🚀 (game-detail) socket is undefined");
     }
-
   }
 
   /* to update players locs data */
   updateMapView() {
-    if (this.map && this.map.getLayer('points')) {
-      this.map.getSource('points').setData({
-        type: 'FeatureCollection',
-        features: this.playersLocsFeatures
+    if (this.map && this.map.getLayer("points")) {
+      this.map.getSource("points").setData({
+        type: "FeatureCollection",
+        features: this.playersLocsFeatures,
       });
 
       // zoom to 1st location in list
-      if(this.playersLocsFeatures.length !=0 ){
+      if (this.playersLocsFeatures.length != 0) {
         this.map.flyTo({
           center: this.playersLocsFeatures[0].geometry.coordinates,
-          zoom: (this.map.getZoom()< 15 ? 15: this.map.getZoom()),
-          speed: 3
+          zoom: this.map.getZoom() < 15 ? 15 : this.map.getZoom(),
+          speed: 3,
         });
       }
-
     } else {
-      console.log('🚀 (game-detail) updateMapView: map is undefined')
+      console.log("🚀 (game-detail) updateMapView: map is undefined");
     }
   }
 
   /* to show and hide locs points on map view  */
   showHideLocs() {
-    if (this.map.getLayoutProperty('points', 'visibility') == 'none') {
-      this.map.setLayoutProperty('points', 'visibility', 'visible');
+    if (this.map.getLayoutProperty("points", "visibility") == "none") {
+      this.map.setLayoutProperty("points", "visibility", "visible");
       this.showLocsBtn = false;
     } else {
-      this.map.setLayoutProperty('points', 'visibility', 'none');
+      this.map.setLayoutProperty("points", "visibility", "none");
       this.showLocsBtn = true;
     }
   }
-
 }

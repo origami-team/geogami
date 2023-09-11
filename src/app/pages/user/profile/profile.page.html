@@ -1,14 +1,18 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>{{ "User.profile" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div>
+  <div *ngIf="user">
     <h1>{{ "User.profile" | translate }}</h1>
 
     <p><b>{{ "General.name" | translate }}: </b>{{user.username}}</p>
@@ -22,7 +26,10 @@
         <ion-label>{{ "General.no" | translate }}</ion-label>
       </ion-chip>
     </div>
-    <p><b>{{ "User.registered" | translate }} </b>{{user.createdAt | date:'d.MM.y'}}</p>
+    <p>
+      <b>{{ "User.registered" | translate }} </b>{{user.createdAt |
+      date:'d.MM.y'}}
+    </p>
     <div>
       <b>{{ "User.roles" | translate }}: </b>
       <div style="display: inline" *ngFor="let role of user.roles">
@@ -61,12 +68,19 @@
       >
       <br /> -->
     <br />
-    <ion-button expand="block" fill="outline" (click)="logout()">Logout</ion-button>
+    <ion-button expand="block" fill="outline" (click)="logout()"
+      >Logout</ion-button
+    >
 
     <br />
     <br />
-    <ion-button expand="block" fill="outline" color="danger" (click)="deleteMyAccount()">{{ "User.deleteAccount" |
-      translate }}</ion-button>
+    <ion-button
+      expand="block"
+      fill="outline"
+      color="danger"
+      (click)="deleteMyAccount()"
+      >{{ "User.deleteAccount" | translate }}</ion-button
+    >
 
     <!-- </form> -->
   </div>
