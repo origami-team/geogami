@@ -1,20 +1,20 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Plugins, DeviceInfo, GeolocationPosition } from '@capacitor/core';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Plugins, DeviceInfo, GeolocationPosition } from "@capacitor/core";
 
-import { environment } from '../../environments/environment';
-import { OrigamiGeolocationService } from './origami-geolocation.service';
-import { Subscription } from 'rxjs';
+import { environment } from "../../environments/environment";
+import { OrigamiGeolocationService } from "./origami-geolocation.service";
+import { Subscription } from "rxjs";
 
-import { FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
-import { OrigamiOrientationService } from './origami-orientation.service';
+import { FilesystemDirectory, FilesystemEncoding } from "@capacitor/core";
+import { OrigamiOrientationService } from "./origami-orientation.service";
 
 // VR world
-import { AvatarPosition } from 'src/app/models/avatarPosition'
-import { Coords } from 'src/app/models/coords'
+import { AvatarPosition } from "src/app/models/avatarPosition";
+import { Coords } from "src/app/models/coords";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class TrackerService {
   private game: string;
@@ -49,7 +49,6 @@ export class TrackerService {
   private events_list;
   private deviceInfo_list;
 
-
   private map: any;
 
   private task: any;
@@ -59,7 +58,7 @@ export class TrackerService {
   private rotationCounter = 0;
   private lastHeading: number = undefined;
 
-  // vars to store taskNo and category 
+  // vars to store taskNo and category
   private taskNo = 0;
   private taskCategory = "";
 
@@ -67,10 +66,19 @@ export class TrackerService {
     private http: HttpClient,
     private geolocateService: OrigamiGeolocationService,
     private orientationService: OrigamiOrientationService
-  ) { }
+  ) {}
 
-  async init(gameID, name, map: any, players: string[], isVirtualWorld: boolean, initialAvatarLoc: any, isSingleMode: boolean, numPlayers: number, playerNo: number) {
-
+  async init(
+    gameID,
+    name,
+    map: any,
+    players: string[],
+    isVirtualWorld: boolean,
+    initialAvatarLoc: any,
+    isSingleMode: boolean,
+    numPlayers: number,
+    playerNo: number
+  ) {
     this.isVirtualWorld = isVirtualWorld;
     this.initialAvatarLoc = initialAvatarLoc;
     this.isSingleMode = isSingleMode;
@@ -78,68 +86,79 @@ export class TrackerService {
     this.playerNo = playerNo;
 
     if (!isVirtualWorld) {
-      this.positionWatch = this.geolocateService.geolocationSubscription.subscribe(
-        (position) => {
+      this.positionWatch =
+        this.geolocateService.geolocationSubscription.subscribe((position) => {
           this.position = position;
-        }
-      );
+        });
 
-      this.deviceOrientationSubscription = this.orientationService.orientationSubscription.subscribe(
-        (heading: number) => {
-          if (this.lastHeading === undefined) {
-            this.lastHeading = heading;
+      this.deviceOrientationSubscription =
+        this.orientationService.orientationSubscription.subscribe(
+          (heading: number) => {
+            if (this.lastHeading === undefined) {
+              this.lastHeading = heading;
+            }
+
+            let diff = Math.abs(this.lastHeading - heading);
+            diff = Math.abs(((diff + 180) % 360) - 180);
+            if (diff > 15) {
+              this.rotationCounter += diff;
+              this.lastHeading = heading;
+            }
+
+            this.compassHeading = heading;
           }
-
-          let diff = Math.abs(this.lastHeading - heading);
-          diff = Math.abs(((diff + 180) % 360) - 180);
-          if (diff > 15) {
-            this.rotationCounter += diff;
-            this.lastHeading = heading;
-          }
-
-          this.compassHeading = heading;
-        }
-      );
-
+        );
     } else {
       // ** VR world ** //
-      this.avatarPositionWatch = this.geolocateService.avatarGeolocationSubscription.subscribe(avatarPosition => {
-        // Set timestamp (to do: timestamp)
-        if (this.avatarPosition === undefined) {
-          // Initial avatar position
-          this.avatarPosition = new AvatarPosition(0, new Coords(this.initialAvatarLoc.lat, this.initialAvatarLoc.lng));
-        } else {
-          this.avatarPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
-        }
-      });
-
-
-      this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(
-        (avatarHeading: number) => {
-          if (this.lastHeading === undefined) {
-            this.lastHeading = avatarHeading;
+      this.avatarPositionWatch =
+        this.geolocateService.avatarGeolocationSubscription.subscribe(
+          (avatarPosition) => {
+            // Set timestamp (to do: timestamp)
+            if (this.avatarPosition === undefined) {
+              // Initial avatar position
+              this.avatarPosition = new AvatarPosition(
+                0,
+                new Coords(this.initialAvatarLoc.lat, this.initialAvatarLoc.lng)
+              );
+            } else {
+              this.avatarPosition = new AvatarPosition(
+                0,
+                new Coords(
+                  parseFloat(avatarPosition["z"]) / 111200,
+                  parseFloat(avatarPosition["x"]) / 111000
+                )
+              );
+            }
           }
+        );
 
-          let diff = Math.abs(this.lastHeading - avatarHeading);
-          diff = Math.abs(((diff + 180) % 360) - 180);
-          if (diff > 15) {
-            this.rotationCounter += diff;
-            this.lastHeading = avatarHeading;
+      this.avatarOrientationSubscription =
+        this.orientationService.avatarOrientationSubscription.subscribe(
+          (avatarHeading: number) => {
+            if (this.lastHeading === undefined) {
+              this.lastHeading = avatarHeading;
+            }
+
+            let diff = Math.abs(this.lastHeading - avatarHeading);
+            diff = Math.abs(((diff + 180) % 360) - 180);
+            if (diff > 15) {
+              this.rotationCounter += diff;
+              this.lastHeading = avatarHeading;
+            }
+
+            this.compassHeading = avatarHeading;
           }
-
-          this.compassHeading = avatarHeading;
-        }
-      );
+        );
     }
     this.map = map;
-    this.map.on('moveend', (moveEvent) => {
-      if (moveEvent.type == 'moveend' && moveEvent.originalEvent) {
+    this.map.on("moveend", (moveEvent) => {
+      if (moveEvent.type == "moveend" && moveEvent.originalEvent) {
         this.panCounter++;
       }
     });
 
-    this.map.on('zoomend', (zoomEvent) => {
-      if (zoomEvent.type == 'zoomend' && zoomEvent.originalEvent) {
+    this.map.on("zoomend", (zoomEvent) => {
+      if (zoomEvent.type == "zoomend" && zoomEvent.originalEvent) {
         this.zoomCounter++;
       }
     });
@@ -176,7 +195,7 @@ export class TrackerService {
       this.waypoints.push({
         ...waypoint,
         timestamp: new Date().toISOString(),
-        position: (this.isVirtualWorld ? this.avatarPosition : this.position),
+        position: this.isVirtualWorld ? this.avatarPosition : this.position,
         mapViewport: {
           bounds: this.map.getBounds(),
           center: this.map.getCenter(),
@@ -191,7 +210,7 @@ export class TrackerService {
           rotation: this.rotationCounter,
         },
         taskNo: this.taskNo,
-        taskCategory: this.taskCategory
+        taskCategory: this.taskCategory,
       });
     }
   }
@@ -216,7 +235,7 @@ export class TrackerService {
     this.events.push({
       ...event,
       timestamp: new Date().toISOString(),
-      position: (this.isVirtualWorld ? this.avatarPosition : this.position),
+      position: this.isVirtualWorld ? this.avatarPosition : this.position,
       mapViewport: {
         bounds: this.map.getBounds(),
         center: this.map.getCenter(),
@@ -238,15 +257,18 @@ export class TrackerService {
   /*  */
   createHeaders() {
     let headers = new HttpHeaders();
-    const token = window.localStorage.getItem('bg_accesstoken');
+    const token = window.localStorage.getItem("bg_accesstoken");
     if (token) {
-      headers = headers.append('Authorization', 'Bearer ' + token);
+      headers = headers.append("Authorization", "Bearer " + token);
     }
-    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append("Content-Type", "application/json");
     return headers;
   }
 
-  async uploadTrack(isGameTrackStored: boolean = false, gameTrack_Id: string = undefined) {
+  async uploadTrack(
+    isGameTrackStored: boolean = false,
+    gameTrack_Id: string = undefined
+  ) {
     /* (multiplayer) 1. create dynamic arrays based on game number of player 2,3,4 */
     this.playersNames_list = new Array(this.numPlayers);
     this.waypoints_list = new Array(this.numPlayers);
@@ -263,19 +285,29 @@ export class TrackerService {
 
     const data = {
       /* (multiplayer) 3. send game track id and player no if track is already exitied in socket server room then update player's corresponding track data */
-      _id: (isGameTrackStored ? gameTrack_Id : undefined),
-      playerNo: (isGameTrackStored ? this.playerNo : undefined),
+      _id: isGameTrackStored ? gameTrack_Id : undefined,
+      playerNo: isGameTrackStored ? this.playerNo : undefined,
       game: this.game,
       name: this.gameName,
       start: this.start,
       end: new Date().toISOString(),
-      device: (this.isSingleMode || isGameTrackStored ? this.getDeviceInfo(this.device) : this.deviceInfo_list),
-      waypoints: (this.isSingleMode || isGameTrackStored ? this.waypoints : this.waypoints_list),
-      events: (this.isSingleMode || isGameTrackStored ? this.events : this.events_list),
+      device:
+        this.isSingleMode || isGameTrackStored
+          ? this.getDeviceInfo(this.device)
+          : this.deviceInfo_list,
+      waypoints:
+        this.isSingleMode || isGameTrackStored
+          ? this.waypoints
+          : this.waypoints_list,
+      events:
+        this.isSingleMode || isGameTrackStored ? this.events : this.events_list,
       answers: null,
-      players: (this.isSingleMode || isGameTrackStored ? this.players : this.playersNames_list),
-      playersCount: (this.isSingleMode ? 1 : this.numPlayers ), // To Do: you may delete it.
-      isMultiplayerGame: (!this.isSingleMode ? true : undefined),
+      players:
+        this.isSingleMode || isGameTrackStored
+          ? this.players
+          : this.playersNames_list,
+      playersCount: this.isSingleMode ? 1 : this.numPlayers, // To Do: you may delete it.
+      isMultiplayerGame: !this.isSingleMode ? true : undefined,
       // numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
     };
 
@@ -294,31 +326,32 @@ export class TrackerService {
     // 1. create directory
     try {
       const ret = await Plugins.Filesystem.mkdir({
-        path: 'origami/tracks',
+        path: "origami/tracks",
         directory: FilesystemDirectory.Documents,
         recursive: true, // like mkdir -p
       });
-      console.log('Created dir', ret);
+      console.log("Created dir", ret);
     } catch (e) {
-      console.log('Unable to make directory', e);
+      console.log("Unable to make directory", e);
     }
     // 2. store tracks locally
     try {
       const result = await Plugins.Filesystem.writeFile({
-        path: `origami/tracks/${this.gameName.replace(/ /g, '_')}-${this.start
-          }.json`,
+        path: `origami/tracks/${this.gameName.replace(/ /g, "_")}-${
+          this.start
+        }.json`,
         data: JSON.stringify(data),
         directory: FilesystemDirectory.Documents,
         encoding: FilesystemEncoding.UTF8,
       });
-      console.log('Wrote file', result);
+      console.log("Wrote file", result);
     } catch (e) {
-      console.error('Unable to write file', e);
+      console.error("Unable to write file", e);
     }
     /* End of store game tracks locally */
 
     /* (multiplayer) 5. Store tracks on server */
-    return this.storeMultiplayerTracks(data, isGameTrackStored)
+    return this.storeMultiplayerTracks(data, isGameTrackStored);
   }
 
   // update task number and cateogory
@@ -326,7 +359,6 @@ export class TrackerService {
     this.taskNo = taskNo;
     this.taskCategory = taskCategory;
   }
-
 
   /* return device info */
   getDeviceInfo(device) {
@@ -342,7 +374,7 @@ export class TrackerService {
       appId: device.appId,
       device_name: device.name,
       device_manufacturer: device.manufacturer,
-    }
+    };
   }
 
   /**********************************/
@@ -352,23 +384,45 @@ export class TrackerService {
   storeMultiplayerTracks(data: any, isGameTrackStored: boolean) {
     if (!isGameTrackStored) {
       /* (multiplayer) 5. a) store new track if not stored yet (multiplayer) */
-      // (single player) store new track 
+      // (single player) store new track
       console.log("store new track (single player) / tracks (multiplayer)");
       return this.http
         .post(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),
-          observe: 'response',
-        }).toPromise();
-    }
-    else {
+          observe: "response",
+        })
+        .toPromise();
+    } else {
       /* (multiplayer) 5. b) update existed tracks (multiplayer) */
       console.log("//update existed tracks (multiplayer)");
       return this.http
         .put(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),
-          observe: 'response',
-        }).toPromise();
+          observe: "response",
+        })
+        .toPromise();
     }
   }
   /* */
+
+  /**********************************************************/
+  //* To retreive selected game tracks - used in evaluate page
+  getGameTracks(gameId: string) {
+    return this.http
+      .get(`${environment.apiURL}/track/gametracks/${gameId}`, {
+        headers: this.createHeaders(),
+      })
+      .toPromise();
+  }
+
+  /**********************************************************/
+  //* To retreive selected track by id - used in evaluate page
+  getGameTrackById(trackId: string) {
+    console.log("🚀 ~ file: tracker.service.ts:421 ~ TrackerService ~ getGameTrackById ~ gameId:", trackId)
+    return this.http
+      .get(`${environment.apiURL}/track/${trackId}`, {
+        headers: this.createHeaders(),
+      })
+      .toPromise();
+  }
 }

@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="game"
+      >{{ "AnalyzeGame.title" | translate }} - {{ game.name }}</ion-title
+    >
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- list title -->
+  <h3 class="list-title">List of game tracks</h3>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Filter</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Ex. player name"
+      #input
+    />
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Position Column -->
+      <ng-container matColumnDef="#">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+        <td mat-cell *matCellDef="let row; let i = index">{{i + 1}}</td>
+      </ng-container>
+
+      <!-- players Name Column -->
+      <ng-container matColumnDef="players">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>players</th>
+        <td mat-cell *matCellDef="let row">{{row.players}}</td>
+      </ng-container>
+
+      <!-- Created_date Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created date</th>
+        <td mat-cell *matCellDef="let row">{{row.createdAt.slice(0, 10)}}</td>
+      </ng-container>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let row">{{row._id}}</td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <!-- Download Track Button -->
+          <ion-buttons>
+            <ion-button
+              (click)=" isWebPlatform?exportTrackData(row._id): showAlertOpenGeoGamiWebVersion()"
+            >
+              <ion-icon name="cloud-download-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          No data matching the filter "{{input.value}}"
+        </td>
+      </tr>
+    </table>
+
+    <!-- Paginator -->
+    <mat-paginator
+      [pageSizeOptions]="[10, 15, 35, 100]"
+      showFirstLastButtons
+      aria-label="Select page of users"
+    ></mat-paginator>
+  </div>
+</ion-content>

@@ -32,8 +32,8 @@
 
         <!-- allow scholars to view virtual environment mode -->
         <option value="virtual" [disabled]="userRole=='unloggedUser'">
-          Virtual env. {{ (userRole=='unloggedUser' ? '('+ ('GameList.logInToAccess' | translate)
-          +')':'') }}
+          Virtual env. {{ (userRole=='unloggedUser' ? '('+
+          ('GameList.logInToAccess' | translate) +')':'') }}
         </option>
       </select>
     </div>
@@ -135,8 +135,9 @@
           >
             {{ (game.isMultiplayerGame && game.isMultiplayerGame)?
             game.numPlayers + " " + ("GameList.players" | translate) + " | ":
-            ""}} {{ (game.tasksCount)? game.tasksCount + " " + ("GameList.tasks"
-            | translate) : ""}}
+            ""}} {{ (game.tasksCount)? game.tasksCount + " " + (
+            (game.tasksCount >1 ?"GameList.tasks":"GameList.task") | translate)
+            : ""}}
           </ion-label>
           <!-- <ion-icon *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
         </ion-item>

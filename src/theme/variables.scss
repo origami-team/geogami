@@ -291,6 +291,11 @@ button.alert-button.alert-button-update {
   color: var(--ion-color-success-contrast);
 }
 
+button.alert-button.alert-button-download-track {
+  border: 1.5px solid;
+  // columns: blu;
+}
+
 .connection-toast-class {
   // --width: 100%;
   --start: 10%;

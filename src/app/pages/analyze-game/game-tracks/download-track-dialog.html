@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Do you want to download selected track data? </h2>
+
+<mat-dialog-actions class="app-dialog-actions" style="justify-content: right;">
+
+  <a [href]="sanitizedBlobUrl" [download]="filename" type="button" class="btn" style="margin-right: 5%;" (click)="download()"><i class="fas fa-download"></i> Yes
+  </a>
+
+  <!-- <mat-button (click)="close()">No</mat-button> -->
+  <!-- <button type="button" class="btn btn-primary btn-sm mr-2" (click)="viewInBrowser()"><i class="fas fa-eye"></i> View in browser
+  </button> -->
+  <button type="button" class="btn" (click)="onNoClick()">No</button>
+</mat-dialog-actions>
