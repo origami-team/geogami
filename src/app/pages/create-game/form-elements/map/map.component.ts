@@ -70,21 +70,21 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.remove();
   }
   ngOnInit(): void {
-    // console.log('// isSingleMode (map comp): ', this.isSingleMode)
+    // // console.log('// isSingleMode (map comp): ', this.isSingleMode)
   }
 
   // Compare the input feature value before and after change task type
   // to keep flags on map 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("ngOnChanges (mapComponent): ", changes);
+  // console.log("ngOnChanges (mapComponent): ", changes);
     // if (this.isSingleMode) {
     if (changes.answer) {     //* we need to add it "if condtionns" to specify what to change
       if (changes.feature.currentValue == undefined && changes.feature.previousValue != undefined) {
-        // console.log("ngOnChanges (mapComponent) - if changes.answer");
+        // // console.log("ngOnChanges (mapComponent) - if changes.answer");
         this.featureChange.emit(changes.feature.previousValue);
       }
     } else if (changes.virEnvType && changes.virEnvType.currentValue != undefined && changes.virEnvType.previousValue != undefined) {            //* when virEnvType is changed
-      console.log("changes (changes.virEnvType): ", changes.virEnvType.currentValue);
+    // console.log("changes (changes.virEnvType): ", changes.virEnvType.currentValue);
       this.virEnvType = changes.virEnvType.currentValue
 
       let newStyle = this.map.getStyle();
@@ -183,7 +183,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.on('click', e => {
 
       // temp
-      // console.log("allPlayersFeatures", this.allPlayersFeatures)
+      // // console.log("allPlayersFeatures", this.allPlayersFeatures)
 
       if (this.featureType == 'point') {
         this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
@@ -191,7 +191,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         this._onChange(this.feature);
 
         // Temporary show loc of selected flag
-        console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
+      // console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
       }
 
       if (this.featureType == 'direction') {

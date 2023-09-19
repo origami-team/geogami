@@ -42,7 +42,7 @@ export class BarcodeScannerPage implements OnInit {
   async startScan() {
     const allowed = await this.checkPermission()
     if (allowed) {
-      // console.log("🚀 allowed")
+      // // console.log("🚀 allowed")
 
       /* make background of WebView transparent, another step is adding some style to global.scss */
       // BarcodeScanner.hideBackground();
@@ -53,7 +53,7 @@ export class BarcodeScannerPage implements OnInit {
 
       /* if the result has content */
       /* if (result.hasContent) {
-        console.log(result.content); // log the raw scanned content
+      // console.log(result.content); // log the raw scanned content
         //* show toast msg
         // this.utilService.showToast(`Qr-Code: ${result.content}`, "dark", 3500);
 
