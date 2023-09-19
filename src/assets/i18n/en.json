@@ -133,7 +133,8 @@
                 "notNow": "Not Now"
         },
         "AnalyzeGame": {
-                "title": "Analyze your GeoGami"
+                "title": "Analyze your GeoGami",
+                "emptyGameTracks": "The games you created have no tracks yet!"
         },
         "CreateGame": {
                 "titleCreateGame": "Develop your GeoGami",

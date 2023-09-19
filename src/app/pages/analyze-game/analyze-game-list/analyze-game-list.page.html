@@ -28,6 +28,14 @@
   <!-- list title -->
   <h3 class="list-title">List of games with tracks</h3>
 
+    <!-- show this message only when game tracks are empty -->
+    <div
+    class="emptygametracks"
+    *ngIf="gamesWithTracks && gamesWithTracks.length == 0"
+  >
+    <h2>{{ "AnalyzeGame.emptyGameTracks" | translate }}</h2>
+  </div>
+
   <ion-card
     *ngFor="let game of gamesWithTracks"
     (click)="gameClick(game)"

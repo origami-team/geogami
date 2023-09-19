@@ -133,7 +133,8 @@
                 "notNow": "Nicht Jetzt"
         },
         "AnalyzeGame": {
-                "title": "Analysiere dein GeoGami"
+                "title": "Analysiere dein GeoGami",
+                "emptyGameTracks": "Die von Ihnen erstellten Spiele verfügen noch über keine Streckendaten!"
         },
         "CreateGame": {
                 "titleCreateGame": "Entwickle dein GeoGami",
