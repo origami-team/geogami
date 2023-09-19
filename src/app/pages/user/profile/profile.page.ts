@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth-service.service';
-import { Validators, FormBuilder } from '@angular/forms';
-import { AlertController, NavController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, OnInit } from "@angular/core";
+import { AuthService } from "src/app/services/auth-service.service";
+import { FormBuilder } from "@angular/forms";
+import { AlertController, NavController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss'],
+  selector: "app-profile",
+  templateUrl: "./profile.page.html",
+  styleUrls: ["./profile.page.scss"],
 })
 export class ProfilePage implements OnInit {
   loginForm;
@@ -15,6 +15,7 @@ export class ProfilePage implements OnInit {
   register;
 
   user;
+  userSub = this.authService.getUser();
 
   constructor(
     private fb: FormBuilder,
@@ -22,14 +23,19 @@ export class ProfilePage implements OnInit {
     public navCtrl: NavController,
     private alertController: AlertController,
     public _translate: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.user = this.authService.getUserValue();
+    // Get user
+    this.userSub.subscribe((event) => {
+      if (event != null) {
+        this.user = event;
 
-    this.loginForm = this.fb.group({
-      username: [this.authService.getUserValue().username],
-      email: [this.authService.getUserValue().email],
+        this.loginForm = this.fb.group({
+          username: [this.user.username],
+          email: [this.user.email],
+        });
+      }
     });
 
     this.authService.getErrorMessage().subscribe((e) => {
@@ -41,7 +47,7 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  updateUser() { }
+  updateUser() {}
 
   logout() {
     this.authService.logout();
@@ -64,7 +70,7 @@ export class ProfilePage implements OnInit {
         },
         {
           text: this._translate.instant("User.deleteAccount"),
-          cssClass: 'alert-button-confirm',
+          cssClass: "alert-button-confirm",
           handler: () => {
           // console.log("user: ", this.user);
             this.authService.DeleteAccountLogout(this.user);
@@ -76,6 +82,6 @@ export class ProfilePage implements OnInit {
   }
 
   navigateRegister() {
-    this.navCtrl.navigateForward('user/register');
+    this.navCtrl.navigateForward("user/register");
   }
 }

@@ -1,33 +1,37 @@
-import { Component, OnInit, ViewChild, } from '@angular/core';
-import { ToastController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from 'src/app/services/auth-service.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ToastController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
+import { AuthService } from "src/app/services/auth-service.service";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
 
 @Component({
-  selector: 'app-user-management',
-  templateUrl: './user-management.page.html',
-  styleUrls: ['./user-management.page.scss'],
+  selector: "app-user-management",
+  templateUrl: "./user-management.page.html",
+  styleUrls: ["./user-management.page.scss"],
 })
 export class UserManagementPage implements OnInit {
-
   users: any; // To hold users info
 
-  displayedColumns: string[] = ['#', 'username', 'email', 'createdAt', 'roles', 'action'];
+  displayedColumns: string[] = [
+    "#",
+    "username",
+    "email",
+    "createdAt",
+    "roles",
+    "action",
+  ];
   dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-
   constructor(
     private authService: AuthService,
     public _translate: TranslateService,
-    public toastController: ToastController,
-  ) { }
+    public toastController: ToastController
+  ) {}
 
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
@@ -37,16 +41,15 @@ export class UserManagementPage implements OnInit {
   ngOnInit() {
     // Get all users
     this.authService.GetUsers().then((res) => {
-      this.users = res.map(obj => ({ ...obj, roleIsUpdated: false }))
-      this.initializeDataSource(this.users)
-
+      this.users = res.map((obj) => ({ ...obj, roleIsUpdated: false }));
+      this.initializeDataSource(this.users);
     });
   }
 
   initializeDataSource(usersData) {
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(usersData);
-  // console.log("this.dataSource: ", this.dataSource)
+    // console.log("this.dataSource: ", this.dataSource);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -54,15 +57,15 @@ export class UserManagementPage implements OnInit {
   // update user role
   async changeRole(roleValue, userEmail) {
     if (userEmail != undefined) {
-    // console.log("userEmail1: ", userEmail)
-    // console.log("roleValue1: ", roleValue)
+      // console.log("userEmail1: ", userEmail);
+      // console.log("roleValue1: ", roleValue);
 
       // update user role and change save icon color to blue
-      this.users.find(user => {
+      this.users.find((user) => {
         if (user.email == userEmail) {
-          user.roleIsUpdated = true
-          user.roles = [roleValue]
-        // console.log("user: ", user)
+          user.roleIsUpdated = true;
+          user.roles = [roleValue];
+          // console.log("user: ", user);
           return user;
         }
       });
@@ -73,19 +76,19 @@ export class UserManagementPage implements OnInit {
   saveRoleUpdate(userEmail) {
     if (userEmail != undefined) {
       // get user whose role has been changed
-      let user = this.users.find(user => user.email == userEmail);
+      let user = this.users.find((user) => user.email == userEmail);
 
       this.authService.updateUserRole(user).then((res) => {
         if (res.status == 200) {
           user.roleIsUpdated = false;
-          this.showToast("User role was successfully updated!")
+          this.showToast("User role was successfully updated!");
         }
       });
     }
   }
 
   //delete user
-  deleteUser(userEmail){
+  deleteUser(userEmail) {
     // do nothing yet
   }
 
@@ -109,5 +112,4 @@ export class UserManagementPage implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
 }

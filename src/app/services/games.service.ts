@@ -89,6 +89,15 @@ export class GamesService {
       .toPromise();
   }
 
+  //* To retreive user games info that has at least on track
+  getUserGamesWithTrackInfo(){
+    return this.http
+      .get(`${environment.apiURL}/game/usergames`, {
+        headers: this.createHeaders(),
+      })
+      .toPromise();
+  }
+
   /* uploadTrack(data): Promise<any> {
     return this.http
     .post(`${environment.apiURL}/track`, data, {

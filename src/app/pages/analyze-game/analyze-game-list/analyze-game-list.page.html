@@ -1,24 +1,60 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>{{ "AnalyzeGame.title" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-
-<ion-content>
-
+<ion-content class="ion-padding">
   <!-- <ngx-json-viewer [json]="tracks" [expanded]="false"></ngx-json-viewer> -->
 
-  <ion-list *ngFor="let track of tracks">
+
+  <!-- old impl. (showing tracks stored locally)  -->
+  <!-- <ion-list *ngFor="let track of tracks">
     <ion-item>
       <ion-label>{{ track }}</ion-label>
       <ion-icon slot="end" name="trash-outline" (click)="remove(track)"></ion-icon>
       <ion-icon slot="end" name="cloud-upload-outline" (click)="upload(track)"></ion-icon>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 
+  <!-- new impl. (showing user games that has tracks) -->
+  <!-- list title -->
+  <h3 class="list-title">List of games with tracks</h3>
 
+    <!-- show this message only when game tracks are empty -->
+    <div
+    class="emptygametracks"
+    *ngIf="gamesWithTracks && gamesWithTracks.length == 0"
+  >
+    <h2>{{ "AnalyzeGame.emptyGameTracks" | translate }}</h2>
+  </div>
+
+  <ion-card
+    *ngFor="let game of gamesWithTracks"
+    (click)="gameClick(game)"
+    detail
+    color="secondary"
+  >
+    <ion-card-header>
+      <ion-item lines="none" color="secondary">
+        <ion-label>
+          <h2>
+            <ion-icon name="game-controller"></ion-icon>
+            {{ game.name }}
+          </h2>
+        </ion-label>
+        <ion-label slot="end" class="gameTracksCount">
+          {{ (game.tracksCount? game.tracksCount + " " + (game.tracksCount
+          >1?"Tracks": "Track"): "") }}
+        </ion-label>
+      </ion-item>
+    </ion-card-header>
+  </ion-card>
 </ion-content>

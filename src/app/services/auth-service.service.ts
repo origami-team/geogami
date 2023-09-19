@@ -49,6 +49,7 @@ export class AuthService {
   }
 
   /* additional functions */
+  /* Not used anymore */
   getUserRole(){
     return this.getUserValue()['roles'][0]
   }

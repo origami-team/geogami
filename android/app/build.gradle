@@ -5,9 +5,9 @@ android {
     defaultConfig {
         applicationId "com.ifgi.geogami"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion 30
-        versionCode 14
-        versionName "2.0.2"
+        targetSdkVersion 33
+        versionCode 15
+        versionName "3.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

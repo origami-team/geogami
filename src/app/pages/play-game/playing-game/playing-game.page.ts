@@ -962,7 +962,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map.on("zoom", () => {
       if (this.isVirtualWorld) {
         const currentZoom = this.map.getZoom();
-        // // console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
+        console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
         /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
         if (virEnvLayers[this.virEnvType].zoomInLayer1) {
           if (
@@ -2559,10 +2559,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /* when instructor request players real time location */
     this.socketService.socket.on("requestPlayerLocation", () => {
     // console.log("(game-paly) requestPlayersLocation1");
-    console.log(
+    /* console.log(
         "(game-paly) requestPlayersLocation1, this.lastKnownPosition",
         this.lastKnownPosition
-      );
+      ); */
 
       this.socketService.socket.emit("updatePlayersLocation", {
         roomName: this.gameCode,

@@ -61,6 +61,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   isCuratedGame = false;
   // to set curated gmaes only by admins (geogami team)
   userRole: String = "";
+  user = this.authService.getUser();
 
   // Multiplayer mode 
   isSingleMode: boolean = false; // used to show number of players card in multiplayer mode
@@ -100,9 +101,11 @@ export class CreateGameOverviewPage implements AfterViewInit {
     });
 
     // Get user role
-    if (this.authService.getUserValue()) {
-      this.userRole = this.authService.getUserRole();
-    }
+    this.user.subscribe((event) => {
+      if (event != null) {
+        this.userRole = event["roles"][0];
+      }
+    });
   }
 
   ngAfterViewInit(): void {
