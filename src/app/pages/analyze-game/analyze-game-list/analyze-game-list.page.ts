@@ -48,7 +48,6 @@ export class AnalyzeGameListPage implements OnInit {
     // await this.getTracks();
     //* new impl. (showing user games that has tracks)
     this.getUserGamesBasicData();
-    this.downloadFile();
   }
 
   ionViewWillEnter() {

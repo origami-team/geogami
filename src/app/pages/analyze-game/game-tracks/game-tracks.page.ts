@@ -6,9 +6,9 @@ import { ActivatedRoute } from "@angular/router";
 import { NavController } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth-service.service";
 import { TrackerService } from "src/app/services/tracker.service";
-import { DomSanitizer } from "@angular/platform-browser";
-import { HttpClient } from "@angular/common/http";
 
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { downloadTrackDialog } from "./download-track-dialog";
 
 @Component({
   selector: "app-game-tracks",
@@ -27,7 +27,7 @@ export class GameTracksPage implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  //* to set sanitizer and file name
+  //* to set sanitizer and file name (used in download track data)
   sanitizedBlobUrl: any;
   filename: string;
 
@@ -36,14 +36,11 @@ export class GameTracksPage implements OnInit {
     private authService: AuthService,
     private trackService: TrackerService,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer,
-    private http: HttpClient,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.getGamesTracksData();
-
-    this.downloadTrack("1");
   }
 
   ionViewWillEnter() {
@@ -98,50 +95,36 @@ export class GameTracksPage implements OnInit {
     }
   }
 
-  /* downloadTrack(trackId: string) {
+  exportTrackData(trackId: string) {
     this.trackService
       .getGameTrackById(trackId)
       .then((res: any) => res.content)
-      .then((track) => {
-
-        console.log("🚀🚀🚀 ~ track", track);
-        const data = track;
-        // 1
-        const blob = new Blob([JSON.stringify(data, null, 2)], {
-          type: "application/json",
-        });
-        // 2
-        const blobURL = window.URL.createObjectURL(blob);
-        // 3
-        const backupType = "snippets";
-        // 4
-        this.sanitizedBlobUrl = this.sanitizer.bypassSecurityTrustUrl(blobURL);
-        const currentDate = new Date();
-        this.filename = `${backupType}_${currentDate.toISOString()}.json`;
-      });
-  } */
-
-  downloadTrack(trackId: string) {
-    this.trackService
-      .getGameTrackById(trackId)
-      .then((res: any) => res.content)
-      .then((track) => {
-
-        console.log("🚀🚀🚀 ~ track", track);
-        const data = track;
-        // 1
-        const blob = new Blob([JSON.stringify(data, null, 2)], {
-          type: "application/json",
-        });
-        // 2
-        const blobURL = window.URL.createObjectURL(blob);
-        // 3
-        const backupType = "snippets";
-        // 4
-        this.sanitizedBlobUrl = this.sanitizer.bypassSecurityTrustUrl(blobURL);
-        const currentDate = new Date();
-        this.filename = `${backupType}_${currentDate.toISOString()}.json`;
+      .then((trackData) => {
+        this.downloadTrackData(trackData);
       });
   }
 
+  private downloadTrackData(trackData: any) {
+    const blob = new Blob([JSON.stringify(trackData, null, 2)], {
+      type: "application/json",
+    });
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      gameName: trackData.name,
+      players: trackData.players,
+      blobUrl: window.URL.createObjectURL(blob),
+      // backupType: "snippets",
+    };
+
+    const dialogRef = this.dialog.open(downloadTrackDialog, dialogConfig);
+
+    /* dialogRef.afterClosed().subscribe(result => {
+      console.log("🚀 ~ file: game-tracks.page.ts:142 ~ GameTracksPage ~ dialogRef.afterClosed ~ result:", result)
+      console.log('The dialog was closed');
+    }); */
+
+    // this.dialog.closeAll();
+  }
 }
