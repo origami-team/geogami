@@ -34,9 +34,7 @@ export class AnalyzeGameListPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     private gamesService: GamesService,
-    private elRef: ElementRef,
     private http: HttpClient,
-    private sanitizer: DomSanitizer,
     private authService: AuthService
   ) {}
 
@@ -44,6 +42,7 @@ export class AnalyzeGameListPage implements OnInit {
     // this.gamesService.getTracks().then(tracks => {
     //   this.tracks = tracks
     // });
+
     //* old impl. (showing tracks stored locally)
     // await this.getTracks();
     //* new impl. (showing user games that has tracks)
@@ -54,11 +53,11 @@ export class AnalyzeGameListPage implements OnInit {
     // Check user role. Allow only ["admin", "contentAdmin", "scholar"] to access evlaute page
     this.user.subscribe((event) => {
       if (
-            event == null ||
-            !["admin", "contentAdmin", "scholar"].includes(event["roles"][0])
-          ) {
-            this.navCtrl.navigateForward("/");
-          }
+        event == null ||
+        !["admin", "contentAdmin", "scholar"].includes(event["roles"][0])
+      ) {
+        this.navCtrl.navigateForward("/");
+      }
     });
   }
 

@@ -3,9 +3,10 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { AlertController, NavController } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth-service.service";
 import { TrackerService } from "src/app/services/tracker.service";
+import { Capacitor } from "@capacitor/core";
 
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { downloadTrackDialog } from "./download-track-dialog";
@@ -31,15 +32,22 @@ export class GameTracksPage implements OnInit {
   sanitizedBlobUrl: any;
   filename: string;
 
+  isWebPlatform = true;
+
   constructor(
     public navCtrl: NavController,
     private authService: AuthService,
     private trackService: TrackerService,
+    private alertCtr: AlertController,
     private route: ActivatedRoute,
     public dialog: MatDialog
   ) {}
 
   ngOnInit() {
+    //* Check platform, if not web ask user to open GeoGamiweb version
+    if (Capacitor.platform == "ios" || Capacitor.platform == "android") {
+      this.isWebPlatform = false;
+    }
     this.getGamesTracksData();
   }
 
@@ -126,5 +134,28 @@ export class GameTracksPage implements OnInit {
     }); */
 
     // this.dialog.closeAll();
+  }
+
+  async showAlertOpenGeoGamiWebVersion() {
+    const alert = await this.alertCtr.create({
+      backdropDismiss: true, // disable alert dismiss when backdrop is clicked
+      header: "Open GeoGami portal",
+      //subHeader: 'Important message',
+      message: "To download tracks you need to use GeoGami portal.",
+      buttons: [ /* 'OK' */
+        {
+          text: "Open portal",
+          cssClass: 'alert-button-download-track',
+          // role: 'cancel',
+          handler: () => {
+            window.open(
+              "https://app.geogami.ifgi.de/",
+              "_system"
+            );
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 }
