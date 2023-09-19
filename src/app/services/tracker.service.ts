@@ -414,4 +414,15 @@ export class TrackerService {
       })
       .toPromise();
   }
+
+  /**********************************************************/
+  //* To retreive selected track by id - used in evaluate page
+  getGameTrackById(trackId: string) {
+    console.log("🚀 ~ file: tracker.service.ts:421 ~ TrackerService ~ getGameTrackById ~ gameId:", trackId)
+    return this.http
+      .get(`${environment.apiURL}/track/${trackId}`, {
+        headers: this.createHeaders(),
+      })
+      .toPromise();
+  }
 }
