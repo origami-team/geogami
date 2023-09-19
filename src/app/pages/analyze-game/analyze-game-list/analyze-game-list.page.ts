@@ -23,6 +23,10 @@ export class AnalyzeGameListPage implements OnInit {
   tracks: any[] = [];
   gamesWithTracks: any[] = [];
 
+  // to only allow admins and scholars to see this page
+  user = this.authService.getUser();
+  userRole: string;
+
   blobUrl: any;
   sanitizedBlobUrl: any;
   filename: string;
@@ -45,6 +49,18 @@ export class AnalyzeGameListPage implements OnInit {
     //* new impl. (showing user games that has tracks)
     this.getUserGamesBasicData();
     this.downloadFile();
+  }
+
+  ionViewWillEnter() {
+    // Check user role. Allow only ["admin", "contentAdmin", "scholar"] to access evlaute page
+    this.user.subscribe((event) => {
+      if (
+            event == null ||
+            !["admin", "contentAdmin", "scholar"].includes(event["roles"][0])
+          ) {
+            this.navCtrl.navigateForward("/");
+          }
+    });
   }
 
   //* Get user games that has at least on track
@@ -104,5 +120,16 @@ export class AnalyzeGameListPage implements OnInit {
 
       return confirmed ? resolve(true) : reject(false);
     });
+  }
+
+  //* open game's tracks
+  gameClick(game: any) {
+    let bundle = {
+      id: game._id,
+      name: game.name,
+    };
+    this.navCtrl.navigateForward(
+      `analyze/game-tracks/${JSON.stringify(bundle)}`
+    );
   }
 }
