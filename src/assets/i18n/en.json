@@ -88,7 +88,8 @@
                 "chooseGameMap": "Choose a game from the map.",
                 "logInToAccess": "You must login to have access",
                 "players": "players",
-                "tasks": "tasks"
+                "tasks": "tasks",
+                "task": "task"
         },
         "CreateTasks": {
                 "combineTasks": "List of created tasks:",

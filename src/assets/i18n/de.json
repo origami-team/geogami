@@ -88,7 +88,8 @@
                 "chooseGameMap": "Wähle ein Spiel aus der Karte.",
                 "logInToAccess": "Sie müssen sich anmelden, um Zugriff zu haben",
                 "players": "Spieler",
-                "tasks": "Aufgaben"
+                "tasks": "Aufgaben",
+                "task": "Aufgabe"
         },
         "CreateTasks": {
                 "combineTasks": "Liste der erstellten Aufgaben:",

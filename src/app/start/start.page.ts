@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
-import { NavController } from '@ionic/angular';
+import { Component, OnInit } from "@angular/core";
+import { AlertController, ToastController } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService } from "@ngx-translate/core";
 
-import { Capacitor, Plugins } from '@capacitor/core';
-import { AuthService } from '../services/auth-service.service';
-import { LanguageService } from '../services/language.service';
-import { GamesService } from '../services/games.service';
-import { UtilService } from '../services/util.service';
+import { Capacitor, Plugins } from "@capacitor/core";
+import { AuthService } from "../services/auth-service.service";
+import { LanguageService } from "../services/language.service";
+import { GamesService } from "../services/games.service";
+import { UtilService } from "../services/util.service";
 
 @Component({
-  selector: 'app-start',
-  templateUrl: './start.page.html',
-  styleUrls: ['./start.page.scss'],
+  selector: "app-start",
+  templateUrl: "./start.page.html",
+  styleUrls: ["./start.page.scss"],
 })
 export class StartPage implements OnInit {
   playerMode: String;
@@ -33,11 +33,10 @@ export class StartPage implements OnInit {
 
   // (translation)
   languages = [];
-  selected = '';
+  selected = "";
 
   // latest app version
   latestAppVersionInfo: any;
-
 
   constructor(
     public navCtrl: NavController,
@@ -48,7 +47,7 @@ export class StartPage implements OnInit {
     private alertController: AlertController,
     private gamesService: GamesService,
     public utilService: UtilService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     /* if device is not connected to internet, show notification */
@@ -60,15 +59,27 @@ export class StartPage implements OnInit {
     Plugins.Device.getInfo().then((device) => (this.device = device));
 
     // get updated app version to notify user of app update
-    this.gamesService.getAppVersion()
-      .then(res => res.content)
-      .then(latestVersionInfo => {
+    this.gamesService
+      .getAppVersion()
+      .then((res) => res.content)
+      .then((latestVersionInfo) => {
         this.latestAppVersionInfo = latestVersionInfo;
         if (this.latestAppVersionInfo.enabled && Capacitor.platform != "web") {
           if (Capacitor.platform == "ios" && this.latestAppVersionInfo.ios) {
-            this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
-          } else if (Capacitor.platform == "android" && this.latestAppVersionInfo.android) {
-            this.showUpdateAppAlert(this.versionToInt(this.latestAppVersionInfo.version), parseInt(this.latestAppVersionInfo.build), this.latestAppVersionInfo.major);
+            this.showUpdateAppAlert(
+              this.versionToInt(this.latestAppVersionInfo.version),
+              parseInt(this.latestAppVersionInfo.build),
+              this.latestAppVersionInfo.major
+            );
+          } else if (
+            Capacitor.platform == "android" &&
+            this.latestAppVersionInfo.android
+          ) {
+            this.showUpdateAppAlert(
+              this.versionToInt(this.latestAppVersionInfo.version),
+              parseInt(this.latestAppVersionInfo.build),
+              this.latestAppVersionInfo.major
+            );
           }
         }
       });
@@ -79,12 +90,11 @@ export class StartPage implements OnInit {
     this.selected = this.languageService.selected;
 
     // Get user role
-    this.user.subscribe(
-      event => {
-        if (event != null) {
-          this.userRole = (event['roles'])[0];
-        }
-      });
+    this.user.subscribe((event) => {
+      if (event != null) {
+        this.userRole = event["roles"][0];
+      }
+    });
   }
 
   handleCardClick(e) {
@@ -92,9 +102,9 @@ export class StartPage implements OnInit {
   }
 
   navigateGamesPlayPage() {
-    if(Capacitor.platform =="web"){
+    if (Capacitor.platform == "web") {
       this.navCtrl.navigateForward(`play-game/play-game-list`);
-    } else{
+    } else {
       this.navCtrl.navigateForward(`play-game/play-game-menu`);
     }
   }
@@ -111,27 +121,27 @@ export class StartPage implements OnInit {
   }
 
   navigateShowroomPage() {
-    this.navCtrl.navigateForward('showroom');
+    this.navCtrl.navigateForward("showroom");
   }
 
   navigateInfoPage() {
-    this.navCtrl.navigateForward('info');
+    this.navCtrl.navigateForward("info");
   }
 
   navigateAnalyzePage() {
-    this.navCtrl.navigateForward('analyze');
+    this.navCtrl.navigateForward("analyze");
   }
 
   navigateUserManagement() {
-    this.navCtrl.navigateForward('user/user-management');
+    this.navCtrl.navigateForward("user/user-management");
   }
 
   login() {
-    this.navCtrl.navigateForward('user/login');
+    this.navCtrl.navigateForward("user/login");
   }
 
   navigateProfile() {
-    this.navCtrl.navigateForward('user/profile');
+    this.navCtrl.navigateForward("user/profile");
   }
 
   changeLng(lng: string) {
@@ -147,38 +157,50 @@ export class StartPage implements OnInit {
       text: this._translate.instant("Start.notNow"),
       handler: () => {
         // Do nothing
-      }
+      },
     };
     let btnOption2 = {
       text: this._translate.instant("Start.update"),
-      cssClass: 'alert-button-update',
+      cssClass: "alert-button-update",
       handler: () => {
         if (Capacitor.platform == "ios") {
-          window.open("https://apps.apple.com/app/geogami/id1614864078", "_system");
+          window.open(
+            "https://apps.apple.com/app/geogami/id1614864078",
+            "_system"
+          );
         } else if (Capacitor.platform == "android") {
-          window.open("https://play.google.com/store/apps/details?id=com.ifgi.geogami", "_system");
+          window.open(
+            "https://play.google.com/store/apps/details?id=com.ifgi.geogami",
+            "_system"
+          );
         }
       },
     };
 
-    if (currentAppVersion < latestDeployedVersion /* || ( currentAppVersion == latestVersion && currentAppBuild < latestBuild) */) {
+    if (
+      currentAppVersion <
+      latestDeployedVersion /* || ( currentAppVersion == latestVersion && currentAppBuild < latestBuild) */
+    ) {
       const alert = await this.alertController.create({
         backdropDismiss: false, // disable alert dismiss when backdrop is clicked
-        header: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateHeader" : "Start.appUpdateHeader")),
+        header: this._translate.instant(
+          isMajorUpdate ? "Start.majorAppUpdateHeader" : "Start.appUpdateHeader"
+        ),
         //subHeader: 'Important message',
-        message: this._translate.instant((isMajorUpdate ? "Start.majorAppUpdateMsg" : "Start.appUpdateMsg")),
-        buttons: (isMajorUpdate ? [btnOption2] : [btnOption1, btnOption2])
+        message: this._translate.instant(
+          isMajorUpdate ? "Start.majorAppUpdateMsg" : "Start.appUpdateMsg"
+        ),
+        buttons: isMajorUpdate ? [btnOption2] : [btnOption1, btnOption2],
       });
       await alert.present();
     }
-
   }
 
   /************/
   /* convert version value to int */
   versionToInt(VersionInString) {
-    let v = VersionInString.split('.');
+    let v = VersionInString.split(".");
     console.log("v: ", v[0] * 100 + v[1] * 10 + v[2] * 1);
-    return (v[0] * 100 + v[1] * 10 + v[2] * 1)
+    return v[0] * 100 + v[1] * 10 + v[2] * 1;
   }
 }
