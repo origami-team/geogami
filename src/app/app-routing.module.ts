@@ -199,6 +199,10 @@ const routes: Routes = [
     path: 'barcode-scanner',
     loadChildren: () => import('./pages/barcode-scanner/barcode-scanner.module').then( m => m.BarcodeScannerPageModule)
   },
+  {
+    path: 'analyze/game-tracks/:bundle',
+    loadChildren: () => import('./pages/analyze-game/game-tracks/game-tracks.module').then( m => m.GameTracksPageModule)
+  },
 ];
 @NgModule({
   imports: [

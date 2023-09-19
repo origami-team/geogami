@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from "@angular/core";
+import { Component, ViewChild, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AlertController, NavController } from "@ionic/angular";
 import { GamesService } from "../../../services/games.service";
