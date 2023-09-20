@@ -134,7 +134,8 @@
         },
         "AnalyzeGame": {
                 "title": "Analyze your GeoGami",
-                "emptyGameTracks": "The games you created have no tracks yet!"
+                "emptyGameTracks": "The games you created have no tracks yet!",
+                "download": "download"
         },
         "CreateGame": {
                 "titleCreateGame": "Develop your GeoGami",

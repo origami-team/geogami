@@ -134,7 +134,8 @@
         },
         "AnalyzeGame": {
                 "title": "Analysiere dein GeoGami",
-                "emptyGameTracks": "Die von Ihnen erstellten Spiele verfügen noch über keine Streckendaten!"
+                "emptyGameTracks": "Die von Ihnen erstellten Spiele verfügen noch über keine Streckendaten!",
+                "download": "herunterladen"
         },
         "CreateGame": {
                 "titleCreateGame": "Entwickle dein GeoGami",
