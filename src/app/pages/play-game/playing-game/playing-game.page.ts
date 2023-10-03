@@ -772,7 +772,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       center: this.isVirtualWorld
         ? virEnvLayers[this.virEnvType].center
         : [8, 51.8],
-      zoom: 2,
+      zoom: this.isVirtualWorld ? virEnvLayers[this.virEnvType].zoom : 2,
       maxZoom: this.isVirtualWorld ? 19.5 : 18,
       maxBounds: this.isVirtualWorld
         ? virEnvLayers[this.virEnvType].bounds
@@ -962,9 +962,51 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map.on("zoom", () => {
       if (this.isVirtualWorld) {
         const currentZoom = this.map.getZoom();
-        console.log("🚀 ~ PlayingGamePage111 ~ this.map.on ~ currentZoom:", currentZoom)
-        /* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details */
-        if (virEnvLayers[this.virEnvType].zoomInLayer1) {
+
+        //* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details
+        //* with 3 zoom levels
+        if (
+          virEnvLayers[this.virEnvType].zoomInLayer1 &&
+          virEnvLayers[this.virEnvType].zoomInLayer2
+        ) {
+          console.log("🚀 ~ PlayingGamePage22222 ~ 3 levels:");
+          if (
+            // currentZoom <= zoomInLayer2
+            currentZoom <= virEnvLayers[this.virEnvType].zoomThreashold2 &&
+            this.map.getStyle().sources.overlay.url !=
+              "assets/vir_envs_layers/" + this.virEnvType + "_zoom2.png"
+          ) {
+            this.updateMapStyleOverlayLayer(
+              "assets/vir_envs_layers/" + this.virEnvType + "_zoom2.png",
+              false
+            );
+            // this.map.setZoom(virEnvLayers[this.virEnvType].zoom);
+          } else if (
+            // currentZoom > zoomInLayer2 && currentZoom < zoomInLayer1
+            currentZoom > virEnvLayers[this.virEnvType].zoomThreashold2 &&
+            currentZoom < virEnvLayers[this.virEnvType].zoomThreashold &&
+            this.map.getStyle().sources.overlay.url !=
+              "assets/vir_envs_layers/" + this.virEnvType + ".png"
+          ) {
+            this.updateMapStyleOverlayLayer(
+              "assets/vir_envs_layers/" + this.virEnvType + ".png",
+              false
+            );
+            // this.map.setZoom(virEnvLayers[this.virEnvType].zoom);
+          } else if (
+            // currentZoom >= zoomInLayer1
+            currentZoom >= virEnvLayers[this.virEnvType].zoomThreashold &&
+            this.map.getStyle().sources.overlay.url !=
+              "assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png"
+          ) {
+            this.updateMapStyleOverlayLayer(
+              "assets/vir_envs_layers/" + this.virEnvType + "_zoom1.png",
+              false
+            );
+          }
+        }
+        //* with 2 zoom levels
+        else if (virEnvLayers[this.virEnvType].zoomInLayer1) {
           if (
             // currentZoom < 17.2 &&
             currentZoom < virEnvLayers[this.virEnvType].zoomThreashold &&
@@ -975,6 +1017,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               "assets/vir_envs_layers/" + this.virEnvType + ".png",
               false
             );
+            // this.map.setZoom(virEnvLayers[this.virEnvType].zoom);
           } else if (
             // currentZoom > 17.5 &&
             currentZoom > virEnvLayers[this.virEnvType].zoomThreashold &&
@@ -1058,7 +1101,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.enableDisableMapInteraction(false);
   }
 
-  /* (V.E.): t load view dir. marker after changing style */
+  /* (V.E.): to load view dir. marker after changing style */
   // ToDo: update it to include all markers and layers- maybe find a way to copy all layers form one ma style to another
   async updateMapStyleOverlayLayer(styleOverlayUrlPath, changeVirEnv) {
     let newStyle = this.map.getStyle();
@@ -1074,7 +1117,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       //* update maxBounds
       this.map.setMaxBounds(virEnvLayers[this.virEnvType].bounds);
       //* update zoom level to 2
-      this.map.setZoom(2);
+      this.map.setZoom(virEnvLayers[this.virEnvType].zoom);
     }
 
     newStyle.sources.overlay.url = styleOverlayUrlPath;
@@ -1668,7 +1711,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           : // null),
 
           this.taskIndex != 0 &&
-            this.task.virEnvType === this.game.tasks[this.taskIndex-1].virEnvType
+            this.task.virEnvType ===
+              this.game.tasks[this.taskIndex - 1].virEnvType
           ? null
           : [
               virEnvLayers[this.virEnvType].initialPosition.lng * 111000,

@@ -100,5 +100,6 @@ export const VirEnv_36: Readonly<any> = {
     lng: 235.01 / 111000,
     lat: 48 / 112000,
   },
-  zoomThreashold: 17.2,
+  zoomThreashold: 18.3,
+  zoomThreashold2: 17.5,
 };
