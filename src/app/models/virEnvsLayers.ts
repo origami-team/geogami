@@ -304,15 +304,6 @@ export const virEnvLayers: Readonly<any> = {
     zoom: 17,
     zoomInLayer1: "VirEnv_36_zoom1",
     zoomThreashold: VirEnv_36.zoomThreashold,
-  },
-  VirEnv_37: {
-    name: "Zoom - Training 2",
-    initialPosition: VirEnv_36.initialPosition,
-    overlayCoords: VirEnv_36.overlayCoords,
-    center: [0.004837837838 / 2, 0.003383928571 / 2],
-    bounds: VirEnv_36.bounds,
-    zoom: 17,
-    zoomInLayer1: "VirEnv_37_zoom1",
-    zoomThreashold: VirEnv_36.zoomThreashold,
+    zoomThreashold2: VirEnv_36.zoomThreashold2,
   },
 };
