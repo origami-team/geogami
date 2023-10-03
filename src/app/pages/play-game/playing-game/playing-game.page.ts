@@ -238,7 +238,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           "fill-outline-color": getComputedStyle(
             document.documentElement
           ).getPropertyValue("--ion-color-secondary"),
-          "fill-opacity": 0.5,
+          "fill-opacity": 0.2,
         },
       },
       // polygon outline stroke
