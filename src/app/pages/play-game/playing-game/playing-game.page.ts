@@ -553,7 +553,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           // VR world
           // Check game type either real or VR world
           if (game.virEnvType !== undefined) {
-            this.virEnvType = game.virEnvType;
+            this.virEnvType = game.tasks[0].virEnvType;
             // console.log("--1---game.virEnvType---: ", this.virEnvType)
           }
 
