@@ -242,6 +242,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_29_satellite",
   },
   VirEnv_30: {
     name: "MM - ",
@@ -250,6 +251,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_30_satellite",
   },
   VirEnv_31: {
     name: "MM - ",
@@ -258,6 +260,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_31_satellite",
   },
   VirEnv_32: {
     name: "MM",
@@ -266,6 +269,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_32_satellite",
   },
   VirEnv_33: {
     name: "MM - ",
@@ -274,6 +278,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_33_satellite",
   },
   VirEnv_34: {
     name: "Zoom - Post Easy",
