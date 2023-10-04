@@ -175,7 +175,7 @@ export const VirEnvHeaders: ReadonlyArray<any> = [
     img_url: "assets/vir_envs_layers/VirEnv_35.png",
   },
   {
-    envName: "Zoom - Training 1",
+    envName: "Zoom - Training",
     layerName: "VirEnv_36",
     img_url: "assets/vir_envs_layers/VirEnv_36.png",
   },
