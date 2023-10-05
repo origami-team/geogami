@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-  AfterViewInit,
-} from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { cloneDeep } from "lodash";
 
@@ -26,6 +19,7 @@ import { navtasksMultiplayers2 } from "src/app/models/navigation-tasks-multi_2_p
 import { themetasksMultiplayers3 } from "src/app/models/theme-tasks-multi-3-players";
 import { themetasksMultiplayers2 } from "src/app/models/theme-tasks-multi-2-players";
 import { VirEnvHeaders } from "src/app/models/virEnvsHeader";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
 
 @Component({
   selector: "app-create-task-modal",

@@ -125,7 +125,7 @@ export class EditGameOverviewPage implements AfterViewInit {
             "fill-outline-color": getComputedStyle(
               document.documentElement
             ).getPropertyValue("--ion-color-warning"),
-            "fill-opacity": 0.5,
+            "fill-opacity": 0.2,
           },
         },
         // polygon outline stroke

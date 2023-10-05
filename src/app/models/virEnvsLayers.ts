@@ -242,6 +242,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_29_satellite",
   },
   VirEnv_30: {
     name: "MM - ",
@@ -250,6 +251,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_30_satellite",
   },
   VirEnv_31: {
     name: "MM - ",
@@ -258,6 +260,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_31_satellite",
   },
   VirEnv_32: {
     name: "MM",
@@ -266,6 +269,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_32_satellite",
   },
   VirEnv_33: {
     name: "MM - ",
@@ -274,6 +278,7 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.002252252252 / 2, 0.002232142857 / 2],
     bounds: VirEnv_22.bounds,
     zoom: 17,
+    satellite: "VirEnv_33_satellite",
   },
   VirEnv_34: {
     name: "Zoom - Post Easy",
@@ -296,23 +301,15 @@ export const virEnvLayers: Readonly<any> = {
     zoomThreashold: VirEnv_34.zoomThreashold,
   },
   VirEnv_36: {
-    name: "Zoom - Training 1",
+    name: "Zoom - Training",
     initialPosition: VirEnv_36.initialPosition,
     overlayCoords: VirEnv_36.overlayCoords,
-    center: [0.004837837838 / 2, 0.003383928571 / 2],
+    center: [0.002119500085399295, 0.0008621423878878431 ],
     bounds: VirEnv_36.bounds,
-    zoom: 17,
+    zoom: 17.5,
     zoomInLayer1: "VirEnv_36_zoom1",
+    zoomInLayer2: "VirEnv_36_zoom2",
     zoomThreashold: VirEnv_36.zoomThreashold,
-  },
-  VirEnv_37: {
-    name: "Zoom - Training 2",
-    initialPosition: VirEnv_36.initialPosition,
-    overlayCoords: VirEnv_36.overlayCoords,
-    center: [0.004837837838 / 2, 0.003383928571 / 2],
-    bounds: VirEnv_36.bounds,
-    zoom: 17,
-    zoomInLayer1: "VirEnv_37_zoom1",
-    zoomThreashold: VirEnv_36.zoomThreashold,
+    zoomThreashold2: VirEnv_36.zoomThreashold2,
   },
 };
