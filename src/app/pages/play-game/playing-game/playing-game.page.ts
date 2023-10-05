@@ -1678,7 +1678,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* set avatar initial position */
     if (this.isVirtualWorld) {
-      console.log("🚀 ~ initTask ~ socketService:");
+      // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
 
       //* update vir env map overlay layer
@@ -1686,9 +1686,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.task.virEnvType != undefined &&
         this.task.virEnvType != this.virEnvType
       ) {
-        console.log(
+        /* console.log(
           "🚀 ~-- initTask ~ this.task.virEnvType != this.virEnvType:"
-        );
+        ); */
         this.virEnvType = this.task.virEnvType;
         this.updateMapStyleOverlayLayer(
           "assets/vir_envs_layers/" + this.task.virEnvType + ".png",

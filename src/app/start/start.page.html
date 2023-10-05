@@ -96,7 +96,7 @@
 
   <!--  -->
   <ion-card
-    *ngIf="(user | async)?.username && ['admin', 'contentAdmin'].includes( (user | async)?.roles[0] )"
+    *ngIf="(user | async)?.username && ['admin'].includes( (user | async)?.roles[0] )"
     id="user_management"
     (click)="navigateUserManagement()"
     color="secondary"
