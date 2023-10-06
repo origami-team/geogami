@@ -19,6 +19,22 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- (Vir. Env.): enable teacher to choose a vir. env. -->
+  <ion-item *ngIf="isVirtualWorld" class="ion-no-padding">
+    <h5>Choose a virtual world</h5>
+    &nbsp;&nbsp;
+
+    <select [(ngModel)]="virEnvType" interface="popover">
+      <option
+        *ngFor="let virEnvitem of virEnvTypesList; let i = index"
+        [ngValue]="virEnvitem.layerName"
+      >
+        {{ i + 1 }}: {{ virEnvitem.envName }}
+      </option>
+    </select>
+  </ion-item>
+  <!--  -->
+
   <ion-card color="warning">
     <ion-card-content>
       <ion-icon name="help-circle"></ion-icon>
@@ -27,7 +43,6 @@
   </ion-card>
 
   <h5>{{ "CreateGame.informationText" | translate }}</h5>
-
   <ion-textarea
     autoGrow
     placeholder="{{ 'General.pl_optional' | translate }}"
@@ -39,12 +54,7 @@
       {{ "CreateGame.markdownSupported" | translate }}
       <ion-icon
         name="information-circle"
-        (click)="
-          showPopover(
-            $event,
-            'Popover.markdown'
-          )
-        "
+        (click)="showPopover($event, 'Popover.markdown')"
       >
       </ion-icon>
     </p>
@@ -55,6 +65,34 @@
   <app-audio-recorder
     [(audioSource)]="task.question.audio"
   ></app-audio-recorder>
+
+  <!-- set avatar initial position and direction -->
+  <ion-item class="ion-no-padding" *ngIf="isVirtualWorld">
+    <h5>
+      Set avatar initial position and direction 🧍‍♂️
+      <ion-icon
+        name="information-circle"
+        (click)="
+          showPopover($event, 'Set avatar initial position and direction')
+        "
+      >
+      </ion-icon>
+    </h5>
+    <ion-toggle
+      color="danger"
+      [(ngModel)]="initialAvatarPositionStatus"
+      (ngModelChange)="initialAvatarPosToggleChange()"
+    ></ion-toggle>
+  </ion-item>
+  <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
+    <app-map
+      featureType="direction"
+      [(feature)]="task.question.initialAvatarPosition"
+      [isVirtualWorld]="isVirtualWorld"
+      [isVRMirrored]="isVRMirrored"
+      [virEnvType]="virEnvType"
+    ></app-map>
+  </div>
 
   <h5>{{ "CreateGame.photos" | translate }}</h5>
 
