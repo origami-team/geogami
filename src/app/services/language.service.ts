@@ -38,7 +38,7 @@ export class LanguageService {
     return [
       { value: 'de', img: '🇩🇪', text: 'Deutsch' },
       { value: 'en', img: '🇺🇸', text: 'English' },
-      //{ value: 'pt', img: '🇵🇹' },
+      { value: 'ar', img: '🇪🇬', text: 'Arabic' },
     ];
   }
 
