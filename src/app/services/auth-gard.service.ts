@@ -8,6 +8,7 @@ import { AuthService } from './auth-service.service';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
+  //* a guard to decide if a route can be activated https://angular.io/api/router/CanActivate
   canActivate() {
     if (this.authService.getUserValue()) {
       return true;
