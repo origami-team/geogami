@@ -116,8 +116,8 @@ export class StartPage implements OnInit {
       this.navCtrl.navigateForward(`create-game/${"userRole"}`);
     } */
 
-    //* ToDo update it (remove bundle)
-    this.navCtrl.navigateForward(`create-game/${"userRole"}`);
+    //* send user role
+    this.navCtrl.navigateForward(`create-game/${this.userRole}`);
   }
 
   navigateShowroomPage() {

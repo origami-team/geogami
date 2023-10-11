@@ -74,7 +74,10 @@
       <ion-item lines="none" color="secondary">
         <ion-label>
           <h2>
-            <ion-icon name="game-controller"></ion-icon
+            <ion-icon
+              name="game-controller"
+              style="vertical-align: sub"
+            ></ion-icon
             ><span *ngIf="game.place"
               ><b>&nbsp;&nbsp;{{ game.place }}</b> -
             </span>
@@ -91,6 +94,12 @@
         >
         <!-- <ion-icon slot="end" *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star"
           [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+        <ion-icon
+          slot="end"
+          *ngIf="game.isCuratedGame"
+          name="star"
+          color="warning"
+        ></ion-icon>
       </ion-item>
     </ion-card-header>
   </ion-card>

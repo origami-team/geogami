@@ -133,7 +133,9 @@ export class MapComponent
     this.map.removeLayer("viewDirectionClick");
     this.map.removeSource("viewDirectionClick");
     this.showDirectionMarker = false;
-    this.featureChange.emit({ bearing: 0, position: undefined });
+
+    this.feature = undefined;
+    this.featureChange.emit({ initialAvatarPosition: undefined });
   }
 
   // _onChange = (feature: GeoJSON.Feature<GeoJSON.Point>) => {
