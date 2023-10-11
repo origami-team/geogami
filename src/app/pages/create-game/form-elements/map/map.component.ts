@@ -73,13 +73,13 @@ export class MapComponent
     this.map.remove();
   }
   ngOnInit(): void {
-    // console.log('// isSingleMode (map comp): ', this.isSingleMode)
+    // // console.log('// isSingleMode (map comp): ', this.isSingleMode)
   }
 
   // Compare the input feature value before and after change task type
   // to keep flags on map
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("ngOnChanges (mapComponent): ", changes);
+  // console.log("ngOnChanges (mapComponent): ", changes);
     // if (this.isSingleMode) {
     if (changes.answer) {
       //* we need to add it "if condtionns" to specify what to change
@@ -211,7 +211,7 @@ export class MapComponent
 
     this.map.on("click", (e) => {
       // temp
-      // console.log("allPlayersFeatures", this.allPlayersFeatures)
+      // // console.log("allPlayersFeatures", this.allPlayersFeatures)
 
       if (this.featureType == "point") {
         this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
@@ -219,7 +219,7 @@ export class MapComponent
         this._onChange(this.feature);
 
         // Temporary show loc of selected flag
-        console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
+      // console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
       }
 
       if (this.featureType == "direction") {
