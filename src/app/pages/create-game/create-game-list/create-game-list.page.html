@@ -107,13 +107,6 @@
                   {{ "CreateTasks.information" | translate }}
                 </ion-label>
               </ion-chip>
-
-              <!-- show extra info (env. type & question text) only with a specific width -->
-              <env-type-question-text
-                [isVirtualWorld]="isVirtualWorld"
-                [virEnvType]="task.virEnvType"
-                [questionText]="task.question.text"
-              ></env-type-question-text>
             </div>
 
             <ion-icon
