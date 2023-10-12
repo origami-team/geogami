@@ -1,7 +1,7 @@
 <ion-content fullscreen>
   <ion-item lines="none" class="shiftLanIOS">
     <ion-select
-      [placeholder]="selected=='de'? '🇩🇪': '🇺🇸'"
+      [placeholder]="selected"
       (ionChange)="changeLng($event.detail.value);"
       interface="customPopoverOptions"
       interface="popover"
