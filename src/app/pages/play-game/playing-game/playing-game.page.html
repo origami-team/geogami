@@ -64,6 +64,14 @@
       </ion-button>
     </ion-card>
 
+    <!-- (VR) To change map material map layers (normal-satellite) -->
+    <ion-card class="overlay feature-button" *ngIf="virEnvLayers_data[this.virEnvType] && virEnvLayers_data[this.virEnvType].satellite"
+      (click)="toggleSatellite()">
+      <ion-button fill="clear">
+        <ion-icon name="map-sharp" size="large"></ion-icon>
+      </ion-button>
+    </ion-card>
+
     <div #panel>
       <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized"
         [class.full]="task.type == 'nav-arrow'" *ngIf="task">
