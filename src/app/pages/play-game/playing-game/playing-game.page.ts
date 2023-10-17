@@ -138,6 +138,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   initialAvatarDir: number;
   currentSecond: number = 0;
   gameCode: string = "";
+  virEnvLayers_data = virEnvLayers;
 
   // degree for nav-arrow
   heading = 0;
@@ -1106,9 +1107,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   async updateMapStyleOverlayLayer(styleOverlayUrlPath, changeVirEnv) {
     let newStyle = this.map.getStyle();
 
-    //* update layer image
-    newStyle.sources.overlay.url =
-      "assets/vir_envs_layers/" + this.virEnvType + ".png";
+    /* newStyle.sources.overlay.url =
+      "assets/vir_envs_layers/" + this.virEnvType + ".png"; */
 
     if (changeVirEnv) {
       //* update layer dimensions
@@ -1116,10 +1116,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         virEnvLayers[this.virEnvType].overlayCoords;
       //* update maxBounds
       this.map.setMaxBounds(virEnvLayers[this.virEnvType].bounds);
-      //* update zoom level to 2
+      //* update zoom level of the env.
       this.map.setZoom(virEnvLayers[this.virEnvType].zoom);
     }
 
+    //* update layer image
     newStyle.sources.overlay.url = styleOverlayUrlPath;
     this.map.setStyle(newStyle);
   }
@@ -2386,6 +2387,29 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       setTimeout(() => {
         this.geolocateButton = true;
       }, 20000);
+    }
+  }
+
+  toggleSatellite() {
+    let currentMapStyle = this.map.getStyle();
+    let normalLayerPath = "assets/vir_envs_layers/" + this.virEnvType + ".png";
+    let satelliteLayerPath =
+      "assets/vir_envs_layers/" + this.virEnvType + "_satellite.png";
+    
+
+    if (currentMapStyle.sources.overlay.url == normalLayerPath) {
+      //* update layer image
+      this.updateMapStyleOverlayLayer(
+        satelliteLayerPath,
+        false
+      );
+      
+    } else {
+      //* update layer image
+      this.updateMapStyleOverlayLayer(
+        normalLayerPath,
+        false
+      );
     }
   }
 
