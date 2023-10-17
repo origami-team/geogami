@@ -78,7 +78,8 @@
     "3DonDemand": "رؤية ثلاثية الأبعاد عند الطلب",
     "blankMap": "خريطة فارغة",
     "blankMapAndSatelliteSwipe": "(خريطة فارغة وصورة القمر الصناعي (تمرير",
-    "keepTrack": "الاحتفاظ بالمسار على الخريطة"
+    "keepTrack": "الاحتفاظ بالمسار على الخريطة",
+    "switchLayer": "(map matrial vir. env.) التبديل إلى طبقة القمر الصناعي"
   },
   "GameList": {
     "titleGameMenu": "حدد بيئة اللعبة",

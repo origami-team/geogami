@@ -3,7 +3,6 @@ import {
   OnInit,
   ViewChild,
   ChangeDetectorRef,
-  ElementRef,
   OnDestroy,
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -138,7 +137,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   initialAvatarDir: number;
   currentSecond: number = 0;
   gameCode: string = "";
-  virEnvLayers_data = virEnvLayers;
 
   // degree for nav-arrow
   heading = 0;
@@ -2395,21 +2393,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     let normalLayerPath = "assets/vir_envs_layers/" + this.virEnvType + ".png";
     let satelliteLayerPath =
       "assets/vir_envs_layers/" + this.virEnvType + "_satellite.png";
-    
 
     if (currentMapStyle.sources.overlay.url == normalLayerPath) {
       //* update layer image
-      this.updateMapStyleOverlayLayer(
-        satelliteLayerPath,
-        false
-      );
-      
+      this.updateMapStyleOverlayLayer(satelliteLayerPath, false);
     } else {
       //* update layer image
-      this.updateMapStyleOverlayLayer(
-        normalLayerPath,
-        false
-      );
+      this.updateMapStyleOverlayLayer(normalLayerPath, false);
     }
   }
 

@@ -20,6 +20,7 @@ import { cloneDeep } from "lodash";
 import { standardMapFeatures } from "../../../models/standardMapFeatures";
 import { TranslateService } from "@ngx-translate/core";
 import { PopoverComponent } from "src/app/popover/popover.component";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
 
 @Component({
   selector: "app-map-features-modal",
@@ -38,6 +39,9 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
   @Input() virEnvType: string;
+
+  // to show (switch map layer to satellite) feature only for map material vir. envs
+  virEnvLayers_data = virEnvLayers;
 
   constructor(
     public modalController: ModalController,
