@@ -133,6 +133,7 @@
       [(feature)]="question.geometry"
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
+      [virEnvType]="virEnvType"
     ></app-map>
   </div>
 
@@ -168,7 +169,7 @@
     ></app-map>
   </div>
 
-  <!-- Viewing direction - Single-player -->
+  <!-- Viewing direction - theme->directionDetermination->indicatedByArrow - Single-player -->
   <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION">
     <h5>
       {{ "CreateGame.destinationDirection" | translate }}
@@ -183,6 +184,7 @@
       [(feature)]="question.direction"
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
+      [virEnvType]="virEnvType"
     ></app-map>
   </div>
 
@@ -215,7 +217,7 @@
     ></app-map>
   </div>
 
-  <!-- Direction on the map - Single-player -->
+  <!-- Direction on the map - theme->directionDetermination->shownOnMap - Single-player -->
   <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_MARKER">
     <h5>
       {{ "CreateGame.directionMap" | translate }}
@@ -234,7 +236,7 @@
     ></app-map>
   </div>
 
-  <!-- Photo of the direction - Single-player -->
+  <!-- Photo of the direction - theme->directionDetermination->displayedWithPhoto - Single-player -->
   <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_PHOTO">
     <h5>
       {{ "CreateGame.photoDirection" | translate }}
@@ -256,7 +258,12 @@
       >
       </ion-icon>
     </h5>
-    <app-map featureType="direction" [(feature)]="question.direction"></app-map>
+    <app-map
+      featureType="direction"
+      [(feature)]="question.direction"
+      [isVirtualWorld]="isVirtualWorld"
+      [virEnvType]="virEnvType"
+    ></app-map>
   </div>
 
   <!-- Photo for the task - Single-player -->
@@ -906,6 +913,7 @@
           <app-map
             featureType="direction"
             [(feature)]="question[i].direction"
+            [virEnvType]="virEnvType"
           ></app-map>
         </div>
       </ion-card-content>

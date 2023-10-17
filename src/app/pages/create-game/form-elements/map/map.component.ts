@@ -170,15 +170,7 @@ export class MapComponent
   };
 
   initMap() {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA";
-
-    // Set bounds of VR world
-    var bounds = [
-      [0.0002307207207 - 0.002, 0.0003628597122 - 0.002], // Southwest coordinates
-      [0.003717027207 + 0.002, 0.004459082914 + 0.002], // Northeast coordinates
-    ];
-
+    mapboxgl.accessToken = environment.mapboxAccessToken;
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       /* style: (this.isVirtualWorld ?
