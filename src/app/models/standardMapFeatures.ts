@@ -13,5 +13,6 @@ export const standardMapFeatures: MapFeatures = {
     reducedInformation: false,
     landmarks: false,
     landmarkFeatures: undefined,
-    reducedMapSectionDiameter: 20
+    reducedMapSectionDiameter: 20,
+    switchLayer: 'none'
 };

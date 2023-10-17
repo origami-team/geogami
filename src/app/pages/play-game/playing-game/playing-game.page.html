@@ -65,7 +65,7 @@
     </ion-card>
 
     <!-- (VR) To change map material map layers (normal-satellite) -->
-    <ion-card class="overlay feature-button" *ngIf="virEnvLayers_data[this.virEnvType] && virEnvLayers_data[this.virEnvType].satellite"
+    <ion-card class="overlay feature-button" *ngIf="task?.mapFeatures?.switchLayer == 'true'"
       (click)="toggleSatellite()">
       <ion-button fill="clear">
         <ion-icon name="map-sharp" size="large"></ion-icon>
