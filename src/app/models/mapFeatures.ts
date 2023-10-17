@@ -12,7 +12,9 @@ export class MapFeatures {
         public landmarks: boolean,
         public landmarkFeatures: any,
         public reducedInformation: boolean,
-        public reducedMapSectionDiameter: number
+        public reducedMapSectionDiameter: number,
+        public switchLayer: String
+
     ) { }
 }
 

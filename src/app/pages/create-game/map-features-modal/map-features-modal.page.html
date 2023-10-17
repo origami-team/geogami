@@ -6,7 +6,8 @@
       </ion-button>
     </ion-buttons>
     <ion-title>
-      <ion-icon color="danger" name="map"></ion-icon> {{ "General.mapfeatures" | translate }}
+      <ion-icon color="danger" name="map"></ion-icon> {{ "General.mapfeatures" |
+      translate }}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button color="dark" (click)="dismissModal(null)">
@@ -25,7 +26,11 @@
     </ion-item> -->
     <ion-item>
       <ion-label>{{ "Mapfeatures.zoom" | translate }}</ion-label>
-      <select [(ngModel)]="features.zoombar" (change)="onZoomChange()" interface="popover">
+      <select
+        [(ngModel)]="features.zoombar"
+        (change)="onZoomChange()"
+        interface="popover"
+      >
         <option value="true">{{ "Mapfeatures.manual" | translate }}</option>
         <option value="task">{{ "Mapfeatures.zoomToTask" | translate }}</option>
         <option value="game">{{ "Mapfeatures.zoomToBB" | translate }}</option>
@@ -36,33 +41,68 @@
       <ion-label>{{ "Mapfeatures.mapSection" | translate }}</ion-label>
       <select [(ngModel)]="features.pan" interface="popover">
         <option value="true">{{ "Mapfeatures.panningOn" | translate }}</option>
-        <option value="center" [disabled]="features.zoombar == 'task' || features.zoombar == 'game'">{{ "Mapfeatures.autoCentered" | translate }}</option>
+        <option
+          value="center"
+          [disabled]="features.zoombar == 'task' || features.zoombar == 'game'"
+        >
+          {{ "Mapfeatures.autoCentered" | translate }}
+        </option>
         <option value="static">{{ "Mapfeatures.static" | translate }}</option>
       </select>
     </ion-item>
     <ion-item>
       <ion-label>{{ "Mapfeatures.mapRotation" | translate }}</ion-label>
       <select [(ngModel)]="features.rotation" interface="popover">
-        <option value="north">{{ "Mapfeatures.fixedToNorth" | translate }}</option>
+        <option value="north">
+          {{ "Mapfeatures.fixedToNorth" | translate }}
+        </option>
         <option value="manual">{{ "Mapfeatures.manual" | translate }}</option>
         <option value="auto">{{ "Mapfeatures.automatic" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="button">{{ "Mapfeatures.automaticOnDemand" | translate }}</option>
+        <option *ngIf="!isVirtualWorld" value="button">
+          {{ "Mapfeatures.automaticOnDemand" | translate }}
+        </option>
       </select>
     </ion-item>
     <ion-item>
       <ion-label>{{ "Mapfeatures.mapType" | translate }}</ion-label>
       <select [(ngModel)]="features.material" interface="popover">
-        <option value="standard">{{ "Mapfeatures.standardMap" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="selection">{{ "Mapfeatures.mapChoice" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="sat">{{ "Mapfeatures.satellite" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="sat-button">{{ "Mapfeatures.satelliteOnDemand" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="sat-swipe">{{ "Mapfeatures.satelliteSwipe" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="3D">{{ "Mapfeatures.3D" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="3D-button">{{ "Mapfeatures.3DonDemand" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="blank">{{ "Mapfeatures.blankMap" | translate }}</option>
-        <option *ngIf='!isVirtualWorld' value="blank-swipe">
+        <option value="standard">
+          {{ "Mapfeatures.standardMap" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="selection">
+          {{ "Mapfeatures.mapChoice" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="sat">
+          {{ "Mapfeatures.satellite" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="sat-button">
+          {{ "Mapfeatures.satelliteOnDemand" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="sat-swipe">
+          {{ "Mapfeatures.satelliteSwipe" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="3D">
+          {{ "Mapfeatures.3D" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="3D-button">
+          {{ "Mapfeatures.3DonDemand" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="blank">
+          {{ "Mapfeatures.blankMap" | translate }}
+        </option>
+        <option *ngIf="!isVirtualWorld" value="blank-swipe">
           {{ "Mapfeatures.blankMapAndSatelliteSwipe" | translate }}
         </option>
+      </select>
+    </ion-item>
+    <!-- switch map layer to satellite (only for Vir.Env. map material tasks) -->
+    <ion-item
+      *ngIf="isVirtualWorld && virEnvLayers_data[this.virEnvType] && virEnvLayers_data[this.virEnvType].satellite"
+    >
+      <ion-label>{{ "Mapfeatures.switchLayer" | translate }}</ion-label>
+      <select [(ngModel)]="features.switchLayer" interface="popover">
+        <option value="none">{{ "Mapfeatures.off" | translate }}</option>
+        <option value="true">{{ "Mapfeatures.on" | translate }}</option>
       </select>
     </ion-item>
 
@@ -86,7 +126,7 @@
       </select>
     </ion-item>
 
-    <ion-item style="--border-style: none;">
+    <ion-item style="--border-style: none">
       <ion-label>{{ "Mapfeatures.track" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.track"></ion-toggle>
     </ion-item>
@@ -94,26 +134,39 @@
     <ion-item [disabled]="! features.track">
       <ion-label>
         {{ "Mapfeatures.keepTrack" | translate }}
-      <ion-icon
-        name="information-circle"
-        (click)="showPopover($event, 'Popover.showTrack')">
-      </ion-icon>
-    </ion-label>
+        <ion-icon
+          name="information-circle"
+          (click)="showPopover($event, 'Popover.showTrack')"
+        >
+        </ion-icon>
+      </ion-label>
       <select interface="popover" [(ngModel)]="features.keepTrack">
-        <option ngValue="current">{{ "DrawSetting.onlyCurrentTask" | translate }}</option>
-        <option ngValue="next">{{ "DrawSetting.alsoNextTask" | translate }}</option>
-        <option ngValue="all">{{ "DrawSetting.inEntireGame" | translate }}</option>
+        <option ngValue="current">
+          {{ "DrawSetting.onlyCurrentTask" | translate }}
+        </option>
+        <option ngValue="next">
+          {{ "DrawSetting.alsoNextTask" | translate }}
+        </option>
+        <option ngValue="all">
+          {{ "DrawSetting.inEntireGame" | translate }}
+        </option>
       </select>
     </ion-item>
 
     <ion-item>
       <ion-label>{{ "Mapfeatures.streetMarker" | translate }}</ion-label>
-      <ion-toggle color="danger" [(ngModel)]="features.streetSection"></ion-toggle>
+      <ion-toggle
+        color="danger"
+        [(ngModel)]="features.streetSection"
+      ></ion-toggle>
     </ion-item>
 
-    <ion-item style="--border-style: none;">
+    <ion-item style="--border-style: none">
       <ion-label>{{ "Mapfeatures.buffer" | translate }}</ion-label>
-      <ion-toggle color="danger" [(ngModel)]="features.reducedInformation"></ion-toggle>
+      <ion-toggle
+        color="danger"
+        [(ngModel)]="features.reducedInformation"
+      ></ion-toggle>
     </ion-item>
 
     <ion-item>
