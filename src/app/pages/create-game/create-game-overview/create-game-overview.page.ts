@@ -467,6 +467,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.utilService.showAlertNoConnection();
       return;
     }
+  
+    // Remove extra spaces from game name
+    this.game.name = this.game.name.trim();
 
     // Remove extra spaces from game name
     this.game.name = this.game.name.trim();
@@ -476,7 +479,6 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.showNameError = true;
       return;
     }
-
     // // console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
