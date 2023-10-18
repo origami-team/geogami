@@ -85,7 +85,7 @@ import { virEnvLayers } from "src/app/models/virEnvsLayers";
 })
 export class PlayingGamePage implements OnInit, OnDestroy {
   // treshold to trigger location arrive
-  public static triggerTreshold: Number = 20;
+  public static triggerTreshold: number = 20;
 
   public static showSuccess = false;
   geofenceAlert: boolean;
@@ -2142,7 +2142,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   async onOkClicked() {
-    console.log("onOkClicked//////");
     const isCorrect = true;
     const answer: any = {};
 
