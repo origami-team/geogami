@@ -79,7 +79,7 @@ export class AnalyzeGameListPage implements OnInit {
       });
       this.tracks = ret.files;
     } catch (e) {
-      console.error("Unable to read dir", e);
+      // console.error("Unable to read dir", e);
     }
   }
   //--- ToDo
@@ -89,7 +89,7 @@ export class AnalyzeGameListPage implements OnInit {
       directory: FilesystemDirectory.Documents,
       encoding: FilesystemEncoding.UTF8,
     });
-    console.log(contents);
+// console.log(contents);
 
     this.http
       .post(`${environment.apiURL}/track`, JSON.parse(contents.data), {

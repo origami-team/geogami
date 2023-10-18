@@ -57,7 +57,7 @@ export class CreateGameMapPage implements OnInit {
 
     // let watch = this.geolocation.watchPosition();
     // watch.subscribe((data) => {
-    //   console.log(data)
+    // // console.log(data)
     // });
 
     // Add geolocate control to the map.
@@ -81,7 +81,7 @@ export class CreateGameMapPage implements OnInit {
           marker: newMarker,
           tasks: []
         });
-        console.log(this.waypoints);
+      // console.log(this.waypoints);
         this.toggleAddMarker();
         this.presentTaskModal(this.waypoints.length - 1);
       }
@@ -90,7 +90,7 @@ export class CreateGameMapPage implements OnInit {
   }
 
   async presentTaskModal(index: Number) {
-    console.log(index);
+  // console.log(index);
     const modal = await this.modalController.create({
       component: CreateTaskModalPage,
       backdropDismiss: false,
