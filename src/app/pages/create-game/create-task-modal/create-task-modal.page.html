@@ -381,7 +381,7 @@
     <ion-text>
       <h5>{{ "CreateGame.addSettings" | translate }}</h5>
     </ion-text>
-    <ion-item lines="none" *ngIf="task.type == 'nav-flag'">
+    <ion-item lines="none" *ngIf="task.type == 'nav-flag' || task.type == 'nav-text'">
       <ion-label>
         {{ "CreateGame.confirmation" | translate }}
         <ion-icon

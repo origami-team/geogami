@@ -21,7 +21,7 @@ import { AvatarPosition } from "src/app/models/avatarPosition";
 import { Coords } from "src/app/models/coords";
 import { environment } from "src/environments/environment";
 import { TranslateService } from "@ngx-translate/core";
- 
+
 enum FeedbackType {
   Correct,
   Wrong,
@@ -37,143 +37,176 @@ enum FeedbackType {
   inputs: [],
 })
 export class FeedbackComponent {
-    private positionSubscription: Subscription;
-    private task: Task;
-    private lastKnownPosition: GeolocationPosition;
-    private Math: Math = Math;
-    private audioPlayer: HTMLAudioElement = new Audio();
+  private positionSubscription: Subscription;
+  private task: Task;
+  private lastKnownPosition: GeolocationPosition;
+  private Math: Math = Math;
+  private audioPlayer: HTMLAudioElement = new Audio();
 
-    // VR world
-    private avatarPositionSubscription: Subscription;
-    private avatarOrientationSubscription: Subscription;
-    avatarLastKnownPosition: AvatarPosition;
-    private waypoint: any;
-    isVirtualWorld: boolean = false;
+  // VR world
+  private avatarPositionSubscription: Subscription;
+  private avatarOrientationSubscription: Subscription;
+  avatarLastKnownPosition: AvatarPosition;
+  private waypoint: any;
+  isVirtualWorld: boolean = false;
 
-    showFeedback = false;
-    private feedback: any = {
-        text: '',
-        icon: '',
-        solution: '',
-        img: '',
-        hint: ''
-    };
-    private feedbackRetry = false;
+  showFeedback = false;
+  private feedback: any = {
+    text: "",
+    icon: "",
+    solution: "",
+    img: "",
+    hint: "",
+  };
+  private feedbackRetry = false;
 
-    private map: any;
-    private geolocationService: OrigamiGeolocationService;
-    private helperService: HelperService;
-    private toastController: ToastController;
-    private trackerService: TrackerService;
-    private playingGamePage: PlayingGamePage;
+  private map: any;
+  private geolocationService: OrigamiGeolocationService;
+  private helperService: HelperService;
+  private toastController: ToastController;
+  private trackerService: TrackerService;
+  private playingGamePage: PlayingGamePage;
 
-    private feedbackDuration = 4000;
-    deviceOrientationSubscription: any;
-    private direction: number;
-    successColor: string;
+  private feedbackDuration = 4000;
+  deviceOrientationSubscription: any;
+  private direction: number;
+  successColor: string;
 
-    private DIRECTION_TRESHOLD = 30;
+  private DIRECTION_TRESHOLD = 30;
 
-     constructor(
-       private orientationService: OrigamiOrientationService, private changeDetectorRef: ChangeDetectorRef, 
-       private sanitizer: DomSanitizer,
-       private translate: TranslateService) { }
+  constructor(
+    private orientationService: OrigamiOrientationService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
+    private translate: TranslateService
+  ) {}
 
-    init(map: any, geolocationService: OrigamiGeolocationService, helperService: HelperService, toastController: ToastController, trackerService: TrackerService, playingGamePage: PlayingGamePage) {
-      this.map = map;
-      this.geolocationService = geolocationService;
-      this.helperService = helperService;
-      this.toastController = toastController;
-      this.trackerService = trackerService;
-      this.playingGamePage = playingGamePage;
+  init(
+    map: any,
+    geolocationService: OrigamiGeolocationService,
+    helperService: HelperService,
+    toastController: ToastController,
+    trackerService: TrackerService,
+    playingGamePage: PlayingGamePage
+  ) {
+    this.map = map;
+    this.geolocationService = geolocationService;
+    this.helperService = helperService;
+    this.toastController = toastController;
+    this.trackerService = trackerService;
+    this.playingGamePage = playingGamePage;
 
-      this.successColor = getComputedStyle(
-        document.documentElement
-      ).getPropertyValue("--ion-color-success");
-  
-      this.map.loadImage(
-        "/assets/icons/marker-editor-solution.png",
-        (error, image) => {
-          if (error) throw error;
-  
-          this.map.addImage("geolocate-solution", image);
-        }
-      );
-  
-      this.map.loadImage(
-        "/assets/icons/directionv2-solution.png",
-        (error, image) => {
-          if (error) throw error;
-  
-          this.map.addImage("direction-solution", image);
-        }
-      );
-  
-      this.map.loadImage("/assets/icons/directionv2.png", (error, image) => {
+    this.successColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--ion-color-success");
+
+    this.map.loadImage(
+      "/assets/icons/marker-editor-solution.png",
+      (error, image) => {
         if (error) throw error;
-  
-        this.map.addImage("directionv2", image);
-      });
 
-      this.audioPlayer.src = 
-        "assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3";
-
-      // VR world (to check type of the game)
-      this.isVirtualWorld = playingGamePage.isVirtualWorld;
-
-      if (!this.isVirtualWorld) {
-          this.positionSubscription = 
-            this.geolocationService.geolocationSubscription.subscribe(
-              (position: GeolocationPosition) => {
-              this.lastKnownPosition = position;
-
-              if (this.task && !PlayingGamePage.showSuccess) {
-                  if (this.task.answer.type == AnswerType.POSITION) {
-                      const waypoint = this.task.answer.position.geometry.coordinates;
-
-                      if (this.userDidArrive(waypoint) && 
-                      !this.task.settings.confirmation && 
-                      !this.showFeedback) {
-                          this.onWaypointReached();
-                      }
-                  }
-              }
-          });
-
-          this.deviceOrientationSubscription = 
-            this.orientationService.orientationSubscription.subscribe(
-              (heading: number) => {
-              this.direction = heading;
-          });
-
-      } else {
-          // VR world
-          this.avatarPositionSubscription = this.geolocationService.avatarGeolocationSubscription.subscribe(avatarPosition => {
-
-              if (this.avatarLastKnownPosition === undefined) {
-                  // Initial avatar's positoin to measure target distance that will be displayed in VR app
-                  this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(this.playingGamePage.initialAvatarLoc.lat, this.playingGamePage.initialAvatarLoc.lng));
-              } else if (!Number.isNaN(parseFloat(avatarPosition["z"]))) {
-                  this.avatarLastKnownPosition = new AvatarPosition(0, new Coords(parseFloat(avatarPosition["z"]) / 111200, parseFloat(avatarPosition["x"]) / 111000));
-              }
-
-              if (this.task && !PlayingGamePage.showSuccess) {
-                  if (this.task.answer.type == AnswerType.POSITION) {
-                      this.waypoint = this.task.answer.position.geometry.coordinates;
-                      
-                      if (this.userDidArrive(this.waypoint) && !this.task.settings.confirmation && !this.showFeedback) {
-                          this.onWaypointReached();
-                      }
-                  }
-              }
-          });
-
-          // Avatar's direction
-          this.avatarOrientationSubscription = this.orientationService.avatarOrientationSubscription.subscribe(avatarHeading => {
-              this.direction = avatarHeading;
-          });
+        this.map.addImage("geolocate-solution", image);
       }
+    );
+
+    this.map.loadImage(
+      "/assets/icons/directionv2-solution.png",
+      (error, image) => {
+        if (error) throw error;
+
+        this.map.addImage("direction-solution", image);
+      }
+    );
+
+    this.map.loadImage("/assets/icons/directionv2.png", (error, image) => {
+      if (error) throw error;
+
+      this.map.addImage("directionv2", image);
+    });
+
+    this.audioPlayer.src =
+      "assets/sounds/zapsplat_multimedia_alert_musical_warm_arp_005_46194.mp3";
+
+    // VR world (to check type of the game)
+    this.isVirtualWorld = playingGamePage.isVirtualWorld;
+
+    if (!this.isVirtualWorld) {
+      this.positionSubscription =
+        this.geolocationService.geolocationSubscription.subscribe(
+          (position: GeolocationPosition) => {
+            this.lastKnownPosition = position;
+
+            if (this.task && !PlayingGamePage.showSuccess) {
+              if (this.task.answer.type == AnswerType.POSITION) {
+                const waypoint = this.task.answer.position.geometry.coordinates;
+
+                if (
+                  this.userDidArrive(waypoint) &&
+                  !this.task.settings.confirmation &&
+                  !this.showFeedback
+                ) {
+                  this.onWaypointReached();
+                }
+              }
+            }
+          }
+        );
+
+      this.deviceOrientationSubscription =
+        this.orientationService.orientationSubscription.subscribe(
+          (heading: number) => {
+            this.direction = heading;
+          }
+        );
+    } else {
+      // VR world
+      this.avatarPositionSubscription =
+        this.geolocationService.avatarGeolocationSubscription.subscribe(
+          (avatarPosition) => {
+            if (this.avatarLastKnownPosition === undefined) {
+              // Initial avatar's positoin to measure target distance that will be displayed in VR app
+              this.avatarLastKnownPosition = new AvatarPosition(
+                0,
+                new Coords(
+                  this.playingGamePage.initialAvatarLoc.lat,
+                  this.playingGamePage.initialAvatarLoc.lng
+                )
+              );
+            } else if (!Number.isNaN(parseFloat(avatarPosition["z"]))) {
+              this.avatarLastKnownPosition = new AvatarPosition(
+                0,
+                new Coords(
+                  parseFloat(avatarPosition["z"]) / 111200,
+                  parseFloat(avatarPosition["x"]) / 111000
+                )
+              );
+            }
+
+            if (this.task && !PlayingGamePage.showSuccess) {
+              if (this.task.answer.type == AnswerType.POSITION) {
+                this.waypoint = this.task.answer.position.geometry.coordinates;
+
+                if (
+                  this.userDidArrive(this.waypoint) &&
+                  !this.task.settings.confirmation &&
+                  !this.showFeedback
+                ) {
+                  this.onWaypointReached();
+                }
+              }
+            }
+          }
+        );
+
+      // Avatar's direction
+      this.avatarOrientationSubscription =
+        this.orientationService.avatarOrientationSubscription.subscribe(
+          (avatarHeading) => {
+            this.direction = avatarHeading;
+          }
+        );
     }
+  }
 
   public setTask(task: Task) {
     this.dismissFeedback();
@@ -196,27 +229,42 @@ export class FeedbackComponent {
     let isCorrect = true;
     let answer: any = {};
 
+    console.log("setAnswer-----11111");
     if (this.task.answer.type == AnswerType.POSITION) {
+      console.log("setAnswer-----iffffff-0");
       const waypoint = this.task.answer.position.geometry.coordinates;
       const arrived = this.userDidArrive(waypoint);
+      console.log("setAnswer-----iffffff-1");
       answer = {
         target: waypoint,
-        position: this.lastKnownPosition,
+        position: this.isVirtualWorld
+          ? this.avatarLastKnownPosition
+          : this.lastKnownPosition,
         distance: this.helperService.getDistanceFromLatLonInM(
           waypoint[1],
           waypoint[0],
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), 
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.latitude
+            : this.lastKnownPosition.coords.latitude,
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.longitude
+            : this.lastKnownPosition.coords.longitude
         ),
         correct: arrived,
       };
+      console.log("setAnswer-----iffffff-2");
       isCorrect = arrived;
+      console.log("setAnswer-----iffffff-3");
       if (!arrived) {
+        console.log("setAnswer-----iffffff-4");
         this.initFeedback(false);
       } else {
+        console.log("setAnswer-----iffffff-5");
         this.onWaypointReached();
       }
     }
+
+    console.log("setAnswer-----22222");
 
     if (this.task.type == "theme-loc") {
       if (this.map.getSource("marker-point")) {
@@ -225,8 +273,12 @@ export class FeedbackComponent {
         const distance = this.helperService.getDistanceFromLatLonInM(
           clickPosition[1],
           clickPosition[0],
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), 
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.latitude
+            : this.lastKnownPosition.coords.latitude,
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.longitude
+            : this.lastKnownPosition.coords.longitude
         );
         isCorrect = distance < PlayingGamePage.triggerTreshold;
         answer = {
@@ -377,8 +429,8 @@ export class FeedbackComponent {
       // // console.log(this.Math.abs(directionBearing - compassHeading));
       this.initFeedback(
         this.Math.abs(directionBearing - compassHeading) <=
-          this.DIRECTION_TRESHOLD, 
-          { clickDirection }
+          this.DIRECTION_TRESHOLD,
+        { clickDirection }
       );
       isCorrect =
         this.Math.abs(directionBearing - compassHeading) <=
@@ -525,10 +577,15 @@ export class FeedbackComponent {
         ) {
           const bounds = new mapboxgl.LngLatBounds();
           bounds.extend(options.clickPosition);
-          // // console.log(this.lastKnownPosition.coords);
+          // console.log(this.lastKnownPosition.coords);
+
           bounds.extend([
-            this.lastKnownPosition.coords.longitude,
-            this.lastKnownPosition.coords.latitude,
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.longitude
+              : this.lastKnownPosition.coords.longitude,
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.latitude
+              : this.lastKnownPosition.coords.latitude,
           ]);
 
           this.map.fitBounds(bounds, {
@@ -559,8 +616,12 @@ export class FeedbackComponent {
           const bounds = new mapboxgl.LngLatBounds();
           bounds.extend(this.task.answer.position.coordinates);
           bounds.extend([
-            this.lastKnownPosition.coords.longitude,
-            this.lastKnownPosition.coords.latitude,
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.longitude
+              : this.lastKnownPosition.coords.longitude,
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.latitude
+              : this.lastKnownPosition.coords.latitude,
           ]);
 
           this.map.fitBounds(bounds, {
@@ -608,7 +669,10 @@ export class FeedbackComponent {
         break;
       case FeedbackType.TryAgain:
         this.feedback.icon = "😕";
-        this.feedback.text = this.task.answer?.hints == undefined ? this.translate.instant("Feedback.tryAgain") : "";
+        this.feedback.text =
+          this.task.answer?.hints == undefined
+            ? this.translate.instant("Feedback.tryAgain")
+            : "";
         this.feedbackRetry = true;
         break;
       case FeedbackType.Saved:
@@ -641,7 +705,11 @@ export class FeedbackComponent {
       this.showHint(options);
     }
 
-    if ((this.task.answer.type === AnswerType.MAP_DIRECTION || this.task.answer.type === AnswerType.DIRECTION) && !correct) {
+    if (
+      (this.task.answer.type === AnswerType.MAP_DIRECTION ||
+        this.task.answer.type === AnswerType.DIRECTION) &&
+      !correct
+    ) {
       this.showHint(options);
     }
 
@@ -683,13 +751,20 @@ export class FeedbackComponent {
       const distance = this.helperService.getDistanceFromLatLonInM(
         waypoint[1],
         waypoint[0],
-        (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), 
-        (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
+        this.isVirtualWorld
+          ? this.avatarLastKnownPosition.coords.latitude
+          : this.lastKnownPosition.coords.latitude,
+        this.isVirtualWorld
+          ? this.avatarLastKnownPosition.coords.longitude
+          : this.lastKnownPosition.coords.longitude
       );
       const evalDistance =
         distance - (PlayingGamePage.triggerTreshold as number);
       if (evalDistance > 10) {
-        this.feedback.hint = this.translate.instant("Feedback.distanceFromDistanation1", {distance: `${distance.toFixed(1)}`});
+        this.feedback.hint = this.translate.instant(
+          "Feedback.distanceFromDistanation1",
+          { distance: `${distance.toFixed(1)}` }
+        );
       } else {
         this.feedback.hint = this.translate.instant("Feedback.youAreNearGoal");
       }
@@ -699,7 +774,10 @@ export class FeedbackComponent {
       const evalDistance =
         options.distance - (PlayingGamePage.triggerTreshold as number);
       if (evalDistance > 10) {
-        this.feedback.hint = this.translate.instant("Feedback.distanceFromDistanation2", {distance: `${options.distance.toFixed(1)}`});
+        this.feedback.hint = this.translate.instant(
+          "Feedback.distanceFromDistanation2",
+          { distance: `${options.distance.toFixed(1)}` }
+        );
       } else {
         this.feedback.hint = this.translate.instant("Feedback.youAreNear");
       }
@@ -729,30 +807,41 @@ export class FeedbackComponent {
       const evalDistance =
         distance - (PlayingGamePage.triggerTreshold as number);
       if (evalDistance > 10) {
-        this.feedback.hint = this.translate.instant("Feedback.distanceFromDistanation2", {distance: `${distance.toFixed(1)}`});
+        this.feedback.hint = this.translate.instant(
+          "Feedback.distanceFromDistanation2",
+          { distance: `${distance.toFixed(1)}` }
+        );
       } else {
         this.feedback.hint = this.translate.instant("Feedback.youAreNear");
       }
     }
 
-    if (this.task.answer.type == AnswerType.MAP_DIRECTION || this.task.answer.type == AnswerType.DIRECTION) {
+    if (
+      this.task.answer.type == AnswerType.MAP_DIRECTION ||
+      this.task.answer.type == AnswerType.DIRECTION
+    ) {
       let evalDirection = this.direction;
       if (this.task.question.direction?.bearing) {
         evalDirection = this.task.question.direction.bearing;
       }
-      
-      const absClckDir = this.Math.abs(options.clickDirection - evalDirection)
-      // // console.log(absClckDir);
 
-      this.feedback.hint = ""
+      const absClckDir = this.Math.abs(options.clickDirection - evalDirection);
+      // console.log(absClckDir);
+
+      this.feedback.hint = "";
 
       if (absClckDir > 30 && absClckDir <= 45) {
-        this.feedback.hint = this.task.answer?.hints?.[0] ?? this.translate.instant("Feedback.directionRight");
-      } else if (absClckDir > 45 && absClckDir <= 135) {
-        this.feedback.hint = this.task.answer?.hints?.[1] ?? this.translate.instant("Feedback.directionWrong");
-      } else if (absClckDir > 135){
         this.feedback.hint =
-          this.task.answer?.hints?.[2] ?? this.translate.instant("Feedback.directionWrongHint");
+          this.task.answer?.hints?.[0] ??
+          this.translate.instant("Feedback.directionRight");
+      } else if (absClckDir > 45 && absClckDir <= 135) {
+        this.feedback.hint =
+          this.task.answer?.hints?.[1] ??
+          this.translate.instant("Feedback.directionWrong");
+      } else if (absClckDir > 135) {
+        this.feedback.hint =
+          this.task.answer?.hints?.[2] ??
+          this.translate.instant("Feedback.directionWrongHint");
       }
       // // console.log(this.feedback.hint);
       this.changeDetectorRef.detectChanges();
@@ -775,8 +864,12 @@ export class FeedbackComponent {
         data: {
           type: "Point",
           coordinates: [
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude), 
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude)
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.longitude
+              : this.lastKnownPosition.coords.longitude,
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.latitude
+              : this.lastKnownPosition.coords.latitude,
           ],
         },
       });
@@ -805,8 +898,12 @@ export class FeedbackComponent {
         data: {
           type: "Point",
           coordinates: [
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude), 
-            (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude)
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.longitude
+              : this.lastKnownPosition.coords.longitude,
+            this.isVirtualWorld
+              ? this.avatarLastKnownPosition.coords.latitude
+              : this.lastKnownPosition.coords.latitude,
           ],
         },
       });
@@ -824,12 +921,17 @@ export class FeedbackComponent {
     }
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE) {
-      this.feedback.solution = this.translate.instant("Feedback.correctAnswerIs1");
+      this.feedback.solution = this.translate.instant(
+        "Feedback.correctAnswerIs1"
+      );
       this.feedback.img = this.task.answer.photos[0];
     }
 
     if (this.task.answer.type == AnswerType.MULTIPLE_CHOICE_TEXT) {
-      this.feedback.solution = this.translate.instant("Feedback.correctAnswerIs2", {answer: `${this.task.answer.choices[0]}`});
+      this.feedback.solution = this.translate.instant(
+        "Feedback.correctAnswerIs2",
+        { answer: `${this.task.answer.choices[0]}` }
+      );
     }
 
     if (
@@ -886,8 +988,12 @@ export class FeedbackComponent {
         position = this.task.question.direction.position.geometry.coordinates;
       } else {
         position = [
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude), 
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude)
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.longitude
+            : this.lastKnownPosition.coords.longitude,
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.latitude
+            : this.lastKnownPosition.coords.latitude,
         ];
       }
 
@@ -984,8 +1090,12 @@ export class FeedbackComponent {
     const targetDistance = this.helperService.getDistanceFromLatLonInM(
       waypoint[1],
       waypoint[0],
-      (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude),
-      (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
+      this.isVirtualWorld
+        ? this.avatarLastKnownPosition.coords.latitude
+        : this.lastKnownPosition.coords.latitude,
+      this.isVirtualWorld
+        ? this.avatarLastKnownPosition.coords.longitude
+        : this.lastKnownPosition.coords.longitude
     );
     this.playingGamePage.targetDistance = targetDistance;
     return targetDistance < PlayingGamePage.triggerTreshold;
@@ -1025,8 +1135,12 @@ export class FeedbackComponent {
         distance: this.helperService.getDistanceFromLatLonInM(
           waypoint[1],
           waypoint[0],
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), 
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.latitude
+            : this.lastKnownPosition.coords.latitude,
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.longitude
+            : this.lastKnownPosition.coords.longitude
         ),
         correct: arrived,
       };
@@ -1037,8 +1151,12 @@ export class FeedbackComponent {
         const distance = this.helperService.getDistanceFromLatLonInM(
           clickPosition[1],
           clickPosition[0],
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.latitude : this.lastKnownPosition.coords.latitude), 
-          (this.isVirtualWorld ? this.avatarLastKnownPosition.coords.longitude : this.lastKnownPosition.coords.longitude)
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.latitude
+            : this.lastKnownPosition.coords.latitude,
+          this.isVirtualWorld
+            ? this.avatarLastKnownPosition.coords.longitude
+            : this.lastKnownPosition.coords.longitude
         );
         answer = {
           clickPosition,
