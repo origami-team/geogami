@@ -60,7 +60,14 @@
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let row">
           <!-- Download Track Button -->
-          <ion-buttons>
+          <ion-buttons class="actionBtn">
+            <ion-button
+              (click)="openTracksVisualization(row._id)"
+              title="Visualize tracks"
+            >
+              <ion-icon name="analytics-outline"></ion-icon>
+            </ion-button>
+
             <ion-button
               (click)=" isWebPlatform?exportTrackData(row._id): showAlertOpenGeoGamiWebVersion()"
               title="{{ 'AnalyzeGame.download' | translate }}"

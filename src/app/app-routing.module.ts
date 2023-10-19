@@ -232,6 +232,14 @@ const routes: Routes = [
         (m) => m.GameTracksPageModule
       ),
   },
+  {
+    path: "game-tracks-visualization",
+    loadChildren: () =>
+      import(
+        "./pages/analyze-game/game-tracks-visualization/game-tracks-visualization.module"
+      ).then((m) => m.GameTracksVisualizationPageModule),
+    canActivate: [AuthGuard],
+  },
 ];
 @NgModule({
   imports: [

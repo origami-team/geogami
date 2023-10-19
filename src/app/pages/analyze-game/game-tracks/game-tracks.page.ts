@@ -3,13 +3,18 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { ActivatedRoute } from "@angular/router";
-import { AlertController, NavController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  NavController,
+} from "@ionic/angular";
 import { AuthService } from "src/app/services/auth-service.service";
 import { TrackerService } from "src/app/services/tracker.service";
 import { Capacitor } from "@capacitor/core";
 
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { downloadTrackDialog } from "./download-track-dialog";
+import { GameTracksVisualizationPage } from "../game-tracks-visualization/game-tracks-visualization.page";
 
 @Component({
   selector: "app-game-tracks",
@@ -40,7 +45,8 @@ export class GameTracksPage implements OnInit {
     private trackService: TrackerService,
     private alertCtr: AlertController,
     private route: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private modalController: ModalController
   ) {}
 
   ngOnInit() {
@@ -68,7 +74,6 @@ export class GameTracksPage implements OnInit {
     //* fetch id from params
     this.route.params.subscribe((params) => {
       this.game = JSON.parse(params.bundle);
-
       //* get selected game tracks
       this.trackService
         .getGameTracks(this.game.id)
@@ -142,20 +147,30 @@ export class GameTracksPage implements OnInit {
       header: "Open GeoGami portal",
       //subHeader: 'Important message',
       message: "To download tracks you need to use GeoGami portal.",
-      buttons: [ /* 'OK' */
+      buttons: [
+        /* 'OK' */
         {
           text: "Open portal",
-          cssClass: 'alert-button-download-track',
+          cssClass: "alert-button-download-track",
           // role: 'cancel',
           handler: () => {
-            window.open(
-              "https://app.geogami.ifgi.de/",
-              "_system"
-            );
-          }
-        }
-      ]
+            window.open("https://app.geogami.ifgi.de/", "_system");
+          },
+        },
+      ],
     });
     await alert.present();
+  }
+
+  async openTracksVisualization(trackId: string) {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: GameTracksVisualizationPage,
+      cssClass: "tracks-visualization-modal",
+      backdropDismiss: false,
+      componentProps: {
+        trackId,
+      },
+    });
+    await modal.present();
   }
 }
