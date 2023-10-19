@@ -67,6 +67,7 @@ export class AnalyzeGameListPage implements OnInit {
       .getUserGamesWithTrackInfo()
       .then((res: any) => res.content)
       .then((games) => {
+        console.log("🚀 ~ file: analyze-game-list.page.ts:70 ~ AnalyzeGameListPage ~ .then ~ games:", games)
         this.gamesWithTracks = games;
       });
   }
@@ -124,7 +125,8 @@ export class AnalyzeGameListPage implements OnInit {
   gameClick(game: any) {
     let bundle = {
       id: game._id,
-      name: game.name,
+      /* replace is used to get rid of special charachters, so values can be sent via routing */
+      name: game.name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ""),
     };
     this.navCtrl.navigateForward(
       `analyze/game-tracks/${JSON.stringify(bundle)}`
