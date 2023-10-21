@@ -37,7 +37,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: "create-game/:bundle",
+    path: "create-game",
     loadChildren: () =>
       import("./pages/create-game/create-game/create-game.module").then(
         (m) => m.CreateGamePageModule
