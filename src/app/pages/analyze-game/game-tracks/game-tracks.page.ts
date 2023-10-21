@@ -163,14 +163,16 @@ export class GameTracksPage implements OnInit {
   }
 
   async openTracksVisualization(trackId: string) {
-    const modal: HTMLIonModalElement = await this.modalController.create({
-      component: GameTracksVisualizationPage,
-      cssClass: "tracks-visualization-modal",
-      backdropDismiss: false,
-      componentProps: {
-        trackId,
-      },
-    });
-    await modal.present();
+    if (trackId) {
+      const modal: HTMLIonModalElement = await this.modalController.create({
+        component: GameTracksVisualizationPage,
+        cssClass: "tracks-visualization-modal",
+        backdropDismiss: false,
+        componentProps: {
+          trackId,
+        },
+      });
+      await modal.present();
+    }
   }
 }

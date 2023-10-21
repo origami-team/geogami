@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { NavController } from "@ionic/angular";
+import { AuthService } from "src/app/services/auth-service.service";
 
 @Component({
   selector: "app-create-game",
@@ -15,42 +16,25 @@ export class CreateGamePage implements OnInit {
   userRole: string;
   bundle: any;
 
-  constructor(public navCtrl: NavController, private route: ActivatedRoute) {}
+  user = this.authService.getUser();
+
+  constructor(
+    public navCtrl: NavController,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
-    // Get selected env. and game type
-    this.route.params.subscribe((params) => {
-      this.userRole = params.bundle;
-      console.log(
-        "🚀 ~ file: create-game.page.ts:27 ~ userRole:",
-        this.userRole
-      );
-
-      /* if (params.bundle != "userRole") {
-        this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-        this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
-      } else{
-        this.isRealWorld = false;
-        this.isSingleMode = true;
-      } */
-
-      /* this.bundle = {
-        isRealWorld: this.isRealWorld,
-        isSingleMode: this.isSingleMode
-      } */
+    // Get user role
+    this.user.subscribe((event) => {
+      if (event != null) {
+        this.userRole = event["roles"][0];
+      }
     });
   }
 
   navigateCreateGamePage() {
-    // this.navCtrl.navigateForward('create-game/create-game-list');
-
-    /* only whit Vir Env. -> to be able to choose between two env.s */
-    /* if(!this.isRealWorld){
-      this.navCtrl.navigateForward(`create-game-virtual-menu/${JSON.stringify(this.bundle)}`);
-    } else{
-      this.navCtrl.navigateForward(`create-game-list/${JSON.stringify(this.bundle)}`);
-    } */
-
+    //* if user role, hide vir env & multiplayer create/edit impl.
     if (this.userRole != "user") {
       this.navCtrl.navigateForward("create-game-menu");
     } else {

@@ -15,12 +15,12 @@ export class GameTracksVisualizationPage implements OnInit {
   @ViewChild("map") mapContainer;
   map: mapboxgl.Map;
 
-  //* variables sent 
-  @Input() virEnvType: string;
+  //* variables sent
+  @Input() trackId: string;
 
   // temp
   isVirtualWorld: boolean = true;
-  // virEnvType: string = "VirEnv_1";
+  virEnvType: string = "VirEnv_1";
   speedValue = 50;
   list_colors = [
     "red",
@@ -38,15 +38,16 @@ export class GameTracksVisualizationPage implements OnInit {
     "#cd853f",
   ];
 
-  constructor(public modalController: ModalController, private trackService: TrackerService) {}
+  constructor(
+    public modalController: ModalController,
+    private trackService: TrackerService
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
-    console.log(
-      "🚀 ~ file: game-tracks-visualization.page.ts:26 ~ GameTracksVisualizationPage ~ ngAfterViewInit ~ ngAfterViewInit:1"
-    );
+    /* console.log("🚀 ~ file: game-tracks-visualization.page.ts:51 ~ GameTracksVisualizationPage ~ ngAfterViewInit ~ this.trackId:", this.trackId) */
+    this.getTrackData(this.trackId);
   }
 
   ngOnDestroy(): void {
@@ -58,12 +59,17 @@ export class GameTracksVisualizationPage implements OnInit {
       .getGameTrackById(trackId)
       .then((res: any) => res.content)
       .then((trackData) => {
-        console.log("🚀 ~ file: game-tracks-visualization.page.ts:58 ~ GameTracksVisualizationPage ~ .then ~ trackData:", trackData)
+        console.log(
+          "🚀 ~ file: game-tracks-visualization.page.ts:58 ~ GameTracksVisualizationPage ~ .then ~ trackData:",
+          trackData
+        );
 
-        console.log("🚀 ~ file: game-tracks-visualization.page.ts:58 ~ GameTracksVisualizationPage ~ .then ~ virEnvType:", this.virEnvType)
-        
+        console.log(
+          "🚀 ~ file: game-tracks-visualization.page.ts:58 ~ GameTracksVisualizationPage ~ .then ~ virEnvType:",
+          this.virEnvType
+        );
+
         // this.initMap();
-        
       });
   }
 
@@ -106,10 +112,8 @@ export class GameTracksVisualizationPage implements OnInit {
       this.map.touchZoomRotate.disableRotation();
 
       // show routes
-    this.showRoutes();
+      this.showRoutes();
     });
-
-    
   }
 
   // show routes
@@ -3657,7 +3661,6 @@ export class GameTracksVisualizationPage implements OnInit {
     }
   } //end showRoutes
 
-
   createSourceandLayer(coords, index) {
     let colorIndex = Math.floor(Math.random() * this.list_colors.length); // set color randomly from list
     const waypoints_data = {
@@ -3708,9 +3711,7 @@ export class GameTracksVisualizationPage implements OnInit {
       if (i < coordinates.length) {
         //console.log("coordinates[i]: ", coordinates[i]);
 
-        waypoints_data.features[0].geometry.coordinates.push(
-          coordinates[i]
-        );
+        waypoints_data.features[0].geometry.coordinates.push(coordinates[i]);
         this.map.getSource(`trace${index}`).setData(waypoints_data);
         //map.panTo(coordinates[i]);
         i++;
@@ -3723,7 +3724,6 @@ export class GameTracksVisualizationPage implements OnInit {
       }
     }, this.speedValue);
   } // end createSourceandLayer
-
 
   dismissModal() {
     this.modalController.dismiss({
