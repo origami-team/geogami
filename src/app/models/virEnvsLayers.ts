@@ -316,7 +316,7 @@ export const virEnvLayers: Readonly<any> = {
     name: "School",
     initialPosition: VirEnv_37.initialPosition,
     overlayCoords: VirEnv_37.overlayCoords,
-    center: [0.001755243243,	0.002153794643 ],
+    center: [0.004837837838,	0.003383928571 ],
     bounds: VirEnv_37.bounds,
     zoom: 17.5,
   },
