@@ -19,3 +19,12 @@ table {
     display: none;
   }
 }
+
+.actionBtn {
+  gap: 1.6%;
+  > ion-button {
+    border: 1px solid;
+    border-radius: 8px;
+    border-color: gray;
+  }
+}

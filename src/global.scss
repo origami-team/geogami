@@ -15,3 +15,9 @@ body.scanner-active {
     --background: transparent;
     --ion-background-color: transparent;
 }
+
+/* showing tracks visualization on a map evalaute page  */
+ion-modal.tracks-visualization-modal {
+    --height: 90% !important;
+    --width: 90% !important;
+}

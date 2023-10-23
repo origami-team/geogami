@@ -103,3 +103,23 @@ export const VirEnv_36: Readonly<any> = {
   zoomThreashold: 18.3,
   zoomThreashold2: 17.3,
 };
+
+export const VirEnv_37: Readonly<any> = {
+  //*NW,NE,SE,SW
+  overlayCoords: [
+    [0, 0.00178566071428571],
+    [0.00153140540540541, 0.00178566071428571],
+    [0.00153140540540541, 0],
+    [0, 0],
+  ],
+  bounds: [
+    //* Southwest coordinates (lng,lat)
+    [0 - 0.002, 0 - 0.0025],
+    //* Northeast coordinates (lng,lat)
+    [0.00153140540540541 + 0.002, 0.00178566071428571 + 0.0002],
+  ],
+  initialPosition: {
+    lng: 67 / 111000,
+    lat: 62 / 112000,
+  },
+};
