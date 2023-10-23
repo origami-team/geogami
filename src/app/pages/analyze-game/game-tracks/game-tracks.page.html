@@ -61,12 +61,12 @@
         <td mat-cell *matCellDef="let row">
           <!-- Download Track Button -->
           <ion-buttons class="actionBtn">
-            <ion-button
+            <!-- <ion-button
               (click)="openTracksVisualization(row._id)"
               title="Visualize tracks"
             >
               <ion-icon name="analytics-outline"></ion-icon>
-            </ion-button>
+            </ion-button> -->
 
             <ion-button
               (click)=" isWebPlatform?exportTrackData(row._id): showAlertOpenGeoGamiWebVersion()"
