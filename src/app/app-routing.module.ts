@@ -37,7 +37,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: "create-game/:bundle",
+    path: "create-game",
     loadChildren: () =>
       import("./pages/create-game/create-game/create-game.module").then(
         (m) => m.CreateGamePageModule
@@ -231,6 +231,14 @@ const routes: Routes = [
       import("./pages/analyze-game/game-tracks/game-tracks.module").then(
         (m) => m.GameTracksPageModule
       ),
+  },
+  {
+    path: "game-tracks-visualization",
+    loadChildren: () =>
+      import(
+        "./pages/analyze-game/game-tracks-visualization/game-tracks-visualization.module"
+      ).then((m) => m.GameTracksVisualizationPageModule),
+    canActivate: [AuthGuard],
   },
 ];
 @NgModule({

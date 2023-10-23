@@ -67,6 +67,7 @@ export class AnalyzeGameListPage implements OnInit {
       .getUserGamesWithTrackInfo()
       .then((res: any) => res.content)
       .then((games) => {
+        console.log("🚀 ~ file: analyze-game-list.page.ts:70 ~ AnalyzeGameListPage ~ .then ~ games:", games)
         this.gamesWithTracks = games;
       });
   }

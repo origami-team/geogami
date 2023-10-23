@@ -1,4 +1,4 @@
-import { VirEnv_1, VirEnv_3, VirEnv_4, VirEnv_22, VirEnv_34, VirEnv_36 } from "./virEnvsProperties";
+import { VirEnv_1, VirEnv_3, VirEnv_4, VirEnv_22, VirEnv_34, VirEnv_36, VirEnv_37 } from "./virEnvsProperties";
 
 export const virEnvLayers: Readonly<any> = {
   VirEnv_1: {
@@ -311,5 +311,13 @@ export const virEnvLayers: Readonly<any> = {
     zoomInLayer2: "VirEnv_36_zoom2",
     zoomThreashold: VirEnv_36.zoomThreashold,
     zoomThreashold2: VirEnv_36.zoomThreashold2,
+  },
+  VirEnv_37: {
+    name: "School",
+    initialPosition: VirEnv_37.initialPosition,
+    overlayCoords: VirEnv_37.overlayCoords,
+    center: [0.004837837838,	0.003383928571 ],
+    bounds: VirEnv_37.bounds,
+    zoom: 17.5,
   },
 };
