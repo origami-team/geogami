@@ -69,7 +69,7 @@ export class GameTracksVisualizationPage implements OnInit {
           this.virEnvType
         );
 
-        // this.initMap();
+        this.initMap();
       });
   }
 

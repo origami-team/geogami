@@ -31,6 +31,13 @@ export class AnalyzeGameListPage implements OnInit {
   sanitizedBlobUrl: any;
   filename: string;
 
+  // filter shown games
+  all_tracks: any;
+  gamesWithTracks_view: any; // for viewing based on filter gamesWithTracks
+  gameEnvSelected = "real"; // (default) game mode select
+  gameModeSelected = "single"; // (default) game mode select
+  isMutiplayerGame = undefined;
+
   constructor(
     public navCtrl: NavController,
     private gamesService: GamesService,
@@ -67,10 +74,56 @@ export class AnalyzeGameListPage implements OnInit {
       .getUserGamesWithTrackInfo()
       .then((res: any) => res.content)
       .then((games) => {
-        console.log("🚀 ~ file: analyze-game-list.page.ts:70 ~ AnalyzeGameListPage ~ .then ~ games:", games)
+        // Get either real or VE agmes based on selected environment
         this.gamesWithTracks = games;
+
+        /* filter real world games (default) - as it represents the initial view */
+        this.filterRealWorldGames();
       });
   }
+
+  //***** Game filters impl. ******/
+  //* on game environment change
+  filterGamesEnv(envVal: string) {
+    /* first, update game mode to single player */
+    this.gameModeSelected = "single";
+    this.isMutiplayerGame = undefined;
+    /* then, check game env. */
+    if (envVal == "real") {
+      this.filterRealWorldGames();
+    } else {
+      this.filterVirtualEnvGames();
+    }
+  }
+
+  //*  on game mode change
+  filterGamesMode(modeVal: string) {
+    if (modeVal == "single") {
+      this.isMutiplayerGame = undefined;
+
+      this.gamesWithTracks_view = this.all_tracks.filter(game =>
+        (game.isMultiplayerGame == undefined)
+      ).reverse();
+    } else {
+      this.isMutiplayerGame = true;
+      this.gamesWithTracks_view = this.all_tracks.filter(game =>
+        (game.isMultiplayerGame == true)
+      ).reverse();
+    }
+  }
+
+  filterRealWorldGames() {
+    this.all_tracks = this.gamesWithTracks
+      .filter((game) => game.isVRWorld == false || game.isVRWorld == undefined)
+      .reverse();
+  }
+
+  filterVirtualEnvGames() {
+    this.all_tracks = this.gamesWithTracks
+      .filter((game) => game.isVRWorld == true)
+      .reverse();
+  }
+  //***** End game filters impl. ******/
 
   async getTracks() {
     try {

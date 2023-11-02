@@ -14,30 +14,61 @@
 <ion-content class="ion-padding">
   <!-- <ngx-json-viewer [json]="tracks" [expanded]="false"></ngx-json-viewer> -->
 
+  <!-- select game env. and mode -->
+  <div class="select-style">
+    <div>
+      <ion-label>
+        <span class="cat-title-style">Game environment</span>
+      </ion-label>
+      <select
+        interface="popover"
+        [(ngModel)]="gameEnvSelected"
+        (change)="filterGamesEnv($event.target.value)"
+      >
+        <option value="real">Real world</option>
 
-  <!-- old impl. (showing tracks stored locally)  -->
-  <!-- <ion-list *ngFor="let track of tracks">
-    <ion-item>
-      <ion-label>{{ track }}</ion-label>
-      <ion-icon slot="end" name="trash-outline" (click)="remove(track)"></ion-icon>
-      <ion-icon slot="end" name="cloud-upload-outline" (click)="upload(track)"></ion-icon>
-    </ion-item>
-  </ion-list> -->
+        <!-- allow scholars to view virtual environment mode -->
+        <option value="virtual">
+          Virtual env.
+        </option>
+      </select>
+    </div>
+    <div>
+      <ion-label>
+        <span class="cat-title-style">Game mode</span>
+      </ion-label>
+      <select
+        interface="popover"
+        [(ngModel)]="gameModeSelected"
+        (change)="filterGamesMode($event.target.value)"
+      >
+        <option value="single">Single player</option>
+        <option
+          value="multi-player"
+          [disabled]="true"
+        >
+          Multiplayer {{ "( not implemented yet )"}}
+        </option>
+      </select>
+    </div>
+  </div>
+  <!--  -->
 
   <!-- new impl. (showing user games that has tracks) -->
   <!-- list title -->
   <h3 class="list-title">List of games with tracks</h3>
 
-    <!-- show this message only when game tracks are empty -->
-    <div
+  <!-- show this message only when game tracks list is empty -->
+  <div
     class="emptygametracks"
-    *ngIf="gamesWithTracks && gamesWithTracks.length == 0"
+    *ngIf="all_tracks && all_tracks.length == 0"
   >
-    <h2>{{ "AnalyzeGame.emptyGameTracks" | translate }}</h2>
+    <!-- To DO: <h2>{{ "AnalyzeGame.emptyGameTracks" | translate }}</h2> -->
+    <h2>The games you created in {{(gameEnvSelected=="real"?"real world":"virtual environment")}} category have no tracks yet!</h2>
   </div>
 
   <ion-card
-    *ngFor="let game of gamesWithTracks"
+    *ngFor="let game of all_tracks"
     (click)="gameClick(game)"
     detail
     color="secondary"
