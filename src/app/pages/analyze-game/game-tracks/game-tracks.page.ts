@@ -13,7 +13,7 @@ import { TrackerService } from "src/app/services/tracker.service";
 import { Capacitor } from "@capacitor/core";
 
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { downloadTrackDialog } from "./download-track-dialog";
+import { downloadTrackDialog } from "../../../components/download-track-dialog/download-track-dialog";
 import { GameTracksVisualizationPage } from "../game-tracks-visualization/game-tracks-visualization.page";
 
 @Component({

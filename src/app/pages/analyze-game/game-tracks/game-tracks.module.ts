@@ -9,7 +9,7 @@ import { GameTracksPageRoutingModule } from "./game-tracks-routing.module";
 import { GameTracksPage } from "./game-tracks.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { MaterialModule } from "src/app/material.module";
-import { downloadTrackDialog } from "./download-track-dialog";
+import { downloadTrackDialog } from "../../../components/download-track-dialog/download-track-dialog";
 
 @NgModule({
   imports: [
