@@ -7,8 +7,8 @@
         text="{{ 'General.back_button' | translate }}"
       ></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="game"
-      >{{ "AnalyzeGame.title" | translate }} - {{ game.name }}</ion-title
+    <ion-title *ngIf="params"
+      >{{ "AnalyzeGame.title" | translate }} - {{ params.name }}</ion-title
     >
   </ion-toolbar>
 </ion-header>

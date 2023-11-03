@@ -13,5 +13,41 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <dev *ngIf="trackTaskNumbers && trackTaskNumbers.length>0">
+    <!-- Task number -->
+    <div>
+      <ion-label>
+        <span style="font-size: 20px">Task number: </span>
+      </ion-label>
+      <select
+        [placeholder]="selectedTaskNo"
+        (change)="changeTaskNo($event.target.value);"
+        interface="popover"
+        [ngModel]="selectedTaskNo"
+      >
+        <ng-container *ngFor="let taskNo of trackTaskNumbers">
+          <option value="{{taskNo}}">{{taskNo}}</option>
+        </ng-container>
+      </select>
+    </div>
+
+    <!-- Speed -->
+    <div>
+      <ion-label>
+        <span style="font-size: 20px">Speed: </span>
+      </ion-label>
+      <select
+        [placeholder]="High"
+        (change)="changeSpeed($event.target.value);"
+        interface="popover"
+      >
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Slow">Slow</option>
+      </select>
+    </div>
+  </dev>
+
+  <!-- Map -->
   <div #map class="map"></div>
 </ion-content>

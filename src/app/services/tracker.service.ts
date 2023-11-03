@@ -416,11 +416,20 @@ export class TrackerService {
   }
 
   /**********************************************************/
-  //* To retreive selected track by id - used in evaluate page
+  //* To retreive selected track by id - used in evaluate page (exportTrackData)
   getGameTrackById(trackId: string) {
-    console.log("🚀 ~ file: tracker.service.ts:421 ~ TrackerService ~ getGameTrackById ~ gameId:", trackId)
     return this.http
       .get(`${environment.apiURL}/track/${trackId}`, {
+        headers: this.createHeaders(),
+      })
+      .toPromise();
+  }
+
+  /**********************************************************/
+  //* To retreive waypoints of selected track by id - used in evaluate page (visualizeTrackData)
+  getGameTrackWaypointsById(trackId: string) {
+    return this.http
+      .get(`${environment.apiURL}/track/waypoints/${trackId}`, {
         headers: this.createHeaders(),
       })
       .toPromise();

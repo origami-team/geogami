@@ -25,7 +25,7 @@ export class GameTracksPage implements OnInit {
   gameTracks: any[] = [];
   // to only allow admins and scholars to see this page
   user = this.authService.getUser();
-  game = null;
+  params = null;
 
   displayedColumns: string[] = ["#", "players", "createdAt", "id", "action"];
   dataSource: MatTableDataSource<any>;
@@ -73,10 +73,10 @@ export class GameTracksPage implements OnInit {
   getGamesTracksData() {
     //* fetch id from params
     this.route.params.subscribe((params) => {
-      this.game = JSON.parse(params.bundle);
+      this.params = JSON.parse(params.bundle);
       //* get selected game tracks
       this.trackService
-        .getGameTracks(this.game.id)
+        .getGameTracks(this.params.id)
         .then((res: any) => res.content)
         .then((tracks) => {
           this.gameTracks = tracks;
@@ -170,6 +170,7 @@ export class GameTracksPage implements OnInit {
         backdropDismiss: false,
         componentProps: {
           trackId,
+          isVRWorld: this.params.isVRWorld
         },
       });
       await modal.present();

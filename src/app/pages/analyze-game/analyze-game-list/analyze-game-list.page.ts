@@ -11,7 +11,6 @@ import {
 } from "@capacitor/core";
 import { environment } from "src/environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { DomSanitizer } from "@angular/platform-browser"; //* for downloading a file
 import { AuthService } from "src/app/services/auth-service.service";
 
 @Component({
@@ -101,14 +100,14 @@ export class AnalyzeGameListPage implements OnInit {
     if (modeVal == "single") {
       this.isMutiplayerGame = undefined;
 
-      this.gamesWithTracks_view = this.all_tracks.filter(game =>
-        (game.isMultiplayerGame == undefined)
-      ).reverse();
+      this.gamesWithTracks_view = this.all_tracks
+        .filter((game) => game.isMultiplayerGame == undefined)
+        .reverse();
     } else {
       this.isMutiplayerGame = true;
-      this.gamesWithTracks_view = this.all_tracks.filter(game =>
-        (game.isMultiplayerGame == true)
-      ).reverse();
+      this.gamesWithTracks_view = this.all_tracks
+        .filter((game) => game.isMultiplayerGame == true)
+        .reverse();
     }
   }
 
@@ -180,6 +179,8 @@ export class AnalyzeGameListPage implements OnInit {
       id: game._id,
       /* replace is used to get rid of special charachters, so values can be sent via routing */
       name: game.name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ""),
+      isVRWorld: game.isVRWorld,
+      virEnvType: game.virEnvType,
     };
     this.navCtrl.navigateForward(
       `analyze/game-tracks/${JSON.stringify(bundle)}`
