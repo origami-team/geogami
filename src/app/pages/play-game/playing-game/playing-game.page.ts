@@ -551,13 +551,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
           // VR world
           // Check game type either real or VR world
-          if (game.virEnvType !== undefined) {
-            this.virEnvType = game.tasks[0].virEnvType;
-            // console.log("--1---game.virEnvType---: ", this.virEnvType)
-          }
-
           // Set the intial avatar location (in either normal or mirrored version)
           if (this.isVirtualWorld) {
+            //* set vir env type
+            if (game.tasks[0] && game.tasks[0].virEnvType) {
+              this.virEnvType = game.tasks[0].virEnvType;
+            } else {
+              this.virEnvType = game.virEnvType;
+            }
+
             /* check first task initial location */
             if (
               this.game.tasks[0] &&

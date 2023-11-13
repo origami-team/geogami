@@ -5,6 +5,7 @@ import { virEnvLayers } from "src/app/models/virEnvsLayers";
 import { environment } from "src/environments/environment";
 import { SatControl } from "../../create-game/form-elements/map/SatControl/SatControl";
 import { TrackerService } from "src/app/services/tracker.service";
+import { UtilService } from "src/app/services/util.service";
 
 @Component({
   selector: "app-game-tracks-visualization",
@@ -14,6 +15,7 @@ import { TrackerService } from "src/app/services/tracker.service";
 export class GameTracksVisualizationPage implements OnInit {
   @ViewChild("map") mapContainer;
   map: mapboxgl.Map;
+  marker: mapboxgl.Marker;
 
   // ToDo: add list of tasks numbers with event to update virenv type as well as task no
   trackWaypoints: any;
@@ -21,6 +23,7 @@ export class GameTracksVisualizationPage implements OnInit {
   selectedTaskNo = 1;
   speedValue = 50;
   virEnvType: string = "VirEnv_1";
+  timer: NodeJS.Timeout;
 
   //* variables sent
   @Input() trackId: string;
@@ -44,7 +47,8 @@ export class GameTracksVisualizationPage implements OnInit {
 
   constructor(
     public modalController: ModalController,
-    private trackService: TrackerService
+    private trackService: TrackerService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit() {}
@@ -54,26 +58,29 @@ export class GameTracksVisualizationPage implements OnInit {
   }
 
   ngOnDestroy(): void {
-    if (this.map) {
-      this.map.remove();
-    }
+    this.removeMap();
   }
 
+  // get all waypoints and events
   getTrackWaypoints(trackId: string) {
     this.trackService
-      .getGameTrackWaypointsById(trackId)
+      .getGameTrackWaypointsandEventsById(trackId)
       .then((res: any) => res.content)
       .then((trackData) => {
-        console.log(
-          "🚀 ~ ---file: game-tracks-visualization.page.ts:58 ~ GameTracksVisualizationPage ~ .then ~ trackData:",
-          trackData
-        );
-        this.trackWaypoints = trackData.waypoints;
-        if (trackData.taskNumbers) {
-          this.trackTaskNumbers = trackData.taskNumbers;
-          this.selectedTaskNo = this.trackTaskNumbers[0];
+        let waypointsLength = trackData.waypoints.length;
+
+        if (waypointsLength > 10) {
+          this.trackWaypoints = trackData;
 
           this.initMap();
+        } else {
+          //* show toast msg and dismiss model
+          this.dismissModal();
+          this.utilService.showToast(
+            `The number of selected track waypoints are not enough to show it on map.`,
+            "dark",
+            3500
+          );
         }
       });
   }
@@ -114,14 +121,12 @@ export class GameTracksVisualizationPage implements OnInit {
       // disable map rotation using touch rotation gesture
       this.map.touchZoomRotate.disableRotation();
 
+      // show flags
+      this.addFlags();
+
       // show routes
       this.showRoutes();
     });
-  }
-
-  changeTaskNo(taskNo) {
-    this.selectedTaskNo = taskNo;
-    this.showRoutes();
   }
 
   changeSpeed(value) {
@@ -134,36 +139,45 @@ export class GameTracksVisualizationPage implements OnInit {
     }
   }
 
+  addFlags() {
+    // throw new Error("Method not implemented.");
+    let initialPosition = false;
+    this.trackWaypoints.events.forEach((event) => {
+      if (event.task && event.task.category == "nav") {
+        if (!initialPosition) {
+          initialPosition = true;
+        }
+        this.addMarker("waypoint-marker", event.task.answer.position.geometry.coordinates)
+        console.log("nav Task");
+      }
+    });
+  }
+
   // show routes
   showRoutes() {
     //AddTaskMarker(taskValue);
 
-    this.deleteSources();
+    this.deleteSourceAndLayer();
 
-    // for (let i = 1; i <= 1; i++) {
     let coords = [];
-    //console.log("player", tracks_vr1[i].players);
-    //console.log("i: ", i);
-    console.log(
-      "🚀 ~ file: game-tracks-visualization.page.ts:3661 ~ .then ~ this.trackWaypoints:",
-      this.trackWaypoints
-    );
 
-    console.log("🚀 ~~~~~~ this.selectedTaskNo:", this.selectedTaskNo);
-    this.trackWaypoints.forEach((waypoint) => {
-      // tracks_vr1[i].waypoints.forEach((waypoint) => {
-      if (waypoint.task_no == this.selectedTaskNo) {
-        //TODO: change taskno to num
-        coords.push([waypoint.longitude, waypoint.latitude]);
-        //console.log("task no true: ", taskValue);
+    this.trackWaypoints.waypoints.forEach((waypoint) => {
+      //* since some points e.g. first one doesn't have coords
+      if (waypoint.position) {
+        coords.push([
+          waypoint.position.coords.longitude,
+          waypoint.position.coords.latitude,
+        ]);
       }
     });
-    this.createSourceandLayer(coords);
+    this.createSourceandAndLayer(coords);
     // }
   } //end showRoutes
 
-  createSourceandLayer(coords) {
-    let colorIndex = Math.floor(Math.random() * this.list_colors.length); // set color randomly from list
+  createSourceandAndLayer(coords) {
+    // let colorIndex = Math.floor(Math.random() * this.list_colors.length); // set color randomly from list
+    let colorIndex = 0; // set color randomly from list
+
     const waypoints_data = {
       type: "FeatureCollection",
       features: [
@@ -194,37 +208,37 @@ export class GameTracksVisualizationPage implements OnInit {
         "line-width": 1.5,
       },
     });
+
     // save full coordinate list for later
     const coordinates = waypoints_data.features[0].geometry.coordinates;
-    //console.log("waypoints_data.features[0].geometry.coordinates: ", waypoints_data.features[0].geometry.coordinates);
 
     // start by showing just the first coordinate
     waypoints_data.features[0].geometry.coordinates = [coordinates[0]];
-    //console.log("[coordinates[0]]: ", [coordinates[0]]);
 
     // setup the viewport TODO
-    //map.jumpTo({ 'center': coordinates[0], 'zoom': 16.8 });
-    //map.setPitch(30);
+    this.map.jumpTo({ 'center': coordinates[0], 'zoom': 16.8 });
+    // this.map.setPitch(30);
 
     // on a regular basis, add more coordinates from the saved list and update the map
     let i = 0;
-    const timer = setInterval(() => {
+    this.timer = setInterval(() => {
       if (i < coordinates.length) {
         waypoints_data.features[0].geometry.coordinates.push(coordinates[i]);
         this.map.getSource("trace").setData(waypoints_data);
         //map.panTo(coordinates[i]);
         i++;
-        /* if ( i == coordinates.length - 1) {  ToDo: update it to the end of execution
-                    // enable `show track` button
-                    document.getElementById("showTrackBtn").disabled = false;
-                } */
+        console.log(
+          "🚀 ~ file: game-tracks-visualization.page.ts:226 ~ timer ~ i:",
+          i
+        );
       } else {
-        window.clearInterval(timer);
+        window.clearInterval(this.timer);
+        console.log("🚀 ~ file: clearInterval.");
       }
     }, this.speedValue);
   } // end createSourceandLayer
 
-  deleteSources() {
+  deleteSourceAndLayer() {
     console.log("delete function");
     if (this.map.getLayer(`trace`)) {
       this.map.removeLayer(`trace`);
@@ -234,9 +248,36 @@ export class GameTracksVisualizationPage implements OnInit {
   }
 
   dismissModal() {
+    //* in case track visualization was interepted.
+    window.clearInterval(this.timer);
+
     this.modalController.dismiss({
       dismissed: true,
       data: {},
     });
+  }
+
+  // add flags and user initial position
+  addMarker(markerType, coord) {
+    const el = document.createElement("div");
+    if (markerType != "circle") {
+      el.className = "waypoint-marker";
+    } else {
+      el.className = "circle-marker";
+    }
+
+    this.marker = new mapboxgl.Marker(el, {
+      anchor: "bottom",
+      offset: markerType == "circle" ? [0, 15] : [15, 0],
+      draggable: true,
+    })
+      .setLngLat(coord)
+      .addTo(this.map);
+  }
+
+  removeMap() {
+    if (this.map) {
+      this.map.remove();
+    }
   }
 }

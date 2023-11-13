@@ -434,4 +434,15 @@ export class TrackerService {
       })
       .toPromise();
   }
+
+  /**********************************************************/
+  //* To retreive waypoints of selected track by id - used in evaluate page (visualizeTrackData)
+  getGameTrackWaypointsandEventsById(trackId: string) {
+    return this.http
+      .get(`${environment.apiURL}/track/waypointswithevents/${trackId}`, {
+        headers: this.createHeaders(),
+      })
+      .toPromise();
+  }
+  
 }
