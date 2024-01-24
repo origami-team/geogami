@@ -52,7 +52,7 @@
     "@types/dom-mediacapture-record": "^1.0.7",
     "angular-pipes": "^10.0.0",
     "capacitor-keep-screen-on": "^0.0.4",
-    "capacitor-voice-recorder": "git+https://github.com/origami-team/capacitor-voice-recorder.git",
+    "capacitor-voice-recorder": "https://github.com/origami-team/capacitor-voice-recorder.git",
     "cordova-android": "^11.0.0",
     "cordova-browser": "6.0.0",
     "cordova-ios": "^6.2.0",
