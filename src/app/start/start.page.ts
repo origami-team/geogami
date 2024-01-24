@@ -117,7 +117,7 @@ export class StartPage implements OnInit {
     } */
 
     //* send user role
-    this.navCtrl.navigateForward(`create-game/${this.userRole}`);
+    this.navCtrl.navigateForward(`create-game`);
   }
 
   navigateShowroomPage() {
