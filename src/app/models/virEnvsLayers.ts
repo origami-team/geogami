@@ -1,4 +1,4 @@
-import { VirEnv_1, VirEnv_3, VirEnv_4, VirEnv_22, VirEnv_34, VirEnv_36, VirEnv_37 } from "./virEnvsProperties";
+import { VirEnv_1, VirEnv_3, VirEnv_4, VirEnv_5, VirEnv_22, VirEnv_34, VirEnv_36, VirEnv_37 } from "./virEnvsProperties";
 
 export const virEnvLayers: Readonly<any> = {
   VirEnv_1: {
@@ -43,13 +43,13 @@ export const virEnvLayers: Readonly<any> = {
   },
   VirEnv_5: {
     name: "Zoom - Pre Difficult",
-    initialPosition: VirEnv_4.initialPosition,
-    overlayCoords: VirEnv_4.overlayCoords,
-    center: [0.001351351351 / 2, 0.001517857143 / 2],
-    bounds: VirEnv_4.bounds,
-    zoom: 17,
+    initialPosition: VirEnv_5.initialPosition,
+    overlayCoords: VirEnv_5.overlayCoords,
+    center: [0.001351351351 / 2 + 0.00023, 0.001517857143 / 2 + 0.000175],
+    bounds: VirEnv_5.bounds,
+    zoom: 19,
     zoomInLayer1: "VirEnv_5_zoom1",
-    zoomThreashold: VirEnv_4.zoomThreashold,
+    zoomThreashold: VirEnv_5.zoomThreashold,
   },
   VirEnv_6: {
     name: "Location Marker - Post Difficult",
@@ -306,7 +306,7 @@ export const virEnvLayers: Readonly<any> = {
     overlayCoords: VirEnv_36.overlayCoords,
     center: [0.002119500085399295, 0.0008621423878878431 ],
     bounds: VirEnv_36.bounds,
-    zoom: 17.5,
+    zoom: 18.45,
     zoomInLayer1: "VirEnv_36_zoom1",
     zoomInLayer2: "VirEnv_36_zoom2",
     zoomThreashold: VirEnv_36.zoomThreashold,

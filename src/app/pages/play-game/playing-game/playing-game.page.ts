@@ -964,6 +964,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.map.on("zoom", () => {
       if (this.isVirtualWorld) {
         const currentZoom = this.map.getZoom();
+        // console.log("🚀 ~ PlayingGamePage22222 ~ 3 levels: currentZoom:", currentZoom);
 
         //* (V.E.): each vir env. has a zoom 0 layer, this is for those which has another layer that is visible to show more details
         //* with 3 zoom levels
@@ -971,7 +972,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvLayers[this.virEnvType].zoomInLayer1 &&
           virEnvLayers[this.virEnvType].zoomInLayer2
         ) {
-          console.log("🚀 ~ PlayingGamePage22222 ~ 3 levels:");
           if (
             // currentZoom <= zoomInLayer2
             currentZoom <= virEnvLayers[this.virEnvType].zoomThreashold2 &&
@@ -1042,6 +1042,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /*  */
 
     this.map.on("click", (e) => {
+      // console.log("🚀 ~ this.map.on map click~ e:", e.lngLat)
       this.onMapClick(e, "standard");
     });
 
@@ -1119,6 +1120,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.map.setMaxBounds(virEnvLayers[this.virEnvType].bounds);
       //* update zoom level of the env.
       this.map.setZoom(virEnvLayers[this.virEnvType].zoom);
+      //* update map center
+      this.map.setCenter(virEnvLayers[this.virEnvType].center);
     }
 
     //* update layer image
@@ -1692,6 +1695,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           "🚀 ~-- initTask ~ this.task.virEnvType != this.virEnvType:"
         ); */
         this.virEnvType = this.task.virEnvType;
+        //* update VR (layer, zoom, center, ..)
         this.updateMapStyleOverlayLayer(
           "assets/vir_envs_layers/" + this.task.virEnvType + ".png",
           true
@@ -1971,6 +1975,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
+    //* check if this is last task that player skipped 
     if (this.taskIndex > this.game.tasks.length - 1) {
       /* multiplayer */
       /* change player status in socket server to finished tasks */
