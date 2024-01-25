@@ -8,7 +8,7 @@ export const virEnvLayers: Readonly<any> = {
     },
     overlayCoords: VirEnv_1.overlayCoords,
     bounds: VirEnv_1.bounds,
-    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2 + 0.00025],
+    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2],
     zoom: 17,
   },
   VirEnv_2: {
@@ -17,7 +17,7 @@ export const virEnvLayers: Readonly<any> = {
       lat: 69 / 112000,
     },
     overlayCoords: VirEnv_1.overlayCoords,
-    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2 + 0.00025],
+    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2],
     bounds: VirEnv_1.bounds,
     zoom: 17,
   },
