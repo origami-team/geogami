@@ -654,7 +654,7 @@ export class CreateTaskModalPage implements OnInit {
       }
 
       if (
-        (this.task.answer.type == AnswerType.MAP_DIRECTION ||
+        ( (this.task.answer.type == AnswerType.MAP_DIRECTION && this.task.settings.feedback) ||
           this.task.answer.type === AnswerType.DIRECTION) &&
         this.task.settings.feedback &&
         this.task.settings.multipleTries &&

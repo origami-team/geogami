@@ -9,7 +9,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card color="medium" *ngIf="feedback.hint != ''">
+  <ion-card color="medium" *ngIf="feedback.hint != '' && this.task.settings.feedback">
     <ion-card-content>
       {{ feedback.hint }}
     </ion-card-content>
