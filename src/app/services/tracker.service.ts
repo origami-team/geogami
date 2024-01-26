@@ -251,7 +251,7 @@ export class TrackerService {
         rotationCount: this.rotationCounter,
       },
     });
-    console.log(this.events);
+// console.log(this.events);
   }
 
   /*  */
@@ -311,7 +311,7 @@ export class TrackerService {
       // numPlayers: (!this.isSingleMode ? this.numPlayers : undefined),
     };
 
-    console.log(data);
+  // console.log(data);
 
     // Plugins.Geolocation.clearWatch({ id: this.positionWatch });
     if (!this.isVirtualWorld) {
@@ -330,9 +330,9 @@ export class TrackerService {
         directory: FilesystemDirectory.Documents,
         recursive: true, // like mkdir -p
       });
-      console.log("Created dir", ret);
+      // console.log("Created dir", ret);
     } catch (e) {
-      console.log("Unable to make directory", e);
+      // console.log("Unable to make directory", e);
     }
     // 2. store tracks locally
     try {
@@ -344,9 +344,9 @@ export class TrackerService {
         directory: FilesystemDirectory.Documents,
         encoding: FilesystemEncoding.UTF8,
       });
-      console.log("Wrote file", result);
+      // console.log("Wrote file", result);
     } catch (e) {
-      console.error("Unable to write file", e);
+      // console.error("Unable to write file", e);
     }
     /* End of store game tracks locally */
 
@@ -385,7 +385,7 @@ export class TrackerService {
     if (!isGameTrackStored) {
       /* (multiplayer) 5. a) store new track if not stored yet (multiplayer) */
       // (single player) store new track
-      console.log("store new track (single player) / tracks (multiplayer)");
+      // console.log("store new track (single player) / tracks (multiplayer)");
       return this.http
         .post(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),
@@ -394,7 +394,7 @@ export class TrackerService {
         .toPromise();
     } else {
       /* (multiplayer) 5. b) update existed tracks (multiplayer) */
-      console.log("//update existed tracks (multiplayer)");
+    // console.log("//update existed tracks (multiplayer)");
       return this.http
         .put(`${environment.apiURL}/track`, data, {
           headers: this.createHeaders(),
@@ -418,7 +418,7 @@ export class TrackerService {
   /**********************************************************/
   //* To retreive selected track by id - used in evaluate page
   getGameTrackById(trackId: string) {
-    console.log("🚀 ~ file: tracker.service.ts:421 ~ TrackerService ~ getGameTrackById ~ gameId:", trackId)
+    // console.log("🚀 ~ file: tracker.service.ts:421 ~ TrackerService ~ getGameTrackById ~ gameId:", trackId)
     return this.http
       .get(`${environment.apiURL}/track/${trackId}`, {
         headers: this.createHeaders(),

@@ -48,7 +48,7 @@ export class AudioRecorderComponent implements OnInit {
     this.recording = false;
     this.audioRecorder.stop().then(({ filename }) => {
       this.audioSource = `${environment.apiURL}/file/audio/${filename}`;
-      console.log(this.audioSource);
+    // console.log(this.audioSource);
       this.audioSourceChange.emit(this.audioSource);
     });
   }
@@ -59,7 +59,7 @@ export class AudioRecorderComponent implements OnInit {
 
     this.audioSource = `${environment.apiURL}/file/audio/${filename}`;
     this.changeDetectorRef.detectChanges();
-    console.log(this.audioSource);
+  // console.log(this.audioSource);
     this.audioSourceChange.emit(this.audioSource);
   }
 
@@ -69,7 +69,7 @@ export class AudioRecorderComponent implements OnInit {
   }
 
   async showPopover(ev: any, text: string) {
-    console.log(ev);
+  // console.log(ev);
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       event: ev,

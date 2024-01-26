@@ -1222,11 +1222,6 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
-"@capacitor-community/barcode-scanner@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/@capacitor-community/barcode-scanner/-/barcode-scanner-1.2.1.tgz"
-  integrity sha512-6NZf4O2ZUmlhqgQvTihc96/AMOGtKSsuru790+f7TCceSTYRrl3SCepUY02WBsUHR+G8HSqrTNvkgTxDA+hGsg==
-
 "@capacitor/android@^2.0.1", "@capacitor/android@^2.4.2":
   version "2.5.0"
   resolved "https://registry.npmjs.org/@capacitor/android/-/android-2.5.0.tgz"
@@ -1887,13 +1882,12 @@
   resolved "https://registry.npmjs.org/@stencil/core/-/core-2.22.3.tgz"
   integrity sha512-kmVA0M/HojwsfkeHsifvHVIYe4l5tin7J5+DLgtl8h6WWfiMClND5K3ifCXXI2ETDNKiEk21p6jql3Fx9o2rng==
 
-"@techiediaries/ngx-qrcode@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.npmjs.org/@techiediaries/ngx-qrcode/-/ngx-qrcode-9.1.0.tgz"
-  integrity sha512-pjDt+eBjxDds7Iz47VhoSUlv4NiPuSWyMo44GiC7ZLoozBoAo6ga6bW7XS6F89omiWVMJ7Gphh5XI2SAcpfzAg==
+"@szmarczak/http-timer@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/@szmarczak/http-timer/-/http-timer-1.1.2.tgz"
+  integrity sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==
   dependencies:
-    qrcode "^1.4.4"
-    tslib "^1.10.0"
+    defer-to-connect "^1.0.1"
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -9514,16 +9508,6 @@ qjobs@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/qjobs/-/qjobs-1.2.0.tgz"
   integrity sha512-8YOJEHtxpySA3fFDyCRxA+UUV+fA+rTWnuWvylOK/NCjhY+b4ocCtmu8TtsWb+mYeU+GCHf/S66KZF/AsteKHg==
-
-qrcode@^1.4.4:
-  version "1.5.3"
-  resolved "https://registry.npmjs.org/qrcode/-/qrcode-1.5.3.tgz"
-  integrity sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==
-  dependencies:
-    dijkstrajs "^1.0.1"
-    encode-utf8 "^1.0.3"
-    pngjs "^5.0.0"
-    yargs "^15.3.1"
 
 qs@^6.11.0, qs@^6.9.4, qs@6.11.0:
   version "6.11.0"
