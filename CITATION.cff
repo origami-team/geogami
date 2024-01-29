@@ -1,0 +1,19 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: GeoGami
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: Institut für Geoinformatik
+    address: Heisenbergstraße 2
+    city: Münster
+    post-code: '48149'
+    country: DE
+    email: geoinformatik@uni-muenster.de
+    tel: +49 251 – 83 33 08 3
+    fax: +49 251 – 83 39 76 3
+    website: 'https://geogami.ifgi.de/'
