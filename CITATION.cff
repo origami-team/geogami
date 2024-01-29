@@ -3,8 +3,6 @@
 
 cff-version: 1.2.0
 title: GeoGami
-doi: 10.5281/zenodo.10018830
-date-released: 2019-10-15
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
@@ -19,3 +17,9 @@ authors:
     tel: +49 251 – 83 33 08 3
     fax: +49 251 – 83 39 76 3
     website: 'https://geogami.ifgi.de/'
+  - given-names: Felix
+    family-names: Erdmann
+  - given-names: Yousef
+    family-names: Qamaz
+date-released: '2019-10-15'
+doi: 10.5281/zenodo.10018830
