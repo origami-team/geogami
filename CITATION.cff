@@ -3,6 +3,8 @@
 
 cff-version: 1.2.0
 title: GeoGami
+doi: 10.5281/zenodo.10018830
+date-released: 2019-10-15
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
