@@ -3,19 +3,28 @@
 
 cff-version: 1.2.0
 title: GeoGami
-doi: 10.5281/zenodo.10018830
-date-released: 2019-10-15
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
 type: software
 authors:
-  - name: Institut für Geoinformatik
-    address: Heisenbergstraße 2
-    city: Münster
-    post-code: '48149'
-    country: DE
-    email: geoinformatik@uni-muenster.de
-    tel: +49 251 – 83 33 08 3
-    fax: +49 251 – 83 39 76 3
-    website: 'https://geogami.ifgi.de/'
+  - given-names: Felix
+    family-names: Erdmann
+  - given-names: Yousef
+    family-names: Qamaz
+  - given-names: ' Janina'
+    family-names: Bistron
+  - given-names: 'Sandhya '
+    family-names: Rajendran
+  - given-names: Annabell
+    family-names: Petri
+  - given-names: 'AHMED '
+    family-names: ALY
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.10018830
+repository-code: 'https://github.com/origami-team/geogami'
+url: 'https://geogami.ifgi.de/'
+license: MIT
+version: 3.2.2
+date-released: '2024-01-26'
