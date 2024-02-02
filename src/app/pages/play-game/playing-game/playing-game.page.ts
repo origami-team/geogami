@@ -137,6 +137,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   initialAvatarDir: number;
   currentSecond: number = 0;
   gameCode: string = "";
+  //* created for solving: https://github.com/origami-team/geogami-virtual-environment-dev/issues/59
+  previousTaskAavatarLastKnownPosition: AvatarPosition;
 
   // degree for nav-arrow
   heading = 0;
@@ -553,7 +555,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           // Check game type either real or VR world
           // Set the intial avatar location (in either normal or mirrored version)
           if (this.isVirtualWorld) {
-
             //* set vir env type for old (where task type is not included in all tasks) and new games
             if (game.tasks[0] && game.tasks[0].virEnvType) {
               this.virEnvType = game.tasks[0].virEnvType;
@@ -1702,6 +1703,34 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         );
       }
 
+      //* To overcome the issue where app waits for initial avatar point from VE app. https://github.com/origami-team/geogami-virtual-environment-dev/issues/59
+      //* 1. whether task has initial pos.
+      //* 2. whether there is a position stored from previous task, if not use default from virEnvLayer.ts
+      if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
+        if (this.task.question.initialAvatarPosition) {
+          this.avatarLastKnownPosition = new AvatarPosition(
+            0,
+            new Coords(
+              this.task.question.initialAvatarPosition.position.geometry.coordinates[1],
+              this.task.question.initialAvatarPosition.position.geometry.coordinates[0]
+            )
+          );
+        } else {
+          this.avatarLastKnownPosition = new AvatarPosition(
+            0,
+            this.previousTaskAavatarLastKnownPosition
+              ? new Coords(
+                  this.previousTaskAavatarLastKnownPosition.coords.latitude,
+                  this.previousTaskAavatarLastKnownPosition.coords.longitude
+                )
+              : new Coords(
+                  virEnvLayers[this.virEnvType].initialPosition.lat,
+                  virEnvLayers[this.virEnvType].initialPosition.lng
+                )
+          );
+        }
+      }
+
       //* send inital loc, dir and vir env type
       //* if task doesn't hahve initial positoin send null to keep avatar current position. (?? Wrong if app env changed from 1 or 2 to others
       //* if no virEnvType is found send deafult one
@@ -1975,7 +2004,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     // this.feedbackControl.dismissFeedback();
     this.taskIndex++;
-    //* check if this is last task that player skipped 
+    //* check if this is last task that player skipped
     if (this.taskIndex > this.game.tasks.length - 1) {
       /* multiplayer */
       /* change player status in socket server to finished tasks */
@@ -2070,6 +2099,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
     if (this.isVirtualWorld) {
+      this.previousTaskAavatarLastKnownPosition = this.avatarLastKnownPosition;
       this.avatarLastKnownPosition = undefined;
     }
 
