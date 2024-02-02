@@ -1247,6 +1247,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                 },
               });
             } else {
+              //* To view location marker and direction on map click
               this.map.addSource("viewDirectionClick", {
                 type: "geojson",
                 data: {
@@ -1704,7 +1705,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
 
       //* To overcome the issue where app waits for initial avatar point from VE app. https://github.com/origami-team/geogami-virtual-environment-dev/issues/59
-      //* 1. whether task has initial pos.
+      //* 1. whether task has initial pos. (no need for it)
       //* 2. whether there is a position stored from previous task, if not use default from virEnvLayer.ts
       if (this.task.answer.type == AnswerType.MAP_DIRECTION) {
         if (this.task.question.initialAvatarPosition) {
