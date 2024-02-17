@@ -133,7 +133,6 @@ const routes: Routes = [
       import("./pages/user/reset-password/reset-password.module").then(
         (m) => m.ResetPasswordPageModule
       ),
-    canActivate: [AuthGuard],
   },
   // older stuff
   // { path: 'map-swipe', loadChildren: './map-swipe/map-swipe.module#MapSwipePageModule' },
