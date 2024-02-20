@@ -1,0 +1,30 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: GeoGami
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Felix
+    family-names: Erdmann
+  - given-names: Yousef
+    family-names: Qamaz
+  - given-names: ' Janina'
+    family-names: Bistron
+  - given-names: 'Sandhya '
+    family-names: Rajendran
+  - given-names: Annabell
+    family-names: Petri
+  - given-names: 'AHMED '
+    family-names: ALY
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.10018830
+repository-code: 'https://github.com/origami-team/geogami'
+url: 'https://geogami.ifgi.de/'
+license: MIT
+version: 3.2.2
+date-released: '2024-01-26'
