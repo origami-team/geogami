@@ -37,11 +37,8 @@ To do that, simply register using your email id and set up a strong password. Wi
 
 GeoGami offers many games in both Real World and Virtual World. In this video, we will see how to play a GeoGame with Real World games.Depending on your location availability you can choose the game of your choice. To play GeoGami you need a GPS-enabled smartphone or tablet with internet access and an integrated compass. For best accuracy, use a device that has a SIM card. 
 
-If you don't like the game list, you can create a game of your own by registering as a user. 
+If you don't like the game list, you can create a game of your own: [![Watch the video](https://uni-muenster.sciebo.de/s/0pEVIrcOVUhdxcc/view)](https://uni-muenster.sciebo.de/s/2rgtfciYZ7UUU75)
 
-[![Watch the video](https://uni-muenster.sciebo.de/s/0pEVIrcOVUhdxcc/view)](https://uni-muenster.sciebo.de/s/zTIT6F6zQ8VExXj)
-
-<video src="src/assets/readme-pictures/how_to_play.png"></video>
 
 ## How to Create a GeoGame
 
@@ -50,9 +47,9 @@ You can create your own game for your location. Choose from different task types
 
 To do that you need to install GeoGami and register as a User in GeoGami. This can be done by entering your email id in the login section. After registration, login with your user credentials that you have created when registering.
 
-In this video, we will see how to create a game in geogami with a single task. You can create your games with as many task types as you want.
+In this video [![How to create game](https://uni-muenster.sciebo.de/s/0pEVIrcOVUhdxcc/view)](https://uni-muenster.sciebo.de/s/2rgtfciYZ7UUU75) you will see how to create a game in geogami with a single task.
 
-https://uni-muenster.sciebo.de/s/g6eXo4xB7264g08
+
 
 ## Map Features and Task Types in GeoGami
 
