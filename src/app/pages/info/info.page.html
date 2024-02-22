@@ -1,7 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>{{ "Info.title" | translate }}</ion-title>
   </ion-toolbar>
@@ -11,15 +15,18 @@
   <h5>{{ "Info.titleInfotext" | translate }}</h5>
   <p>{{ "Info.infotext1" | translate }}</p>
   <p>{{ "Info.infotext2" | translate }}</p>
-  <p>{{ "Info.infotext3" | translate }} <a href="geogami.uni-muenster.de">{{ "Info.website" | translate }}</a>!</p>
+  <p>
+    {{ "Info.infotext3" | translate }}
+    <a href="geogami.uni-muenster.de">{{ "Info.website" | translate }}</a>!
+  </p>
 
-  <h2 class="ion-text-center">
+  <!--   <h2 class="ion-text-center">
     Made with
     <span (click)="onDarkThemeChange()"
       ><span *ngIf="dark">❤️</span><span *ngIf="!dark">🖤</span></span
     >
     by <a href="https://reedu.de">re:edu</a>
-  </h2>
+  </h2> -->
 
   <h5>Animations</h5>
   <p>
@@ -39,15 +46,15 @@
 
   <p>
     Smiles obtained from
-    <a href="https://www.flaticon.com/free-icons/smile" title="smile icons">Smile icons created by tulpahn - Flaticon</a>
+    <a href="https://www.flaticon.com/free-icons/smile" title="smile icons"
+      >Smile icons created by tulpahn - Flaticon</a
+    >
   </p>
 
   <h5>Screenshots template</h5>
   <p>
     Screenshots template obtained from
-    <a href="https://previewed.app/template/CFA9A157"
-      >previewed.app</a
-    >
+    <a href="https://previewed.app/template/CFA9A157">previewed.app</a>
   </p>
 
   <h5>Sounds</h5>
@@ -60,17 +67,16 @@
   <p class="adsimple-321265083">Informationspflicht laut § 5 TMG.</p>
   <p class="adsimple-321265083">
     Institut für Geoinformatik<br />
-    SIL - Spatial Intelligence Lab<br />
     Heisenbergstraße 2<br />
-    Geo 1<br />
     48149 Münster<br />
   </p>
   <p class="adsimple-321265083"><strong>UID-Nummer:</strong> 126118759<br /></p>
   <p class="adsimple-321265083">
-    <strong>Tel.:</strong> +49 251 83-30001<br />
+    <strong>Tel:</strong> +49 251 – 83 33 08 3<br />
+    <strong>Fax:</strong> +49 251 – 83 39 76 3<br />
     <strong>E-Mail: </strong>
-     <a href="mailto:geogami.ifgi@uni-muenster.de"
-    >geogami.ifgi(at)uni-muenster.de</a
+    <a href="mailto:geogami.ifgi@uni-muenster.de"
+      >geogami.ifgi(at)uni-muenster.de</a
     >
   </p>
   <p class="adsimple-321265083">
@@ -141,17 +147,17 @@
     Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden.
   </p>
   <p>
-    Wenn Ihnen rechtswidrige Links in unserer Applikation auffallen, bitte wir Sie
-    uns zu kontaktieren. Sie finden die Kontaktdaten im Impressum.
+    Wenn Ihnen rechtswidrige Links in unserer Applikation auffallen, bitte wir
+    Sie uns zu kontaktieren. Sie finden die Kontaktdaten im Impressum.
   </p>
   <h2 class="adsimple-321265083">Urheberrechtshinweis</h2>
   <p>
-    Alle Inhalte dieser Applikation (Bilder, Fotos, Texte, Videos) unterliegen dem
-    Urheberrecht der Bundesrepublik Deutschland. Bitte fragen Sie uns bevor Sie
-    die Inhalte dieser Website verbreiten, vervielfältigen oder verwerten wie
-    zum Beispiel auf anderen Websites erneut veröffentlichen. Falls notwendig,
-    werden wir die unerlaubte Nutzung von Teilen der Inhalte unserer Seite
-    rechtlich verfolgen.
+    Alle Inhalte dieser Applikation (Bilder, Fotos, Texte, Videos) unterliegen
+    dem Urheberrecht der Bundesrepublik Deutschland. Bitte fragen Sie uns bevor
+    Sie die Inhalte dieser Website verbreiten, vervielfältigen oder verwerten
+    wie zum Beispiel auf anderen Websites erneut veröffentlichen. Falls
+    notwendig, werden wir die unerlaubte Nutzung von Teilen der Inhalte unserer
+    Seite rechtlich verfolgen.
   </p>
   <p>
     Sollten Sie in dieser Applikation Inhalte finden, die das Urheberrecht
@@ -262,22 +268,25 @@
     </li>
     <li>Tonaufnahmen.</li>
     <li>
-      Standort- und Kompassdaten (Angaben zur geografischen Position und Ausrichtung eines Gerätes oder einer
-      Person).
+      Standort- und Kompassdaten (Angaben zur geografischen Position und
+      Ausrichtung eines Gerätes oder einer Person).
     </li>
     <li>
       Standortverlauf und Bewegungsprofile (Sammlung von Standortdaten und
       Positionsveränderungen über einen gewissen Zeitraum).
     </li>
     <li>
-      Interaktionsdaten (z.B. Tippvorgänge auf der Karte (Anzahl und Ort, Zoom- und Panningvorgänge), 
-      ausgewählte und eingegebene Lösungen beim Beantworten von Fragen).
+      Interaktionsdaten (z.B. Tippvorgänge auf der Karte (Anzahl und Ort, Zoom-
+      und Panningvorgänge), ausgewählte und eingegebene Lösungen beim
+      Beantworten von Fragen).
     </li>
   </ul>
   <h3>Kategorien betroffener Personen</h3>
   <ul>
     <li>Kunden.</li>
-    <li>Nutzer (z.B. App-Nutzer, Webseitenbesucher, Nutzer von Onlinediensten).</li>
+    <li>
+      Nutzer (z.B. App-Nutzer, Webseitenbesucher, Nutzer von Onlinediensten).
+    </li>
   </ul>
   <h3>Zwecke der Verarbeitung</h3>
   <ul>
@@ -642,11 +651,13 @@
         Adressen), Meta-/Kommunikationsdaten (z.B. Geräte-Informationen,
         IP-Adressen), Vertragsdaten (z.B. Vertragsgegenstand, Laufzeit,
         Kundenkategorie), Bild- und/ oder Videoaufnahmen (z. B. Fotografien oder
-        Videoaufnahmen einer Person), Tonaufnahmen, Standort- und Kompassdaten (Angaben zur
-        geografischen Position und Ausrichtung eines Gerätes oder einer Person), Standortverlauf
-        und Bewegungsprofile (Sammlung von Standortdaten und
-        Positionsveränderungen über einen gewissen Zeitraum), Interaktionsdaten (z.B. Tippvorgänge auf der Karte (Anzahl und Ort, Zoom- und Panningvorgänge), 
-        ausgewählte und eingegebene Lösungen beim Beantworten von Fragen).
+        Videoaufnahmen einer Person), Tonaufnahmen, Standort- und Kompassdaten
+        (Angaben zur geografischen Position und Ausrichtung eines Gerätes oder
+        einer Person), Standortverlauf und Bewegungsprofile (Sammlung von
+        Standortdaten und Positionsveränderungen über einen gewissen Zeitraum),
+        Interaktionsdaten (z.B. Tippvorgänge auf der Karte (Anzahl und Ort,
+        Zoom- und Panningvorgänge), ausgewählte und eingegebene Lösungen beim
+        Beantworten von Fragen).
       </li>
       <li>
         <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher,
@@ -1108,19 +1119,19 @@
   </p>
   <h2 class="adsimple-311265068">Automatische Datenspeicherung</h2>
   <p>
-    Wenn Sie heutzutage Websites besuchen oder Apps nutzen, werden gewisse Informationen
-    automatisch erstellt und gespeichert, so auch auf dieser Website. Diese
-    gesammelten Daten sollten möglichst sparsam und nur mit Begründung gesammelt
-    werden werden. Mit Website meinen wir übrigens die Gesamtheit aller
-    Webseiten auf Ihrer Domain, d.h. alles von der Startseite (Homepage) bis hin
-    zur aller letzten Unterseite (wie dieser hier). Mit Domain meinen wir zum
-    Beispiel beispiel.de oder musterbeispiel.com.
+    Wenn Sie heutzutage Websites besuchen oder Apps nutzen, werden gewisse
+    Informationen automatisch erstellt und gespeichert, so auch auf dieser
+    Website. Diese gesammelten Daten sollten möglichst sparsam und nur mit
+    Begründung gesammelt werden werden. Mit Website meinen wir übrigens die
+    Gesamtheit aller Webseiten auf Ihrer Domain, d.h. alles von der Startseite
+    (Homepage) bis hin zur aller letzten Unterseite (wie dieser hier). Mit
+    Domain meinen wir zum Beispiel beispiel.de oder musterbeispiel.com.
   </p>
   <p>
-    Auch während Sie unsere Website jetzt gerade besuchen oder unsere App nutzen, speichert unser
-    Webserver &#8211; das ist der Computer auf dem diese Webseite gespeichert
-    ist &#8211;  aus Gründen der Betriebssicherheit, zur Erstellung von
-    Zugriffsstatistik usw. in der Regel automatisch Daten wie
+    Auch während Sie unsere Website jetzt gerade besuchen oder unsere App
+    nutzen, speichert unser Webserver &#8211; das ist der Computer auf dem diese
+    Webseite gespeichert ist &#8211;  aus Gründen der Betriebssicherheit, zur
+    Erstellung von Zugriffsstatistik usw. in der Regel automatisch Daten wie
   </p>
   <ul class="adsimple-311265068">
     <li class="adsimple-311265068">
@@ -1159,8 +1170,8 @@
   </p>
   <h2 class="adsimple-311265068">Cookies</h2>
   <p>
-    Unsere Website/Applikation verwendet HTTP-Cookies um nutzerspezifische Daten zu
-    speichern.<br />
+    Unsere Website/Applikation verwendet HTTP-Cookies um nutzerspezifische Daten
+    zu speichern.<br />
     Im Folgenden erklären wir, was Cookies sind und warum Sie genutzt werden,
     damit Sie die folgende Datenschutzerklärung besser verstehen.
   </p>
@@ -1356,12 +1367,12 @@
   </p>
   <h2 class="adsimple-311265068">Speicherung persönlicher Daten</h2>
   <p>
-    Persönliche Daten, die Sie uns auf dieser Website/ in dieser App elektronisch übermitteln,
-    wie zum Beispiel Name, E-Mail-Adresse, Adresse oder andere persönlichen
-    Angaben im Rahmen der Übermittlung eines Formulars oder Kommentaren im Blog,
-    werden von uns gemeinsam mit dem Zeitpunkt und der IP-Adresse nur zum
-    jeweils angegebenen Zweck verwendet, sicher verwahrt und nicht an Dritte
-    weitergegeben.
+    Persönliche Daten, die Sie uns auf dieser Website/ in dieser App
+    elektronisch übermitteln, wie zum Beispiel Name, E-Mail-Adresse, Adresse
+    oder andere persönlichen Angaben im Rahmen der Übermittlung eines Formulars
+    oder Kommentaren im Blog, werden von uns gemeinsam mit dem Zeitpunkt und der
+    IP-Adresse nur zum jeweils angegebenen Zweck verwendet, sicher verwahrt und
+    nicht an Dritte weitergegeben.
   </p>
   <p>
     Wir nutzen Ihre persönlichen Daten somit nur für die Kommunikation mit jenen
@@ -1439,9 +1450,10 @@
   <h2 class="adsimple-311265068">Auswertung des Besucherverhaltens</h2>
   <p>
     In der folgenden Datenschutzerklärung informieren wir Sie darüber, ob und
-    wie wir Daten Ihres Besuchs dieser Website/ das Nutzen dieser App auswerten. Die Auswertung der
-    gesammelten Daten erfolgt in der Regel anonym und wir können von Ihrem
-    Verhalten auf dieser Website nicht auf Ihre Person schließen.
+    wie wir Daten Ihres Besuchs dieser Website/ das Nutzen dieser App auswerten.
+    Die Auswertung der gesammelten Daten erfolgt in der Regel anonym und wir
+    können von Ihrem Verhalten auf dieser Website nicht auf Ihre Person
+    schließen.
   </p>
   <p>
     Mehr über Möglichkeiten dieser Auswertung der Besuchsdaten zu widersprechen
@@ -1485,12 +1497,12 @@
   </p>
   <h2 class="adsimple-311265068">OpenStreetMap Datenschutzerklärung</h2>
   <p>
-    Wir haben auf unserer Website/ in unserer App Kartenausschnitte des Online-Kartentools
-    „OpenStreetMap“ eingebunden. Dabei handelt es sich um ein sogenanntes
-    Open-Source-Mapping, welches wir über eine API (Schnittstelle) abrufen
-    können. Angeboten wird diese Funktion von OpenStreetMap Foundation, St
-    John’s Innovation Centre, Cowley Road, Cambridge, CB4 0WS, United Kingdom.
-    Durch die Verwendung dieser Kartenfunktion wird Ihre IP-Adresse an
+    Wir haben auf unserer Website/ in unserer App Kartenausschnitte des
+    Online-Kartentools „OpenStreetMap“ eingebunden. Dabei handelt es sich um ein
+    sogenanntes Open-Source-Mapping, welches wir über eine API (Schnittstelle)
+    abrufen können. Angeboten wird diese Funktion von OpenStreetMap Foundation,
+    St John’s Innovation Centre, Cowley Road, Cambridge, CB4 0WS, United
+    Kingdom. Durch die Verwendung dieser Kartenfunktion wird Ihre IP-Adresse an
     OpenStreetMap weitergeleitet. In dieser Datenschutzerklärung erfahren Sie
     warum wir Funktionen des Tools OpenStreetMap verwenden, wo welche Daten
     gespeichert werden und wie Sie diese Datenspeicherung verhindern können.
@@ -1508,7 +1520,8 @@
     Warum verwenden wir OpenStreetMap auf unserer Website?
   </h3>
   <p>
-    Unsere Webseite/ App nutzt OSM für die Darstellung und den Einsatz von Karten.
+    Unsere Webseite/ App nutzt OSM für die Darstellung und den Einsatz von
+    Karten.
   </p>
   <h3 class="adsimple-311265068">
     Welche Daten werden von OpenStreetMap gespeichert?
@@ -1654,9 +1667,9 @@
   </p>
   <h2 class="adsimple-311265068">Mapbox API Datenschutzerklärung</h2>
   <p>
-    Auf unserer Website/in unserer App nutzen wir die Mapbox API des amerikanischen
-    Software-Unternehmens Mapbox Inc., 740 15th Street NW, 5th Floor, District
-    of Columbia 20005, USA. Mapbox ist ein Online-Kartentool
+    Auf unserer Website/in unserer App nutzen wir die Mapbox API des
+    amerikanischen Software-Unternehmens Mapbox Inc., 740 15th Street NW, 5th
+    Floor, District of Columbia 20005, USA. Mapbox ist ein Online-Kartentool
     (Open-Source-Mapping), das über eine Schnittstelle (API) abgerufen wird.
     Durch die Nutzung dieses Tools wird unter anderem Ihre IP-Adresse an Mapbox
     weitergeleitet und gespeichert. In dieser Datenschutzerklärung erfahren Sie
@@ -1677,8 +1690,8 @@
     Warum verwenden wir Mapbox API auf unserer Website?
   </h3>
   <p>
-    Den Mapbox Service nutzen wir, um in der App eine Bandbreite an Karteninteraktionen und
-    die Kartennutzung zu ermöglichen.
+    Den Mapbox Service nutzen wir, um in der App eine Bandbreite an
+    Karteninteraktionen und die Kartennutzung zu ermöglichen.
   </p>
   <h3 class="adsimple-311265068">
     Welche Daten werden von Mapbox API gespeichert?

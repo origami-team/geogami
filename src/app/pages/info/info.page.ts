@@ -26,7 +26,7 @@ export class InfoPage implements OnInit {
     this.dark = document.body.classList.contains('dark');
   }
 
-  onDarkThemeChange() {
+  /* onDarkThemeChange() {
     document.body.classList.toggle('dark');
     this.dark = !this.dark;
 
@@ -42,6 +42,6 @@ export class InfoPage implements OnInit {
         Plugins.StatusBar.setBackgroundColor({ color: 'white' });
       }
     }
-  }
+  } */
 
 }

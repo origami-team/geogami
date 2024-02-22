@@ -41,6 +41,8 @@ If you don't like the game list, you can create a game of your own by registerin
 
 [![Watch the video](https://uni-muenster.sciebo.de/s/0pEVIrcOVUhdxcc/view)](https://uni-muenster.sciebo.de/s/zTIT6F6zQ8VExXj)
 
+<video src="src/assets/readme-pictures/how_to_play.png"></video>
+
 ## How to Create a GeoGame
 
 The GeoGami games that you can find in our games database so far have been created by the GeoGami users themselves. 
@@ -75,14 +77,14 @@ These are classified as :
 
 | Navigation to Flag | Navigation with Arrow | Navigation via Text | Navigation via Photo |
 | ------------------ | --------------------- | ------------------- | -------------------- |
-| <img src = 'https://uni-muenster.sciebo.de/s/7cZ919drVRkrXLE/download' width = 500 height = 300>| <img src = 'https://uni-muenster.sciebo.de/s/VoBTWSpHaeGxFp9/download' width = 500 height = 300 > | <img src = 'https://uni-muenster.sciebo.de/s/J4dyocs2KTtKHil/download' width = 500 height = 300 > | <img src = 'https://uni-muenster.sciebo.de/s/T1aa7BdcPk154EP/download' width = 500 height = 300 > |
+| <img src = 'src/assets/readme-pictures/nav_flag.png' width = 500 height = 300>| <img src = 'src/assets/readme-pictures/nav_arrow.png' width = 500 height = 300 > | <img src = 'src/assets/readme-pictures/nav_text.png' width = 500 height = 300 > | <img src = 'src/assets/readme-pictures/nav_photo.png' width = 500 height = 300 > |
 
 
 #### Thematic Tasks
 
 | Self location Task | Object location Task | Direction determination Task | Free Tasks |
 | ------------------ | -------------------- | ---------------------------- | ---------- |
-| <img src = 'https://uni-muenster.sciebo.de/s/Qe4SmAb6bYIiOWl/download' width = 600 height = 300> | <img src = 'https://uni-muenster.sciebo.de/s/SjTNDpyMb8gm4GL/download' width = 600 height = 300> | <img src = 'https://uni-muenster.sciebo.de/s/uZzsjUfKuwcR642/download' width = 550 height = 300> | <img src = 'https://uni-muenster.sciebo.de/s/dCmgeA2Z4PuI05Z/download' width = 600 height = 300> |
+| <img src = 'src/assets/readme-pictures/self_location.png' width = 600 height = 300> | <img src = 'src/assets/readme-pictures/object_location.png' width = 600 height = 300> | <img src = 'src/assets/readme-pictures/direction_determination.png' width = 550 height = 300> | <img src = 'src/assets/readme-pictures/free_tasks.png' width = 600 height = 300> |
 
 Additionally we have Information type where you can explain the game in detail to the players, give instructions and rules before proceeding to play.
 
@@ -133,6 +135,4 @@ Heisenbergstraße 2
 
 ## License
 
-MIT Copyright(C) 2021 - GeoGami.
-
-Implemented by [re:edu](https://reedu.de).
+MIT Copyright(C) 2024 - GeoGami.
