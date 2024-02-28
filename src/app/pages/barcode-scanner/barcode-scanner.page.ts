@@ -40,7 +40,7 @@ export class BarcodeScannerPage implements OnInit {
   /**********/
   // tutorial: https://www.youtube.com/watch?v=8GXfjDUCYjU
   async startScan() {
-    const allowed = await this.checkPermission()
+    /* const allowed = await this.checkPermission()
     if (allowed) {
       // // console.log("🚀 allowed")
 
@@ -60,8 +60,8 @@ export class BarcodeScannerPage implements OnInit {
         this.utilService.setQRCodeValue(result.content);
 
         this.navCtrl.navigateForward(`play-game/game-detail/${result.content.slice(25)}`);
-      } */
-    }
+      } 
+    }*/
   }
 
   /********/
