@@ -29,7 +29,7 @@ export class OrigamiOrientationService {
 
   init(isVirtualWorld: boolean) {
     this.isVirtualWorld = isVirtualWorld;
-    console.log(this.platform.platforms());
+  // console.log(this.platform.platforms());
 
     if (this.platform.is('mobile') && this.platform.is('capacitor') && !this.platform.is('mobileweb')) {
       // native
@@ -53,7 +53,7 @@ export class OrigamiOrientationService {
 
     if (!isVirtualWorld) {
       this.orientationSubscription = new Observable((subscriber: Subscriber<number>) => {
-        // console.log("......orientationSubscription (subscriber): ",  subscriber);
+        // // console.log("......orientationSubscription (subscriber): ",  subscriber);
         this.orientationSubscriber = subscriber;
       }).pipe(shareReplay());
     } else {
