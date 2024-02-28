@@ -8,10 +8,10 @@ message: >-
   metadata from this file.
 type: software
 authors:
-  - given-names: Felix
-    family-names: Erdmann
   - given-names: Yousef
     family-names: Qamaz
+  - given-names: Felix
+    family-names: Erdmann
   - given-names: ' Janina'
     family-names: Bistron
   - given-names: 'Sandhya '

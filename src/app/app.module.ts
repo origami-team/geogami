@@ -61,7 +61,7 @@ export function createTranslateLoader(http: HttpClient) {
 import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
 import { EnvTypeQuestionTextModule } from "./components/env-type-question-text/env-type-question-text.module";
 
-const config: SocketIoConfig = { url: environment.socketIoURL, options: {} }; // openstack server
+const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // openstack server
 
 @NgModule({
   declarations: [

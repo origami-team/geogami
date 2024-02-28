@@ -479,6 +479,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.showNameError = true;
       return;
     }
+
     // // console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
