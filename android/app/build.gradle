@@ -6,8 +6,8 @@ android {
         applicationId "com.ifgi.geogami"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 33
-        versionCode 1
-        versionName "3.2.2"
+        versionCode 17
+        versionName "4.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
