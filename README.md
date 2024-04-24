@@ -127,7 +127,7 @@ Institute for Geoinformatics
 University of Münster
 Heisenbergstraße 2
 48149 Münster
-**Mail:** geogami.ifgi(at)uni-muenster.de
+**Mail:** geogami(at)uni-muenster.de
 
 **Team :technologist::**  https://geogami.ifgi.de/kontakt.html#team
 
