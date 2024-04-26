@@ -239,6 +239,10 @@ const routes: Routes = [
       ).then((m) => m.GameTracksVisualizationPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'playing-virenv',
+    loadChildren: () => import('./pages/play-game/playing-virenv/playing-virenv.module').then( m => m.PlayingVirenvPageModule)
+  },
 ];
 @NgModule({
   imports: [
