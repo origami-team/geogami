@@ -240,7 +240,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'playing-virenv',
+    path: 'playing-virenv/:queryParams',
     loadChildren: () => import('./pages/play-game/playing-virenv/playing-virenv.module').then( m => m.PlayingVirenvPageModule)
   },
 ];

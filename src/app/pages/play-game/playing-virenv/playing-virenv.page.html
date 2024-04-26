@@ -1,5 +1,6 @@
 <iframe
-  src="http://localhost:8080?id=6619066b0e403e001e26be82&isVRWorld=true&isVRMirrored=false&gameCode=you&isSingleMode=true&shareData_cbox=false&playerName=you&isRejoin=false"
+  *ngIf="urlSafe"
+  [src]="urlSafe"
   height="100%"
   width="100%"
   target="_self"
