@@ -196,15 +196,22 @@ export class GameDetailPage implements OnInit {
       isRejoin: false,
     };
 
-    if (this.isSingleMode) {
-      this.navCtrl.navigateForward(
-        `play-game/playing-game/${JSON.stringify(this.bundle)}`
-      );
-    } else {
-      /* check whether game is full beofore join game */
-      this.checkAbilityToJoinGame(this.bundle);
+    if (!this.isVirtualWorld) {
+      if (this.isSingleMode) {
+        this.navCtrl.navigateForward(
+          `play-game/playing-game/${JSON.stringify(this.bundle)}`
+        );
+      } else {
+        /* check whether game is full beofore join game */
+        this.checkAbilityToJoinGame(this.bundle);
 
-      // this.checkSavedGameSession();
+        // this.checkSavedGameSession();
+      }
+    } else {
+      /* In case game type is VirEnv, redirect player to WebGL-build - page */
+      this.navCtrl.navigateForward(
+        `playing-virenv/${JSON.stringify(this.bundle)}`
+      );
     }
   }
 
