@@ -467,6 +467,9 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.utilService.showAlertNoConnection();
       return;
     }
+  
+    // Remove extra spaces from game name
+    this.game.name = this.game.name.trim();
 
     // Remove extra spaces from game name
     this.game.name = this.game.name.trim();
