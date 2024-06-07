@@ -59,12 +59,30 @@ export class StartPage implements OnInit {
     Plugins.Device.getInfo().then((device) => (this.device = device));
 
     // get updated app version to notify user of app update
+    if (Capacitor.platform != "web") {
+      this.checkNewAppVersion();
+    }
+
+    // (translation) get languages
+    this.languages = this.languageService.getLangauges();
+    // (translation) set selected language (no need for it)
+    this.selected = this.languageService.selected;
+
+    // Get user role
+    this.user.subscribe((event) => {
+      if (event != null) {
+        this.userRole = event["roles"][0];
+      }
+    });
+  }
+
+  checkNewAppVersion() {
     this.gamesService
       .getAppVersion()
       .then((res) => res.content)
       .then((latestVersionInfo) => {
         this.latestAppVersionInfo = latestVersionInfo;
-        if (this.latestAppVersionInfo.enabled && Capacitor.platform != "web") {
+        if (this.latestAppVersionInfo.enabled) {
           if (Capacitor.platform == "ios" && this.latestAppVersionInfo.ios) {
             this.showUpdateAppAlert(
               this.versionToInt(this.latestAppVersionInfo.version),
@@ -83,18 +101,6 @@ export class StartPage implements OnInit {
           }
         }
       });
-
-    // (translation) get languages
-    this.languages = this.languageService.getLangauges();
-    // (translation) set selected language (no need for it)
-    this.selected = this.languageService.selected;
-
-    // Get user role
-    this.user.subscribe((event) => {
-      if (event != null) {
-        this.userRole = event["roles"][0];
-      }
-    });
   }
 
   handleCardClick(e) {
