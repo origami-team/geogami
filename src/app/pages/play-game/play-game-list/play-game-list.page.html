@@ -29,12 +29,7 @@
         (change)="filterGamesEnv($event.target.value)"
       >
         <option value="real">Real world</option>
-
-        <!-- allow scholars to view virtual environment mode -->
-        <option value="virtual" [disabled]="userRole=='unloggedUser'">
-          Virtual env. {{ (userRole=='unloggedUser' ? '('+
-          ('GameList.logInToAccess' | translate) +')':'') }}
-        </option>
+        <option value="virtual">Virtual env.</option>
       </select>
     </div>
     <div>
