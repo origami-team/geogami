@@ -138,7 +138,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   currentSecond: number = 0;
   gameCode: string = "";
   //* created for solving: https://github.com/origami-team/geogami-virtual-environment-dev/issues/59
-  previousTaskAavatarLastKnownPosition: AvatarPosition;
+  // To send avatar previous position and heading when moving to next env. with same type and  has no initial position
+  previousTaskAvatarLastKnownPosition: AvatarPosition;
+  previousTaskAvatarHeading: number;
 
   // degree for nav-arrow
   heading = 0;
@@ -1719,10 +1721,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         } else {
           this.avatarLastKnownPosition = new AvatarPosition(
             0,
-            this.previousTaskAavatarLastKnownPosition
+            this.previousTaskAvatarLastKnownPosition
               ? new Coords(
-                  this.previousTaskAavatarLastKnownPosition.coords.latitude,
-                  this.previousTaskAavatarLastKnownPosition.coords.longitude
+                  this.previousTaskAvatarLastKnownPosition.coords.latitude,
+                  this.previousTaskAvatarLastKnownPosition.coords.longitude
                 )
               : new Coords(
                   virEnvLayers[this.virEnvType].initialPosition.lat,
@@ -1733,9 +1735,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
 
       //* send inital loc, dir and vir env type
-      //* if task doesn't hahve initial positoin send null to keep avatar current position. (?? Wrong if app env changed from 1 or 2 to others
+      //* if task has initial postion then send it. if not,
+      //* if this isn't first task and same as previous type then send previous avatar position. if not,
+      //* send default inital avatar position from `virEnvLayers`
       //* if no virEnvType is found send deafult one
-      //* if no initial position is defined, check previous task env., if not same as current use default initial position
       this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
         initialPosition: this.task.question.initialAvatarPosition
           ? [
@@ -1744,19 +1747,29 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.task.question.initialAvatarPosition.position.geometry
                 .coordinates[1] * 112000,
             ]
-          : // null),
-
-          this.taskIndex != 0 &&
+          :
+          (
+            this.taskIndex != 0 &&
             this.task.virEnvType ===
               this.game.tasks[this.taskIndex - 1].virEnvType
-          ? null
+          ? [
+            this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
+            this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
+          ]
           : [
               virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
               virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
-            ],
+            ]
+          ),
         initialRotation: this.task.question.initialAvatarPosition
           ? this.task.question.initialAvatarPosition.bearing
-          : null,
+          : (
+            this.taskIndex != 0 &&
+            this.task.virEnvType ===
+              this.game.tasks[this.taskIndex - 1].virEnvType
+          ? this.previousTaskAvatarHeading
+          : null
+          ),
         virEnvType: this.task.virEnvType,
       });
     }
@@ -2100,7 +2113,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
     if (this.isVirtualWorld) {
-      this.previousTaskAavatarLastKnownPosition = this.avatarLastKnownPosition;
+      this.previousTaskAvatarLastKnownPosition = this.avatarLastKnownPosition;
+      this.previousTaskAvatarHeading = this.compassHeading;
       this.avatarLastKnownPosition = undefined;
     }
 
