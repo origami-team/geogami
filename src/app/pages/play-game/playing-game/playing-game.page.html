@@ -79,13 +79,13 @@
           <div *ngIf="!panelMinimized">
             <ion-chip color="primary" *ngIf="task.category.includes('nav')">
               <ion-icon name="navigate"></ion-icon>
-              &nbsp;{{ "General.task" | translate }} {{ taskIndex + 1 }}&nbsp;{{ "General.from" | translate }} {{
-              game.tasks.length }}
+              &nbsp;{{ "General.task" | translate }} ({{ taskIndex + 1 }}/{{
+              game.tasks.length }})
             </ion-chip>
             <ion-chip color="secondary" *ngIf="task.category.includes('theme')">
               <ion-icon name="clipboard"></ion-icon>
-              &nbsp;{{ "General.task" | translate }} {{ taskIndex + 1 }}&nbsp;{{ "General.from" | translate }} {{
-              game.tasks.length }}
+              &nbsp;{{ "General.task" | translate }} ({{ taskIndex + 1 }}/{{
+                game.tasks.length }})
             </ion-chip>
             <!-- <ion-chip color="tertiary" *ngIf="task.category.includes('free')">
               <ion-icon name="rose"></ion-icon>
