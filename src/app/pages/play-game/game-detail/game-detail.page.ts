@@ -48,6 +48,8 @@ export class GameDetailPage implements OnInit {
 
   playersData = [];
 
+  virEnvType: string = null;
+
   constructor(
     public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -112,6 +114,15 @@ export class GameDetailPage implements OnInit {
           if (this.game.isMultiplayerGame == true) {
             /* connect to socket server (multiplayer) */
             this.connectSocketIO_MultiPlayer();
+          }
+
+          //* set vir env type for old (where task type is not included in all tasks) and new games
+          if (this.isVirtualWorld) {
+            if (this.game.tasks[0] && this.game.tasks[0].virEnvType) {
+              this.virEnvType = this.game.tasks[0].virEnvType;
+            } else {
+              this.virEnvType = this.game.virEnvType;
+            }
           }
         });
     });
@@ -185,10 +196,6 @@ export class GameDetailPage implements OnInit {
     }
   }
 
-  pointClick(point) {
-    console.log(point);
-  }
-
   startGame() {
     this.bundle = {
       ...this.prepareRouteParams(),
@@ -208,6 +215,18 @@ export class GameDetailPage implements OnInit {
         // this.checkSavedGameSession();
       }
     } else {
+      // for new impl. where we need to check whether game name is already used and close frame when game is done.
+      if (this.isSingleMode) {
+        // connect to socket.io
+        this.socketService.socket.connect();
+
+        this.socketService.creatAndJoinNewRoom(
+          this.playerName,
+          this.virEnvType,
+          this.isSingleMode
+        );
+      }
+
       /* In case game type is VirEnv, redirect player to WebGL-build - page */
       this.navCtrl.navigateForward(
         `playing-virenv/${JSON.stringify(this.bundle)}`

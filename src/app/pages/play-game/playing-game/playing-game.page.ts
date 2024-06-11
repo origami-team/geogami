@@ -665,23 +665,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   connectSocketIO(task) {
     /* Sinlge user V.E. impl. */
     // ToDo: with many envs you can use env. id instead
-    if (this.isSingleMode) {
-      this.socketService.socket.connect();
+
+    /*** with Vir. Env. single mode the received game code is actually the player name,
+     *   but with mutliplayer  game code it is the (teacherid+gameid).
+     *   (with multiplayer -> here where user connect join a room )
+     ***/
+
+    if (!this.isSingleMode) {
+      this.socketService.creatAndJoinNewRoom(
+        this.playersNames[0],
+        task.virEnvType ? task.virEnvType : this.virEnvType,
+        this.isSingleMode
+      );
+    } else {
+      this.socketService.joinVERoom(
+        this.gameCode
+      );
     }
 
-    /* with Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) 
-        - now vir env name is sent instead of boolion (mirroed or normal)
-    */
-    //* (with single & multiplayer -> here where user connect join a room )
-    this.socketService.socket.emit("newGame", {
-      gameCode: this.isSingleMode ? this.gameCode : this.playersNames[0],
-      virEnvType: task.virEnvType ? task.virEnvType : this.virEnvType,
-      isSingleMode: this.isSingleMode,
-    });
-
     /* To update avatar initial position */
-    // this.socketService.socket.on('requestAvatarInitialPosition', this.deliverInitialAvatarPosition);
-    // this.socketService.socket.once('requestAvatarInitialPosition', () => {
     this.socketService.socket.on("requestAvatarInitialPosition", () => {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
       if (this.avatarLastKnownPosition != undefined) {
