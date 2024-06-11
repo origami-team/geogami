@@ -218,27 +218,38 @@ export class GameDetailPage implements OnInit {
       }
     } else {
       if (this.isSingleMode) {
-        // for new impl. where we need to check whether game name is already used and close frame when game is done.
+        //*** for new impl. where we need to check whether game name is already used and close frame when game is done.
         // ToDo: remove else, when webGL integration works fine
         if (this.useWebGL_cbox) {
           // connect to socket.io
           this.socketService.socket.connect();
 
-          this.socketService.creatAndJoinNewRoom(
-            this.playerName,
-            this.virEnvType,
-            this.isSingleMode
-          );
+          /* 2. check if user name is already exist */
+          this.socketService.socket.emit(
+            "checkRoomNameExistance_v2",
+            { gameCode: this.playerName },
+            (response) => {
+              if (!response.roomStatus) {
+                this.socketService.creatAndJoinNewRoom(
+                  this.playerName,
+                  this.virEnvType,
+                  this.isSingleMode
+                );
 
-          this.socketService.closeFrame_listener();
+                this.socketService.closeFrame_listener();
 
-          /* In case game type is VirEnv, redirect player to WebGL-build - page */
-          this.navCtrl.navigateForward(
-            `playing-virenv/${JSON.stringify(this.bundle)}`
+                /* In case game type is VirEnv, redirect player to WebGL-build - page */
+                this.navCtrl.navigateForward(
+                  `playing-virenv/${JSON.stringify(this.bundle)}`
+                );
+              } else {
+                this.utilService.showAlert("Use another name", "The name you entered is already in use. Please use another name.");
+              }
+            }
           );
         } else {
           // if use webGL check-box is not checked
-          this.bundle = {...this.bundle, useWebGL_cbox: this.useWebGL_cbox}
+          this.bundle = { ...this.bundle, useWebGL_cbox: this.useWebGL_cbox };
           this.navCtrl.navigateForward(
             `play-game/playing-game/${JSON.stringify(this.bundle)}`
           );
