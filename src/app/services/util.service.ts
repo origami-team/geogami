@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
-import { AlertController, PopoverController, ToastController } from '@ionic/angular';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import {
+  AlertController,
+  PopoverController,
+  ToastController,
+} from "@ionic/angular";
+import { BehaviorSubject } from "rxjs";
 import { PopoverComponent } from "src/app/popover/popover.component";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UtilService {
-
   private isOnline$: BehaviorSubject<boolean>;
   private qrCode$: BehaviorSubject<string>;
 
@@ -37,19 +40,18 @@ export class UtilService {
       color: colorV,
       animated: true,
       duration: durationV,
-      cssClass: 'custom-toast',
+      cssClass: "custom-toast",
       buttons: [
         {
-          text: 'Dismiss',
-          role: 'cancel',
+          text: "Dismiss",
+          role: "cancel",
           handler: () => {
-            // Do nothing 
-          }
-        }
-      ]
+            // Do nothing
+          },
+        },
+      ],
     });
     return toast;
-
   }
 
   async showAlertNoConnection() {
@@ -58,15 +60,15 @@ export class UtilService {
       header: "No Internet Connection",
       //subHeader: 'Important message',
       message: "Please check your connection and try again.",
-      buttons: [ /* 'OK' */
+      buttons: [
+        /* 'OK' */
         {
           text: "OK",
           //cssClass: 'alert-button-update',
-          role: 'cancel',
-          handler: () => {
-          }
-        }
-      ]
+          role: "cancel",
+          handler: () => {},
+        },
+      ],
     });
     await alert.present();
   }
@@ -99,11 +101,28 @@ export class UtilService {
       component: PopoverComponent,
       event: ev,
       translucent: true,
-      componentProps: { text }
+      componentProps: { text },
     });
     return await popover.present();
   }
   /*  */
+
+  async showAlert(header: string, msg:string) {
+    const alert = await this.alertCtr.create({
+      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
+      header: header,
+      //subHeader: 'Important message',
+      message:msg,
+      buttons: [
+        /* 'OK' */
+        {
+          text: "OK",
+          //cssClass: 'alert-button-update',
+          role: "cancel",
+          handler: () => {},
+        },
+      ],
+    });
+    await alert.present();
+  }
 }
-
-
