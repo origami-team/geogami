@@ -659,6 +659,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // console.log(" ngOnDestroy")
+    // To disconnect socket connection
+    // this.socketService.disconnectSocket();
   }
 
   // With VR env only
@@ -2022,9 +2024,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.taskIndex++;
     //* check if this is last task that player skipped
     if (this.taskIndex > this.game.tasks.length - 1) {
+      // to close webgl frame when game is finsihed
+      if(this.isSingleMode && this.isVirtualWorld){
+        this.socketService.closeVEGame();
+      }
       /* multiplayer */
       /* change player status in socket server to finished tasks */
-      if (!this.isSingleMode) {
+      else if (!this.isSingleMode) {
         this.socketService.socket.emit(
           "changePlayerConnectionStauts",
           "finished tasks"

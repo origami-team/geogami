@@ -227,6 +227,8 @@ export class GameDetailPage implements OnInit {
         );
       }
 
+      this.socketService.closeFrame_listener();
+
       /* In case game type is VirEnv, redirect player to WebGL-build - page */
       this.navCtrl.navigateForward(
         `playing-virenv/${JSON.stringify(this.bundle)}`
