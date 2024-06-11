@@ -25,6 +25,7 @@ export class GameDetailPage implements OnInit {
   points: any[];
   //* Default share data status
   shareData_cbox = environment.shareData_status;
+  useWebGL_cbox = false;
 
   // VR world
   isVirtualWorld: boolean = false;
@@ -209,30 +210,45 @@ export class GameDetailPage implements OnInit {
           `play-game/playing-game/${JSON.stringify(this.bundle)}`
         );
       } else {
+        //Multi-player
         /* check whether game is full beofore join game */
         this.checkAbilityToJoinGame(this.bundle);
 
         // this.checkSavedGameSession();
       }
     } else {
-      // for new impl. where we need to check whether game name is already used and close frame when game is done.
       if (this.isSingleMode) {
-        // connect to socket.io
-        this.socketService.socket.connect();
+        // for new impl. where we need to check whether game name is already used and close frame when game is done.
+        // ToDo: remove else, when webGL integration works fine
+        if (this.useWebGL_cbox) {
+          // connect to socket.io
+          this.socketService.socket.connect();
 
-        this.socketService.creatAndJoinNewRoom(
-          this.playerName,
-          this.virEnvType,
-          this.isSingleMode
-        );
+          this.socketService.creatAndJoinNewRoom(
+            this.playerName,
+            this.virEnvType,
+            this.isSingleMode
+          );
+
+          this.socketService.closeFrame_listener();
+
+          /* In case game type is VirEnv, redirect player to WebGL-build - page */
+          this.navCtrl.navigateForward(
+            `playing-virenv/${JSON.stringify(this.bundle)}`
+          );
+        } else {
+          // if use webGL check-box is not checked
+          this.bundle = {...this.bundle, useWebGL_cbox: this.useWebGL_cbox}
+          this.navCtrl.navigateForward(
+            `play-game/playing-game/${JSON.stringify(this.bundle)}`
+          );
+        }
+      } else {
+        //Multi-player
+        /* check whether game is full beofore join game */
+        this.checkAbilityToJoinGame(this.bundle);
+        // this.checkSavedGameSession();
       }
-
-      this.socketService.closeFrame_listener();
-
-      /* In case game type is VirEnv, redirect player to WebGL-build - page */
-      this.navCtrl.navigateForward(
-        `playing-virenv/${JSON.stringify(this.bundle)}`
-      );
     }
   }
 

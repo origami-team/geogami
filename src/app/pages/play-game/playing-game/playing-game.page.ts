@@ -197,6 +197,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   // share data approval
   shareDataBox = true;
+  useWebGLBox = false;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
@@ -524,6 +525,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.sPlayerNo = JSON.parse(params.bundle).sPlayerNo;
       this.cJoindPlayersCount = JSON.parse(params.bundle).cJoindPlayersCount;
       this.sTaskNo = JSON.parse(params.bundle).sTaskNo;
+      this.useWebGLBox = JSON.parse(params.bundle).useWebGL_cbox;
     });
 
     this.game = null;
@@ -670,18 +672,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /*** with Vir. Env. single mode the received game code is actually the player name,
      *   but with mutliplayer  game code it is the (teacherid+gameid).
-     *   (with multiplayer -> here where user connect join a room )
+     *   (with single (no webgl) & multiplayer -> here where user connect join a room )
      ***/
 
-    if (!this.isSingleMode) {
+    if ( this.isSingleMode && this.useWebGLBox != undefined && this.useWebGLBox) {
+      this.socketService.joinVERoom(this.gameCode);
+    } else {
       this.socketService.creatAndJoinNewRoom(
-        this.playersNames[0],
+        this.isSingleMode ? this.gameCode : this.playersNames[0],
         task.virEnvType ? task.virEnvType : this.virEnvType,
         this.isSingleMode
-      );
-    } else {
-      this.socketService.joinVERoom(
-        this.gameCode
       );
     }
 
@@ -1751,29 +1751,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.task.question.initialAvatarPosition.position.geometry
                 .coordinates[1] * 112000,
             ]
-          :
-          (
-            this.taskIndex != 0 &&
+          : this.taskIndex != 0 &&
             this.task.virEnvType ===
               this.game.tasks[this.taskIndex - 1].virEnvType
           ? [
-            this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
-            this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
-          ]
+              this.previousTaskAvatarLastKnownPosition.coords.longitude *
+                111000,
+              this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
+            ]
           : [
               virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
               virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
-            ]
-          ),
+            ],
         initialRotation: this.task.question.initialAvatarPosition
           ? this.task.question.initialAvatarPosition.bearing
-          : (
-            this.taskIndex != 0 &&
+          : this.taskIndex != 0 &&
             this.task.virEnvType ===
               this.game.tasks[this.taskIndex - 1].virEnvType
           ? this.previousTaskAvatarHeading
-          : null
-          ),
+          : null,
         virEnvType: this.task.virEnvType,
       });
     }
@@ -2025,12 +2021,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     //* check if this is last task that player skipped
     if (this.taskIndex > this.game.tasks.length - 1) {
       // to close webgl frame when game is finsihed
-      if(this.isSingleMode && this.isVirtualWorld){
+      if (this.isSingleMode && this.isVirtualWorld) {
         this.socketService.closeVEGame();
-      }
+      } else if (!this.isSingleMode) {
       /* multiplayer */
       /* change player status in socket server to finished tasks */
-      else if (!this.isSingleMode) {
         this.socketService.socket.emit(
           "changePlayerConnectionStauts",
           "finished tasks"
