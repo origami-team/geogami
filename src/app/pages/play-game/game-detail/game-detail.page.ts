@@ -104,7 +104,7 @@ export class GameDetailPage implements OnInit {
           ) {
             this.teacherCode =
               this.authService.getUserId() + "-" + this.game._id;
-            console.log("teacher code -> game name", this.teacherCode);
+            // console.log("teacher code -> game name", this.teacherCode);
             //ex(teacherId+gameId): 610bbc83a9fca4001cea4eaa-638df27d7ece7c88bff50443
 
             // initialize map
@@ -146,17 +146,17 @@ export class GameDetailPage implements OnInit {
       this.socketService.socket.on(
         "onPlayerConnectionStatusChange",
         (playersData) => {
-          console.log(
-            "(connectSocketIO_MultiPlayer) playersData: ",
-            playersData
-          );
+          // console.log(
+          //   "(connectSocketIO_MultiPlayer) playersData: ",
+          //   playersData
+          // );
           this.playersData = playersData;
         }
       );
 
       /* get players locations */
       this.socketService.socket.on("updateInstrunctorMapView", (playerData) => {
-        console.log("(updateInstrunctorMapView) playerLoc: ", playerData);
+        // console.log("(updateInstrunctorMapView) playerLoc: ", playerData);
 
         // impl.
         /* check if player loc is not stored yet. this to avoid duplicate entries */
@@ -204,82 +204,74 @@ export class GameDetailPage implements OnInit {
       isRejoin: false,
     };
 
-    /* check if user name is already exist before proceed with starting the game */
+    /* check if user name is already existed before proceeding with starting the game */
+    // ToDo: test if multiplayer player can have same names
     if (this.isVirtualWorld) {
+      // connect to socket.io
+      this.socketService.socket.connect();
+
       this.socketService
         .checkRoomNameExistance(this.playerName)
         .then((isPlayerNameExisted) => {
           if (isPlayerNameExisted) {
-            console.log("🚀 ~~~~~~ true");
             this.utilService.showAlert(
               "Use another name",
               "The name you entered is already in use. Please use another name."
             );
-            return;
+            // return;
+          } else {
+            this.playGameVE();
           }
         });
+    } else {
+      this.playGameReal();
     }
+  }
 
-    console.log("🚀 ~~~111111 ~~~ true");
+  /**
+   * for real world games, redirect player to play-game-game
+   */
+  playGameReal() {
+    if (this.isSingleMode) {
+      this.navCtrl.navigateForward(
+        `play-game/playing-game/${JSON.stringify(this.bundle)}`
+      );
+    } else {
+      //Multi-player
+      /* check whether game is full beofore join game */
+      this.checkAbilityToJoinGame(this.bundle);
 
-    if (!this.isVirtualWorld) {
-      if (this.isSingleMode) {
+      // this.checkSavedGameSession();
+    }
+  }
+
+  /**
+   * for virtual Environment games, redirect player to play-game-game
+   */
+  playGameVE() {
+    if (this.isSingleMode) {
+      //*** for new impl. where we need to check whether game name is already used and close frame when game is done.
+      // ToDo: remove else, when webGL integration works fine
+      if (this.useWebGL_cbox) {
+        this.socketService.creatAndJoinNewRoom(
+          this.playerName,
+          this.virEnvType,
+          this.isSingleMode
+        );
+
+        this.socketService.closeFrame_listener();
+      } else {
+        // if use webGL check-box is not checked
+        this.bundle = { ...this.bundle, useWebGL_cbox: this.useWebGL_cbox };
         this.navCtrl.navigateForward(
           `play-game/playing-game/${JSON.stringify(this.bundle)}`
         );
-      } else {
-        //Multi-player
-        /* check whether game is full beofore join game */
-        this.checkAbilityToJoinGame(this.bundle);
-
-        // this.checkSavedGameSession();
       }
     } else {
-      if (this.isSingleMode) {
-        //*** for new impl. where we need to check whether game name is already used and close frame when game is done.
-        // ToDo: remove else, when webGL integration works fine
-        if (this.useWebGL_cbox) {
-          //1.  connect to socket.io
-          this.socketService.socket.connect();
-
-          /* 2. check if user name is already exist */
-          this.socketService
-            .checkRoomNameExistance(this.playerName)
-            .then((isPlayerNameExisted) => {
-              if (!isPlayerNameExisted) {
-                console.log("🚀 ~~~~~~ true");
-                this.socketService.creatAndJoinNewRoom(
-                  this.playerName,
-                  this.virEnvType,
-                  this.isSingleMode
-                );
-
-                this.socketService.closeFrame_listener();
-
-                /* In case game type is VirEnv, redirect player to WebGL-build - page */
-                this.navCtrl.navigateForward(
-                  `playing-virenv/${JSON.stringify(this.bundle)}`
-                );
-              } else {
-                this.utilService.showAlert(
-                  "Use another name",
-                  "The name you entered is already in use. Please use another name."
-                );
-              }
-            });
-        } else {
-          // if use webGL check-box is not checked
-          this.bundle = { ...this.bundle, useWebGL_cbox: this.useWebGL_cbox };
-          this.navCtrl.navigateForward(
-            `play-game/playing-game/${JSON.stringify(this.bundle)}`
-          );
-        }
-      } else {
-        //Multi-player
-        /* check whether game is full beofore join game */
-        this.checkAbilityToJoinGame(this.bundle);
-        // this.checkSavedGameSession();
-      }
+      //Multi-player
+      /* check whether game is full beofore join game */
+      this.checkAbilityToJoinGame(this.bundle);
+      // this.checkSavedGameSession();
     }
   }
 
@@ -371,7 +363,7 @@ export class GameDetailPage implements OnInit {
           text: "Yes",
           handler: () => {
             /* retreive task index of previous game state */
-            console.log("🚀🚀🚀 (game-detail) - player found disconnected");
+            // console.log("🚀🚀🚀 (game-detail) - player found disconnected");
             this.bundle = this.bundle = {
               ...this.prepareRouteParams(),
               isRejoin: true,
