@@ -426,7 +426,7 @@ export class FeedbackComponent {
     }
 
     if (this.task.answer.type == AnswerType.DIRECTION) {
-      // console.log(this.Math.abs(directionBearing - compassHeading));
+      // // console.log(this.Math.abs(directionBearing - compassHeading));
       this.initFeedback(
         this.Math.abs(directionBearing - compassHeading) <=
           this.DIRECTION_TRESHOLD,
@@ -745,7 +745,7 @@ export class FeedbackComponent {
   }
 
   public showHint(options: any = undefined) {
-    // console.log(options);
+    // // console.log(options);
     if (this.task.answer.type == AnswerType.POSITION) {
       const waypoint = this.task.answer.position.geometry.coordinates;
       const distance = this.helperService.getDistanceFromLatLonInM(
@@ -796,7 +796,7 @@ export class FeedbackComponent {
       this.task.type != "theme-loc"
     ) {
       const center = centroid(this.task.question.geometry.features[0]);
-      // console.log(center);
+      // // console.log(center);
       const waypoint = options.clickPosition;
       const distance = this.helperService.getDistanceFromLatLonInM(
         waypoint[1],
@@ -843,7 +843,7 @@ export class FeedbackComponent {
           this.task.answer?.hints?.[2] ??
           this.translate.instant("Feedback.directionWrongHint");
       }
-      // console.log(this.feedback.hint);
+      // // console.log(this.feedback.hint);
       this.changeDetectorRef.detectChanges();
     }
 
