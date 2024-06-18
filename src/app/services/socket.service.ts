@@ -12,6 +12,9 @@ export class SocketService {
     this.socket = socket;
   }
 
+  /**
+   * Socket events
+   */
   creatAndJoinNewRoom(
     gameCode: string,
     virEnvType: string,
@@ -34,12 +37,34 @@ export class SocketService {
     this.socket.emit("closeVEGame");
   }
 
+  checkRoomNameExistance(gameCode) {
+    return new Promise((resolve) => {
+      this.socket.emit(
+        "checkRoomNameExistance_v2",
+        { gameCode: gameCode },
+        (callback) => {
+          console.log(
+            "🚀 ~ SocketService ~ checkRoomNameExistance ~ response.roomStatus:",
+            callback.roomStatus
+          );
+          resolve(callback.roomStatus);
+        }
+      );
+    });
+  }
+
+  /**
+   * Socket events' listeners
+   */
   closeFrame_listener() {
     this.socket.on("closeWebGLFrame", () => {
       this.navCtrl.navigateForward(`/`);
     });
   }
 
+  /**
+   * General functions
+   */
   disconnectSocket() {
     /* dissconnect socket connection */
     if (this.socket) {

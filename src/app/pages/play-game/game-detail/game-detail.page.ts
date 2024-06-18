@@ -197,12 +197,30 @@ export class GameDetailPage implements OnInit {
     }
   }
 
-  startGame() {
+  async startGame() {
     this.bundle = {
       ...this.prepareRouteParams(),
       playerName: this.playerName,
       isRejoin: false,
     };
+
+    /* check if user name is already exist before proceed with starting the game */
+    if (this.isVirtualWorld) {
+      this.socketService
+        .checkRoomNameExistance(this.playerName)
+        .then((isPlayerNameExisted) => {
+          if (isPlayerNameExisted) {
+            console.log("🚀 ~~~~~~ true");
+            this.utilService.showAlert(
+              "Use another name",
+              "The name you entered is already in use. Please use another name."
+            );
+            return;
+          }
+        });
+    }
+
+    console.log("🚀 ~~~111111 ~~~ true");
 
     if (!this.isVirtualWorld) {
       if (this.isSingleMode) {
@@ -221,15 +239,15 @@ export class GameDetailPage implements OnInit {
         //*** for new impl. where we need to check whether game name is already used and close frame when game is done.
         // ToDo: remove else, when webGL integration works fine
         if (this.useWebGL_cbox) {
-          // connect to socket.io
+          //1.  connect to socket.io
           this.socketService.socket.connect();
 
           /* 2. check if user name is already exist */
-          this.socketService.socket.emit(
-            "checkRoomNameExistance_v2",
-            { gameCode: this.playerName },
-            (response) => {
-              if (!response.roomStatus) {
+          this.socketService
+            .checkRoomNameExistance(this.playerName)
+            .then((isPlayerNameExisted) => {
+              if (!isPlayerNameExisted) {
+                console.log("🚀 ~~~~~~ true");
                 this.socketService.creatAndJoinNewRoom(
                   this.playerName,
                   this.virEnvType,
@@ -243,10 +261,12 @@ export class GameDetailPage implements OnInit {
                   `playing-virenv/${JSON.stringify(this.bundle)}`
                 );
               } else {
-                this.utilService.showAlert("Use another name", "The name you entered is already in use. Please use another name.");
+                this.utilService.showAlert(
+                  "Use another name",
+                  "The name you entered is already in use. Please use another name."
+                );
               }
-            }
-          );
+            });
         } else {
           // if use webGL check-box is not checked
           this.bundle = { ...this.bundle, useWebGL_cbox: this.useWebGL_cbox };

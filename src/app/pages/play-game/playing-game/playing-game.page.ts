@@ -675,9 +675,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
      *   (with single (no webgl) & multiplayer -> here where user connect join a room )
      ***/
 
-    if ( this.isSingleMode && this.useWebGLBox != undefined && this.useWebGLBox) {
+    if (
+      this.isSingleMode &&
+      this.useWebGLBox != undefined &&
+      this.useWebGLBox
+    ) {
       this.socketService.joinVERoom(this.gameCode);
     } else {
+      // To Do: update it after testing integrated webGL frame
+      if (this.isSingleMode) {
+        this.socketService.socket.connect();
+      }
+
       this.socketService.creatAndJoinNewRoom(
         this.isSingleMode ? this.gameCode : this.playersNames[0],
         task.virEnvType ? task.virEnvType : this.virEnvType,
@@ -2024,8 +2033,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.isSingleMode && this.isVirtualWorld) {
         this.socketService.closeVEGame();
       } else if (!this.isSingleMode) {
-      /* multiplayer */
-      /* change player status in socket server to finished tasks */
+        /* multiplayer */
+        /* change player status in socket server to finished tasks */
         this.socketService.socket.emit(
           "changePlayerConnectionStauts",
           "finished tasks"
