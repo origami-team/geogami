@@ -260,6 +260,12 @@ export class GameDetailPage implements OnInit {
         );
 
         this.socketService.closeFrame_listener();
+
+        /* redirect player to WebGL-build - page */
+        this.navCtrl.navigateForward(
+          `playing-virenv/${JSON.stringify(this.bundle)}`
+        );
+        
       } else {
         // if use webGL check-box is not checked
         this.bundle = { ...this.bundle, useWebGL_cbox: this.useWebGL_cbox };
