@@ -197,6 +197,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   // share data approval
   shareDataBox = true;
+  useWebGLBox = false;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
@@ -524,6 +525,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.sPlayerNo = JSON.parse(params.bundle).sPlayerNo;
       this.cJoindPlayersCount = JSON.parse(params.bundle).cJoindPlayersCount;
       this.sTaskNo = JSON.parse(params.bundle).sTaskNo;
+      this.useWebGLBox = JSON.parse(params.bundle).useWebGL_cbox;
     });
 
     this.game = null;
@@ -659,29 +661,40 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // console.log(" ngOnDestroy")
+    // To disconnect socket connection
+    // this.socketService.disconnectSocket();
   }
 
   // With VR env only
   connectSocketIO(task) {
     /* Sinlge user V.E. impl. */
     // ToDo: with many envs you can use env. id instead
-    if (this.isSingleMode) {
-      this.socketService.socket.connect();
+
+    /*** with Vir. Env. single mode the received game code is actually the player name,
+     *   but with mutliplayer  game code it is the (teacherid+gameid).
+     *   (with single (no webgl) & multiplayer -> here where user connect join a room )
+     ***/
+
+    if (
+      this.isSingleMode &&
+      this.useWebGLBox != undefined &&
+      this.useWebGLBox
+    ) {
+      this.socketService.joinVERoom(this.gameCode);
+    } else {
+      // To Do: update it after testing integrated webGL frame
+      if (this.isSingleMode) {
+        this.socketService.socket.connect();
+      }
+
+      this.socketService.creatAndJoinNewRoom(
+        this.isSingleMode ? this.gameCode : this.playersNames[0],
+        task.virEnvType ? task.virEnvType : this.virEnvType,
+        this.isSingleMode
+      );
     }
 
-    /* with Vir. Env. single mode the received game code is actually the player name, but with mutliplayer game code is the (teacherid+gameid) 
-        - now vir env name is sent instead of boolion (mirroed or normal)
-    */
-    //* (with single & multiplayer -> here where user connect join a room )
-    this.socketService.socket.emit("newGame", {
-      gameCode: this.isSingleMode ? this.gameCode : this.playersNames[0],
-      virEnvType: task.virEnvType ? task.virEnvType : this.virEnvType,
-      isSingleMode: this.isSingleMode,
-    });
-
     /* To update avatar initial position */
-    // this.socketService.socket.on('requestAvatarInitialPosition', this.deliverInitialAvatarPosition);
-    // this.socketService.socket.once('requestAvatarInitialPosition', () => {
     this.socketService.socket.on("requestAvatarInitialPosition", () => {
       // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
       if (this.avatarLastKnownPosition != undefined) {
@@ -1747,29 +1760,25 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.task.question.initialAvatarPosition.position.geometry
                 .coordinates[1] * 112000,
             ]
-          :
-          (
-            this.taskIndex != 0 &&
+          : this.taskIndex != 0 &&
             this.task.virEnvType ===
               this.game.tasks[this.taskIndex - 1].virEnvType
           ? [
-            this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
-            this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
-          ]
+              this.previousTaskAvatarLastKnownPosition.coords.longitude *
+                111000,
+              this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
+            ]
           : [
               virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
               virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
-            ]
-          ),
+            ],
         initialRotation: this.task.question.initialAvatarPosition
           ? this.task.question.initialAvatarPosition.bearing
-          : (
-            this.taskIndex != 0 &&
+          : this.taskIndex != 0 &&
             this.task.virEnvType ===
               this.game.tasks[this.taskIndex - 1].virEnvType
           ? this.previousTaskAvatarHeading
-          : null
-          ),
+          : null,
         virEnvType: this.task.virEnvType,
       });
     }
@@ -2020,9 +2029,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.taskIndex++;
     //* check if this is last task that player skipped
     if (this.taskIndex > this.game.tasks.length - 1) {
-      /* multiplayer */
-      /* change player status in socket server to finished tasks */
-      if (!this.isSingleMode) {
+      // to close webgl frame when game is finsihed
+      if (this.isSingleMode && this.isVirtualWorld) {
+        this.socketService.closeVEGame();
+      } else if (!this.isSingleMode) {
+        /* multiplayer */
+        /* change player status in socket server to finished tasks */
         this.socketService.socket.emit(
           "changePlayerConnectionStauts",
           "finished tasks"
