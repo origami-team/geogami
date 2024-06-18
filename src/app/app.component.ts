@@ -6,6 +6,7 @@ import { AuthService } from './services/auth-service.service';
 import { LanguageService } from './services/language.service';
 import { Network } from '@ionic-native/network/ngx';
 import { UtilService } from './services/util.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,12 @@ export class AppComponent {
       Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light }).catch((err) =>
         console.log(err)
       );
+
+      // hide console logs msg
+      if(!environment.production){
+        console.log = function (): void { };
+      }
+
       if (this.platform.is('android')) {
         Plugins.StatusBar.setBackgroundColor({ color: 'white' });
       }
