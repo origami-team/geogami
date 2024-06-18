@@ -6,6 +6,8 @@ import { AuthService } from './services/auth-service.service';
 import { LanguageService } from './services/language.service';
 import { Network } from '@ionic-native/network/ngx';
 import { UtilService } from './services/util.service';
+import { environment } from 'src/environments/environment';
+import { ConsoleToggleServiceService } from './services/console-toggle.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +21,8 @@ export class AppComponent {
     private authService: AuthService,
     private languageService: LanguageService,
     private network: Network,
-    private utilService: UtilService) {
+    private utilService: UtilService,
+    private consoleToggleService: ConsoleToggleServiceService) {
 
     this.initializeApp();
 
@@ -34,6 +37,10 @@ export class AppComponent {
       Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light }).catch((err) =>
       console.log(err)
       );
+
+      // hide console logs
+      this.consoleToggleService.disableConsoleInProduction();
+
       if (this.platform.is('android')) {
         Plugins.StatusBar.setBackgroundColor({ color: 'white' });
       }

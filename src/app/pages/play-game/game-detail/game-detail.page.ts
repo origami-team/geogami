@@ -25,6 +25,7 @@ export class GameDetailPage implements OnInit {
   points: any[];
   //* Default share data status
   shareData_cbox = environment.shareData_status;
+  useWebGL_cbox = false;
 
   // VR world
   isVirtualWorld: boolean = false;
@@ -47,6 +48,8 @@ export class GameDetailPage implements OnInit {
   showLocsBtn = true;
 
   playersData = [];
+
+  virEnvType: string = null;
 
   constructor(
     public navCtrl: NavController,
@@ -113,6 +116,15 @@ export class GameDetailPage implements OnInit {
             /* connect to socket server (multiplayer) */
             this.connectSocketIO_MultiPlayer();
           }
+
+          //* set vir env type for old (where task type is not included in all tasks) and new games
+          if (this.isVirtualWorld) {
+            if (this.game.tasks[0] && this.game.tasks[0].virEnvType) {
+              this.virEnvType = this.game.tasks[0].virEnvType;
+            } else {
+              this.virEnvType = this.game.virEnvType;
+            }
+          }
         });
     });
 
@@ -134,10 +146,10 @@ export class GameDetailPage implements OnInit {
       this.socketService.socket.on(
         "onPlayerConnectionStatusChange",
         (playersData) => {
-          /* console.log(
-            "(connectSocketIO_MultiPlayer) playersData: ",
-            playersData
-          ); */
+          // console.log(
+          //   "(connectSocketIO_MultiPlayer) playersData: ",
+          //   playersData
+          // );
           this.playersData = playersData;
         }
       );
@@ -185,25 +197,86 @@ export class GameDetailPage implements OnInit {
     }
   }
 
-  pointClick(point) {
-  // console.log(point);
-  }
-
-  startGame() {
+  async startGame() {
     this.bundle = {
       ...this.prepareRouteParams(),
       playerName: this.playerName,
       isRejoin: false,
     };
 
+    /* check if user name is already existed before proceeding with starting the game */
+    // ToDo: test if multiplayer player can have same names
+    if (this.isVirtualWorld) {
+      // connect to socket.io
+      this.socketService.socket.connect();
+
+      this.socketService
+        .checkRoomNameExistance(this.playerName)
+        .then((isPlayerNameExisted) => {
+          if (isPlayerNameExisted) {
+            this.utilService.showAlert(
+              "Use another name",
+              "The name you entered is already in use. Please use another name."
+            );
+            // return;
+          } else {
+            this.playGameVE();
+          }
+        });
+    } else {
+      this.playGameReal();
+    }
+  }
+
+  /**
+   * for real world games, redirect player to play-game-game
+   */
+  playGameReal() {
     if (this.isSingleMode) {
       this.navCtrl.navigateForward(
         `play-game/playing-game/${JSON.stringify(this.bundle)}`
       );
     } else {
+      //Multi-player
       /* check whether game is full beofore join game */
       this.checkAbilityToJoinGame(this.bundle);
 
+      // this.checkSavedGameSession();
+    }
+  }
+
+  /**
+   * for virtual Environment games, redirect player to play-game-game
+   */
+  playGameVE() {
+    if (this.isSingleMode) {
+      //*** for new impl. where we need to check whether game name is already used and close frame when game is done.
+      // ToDo: remove else, when webGL integration works fine
+      if (this.useWebGL_cbox) {
+        this.socketService.creatAndJoinNewRoom(
+          this.playerName,
+          this.virEnvType,
+          this.isSingleMode
+        );
+
+        this.socketService.closeFrame_listener();
+
+        /* redirect player to WebGL-build - page */
+        this.navCtrl.navigateForward(
+          `playing-virenv/${JSON.stringify(this.bundle)}`
+        );
+        
+      } else {
+        // if use webGL check-box is not checked
+        this.bundle = { ...this.bundle, useWebGL_cbox: this.useWebGL_cbox };
+        this.navCtrl.navigateForward(
+          `play-game/playing-game/${JSON.stringify(this.bundle)}`
+        );
+      }
+    } else {
+      //Multi-player
+      /* check whether game is full beofore join game */
+      this.checkAbilityToJoinGame(this.bundle);
       // this.checkSavedGameSession();
     }
   }
