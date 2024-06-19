@@ -37,7 +37,7 @@ export class GameDetailPage implements OnInit {
   teacherCode: string = "";
   isSingleMode: boolean = true;
   numPlayers = 2;
-  userRole: String = "";
+  userRole: String = null;
   user = this.authService.getUser();
   bundle: any = {};
   map: mapboxgl.Map;
