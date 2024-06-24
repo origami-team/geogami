@@ -93,6 +93,10 @@ ion-thumbnail {
       > ion-icon {
         margin: 0;
       }
+
+      > .chev-down {
+        align-self: self-start;
+      }
     }
   }
 
@@ -134,7 +138,7 @@ ion-thumbnail {
 
     @media screen and (max-width: 767px) {
       p {
-        margin: 0;
+        margin: 5px;
       }
 
       max-height: 33vh;
@@ -415,14 +419,49 @@ ion-label.player-counter {
 
 /*  */
 
-/* responise header for webgl frame */
+/* responise header and panel for webgl frame */
 @media screen and (max-width: 500px) {
   ion-toolbar {
     --min-height: 45px !important;
   }
   ion-title {
-    font-size: 15px;
-    padding: 0px 5px;
+    font-size: 15px; // normal 20px
+    padding: 0px 5px; // normal 0px 20px
+  }
+
+  .overlay {
+    padding: 10px;
+    .task-text {
+      font-size: 13px; // font-size: 16px;
+    }
+
+    .take-photo-wrapper,
+    .ok-container {
+      ion-button {
+        font-size: 11px; // font-size: 14px;
+        height: 27px; // normal 32px
+      }
+    }
+  }
+
+  .top-info {
+    height: 35px; // normal 50px
+
+    ion-chip {
+      font-size: 11px; // normal 14px
+      height: 27px; // normal 32px
+      ion-icon {
+        font-size: 15px; // normal 20px
+      }
+    }
+  }
+
+  .task-control {
+    .task-wrapper {
+      .task-text {
+        margin: -9px 0px;
+      }
+    }
   }
 }
 
@@ -434,5 +473,31 @@ ion-label.player-counter {
   ion-title {
     font-size: 12px;
     padding: 0px;
+  }
+
+  .overlay {
+    .task-text {
+      font-size: 10px;
+    }
+
+    .take-photo-wrapper,
+    .ok-container {
+      ion-button {
+        font-size: 10px; // font-size: 14px;
+        height: 22px; // normal 32px
+      }
+    }
+  }
+
+  .top-info {
+    height: 27px;
+
+    ion-chip {
+      font-size: 10px;
+      height: 22px;
+      ion-icon {
+        font-size: 12px;
+      }
+    }
   }
 }
