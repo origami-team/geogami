@@ -97,8 +97,8 @@
             </ion-chip>
           </div>
           <ion-button color="dark" fill="clear" (click)="togglePanel()"
-            *ngIf="task.category?.includes('theme') || task.answer.mode != 'NAV_ARROW'">
-            <ion-icon slot="end" name="chevron-down" size="large" *ngIf="!panelMinimized"></ion-icon>
+            *ngIf="task.category?.includes('theme') || task.answer.mode != 'NAV_ARROW'" [ngStyle]="{ 'height' : ( !panelMinimized ? '35px' : '' ) }">
+            <ion-icon class="chev-down" slot="end" name="chevron-down" size="large" *ngIf="!panelMinimized" ></ion-icon>
             <ion-icon slot="end" name="chevron-up" size="large" *ngIf="panelMinimized"></ion-icon>
           </ion-button>
         </div>
@@ -172,7 +172,7 @@
             </ion-button>
           </div>
         </div>
-        <div class="task-text">
+        <div class="task-text" *ngIf="!panelMinimized">
           <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
             {{ "PlayGame.pressOKdestination" | translate }}
           </p>
@@ -188,7 +188,7 @@
 
 
         </div>
-        <div class="ok-container">
+        <div class="ok-container" *ngIf="!panelMinimized">
           <app-audio-player *ngIf="task.question.audio != undefined" [audioSource]="task.question.audio">
           </app-audio-player>
           <ion-button slot="end" class="confirm" [disabled]="uploading"
