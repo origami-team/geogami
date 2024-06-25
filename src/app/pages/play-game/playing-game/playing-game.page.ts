@@ -551,78 +551,90 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.gamesService
         .getGame(JSON.parse(params.bundle).id)
         .then((res) => res.content)
-        .then((game) => {
-          this.game = game;
-          this.loaded = true;
+        .then(
+          (game) => {
+            this.game = game;
+            this.loaded = true;
 
-          // VR world
-          // Check game type either real or VR world
-          // Set the intial avatar location (in either normal or mirrored version)
-          if (this.isVirtualWorld) {
-            //* set vir env type for old (where task type is not included in all tasks) and new games
-            if (game.tasks[0] && game.tasks[0].virEnvType) {
-              this.virEnvType = game.tasks[0].virEnvType;
-            } else {
-              this.virEnvType = game.virEnvType;
-            }
-
-            /* check first task initial location */
-            if (
-              this.game.tasks[0] &&
-              this.game.tasks[0].question.initialAvatarPosition != undefined
-            ) {
-            // console.log("🚀 ~ PlayingGamePage ~ .then ~ initialAvatarLoc:");
-              this.initialAvatarLoc = {
-                lng: this.game.tasks[0].question.initialAvatarPosition.position
-                  .geometry.coordinates[0],
-                lat: this.game.tasks[0].question.initialAvatarPosition.position
-                  .geometry.coordinates[1],
-              };
-              this.initialAvatarDir =
-                this.game.tasks[0].question.initialAvatarPosition.bearing;
-            } else {
-              //* in case task doesn't have intitial positoin, use default one
-              this.initialAvatarLoc =
-                virEnvLayers[this.virEnvType].initialPosition;
-              this.initialAvatarDir = 0;
-            }
-          }
-
-          // Check game type either real or VR world
-          if (game.isVRWorld !== undefined && game.isVRWorld != false) {
-            this.connectSocketIO(this.game.tasks[0]);
-          }
-
-          /* only for multi-player game */
-          if (!this.isSingleMode) {
-            this.numPlayers = game.numPlayers;
-            this.waitPlayersPanel = true;
-
-            if (!this.isRejoin) {
-              /* when join for first time */
-              // connect to socket server
-              this.joinGame_MultiPlayer();
-            } else {
-              /* when rejoin */
-              this.playerNo = this.sPlayerNo;
-              this.joinedPlayersCount = this.cJoindPlayersCount;
-              this.taskIndex = this.sTaskNo;
-
-              /* in case rejoin happens while waiting for players to join */
-              if (this.joinedPlayersCount == this.numPlayers) {
-                this.waitPlayersPanel = false;
+            // VR world
+            // Check game type either real or VR world
+            // Set the intial avatar location (in either normal or mirrored version)
+            if (this.isVirtualWorld) {
+              //* set vir env type for old (where task type is not included in all tasks) and new games
+              if (game.tasks[0] && game.tasks[0].virEnvType) {
+                this.virEnvType = game.tasks[0].virEnvType;
+              } else {
+                this.virEnvType = game.virEnvType;
               }
 
-              /* (socket listener) on instructor request players real time location */
-              this.onRequestPlayerLocationByInstructor();
-              /* (socket listener) on joining game by other players */
-              this.onPlayerJoinGame();
+              /* check first task initial location */
+              if (
+                this.game.tasks[0] &&
+                this.game.tasks[0].question.initialAvatarPosition != undefined
+              ) {
+                this.initialAvatarLoc = {
+                  lng: this.game.tasks[0].question.initialAvatarPosition
+                    .position.geometry.coordinates[0],
+                  lat: this.game.tasks[0].question.initialAvatarPosition
+                    .position.geometry.coordinates[1],
+                };
+                this.initialAvatarDir =
+                  this.game.tasks[0].question.initialAvatarPosition.bearing;
+              } else {
+                //* in case task doesn't have intitial positoin, use default one
+                this.initialAvatarLoc =
+                  virEnvLayers[this.virEnvType].initialPosition;
+                this.initialAvatarDir = 0;
+              }
             }
-          }
 
-          /* Initialize map and subscribe location */
-          this.initializeMap();
-        });
+            // Check game type either real or VR world
+            if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+              this.connectSocketIO(this.game.tasks[0]);
+            }
+
+            /* only for multi-player game */
+            if (!this.isSingleMode) {
+              this.numPlayers = game.numPlayers;
+              this.waitPlayersPanel = true;
+
+              if (!this.isRejoin) {
+                /* when join for first time */
+                // connect to socket server
+                this.joinGame_MultiPlayer();
+              } else {
+                /* when rejoin */
+                this.playerNo = this.sPlayerNo;
+                this.joinedPlayersCount = this.cJoindPlayersCount;
+                this.taskIndex = this.sTaskNo;
+
+                /* in case rejoin happens while waiting for players to join */
+                if (this.joinedPlayersCount == this.numPlayers) {
+                  this.waitPlayersPanel = false;
+                }
+
+                /* (socket listener) on instructor request players real time location */
+                this.onRequestPlayerLocationByInstructor();
+                /* (socket listener) on joining game by other players */
+                this.onPlayerJoinGame();
+              }
+            }
+
+            /* Initialize map and subscribe location */
+            this.initializeMap();
+          },
+          (err) => {
+            // if game is not found due to wrong game id or game was deleted,
+            // show a msg that game was not found and redirect user to games menu
+            this.utilService.showToast(
+              `Game could not be found.`,
+              "warning",
+              3000,
+              "toast-black"
+            );
+            this.navCtrl.navigateForward("/");
+          }
+        );
     });
 
     /* Initialize map and subscribe location */
