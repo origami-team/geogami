@@ -220,7 +220,8 @@
     "allGames": "Alle",
     "myGames": "Meine Spiele",
     "curated": "Kuratiert",
-    "emptyGamesList": "Du hast noch kein Spiel erstellt!"
+    "emptyGamesList": "Du hast noch kein Spiel erstellt!",
+    "gameNotFound":"Das Spiel konnte nicht gefunden werden."
   },
   "Showroom": {
     "titleShowroom": "Lerne GeoGami kennen",

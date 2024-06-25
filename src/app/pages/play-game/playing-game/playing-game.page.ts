@@ -627,7 +627,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             // if game is not found due to wrong game id or game was deleted,
             // show a msg that game was not found and redirect user to games menu
             this.utilService.showToast(
-              `Game could not be found.`,
+              this.translate.instant("PlayGame.gameNotFound"),
               "warning",
               3000,
               "toast-black"
