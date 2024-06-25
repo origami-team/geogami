@@ -23,13 +23,14 @@ export class UtilService {
     this.qrCode$ = new BehaviorSubject("");
   }
 
-  async showToast(msg, colorV = "dark", durationV = 3000, cssStyle = false) {
+  async showToast(msg, colorV = "dark", durationV = 3000, cssStyle = "") {
+    console.log("🚀 ~ UtilService ~ showToast ~ colorV:", colorV)
     const toast = await this.toastCtr.create({
       message: msg,
       color: colorV,
       animated: true,
       duration: durationV,
-      //cssClass: (cssStyle?'connection-toast-class':'')
+      cssClass: cssStyle
     });
     toast.present();
   }

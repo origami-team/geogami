@@ -12,7 +12,7 @@ import { environment } from "../../environments/environment";
   providedIn: "root",
 })
 export class GamesService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   createHeaders() {
     let headers = new HttpHeaders();
@@ -24,17 +24,22 @@ export class GamesService {
     return headers;
   }
 
-  getGames(minimal: boolean = false, contentAdmin: boolean = false): Promise<any> {
+  getGames(
+    minimal: boolean = false,
+    contentAdmin: boolean = false
+  ): Promise<any> {
     // Only content admin can view multi-players games
     return this.http
-      .get(`${environment.apiURL}/game/all/?${minimal ? "minimal" : ""}&${contentAdmin ? "contentAdmin" : ""}`)
+      .get(
+        `${environment.apiURL}/game/all/?${minimal ? "minimal" : ""}&${
+          contentAdmin ? "contentAdmin" : ""
+        }`
+      )
       .toPromise();
   }
 
   getMinimalGamesWithLocs(): Promise<any> {
-    return this.http
-      .get(`${environment.apiURL}/game/allwithlocs`)
-      .toPromise();
+    return this.http.get(`${environment.apiURL}/game/allwithlocs`).toPromise();
   }
 
   getTracks(): Promise<any> {
@@ -46,7 +51,13 @@ export class GamesService {
   }
 
   getGame(id: string): Promise<any> {
-    return this.http.get(`${environment.apiURL}/game/${id}`).toPromise();
+    return this.http
+      .get(`${environment.apiURL}/game/${id}`)
+      .toPromise()
+      // in case game was deleted or not found
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   postGame(game: Game): Promise<any> {
@@ -64,7 +75,7 @@ export class GamesService {
 
   updateGame(game: Game): Promise<any> {
     game.tasks.forEach((task) => {
-      if (task._id.length != 24) delete task._id;
+      if (task._id.length != 24) delete task._id; //?????
     });
     return this.http
       .put(`${environment.apiURL}/game`, game, {
@@ -90,7 +101,7 @@ export class GamesService {
   }
 
   //* To retreive user games info that has at least on track
-  getUserGamesWithTrackInfo(){
+  getUserGamesWithTrackInfo() {
     return this.http
       .get(`${environment.apiURL}/game/usergames`, {
         headers: this.createHeaders(),
