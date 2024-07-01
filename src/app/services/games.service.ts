@@ -85,6 +85,15 @@ export class GamesService {
       .toPromise();
   }
 
+  deleteMyGame(id: string): Promise<any> {
+    return this.http
+      .put(`${environment.apiURL}/game/delete/${id}`,null, {
+        headers: this.createHeaders(),
+        observe: "response",
+      })
+      .toPromise();
+  }
+
   getUserGames(): Promise<any> {
     return this.http
       .get(`${environment.apiURL}/user/games`, {
