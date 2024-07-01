@@ -16,7 +16,9 @@
     "pl_optional": "(optional)",
     "back_button": "Back",
     "from": "from",
-    "next": "Next"
+    "next": "Next",
+    "delete": "Delete",
+    "edit": "Edit"
   },
   "Tasktypes": {
     "navigationTasks": "Navigation tasks",
@@ -148,7 +150,6 @@
     "titleCreateGameList": "Create a GeoGami",
     "titleCreateGameVirtualList": "Create a virtual GeoGami",
     "create": "Create",
-    "edit": "Edit",
     "createDescription": "Create a new Game.",
     "editDescription": "Modify an existing GeoGami.",
     "informationText": "Information text",
