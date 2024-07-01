@@ -85,7 +85,7 @@ export class GamesService {
       .toPromise();
   }
 
-  deleteMyGame(id: string): Promise<any> {
+  deleteGame(id: string): Promise<any> {
     return this.http
       .put(`${environment.apiURL}/game/delete/${id}`,null, {
         headers: this.createHeaders(),

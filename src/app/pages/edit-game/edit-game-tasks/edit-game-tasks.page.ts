@@ -249,6 +249,6 @@ export class EditGameTasksPage implements OnInit {
   navigateBack() {
     this.gameFactory.flushGame();
     // this.navCtrl.back();
-    this.navCtrl.navigateForward(`edit-game-list`);;
+    this.navCtrl.navigateForward(`play-game/play-game-list`);;
   }
 }

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button
         color="dark"
-        defaultHref="/"
+        (click)="navigateBackToStart()"
         text="{{ 'General.back_button' | translate }}"
       ></ion-back-button>
     </ion-buttons>
@@ -112,7 +112,7 @@
         (click)="gameClick(game)"
         detail
         color="secondary"
-        style="width: 100%; margin-right: 0;"
+        style="width: 100%; margin-right: 0"
       >
         <ion-card-header>
           <ion-item lines="none" color="secondary">
@@ -141,16 +141,18 @@
         </ion-card-header>
       </ion-card>
       <ion-buttons *ngIf="this.userId == game.user" class="game-actions">
-        <!-- for edit -->
-        <!-- <ion-button>
-          <ion-icon name="save-sharp"></ion-icon>
-        </ion-button> -->
+        <ion-button
+          title="{{'General.edit'| translate}}"
+          (click)="EditGame(game._id)"
+        >
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
 
-        <ion-button (click)="deleteMyGame(game._id)">
-          <ion-icon
-            slot="end"
-            name="trash-outline"
-          ></ion-icon>
+        <ion-button
+          title="{{'General.delete'| translate}}"
+          (click)="deleteGame(game._id)"
+        >
+          <ion-icon name="trash-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </div>
