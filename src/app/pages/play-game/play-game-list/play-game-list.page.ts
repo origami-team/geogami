@@ -394,7 +394,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   async openMapTap() {
-    if (this.isListTabSelected ) {
+    if (this.isListTabSelected) {
       this.isListTabSelected = false;
 
       if (!this.map) {
@@ -532,7 +532,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   // Delete game
-  async deleteMyGame(gameID: string) {
+  async deleteGame(gameID: string) {
     const alert = await this.alertController.create({
       backdropDismiss: false, // disable alert dismiss when backdrop is clicked
       header: this._translate.instant("PlayGame.deleteGame"),
@@ -549,11 +549,11 @@ export class PlayGameListPage implements OnInit {
           cssClass: "alert-button-confirm",
           handler: () => {
             this.gamesService
-              .deleteMyGame(gameID)
+              .deleteGame(gameID)
               .then((res) => {
                 if (res.status == 200) {
                   // Get games data from server to refresh list
-                  this.getGamesData()
+                  this.getGamesData();
                 }
               })
               .catch((e) => {
@@ -564,5 +564,19 @@ export class PlayGameListPage implements OnInit {
       ],
     });
     await alert.present();
+  }
+
+  // Edit game
+  async EditGame(gameID: string) {
+    let bundle = {
+      isRealWorld: this.gameEnvSelected == "real" ? true : false,
+      isSingleMode: this.gameModeSelected == "single" ? true : false,
+      game_id: gameID,
+    };
+    this.navCtrl.navigateForward(`edit-game-tasks/${JSON.stringify(bundle)}`);
+  }
+
+  navigateBackToStart() {
+    this.navCtrl.navigateRoot("/");
   }
 }

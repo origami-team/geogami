@@ -174,4 +174,9 @@ export class EditGameListPage implements OnInit {
         .reverse();
     }
   }
+
+  navigateBackToCreateMenu() {
+    // this.navCtrl.back();
+    this.navCtrl.navigateForward(`create-game`);;
+  }
 }
