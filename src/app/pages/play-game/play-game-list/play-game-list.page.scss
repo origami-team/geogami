@@ -82,6 +82,14 @@ ion-tab-bar {
   }
 }
 
+.game-actions{
+  margin: 17px 0 17px 0;
+  border-radius: 0 10px 10px 0;
+  border-bottom: 1px solid;
+  border-top: 1px solid;
+  border-right: 1px solid;
+}
+
 // less than 630px tablet
 @media only screen and (max-width: 630px) {
   .select-style {

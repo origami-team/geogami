@@ -1,40 +1,40 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from "@angular/core";
 
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from "@ionic/angular";
 
-import { GamesService } from '../../../services/games.service';
+import { GamesService } from "../../../services/games.service";
 
 // VR world
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from "@angular/router";
 // For getting user role
-import { AuthService } from '../../../services/auth-service.service';
-import { environment } from 'src/environments/environment';
+import { AuthService } from "../../../services/auth-service.service";
+import { environment } from "src/environments/environment";
 
 import mapboxgl from "mapbox-gl";
-import { UtilService } from 'src/app/services/util.service';
-import { SocketService } from 'src/app/services/socket.service';
+import { UtilService } from "src/app/services/util.service";
+import { SocketService } from "src/app/services/socket.service";
+import { TranslateService } from "@ngx-translate/core";
 // import {} from environment.mapStyle + 'realWorld.json'
 
-
 @Component({
-  selector: 'app-play-game-list',
-  templateUrl: './play-game-list.page.html',
-  styleUrls: ['./play-game-list.page.scss']
+  selector: "app-play-game-list",
+  templateUrl: "./play-game-list.page.html",
+  styleUrls: ["./play-game-list.page.scss"],
 })
 export class PlayGameListPage implements OnInit {
   @ViewChild("gamesMap") mapContainer;
   @ViewChild("popupContainer") popupContainer: any;
 
   games_res: any;
-  games_view: any;  // for viewing based on filter games_res
+  games_view: any; // for viewing based on filter games_res
   all_games_segment: any;
   gamesWithLocs: any;
 
-  gameEnvSelected = 'real';  // (default) game mode select
-  gameModeSelected = 'single';  // (default) game mode select
+  gameEnvSelected = "real"; // (default) game mode select
+  gameModeSelected = "single"; // (default) game mode select
   isMutiplayerGame = undefined;
 
-  // To be able to update games list and switch between segments 
+  // To be able to update games list and switch between segments
   searchText: string = "";
   selectedSegment: string = "curated";
   // to disable mine segment for unlogged user
@@ -60,15 +60,16 @@ export class PlayGameListPage implements OnInit {
   /* isSingleMode: boolean = true;
   numPlayers : number = 1; */
 
-
   constructor(
     public navCtrl: NavController,
-    private gamesService: GamesService,
+    public gamesService: GamesService,
     private route: ActivatedRoute,
     private authService: AuthService,
     private utilService: UtilService,
-    private socketService: SocketService
-  ) { }
+    private socketService: SocketService,
+    private alertController: AlertController,
+    public _translate: TranslateService
+  ) {}
 
   ngOnInit() {
     /* if device is not connected to internet, show notification */
@@ -99,39 +100,43 @@ export class PlayGameListPage implements OnInit {
     }
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   // Get games data from server
   getGamesData() {
     /* Only content admin can view multi-players games */
-    this.gamesService.getGames(true, this.userRole == "contentAdmin").then(res => res.content).then(games => {
-      // Get either real or VE agmes based on selected environment 
-      this.games_res = games;
+    this.gamesService
+      .getGames(true, this.userRole == "contentAdmin")
+      .then((res) => res.content)
+      .then((games) => {
+        // Get either real or VE agmes based on selected environment
+        this.games_res = games;
 
-      /* filter real world games (default) - as it represents the initial view */
-      this.filterRealWorldGames();
+        /* filter real world games (default) - as it represents the initial view */
+        this.filterRealWorldGames();
 
-      // this.loading = true;
+        // this.loading = true;
 
-      // Filter data of selected segment
-      this.segmentChanged(this.selectedSegment)
-    });
+        // Filter data of selected segment
+        this.segmentChanged(this.selectedSegment);
+      });
   }
 
   // ToDo: update the functions
   doRefresh(event) {
     // Get games data from server
     // Only content admin can view multi-players games
-    this.gamesService.getGames(true, this.userRole == "contentAdmin")
-      .then(res => res.content).then(games => {
+    this.gamesService
+      .getGames(true, this.userRole == "contentAdmin")
+      .then((res) => res.content)
+      .then((games) => {
         this.games_res = games;
         this.filterGamesEnv(this.gameEnvSelected);
-
-      }).finally(() => event.target.complete());;
+      })
+      .finally(() => event.target.complete());
   }
 
-  //* update shown games based on search phrase 
+  //* update shown games based on search phrase
   filterList(event) {
     this.filterSelectedSegementList(event.detail.value);
   }
@@ -141,23 +146,34 @@ export class PlayGameListPage implements OnInit {
   }
 
   // segment (my games - all games - curated game)
-  segmentChanged(segVal) {  //--- ToDo check duplicate code and create a func for it
+  segmentChanged(segVal) {
+    //--- ToDo check duplicate code and create a func for it
     // if mine is selected
     if (segVal == "mine") {
-      this.games_view = this.all_games_segment.filter(game => game.user == this.userId && game.isMultiplayerGame == this.isMutiplayerGame);
+      this.games_view = this.all_games_segment.filter(
+        (game) =>
+          game.user == this.userId &&
+          game.isMultiplayerGame == this.isMutiplayerGame
+      );
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();
-
-    } else if (segVal == "all") { // if all is selected
+    } else if (segVal == "all") {
+      // if all is selected
       //onsole.log("all"); //temp
-      this.games_view = this.all_games_segment.filter(game => game.isMultiplayerGame == this.isMutiplayerGame);
+      this.games_view = this.all_games_segment.filter(
+        (game) => game.isMultiplayerGame == this.isMutiplayerGame
+      );
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();
-    }
-    else if (segVal == "curated") { // if curated is selected
-      this.games_view = this.all_games_segment.filter(game => game.isCuratedGame == true && game.isMultiplayerGame == this.isMutiplayerGame);
+    } else if (segVal == "curated") {
+      // if curated is selected
+      this.games_view = this.all_games_segment.filter(
+        (game) =>
+          game.isCuratedGame == true &&
+          game.isMultiplayerGame == this.isMutiplayerGame
+      );
 
       // to update shown games based on search phrase
       this.updateGamesListSearchPhrase();
@@ -167,33 +183,40 @@ export class PlayGameListPage implements OnInit {
   /* update shown games based on search phrase */
   updateGamesListSearchPhrase() {
     if (this.searchText != "") {
-      this.games_view = this.games_view.filter(game =>
-      (game.name.toLowerCase().includes(this.searchText.toLowerCase())
-        || (game.place != undefined && game.place.toLowerCase().includes(this.searchText.toLowerCase())))
-      )
+      this.games_view = this.games_view.filter(
+        (game) =>
+          game.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+          (game.place != undefined &&
+            game.place.toLowerCase().includes(this.searchText.toLowerCase()))
+      );
     }
   }
 
   // update list after selecting a segment
   filterSelectedSegementList(searchPhrase) {
     if (this.selectedSegment == "all") {
-      this.games_view = this.all_games_segment.filter(game =>
-      (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
-        || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
-      )
+      this.games_view = this.all_games_segment.filter(
+        (game) =>
+          game.name.toLowerCase().includes(searchPhrase.toLowerCase()) ||
+          (game.place != undefined &&
+            game.place.toLowerCase().includes(searchPhrase.toLowerCase()))
+      );
     } else if (this.selectedSegment == "mine") {
-      this.games_view = this.all_games_segment.filter(game =>
-        (game.user == this.userId) &&
-        (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
-          || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
-      )
-    }
-    else if (this.selectedSegment == "curated") {
-      this.games_view = this.all_games_segment.filter(game =>
-        (game.isCuratedGame == true) &&
-        (game.name.toLowerCase().includes(searchPhrase.toLowerCase())
-          || (game.place != undefined && game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
-      )
+      this.games_view = this.all_games_segment.filter(
+        (game) =>
+          game.user == this.userId &&
+          (game.name.toLowerCase().includes(searchPhrase.toLowerCase()) ||
+            (game.place != undefined &&
+              game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+      );
+    } else if (this.selectedSegment == "curated") {
+      this.games_view = this.all_games_segment.filter(
+        (game) =>
+          game.isCuratedGame == true &&
+          (game.name.toLowerCase().includes(searchPhrase.toLowerCase()) ||
+            (game.place != undefined &&
+              game.place.toLowerCase().includes(searchPhrase.toLowerCase())))
+      );
     }
   }
 
@@ -202,14 +225,14 @@ export class PlayGameListPage implements OnInit {
     mapboxgl.accessToken = environment.mapboxAccessToken;
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      style: environment.mapStyle + 'realWorld.json',
+      style: environment.mapStyle + "realWorld.json",
       // style: 'mapbox://styles/mapbox/light-v9',
       // style: 'mapbox://styles/mapbox/light-v10',
       // style: 'mapbox://styles/mapbox/streets-v11',
       center: [8, 51.8],
       zoom: 3,
       minZoom: 2,
-      maxZoom: 18  // to avoid error
+      maxZoom: 18, // to avoid error
     });
 
     // disable map rotation using right click + drag
@@ -220,7 +243,7 @@ export class PlayGameListPage implements OnInit {
     this.map.addControl(new mapboxgl.NavigationControl());
 
     //Temp
-    this.map.on('load', () => {
+    this.map.on("load", () => {
       // Load an image from an external URL pr assets
       this.map.loadImage(
         "assets/icons/icon-72x72.png",
@@ -235,90 +258,93 @@ export class PlayGameListPage implements OnInit {
       // Add a new source from our GeoJSON data and
       // set the 'cluster' option to true. GL-JS will
       // add the point_count property to your source data.
-      this.map.addSource('clusters', {
-        type: 'geojson',
+      this.map.addSource("clusters", {
+        type: "geojson",
         data: {
-          'type': 'FeatureCollection',
-          'features': gamesPoints
+          type: "FeatureCollection",
+          features: gamesPoints,
         },
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
       });
 
       this.map.addLayer({
-        id: 'clusters',
-        type: 'circle',
-        source: 'clusters',
-        filter: ['has', 'point_count'],
+        id: "clusters",
+        type: "circle",
+        source: "clusters",
+        filter: ["has", "point_count"],
         paint: {
-          'circle-color': '#51bbd6',
-          'circle-radius': [
-            'step',
-            ['get', 'point_count'],
-            5, 2,
-            10, 7,
-            15, 20,
-            20, 30,
-            25
+          "circle-color": "#51bbd6",
+          "circle-radius": [
+            "step",
+            ["get", "point_count"],
+            5,
+            2,
+            10,
+            7,
+            15,
+            20,
+            20,
+            30,
+            25,
           ],
           "circle-opacity": 0,
           "circle-stroke-width": 12,
-          "circle-stroke-color": '#51bbd6',
-          "circle-stroke-opacity": 0.85
-        }
+          "circle-stroke-color": "#51bbd6",
+          "circle-stroke-opacity": 0.85,
+        },
       });
 
       this.map.addLayer({
-        id: 'cluster-count',
-        type: 'symbol',
-        source: 'clusters',
-        filter: ['has', 'point_count'],
+        id: "cluster-count",
+        type: "symbol",
+        source: "clusters",
+        filter: ["has", "point_count"],
         layout: {
-          'text-field': '{point_count_abbreviated}',
-          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-          'text-size': 20,
-        }
+          "text-field": "{point_count_abbreviated}",
+          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+          "text-size": 20,
+        },
       });
 
       // Add a layer showing game point
       this.map.addLayer({
-        id: 'unclustered-point',
-        type: 'symbol',
-        source: 'clusters',
-        filter: ['!', ['has', 'point_count']],
+        id: "unclustered-point",
+        type: "symbol",
+        source: "clusters",
+        filter: ["!", ["has", "point_count"]],
         layout: {
           "icon-image": "geogami-marker",
           "icon-size": 0.75,
           "icon-offset": [0, 0],
           "icon-allow-overlap": true,
-        }
+        },
       });
 
       // inspect a cluster on click
-      this.map.on('click', 'clusters', (e) => {
+      this.map.on("click", "clusters", (e) => {
         const features = this.map.queryRenderedFeatures(e.point, {
-          layers: ['clusters']
+          layers: ["clusters"],
         });
         const clusterId = features[0].properties.cluster_id;
-        this.map.getSource('clusters').getClusterExpansionZoom(
-          clusterId,
-          (err, zoom) => {
+        this.map
+          .getSource("clusters")
+          .getClusterExpansionZoom(clusterId, (err, zoom) => {
             if (err) return;
 
             this.map.easeTo({
               center: features[0].geometry.coordinates,
-              zoom: zoom
+              zoom: zoom,
             });
-          }
-        );
+          });
       });
 
       // When a click event occurs on a feature in
       // the unclustered-point layer, open a popup at
       // the location of the feature, with
       // description HTML from its properties.
-      this.map.on('click', 'unclustered-point', (e) => {
+      this.map.on("click", "unclustered-point", (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         this.popup = e.features[0].properties;
 
@@ -346,26 +372,25 @@ export class PlayGameListPage implements OnInit {
 
       //--- ToDo (imp) use one func mouseenter for both cluster and point
       // Change the cursor to a pointer when the mouse is over the cluster layer.
-      this.map.on('mouseenter', 'clusters', (e) => {
-        this.map.getCanvas().style.cursor = 'pointer';
+      this.map.on("mouseenter", "clusters", (e) => {
+        this.map.getCanvas().style.cursor = "pointer";
       });
 
       // Change it back to a pointer when it leaves.
-      this.map.on('mouseleave', 'clusters', () => {
-        this.map.getCanvas().style.cursor = '';
+      this.map.on("mouseleave", "clusters", () => {
+        this.map.getCanvas().style.cursor = "";
       });
 
       // Change it back to a pointer when it leaves.
-      this.map.on('mouseleave', 'unclustered-point', () => {
-        this.map.getCanvas().style.cursor = '';
+      this.map.on("mouseleave", "unclustered-point", () => {
+        this.map.getCanvas().style.cursor = "";
       });
 
       // Change the cursor to a pointer when the mouse is over the game layer.
-      this.map.on('mouseenter', 'unclustered-point', () => {
-        this.map.getCanvas().style.cursor = 'pointer';
+      this.map.on("mouseenter", "unclustered-point", () => {
+        this.map.getCanvas().style.cursor = "pointer";
       });
     });
-
   }
 
   async openMapTap() {
@@ -374,16 +399,17 @@ export class PlayGameListPage implements OnInit {
 
       if (!this.map) {
         // get minimal games with locs for games map view
-        this.gamesService.getMinimalGamesWithLocs().then(res => res.content).then(gameswithlocs => {
-          // Get either real or VE agmes based on selected environment 
-          this.gamesWithLocs = gameswithlocs;
+        this.gamesService
+          .getMinimalGamesWithLocs()
+          .then((res) => res.content)
+          .then((gameswithlocs) => {
+            // Get either real or VE agmes based on selected environment
+            this.gamesWithLocs = gameswithlocs;
 
-          this.convertToGeoJson()
-        });
+            this.convertToGeoJson();
+          });
       }
-
     }
-
   }
 
   openListTap() {
@@ -393,23 +419,23 @@ export class PlayGameListPage implements OnInit {
   }
 
   async convertToGeoJson() {
-    let convertedData = []
+    let convertedData = [];
 
-    this.gamesWithLocs.forEach(game => {
+    this.gamesWithLocs.forEach((game) => {
       if (game.coords) {
         convertedData.push({
-          'type': 'Feature',
-          'properties': {
-            '_id': game._id,
-            'name': game.name,
-            'place': game.place,
-            'task_num': game.task_num,
+          type: "Feature",
+          properties: {
+            _id: game._id,
+            name: game.name,
+            place: game.place,
+            task_num: game.task_num,
           },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': game.coords
-          }
-        })
+          geometry: {
+            type: "Point",
+            coordinates: game.coords,
+          },
+        });
       }
     });
 
@@ -418,7 +444,6 @@ export class PlayGameListPage implements OnInit {
   }
 
   showGamesOnMap(gamesListGeoJson) {
-
     if (!this.map) {
       // console.log("Create map ////////////");
       this.initMap(gamesListGeoJson);
@@ -453,13 +478,12 @@ export class PlayGameListPage implements OnInit {
         }
       }); 
     }*/
-
   }
 
   /* on game environment change OR refresh*/
   filterGamesEnv(envVal: string) {
     /* first, update game mode to single player */
-    this.gameModeSelected = 'single';
+    this.gameModeSelected = "single";
     this.isMutiplayerGame = undefined;
     /* then, check game env. */
     if (envVal == "real") {
@@ -469,19 +493,19 @@ export class PlayGameListPage implements OnInit {
     }
 
     // Filter data of selected segment
-    this.segmentChanged(this.selectedSegment)
+    this.segmentChanged(this.selectedSegment);
   }
 
   filterRealWorldGames() {
-    this.all_games_segment = this.games_res.filter(game =>
-      (game.isVRWorld == false || game.isVRWorld == undefined)
-    ).reverse();
+    this.all_games_segment = this.games_res
+      .filter((game) => game.isVRWorld == false || game.isVRWorld == undefined)
+      .reverse();
   }
 
   filterVirtualEnvGames() {
-    this.all_games_segment = this.games_res.filter(game =>
-      (game.isVRWorld == true)
-    ).reverse();
+    this.all_games_segment = this.games_res
+      .filter((game) => game.isVRWorld == true)
+      .reverse();
   }
 
   /***  on game mode change ***/
@@ -489,21 +513,55 @@ export class PlayGameListPage implements OnInit {
     if (modeVal == "single") {
       this.isMutiplayerGame = undefined;
 
-      this.games_view = this.all_games_segment.filter(game =>
-        (game.isMultiplayerGame == undefined)
-      ).reverse();
+      this.games_view = this.all_games_segment
+        .filter((game) => game.isMultiplayerGame == undefined)
+        .reverse();
 
       // Filter data of selected segment
-      this.segmentChanged(this.selectedSegment)
+      this.segmentChanged(this.selectedSegment);
     } else {
       this.isMutiplayerGame = true;
-      this.games_view = this.all_games_segment.filter(game =>
-        (game.isMultiplayerGame == true)
-      ).reverse();
+      this.games_view = this.all_games_segment
+        .filter((game) => game.isMultiplayerGame == true)
+        .reverse();
 
       // Filter data of selected segment
-      this.segmentChanged(this.selectedSegment)
+      this.segmentChanged(this.selectedSegment);
     }
   }
 
+  // Delete game
+  async deleteMyGame(gameID: string) {
+    const alert = await this.alertController.create({
+      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
+      header: this._translate.instant("PlayGame.deleteGame"),
+      message: this._translate.instant("PlayGame.deleteGameMsg"),
+      buttons: [
+        {
+          text: this._translate.instant("User.cancel"),
+          handler: () => {
+            // close alert
+          },
+        },
+        {
+          text: this._translate.instant("PlayGame.deleteGame"),
+          cssClass: "alert-button-confirm",
+          handler: () => {
+            this.gamesService
+              .deleteMyGame(gameID)
+              .then((res) => {
+                if (res.status == 200) {
+                  // Get games data from server to refresh list
+                  this.getGamesData()
+                }
+              })
+              .catch((e) => {
+                console.error(e);
+              });
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
 }

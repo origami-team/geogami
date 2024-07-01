@@ -106,38 +106,54 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
-    <ion-card
-      *ngFor="let game of games_view"
-      (click)="gameClick(game)"
-      detail
-      color="secondary"
-    >
-      <ion-card-header>
-        <ion-item lines="none" color="secondary">
-          <ion-label>
-            <h2>
-              <ion-icon name="game-controller"></ion-icon
-              ><span *ngIf="game.place"
-                ><b>&nbsp;&nbsp;{{ game.place }}</b> -
-              </span>
-              {{ game.name }}
-            </h2>
-          </ion-label>
-          <ion-label
+    <!-- list of games -->
+    <div *ngFor="let game of games_view" style="display: flex">
+      <ion-card
+        (click)="gameClick(game)"
+        detail
+        color="secondary"
+        style="width: 100%; margin-right: 0;"
+      >
+        <ion-card-header>
+          <ion-item lines="none" color="secondary">
+            <ion-label>
+              <h2>
+                <ion-icon name="game-controller"></ion-icon
+                ><span *ngIf="game.place"
+                  ><b>&nbsp;&nbsp;{{ game.place }}</b> -
+                </span>
+                {{ game.name }}
+              </h2>
+            </ion-label>
+            <ion-label
+              slot="end"
+              *ngIf="(game.isMultiplayerGame && game.isMultiplayerGame == true) || game.tasksCount"
+              class="numplayersCard"
+            >
+              {{ (game.isMultiplayerGame && game.isMultiplayerGame)?
+              game.numPlayers + " " + ("GameList.players" | translate) + " | ":
+              ""}} {{ (game.tasksCount)? game.tasksCount + " " + (
+              (game.tasksCount >1 ?"GameList.tasks":"GameList.task") |
+              translate) : ""}}
+            </ion-label>
+            <!-- <ion-icon *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+          </ion-item>
+        </ion-card-header>
+      </ion-card>
+      <ion-buttons *ngIf="this.userId == game.user" class="game-actions">
+        <!-- for edit -->
+        <!-- <ion-button>
+          <ion-icon name="save-sharp"></ion-icon>
+        </ion-button> -->
+
+        <ion-button (click)="deleteMyGame(game._id)">
+          <ion-icon
             slot="end"
-            *ngIf="(game.isMultiplayerGame && game.isMultiplayerGame == true) || game.tasksCount"
-            class="numplayersCard"
-          >
-            {{ (game.isMultiplayerGame && game.isMultiplayerGame)?
-            game.numPlayers + " " + ("GameList.players" | translate) + " | ":
-            ""}} {{ (game.tasksCount)? game.tasksCount + " " + (
-            (game.tasksCount >1 ?"GameList.tasks":"GameList.task") | translate)
-            : ""}}
-          </ion-label>
-          <!-- <ion-icon *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
-        </ion-item>
-      </ion-card-header>
-    </ion-card>
+            name="trash-outline"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
   </ng-container>
 
   <!-- show this message only when my games section is selected and there're no games were created by logged user -->
