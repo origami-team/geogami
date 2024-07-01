@@ -220,7 +220,10 @@
     "allGames": "All",
     "myGames": "My games",
     "curated": "Curated",
-    "emptyGamesList": "You haven't created a game yet!"
+    "emptyGamesList": "You haven't created a game yet!",
+    "gameNotFound":"Game could not be found.",
+    "deleteGame": "Delete Game",
+    "deleteGameMsg": "Are you sure you want to delete this game?"
   },
   "Showroom": {
     "titleShowroom": "Get to know GeoGami",
