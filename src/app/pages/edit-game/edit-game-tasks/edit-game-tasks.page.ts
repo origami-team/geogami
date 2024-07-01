@@ -264,7 +264,7 @@ export class EditGameTasksPage implements OnInit {
       .then((isOk) => {
         if (isOk) {
           this.gamesService
-            .deleteMyGame(gameID)
+            .deleteGame(gameID)
             .then((res) => {
               if (res.status == 200) {
                 // Redirect user to `play game list` page
