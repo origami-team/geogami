@@ -52,4 +52,8 @@ export class CreateGamePage implements OnInit {
   navigateEditGame() {
     this.navCtrl.navigateForward(`edit-game-list`);
   }
+
+  navigateBackToStart() {
+    this.navCtrl.navigateRoot("/");
+  }
 }

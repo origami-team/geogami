@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button color=dark (click)="navigateBackToStart()" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
     <ion-title>
       {{ (isRealWorld ? "CreateGame.titleCreateGame":"CreateGame.titleCreateGameVirtual") | translate }}
@@ -24,7 +24,7 @@
   <ion-card id="create_card_edit" (click)=navigateEditGame() color="secondary">
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="construct"></ion-icon> {{ "CreateGame.edit" | translate }}
+        <ion-icon name="construct"></ion-icon> {{ "General.edit" | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
