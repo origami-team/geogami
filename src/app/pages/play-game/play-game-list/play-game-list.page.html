@@ -141,16 +141,11 @@
         </ion-card-header>
       </ion-card>
       <ion-buttons *ngIf="this.userId == game.user" class="game-actions">
-        <!-- for edit -->
-        <!-- <ion-button>
-          <ion-icon name="save-sharp"></ion-icon>
-        </ion-button> -->
-
-        <ion-button (click)="deleteMyGame(game._id)">
-          <ion-icon
-            slot="end"
-            name="trash-outline"
-          ></ion-icon>
+        <ion-button
+          title="{{'General.edit'| translate}}"
+          (click)="EditGame(game._id)"
+        >
+          <ion-icon name="create-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </div>
