@@ -25,7 +25,7 @@ export class GameDetailPage implements OnInit {
   points: any[];
   //* Default share data status
   shareData_cbox = environment.shareData_status;
-  useWebGL_cbox = false;
+  useExternalVEApp_cbox = false;
 
   // VR world
   isVirtualWorld: boolean = false;
@@ -252,7 +252,7 @@ export class GameDetailPage implements OnInit {
     if (this.isSingleMode) {
       //*** for new impl. where we need to check whether game name is already used and close frame when game is done.
       // ToDo: remove else, when webGL integration works fine
-      if (this.useWebGL_cbox) {
+      if (!this.useExternalVEApp_cbox) {
         this.socketService.creatAndJoinNewRoom(
           this.playerName,
           this.virEnvType,
@@ -267,8 +267,8 @@ export class GameDetailPage implements OnInit {
         );
         
       } else {
-        // if use webGL check-box is not checked
-        this.bundle = { ...this.bundle, useWebGL_cbox: this.useWebGL_cbox };
+        // if use webGL cb is not checked
+        this.bundle = { ...this.bundle, useExternalVEApp_cbox: this.useExternalVEApp_cbox };
         this.navCtrl.navigateForward(
           `play-game/playing-game/${JSON.stringify(this.bundle)}`
         );
