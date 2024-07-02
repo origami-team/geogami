@@ -197,7 +197,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   // share data approval
   shareDataBox = true;
-  useWebGLBox = false;
+  useExternalVE_app = false;
 
   // Draw control all enabled
   DrawControl_all = new MapboxDraw({
@@ -525,7 +525,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.sPlayerNo = JSON.parse(params.bundle).sPlayerNo;
       this.cJoindPlayersCount = JSON.parse(params.bundle).cJoindPlayersCount;
       this.sTaskNo = JSON.parse(params.bundle).sTaskNo;
-      this.useWebGLBox = JSON.parse(params.bundle).useWebGL_cbox;
+      this.useExternalVE_app = JSON.parse(params.bundle).useExternalVEApp_cbox;
     });
 
     this.game = null;
@@ -689,8 +689,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (
       this.isSingleMode &&
-      this.useWebGLBox != undefined &&
-      this.useWebGLBox
+      this.useExternalVE_app != undefined &&
+      !this.useExternalVE_app
     ) {
       this.socketService.joinVERoom(this.gameCode);
     } else {
