@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
-import { IonReorderGroup, Platform } from "@ionic/angular";
+import { AlertController, IonReorderGroup, Platform } from "@ionic/angular";
 import { ModalController } from "@ionic/angular";
 import { GameFactoryService } from "../../../services/game-factory.service";
 import { CreateTaskModalPage } from "../../create-game/create-task-modal/create-task-modal.page";
@@ -10,6 +10,7 @@ import { GamesService } from "src/app/services/games.service";
 import { ActivatedRoute } from "@angular/router";
 import { Task } from "src/app/models/task";
 import { UtilService } from "src/app/services/util.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-edit-game-tasks", // edit-game-tasks
@@ -31,6 +32,7 @@ export class EditGameTasksPage implements OnInit {
   isRealWorld: boolean = true;
   isSingleMode: boolean = true;
   numPlayers = 1;
+  game_id = null;
   // bundle: any;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
@@ -41,7 +43,6 @@ export class EditGameTasksPage implements OnInit {
     await this.modalController.dismiss();
   }
 
-
   constructor(
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
@@ -49,56 +50,61 @@ export class EditGameTasksPage implements OnInit {
     private gamesService: GamesService,
     private route: ActivatedRoute,
     private utilService: UtilService,
-    private platform: Platform      //* used in html
-  ) { }
+    private platform: Platform, //* used in html,
+    private alertController: AlertController,
+    public translate: TranslateService
+  ) {}
 
   ngOnInit() {
     // Get selected env. and game type
     this.route.params.subscribe((params) => {
       this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
       this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
-      let game_id = JSON.parse(params.bundle).game_id;
+      this.game_id = JSON.parse(params.bundle).game_id;
 
       this.isVirtualWorld = !this.isRealWorld;
 
-
       // Get data of selected game via game_id
       this.gamesService
-        .getGame(game_id)
+        .getGame(this.game_id)
         .then((res) => res.content)
-        .then((game) => {
-          this.game = game;
-          this.gameFactory.flushGame();
-          this.gameFactory.addGameInformation(this.game);
+        .then(
+          (game) => {
+            this.game = game;
+            this.gameFactory.flushGame();
+            this.gameFactory.addGameInformation(this.game);
 
-          // VR world
-          /* if (game.isVRWorld !== undefined && game.isVRWorld != false) {
-            this.isVirtualWorld = true;
-            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
-              this.isVRMirrored = true;
+            // check if game is VE 2 (mirrored)
+            if (!this.isRealWorld) {
+              // Set num of players
+              this.numPlayers = game.numPlayers;
+              // Set virEnv Type
+              this.virEnvType = game.virEnvType;
+              // ToDo: do we still need mirrored env???
+              if (
+                game.isVRMirrored !== undefined &&
+                game.isVRMirrored != false
+              ) {
+                this.isVRMirrored = true;
+              }
+            } else {
+              // Get num of players
+              this.numPlayers = game.numPlayers;
+              console.log("/// numPlayers: ", this.numPlayers);
             }
-          } */
-
-          // check if game is VE 2 (mirrored)
-          if (!this.isRealWorld) {
-            // Set num of players
-            this.numPlayers = game.numPlayers;
-            // Set virEnv Type
-            this.virEnvType = game.virEnvType;
-            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
-              this.isVRMirrored = true;
-            }
-          } else {
-            // Get num of players
-            this.numPlayers = game.numPlayers;
-          // console.log("/// numPlayers: ", this.numPlayers);
+          },
+          (err) => {
+            // if game is not found due to wrong game id or game was deleted,
+            // show a msg that game was not found and redirect user to games menu
+            this.utilService.showToast(
+              this.translate.instant("PlayGame.gameNotFound"),
+              "warning",
+              3000,
+              "toast-black-text"
+            );
+            this.navCtrl.navigateForward("/");
           }
-
-
-
-
-
-        });
+        );
     });
   }
 
@@ -139,9 +145,10 @@ export class EditGameTasksPage implements OnInit {
     numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode,
     //* if task doesn't have a virEnvType send the default one
-    virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
-  // console.log("🚀 ~ EditGameTasksPage ~ task:", task)
-
+    virEnvType: string = task && task.virEnvType
+      ? task.virEnvType
+      : this.virEnvType
+  ) {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
         type == "info" ? CreateInfoModalComponent : CreateTaskModalPage,
@@ -149,11 +156,11 @@ export class EditGameTasksPage implements OnInit {
       componentProps: {
         type,
         task,
-        isVirtualWorld,  // added to view VR world map instead of real map if true
+        isVirtualWorld, // added to view VR world map instead of real map if true
         isVRMirrored,
         virEnvType,
         numPlayers,
-        isSingleMode
+        isSingleMode,
       },
     });
 
@@ -230,17 +237,19 @@ export class EditGameTasksPage implements OnInit {
     let bundle = {
       game_id: this.game._id,
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored
-    }
+      isVRMirrored: this.isVRMirrored,
+    };
 
-    this.gamesService.updateGame(this.game).then((res) => {
-      if (res.status == 200) {
-        this.navCtrl.navigateForward(
-          `edit-game/edit-game-overview/${JSON.stringify(bundle)}`
-        );
-        // this.gameFactory.flushGame();
-      }
-    })
+    this.gamesService
+      .updateGame(this.game)
+      .then((res) => {
+        if (res.status == 200) {
+          this.navCtrl.navigateForward(
+            `edit-game/edit-game-overview/${JSON.stringify(bundle)}`
+          );
+          // this.gameFactory.flushGame();
+        }
+      })
       .catch((e) => {
         console.error(e);
       });
@@ -249,6 +258,32 @@ export class EditGameTasksPage implements OnInit {
   navigateBack() {
     this.gameFactory.flushGame();
     // this.navCtrl.back();
-    this.navCtrl.navigateForward(`play-game/play-game-list`);;
+    this.navCtrl.navigateForward(`play-game/play-game-list`);
+  }
+
+  // Delete game
+  deleteGame(gameID: string) {
+    let header = this.translate.instant("PlayGame.deleteGame");
+    let message = this.translate.instant("PlayGame.deleteGameMsg");
+    let btnText1 = this.translate.instant("User.cancel");
+    let btnText2 = this.translate.instant("PlayGame.deleteGame");
+
+    this.utilService
+      .showAlertTwoButtons(header, message, btnText1, btnText2)
+      .then((isOk) => {
+        if (isOk) {
+          this.gamesService
+            .deleteGame(gameID)
+            .then((res) => {
+              if (res.status == 200) {
+                // Redirect user to `play game list` page
+                this.navCtrl.navigateRoot("/");
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
+        }
+      });
   }
 }

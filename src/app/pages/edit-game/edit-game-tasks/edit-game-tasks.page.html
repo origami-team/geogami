@@ -88,7 +88,7 @@
                 [questionText]="task.question.text"
               ></env-type-question-text>
             </div>
-            
+
             <!-- Info tasks -->
             <div
               *ngIf="task.category.includes('info')"
@@ -220,3 +220,12 @@
       </ion-card-content>
     </ion-card> -->
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar
+    ><ion-button expand="block" color="danger" (click)="deleteGame(game_id)">
+      <ion-icon name="trash-outline" style="margin-right: 10px"></ion-icon>
+      <span>Delete Game</span>
+    </ion-button></ion-toolbar
+  >
+</ion-footer>
