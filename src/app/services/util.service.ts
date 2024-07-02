@@ -24,13 +24,12 @@ export class UtilService {
   }
 
   async showToast(msg, colorV = "dark", durationV = 3000, cssStyle = "") {
-    console.log("🚀 ~ UtilService ~ showToast ~ colorV:", colorV)
     const toast = await this.toastCtr.create({
       message: msg,
       color: colorV,
       animated: true,
       duration: durationV,
-      cssClass: cssStyle
+      cssClass: cssStyle,
     });
     toast.present();
   }
@@ -108,12 +107,12 @@ export class UtilService {
   }
   /*  */
 
-  async showAlert(header: string, msg:string) {
+  async showAlert(header: string, msg: string) {
     const alert = await this.alertCtr.create({
       backdropDismiss: false, // disable alert dismiss when backdrop is clicked
       header: header,
       //subHeader: 'Important message',
-      message:msg,
+      message: msg,
       buttons: [
         /* 'OK' */
         {
@@ -125,5 +124,42 @@ export class UtilService {
       ],
     });
     await alert.present();
+  }
+
+  showAlertTwoButtons(
+    header: string,
+    msg: string,
+    btnText1: string,
+    btnText2: string,
+    alertDismiss = false
+  ): Promise<Boolean> {
+    return new Promise((resolve) => {
+      this.alertCtr
+        .create({
+          backdropDismiss: alertDismiss, // disable alert dismiss when backdrop is clicked
+          header: header,
+          message: msg,
+          buttons: [
+            {
+              text: btnText1,
+              handler: () => {
+                // close alert
+                resolve(false);
+              },
+            },
+            {
+              text: btnText2,
+              cssClass: "alert-button-confirm",
+              handler: () => {
+                resolve(true);
+              },
+            },
+          ],
+        })
+        .then((alert) => {
+          // Present the alert
+          alert.present();
+        });
+    });
   }
 }

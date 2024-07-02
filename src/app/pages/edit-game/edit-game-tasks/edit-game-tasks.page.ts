@@ -43,7 +43,6 @@ export class EditGameTasksPage implements OnInit {
     await this.modalController.dismiss();
   }
 
-
   constructor(
     private gameFactory: GameFactoryService,
     private modalController: ModalController,
@@ -51,10 +50,10 @@ export class EditGameTasksPage implements OnInit {
     private gamesService: GamesService,
     private route: ActivatedRoute,
     private utilService: UtilService,
-    private platform: Platform,      //* used in html,
+    private platform: Platform, //* used in html,
     private alertController: AlertController,
     public translate: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Get selected env. and game type
@@ -64,7 +63,6 @@ export class EditGameTasksPage implements OnInit {
       this.game_id = JSON.parse(params.bundle).game_id;
 
       this.isVirtualWorld = !this.isRealWorld;
-
 
       // Get data of selected game via game_id
       this.gamesService
@@ -97,11 +95,6 @@ export class EditGameTasksPage implements OnInit {
             this.numPlayers = game.numPlayers;
           // console.log("/// numPlayers: ", this.numPlayers);
           }
-
-
-
-
-
         });
     });
   }
@@ -143,9 +136,10 @@ export class EditGameTasksPage implements OnInit {
     numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode,
     //* if task doesn't have a virEnvType send the default one
-    virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
-  // console.log("🚀 ~ EditGameTasksPage ~ task:", task)
-
+    virEnvType: string = task && task.virEnvType
+      ? task.virEnvType
+      : this.virEnvType
+  ) {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
         type == "info" ? CreateInfoModalComponent : CreateTaskModalPage,
@@ -153,11 +147,11 @@ export class EditGameTasksPage implements OnInit {
       componentProps: {
         type,
         task,
-        isVirtualWorld,  // added to view VR world map instead of real map if true
+        isVirtualWorld, // added to view VR world map instead of real map if true
         isVRMirrored,
         virEnvType,
         numPlayers,
-        isSingleMode
+        isSingleMode,
       },
     });
 
@@ -234,17 +228,19 @@ export class EditGameTasksPage implements OnInit {
     let bundle = {
       game_id: this.game._id,
       isVRWorld: this.isVirtualWorld,
-      isVRMirrored: this.isVRMirrored
-    }
+      isVRMirrored: this.isVRMirrored,
+    };
 
-    this.gamesService.updateGame(this.game).then((res) => {
-      if (res.status == 200) {
-        this.navCtrl.navigateForward(
-          `edit-game/edit-game-overview/${JSON.stringify(bundle)}`
-        );
-        // this.gameFactory.flushGame();
-      }
-    })
+    this.gamesService
+      .updateGame(this.game)
+      .then((res) => {
+        if (res.status == 200) {
+          this.navCtrl.navigateForward(
+            `edit-game/edit-game-overview/${JSON.stringify(bundle)}`
+          );
+          // this.gameFactory.flushGame();
+        }
+      })
       .catch((e) => {
         console.error(e);
       });
@@ -253,41 +249,32 @@ export class EditGameTasksPage implements OnInit {
   navigateBack() {
     this.gameFactory.flushGame();
     // this.navCtrl.back();
-    this.navCtrl.navigateForward(`edit-game-list`);;
+    this.navCtrl.navigateForward(`play-game/play-game-list`);
   }
 
   // Delete game
-  async deleteGame(gameID: string) {
-    const alert = await this.alertController.create({
-      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
-      header: this.translate.instant("PlayGame.deleteGame"),
-      message: this.translate.instant("PlayGame.deleteGameMsg"),
-      buttons: [
-        {
-          text: this.translate.instant("User.cancel"),
-          handler: () => {
-            // close alert
-          },
-        },
-        {
-          text: this.translate.instant("PlayGame.deleteGame"),
-          cssClass: "alert-button-confirm",
-          handler: () => {
-            this.gamesService
-              .deleteGame(gameID)
-              .then((res) => {
-                if (res.status == 200) {
-                  // Redirect user to `play game list` page
-                  this.navCtrl.navigateRoot('/');
-                }
-              })
-              .catch((e) => {
-                console.error(e);
-              });
-          },
-        },
-      ],
-    });
-    await alert.present();
+  deleteGame(gameID: string) {
+    let header = this.translate.instant("PlayGame.deleteGame");
+    let message = this.translate.instant("PlayGame.deleteGameMsg");
+    let btnText1 = this.translate.instant("User.cancel");
+    let btnText2 = this.translate.instant("PlayGame.deleteGame");
+
+    this.utilService
+      .showAlertTwoButtons(header, message, btnText1, btnText2)
+      .then((isOk) => {
+        if (isOk) {
+          this.gamesService
+            .deleteMyGame(gameID)
+            .then((res) => {
+              if (res.status == 200) {
+                // Redirect user to `play game list` page
+                this.navCtrl.navigateRoot("/");
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
+        }
+      });
   }
 }
