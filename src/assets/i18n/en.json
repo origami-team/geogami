@@ -224,7 +224,8 @@
     "emptyGamesList": "You haven't created a game yet!",
     "gameNotFound":"Game could not be found.",
     "deleteGame": "Delete Game",
-    "deleteGameMsg": "Are you sure you want to delete this game?"
+    "deleteGameMsg": "Are you sure you want to delete this game?",
+    "useExternalVEApp":"Use external Virtual Enviroment App (WinOS/ MacOS)"
   },
   "Showroom": {
     "titleShowroom": "Get to know GeoGami",
