@@ -68,34 +68,43 @@ export class EditGameTasksPage implements OnInit {
       this.gamesService
         .getGame(this.game_id)
         .then((res) => res.content)
-        .then((game) => {
-          this.game = game;
-          this.gameFactory.flushGame();
-          this.gameFactory.addGameInformation(this.game);
+        .then(
+          (game) => {
+            this.game = game;
+            this.gameFactory.flushGame();
+            this.gameFactory.addGameInformation(this.game);
 
-          // VR world
-          /* if (game.isVRWorld !== undefined && game.isVRWorld != false) {
-            this.isVirtualWorld = true;
-            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
-              this.isVRMirrored = true;
+            // check if game is VE 2 (mirrored)
+            if (!this.isRealWorld) {
+              // Set num of players
+              this.numPlayers = game.numPlayers;
+              // Set virEnv Type
+              this.virEnvType = game.virEnvType;
+              // ToDo: do we still need mirrored env???
+              if (
+                game.isVRMirrored !== undefined &&
+                game.isVRMirrored != false
+              ) {
+                this.isVRMirrored = true;
+              }
+            } else {
+              // Get num of players
+              this.numPlayers = game.numPlayers;
+              console.log("/// numPlayers: ", this.numPlayers);
             }
-          } */
-
-          // check if game is VE 2 (mirrored)
-          if (!this.isRealWorld) {
-            // Set num of players
-            this.numPlayers = game.numPlayers;
-            // Set virEnv Type
-            this.virEnvType = game.virEnvType;
-            if (game.isVRMirrored !== undefined && game.isVRMirrored != false) {
-              this.isVRMirrored = true;
-            }
-          } else {
-            // Get num of players
-            this.numPlayers = game.numPlayers;
-            console.log("/// numPlayers: ", this.numPlayers);
+          },
+          (err) => {
+            // if game is not found due to wrong game id or game was deleted,
+            // show a msg that game was not found and redirect user to games menu
+            this.utilService.showToast(
+              this.translate.instant("PlayGame.gameNotFound"),
+              "warning",
+              3000,
+              "toast-black-text"
+            );
+            this.navCtrl.navigateForward("/");
           }
-        });
+        );
     });
   }
 
