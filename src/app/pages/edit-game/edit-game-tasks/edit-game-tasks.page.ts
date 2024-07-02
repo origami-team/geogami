@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
-import { IonReorderGroup, Platform } from "@ionic/angular";
+import { AlertController, IonReorderGroup, Platform } from "@ionic/angular";
 import { ModalController } from "@ionic/angular";
 import { GameFactoryService } from "../../../services/game-factory.service";
 import { CreateTaskModalPage } from "../../create-game/create-task-modal/create-task-modal.page";
@@ -10,6 +10,7 @@ import { GamesService } from "src/app/services/games.service";
 import { ActivatedRoute } from "@angular/router";
 import { Task } from "src/app/models/task";
 import { UtilService } from "src/app/services/util.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-edit-game-tasks", // edit-game-tasks
@@ -31,6 +32,7 @@ export class EditGameTasksPage implements OnInit {
   isRealWorld: boolean = true;
   isSingleMode: boolean = true;
   numPlayers = 1;
+  game_id = null;
   // bundle: any;
 
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
@@ -49,7 +51,9 @@ export class EditGameTasksPage implements OnInit {
     private gamesService: GamesService,
     private route: ActivatedRoute,
     private utilService: UtilService,
-    private platform: Platform      //* used in html
+    private platform: Platform,      //* used in html,
+    private alertController: AlertController,
+    public translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -57,14 +61,14 @@ export class EditGameTasksPage implements OnInit {
     this.route.params.subscribe((params) => {
       this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
       this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
-      let game_id = JSON.parse(params.bundle).game_id;
+      this.game_id = JSON.parse(params.bundle).game_id;
 
       this.isVirtualWorld = !this.isRealWorld;
 
 
       // Get data of selected game via game_id
       this.gamesService
-        .getGame(game_id)
+        .getGame(this.game_id)
         .then((res) => res.content)
         .then((game) => {
           this.game = game;
@@ -250,5 +254,40 @@ export class EditGameTasksPage implements OnInit {
     this.gameFactory.flushGame();
     // this.navCtrl.back();
     this.navCtrl.navigateForward(`play-game/play-game-list`);;
+  }
+
+  // Delete game
+  async deleteGame(gameID: string) {
+    const alert = await this.alertController.create({
+      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
+      header: this.translate.instant("PlayGame.deleteGame"),
+      message: this.translate.instant("PlayGame.deleteGameMsg"),
+      buttons: [
+        {
+          text: this.translate.instant("User.cancel"),
+          handler: () => {
+            // close alert
+          },
+        },
+        {
+          text: this.translate.instant("PlayGame.deleteGame"),
+          cssClass: "alert-button-confirm",
+          handler: () => {
+            this.gamesService
+              .deleteGame(gameID)
+              .then((res) => {
+                if (res.status == 200) {
+                  // Redirect user to `play game list` page
+                  this.navCtrl.navigateRoot('/');
+                }
+              })
+              .catch((e) => {
+                console.error(e);
+              });
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 }

@@ -530,40 +530,6 @@ export class PlayGameListPage implements OnInit {
     }
   }
 
-  // Delete game
-  async deleteGame(gameID: string) {
-    const alert = await this.alertController.create({
-      backdropDismiss: false, // disable alert dismiss when backdrop is clicked
-      header: this._translate.instant("PlayGame.deleteGame"),
-      message: this._translate.instant("PlayGame.deleteGameMsg"),
-      buttons: [
-        {
-          text: this._translate.instant("User.cancel"),
-          handler: () => {
-            // close alert
-          },
-        },
-        {
-          text: this._translate.instant("PlayGame.deleteGame"),
-          cssClass: "alert-button-confirm",
-          handler: () => {
-            this.gamesService
-              .deleteGame(gameID)
-              .then((res) => {
-                if (res.status == 200) {
-                  // Get games data from server to refresh list
-                  this.getGamesData();
-                }
-              })
-              .catch((e) => {
-                console.error(e);
-              });
-          },
-        },
-      ],
-    });
-    await alert.present();
-  }
 
   // Edit game
   async EditGame(gameID: string) {
