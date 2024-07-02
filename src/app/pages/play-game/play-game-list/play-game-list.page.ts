@@ -394,7 +394,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   async openMapTap() {
-    if (this.isListTabSelected ) {
+    if (this.isListTabSelected) {
       this.isListTabSelected = false;
 
       if (!this.map) {
