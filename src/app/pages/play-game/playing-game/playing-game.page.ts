@@ -630,7 +630,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.translate.instant("PlayGame.gameNotFound"),
               "warning",
               3000,
-              "toast-black"
+              "toast-black-text"
             );
             this.navCtrl.navigateForward("/");
           }
