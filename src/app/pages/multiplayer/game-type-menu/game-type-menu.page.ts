@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController } from "@ionic/angular";
+import { AuthService } from "src/app/services/auth-service.service";
 
 @Component({
   selector: "app-game-type-menu",
@@ -8,7 +9,14 @@ import { NavController } from "@ionic/angular";
   styleUrls: ["./game-type-menu.page.scss"],
 })
 export class GameTypeMenuPage implements OnInit {
-  constructor(public navCtrl: NavController, private route: ActivatedRoute) {}
+  user = this.authService.getUser();
+  userRole: String = "unlogged";
+
+  constructor(
+    public navCtrl: NavController,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
 
   isRealWorld = false;
 
@@ -19,6 +27,22 @@ export class GameTypeMenuPage implements OnInit {
         this.isRealWorld = true;
       } else {
         this.isRealWorld = false;
+      }
+    });
+
+    /* Check whther user is registerd. if yes, get role and id */
+    // Get user role
+    this.user.subscribe((event) => {
+      console.log(
+        "🚀 ~ PlayGameMenuPage ~ this.user.subscribe ~ user:",
+        this.user
+      );
+      if (event != null) {
+        this.userRole = event["roles"][0];
+        console.log(
+          "🚀 ~ PlayGameMenuPage ~ this.user.subscribe ~ this.userRole:",
+          this.userRole
+        );
       }
     });
   }
