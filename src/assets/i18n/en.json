@@ -184,7 +184,8 @@
     "directionMap": "Direction on the map",
     "photoDirection": "Photo of the direction to be searched for",
     "photoTask": "Photo for the task",
-    "correctAnswer": "The correct answer:"
+    "correctAnswer": "The correct answer:",
+    "selectGameType":"Select game type"
   },
   "EditGame": {
     "titleEditGame": "Edit your GeoGami",
