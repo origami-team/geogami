@@ -216,6 +216,7 @@ const routes: Routes = [
       import("./pages/multiplayer/game-type-menu/game-type-menu.module").then(
         (m) => m.GameTypeMenuPageModule
       ),
+      canActivate: [AuthGuard],
   },
   {
     path: "barcode-scanner",
