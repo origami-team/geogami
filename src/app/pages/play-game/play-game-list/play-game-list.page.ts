@@ -544,4 +544,12 @@ export class PlayGameListPage implements OnInit {
   navigateBackToStart() {
     this.navCtrl.navigateRoot("/");
   }
+
+  navigateCreateRealGames(){
+    this.navCtrl.navigateForward("game-type-menu/RealWorld");
+  }
+
+  navigateCreateVirEnvGames(){
+    this.navCtrl.navigateForward("game-type-menu/Vir.Env.");
+  }
 }
