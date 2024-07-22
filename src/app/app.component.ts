@@ -35,7 +35,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       Plugins.StatusBar.setStyle({ style: StatusBarStyle.Light }).catch((err) =>
-        console.log(err)
+      console.log(err)
       );
 
       // hide console logs
@@ -57,14 +57,14 @@ export class AppComponent {
   checkInternetConnection() {
     // watch network for a disconnection
     let disconnectSubscription = this.network.onDisconnect().subscribe(async () => {
-      //console.log('network was disconnected :-(');
+      //// console.log('network was disconnected :-(');
       this.utilService.setIsOnlineValue(false);   // set behaviour sub. false
       this.networkAlert = await this.utilService.showToastBtn("No connection", 'dark', null)   // show toast
       this.networkAlert.present();
     });
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
-      //console.log('network connected!');
+      //// console.log('network connected!');
       this.utilService.setIsOnlineValue(true);   // set behaviour sub. true
       this.utilService.showToast("Back online", 'success', 3000)   // show toast
       // Remove notification when connection get back
