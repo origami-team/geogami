@@ -86,6 +86,8 @@ export class PlayGameListPage implements OnInit {
         this.selectedSegment = "all";
         this.userRole = event["roles"][0];
         this.userId = this.authService.getUserId();
+      } else {
+        this.user=null;
       }
     });
 
