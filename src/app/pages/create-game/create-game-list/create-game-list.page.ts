@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild, HostListener, ChangeDetectorRef } from "@angular/core";
-import { IonReorderGroup, Platform } from "@ionic/angular";
-
-import mapboxgl from "mapbox-gl";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  HostListener,
+} from "@angular/core";
+import { IonReorderGroup } from "@ionic/angular";
 
 import { ModalController } from "@ionic/angular";
 
 import { GameFactoryService } from "../../../services/game-factory.service";
 
 import { CreateTaskModalPage } from "./../create-task-modal/create-task-modal.page";
-import { CreateModuleModalPage } from "./../create-module-modal/create-module-modal.page";
 import { CreateInfoModalComponent } from "./../create-info-modal/create-info-modal.component";
 
 import { NavController } from "@ionic/angular";
@@ -18,8 +20,7 @@ import { Game } from "src/app/models/game";
 import { PopoverController } from "@ionic/angular";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
-import { ActivatedRoute } from "@angular/router";
-import { Storage } from "@ionic/storage";
+import { ActivatedRoute, Router } from "@angular/router";
 import { UtilService } from "src/app/services/util.service";
 
 @Component({
@@ -36,7 +37,7 @@ export class CreateGameListPage implements OnInit {
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
 
   // To hold received parametres vlaues via route
-  // Multiplayer mode 
+  // Multiplayer mode
   isRealWorld: boolean = false;
   isVRMirrored: boolean = false;
   virEnvType: string; // new to store vir env type (default layer)
@@ -58,30 +59,30 @@ export class CreateGameListPage implements OnInit {
     private translate: TranslateService,
     private route: ActivatedRoute,
     private utilService: UtilService,
-    private platform: Platform,      //* used in html
-  ) { }
+    private router: Router,
+  ) {
+    // Get sent data (not visible on url)
+    if (this.router.getCurrentNavigation().extras.state) {
+      this.isRealWorld =
+        this.router.getCurrentNavigation().extras.state.isRealWorld;
+      this.isSingleMode =
+        this.router.getCurrentNavigation().extras.state.isSingleMode;
+
+        // only with Vir. Env. get vir-env name
+        if(!this.isRealWorld){
+          this.virEnvType = this.router.getCurrentNavigation().extras.state.virEnvType;
+        }
+    } else {
+      // if sent data from `game-type-menu` is lost due to reload page, redirect user to previous page
+      navCtrl.back();
+    }
+  }
 
   async ngOnInit() {
-    // Get selected env. and game type
-    this.route.params.subscribe((params) => {
-      this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
-      this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
-
-      /* only with Vir. Env. */
-      if (!this.isRealWorld) {
-        /* to check if VR version is mirrored */
-        this.route.params.subscribe((params) => {
-          this.virEnvType = JSON.parse(params.bundle).virEnvType;
-          if (this.virEnvType === "VR_type_B") {
-            this.isVRMirrored = true;
-          }
-        });
-      }
-    });
 
     this.gameFactory.getGame().then((game) => {
       // It could happen that game data is stored from edit game page
-      // here we clean game data if it is related to existed game. 
+      // here we clean game data if it is related to existed game.
       // otheriwse we get `name already exists` error
       if (game._id != 0) {
         this.gameFactory.flushGame(); // clear game data
@@ -89,39 +90,7 @@ export class CreateGameListPage implements OnInit {
       } else {
         this.game = game;
       }
-
     });
-    //console.log("this.gameFactory.game: ", this.gameFactory.game);
-
-  }
-
-  ionViewWillEnter() {
-    // mapboxgl.accessToken =
-    //   "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA";
-    // const map = new mapboxgl.Map({
-    //   container: "create-game-map",
-    //   style: "mapbox://styles/mapbox/streets-v9",
-    //   center: [8, 51.8],
-    //   zoom: 2
-    // });
-    // const geolocate = new mapboxgl.GeolocateControl({
-    //   positionOptions: {
-    //     enableHighAccuracy: true
-    //   },
-    //   fitBoundsOptions: {
-    //     maxZoom: 25
-    //   },
-    //   trackUserLocation: true
-    // });
-    // map.addControl(geolocate);
-    // // let watch = this.geolocation.watchPosition();
-    // // watch.subscribe((data) => {
-    // //   console.log(data)
-    // // });
-    // // Add geolocate control to the map.
-    // map.on("load", () => {
-    //   geolocate.trigger();
-    // });
   }
 
   async presentTaskModal(
@@ -132,8 +101,11 @@ export class CreateGameListPage implements OnInit {
     numPlayers: number = this.numPlayers,
     isSingleMode: boolean = this.isSingleMode,
     //* if task doesn't have a virEnvType send the default one
-    virEnvType: string = (task && task.virEnvType ? task.virEnvType : this.virEnvType)) {
-    console.log("🚀 ~ EditGameTasksPage ~ task:", task)
+    virEnvType: string = task && task.virEnvType
+      ? task.virEnvType
+      : this.virEnvType
+  ) {
+    console.log("🚀 ~ EditGameTasksPage ~ task:", task);
 
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -146,7 +118,7 @@ export class CreateGameListPage implements OnInit {
         isVRMirrored,
         virEnvType,
         numPlayers,
-        isSingleMode
+        isSingleMode,
       },
     });
 
@@ -231,10 +203,12 @@ export class CreateGameListPage implements OnInit {
       virEnvType: this.virEnvType,
       //isRealWorld: this.isRealWorld,
       isSingleMode: this.isSingleMode,
-      numPlayers: (this.isSingleMode ? undefined : this.numPlayers)
-    }
+      numPlayers: this.isSingleMode ? undefined : this.numPlayers,
+    };
 
-    this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(this.bundle)}`);
+    this.navCtrl.navigateForward(
+      `create-game/create-game-overview/${JSON.stringify(this.bundle)}`
+    );
   }
 
   async showPopover(ev: any, key: string) {
@@ -244,7 +218,7 @@ export class CreateGameListPage implements OnInit {
       component: PopoverComponent,
       event: ev,
       translucent: true,
-      componentProps: { text }
+      componentProps: { text },
     });
     return await popover.present();
   }

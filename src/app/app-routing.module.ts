@@ -37,14 +37,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: "create-game",
-    loadChildren: () =>
-      import("./pages/create-game/create-game/create-game.module").then(
-        (m) => m.CreateGamePageModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
     path: "create-game/create-game-overview/:bundle",
     loadChildren: () =>
       import(
@@ -53,7 +45,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "create-game-list/:bundle",
+    path: "create-game-list",
     loadChildren: () =>
       import(
         "./pages/create-game/create-game-list/create-game-list.module"
@@ -168,13 +160,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: "create-game-menu",
-    loadChildren: () =>
-      import(
-        "./pages/create-game/create-game-menu/create-game-menu.module"
-      ).then((m) => m.CreateGameMenuPageModule),
-  },
-  {
     path: "create-game-virtual",
     loadChildren: () =>
       import(
@@ -196,7 +181,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: "create-game-virtual-menu/:bundle",
+    path: "create-game-virtual-menu",
     loadChildren: () =>
       import(
         "./pages/create-game/create-game-virtual-menu/create-game-virtual-menu.module"
@@ -216,6 +201,7 @@ const routes: Routes = [
       import("./pages/multiplayer/game-type-menu/game-type-menu.module").then(
         (m) => m.GameTypeMenuPageModule
       ),
+      canActivate: [AuthGuard],
   },
   {
     path: "barcode-scanner",

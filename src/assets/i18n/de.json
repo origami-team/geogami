@@ -184,7 +184,8 @@
     "directionMap": "Richtung auf der Karte",
     "photoDirection": "Foto der zu suchenden Richtung",
     "photoTask": "Foto zur Aufgabe",
-    "correctAnswer": "Die korrekte Anwort:"
+    "correctAnswer": "Die korrekte Anwort:",
+    "selectGameType":"Spieltyp auswählen"
   },
   "EditGame": {
     "titleEditGame": "Bearbeite dein GeoGami",
