@@ -1,4 +1,4 @@
-<ion-content  fullscreen class="ion-padding">
+<ion-content fullscreen class="ion-padding">
   <ion-item lines="none">
     <ion-select
       [placeholder]="selected"
@@ -24,12 +24,28 @@
   >
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="game-controller"></ion-icon> {{ "Start.playMode" |
+        <ion-icon name="game-controller"></ion-icon> {{ "Start.games" |
         translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       {{ "Start.playModeDescription" | translate }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card
+    *ngIf="!isWebPlatform"
+    (click)="navigateBarcodeScannerPage()"
+    color="secondary"
+  >
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="qr-code-outline"></ion-icon> {{ "Start.scanCode" |
+        translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content
+      >{{ "Start.scanCode_desc" | translate }}
     </ion-card-content>
   </ion-card>
 
