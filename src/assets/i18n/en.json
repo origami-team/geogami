@@ -133,7 +133,10 @@
     "majorAppUpdateHeader": "Important App Update",
     "majorAppUpdateMsg": "Please update to continue using the App.",
     "update": "Update",
-    "notNow": "Not Now"
+    "notNow": "Not Now",
+    "games": "Games",
+    "scanCode":"Scan Code",
+    "scanCode_desc":"Scan game qr-code provided by instructor."
   },
   "AnalyzeGame": {
     "title": "Analyze your GeoGami",
