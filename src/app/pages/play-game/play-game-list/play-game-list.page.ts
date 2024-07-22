@@ -152,7 +152,7 @@ export class PlayGameListPage implements OnInit {
     //--- ToDo check duplicate code and create a func for it
     // if mine is selected
     if (segVal == "mine") {
-      this.games_view = this.all_games_segment.filter(
+      this.games_view = this.all_games_segment?.filter(
         (game) =>
           game.user == this.userId &&
           game.isMultiplayerGame == this.isMutiplayerGame
@@ -163,7 +163,7 @@ export class PlayGameListPage implements OnInit {
     } else if (segVal == "all") {
       // if all is selected
       //onsole.log("all"); //temp
-      this.games_view = this.all_games_segment.filter(
+      this.games_view = this.all_games_segment?.filter(
         (game) => game.isMultiplayerGame == this.isMutiplayerGame
       );
 
