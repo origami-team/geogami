@@ -142,7 +142,7 @@ ion-thumbnail {
       }
 
       max-height: 33vh;
-      overflow: scroll;
+      overflow: hidden;
       font-size: inherit;
     }
 
@@ -273,7 +273,7 @@ ion-thumbnail {
 
       @media screen and (max-width: 568px) {
         max-height: 60px;
-        overflow: scroll;
+        overflow: hidden;
 
         > p {
           margin: 0;
