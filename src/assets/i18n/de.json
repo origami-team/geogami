@@ -133,7 +133,10 @@
     "majorAppUpdateHeader": "Wichtige App-Aktualisierung",
     "majorAppUpdateMsg": "Bitte aktualisieren Sie, um die App weiterhin zu verwenden.",
     "update": "Aktualisieren",
-    "notNow": "Nicht Jetzt"
+    "notNow": "Nicht Jetzt",
+    "games": "Spiele",
+    "scanCode":"Code Scannen",
+    "scanCode_desc":"Scanne den vom Kursleiter bereitgestellten QR-Code des Spiels."
   },
   "AnalyzeGame": {
     "title": "Analysiere dein GeoGami",
@@ -184,7 +187,8 @@
     "directionMap": "Richtung auf der Karte",
     "photoDirection": "Foto der zu suchenden Richtung",
     "photoTask": "Foto zur Aufgabe",
-    "correctAnswer": "Die korrekte Anwort:"
+    "correctAnswer": "Die korrekte Anwort:",
+    "selectGameType":"Spieltyp auswählen"
   },
   "EditGame": {
     "titleEditGame": "Bearbeite dein GeoGami",

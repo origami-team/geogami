@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button color=dark defaultHref="start" text="{{ 'General.back_button' | translate }}"></ion-back-button>
     </ion-buttons>
-    <ion-title> Game Type </ion-title>
+    <ion-title> {{ 'CreateGame.selectGameType' | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,7 +19,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card id="create_card_create" (click)=navCreateMultiPlayerGamePage() color="secondary">
+  <ion-card id="create_card_create" (click)=navCreateMultiPlayerGamePage() color="secondary" [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="people"></ion-icon> Multiplayer

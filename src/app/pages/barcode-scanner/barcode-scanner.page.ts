@@ -66,23 +66,23 @@ export class BarcodeScannerPage implements OnInit {
 
   /********/
   async stopScan() {
-    // BarcodeScanner.showBackground();
-    // document.querySelector('body').classList.remove('scanner-active');
-    // /* stop scan */
-    // BarcodeScanner.stopScan();
-  };
+  //   BarcodeScanner.showBackground();
+  //   document.querySelector('body').classList.remove('scanner-active');
+  //   /* stop scan */
+  //   BarcodeScanner.stopScan();
+  // };
 
-  async checkPermission() {
-    // return new Promise(async (resolve, rejects) => {
-    //   const status = await BarcodeScanner.checkPermission({ force: true });
-    //   if (status.granted) {
-    //     resolve(true);
-    //   } else if (status.denied) {
-    //     // ToDo: update
-    //     BarcodeScanner.openAppSettings();
-    //   } else {
-    //     resolve(false);
-    //   }
-    // });
+  // async checkPermission() {
+  //   return new Promise(async (resolve, rejects) => {
+  //     const status = await BarcodeScanner.checkPermission({ force: true });
+  //     if (status.granted) {
+  //       resolve(true);
+  //     } else if (status.denied) {
+  //       // ToDo: update
+  //       BarcodeScanner.openAppSettings();
+  //     } else {
+  //       resolve(false);
+  //     }
+  //   });
   }
 }

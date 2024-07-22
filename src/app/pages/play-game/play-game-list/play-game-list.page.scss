@@ -25,7 +25,6 @@ ion-tab-bar {
   height: 100%;
 }
 
-
 .map {
   height: 93%;
   //border-radius: 1rem;
@@ -38,7 +37,7 @@ ion-tab-bar {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 
-  >h1 {
+  > h1 {
     text-align: center;
   }
 }
@@ -47,7 +46,6 @@ ion-tab-bar {
   color: var(--ion-color-primary);
   // border-radius: 16px;
 }
-
 
 /* mutli-player mode */
 .numplayersCard {
@@ -65,24 +63,24 @@ ion-tab-bar {
   margin-right: 0.5%;
   margin-left: 0.5%;
 
-  >div {
+  > div {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
 
-    >ion-label {
+    > ion-label {
       font-size: 18px;
       //font-weight: bold;
     }
 
-    >select {
+    > select {
       width: 70%;
       height: fit-content;
     }
   }
 }
 
-.game-actions{
+.game-actions {
   margin: 17px 0 17px 0;
   border-radius: 0 10px 10px 0;
   border-bottom: 1px solid;
@@ -98,11 +96,11 @@ ion-tab-bar {
     justify-content: space-between;
     flex-direction: row;
 
-    >div {
+    > div {
       //display: flex;
       display: block;
 
-      >select {
+      > select {
         // width: 150px;
         width: 42vw;
         margin-top: 2px;
@@ -118,10 +116,10 @@ ion-tab-bar {
     justify-content: space-between;
     flex-direction: row;
 
-    >div {
+    > div {
       display: block;
 
-      >select {
+      > select {
         width: 42vw;
         margin-top: 2px;
       }
@@ -132,4 +130,22 @@ ion-tab-bar {
     font-size: 16px;
   }
 }
-/*  */
+
+/* ion-fab custom */
+ion-fab-list ion-label:nth-child(1) {
+  margin-bottom: 45px;
+}
+
+ion-fab-list > ion-label{
+    background-color: #f4f5f8;
+    position: absolute;
+    right: 5px;
+    bottom: 7px;
+    padding: 10px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+    width: max-content;
+    cursor: pointer;
+}
