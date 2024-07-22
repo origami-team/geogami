@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NavController } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth-service.service";
 
@@ -15,7 +15,8 @@ export class GameTypeMenuPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   isRealWorld = false;
@@ -33,16 +34,8 @@ export class GameTypeMenuPage implements OnInit {
     /* Check whther user is registerd. if yes, get role and id */
     // Get user role
     this.user.subscribe((event) => {
-      console.log(
-        "🚀 ~ PlayGameMenuPage ~ this.user.subscribe ~ user:",
-        this.user
-      );
       if (event != null) {
         this.userRole = event["roles"][0];
-        console.log(
-          "🚀 ~ PlayGameMenuPage ~ this.user.subscribe ~ this.userRole:",
-          this.userRole
-        );
       }
     });
   }
@@ -55,35 +48,23 @@ export class GameTypeMenuPage implements OnInit {
       isSingleMode: true,
     };
 
-    /* fpr both real and Vir.Emv. */
-    if (this.isRealWorld) {
-      this.navCtrl.navigateForward(
-        `create-game-list/${JSON.stringify(bundle)}`
-      );
-    } else {
-      this.navCtrl.navigateForward(
-        `create-game-virtual-menu/${JSON.stringify(bundle)}`
-      );
-    }
+    // for both real and Vir.Emv. (single-player mode)
+    this.router.navigate(
+      [this.isRealWorld ? "create-game-list" : "create-game-virtual-menu"],
+      { state: bundle }
+    );
   }
 
   navCreateMultiPlayerGamePage() {
-    // this.navCtrl.navigateForward(`play-game/play-game-list/${"VRWorld"}`);
-
     let bundle = {
       isRealWorld: this.isRealWorld,
       isSingleMode: false,
     };
 
-    /* fpr both real and Vir.Emv. */
-    if (this.isRealWorld) {
-      this.navCtrl.navigateForward(
-        `create-game-list/${JSON.stringify(bundle)}`
-      );
-    } else {
-      this.navCtrl.navigateForward(
-        `create-game-virtual-menu/${JSON.stringify(bundle)}`
-      );
-    }
+    // for both real and Vir.Emv. (multi-player mode)
+    this.router.navigate(
+      [this.isRealWorld ? "create-game-list" : "create-game-virtual-menu"],
+      { state: bundle }
+    );
   }
 }

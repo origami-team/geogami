@@ -53,7 +53,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "create-game-list/:bundle",
+    path: "create-game-list",
     loadChildren: () =>
       import(
         "./pages/create-game/create-game-list/create-game-list.module"
@@ -196,7 +196,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: "create-game-virtual-menu/:bundle",
+    path: "create-game-virtual-menu",
     loadChildren: () =>
       import(
         "./pages/create-game/create-game-virtual-menu/create-game-virtual-menu.module"
