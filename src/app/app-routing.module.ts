@@ -174,13 +174,6 @@ const routes: Routes = [
       ).then((m) => m.CreateGameVirtualListPageModule),
   },
   {
-    path: "play-game/play-game-menu",
-    loadChildren: () =>
-      import("./pages/play-game/play-game-menu/play-game-menu.module").then(
-        (m) => m.PlayGameMenuPageModule
-      ),
-  },
-  {
     path: "create-game-virtual-menu",
     loadChildren: () =>
       import(
@@ -201,7 +194,7 @@ const routes: Routes = [
       import("./pages/multiplayer/game-type-menu/game-type-menu.module").then(
         (m) => m.GameTypeMenuPageModule
       ),
-      canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: "barcode-scanner",
@@ -226,8 +219,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'playing-virenv/:queryParams',
-    loadChildren: () => import('./pages/play-game/playing-virenv/playing-virenv.module').then( m => m.PlayingVirenvPageModule)
+    path: "playing-virenv/:queryParams",
+    loadChildren: () =>
+      import("./pages/play-game/playing-virenv/playing-virenv.module").then(
+        (m) => m.PlayingVirenvPageModule
+      ),
   },
 ];
 @NgModule({

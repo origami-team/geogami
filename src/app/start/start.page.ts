@@ -37,6 +37,7 @@ export class StartPage implements OnInit {
 
   // latest app version
   latestAppVersionInfo: any;
+  isWebPlatform = (Capacitor.platform == 'web');
 
   constructor(
     public navCtrl: NavController,
@@ -108,11 +109,11 @@ export class StartPage implements OnInit {
   }
 
   navigateGamesPlayPage() {
-    if (Capacitor.platform == "web") {
-      this.navCtrl.navigateForward(`play-game/play-game-list`);
-    } else {
-      this.navCtrl.navigateForward(`play-game/play-game-menu`);
-    }
+    this.navCtrl.navigateForward(`play-game/play-game-list`);
+  }
+
+  navigateBarcodeScannerPage() {
+    this.navCtrl.navigateForward(`barcode-scanner`);
   }
 
   navigateShowroomPage() {
