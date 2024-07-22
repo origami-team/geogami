@@ -37,14 +37,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: "create-game",
-    loadChildren: () =>
-      import("./pages/create-game/create-game/create-game.module").then(
-        (m) => m.CreateGamePageModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
     path: "create-game/create-game-overview/:bundle",
     loadChildren: () =>
       import(
@@ -166,13 +158,6 @@ const routes: Routes = [
       import("./pages/showroom/task-showroom/task-showroom.module").then(
         (m) => m.TaskShowroomPageModule
       ),
-  },
-  {
-    path: "create-game-menu",
-    loadChildren: () =>
-      import(
-        "./pages/create-game/create-game-menu/create-game-menu.module"
-      ).then((m) => m.CreateGameMenuPageModule),
   },
   {
     path: "create-game-virtual",

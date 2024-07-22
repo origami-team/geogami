@@ -34,23 +34,6 @@
   </ion-card>
 
   <ion-card
-    *ngIf="(user | async)?.username"
-    id="start_card_create"
-    (click)="navigateCreatePage()"
-    color="secondary"
-  >
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="construct"></ion-icon> {{ "Start.developMode" |
-        translate }}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      {{ "Start.developModeDescription" | translate }}
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card
     *ngIf="(user | async)?.roles && ['admin', 'contentAdmin', 'scholar'].includes( (user | async)?.roles[0] )"
     id="start_card_analyze"
     (click)="navigateAnalyzePage()"
