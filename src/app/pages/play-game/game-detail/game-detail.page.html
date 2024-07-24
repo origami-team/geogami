@@ -96,7 +96,7 @@
     </ion-item>
 
     <!-- ToDo: this is a temporary impl. till webGL works properly. You can delete it afterwards-->
-    <ion-item lines="none" *ngIf="userRole && isSingleMode">
+    <ion-item lines="none" *ngIf="userRole && isSingleMode && isVirtualWorld">
       <ion-label text-wrap style="font-weight: bold">
         {{ "PlayGame.useExternalVEApp" | translate }}</ion-label
       >
