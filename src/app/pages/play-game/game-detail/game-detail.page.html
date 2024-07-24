@@ -1,7 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="/" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game">{{ game.name }}</ion-title>
     <ion-buttons slot="primary"></ion-buttons>
@@ -9,19 +13,23 @@
 </ion-header>
 
 <ion-content>
-
   <ion-card>
     <!-- <div #map class="map"></div> -->
     <ion-card-header>
       <ion-card-title *ngIf="game">{{ game.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content *ngIf="game">
-      {{ game.tasks.length }} {{ game.tasks.length == 1 ? ['General.task' | translate ] : ['General.tasks' | translate
-      ]}}
+      {{ game.tasks.length }} {{ game.tasks.length == 1 ? ['General.task' |
+      translate ] : ['General.tasks' | translate ]}}
       <div>
-        <span *ngFor="let task of game.tasks" class="dot" [class.nav]="task.category.includes('nav')"
-          [class.theme]="task.category.includes('theme')" [class.free]="task.category.includes('free')"
-          [class.info]="task.category.includes('info')"></span>
+        <span
+          *ngFor="let task of game.tasks"
+          class="dot"
+          [class.nav]="task.category.includes('nav')"
+          [class.theme]="task.category.includes('theme')"
+          [class.free]="task.category.includes('free')"
+          [class.info]="task.category.includes('info')"
+        ></span>
       </div>
     </ion-card-content>
   </ion-card>
@@ -30,14 +38,18 @@
   <ion-card *ngIf="userRole != 'contentAdmin' || isSingleMode">
     <!-- <ion-card> -->
     <ion-card-header>
-      <ion-card-title> Enter your name
+      <ion-card-title>
+        {{ 'PlayGame.enterName' | translate }}
         <!-- <ion-icon name="information-circle"
           (click)="showPopover($event, 'Popover.gameConnectionInfo')">
         </ion-icon> -->
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-input placeholder="Player name (required)" [(ngModel)]="playerName"></ion-input>
+      <ion-input
+        placeholder="Player name (required)"
+        [(ngModel)]="playerName"
+      ></ion-input>
     </ion-card-content>
   </ion-card>
 
@@ -57,10 +69,11 @@
   <!-- only viewed by instructor -->
   <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
     <ion-card-header>
-      <ion-card-title> Ask players to scan the below QR code to join the game.
+      <ion-card-title>
+        {{ 'PlayGame.askPlayerToScanQRCode' | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content style="display: flex; justify-content: center;">
+    <ion-card-content style="display: flex; justify-content: center">
       <!-- <ion-img style="width: 40%;" src="../../../../assets/temp/qrcode.png"></ion-img> -->
       <div style="width: 70%; text-align: center;">
         <!-- <ngx-qrcode
@@ -70,89 +83,116 @@
           errorCorrectionLevel="L">
         </ngx-qrcode> -->
       </div>
-
     </ion-card-content>
   </ion-card>
 
   <ion-card *ngIf="userRole != 'contentAdmin' || isSingleMode">
     <ion-item lines="none">
-      <ion-label text-wrap style="font-weight: bold;">{{ "PlayGame.shareDataAgreement" | translate }}</ion-label>
+      <ion-label text-wrap style="font-weight: bold"
+        >{{ "PlayGame.shareDataAgreement" | translate }}</ion-label
+      >
       <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
     </ion-item>
 
     <!-- ToDo: this is a temporary impl. till webGL works properly. You can delete it afterwards-->
     <ion-item lines="none" *ngIf="userRole && isSingleMode">
-      <ion-label text-wrap style="font-weight: bold;"> {{ "PlayGame.useExternalVEApp" | translate }}</ion-label>
-      <ion-checkbox slot="start" [(ngModel)]="useExternalVEApp_cbox"></ion-checkbox>
+      <ion-label text-wrap style="font-weight: bold">
+        {{ "PlayGame.useExternalVEApp" | translate }}</ion-label
+      >
+      <ion-checkbox
+        slot="start"
+        [(ngModel)]="useExternalVEApp_cbox"
+      ></ion-checkbox>
     </ion-item>
-
   </ion-card>
 
   <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
     <ion-card-header>
-      <ion-card-title> List of players:
-      </ion-card-title>
+      <ion-card-title> List of players: </ion-card-title>
     </ion-card-header>
 
-    <ion-card-content *ngFor="let e of [].constructor(numPlayers); let i = index">
-
-      <ion-label *ngIf="playersData[i]" style="font-weight: bold; font-size: large; color: black;">
+    <ion-card-content
+      *ngFor="let e of [].constructor(numPlayers); let i = index"
+    >
+      <ion-label
+        *ngIf="playersData[i]"
+        style="font-weight: bold; font-size: large; color: black"
+      >
         p{{ i+1 }}: {{playersData[i].name}} (
         <span
-          [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':(playersData[i].connectionStatus=='disconnected'?'red':'blue')}">
+          [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':(playersData[i].connectionStatus=='disconnected'?'red':'blue')}"
+        >
           {{playersData[i].connectionStatus}}
         </span>
         )
       </ion-label>
 
-      <ion-label *ngIf="!playersData[i]" style="font-weight: bold; font-size: large; color: black;">
+      <ion-label
+        *ngIf="!playersData[i]"
+        style="font-weight: bold; font-size: large; color: black"
+      >
         p{{ i+1 }}: ------ (
-        <span style="color: blue;">
-          not connected yet
-        </span>
+        <span style="color: blue"> not connected yet </span>
         )
       </ion-label>
-
     </ion-card-content>
   </ion-card>
 
-
   <!-- Monitor players on map -->
-  <ion-card [ngStyle]="{ 'display' : ( userRole=='contentAdmin' && !isSingleMode ? '' : 'none' ) }">
+  <ion-card
+    [ngStyle]="{ 'display' : ( userRole=='contentAdmin' && !isSingleMode ? '' : 'none' ) }"
+  >
     <ion-card-header>
-      <ion-card-title> Monitor players location
-      </ion-card-title>
+      <ion-card-title> Monitor players location </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <div id="main" class="showLocsLabel">
         <div *ngFor="let e of [].constructor(numPlayers); let i = index">
-          <ion-label *ngIf="playersData[i]" style=" font-size: large; color: black;">
-            <ion-icon style="font-size: 16px; opacity: 100%;" [color]="cirColor[i]" name="ellipse"></ion-icon> p{{ i+1
-            }}: {{playersData[i].name}}
+          <ion-label
+            *ngIf="playersData[i]"
+            style="font-size: large; color: black"
+          >
+            <ion-icon
+              style="font-size: 16px; opacity: 100%"
+              [color]="cirColor[i]"
+              name="ellipse"
+            ></ion-icon>
+            p{{ i+1 }}: {{playersData[i].name}}
           </ion-label>
 
-          <ion-label *ngIf="!playersData[i]" style="font-size: large; color: black;">
-            <ion-icon style="font-size: 16px;" [color]="cirColor[i]" name="ellipse"></ion-icon> P{{ i+1 }}: ------
+          <ion-label
+            *ngIf="!playersData[i]"
+            style="font-size: large; color: black"
+          >
+            <ion-icon
+              style="font-size: 16px"
+              [color]="cirColor[i]"
+              name="ellipse"
+            ></ion-icon>
+            P{{ i+1 }}: ------
           </ion-label>
         </div>
       </div>
 
-
       <div #mointorMap class="map"></div>
 
-      <ion-button 
-        class="showLocsBtnStyle" 
+      <ion-button
+        class="showLocsBtnStyle"
         (click)="showPlayerLocs()"
-        [ngStyle]="{ 'display' : ( !showLocsBtn ? 'none' : '' ) }">Show players location</ion-button>
+        [ngStyle]="{ 'display' : ( !showLocsBtn ? 'none' : '' ) }"
+        >Show players location</ion-button
+      >
     </ion-card-content>
   </ion-card>
-
 </ion-content>
 
-<ion-footer *ngIf="(userRole != 'contentAdmin' && !isSingleMode)  || isSingleMode">
+<ion-footer
+  *ngIf="(userRole != 'contentAdmin' && !isSingleMode)  || isSingleMode"
+>
   <ion-toolbar>
-    <ion-button expand="block" (click)="startGame()" [disabled]="!playerName">{{
-      "General.start" | translate }}</ion-button>
+    <ion-button expand="block" (click)="startGame()" [disabled]="!playerName"
+      >{{ "General.start" | translate }}</ion-button
+    >
   </ion-toolbar>
 </ion-footer>

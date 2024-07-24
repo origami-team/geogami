@@ -4,6 +4,7 @@ import {
   PopoverController,
   ToastController,
 } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 import { BehaviorSubject } from "rxjs";
 import { PopoverComponent } from "src/app/popover/popover.component";
 
@@ -17,7 +18,8 @@ export class UtilService {
   constructor(
     private toastCtr: ToastController,
     private alertCtr: AlertController,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private translate: TranslateService
   ) {
     this.isOnline$ = new BehaviorSubject(true);
     this.qrCode$ = new BehaviorSubject("");
@@ -105,7 +107,19 @@ export class UtilService {
     });
     return await popover.present();
   }
-  /*  */
+
+  /* showPopover with translation */
+  async showPopover_i18n(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text },
+    });
+    return await popover.present();
+  }
 
   async showAlert(header: string, msg: string) {
     const alert = await this.alertCtr.create({

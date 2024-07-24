@@ -58,7 +58,7 @@ export class CreateGameListPage implements OnInit {
     public popoverController: PopoverController,
     private translate: TranslateService,
     private route: ActivatedRoute,
-    private utilService: UtilService,
+    public utilService: UtilService,
     private router: Router,
   ) {
     // Get sent data (not visible on url)
@@ -209,17 +209,5 @@ export class CreateGameListPage implements OnInit {
     this.navCtrl.navigateForward(
       `create-game/create-game-overview/${JSON.stringify(this.bundle)}`
     );
-  }
-
-  async showPopover(ev: any, key: string) {
-    let text = this.translate.instant(key);
-
-    const popover = await this.popoverController.create({
-      component: PopoverComponent,
-      event: ev,
-      translucent: true,
-      componentProps: { text },
-    });
-    return await popover.present();
   }
 }
