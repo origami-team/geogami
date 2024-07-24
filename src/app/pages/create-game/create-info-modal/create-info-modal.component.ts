@@ -12,9 +12,9 @@ import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal
 import { QuestionType, AnswerType } from "src/app/models/types";
 import { standardMapFeatures } from "src/app/models/standardMapFeatures";
 import { cloneDeep } from "lodash";
-import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
 import { VirEnvHeaders } from "src/app/models/virEnvsHeader";
+import { UtilService } from "src/app/services/util.service";
 
 @Component({
   selector: "app-create-info-modal",
@@ -41,7 +41,8 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   constructor(
     public modalController: ModalController,
     public popoverController: PopoverController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public utilService: UtilService
   ) {}
 
   ngOnInit() {
@@ -125,18 +126,5 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     ) {
       this.task.question.initialAvatarPosition = undefined;
     }
-  }
-
-  async showPopover(ev: any, key: string) {
-    let text = this.translate.instant(key);
-
-    console.log(ev);
-    const popover = await this.popoverController.create({
-      component: PopoverComponent,
-      event: ev,
-      translucent: true,
-      componentProps: { text },
-    });
-    return await popover.present();
   }
 }
