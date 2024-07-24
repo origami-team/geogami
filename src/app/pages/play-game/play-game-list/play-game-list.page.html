@@ -16,10 +16,12 @@
   <div class="select-style" *ngIf="isListTabSelected">
     <div>
       <ion-label>
-        <span class="cat-title-style">Game environment </span>
+        <span class="cat-title-style"
+          >{{ 'GameList.gameEnv' | translate }}
+        </span>
         <ion-icon
           name="information-circle"
-          (click)="utilService.showPopover($event, 'Choose between playing GeoGami outside (real world) or indoor (virtual environment)')"
+          (click)="utilService.showPopover_i18n($event, 'GameList.gameEnv_info')"
         >
         </ion-icon>
       </ion-label>
@@ -28,16 +30,20 @@
         [(ngModel)]="gameEnvSelected"
         (change)="filterGamesEnv($event.target.value)"
       >
-        <option value="real">Real world</option>
-        <option value="virtual">Virtual env.</option>
+        <option value="real">{{ 'GameList.realWorld' | translate }}</option>
+        <option value="virtual">
+          {{ 'GameList.virtualWorld' | translate }}
+        </option>
       </select>
     </div>
     <div>
       <ion-label>
-        <span class="cat-title-style">Game mode </span>
+        <span class="cat-title-style"
+          >{{ 'GameList.gameMode' | translate }}
+        </span>
         <ion-icon
           name="information-circle"
-          (click)="utilService.showPopover($event, 'Choose between playing GeoGami indivisually or with a group. Minium number of players of a mutliplayer mode is 2')"
+          (click)="utilService.showPopover_i18n($event, 'GameList.gameMode_info')"
         >
         </ion-icon>
       </ion-label>
@@ -46,12 +52,14 @@
         [(ngModel)]="gameModeSelected"
         (change)="filterGamesMode($event.target.value)"
       >
-        <option value="single">Single player</option>
+        <option value="single">
+          {{ 'GameList.singlePlayer' | translate }}
+        </option>
         <option
           value="multi-player"
           [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"
         >
-          Multiplayer {{ !['admin', 'contentAdmin',
+          {{ 'GameList.multiplayer' | translate }} {{ !['admin', 'contentAdmin',
           'scholar'].includes(userRole)? "( only scholars have access )" : ''}}
         </option>
       </select>

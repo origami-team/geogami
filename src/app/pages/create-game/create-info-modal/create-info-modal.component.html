@@ -54,7 +54,7 @@
       {{ "CreateGame.markdownSupported" | translate }}
       <ion-icon
         name="information-circle"
-        (click)="showPopover($event, 'Popover.markdown')"
+        (click)="utilService.showPopover_i18n($event, 'Popover.markdown')"
       >
       </ion-icon>
     </p>
@@ -69,12 +69,10 @@
   <!-- set avatar initial position and direction -->
   <ion-item class="ion-no-padding" *ngIf="isVirtualWorld">
     <h5>
-      Set avatar initial position and direction 🧍‍♂️
+      {{ "CreateGame.setAvatarPosition" | translate }} 🧍‍♂️
       <ion-icon
         name="information-circle"
-        (click)="
-          showPopover($event, 'Set avatar initial position and direction')
-        "
+        (click)="utilService.showPopover_i18n($event, 'CreateGame.setAvatarPosition')"
       >
       </ion-icon>
     </h5>
