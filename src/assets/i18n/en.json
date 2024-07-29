@@ -92,7 +92,13 @@
     "logInToAccess": "You must login to have access",
     "players": "players",
     "tasks": "tasks",
-    "task": "task"
+    "task": "task",
+    "gameEnv":"Game environment",
+    "gameEnv_info":"Choose between playing GeoGami outside (real world) or indoor (virtual environment)",
+    "gameMode":"Game Mode",
+    "gameMode_info":"Choose between playing GeoGami indivisually or with a group. Minium number of players of a mutliplayer mode is 2",
+    "singlePlayer":"Single player",
+    "multiplayer":"Multiplayer"
   },
   "CreateTasks": {
     "combineTasks": "List of created tasks:",
@@ -188,7 +194,8 @@
     "photoDirection": "Photo of the direction to be searched for",
     "photoTask": "Photo for the task",
     "correctAnswer": "The correct answer:",
-    "selectGameType":"Select game type"
+    "selectGameType":"Select game type",
+    "setAvatarPosition":"Set avatar initial position and direction"
   },
   "EditGame": {
     "titleEditGame": "Edit your GeoGami",
@@ -229,7 +236,9 @@
     "gameNotFound":"Game could not be found.",
     "deleteGame": "Delete Game",
     "deleteGameMsg": "Are you sure you want to delete this game?",
-    "useExternalVEApp":"Use external Virtual Enviroment App (WinOS/ MacOS)"
+    "useExternalVEApp":"Use external Virtual Enviroment App (WinOS/ MacOS)",
+    "enterName":"Enter your name",
+    "askPlayerToScanQRCode":"Ask players to scan the below QR code to join the game."
   },
   "Showroom": {
     "titleShowroom": "Get to know GeoGami",

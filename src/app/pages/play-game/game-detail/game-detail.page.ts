@@ -281,19 +281,6 @@ export class GameDetailPage implements OnInit {
     }
   }
 
-  /***************************************/
-  async showPopover(ev: any, key: string) {
-    let text = this.translate.instant(key);
-
-    const popover = await this.popoverController.create({
-      component: PopoverComponent,
-      event: ev,
-      translucent: true,
-      componentProps: { text },
-    });
-    return await popover.present();
-  }
-
   /*****************/
   prepareRouteParams() {
     return {

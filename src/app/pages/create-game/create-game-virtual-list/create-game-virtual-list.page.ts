@@ -18,11 +18,11 @@ import { NavController } from "@ionic/angular";
 import { Game } from "src/app/models/game";
 
 import { PopoverController } from "@ionic/angular";
-import { PopoverComponent } from "src/app/popover/popover.component";
 
 // VR world
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-create-game-virtual-list',
@@ -53,7 +53,7 @@ export class CreateGameVirtualListPage implements OnInit {
     private navCtrl: NavController,
     public popoverController: PopoverController,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    public utilService: UtilService
   ) { }
 
   ngOnInit() {
@@ -166,17 +166,4 @@ export class CreateGameVirtualListPage implements OnInit {
     }
     this.navCtrl.navigateForward(`create-game/create-game-overview/${JSON.stringify(bundle)}`);
   }
-
-  async showPopover(ev: any, key: string) {
-    let text = this.translate.instant(key);
-
-    const popover = await this.popoverController.create({
-      component: PopoverComponent,
-      event: ev,
-      translucent: true,
-      componentProps: { text },
-    });
-    return await popover.present();
-  }
-
 }
