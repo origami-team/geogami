@@ -149,7 +149,7 @@
             </ion-item>
           </ion-card-header>
         </ion-card>
-        <ion-buttons *ngIf="this.userId == game.user" class="game-actions">
+        <ion-buttons *ngIf="this.userId == game.user || userRole=='contentAdmin'" class="game-actions">
           <ion-button
             title="{{'General.edit'| translate}}"
             (click)="EditGame(game._id)"
