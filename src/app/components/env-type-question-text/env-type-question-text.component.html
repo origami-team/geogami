@@ -1,8 +1,5 @@
 <!-- show extra info (env. type & question text) only with a specific width -->
-<div
-  *ngIf="this.platform.width() > 780"
-  style="display: inline"
->
+<div *ngIf="this.platform.width() > 780" style="display: inline">
   <!-- Show vir. env. type -->
   <ion-chip *ngIf="isVirtualWorld" color="medium" htmlFor="test">
     <ion-label style="color: black">
@@ -12,7 +9,13 @@
   <!-- Show part of quesition text -->
   <ion-chip color="medium" htmlFor="test">
     <ion-label style="color: black">
-      <span style="font-weight: bold;">Question:</span>
+      <span style="font-weight: bold"
+        >{{
+          taskCategory.includes("info")
+            ? "Info"
+            : "General.question" | translate
+        }}:</span
+      >
       {{ questionText.substring(0, 30) }}
       {{ questionText.length > 30 ? "..." : "" }}
     </ion-label>
