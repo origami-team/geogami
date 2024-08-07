@@ -2382,7 +2382,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.feedbackControl.remove();
 
-    this.orientationService.clear();
+    // To allow press done without error
+    if (
+      this.isVirtualWorld ||
+      (!this.isVirtualWorld && Capacitor.platform !== "web")
+    ) {
+      this.orientationService.clear();
+    }
 
     this.map.remove();
     this.navCtrl.navigateRoot("/");
