@@ -589,7 +589,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             }
 
             // Check game type either real or VR world
-            if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+            if (game?.isVRWorld != false) {
               this.connectSocketIO(this.game.tasks[0]);
             }
 
