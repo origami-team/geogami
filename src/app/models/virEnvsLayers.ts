@@ -320,4 +320,24 @@ export const virEnvLayers: Readonly<any> = {
     bounds: VirEnv_37.bounds,
     zoom: 17.8,
   },
+  VirEnv_38: {
+    initialPosition: {
+      lng: 214 / 111000,
+      lat: 69 / 112000,
+    },
+    overlayCoords: VirEnv_1.overlayCoords,
+    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2],
+    bounds: VirEnv_1.bounds,
+    zoom: 17,
+  },
+  VirEnv_39: {
+    initialPosition: {
+      lng: 214 / 111000,
+      lat: 69 / 112000,
+    },
+    overlayCoords: VirEnv_1.overlayCoords,
+    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2],
+    bounds: VirEnv_1.bounds,
+    zoom: 17,
+  }
 };
