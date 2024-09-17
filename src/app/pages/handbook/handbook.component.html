@@ -1,9 +1,11 @@
-
-
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color=dark defaultHref="start" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+      <ion-back-button
+        color="dark"
+        defaultHref="start"
+        text="{{ 'General.back_button' | translate }}"
+      ></ion-back-button>
     </ion-buttons>
     <!-- <ion-title>{{ "Showroom.titleShowroom" | translate }}</ion-title> -->
     <ion-title>Handbook</ion-title>
@@ -11,28 +13,79 @@
 </ion-header>
 
 <ion-content>
-
-  <h1></h1>
-
-  <ion-accordion-group>
-    <ion-accordion value="first">
-      <ion-item slot="header" color="light">
-        <ion-label>First Accordion</ion-label>
-      </ion-item>
-      <div class="ion-padding" slot="content">First Content</div>
-    </ion-accordion>
-    <ion-accordion value="second">
-      <ion-item slot="header" color="light">
-        <ion-label>Second Accordion</ion-label>
-      </ion-item>
-      <div class="ion-padding" slot="content">Second Content</div>
-    </ion-accordion>
-    <ion-accordion value="third">
-      <ion-item slot="header" color="light">
-        <ion-label>Third Accordion</ion-label>
-      </ion-item>
-      <div class="ion-padding" slot="content">Third Content</div>
-    </ion-accordion>
-  </ion-accordion-group>
-
+  <div style="padding: 3rem">
+    <!--------------->
+    <!-- accordion -->
+    <h1>Draußen in der realen Welt</h1>
+    <ion-accordion-group>
+      <ng-container
+        *ngFor="
+          let section of sections;
+          index as i;
+          first as first;
+          last as last
+        "
+      >
+        <ion-accordion value="{{ section.heading }}">
+          <!------------>
+          <!-- Header -->
+          <ion-item
+            slot="header"
+            style="border: 0.5px solid; border-color: #757575"
+            [ngStyle]="{ 'border-top': first ? '0.5px solid' : 'none' }"
+          >
+            <ion-label>{{ section.heading }}</ion-label>
+          </ion-item>
+          <!------------->
+          <!-- Content -->
+          <div
+            class="ion-padding"
+            slot="content"
+            style="
+              box-sizing: border-box;
+              border-left: 0.5px solid;
+              border-right: 0.5px solid;
+              border-color: #757575;
+              padding: 2rem;
+            "
+            [ngStyle]="{ 'border-bottom': last ? '0.5px solid' : 'none' }"
+          >
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+              <div style="width: calc(50% - (1rem / 2))">
+                <!------------>
+                <!-- images -->
+                <div style="display: flex; flex-wrap: wrap; gap: 2rem">
+                  <ng-container
+                    *ngFor="let image of section.images; index as i"
+                  >
+                    <!-- images-list -->
+                    <div
+                      style="
+                        width: calc(
+                          (100% / var(--gallery-columns)) -
+                            (var(--gallery-gap) * (var(--gallery-columns) - 1)) /
+                            var(--gallery-columns)
+                        );
+                      "
+                    >
+                      <img
+                        src="{{ section.path }}/{{ image }}.jpeg"
+                        alt=""
+                        style="width: 200px"
+                      />
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div style="width: calc(50% - (1rem / 2))">
+                {{ section.text }}
+              </div>
+            </div>
+          </div>
+        </ion-accordion>
+      </ng-container>
+    </ion-accordion-group>
+  </div>
 </ion-content>
+
+<!-- To Do: 1. remove border from middle -->
