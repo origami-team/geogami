@@ -224,6 +224,12 @@ const routes: Routes = [
       import("./pages/play-game/playing-virenv/playing-virenv.module").then(
         (m) => m.PlayingVirenvPageModule
       ),
+  },{
+    path: "handbook",
+    loadChildren: () =>
+      import("./pages/handbook/handbook.module").then(
+        (m) => m.HandbookModule
+      ),
   },
 ];
 @NgModule({

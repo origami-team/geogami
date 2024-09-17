@@ -1,0 +1,38 @@
+
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color=dark defaultHref="start" text="{{ 'General.back_button' | translate }}"></ion-back-button>
+    </ion-buttons>
+    <!-- <ion-title>{{ "Showroom.titleShowroom" | translate }}</ion-title> -->
+    <ion-title>Handbook</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <h1></h1>
+
+  <ion-accordion-group>
+    <ion-accordion value="first">
+      <ion-item slot="header" color="light">
+        <ion-label>First Accordion</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">First Content</div>
+    </ion-accordion>
+    <ion-accordion value="second">
+      <ion-item slot="header" color="light">
+        <ion-label>Second Accordion</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">Second Content</div>
+    </ion-accordion>
+    <ion-accordion value="third">
+      <ion-item slot="header" color="light">
+        <ion-label>Third Accordion</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">Third Content</div>
+    </ion-accordion>
+  </ion-accordion-group>
+
+</ion-content>
