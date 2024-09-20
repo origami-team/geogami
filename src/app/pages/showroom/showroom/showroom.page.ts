@@ -19,5 +19,8 @@ export class ShowroomPage implements OnInit {
   navigateTaskShowroom() {
     this.navCtrl.navigateForward('task-showroom');
   }
+  navigateHandbook() {
+    this.navCtrl.navigateForward('handbook');
+  }
 
 }
