@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content>
-  <div style="padding: 3rem">
+  <div class="page-padding">
     <!--------------->
     <!-- accordion 1-->
     <div>
@@ -37,56 +37,36 @@
             >
               <ion-label>{{ section.heading }}</ion-label>
             </ion-item>
-            <!------------->
-            <!-- Content -->
+            <!--------------------->
+            <!-- section-content -->
             <div
               class="ion-padding"
               slot="content"
-              style="
-                box-sizing: border-box;
-                border-left: 0.5px solid;
-                border-right: 0.5px solid;
-                border-color: #757575;
-                padding: 2rem;
-                display: flex;
-                flex-direction: column;
-                gap: 3rem;
-              "
+              class="section-content"
               [ngStyle]="{ 'border-bottom': last ? '0.5px solid' : 'none' }"
             >
-              <!-- add here multi images and texts -->
-
               <ng-container *ngFor="let content of section.content">
-                <div style="display: flex; flex-wrap: wrap; gap: 1rem">
-                  <div style="width: calc(50% - (1rem / 2))">
-                    <!------------>
-                    <!-- images -->
-                    <div style="display: flex; flex-wrap: wrap; gap: 2rem">
+                <!-- inner-section-content -->
+                <div>
+                  <!-- images-side -->
+                  <div class="images-side">
+                    <!-- images container -->
+                    <div>
                       <ng-container
                         *ngFor="let image of content.images; index as i"
                       >
                         <!-- images-list -->
-                        <div
-                          style="
-                            width: calc(
-                              (100% / var(--gallery-columns)) -
-                                (
-                                  var(--gallery-gap) *
-                                    (var(--gallery-columns) - 1)
-                                ) / var(--gallery-columns)
-                            );
-                          "
-                        >
+                        <div>
                           <img
                             src="{{ section.path }}/{{ image }}frame.jpeg"
                             alt=""
-                            style="width: 200px"
                           />
                         </div>
                       </ng-container>
                     </div>
                   </div>
-                  <div style="width: calc(50% - (1rem / 2))">
+                  <!-- text-side -->
+                  <div class="text-side">
                     {{ content.text }}
                   </div>
                 </div>
