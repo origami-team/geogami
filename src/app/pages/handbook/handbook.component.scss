@@ -7,7 +7,9 @@ ion-accordion.accordion-collapsed ion-item[slot="header"] {
 ion-accordion.accordion-expanding ion-item[slot="header"],
 ion-accordion.accordion-expanded ion-item[slot="header"] {
   --background: #a7d7ea;
-  //   --color: var(--ion-color-primary-contrast);
+}
+ion-accordion.accordion-expanded div[slot="content"] {
+  border: 0.5px solid #757575 !important; // used !imp. to override the style of drawing border to last subsection which was added to prevent duplicate lines
 }
 
 .page-padding {
