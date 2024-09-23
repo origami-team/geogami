@@ -16,149 +16,69 @@
   <div class="page-padding">
     <!--------------->
     <!-- accordion 1-->
-    <div>
-      <h1>Draußen in der realen Welt</h1>
-      <ion-accordion-group>
-        <ng-container
-          *ngFor="
-            let section of sections;
-            index as i;
-            first as first;
-            last as last
-          "
-        >
-          <ion-accordion value="{{ section.heading }}">
-            <!------------>
-            <!-- Header -->
-            <ion-item
-              slot="header"
-              style="border: 0.5px solid; border-color: #757575"
-              [ngStyle]="{ 'border-top': first ? '0.5px solid' : 'none' }"
-            >
-              <ion-label>{{ section.heading }}</ion-label>
-            </ion-item>
-            <!--------------------->
-            <!-- section-content -->
-            <div
-              class="ion-padding"
-              slot="content"
-              class="section-content"
-              [ngStyle]="{ 'border-bottom': last ? '0.5px solid' : 'none' }"
-            >
-              <ng-container *ngFor="let content of section.content">
-                <!-- inner-section-content -->
-                <div>
-                  <!-- images-side -->
-                  <div class="images-side">
-                    <!-- images container -->
-                    <div>
-                      <ng-container
-                        *ngFor="let image of content.images; index as i"
-                      >
-                        <!-- images-list -->
-                        <div>
-                          <img
-                            src="{{ section.path }}/{{ image }}frame.jpeg"
-                            alt=""
-                          />
-                        </div>
-                      </ng-container>
-                    </div>
-                  </div>
-                  <!-- text-side -->
-                  <div class="text-side">
-                    {{ content.text }}
-                  </div>
-                </div>
-              </ng-container>
-            </div>
-          </ion-accordion>
-        </ng-container>
-      </ion-accordion-group>
-    </div>
-
-    <!--------------->
-    <!-- accordion 2-->
-    <div>
-      <h1>Virtuelle Welt</h1>
-      <ion-accordion-group>
-        <ng-container
-          *ngFor="
-            let section of sections2;
-            index as i;
-            first as first;
-            last as last
-          "
-        >
-          <ion-accordion value="{{ section.heading }}">
-            <!------------>
-            <!-- Header -->
-            <ion-item
-              slot="header"
-              style="border: 0.5px solid; border-color: #757575"
-              [ngStyle]="{ 'border-top': first ? '0.5px solid' : 'none' }"
-            >
-              <ion-label>{{ section.heading }}</ion-label>
-            </ion-item>
-            <!------------->
-            <!-- Content -->
-            <div
-              class="ion-padding"
-              slot="content"
-              style="
-                box-sizing: border-box;
-                border-left: 0.5px solid;
-                border-right: 0.5px solid;
-                border-color: #757575;
-                padding: 2rem;
-                display: flex;
-                flex-direction: column;
-                gap: 3rem;
-              "
-              [ngStyle]="{ 'border-bottom': last ? '0.5px solid' : 'none' }"
-            >
-              <!-- add here multi images and texts -->
-
-              <ng-container *ngFor="let content of section.content">
-                <div style="display: flex; flex-wrap: wrap; gap: 1rem">
-                  <div style="width: calc(50% - (1rem / 2))">
-                    <!------------>
-                    <!-- images -->
-                    <div style="display: flex; flex-wrap: wrap; gap: 2rem">
-                      <ng-container
-                        *ngFor="let image of content.images; index as i"
-                      >
-                        <!-- images-list -->
-                        <div
-                          style="
-                            width: calc(
-                              (100% / var(--gallery-columns)) -
-                                (
-                                  var(--gallery-gap) *
-                                    (var(--gallery-columns) - 1)
-                                ) / var(--gallery-columns)
-                            );
-                          "
+    <ng-container *ngFor="let section of sections">
+      <div>
+        <h1>{{ section.sectionTitle }}</h1>
+        <ion-accordion-group>
+          <ng-container
+            *ngFor="
+              let subsection of section.subsections;
+              index as i;
+              first as first;
+              last as last
+            "
+          >
+            <ion-accordion value="{{ subsection.heading }}">
+              <!---------------------->
+              <!-- section - header -->
+              <ion-item
+              lines="none"
+                slot="header"
+                style="border: 0.5px solid #757575"
+                [ngStyle]="{ 'border-top': first ? '0.5px solid #757575' : 'none' }"
+              >
+                <ion-label>{{ subsection.heading }}</ion-label>
+              </ion-item>
+              <!----------------------->
+              <!-- section - content -->
+              <div
+                class="ion-padding"
+                slot="content"
+                class="section-content"
+                [ngStyle]="{ 'border-bottom': last ? '0.5px solid' : 'none' }"
+              >
+                <ng-container *ngFor="let content of subsection.content">
+                  <!-- inner-section-content -->
+                  <div>
+                    <!-- images-side -->
+                    <div class="images-side">
+                      <!-- images container -->
+                      <div>
+                        <ng-container
+                          *ngFor="let image of content.images; index as i"
                         >
-                          <img
-                            src="{{ section.path }}/{{ image }}frame.jpeg"
-                            alt=""
-                            style="width: 200px"
-                          />
-                        </div>
-                      </ng-container>
+                          <!-- images-list -->
+                          <div>
+                            <img
+                              src="{{ subsection.path }}/{{ image }}frame.jpeg"
+                              alt=""
+                            />
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <!-- text-side -->
+                    <div class="text-side">
+                      {{ content.text }}
                     </div>
                   </div>
-                  <div style="width: calc(50% - (1rem / 2))">
-                    {{ content.text }}
-                  </div>
-                </div>
-              </ng-container>
-            </div>
-          </ion-accordion>
-        </ng-container>
-      </ion-accordion-group>
-    </div>
+                </ng-container>
+              </div>
+            </ion-accordion>
+          </ng-container>
+        </ion-accordion-group>
+      </div>
+    </ng-container>
   </div>
 </ion-content>
 
