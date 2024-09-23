@@ -18,7 +18,8 @@
     "from": "from",
     "next": "Next",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "question": "Question"
   },
   "Tasktypes": {
     "navigationTasks": "Navigation tasks",

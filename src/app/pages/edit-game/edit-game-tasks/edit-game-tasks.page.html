@@ -48,6 +48,7 @@
               </div>
             </ion-avatar>
 
+            <!-- ToDo: add this to env-type comp. -->
             <!-- ToDo: there is a space to do refactoring by adding duplicated impl. in a single comp.  -->
             <!-- Nav tasks -->
             <div
@@ -65,7 +66,8 @@
               <env-type-question-text
                 [isVirtualWorld]="isVirtualWorld"
                 [virEnvType]="task.virEnvType"
-                [questionText]="task.question.text"
+                [questionText]='isSingleMode?task.question.text:task.question[0].text'
+                [taskCategory]="task.category"
               ></env-type-question-text>
             </div>
 
@@ -85,7 +87,8 @@
               <env-type-question-text
                 [isVirtualWorld]="isVirtualWorld"
                 [virEnvType]="task.virEnvType"
-                [questionText]="task.question.text"
+                [questionText]='isSingleMode?task.question.text:task.question[0].text'
+                [taskCategory]="task.category"
               ></env-type-question-text>
             </div>
 
@@ -106,6 +109,7 @@
                 [isVirtualWorld]="isVirtualWorld"
                 [virEnvType]="task.virEnvType"
                 [questionText]="task.question.text"
+                [taskCategory]="task.category"
               ></env-type-question-text>
             </div>
 
