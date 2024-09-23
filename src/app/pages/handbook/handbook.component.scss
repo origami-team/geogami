@@ -1,11 +1,117 @@
-ion-accordion.accordion-collapsing ion-item[slot='header'],
-ion-accordion.accordion-collapsed ion-item[slot='header'] {
+ion-accordion.accordion-collapsing ion-item[slot="header"],
+ion-accordion.accordion-collapsed ion-item[slot="header"] {
   --background: none;
-//   --color: var(--ion-color-light-contrast);
+  //   --color: var(--ion-color-light-contrast);
 }
 
-ion-accordion.accordion-expanding ion-item[slot='header'],
-ion-accordion.accordion-expanded ion-item[slot='header'] {
-  --background: #A7D7EA;
-//   --color: var(--ion-color-primary-contrast);
+ion-accordion.accordion-expanding ion-item[slot="header"],
+ion-accordion.accordion-expanded ion-item[slot="header"] {
+  --background: #a7d7ea;
+  //   --color: var(--ion-color-primary-contrast);
+}
+
+.page-padding {
+  padding: 3rem;
+}
+
+// section-content
+.section-content {
+  box-sizing: border-box;
+  border-left: 0.5px solid;
+  border-right: 0.5px solid;
+  border-color: #757575;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  // inner-section-content
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 1rem;
+    // images-side
+    .images-side {
+      width: calc(50% - (1rem / 2));
+      // images container
+      > div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        // images-list
+        > div {
+          width: calc(
+            (100% / var(--gallery-columns)) -
+              (var(--gallery-gap) * (var(--gallery-columns) - 1)) /
+              var(--gallery-columns)
+          );
+          > img {
+            width: 200px;
+          }
+        }
+      }
+    }
+
+    // text-side
+    .text-side {
+      width: calc(50% - (1rem / 2));
+    }
+  }
+}
+
+// less than 810px tablet
+@media only screen and (max-width: 810px) {
+  .page-padding {
+    padding: 1.5rem;
+  }
+
+  // section-content
+  .section-content {
+    > div {
+      // images-side
+      .images-side {
+        // images container
+        > div {
+          gap: 1.5rem;
+          // images-list
+          > div {
+            > img {
+              width: 140px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// less than 768px mobile
+@media only screen and (max-width: 768px) {
+  // section-content
+  .section-content {
+    > div {
+      flex-direction: column;
+      gap: 1.2rem;
+      // images-side
+      .images-side {
+        // images container
+        width: 100%;
+        > div {
+          flex-direction: row;
+          // images-list
+          > div {
+            // width: 100%;
+            > img {
+              width: auto;
+              max-width: 110px;
+            }
+          }
+        }
+      }
+      // text-side
+      .text-side {
+        width: 100%;
+      }
+    }
+  }
 }
