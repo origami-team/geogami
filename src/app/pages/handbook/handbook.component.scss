@@ -57,6 +57,7 @@ ion-accordion.accordion-expanded div[slot="content"] {
     // text-side
     .text-side {
       width: calc(50% - (1rem / 2));
+      white-space: preserve-breaks;
     }
   }
 }
