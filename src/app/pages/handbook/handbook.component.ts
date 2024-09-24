@@ -288,6 +288,96 @@ export class HandbookComponent implements OnInit {
         },
       ],
     },
+    /* Kartenfeatures */
+    {
+      sectionTitle: "Kartenfeatures",
+      subsections: [
+        /* Navigationsaufgaben */
+        {
+          heading: "Kartenfeatures",
+          path: "assets/handbook/vr_aufgabentypen/navigationsaufgaben",
+          content: [
+            {
+              text: "Zoom: Hier kannst du einstellen, ob der Zoom auf die Aufgabe, die Karte, vom Spieler selbst oder gar nicht gesetzt werden soll.",
+              images: ["no"],
+            },
+            {
+              text: "Kartenbereich: Hier kannst du einstellen, ob der gesamte Kartenausschnitt oder ein Bestimmter ständig zu sehen ist, oder ob sich der Kartenbereich mitbewegt und somit verschieben kann.",
+              images: ["no"],
+            },
+            {
+              text: 'Kartenrotation: Hier stellst du die Ausrichtung der Karte ein (guckt man immer nach oben oder ist oben immer Norden?)',
+              images: ["no"],
+            },
+            {
+              text: 'Positionsmarker: Die Positionsmarkereinstellung verändert die Aufgabe gravierend. Ist er ausgeschaltet, müssen sich die Spielenden allein an der Umwelt orientieren um zu entscheiden wo sie sich befinden. Ist er angeschaltet, können sie sich anhand des Markers orientieren. Ist er nur zu Aufgabenbeginn angeschaltet, können sie sich einmalig am Anfang orientieren, ist er auf Knopdfruck angeschaltet, können die Spielenden selbst entscheiden, wie oft sie diese Hilfe gebrauchen',
+              images: ["no"],
+            },
+            {
+              text: 'Blickrichtungsmarker: Es gelten die gleichen Hinweise, wie beim Positionsmarker. Allerdings wird nicht nur der Ort an dem man sich befindet dargestellt, sondern auch die Richtung in die man guckt. Nur mit eingeschaltetem Positionsmarker ist diese Funktion nutzbar.',
+              images: ["no"],
+            },
+            {
+              text: 'Trackaufzeichnung; Wenn du die Trackaufzeichnung anstellst, kann der Spielende live seine eigene Spielbewegung auf der Karte sehen und visuell nachvollziehen. Bei Kindern ist es beliebt, so Formen wie einen Kreis oder ein Herz auf die Karte zu "malen". Trackaufzeichnung bezieht sich nur auf das visualisieren auf der Karte: Im Hintergrund zeichnet GeoGami immer den Track auf.',
+              images: ["no"],
+            },
+            {
+              text: 'Straßenmarkierung: Du kannst den Abschnitt der Straße, an dem du dich befindest so rot markieren. Anders als beim Positionsmarker erfährst du aber nicht deine exakte Position.',
+              images: ["no"],
+            },
+            {
+              text: 'Hervorhebung von Landmarken: Damit kannst du auf Dinge in der Landschaft hinweisen, die beispielsweise die Orientierung erleichtern können',
+              images: ["no"],
+            },
+          ],
+        }
+      ],
+    },
+    /* "Weitere Einstellungen" für Aufgaben */
+    {
+      sectionTitle: "'Weitere Einstellungen' für Aufgaben",
+      subsections: [
+        /* Weitere Einstellungen */
+        {
+          heading: "Weitere Einstellungen",
+          path: "assets/handbook/weitere-einstellungen",
+          content: [
+            {
+              text: "Je nach Aufgabentyp kannst du noch weitere EInstellungen vornehmen, die das Spielerlebnis verbessern oder das Ziel der Aufgabe besser ansprechen. \n Eingabebestätigung an- und ausschalten; So bestimmst du, ob die Spielenden selber feststellen müssen, dass sie die Aufgabe richtig gelöst haben.",
+              images: ["1"],
+            },
+            {
+              text: "Fahne anzeigen; So bestimmst du den Schwierigkeitsgrad der Aufgabe, da du einstellen kannst, ob die Zielfahne auf der Karte sichtbar ist.",
+              images: ["2"],
+            },
+            {
+              text: 'Feedback an- und ausschalten; So bestimmst du ob die Spielenden direkt erfahren, ob sie die Aufgabe richtig oder falsch gelöst haben.',
+              images: ["3"],
+            },
+            {
+              text: 'Fahne auf der Karte behalten; So bestimmst du ob, das Ziel dieser Aufgabe bei den nächsten Aufgaben sichtbar bleibt.',
+              images: ["4"],
+            },
+            {
+              text: 'Mehrere Versuche einstellen; so bestimmst du, ob die Spielenden eine neue Chance erhalten, wenn sie die Aufgabe falsch lösen (nur bei Themenaufgaben).',
+              images: ["5"],
+            },
+            {
+              text: 'Genauigkeit: Hier kannst du einstellen, wie nah man sich am Ziel befinden muss, damit man als "am richtigen Ort" angesehen wird. Aufgrund von GPS-Ungenauigkeiten sollte hier keine zu kleine Distanz gewählt werden.',
+              images: ["6"],
+            },
+            {
+              text: 'Unter Kartenfeatures können noch Einstellungen zum Positionsmarker und zur Interaktion mit der Karte selbst vorgenommen werden. Unter "Lernen" im Hauptmenü können diese ausprobiert werden.',
+              images: ["7"],
+            },
+            {
+              text: 'Hervorhebung von Landmarken: Damit kannst du auf Dinge in der Landschaft hinweisen, die beispielsweise die Orientierung erleichtern können',
+              images: ["no"],
+            },
+          ],
+        }
+      ],
+    },
   ];
 
   constructor() {}
