@@ -3,7 +3,6 @@ import { ActivatedRoute } from "@angular/router";
 import { AlertController, NavController } from "@ionic/angular";
 import { GamesService } from "../../../services/games.service";
 import { PopoverController } from "@ionic/angular";
-import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
 import { SocketService } from "src/app/services/socket.service";
 import { UtilService } from "src/app/services/util.service";
@@ -34,7 +33,7 @@ export class GameDetailPage implements OnInit {
   playerName: string = "";
 
   // multiplayer
-  teacherCode: string = "";
+  teacherCode: string = "";   // teacherId+gameId
   isSingleMode: boolean = true;
   numPlayers = 2;
   userRole: String = null;
@@ -97,6 +96,7 @@ export class GameDetailPage implements OnInit {
         })
         .finally(() => {
           /* initialize user id and teacher code*/
+          // ToDo: update it to be using gameid+userID
           if (
             !this.isSingleMode &&
             this.authService.getUserValue() &&
@@ -128,6 +128,9 @@ export class GameDetailPage implements OnInit {
         });
     });
 
+    // ToDo: Needs to be changed after allowing others than cadmin
+    if (!this.authService.getUserValue()) {
+      // console.log("unlogged user!!!!");
     this.utilService.getQRCode().subscribe((qrCode) => {
       this.teacherCode = qrCode;
     });
@@ -183,6 +186,7 @@ export class GameDetailPage implements OnInit {
         }
       });
 
+      // ToDo: needs to be updated when allowing other than cadmin
       /* Join instructor only */
       this.socketService.socket.emit("joinGame", {
         roomName: this.teacherCode,
@@ -239,7 +243,7 @@ export class GameDetailPage implements OnInit {
     } else {
       //Multi-player
       /* check whether game is full beofore join game */
-      this.checkAbilityToJoinGame(this.bundle);
+      this.checkAbilityToJoinaMultiPlayerGame(this.bundle);
 
       // this.checkSavedGameSession();
     }
@@ -259,16 +263,20 @@ export class GameDetailPage implements OnInit {
           this.isSingleMode
         );
 
+        // Close frame and redirect to start-page when game is over.
         this.socketService.closeFrame_listener();
 
         /* redirect player to WebGL-build - page */
         this.navCtrl.navigateForward(
           `playing-virenv/${JSON.stringify(this.bundle)}`
         );
-        
       } else {
-        // if use webGL cb is not checked
-        this.bundle = { ...this.bundle, useExternalVEApp_cbox: this.useExternalVEApp_cbox };
+        // if use external vir.env. is checked
+        this.bundle = {
+          ...this.bundle,
+          useExternalVEApp_cbox: this.useExternalVEApp_cbox, // you can delete it after fully testing webgl
+        };
+
         this.navCtrl.navigateForward(
           `play-game/playing-game/${JSON.stringify(this.bundle)}`
         );
@@ -276,7 +284,7 @@ export class GameDetailPage implements OnInit {
     } else {
       //Multi-player
       /* check whether game is full beofore join game */
-      this.checkAbilityToJoinGame(this.bundle);
+      this.checkAbilityToJoinaMultiPlayerGame(this.bundle);
       // this.checkSavedGameSession();
     }
   }
@@ -308,7 +316,8 @@ export class GameDetailPage implements OnInit {
   }
 
   /**********************************/
-  checkAbilityToJoinGame(bundle: any) {
+  // Check whether multiplayer game is not full
+  checkAbilityToJoinaMultiPlayerGame(bundle: any) {
     /* if multi player mode, check whether room is not yet full. then allow player to join game in playing-page page */
     this.socketService.socket.emit(
       "checkAbilityToJoinGame",
@@ -325,9 +334,15 @@ export class GameDetailPage implements OnInit {
             3500
           );
         } else {
+          if (this.useExternalVEApp_cbox || !this.isVirtualWorld) {
           this.navCtrl.navigateForward(
             `play-game/playing-game/${JSON.stringify(bundle)}`
           );
+          } else {
+            this.navCtrl.navigateForward(
+              `playing-virenv/${JSON.stringify(bundle)}`
+            );
+          }
         }
       }
     );
@@ -422,6 +437,7 @@ export class GameDetailPage implements OnInit {
 
   initMonitoringMap() {
     // Set bounds of VR world
+    // ToDo_06.08: check if this works with all envs
     var bounds = [
       [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
       [0.003717027207 + 0.002, 0.004459082914 + 0.002], // Northeast coordinates (lng,lat)
