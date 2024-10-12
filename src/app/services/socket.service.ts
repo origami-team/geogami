@@ -68,6 +68,10 @@ export class SocketService {
   disconnectSocket() {
     /* dissconnect socket connection */
     if (this.socket) {
+      console.log("🚀 ~ 3 3 3 SocketService ~ disconnectSocket ~ socket:")
+      /* remove all listners to avoid duplicate listenres after rejoining game */
+      this.socket.removeAllListeners();
+      /*  dissconnect socket server*/
       this.socket.disconnect();
     }
   }

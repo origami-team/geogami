@@ -650,7 +650,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   ionViewWillLeave() {
     // Disconnect server when leaving playing-page
     if (!this.isSingleMode) {
-      this.disconnectSocketIO_MultiPlayer();
+      this.disconnectSocketIO();
     }
 
     /* if player left game without solving all tasks, save game events, waypoints and taskno (to be restored when resume game) */
@@ -775,15 +775,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
   }
 
+  // For both single and multiplayer games
   disconnectSocketIO() {
-    this.socketService.socket.disconnect();
-  }
-
-  disconnectSocketIO_MultiPlayer() {
-    /* remove all listners to avoid duplicate listenres after rejoining game */
-    this.socketService.socket.removeAllListeners();
-    /*  dissconnect socket server*/
-    this.socketService.socket.disconnect();
+    this.socketService.disconnectSocket();
   }
 
   /* Initialize map and subscribe location */
@@ -2112,7 +2106,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   }
                 });
               } else {
-                // if game aready stored
+                // if game is aready stored
                 // console.log("game track already stored: ", this.trackDataStatus)
 
                 /* update stored multiplayer tracks on server*/
@@ -2129,6 +2123,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             }
           );
         }
+      }
+
+      // VR world (disconnect socket connection when tasks are done and result data is stored) - only for single player
+      // as with multiplayer we need to check if data of alerady stored in cloud
+      if (this.isVirtualWorld && this.isSingleMode) {
+        this.disconnectSocketIO();
       }
 
       if (Capacitor.isNative) {
@@ -2360,6 +2360,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.positionSubscription.unsubscribe();
       this.deviceOrientationSubscription.unsubscribe();
     } else {
+      // disconnect when user navigate home
       this.disconnectSocketIO();
 
       this.avatarPositionSubscription.unsubscribe();
