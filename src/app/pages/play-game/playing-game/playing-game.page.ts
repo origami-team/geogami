@@ -2042,11 +2042,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.taskIndex++;
     //* check if this is last task that player skipped
     if (this.taskIndex > this.game.tasks.length - 1) {
-      // to close webgl frame when game is finsihed
-      if (this.isSingleMode && this.isVirtualWorld) {
-        // close webGL frame and redirect to star-page
-        this.socketService.closeVEGame();
-      } else if (!this.isSingleMode) {
+      if (!this.isSingleMode) {
         /* multiplayer */
         /* change player status in socket server to finished tasks */
         this.socketService.socket.emit(
@@ -2061,11 +2057,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       // To disable map interations
       this.enableDisableMapInteraction(false);
-
-      // VR world (disconnect socket connection when tasks are done and result data is stored)
-      if (this.isVirtualWorld) {
-        this.disconnectSocketIO();
-      }
 
       this.trackerService.addEvent({
         type: "FINISHED_GAME",
@@ -2120,9 +2111,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                     }
                   });
               }
+              // VE-multi (disconnect socket connection when tasks are done and result data is stored)
+              this.socketService.closeVEGame()
             }
           );
         }
+      } else {
+        // VE-multi (disconnect socket connection when tasks are done and result data is stored)
+        this.socketService.closeVEGame()
       }
 
       // VR world (disconnect socket connection when tasks are done and result data is stored) - only for single player
