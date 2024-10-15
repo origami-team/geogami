@@ -23,7 +23,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: "play-game/game-detail/:id",
+    path: "play-game/game-detail",
     loadChildren: () =>
       import("./pages/play-game/game-detail/game-detail.module").then(
         (m) => m.GameDetailPageModule

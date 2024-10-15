@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
-import {Clipboard} from '@angular/cdk/clipboard'; 
+import { Clipboard } from "@angular/cdk/clipboard";
 import { ActivatedRoute } from "@angular/router";
 import { AlertController, NavController } from "@ionic/angular";
 import { GamesService } from "../../../services/games.service";
@@ -34,7 +34,7 @@ export class GameDetailPage implements OnInit {
   playerName: string = "";
 
   // multiplayer
-  teacherCode: string = "";   // teacherId+gameId
+  teacherCode: string = ""; // teacherId+gameId
   isSingleMode: boolean = true;
   numPlayers = 2;
   userRole: String = null;
@@ -53,6 +53,8 @@ export class GameDetailPage implements OnInit {
 
   // To copy maulti-player game link
   multiplayerGameLink: string;
+  // user id used when game link is sent to player. only with multi-player games
+  uId: string;
 
   constructor(
     public navCtrl: NavController,
@@ -77,9 +79,9 @@ export class GameDetailPage implements OnInit {
       }
     });
 
-    this.route.params.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       this.gamesService
-        .getGame(params.id)
+        .getGame(params["gameId"])
         .then((res) => res.content)
         .then((game) => {
           this.game = game;
@@ -92,20 +94,22 @@ export class GameDetailPage implements OnInit {
             }
           }
 
-          /* multi-player */
-          if (game.isMultiplayerGame == true) {
+          // multi-player
+          if (game.isMultiplayerGame) {
             this.isSingleMode = false;
             this.numPlayers = game.numPlayers;
-            this.multiplayerGameLink = `${environment.uiURL}/play-game/game-detail/${this.game._id}`;     // initialize game link
+
+            // initialize multi-player game link
+            const userId = this.authService.getUserId();
+            this.multiplayerGameLink = `${environment.uiURL}/play-game/game-detail?gameId=${this.game._id}&uId=${userId}`;
           }
         })
         .finally(() => {
-          /* initialize user id and teacher code*/
-          // ToDo: update it to be using gameid+userID
+          // check if this is a teacher with 'scholar' or advanced role who is playing multiplayer game
           if (
             !this.isSingleMode &&
             this.authService.getUserValue() &&
-            this.userRole == "contentAdmin"
+            this.userRole != "user"
           ) {
             this.teacherCode =
               this.authService.getUserId() + "-" + this.game._id;
@@ -116,9 +120,9 @@ export class GameDetailPage implements OnInit {
             this.initMonitoringMap();
           }
 
-          /* multi-player */
-          if (this.game.isMultiplayerGame == true) {
-            /* connect to socket server (multiplayer) */
+          // multi-player
+          if (!this.isSingleMode) {
+            // connect to socket server (multiplayer)
             this.connectSocketIO_MultiPlayer();
           }
 
@@ -130,14 +134,27 @@ export class GameDetailPage implements OnInit {
               this.virEnvType = this.game.virEnvType;
             }
           }
-        });
-    });
 
-    // ToDo: Needs to be changed after allowing others than cadmin
-    if (!this.authService.getUserValue()) {
-      // console.log("unlogged user!!!!");
-    this.utilService.getQRCode().subscribe((qrCode) => {
-      this.teacherCode = qrCode;
+          // ToDo: Needs to be changed after allowing others than cadmin??
+          // initialize teacher code for multi-player games
+          if (
+            !this.isSingleMode &&
+            (!this.userRole || this.userRole == "user")
+          ) {
+            // check if this is a multiplayer game played using a copied link by instructor
+            // if a copied link is used, the instructor/user id attached to link 'uId' will be used to form teacher code / game code
+            if (params["uId"]) {
+              this.teacherCode = params["uId"] + "-" + this.game._id;
+            } else {
+              // console.log("unlogged user!!!!");
+              this.utilService.getQRCode().subscribe((qrCode) => {
+                if (qrCode) {
+                  this.teacherCode = qrCode;
+                }
+              });
+            }
+          }
+        });
     });
   }
 
@@ -558,7 +575,10 @@ export class GameDetailPage implements OnInit {
     }
   }
 
-  copyGameLink(){
-    this.clipboard.copy(this.multiplayerGameLink)
+  /**
+   * Copy game link, only with multi-player game
+   */
+  copyGameLink() {
+    this.clipboard.copy(this.multiplayerGameLink);
   }
 }

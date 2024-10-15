@@ -144,7 +144,7 @@ export class PlayGameListPage implements OnInit {
   }
 
   gameClick(game: any) {
-    this.navCtrl.navigateForward(`play-game/game-detail/${game._id}`);
+    this.navCtrl.navigateForward(`play-game/game-detail?gameId=${game._id}`);
   }
 
   // segment (my games - all games - curated game)

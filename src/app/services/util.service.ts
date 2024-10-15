@@ -84,7 +84,7 @@ export class UtilService {
     return this.isOnline$.next(val);
   }
 
-  /* set and get network connection status */
+  /* get qr code observer */
   getQRCode() {
     return this.qrCode$.asObservable();
   }
