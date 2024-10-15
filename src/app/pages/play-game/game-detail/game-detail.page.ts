@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
+import {Clipboard} from '@angular/cdk/clipboard'; 
 import { ActivatedRoute } from "@angular/router";
 import { AlertController, NavController } from "@ionic/angular";
 import { GamesService } from "../../../services/games.service";
@@ -50,6 +51,9 @@ export class GameDetailPage implements OnInit {
 
   virEnvType: string = null;
 
+  // To copy maulti-player game link
+  multiplayerGameLink: string;
+
   constructor(
     public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -60,7 +64,8 @@ export class GameDetailPage implements OnInit {
     private utilService: UtilService,
     private authService: AuthService,
     private storage: Storage,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private clipboard: Clipboard
   ) {}
 
   /******/
@@ -78,7 +83,6 @@ export class GameDetailPage implements OnInit {
         .then((res) => res.content)
         .then((game) => {
           this.game = game;
-
           // VR world
           // Check game type either real or VR world
           if (game.isVRWorld !== undefined && game.isVRWorld != false) {
@@ -92,6 +96,7 @@ export class GameDetailPage implements OnInit {
           if (game.isMultiplayerGame == true) {
             this.isSingleMode = false;
             this.numPlayers = game.numPlayers;
+            this.multiplayerGameLink = `${environment.uiURL}/play-game/game-detail/${this.game._id}`;     // initialize game link
           }
         })
         .finally(() => {
@@ -335,9 +340,9 @@ export class GameDetailPage implements OnInit {
           );
         } else {
           if (this.useExternalVEApp_cbox || !this.isVirtualWorld) {
-          this.navCtrl.navigateForward(
-            `play-game/playing-game/${JSON.stringify(bundle)}`
-          );
+            this.navCtrl.navigateForward(
+              `play-game/playing-game/${JSON.stringify(bundle)}`
+            );
           } else {
             this.navCtrl.navigateForward(
               `playing-virenv/${JSON.stringify(bundle)}`
@@ -551,5 +556,9 @@ export class GameDetailPage implements OnInit {
       this.map.setLayoutProperty("points", "visibility", "none");
       this.showLocsBtn = true;
     }
+  }
+
+  copyGameLink(){
+    this.clipboard.copy(this.multiplayerGameLink)
   }
 }
