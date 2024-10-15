@@ -33,10 +33,6 @@ export class SocketService {
     });
   }
 
-  closeVEGame() {
-    this.socket.emit("closeVEGame");
-  }
-
   checkRoomNameExistance(gameCode) {
     return new Promise((resolve) => {
       this.socket.emit(
@@ -51,6 +47,12 @@ export class SocketService {
         }
       );
     });
+  }
+
+  // to close webgl frame when game is over
+  closeVEGame() {
+    console.log("🚀 ~ SocketService ~ closeVEGame ~ closeVEGame:")
+    this.socket.emit("closeVEGame");
   }
 
   /**
@@ -68,6 +70,9 @@ export class SocketService {
   disconnectSocket() {
     /* dissconnect socket connection */
     if (this.socket) {
+      /* remove all listners to avoid duplicate listenres after rejoining game */
+      this.socket.removeAllListeners();
+      /*  dissconnect socket server*/
       this.socket.disconnect();
     }
   }

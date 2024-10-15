@@ -1,57 +1,96 @@
 .map {
-    height: 30rem;
-    width: 100%;
+  height: 30rem;
+  width: 100%;
 }
 
 .dot {
-    height: 9px;
-    width: 9px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 5.5px;
+  height: 9px;
+  width: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5.5px;
 
-    &.nav {
-        background-color: var(--ion-color-primary);
-    }
+  &.nav {
+    background-color: var(--ion-color-primary);
+  }
 
-    &.theme {
-        background-color: var(--ion-color-secondary);
-    }
+  &.theme {
+    background-color: var(--ion-color-secondary);
+  }
 
-    &.free {
-        background-color: var(--ion-color-tertiary);
-    }
+  &.free {
+    background-color: var(--ion-color-tertiary);
+  }
 
-    &.info {
-        background-color: var(--ion-color-warning);
-    }
+  &.info {
+    background-color: var(--ion-color-warning);
+  }
 }
-
 
 /* map card */
 .showLocsBtnStyle {
-    position: absolute;
-    bottom: 2.4rem;
-    margin: 0;
-    left: 50%;
-    // font-size: x-small;
-    transform: translateX(-50%);
+  position: absolute;
+  bottom: 2.4rem;
+  margin: 0;
+  left: 50%;
+  // font-size: x-small;
+  transform: translateX(-50%);
 }
 
 .showLocsLabel {
-    position: absolute;
-    top: 1rem;
-    right: 0rem;
-    margin: 0;
-    // left: 50%;
-    // font-size: x-small;
-    transform: translateX(-25%);
-    background: white;
-    opacity: 95%;
-    border: solid 1px;
-    border-radius: 5px;
-    padding: 7px 15px 13px 7px;
-    z-index: 10;
+  position: absolute;
+  top: 1rem;
+  right: 0rem;
+  margin: 0;
+  // left: 50%;
+  // font-size: x-small;
+  transform: translateX(-25%);
+  background: white;
+  opacity: 95%;
+  border: solid 1px;
+  border-radius: 5px;
+  padding: 7px 15px 13px 7px;
+  z-index: 10;
 }
 
 /* qr-code generator style- in global.scss */
+
+// copy multi-player game link style
+.copy-link {
+  --height: 36px;
+  display: flex;
+  margin-bottom: 5px;
+//   max-width: 250px;
+}
+
+.copy-link-input {
+  flex-grow: 1;
+  padding: 0 8px;
+  font-size: 14px;
+  border: 1px solid #cccccc;
+  border-right: none;
+  outline: none;
+  color: black;
+}
+
+.copy-link-input:hover {
+  background: #eeeeee;
+}
+
+.copy-link-button {
+  flex-shrink: 0;
+  width: var(--height);
+  height: var(--height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #dddddd;
+  color: #333333;
+  outline: none;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+}
+
+.copy-link-button:hover {
+  background: #cccccc;
+}

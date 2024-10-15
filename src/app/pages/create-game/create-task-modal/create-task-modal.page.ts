@@ -918,6 +918,14 @@ export class CreateTaskModalPage implements OnInit {
           }
         }
       }
+      // only for 1-1 option
+      // update answer types of 2nd and 3rd players
+      else if(this.selectedCollType.type == "1-1"){
+        this.task.answer[1].type = this.task.answer[0].type;
+        if (this.numPlayers == 3) {
+          this.task.answer[2].type = this.task.answer[0].type;
+        }
+      }
     }
 
     this.modalController.dismiss({

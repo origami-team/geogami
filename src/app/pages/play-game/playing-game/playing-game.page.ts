@@ -586,10 +586,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   virEnvLayers[this.virEnvType].initialPosition;
                 this.initialAvatarDir = 0;
               }
+
+              // To handle close webgl frame when game is finished
+              // this can't be added here as it has effect only on geogami-app wihin webgl frame 
+              // this.socketService.closeFrame_listener();
             }
 
+            // ToDo: what if game has 0 tasks
             // Check game type either real or VR world
-            if (game.isVRWorld !== undefined && game.isVRWorld != false) {
+            if (game?.isVRWorld != false) {
               this.connectSocketIO(this.game.tasks[0]);
             }
 
@@ -645,7 +650,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   ionViewWillLeave() {
     // Disconnect server when leaving playing-page
     if (!this.isSingleMode) {
-      this.disconnectSocketIO_MultiPlayer();
+      this.disconnectSocketIO();
     }
 
     /* if player left game without solving all tasks, save game events, waypoints and taskno (to be restored when resume game) */
@@ -689,18 +694,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     if (
       this.isSingleMode &&
-      this.useExternalVE_app != undefined &&
-      !this.useExternalVE_app
+      this.useExternalVE_app
     ) {
-      this.socketService.joinVERoom(this.gameCode);
+      this.socketService.joinVERoom(this.playersNames[0]);  // always send user_name as room name
     } else {
       // To Do: update it after testing integrated webGL frame
       if (this.isSingleMode) {
         this.socketService.socket.connect();
       }
-
       this.socketService.creatAndJoinNewRoom(
-        this.isSingleMode ? this.gameCode : this.playersNames[0],
+        this.playersNames[0],   // always send user_name as room name
         task.virEnvType ? task.virEnvType : this.virEnvType,
         this.isSingleMode
       );
@@ -764,6 +767,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /* if player is not rejoining */
     if (!this.isRejoin) {
       /* Join player in teacher's dedicated room */
+      // ToDo: teacher Code
       this.socketService.socket.emit("joinGame", {
         roomName: this.gameCode,
         playerName: this.playersNames[0],
@@ -771,15 +775,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
   }
 
+  // For both single and multiplayer games
   disconnectSocketIO() {
-    this.socketService.socket.disconnect();
-  }
-
-  disconnectSocketIO_MultiPlayer() {
-    /* remove all listners to avoid duplicate listenres after rejoining game */
-    this.socketService.socket.removeAllListeners();
-    /*  dissconnect socket server*/
-    this.socketService.socket.disconnect();
+    this.socketService.disconnectSocket();
   }
 
   /* Initialize map and subscribe location */
@@ -813,6 +811,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // Fix this issue
     this.orientationService.init(this.isVirtualWorld);
 
+    // Note: Geolocation subscription (except with realworld game using web browser)
+    // ToDo: test it
     if (!this.isVirtualWorld) {
       this.positionSubscription =
         this.geolocationService.geolocationSubscription.subscribe(
@@ -1099,7 +1099,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
     });
 
-    // rotation
+    // ToDO: Device-orientation subscription (except with realworld game using web browser)
+    // ToDo: test it
     if (!this.isVirtualWorld) {
       this.deviceOrientationSubscription =
         this.orientationService.orientationSubscription.subscribe(
@@ -2041,10 +2042,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.taskIndex++;
     //* check if this is last task that player skipped
     if (this.taskIndex > this.game.tasks.length - 1) {
-      // to close webgl frame when game is finsihed
-      if (this.isSingleMode && this.isVirtualWorld) {
-        this.socketService.closeVEGame();
-      } else if (!this.isSingleMode) {
+      if (!this.isSingleMode) {
         /* multiplayer */
         /* change player status in socket server to finished tasks */
         this.socketService.socket.emit(
@@ -2059,11 +2057,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
       // To disable map interations
       this.enableDisableMapInteraction(false);
-
-      // VR world (disconnect socket connection when tasks are done)
-      if (this.isVirtualWorld) {
-        this.disconnectSocketIO();
-      }
 
       this.trackerService.addEvent({
         type: "FINISHED_GAME",
@@ -2080,11 +2073,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           });
         } else {
           /* Multiplayer */
-          /* Request gmae track status from socket server
+          /* Request game track status from socket server
            * check wether game track is already stored by one of the players */
           this.socketService.socket.emit(
             "checkGameStatus",
-            this.gameCode,
+            this.gameCode,  // here gameCode is teacher-code
             (response) => {
               this.trackDataStatus = response.trackDataStatus;
 
@@ -2104,7 +2097,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   }
                 });
               } else {
-                // if game aready stored
+                // if game is aready stored
                 // console.log("game track already stored: ", this.trackDataStatus)
 
                 /* update stored multiplayer tracks on server*/
@@ -2118,9 +2111,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                     }
                   });
               }
+              // VE-multi (disconnect socket connection when tasks are done and result data is stored)
+              this.socketService.closeVEGame()
             }
           );
         }
+      } else {
+        // VE-multi (disconnect socket connection when tasks are done and result data is stored)
+        this.socketService.closeVEGame()
+      }
+
+      // VR world (disconnect socket connection when tasks are done and result data is stored) - only for single player
+      // as with multiplayer we need to check if data of alerady stored in cloud
+      if (this.isVirtualWorld && this.isSingleMode) {
+        this.disconnectSocketIO();
       }
 
       if (Capacitor.isNative) {
@@ -2352,6 +2356,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.positionSubscription.unsubscribe();
       this.deviceOrientationSubscription.unsubscribe();
     } else {
+      // disconnect when user navigate home
       this.disconnectSocketIO();
 
       this.avatarPositionSubscription.unsubscribe();
@@ -2382,7 +2387,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     this.feedbackControl.remove();
 
-    this.orientationService.clear();
+    // To allow press done without error
+    if (
+      this.isVirtualWorld ||
+      (!this.isVirtualWorld && Capacitor.platform !== "web")
+    ) {
+      this.orientationService.clear();
+    }
 
     this.map.remove();
     this.navCtrl.navigateRoot("/");
@@ -2697,7 +2708,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         "(game-paly) requestPlayersLocation1, this.lastKnownPosition",
         this.lastKnownPosition
       );
-
+      // result data will be sent to instructor from server
       this.socketService.socket.emit("updatePlayersLocation", {
         roomName: this.gameCode,
         playerLoc: !this.isVirtualWorld
