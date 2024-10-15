@@ -72,6 +72,7 @@
       </ion-button>
     </ion-card>
 
+    <!-- ToDo_06_08: add one for multiplayer then maybe add template/compoonent  -->
     <div #panel>
       <ion-card class="overlay task-control ion-padding" [class.minimized]="panelMinimized"
         [class.full]="task.type == 'nav-arrow'" *ngIf="task">
@@ -172,6 +173,7 @@
             </ion-button>
           </div>
         </div>
+        
         <div class="task-text" *ngIf="!panelMinimized">
           <p *ngIf="task?.settings?.confirmation && task?.type == 'nav-flag'">
             {{ "PlayGame.pressOKdestination" | translate }}
@@ -185,8 +187,6 @@
             *ngIf="task?.settings?.confirmation && task?.type != 'nav-flag' && task?.answer?.type.includes('MULTIPLE_CHOICE')">
             {{ "PlayGame.selectThenPressOK" | translate }}
           </p>
-
-
         </div>
         <div class="ok-container" *ngIf="!panelMinimized">
           <app-audio-player *ngIf="task.question.audio != undefined" [audioSource]="task.question.audio">

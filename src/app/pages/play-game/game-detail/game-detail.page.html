@@ -73,15 +73,32 @@
         {{ 'PlayGame.askPlayerToScanQRCode' | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content style="display: flex; justify-content: center">
+    <ion-card-content
+      style="display: flex; justify-content: center; flex-direction: column"
+    >
       <!-- <ion-img style="width: 40%;" src="../../../../assets/temp/qrcode.png"></ion-img> -->
-      <div style="width: 70%; text-align: center;">
-        <!-- <ngx-qrcode
-          elementType="img" 
-          [value]="teacherCode" 
+      <div style="width: 100%; text-align: center">
+        <ngx-qrcode
+          elementType="img"
+          [value]="teacherCode"
           cssClass="qr-code"
-          errorCorrectionLevel="L">
-        </ngx-qrcode> -->
+          errorCorrectionLevel="L"
+        >
+        </ngx-qrcode>
+      </div>
+
+      <!-- copy game link - source: https://codepen.io/dcode-software/pen/eYMYXrK -->
+      <div class="copy-link">
+        <input
+          type="text"
+          class="copy-link-input"
+          value="{{multiplayerGameLink}}"
+          readonly
+        />
+        <button type="button" class="copy-link-button" (click)="copyGameLink()">
+          <!-- uodate icon to be using ionic ones -->
+          <span class="material-icons">content_copy</span>
+        </button>
       </div>
     </ion-card-content>
   </ion-card>
@@ -94,8 +111,8 @@
       <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
     </ion-item>
 
-    <!-- ToDo: this is a temporary impl. till webGL works properly. You can delete it afterwards-->
-    <ion-item lines="none" *ngIf="userRole && isSingleMode && isVirtualWorld">
+    <!-- Allow multi-player games to use webGL frame. Needs testing-->
+    <ion-item lines="none" *ngIf="isVirtualWorld">
       <ion-label text-wrap style="font-weight: bold">
         {{ "PlayGame.useExternalVEApp" | translate }}</ion-label
       >

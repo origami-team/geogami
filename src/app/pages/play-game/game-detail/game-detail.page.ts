@@ -1,9 +1,9 @@
 import { Component, ViewChild, OnInit } from "@angular/core";
+import { Clipboard } from "@angular/cdk/clipboard";
 import { ActivatedRoute } from "@angular/router";
 import { AlertController, NavController } from "@ionic/angular";
 import { GamesService } from "../../../services/games.service";
 import { PopoverController } from "@ionic/angular";
-import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
 import { SocketService } from "src/app/services/socket.service";
 import { UtilService } from "src/app/services/util.service";
@@ -34,7 +34,7 @@ export class GameDetailPage implements OnInit {
   playerName: string = "";
 
   // multiplayer
-  teacherCode: string = "";
+  teacherCode: string = ""; // teacherId+gameId
   isSingleMode: boolean = true;
   numPlayers = 2;
   userRole: String = null;
@@ -51,6 +51,11 @@ export class GameDetailPage implements OnInit {
 
   virEnvType: string = null;
 
+  // To copy maulti-player game link
+  multiplayerGameLink: string;
+  // user id used when game link is sent to player. only with multi-player games
+  uId: string;
+
   constructor(
     public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -61,7 +66,8 @@ export class GameDetailPage implements OnInit {
     private utilService: UtilService,
     private authService: AuthService,
     private storage: Storage,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private clipboard: Clipboard
   ) {}
 
   /******/
@@ -73,13 +79,12 @@ export class GameDetailPage implements OnInit {
       }
     });
 
-    this.route.params.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       this.gamesService
-        .getGame(params.id)
+        .getGame(params["gameId"])
         .then((res) => res.content)
         .then((game) => {
           this.game = game;
-
           // VR world
           // Check game type either real or VR world
           if (game.isVRWorld !== undefined && game.isVRWorld != false) {
@@ -89,18 +94,22 @@ export class GameDetailPage implements OnInit {
             }
           }
 
-          /* multi-player */
-          if (game.isMultiplayerGame == true) {
+          // multi-player
+          if (game.isMultiplayerGame) {
             this.isSingleMode = false;
             this.numPlayers = game.numPlayers;
+
+            // initialize multi-player game link
+            const userId = this.authService.getUserId();
+            this.multiplayerGameLink = `${environment.uiURL}/play-game/game-detail?gameId=${this.game._id}&uId=${userId}`;
           }
         })
         .finally(() => {
-          /* initialize user id and teacher code*/
+          // check if this is a teacher with 'scholar' or advanced role who is playing multiplayer game
           if (
             !this.isSingleMode &&
             this.authService.getUserValue() &&
-            this.userRole == "contentAdmin"
+            this.userRole != "user"
           ) {
             this.teacherCode =
               this.authService.getUserId() + "-" + this.game._id;
@@ -111,9 +120,9 @@ export class GameDetailPage implements OnInit {
             this.initMonitoringMap();
           }
 
-          /* multi-player */
-          if (this.game.isMultiplayerGame == true) {
-            /* connect to socket server (multiplayer) */
+          // multi-player
+          if (!this.isSingleMode) {
+            // connect to socket server (multiplayer)
             this.connectSocketIO_MultiPlayer();
           }
 
@@ -125,11 +134,27 @@ export class GameDetailPage implements OnInit {
               this.virEnvType = this.game.virEnvType;
             }
           }
-        });
-    });
 
-    this.utilService.getQRCode().subscribe((qrCode) => {
-      this.teacherCode = qrCode;
+          // ToDo: Needs to be changed after allowing others than cadmin??
+          // initialize teacher code for multi-player games
+          if (
+            !this.isSingleMode &&
+            (!this.userRole || this.userRole == "user")
+          ) {
+            // check if this is a multiplayer game played using a copied link by instructor
+            // if a copied link is used, the instructor/user id attached to link 'uId' will be used to form teacher code / game code
+            if (params["uId"]) {
+              this.teacherCode = params["uId"] + "-" + this.game._id;
+            } else {
+              // console.log("unlogged user!!!!");
+              this.utilService.getQRCode().subscribe((qrCode) => {
+                if (qrCode) {
+                  this.teacherCode = qrCode;
+                }
+              });
+            }
+          }
+        });
     });
   }
 
@@ -183,6 +208,7 @@ export class GameDetailPage implements OnInit {
         }
       });
 
+      // ToDo: needs to be updated when allowing other than cadmin
       /* Join instructor only */
       this.socketService.socket.emit("joinGame", {
         roomName: this.teacherCode,
@@ -239,7 +265,7 @@ export class GameDetailPage implements OnInit {
     } else {
       //Multi-player
       /* check whether game is full beofore join game */
-      this.checkAbilityToJoinGame(this.bundle);
+      this.checkAbilityToJoinaMultiPlayerGame(this.bundle);
 
       // this.checkSavedGameSession();
     }
@@ -259,16 +285,20 @@ export class GameDetailPage implements OnInit {
           this.isSingleMode
         );
 
+        // Close frame and redirect to start-page when game is over.
         this.socketService.closeFrame_listener();
 
         /* redirect player to WebGL-build - page */
         this.navCtrl.navigateForward(
           `playing-virenv/${JSON.stringify(this.bundle)}`
         );
-        
       } else {
-        // if use webGL cb is not checked
-        this.bundle = { ...this.bundle, useExternalVEApp_cbox: this.useExternalVEApp_cbox };
+        // if use external vir.env. is checked
+        this.bundle = {
+          ...this.bundle,
+          useExternalVEApp_cbox: this.useExternalVEApp_cbox, // you can delete it after fully testing webgl
+        };
+
         this.navCtrl.navigateForward(
           `play-game/playing-game/${JSON.stringify(this.bundle)}`
         );
@@ -276,7 +306,7 @@ export class GameDetailPage implements OnInit {
     } else {
       //Multi-player
       /* check whether game is full beofore join game */
-      this.checkAbilityToJoinGame(this.bundle);
+      this.checkAbilityToJoinaMultiPlayerGame(this.bundle);
       // this.checkSavedGameSession();
     }
   }
@@ -308,7 +338,8 @@ export class GameDetailPage implements OnInit {
   }
 
   /**********************************/
-  checkAbilityToJoinGame(bundle: any) {
+  // Check whether multiplayer game is not full
+  checkAbilityToJoinaMultiPlayerGame(bundle: any) {
     /* if multi player mode, check whether room is not yet full. then allow player to join game in playing-page page */
     this.socketService.socket.emit(
       "checkAbilityToJoinGame",
@@ -325,9 +356,15 @@ export class GameDetailPage implements OnInit {
             3500
           );
         } else {
-          this.navCtrl.navigateForward(
-            `play-game/playing-game/${JSON.stringify(bundle)}`
-          );
+          if (this.useExternalVEApp_cbox || !this.isVirtualWorld) {
+            this.navCtrl.navigateForward(
+              `play-game/playing-game/${JSON.stringify(bundle)}`
+            );
+          } else {
+            this.navCtrl.navigateForward(
+              `playing-virenv/${JSON.stringify(bundle)}`
+            );
+          }
         }
       }
     );
@@ -422,6 +459,7 @@ export class GameDetailPage implements OnInit {
 
   initMonitoringMap() {
     // Set bounds of VR world
+    // ToDo_06.08: check if this works with all envs
     var bounds = [
       [0.0002307207207 - 0.002, 0.0003628597122 - 0.0035], // Southwest coordinates (lng,lat)
       [0.003717027207 + 0.002, 0.004459082914 + 0.002], // Northeast coordinates (lng,lat)
@@ -535,5 +573,12 @@ export class GameDetailPage implements OnInit {
       this.map.setLayoutProperty("points", "visibility", "none");
       this.showLocsBtn = true;
     }
+  }
+
+  /**
+   * Copy game link, only with multi-player game
+   */
+  copyGameLink() {
+    this.clipboard.copy(this.multiplayerGameLink);
   }
 }
