@@ -23,7 +23,7 @@ export class BarcodeScannerPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    /* in case user has joined room and pressed back button */
+    /* //* in case user has joined room and pressed back button
     if(this.socketService.socket){
       this.socketService.socket.disconnect();
     }
@@ -34,7 +34,7 @@ export class BarcodeScannerPage implements OnInit {
   }
 
   ngOnDestroy() {
-    this.stopScan();
+    // this.stopScan();
   }
 
   /**********/

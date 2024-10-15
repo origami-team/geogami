@@ -402,7 +402,7 @@ export class GameDetailPage implements OnInit {
               cJoindPlayersCount: c_JoinedPlayersCount,
               sTaskNo: s_taskNo,
             };
-            console.log("🚀🚀 (game-detail) - bundle2", this.bundle);
+            // console.log("🚀🚀 (game-detail) - bundle2", this.bundle);
 
             /* note: if player found in socket server, no need to check room availability */
             this.navCtrl.navigateForward(
@@ -416,19 +416,19 @@ export class GameDetailPage implements OnInit {
   }
 
   checkSavedGameSession() {
-    console.log("🚀-- (game-detail) checkSavedGameSession");
+  // console.log("🚀-- (game-detail) checkSavedGameSession");
 
     /* retreive tracks and player info of previous uncompleted game session */
     this.storage.get("savedTracksData").then((tracksData) => {
       if (tracksData) {
-        // console.log("tracksData: ", tracksData);
+        // // console.log("tracksData: ", tracksData);
         /* 1. if saved player room name equal and player name equal stroed player name   */
         // if (tracksData.s_playerInfo['roomName'] == this.teacherCode && tracksData.s_playerInfo['playerName'] == this.playerName) {
         if (tracksData.s_playerInfo["roomName"] == this.teacherCode) {
-          console.log(
+          /* console.log(
             "🚀 (game-detail) savedPlayerInfo - (same game name and player): ",
             tracksData
-          );
+          ); */
 
           /* 2. check if user was accidentally disconnected */
           this.socketService.socket.emit(
@@ -444,14 +444,14 @@ export class GameDetailPage implements OnInit {
                   response.joinedPlayersCount
                 );
               } else {
-                console.log("🚀🚀 (game-detail) - player not found");
+                // console.log("🚀🚀 (game-detail) - player not found");
               }
             }
           );
         } else {
-          console.log(
+          /* console.log(
             "🚀 (game-detail) savedPlayerInfo: No previous info found for this game"
-          );
+          ); */
         }
       }
     });
@@ -539,7 +539,7 @@ export class GameDetailPage implements OnInit {
         this.showHideLocs();
       }, 6000);
     } else {
-      console.log("🚀 (game-detail) socket is undefined");
+    // console.log("🚀 (game-detail) socket is undefined");
     }
   }
 
@@ -560,7 +560,7 @@ export class GameDetailPage implements OnInit {
         });
       }
     } else {
-      console.log("🚀 (game-detail) updateMapView: map is undefined");
+      // console.log("🚀 (game-detail) updateMapView: map is undefined");
     }
   }
 
