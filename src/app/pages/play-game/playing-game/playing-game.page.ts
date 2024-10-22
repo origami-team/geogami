@@ -725,8 +725,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.task.virEnvType
             : this.virEnvType,
         });
-      } else {
+      } else if(this.isSingleMode) {
         //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
+        // On;y for single player as with multiplayers users needs to wait till all join
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
           initialPosition: this.task.question.initialAvatarPosition
             ? [
