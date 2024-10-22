@@ -2114,13 +2114,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   });
               }
               // VE-multi (disconnect socket connection when tasks are done and result data is stored)
-              this.socketService.closeVEGame()
+              this.socketService.closeVEGame();
             }
           );
         }
       } else {
-        // VE-multi (disconnect socket connection when tasks are done and result data is stored)
-        this.socketService.closeVEGame()
+        // Before closing the webGL frame, remove avatar object from other connected players
+        if ( this.isVirtualWorld && !this.isSingleMode) {
+          this.socketService.socket.emit("removeOwnAvatar", {
+            playerName: this.playersNames[0],
+          });
+        }
+        // VE-multi and single player (disconnect socket connection when tasks are done)
+        this.socketService.closeVEGame();
       }
 
       // VR world (disconnect socket connection when tasks are done and result data is stored) - only for single player

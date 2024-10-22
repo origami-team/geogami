@@ -49,7 +49,7 @@ export class SocketService {
     });
   }
 
-  // to close webgl frame when game is over
+  // for closing webGL frame of single-player and multi-player game
   closeVEGame() {
     console.log("🚀 ~ SocketService ~ closeVEGame ~ closeVEGame:")
     this.socket.emit("closeVEGame");
@@ -57,6 +57,7 @@ export class SocketService {
 
   /**
    * Socket events' listeners
+   * for closing webGL frame of single-player game
    */
   closeFrame_listener() {
     this.socket.on("closeWebGLFrame", () => {
