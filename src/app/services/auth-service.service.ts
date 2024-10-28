@@ -57,7 +57,24 @@ export class AuthService {
   getUserId(){
     return this.getUserValue()['_id']
   }
-  /*  */
+
+  // Permisions
+  get isAdmin(): boolean {
+		return this.getUserRole() === 'admin';
+	}
+  get isContentAdmin(): boolean {
+		return this.getUserRole() === 'contentAdmin';
+	}
+  get isScholar(): boolean {
+		return this.getUserRole() === 'scholar';
+	}
+  get isUser(): boolean {
+		return this.getUserRole() === 'user';
+	}
+
+  isRegisteredUser(){
+    return this.isAdmin || this.isContentAdmin || this.isScholar || this.isUser;
+  }
 
   getLoginPageOpen() {
     return this.loginPageOpen$.asObservable();

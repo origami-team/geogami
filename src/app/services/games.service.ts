@@ -26,13 +26,13 @@ export class GamesService {
 
   getGames(
     minimal: boolean = false,
-    contentAdmin: boolean = false
+    registeredUser: boolean = false
   ): Promise<any> {
     // Only content admin can view multi-players games
     return this.http
       .get(
         `${environment.apiURL}/game/all/?${minimal ? "minimal" : ""}&${
-          contentAdmin ? "contentAdmin" : ""
+          registeredUser ? "registeredUser" : ""
         }`
       )
       .toPromise();
