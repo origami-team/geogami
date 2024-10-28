@@ -34,26 +34,50 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Enter name -->
-  <ion-card *ngIf="userRole != 'contentAdmin' || isSingleMode">
-    <!-- <ion-card> -->
-    <ion-card-header>
-      <ion-card-title>
-        {{ 'PlayGame.enterName' | translate }}
-        <!-- <ion-icon name="information-circle"
+  <!-- Uesr name and share data consent. -->
+  <div *ngIf="!showInstructionView">
+    <!-- Enter name -->
+    <ion-card>
+      <!-- <ion-card> -->
+      <ion-card-header>
+        <ion-card-title>
+          {{ 'PlayGame.enterName' | translate }}
+          <!-- <ion-icon name="information-circle"
           (click)="showPopover($event, 'Popover.gameConnectionInfo')">
         </ion-icon> -->
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-input
-        placeholder="Player name (required)"
-        [(ngModel)]="playerName"
-      ></ion-input>
-    </ion-card-content>
-  </ion-card>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input
+          placeholder="Player name (required)"
+          [(ngModel)]="playerName"
+        ></ion-input>
+      </ion-card-content>
+    </ion-card>
 
-  <!-- virtual environment -->
+    <!-- share data consent -->
+    <ion-card>
+      <ion-item lines="none">
+        <ion-label text-wrap style="font-weight: bold"
+          >{{ "PlayGame.shareDataAgreement" | translate }}</ion-label
+        >
+        <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
+      </ion-item>
+
+      <!-- Allow multi-player games to use webGL frame. Needs testing-->
+      <ion-item lines="none" *ngIf="isVirtualWorld">
+        <ion-label text-wrap style="font-weight: bold">
+          {{ "PlayGame.useExternalVEApp" | translate }}</ion-label
+        >
+        <ion-checkbox
+          slot="start"
+          [(ngModel)]="useExternalVEApp_cbox"
+        ></ion-checkbox>
+      </ion-item>
+    </ion-card>
+  </div>
+
+  <!-- virtual environment - old impl. where user enter gamecode -->
   <!--   <ion-card *ngIf="isVirtualWorld">
     <ion-card-header>
       <ion-card-title> {{ "PlayGame.gameConnection" | translate }}
@@ -67,98 +91,85 @@
   </ion-card> -->
 
   <!-- only viewed by instructor -->
-  <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
-    <ion-card-header>
-      <ion-card-title>
-        {{ 'PlayGame.askPlayerToScanQRCode' | translate }}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content
-      style="display: flex; justify-content: center; flex-direction: column"
-    >
-      <!-- <ion-img style="width: 40%;" src="../../../../assets/temp/qrcode.png"></ion-img> -->
-      <div style="width: 100%; text-align: center">
-        <ngx-qrcode
-          elementType="img"
-          [value]="teacherCode"
-          cssClass="qr-code"
-          errorCorrectionLevel="L"
+  <div *ngIf="showInstructionView">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{ 'PlayGame.askPlayerToScanQRCode' | translate }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content
+        style="display: flex; justify-content: center; flex-direction: column"
+      >
+        <!-- <ion-img style="width: 40%;" src="../../../../assets/temp/qrcode.png"></ion-img> -->
+
+        <!-- ToDo: put it back -->
+        <div style="width: 100%; text-align: center">
+          <ngx-qrcode
+            elementType="img"
+            [value]="'teacherCode'"
+            cssClass="qr-code"
+            errorCorrectionLevel="L"
+          >
+          </ngx-qrcode>
+        </div>
+
+        <!-- copy game link - source: https://codepen.io/dcode-software/pen/eYMYXrK -->
+        <div class="copy-link">
+          <input
+            type="text"
+            class="copy-link-input"
+            value="{{multiplayerGameLink}}"
+            readonly
+          />
+          <button
+            type="button"
+            class="copy-link-button"
+            (click)="copyGameLink()"
+          >
+            <!-- uodate icon to be using ionic ones -->
+            <span class="material-icons">content_copy</span>
+          </button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title> List of players: </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content
+        *ngFor="let e of [].constructor(numPlayers); let i = index"
+      >
+        <ion-label
+          *ngIf="playersData[i]"
+          style="font-weight: bold; font-size: large; color: black"
         >
-        </ngx-qrcode>
-      </div>
+          p{{ i+1 }}: {{playersData[i].name}} (
+          <span
+            [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':(playersData[i].connectionStatus=='disconnected'?'red':'blue')}"
+          >
+            {{playersData[i].connectionStatus}}
+          </span>
+          )
+        </ion-label>
 
-      <!-- copy game link - source: https://codepen.io/dcode-software/pen/eYMYXrK -->
-      <div class="copy-link">
-        <input
-          type="text"
-          class="copy-link-input"
-          value="{{multiplayerGameLink}}"
-          readonly
-        />
-        <button type="button" class="copy-link-button" (click)="copyGameLink()">
-          <!-- uodate icon to be using ionic ones -->
-          <span class="material-icons">content_copy</span>
-        </button>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="userRole != 'contentAdmin' || isSingleMode">
-    <ion-item lines="none">
-      <ion-label text-wrap style="font-weight: bold"
-        >{{ "PlayGame.shareDataAgreement" | translate }}</ion-label
-      >
-      <ion-checkbox slot="start" [(ngModel)]="shareData_cbox"></ion-checkbox>
-    </ion-item>
-
-    <!-- Allow multi-player games to use webGL frame. Needs testing-->
-    <ion-item lines="none" *ngIf="isVirtualWorld">
-      <ion-label text-wrap style="font-weight: bold">
-        {{ "PlayGame.useExternalVEApp" | translate }}</ion-label
-      >
-      <ion-checkbox
-        slot="start"
-        [(ngModel)]="useExternalVEApp_cbox"
-      ></ion-checkbox>
-    </ion-item>
-  </ion-card>
-
-  <ion-card *ngIf="userRole=='contentAdmin' && !isSingleMode">
-    <ion-card-header>
-      <ion-card-title> List of players: </ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content
-      *ngFor="let e of [].constructor(numPlayers); let i = index"
-    >
-      <ion-label
-        *ngIf="playersData[i]"
-        style="font-weight: bold; font-size: large; color: black"
-      >
-        p{{ i+1 }}: {{playersData[i].name}} (
-        <span
-          [ngStyle]="{'color':playersData[i].connectionStatus=='connected'?'green':(playersData[i].connectionStatus=='disconnected'?'red':'blue')}"
+        <ion-label
+          *ngIf="!playersData[i]"
+          style="font-weight: bold; font-size: large; color: black"
         >
-          {{playersData[i].connectionStatus}}
-        </span>
-        )
-      </ion-label>
-
-      <ion-label
-        *ngIf="!playersData[i]"
-        style="font-weight: bold; font-size: large; color: black"
-      >
-        p{{ i+1 }}: ------ (
-        <span style="color: blue"> not connected yet </span>
-        )
-      </ion-label>
-    </ion-card-content>
-  </ion-card>
+          p{{ i+1 }}: ------ (
+          <span style="color: blue"> not connected yet </span>
+          )
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
   <!-- Monitor players on map -->
-  <ion-card
-    [ngStyle]="{ 'display' : ( userRole=='contentAdmin' && !isSingleMode ? '' : 'none' ) }"
-  >
+   <!-- not included in above div as it causes an error since map child will be missing if inside an if condition  -->
+  <ion-card [ngStyle]="{ 'display' : (showInstructionView ? 'block' : 'none' ) }">
     <ion-card-header>
       <ion-card-title> Monitor players location </ion-card-title>
     </ion-card-header>
@@ -192,7 +203,7 @@
         </div>
       </div>
 
-      <div #mointorMap class="map"></div>
+      <div #monitorMap class="map"></div>
 
       <ion-button
         class="showLocsBtnStyle"
@@ -204,9 +215,7 @@
   </ion-card>
 </ion-content>
 
-<ion-footer
-  *ngIf="(userRole != 'contentAdmin' && !isSingleMode)  || isSingleMode"
->
+<ion-footer *ngIf="!showInstructionView">
   <ion-toolbar>
     <ion-button expand="block" (click)="startGame()" [disabled]="!playerName"
       >{{ "General.start" | translate }}</ion-button
