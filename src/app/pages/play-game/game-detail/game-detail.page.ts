@@ -18,7 +18,7 @@ import mapboxgl from "mapbox-gl";
   styleUrls: ["./game-detail.page.scss"],
 })
 export class GameDetailPage implements OnInit {
-  @ViewChild("mointorMap") mapContainer;
+  @ViewChild("monitorMap") mapContainer;
 
   game: any;
   activities: any[];
@@ -53,8 +53,9 @@ export class GameDetailPage implements OnInit {
 
   // To copy maulti-player game link
   multiplayerGameLink: string;
-  // user id used when game link is sent to player. only with multi-player games
-  uId: string;
+  // user id used when game link is sent to player. only with multi-player games. Iniital value is undefined to avoid showing instructor view when game-link is used.
+  instructorId: string;
+  showInstructionView: boolean = false; // only for multi-player game
 
   constructor(
     public navCtrl: NavController,
@@ -80,6 +81,11 @@ export class GameDetailPage implements OnInit {
     });
 
     this.route.queryParams.subscribe((params) => {
+      // used when user uses multi-player game link
+      if (params["uId"]) {
+        this.instructorId = params["uId"];
+      }
+
       this.gamesService
         .getGame(params["gameId"])
         .then((res) => res.content)
@@ -99,9 +105,19 @@ export class GameDetailPage implements OnInit {
             this.isSingleMode = false;
             this.numPlayers = game.numPlayers;
 
-            // initialize multi-player game link
-            const userId = this.authService.getUserId();
-            this.multiplayerGameLink = `${environment.uiURL}/play-game/game-detail?gameId=${this.game._id}&uId=${userId}`;
+            // show instructor view of multiplayer games
+            // should only be shown for
+            // - registered users
+            // - uid in link does not exist
+            // - uid in link equals the id of the player (means the instrauctor rejoins the games using the link)
+            // this.showInstructionView = true;
+            if (
+              this.authService.isRegisteredUser() &&
+              (!this.instructorId ||
+                this.authService?.getUserId() == this.instructorId)
+            ) {
+              this.showInstructionView = true;
+            }
           }
         })
         .finally(() => {
@@ -111,6 +127,11 @@ export class GameDetailPage implements OnInit {
             this.authService.getUserValue() &&
             this.userRole != "user"
           ) {
+            // initialize multi-player game link
+            const userId = this.authService.getUserId();
+            this.multiplayerGameLink = `${environment.uiURL}/play-game/game-detail?gameId=${this.game._id}&uId=${userId}`;
+
+            // initialize teacher-code
             this.teacherCode =
               this.authService.getUserId() + "-" + this.game._id;
             // console.log("teacher code -> game name", this.teacherCode);
@@ -166,15 +187,16 @@ export class GameDetailPage implements OnInit {
   connectSocketIO_MultiPlayer() {
     this.socketService.socket.connect();
 
-    if (this.userRole == "contentAdmin") {
+    // show instructor view of multiplayer games
+    // should only be shown for
+    // - registered users
+    // -  uid in link does not exist
+    if (this.showInstructionView
+    ) {
       /* get players status when they join or disconnect from socket server */
       this.socketService.socket.on(
         "onPlayerConnectionStatusChange",
         (playersData) => {
-          // console.log(
-          //   "(connectSocketIO_MultiPlayer) playersData: ",
-          //   playersData
-          // );
           this.playersData = playersData;
         }
       );
@@ -416,8 +438,6 @@ export class GameDetailPage implements OnInit {
   }
 
   checkSavedGameSession() {
-  // console.log("🚀-- (game-detail) checkSavedGameSession");
-
     /* retreive tracks and player info of previous uncompleted game session */
     this.storage.get("savedTracksData").then((tracksData) => {
       if (tracksData) {
@@ -539,7 +559,7 @@ export class GameDetailPage implements OnInit {
         this.showHideLocs();
       }, 6000);
     } else {
-    // console.log("🚀 (game-detail) socket is undefined");
+      console.log("🚀 (game-detail) socket is undefined");
     }
   }
 
