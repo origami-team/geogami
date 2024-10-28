@@ -87,7 +87,7 @@ export class PlayGameListPage implements OnInit {
         this.userRole = event["roles"][0];
         this.userId = this.authService.getUserId();
       } else {
-        this.user=null;
+        this.user = null;
       }
     });
 
@@ -108,7 +108,7 @@ export class PlayGameListPage implements OnInit {
   getGamesData() {
     /* Only content admin can view multi-players games */
     this.gamesService
-      .getGames(true, this.userRole == "contentAdmin")
+      .getGames(true, this.userRole != "unloggedUser")
       .then((res) => res.content)
       .then((games) => {
         // Get either real or VE agmes based on selected environment
@@ -129,7 +129,7 @@ export class PlayGameListPage implements OnInit {
     // Get games data from server
     // Only content admin can view multi-players games
     this.gamesService
-      .getGames(true, this.userRole == "contentAdmin")
+      .getGames(true, this.userRole != "unloggedUser")
       .then((res) => res.content)
       .then((games) => {
         this.games_res = games;
@@ -547,11 +547,11 @@ export class PlayGameListPage implements OnInit {
     this.navCtrl.navigateRoot("/");
   }
 
-  navigateCreateRealGames(){
+  navigateCreateRealGames() {
     this.navCtrl.navigateForward("game-type-menu/RealWorld");
   }
 
-  navigateCreateVirEnvGames(){
+  navigateCreateVirEnvGames() {
     this.navCtrl.navigateForward("game-type-menu/Vir.Env.");
   }
 }

@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  apiURL: "https://api.geogami.ifgi.de",
-  uiURL:"https://app.geogami.ifgi.de",
-  webglURL: "https://ve.geogami.ifgi.de",
+  apiURL: "http://localhost:3000",
+  uiURL:"http://localhost:8100",
+  webglURL: "http://localhost:50219",
+  // webglURL: "http://localhost:8080",
   mapboxAccessToken:
     "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA",
   photoQuality: 10,
@@ -22,5 +23,5 @@ export const environment = {
  *
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
- */
+*/
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
