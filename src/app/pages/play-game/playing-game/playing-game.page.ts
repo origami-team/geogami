@@ -711,7 +711,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* To update avatar initial position */
     this.socketService.socket.on("requestAvatarInitialPosition", () => {
-      // // console.log("🚀 ~ PlayingGamePage ~ this.socketService.socket.on ~ requestAvatarInitialPosition")
       if (this.avatarLastKnownPosition != undefined) {
         //* when reopen vir env app
         //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
@@ -1766,37 +1765,42 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       //* if this isn't first task and same as previous type then send previous avatar position. if not,
       //* send default inital avatar position from `virEnvLayers`
       //* if no virEnvType is found send deafult one
-      this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-        initialPosition: this.task.question.initialAvatarPosition
-          ? [
-              this.task.question.initialAvatarPosition.position.geometry
-                .coordinates[0] * 111000,
-              this.task.question.initialAvatarPosition.position.geometry
-                .coordinates[1] * 112000,
+      //* Note: setTimeout is important to resolve the issue of not showing vir. env. of last joined player in multi-player game
+      setTimeout(() => {
+        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+          initialPosition: this.task.question.initialAvatarPosition
+            ? [
+                this.task.question.initialAvatarPosition.position.geometry
+                  .coordinates[0] * 111000,
+                this.task.question.initialAvatarPosition.position.geometry
+                  .coordinates[1] * 112000,
+              ]
+            :
+            (
+              this.taskIndex != 0 &&
+              this.task.virEnvType ===
+                this.game.tasks[this.taskIndex - 1].virEnvType
+            ? [
+              this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
+              this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
             ]
-          :
-          (
-            this.taskIndex != 0 &&
-            this.task.virEnvType ===
-              this.game.tasks[this.taskIndex - 1].virEnvType
-          ? [
-            this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
-            this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
-          ]
-          : [
-              virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
-              virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
-            ]
-          ),
-        initialRotation: this.task.question.initialAvatarPosition
-          ? this.task.question.initialAvatarPosition.bearing
-          : this.taskIndex != 0 &&
-            this.task.virEnvType ===
-              this.game.tasks[this.taskIndex - 1].virEnvType
-          ? this.previousTaskAvatarHeading
-          : null,
-        virEnvType: this.task.virEnvType,
-      });
+            : [
+                virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
+                virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
+              ]
+            ),
+          initialRotation: this.task.question.initialAvatarPosition
+            ? this.task.question.initialAvatarPosition.bearing
+            : this.taskIndex != 0 &&
+              this.task.virEnvType ===
+                this.game.tasks[this.taskIndex - 1].virEnvType
+            ? this.previousTaskAvatarHeading
+            : null,
+          virEnvType: this.task.virEnvType,
+        });
+      }, 1000);
+
+      
     }
 
     if (this.task.settings?.accuracy) {
@@ -2754,6 +2758,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
   /* on joining game by other players */
   onPlayerJoinGame() {
+    console.log("🚀 ~ 111111 onPlayerJoinGame ~ onPlayerJoinGame:")
     this.socketService.socket.on("playerJoined", (data) => {
     // console.log("PlayerJoined: (number of players so far) ", data);
       this.joinedPlayersCount = data.joinedPlayersCount;
