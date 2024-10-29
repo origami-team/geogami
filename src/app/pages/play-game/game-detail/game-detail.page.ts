@@ -124,8 +124,7 @@ export class GameDetailPage implements OnInit {
           // check if this is a teacher with 'scholar' or advanced role who is playing multiplayer game
           if (
             !this.isSingleMode &&
-            this.authService.getUserValue() &&
-            this.userRole != "user"
+            this.authService.getUserValue()
           ) {
             // initialize multi-player game link
             const userId = this.authService.getUserId();
@@ -141,12 +140,6 @@ export class GameDetailPage implements OnInit {
             this.initMonitoringMap();
           }
 
-          // multi-player
-          if (!this.isSingleMode) {
-            // connect to socket server (multiplayer)
-            this.connectSocketIO_MultiPlayer();
-          }
-
           //* set vir env type for old (where task type is not included in all tasks) and new games
           if (this.isVirtualWorld) {
             if (this.game.tasks[0] && this.game.tasks[0].virEnvType) {
@@ -156,13 +149,14 @@ export class GameDetailPage implements OnInit {
             }
           }
 
-          // ToDo: Needs to be changed after allowing others than cadmin??
           // initialize teacher code for multi-player games
           if (
-            !this.isSingleMode &&
-            (!this.userRole || this.userRole == "user")
+            !this.isSingleMode
           ) {
-            // check if this is a multiplayer game played using a copied link by instructor
+            // 1. connect to socketio in cloud (multiplayer)
+            this.connectSocketIO_MultiPlayer();
+
+            // 2. check if this is a multiplayer game played using a copied link by instructor
             // if a copied link is used, the instructor/user id attached to link 'uId' will be used to form teacher code / game code
             if (params["uId"]) {
               this.teacherCode = params["uId"] + "-" + this.game._id;
