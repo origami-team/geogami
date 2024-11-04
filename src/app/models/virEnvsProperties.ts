@@ -159,7 +159,7 @@ export const VirEnv_40: Readonly<any> = {
   ],
   initialPosition: {
     lng: 31.01 / 111000,
-    lat: 0.21 / 112000,
+    lat: 0.22 / 112000,
   },
   zoomThreashold: 18.5,
   zoomThreashold2: 18,
