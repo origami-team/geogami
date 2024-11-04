@@ -41,6 +41,7 @@ export class GameDetailPage implements OnInit {
   user = this.authService.getUser();
   bundle: any = {};
   map: mapboxgl.Map;
+  // ToDo: Make color rondomly picked
   cirColor = ["danger", "success", "primary"];
   pointsColor = ["red", "green", "blue"];
   playersLocsFeatures = []; // for storing palyers features received from socket server
@@ -122,11 +123,7 @@ export class GameDetailPage implements OnInit {
         })
         .finally(() => {
           // check if this is a teacher with 'scholar' or advanced role who is playing multiplayer game
-          if (
-            !this.isSingleMode &&
-            this.authService.getUserValue() &&
-            this.userRole != "user"
-          ) {
+          if (!this.isSingleMode && this.authService.getUserValue()) {
             // initialize multi-player game link
             const userId = this.authService.getUserId();
             this.multiplayerGameLink = `${environment.uiURL}/play-game/game-detail?gameId=${this.game._id}&uId=${userId}`;
@@ -141,12 +138,6 @@ export class GameDetailPage implements OnInit {
             this.initMonitoringMap();
           }
 
-          // multi-player
-          if (!this.isSingleMode) {
-            // connect to socket server (multiplayer)
-            this.connectSocketIO_MultiPlayer();
-          }
-
           //* set vir env type for old (where task type is not included in all tasks) and new games
           if (this.isVirtualWorld) {
             if (this.game.tasks[0] && this.game.tasks[0].virEnvType) {
@@ -156,13 +147,12 @@ export class GameDetailPage implements OnInit {
             }
           }
 
-          // ToDo: Needs to be changed after allowing others than cadmin??
           // initialize teacher code for multi-player games
-          if (
-            !this.isSingleMode &&
-            (!this.userRole || this.userRole == "user")
-          ) {
-            // check if this is a multiplayer game played using a copied link by instructor
+          if (!this.isSingleMode) {
+            // 1. connect to socketio in cloud (multiplayer)
+            this.connectSocketIO_MultiPlayer();
+
+            // 2. check if this is a multiplayer game played using a copied link by instructor
             // if a copied link is used, the instructor/user id attached to link 'uId' will be used to form teacher code / game code
             if (params["uId"]) {
               this.teacherCode = params["uId"] + "-" + this.game._id;
@@ -191,8 +181,7 @@ export class GameDetailPage implements OnInit {
     // should only be shown for
     // - registered users
     // -  uid in link does not exist
-    if (this.showInstructionView
-    ) {
+    if (this.showInstructionView) {
       /* get players status when they join or disconnect from socket server */
       this.socketService.socket.on(
         "onPlayerConnectionStatusChange",
@@ -220,8 +209,9 @@ export class GameDetailPage implements OnInit {
               coordinates: playerData.playerLoc,
             },
             properties: {
-              pColor: this.pointsColor[playerData.playerNo - 1],
+              pColor: this.pointsColor[playerData.playerNo - 1] ?? "green", // if more than three players should be green
               playerNo: playerData.playerNo,
+              playerName: this.playersData[playerData.playerNo - 1].name,
             },
           });
 
@@ -498,7 +488,7 @@ export class GameDetailPage implements OnInit {
       center: this.isVirtualWorld
         ? [0.00001785714286 / 2, 0.002936936937 / 2]
         : [8, 51.8],
-      minZoom: 2,
+      minZoom: 15,
       maxZoom: 18, // to avoid error
       maxBounds: this.isVirtualWorld ? bounds : null, // Sets bounds
     });
@@ -511,33 +501,48 @@ export class GameDetailPage implements OnInit {
     this.map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
 
     this.map.on("load", () => {
-      this.map.addSource("points", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: this.playersLocsFeatures,
-        },
+      // show red symbol to represent players postions
+      this.map.loadImage("/assets/icons/position.png", (error, image) => {
+        if (error) throw error;
+
+        this.map.addImage("position", image);
+
+        this.map.addSource("points", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: this.playersLocsFeatures,
+          },
+        });
+
+        // Add players points
+        this.map.addLayer({
+          id: "points",
+          type: "symbol",
+          source: "points",
+          layout: {
+            'icon-image': 'position',
+            "icon-allow-overlap": true,
+            'icon-ignore-placement': true,
+            'icon-size': 0.3,
+            'icon-offset': [0, 0],
+            "text-field": ["get", "playerName"],
+            'text-allow-overlap': true,
+            'text-ignore-placement': true,
+            "text-anchor": "top",
+            "text-offset": [0, -1.8]
+          },
+          paint: {
+          "icon-color": "#000000"
+          }
+        });
+
+        // hide points layer
+        this.map.setLayoutProperty("points", "visibility", "none");
+
+        // to fix the issue of smaller zise map after loading- **this is due to adding ngstyle on card container**
+        this.map.resize();
       });
-
-      // Add a symbol layer
-      this.map.addLayer({
-        id: "points",
-        type: "circle",
-        source: "points",
-        paint: {
-          "circle-radius": 8,
-          // "circle-color": 'red',
-          "circle-color": ["get", "pColor"],
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "black",
-        },
-      });
-
-      // hide points layer
-      this.map.setLayoutProperty("points", "visibility", "none");
-
-      // to fix the issue of smaller zise map after loading- **this is due to adding ngstyle on card container**
-      this.map.resize();
     });
   }
 

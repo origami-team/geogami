@@ -57,10 +57,9 @@
         </option>
         <option
           value="multi-player"
-          [disabled]="!['admin', 'contentAdmin', 'scholar'].includes(userRole)"
+          [disabled]="!user"
         >
-          {{ 'GameList.multiplayer' | translate }} {{ !['admin', 'contentAdmin',
-          'scholar'].includes(userRole)? "( only scholars have access )" : ''}}
+          {{ 'GameList.multiplayer' | translate }} {{ !user? ('GameList.loginToAccess' | translate) : ''}}
         </option>
       </select>
     </div>

@@ -99,7 +99,8 @@
     "gameMode":"Game Mode",
     "gameMode_info":"Choose between playing GeoGami indivisually or with a group. Minium number of players of a mutliplayer mode is 2",
     "singlePlayer":"Single player",
-    "multiplayer":"Multiplayer"
+    "multiplayer":"Multiplayer",
+    "loginToAccess": " (login to have access)"
   },
   "CreateTasks": {
     "combineTasks": "List of created tasks:",
