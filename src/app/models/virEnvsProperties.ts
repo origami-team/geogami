@@ -141,3 +141,26 @@ export const VirEnv_37: Readonly<any> = {
     lat: 62 / 112000,
   },
 };
+
+// ifgi building
+export const VirEnv_40: Readonly<any> = {
+  //*NW,NE,SE,SW
+  overlayCoords: [
+    [0, 0.000357142857142857],
+    [0.00036036036036036, 0.000357142857142857],
+    [0.00036036036036036, 0],
+    [0, 0],
+  ],
+  bounds: [
+    //* Southwest coordinates (lng,lat)
+    [0 - 0.0002 , 0 - 0.0002 ],
+    //* Northeast coordinates (lng,lat)
+    [0 + 0.00055, 0 + 0.00055],
+  ],
+  initialPosition: {
+    lng: 31.01 / 111000,
+    lat: 0.21 / 112000,
+  },
+  zoomThreashold: 18.5,
+  zoomThreashold2: 18,
+};
