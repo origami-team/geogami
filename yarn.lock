@@ -1903,13 +1903,6 @@
   "resolved" "https://registry.npmjs.org/@stencil/core/-/core-2.22.3.tgz"
   "version" "2.22.3"
 
-"@szmarczak/http-timer@^1.1.2":
-  "integrity" "sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA=="
-  "resolved" "https://registry.npmjs.org/@szmarczak/http-timer/-/http-timer-1.1.2.tgz"
-  "version" "1.1.2"
-  dependencies:
-    "defer-to-connect" "^1.0.1"
-
 "@techiediaries/ngx-qrcode@^9.1.0":
   "integrity" "sha512-pjDt+eBjxDds7Iz47VhoSUlv4NiPuSWyMo44GiC7ZLoozBoAo6ga6bW7XS6F89omiWVMJ7Gphh5XI2SAcpfzAg=="
   "resolved" "https://registry.npmjs.org/@techiediaries/ngx-qrcode/-/ngx-qrcode-9.1.0.tgz"
