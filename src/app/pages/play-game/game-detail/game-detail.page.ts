@@ -11,6 +11,7 @@ import { AuthService } from "src/app/services/auth-service.service";
 import { Storage } from "@ionic/storage";
 import { environment } from "src/environments/environment";
 import mapboxgl from "mapbox-gl";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
 
 @Component({
   selector: "app-game-detail",
@@ -480,9 +481,7 @@ export class GameDetailPage implements OnInit {
       container: this.mapContainer.nativeElement,
       // style: environment.mapStyle + 'realWorld.json',
       style: this.isVirtualWorld
-        ? this.isVRMirrored
-          ? environment.mapStyle + "virtualEnv_2.json"
-          : environment.mapStyle + "virtualEnv_1.json"
+        ? environment.mapStyle + this.game.virEnvType+".json"
         : environment.mapStyle + "realWorld.json",
       // center: [8, 51.8],
       center: this.isVirtualWorld
@@ -490,7 +489,7 @@ export class GameDetailPage implements OnInit {
         : [8, 51.8],
       minZoom: 15,
       maxZoom: 18, // to avoid error
-      maxBounds: this.isVirtualWorld ? bounds : null, // Sets bounds
+      maxBounds: this.isVirtualWorld ? virEnvLayers[this.game.virEnvType].bounds : null, // Sets bounds
     });
 
     // disable map rotation using right click + drag
