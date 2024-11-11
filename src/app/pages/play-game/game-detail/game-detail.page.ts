@@ -161,7 +161,6 @@ export class GameDetailPage implements OnInit {
               // console.log("unlogged user!!!!");
               this.utilService.getQRCode().subscribe((qrCode) => {
                 if (qrCode) {
-                  console.log("🚀 ~ this.utilService.getQRCode ~ qrCode:", qrCode)
                   this.teacherCode = qrCode;
                 }
               });
