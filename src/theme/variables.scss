@@ -302,10 +302,14 @@ button.alert-button.alert-button-download-track {
   --end: 10%;
 }
 
+// To edit message color
+/* ion-toast::part(message) {
+  color: #000000 !important;
+} */
 // To show border between msg and dismiss button
 .custom-toast::part(button) {
   border-left: 1px solid #d2d2d2;
-  //color: #030207;
+  // color: #030207;
   font-size: 15px;
 }
 
