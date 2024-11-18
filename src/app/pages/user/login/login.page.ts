@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth-service.service';
 import { Validators, FormBuilder } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { UtilService } from 'src/app/services/util.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,15 +15,27 @@ export class LoginPage implements OnInit {
   error: string;
   register;
   loading;
+  emailStatus='';
+  msgType=''
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     public navCtrl: NavController,
-    private utilService: UtilService
-  ) {}
+    private utilService: UtilService,
+    private route: ActivatedRoute
+  ) {
+    this.emailStatus = this.route.snapshot.queryParamMap.get('emailStatus');
+    this.msgType = this.route.snapshot.queryParamMap.get('msgType');
+  }
 
   ngOnInit(): void {
+    // show msg when access game using email verification link
+    if (this.emailStatus) {
+      /* show toast msg */
+      this.utilService.showToast(this.emailStatus, this.msgType);
+    }
+    
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
