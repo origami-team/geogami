@@ -30,6 +30,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   @Input() isVRMirrored: boolean;
   @Input() virEnvType: string;
   initialAvatarPositionStatus = false;
+  @Input() isSingleMode: boolean;
 
   //* get virual environment headers
   virEnvTypesList = VirEnvHeaders;

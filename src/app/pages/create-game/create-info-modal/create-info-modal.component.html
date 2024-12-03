@@ -24,7 +24,7 @@
     <h5>Choose a virtual world</h5>
     &nbsp;&nbsp;
 
-    <select [(ngModel)]="virEnvType" interface="popover">
+    <select [(ngModel)]="virEnvType" interface="popover" [disabled]="!isSingleMode">
       <option
         *ngFor="let virEnvitem of virEnvTypesList; let i = index"
         [ngValue]="virEnvitem.layerName"
