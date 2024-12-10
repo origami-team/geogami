@@ -23,16 +23,16 @@ export class PlayingVirenvPage implements OnInit {
     this.route.params.subscribe((params) => {
       if (params) {
         // console.log("🚀 ~ PlayingVirenvPage ~ this.route.params.subscribe ~ params:", params);
-
+        const queryParams = JSON.parse(params.queryParams);
         let queryParamsString = new HttpParams({
-          fromObject: JSON.parse(params.queryParams),
+          fromObject: queryParams,
         }).toString();
 
         // console.log("🚀 ~ PlayingVirenvPage ~ this.route.params.subscribe ~ queryParamsString:", queryParamsString);
 
         this.webGLURL = `${environment.webglURL}?`.concat(queryParamsString);
 
-        // The url needs to be sanitized, before used in iframe
+        // The url needs to be sanitized, before being used in iframe
         this.urlSafe = this.sanitizedURL(this.webGLURL);
         console.log(
           "🚀 ~ PlayingVirenvPage ~ this.route.params.subscribe ~ webGLURL:",

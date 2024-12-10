@@ -301,6 +301,11 @@ export class GameDetailPage implements OnInit {
         // Close frame and redirect to start-page when game is over.
         this.socketService.closeFrame_listener();
 
+        this.bundle = {
+          ...this.bundle,
+          date: new Date().getTime(), // you can delete it after fully testing webgl
+        };
+
         /* redirect player to WebGL-build - page */
         this.navCtrl.navigateForward(
           `playing-virenv/${JSON.stringify(this.bundle)}`

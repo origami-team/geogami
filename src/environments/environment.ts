@@ -1,13 +1,15 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+// const localhost="localhost"
+const localhostIP="00.00.00.000";
+const localWebGLPort="8080";
 
 export const environment = {
   production: false,
-  apiURL: "http://localhost:3000",
-  uiURL:"http://localhost:8100",
-  webglURL: "http://localhost:50219",
-  // webglURL: "http://localhost:8080",
+  apiURL: `http://${localhostIP}:3000`,
+  uiURL:`http://${localhostIP}:8100`,
+  webglURL: `http://${localhostIP}:${localWebGLPort}`,
   mapboxAccessToken:
     "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA",
   photoQuality: 10,
