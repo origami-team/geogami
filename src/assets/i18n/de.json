@@ -197,7 +197,10 @@
     "photoTask": "Foto zur Aufgabe",
     "correctAnswer": "Die korrekte Anwort:",
     "selectGameType":"Spieltyp auswählen",
-    "setAvatarPosition":"Anfangsposition und Richtung des Avatars festlegen"
+    "setAvatarPosition":"Anfangsposition und Richtung des Avatars festlegen",
+    "virEnvSettings": "Einstellungen der virtuellen Welt",
+    "avatarSpeed":"Avatar-Geschwindigkeit",
+    "showEnvSettings":"Umgebungseinstellungen anzeigen"
   },
   "EditGame": {
     "titleEditGame": "Bearbeite dein GeoGami",

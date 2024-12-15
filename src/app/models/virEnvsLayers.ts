@@ -346,6 +346,6 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.004837837838 / 2,	0.003383928571 / 2],
     bounds: VirEnv_40.bounds,
     zoom: 17,
+    defaultAvatarSpeed: 2,
   }
-  // Vector3(276.5,97.8499832,283.299988)
 };

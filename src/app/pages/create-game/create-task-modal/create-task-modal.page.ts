@@ -205,6 +205,14 @@ export class CreateTaskModalPage implements OnInit {
     }
     // this.onTaskSelected(this.task);
     this.onTaskSelected(cloneDeep(this.task));
+
+    // Set default avatar-speed of new tasks
+    if (this.isVirtualWorld) {
+      if (!this.task.settings.avatarSpeed) {
+        this.task.settings.avatarSpeed =
+          virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 6;
+      }
+    }
   }
 
   onThemeTaskTypeChange(taskType) {
