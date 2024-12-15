@@ -28,7 +28,7 @@
     &nbsp;&nbsp;
 
     <!-- TODO: remove disable after resolving reloading vir. env. using tablet -->
-    <select [(ngModel)]="virEnvType" interface="popover" disabled>
+    <select [(ngModel)]="virEnvType" interface="popover" [disabled]="!isSingleMode">
       <option
         *ngFor="let virEnvitem of virEnvTypesList; let i = index"
         [ngValue]="virEnvitem.layerName"
