@@ -723,10 +723,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvType: this.task.virEnvType
             ? this.task.virEnvType
             : this.virEnvType,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       } else if(this.isSingleMode) {
         //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
-        // On;y for single player as with multiplayers users needs to wait till all join
+        // Only for single player as with multiplayers users needs to wait till all join
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
           initialPosition: this.task.question.initialAvatarPosition
             ? [
@@ -745,6 +747,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvType: this.task.virEnvType
             ? this.task.virEnvType
             : this.virEnvType,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       }
     });
@@ -1797,6 +1801,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.previousTaskAvatarHeading
             : null,
           virEnvType: this.task.virEnvType,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       }, 1000);
 

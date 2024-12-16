@@ -212,6 +212,9 @@ export class CreateTaskModalPage implements OnInit {
         this.task.settings.avatarSpeed =
           virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 6;
       }
+      if (!this.task.settings.showEnvSettings) {
+        this.task.settings.showEnvSettings = true;
+      }
     }
   }
 
