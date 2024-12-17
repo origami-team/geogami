@@ -28,7 +28,7 @@
     &nbsp;&nbsp;
 
     <!-- TODO: remove disable after resolving reloading vir. env. using tablet -->
-    <select [(ngModel)]="virEnvType" interface="popover" disabled>
+    <select [(ngModel)]="virEnvType" interface="popover" [disabled]="!isSingleMode">
       <option
         *ngFor="let virEnvitem of virEnvTypesList; let i = index"
         [ngValue]="virEnvitem.layerName"
@@ -377,12 +377,50 @@
     </answer-type>
   </div>
 
+  <!-- Vir. Env. settings -->
+  <div *ngIf="isVirtualWorld && task.settings">
+
+    <!-- section heading -->
+    <ion-text>
+      <h5>{{ "CreateGame.virEnvSettings" | translate }}</h5>
+    </ion-text>
+
+    <!-- avatar speed -->
+    <ion-item lines="none">
+      <ion-label> {{ "CreateGame.avatarSpeed" | translate }} </ion-label>
+      <select
+        [(ngModel)]="task.settings.avatarSpeed"
+        interface="popover"
+        style="width: 50px"
+      >
+        <!-- speed can be adjusted to be more than five levels -->
+        <option
+          *ngFor="let e of [].constructor(7); let i = index"
+          [ngValue]="i+1"
+        >
+          {{ i + 1 }}
+        </option>
+      </select>
+    </ion-item>
+
+    <!-- show environment settings -->
+    <ion-item lines="none">
+      <ion-label> {{ "CreateGame.showEnvSettings" | translate }} </ion-label>
+      <ion-toggle
+        [(ngModel)]="task.settings.showEnvSettings"
+      ></ion-toggle>
+    </ion-item>
+  </div>
+
   <!-- Additional settings -->
   <div *ngIf="task.settings">
     <ion-text>
       <h5>{{ "CreateGame.addSettings" | translate }}</h5>
     </ion-text>
-    <ion-item lines="none" *ngIf="task.type == 'nav-flag' || task.type == 'nav-text'">
+    <ion-item
+      lines="none"
+      *ngIf="task.type == 'nav-flag' || task.type == 'nav-text'"
+    >
       <ion-label>
         {{ "CreateGame.confirmation" | translate }}
         <ion-icon

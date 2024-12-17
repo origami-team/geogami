@@ -8,6 +8,8 @@ export interface Task {
     evaluate: String
     settings: {
         confirmation: String,
-        mapFeatures: any
+        mapFeatures: any,
+        avatarSpeed: number,
+        showEnvSettings: boolean,
     }
 }

@@ -197,7 +197,10 @@
     "photoTask": "Photo for the task",
     "correctAnswer": "The correct answer:",
     "selectGameType":"Select game type",
-    "setAvatarPosition":"Set avatar initial position and direction"
+    "setAvatarPosition":"Set avatar initial position and direction",
+    "virEnvSettings": "Virtual world settings",
+    "avatarSpeed":"Avatar speed",
+    "showEnvSettings":"Show environment settings"
   },
   "EditGame": {
     "titleEditGame": "Edit your GeoGami",
