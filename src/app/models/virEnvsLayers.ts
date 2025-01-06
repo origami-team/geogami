@@ -341,6 +341,7 @@ export const virEnvLayers: Readonly<any> = {
     zoom: 17,
   },
   VirEnv_40: {
+    isBuilding: true,
     initialPosition: VirEnv_40.initialPosition,
     overlayCoords: VirEnv_40.overlayCoords,
     center: [0.004837837838 / 2,	0.003383928571 / 2],
@@ -348,14 +349,14 @@ export const virEnvLayers: Readonly<any> = {
     zoom: 17,
     defaultAvatarSpeed: 1,
     defaultFloor: "F1",
-    floorsHeight:{
-      F0: 96.249,     // library
-      F1: 99.999,
-      F2: 103.749,
-      F3: 107.199,
-      F4: 110.649,
-      F5: 114.099,
-      F6: 117.549
+    floors:{
+      f0: {name: "Library", height: 96.249},     // library
+      f1: {name: "Floor 1", height: 99.999},
+      f2: {name: "Floor 2", height: 103.749},
+      f3: {name: "Floor 3", height: 107.199},
+      f4: {name: "Floor 4", height: 110.649},
+      f5: {name: "Floor 5", height: 114.099},
+      f6: {name: "Floor 6", height: 117.549},
     }
   }
 };
