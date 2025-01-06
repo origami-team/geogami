@@ -210,7 +210,7 @@ export class CreateTaskModalPage implements OnInit {
     if (this.isVirtualWorld) {
       if (!this.task.settings.avatarSpeed) {
         this.task.settings.avatarSpeed =
-          virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 6;
+          virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
       }
     }
   }
@@ -955,5 +955,11 @@ export class CreateTaskModalPage implements OnInit {
       componentProps: { text },
     });
     return await popover.present();
+  }
+
+  // Set default avatar-speed when vir. env. is changed
+  onEnvChanged(){
+      this.task.settings.avatarSpeed =
+        virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
   }
 }

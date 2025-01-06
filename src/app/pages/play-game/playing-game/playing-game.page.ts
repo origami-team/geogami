@@ -723,7 +723,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvType: this.task.virEnvType
             ? this.task.virEnvType
             : this.virEnvType,
-          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       } else if(this.isSingleMode) {
@@ -747,7 +747,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvType: this.task.virEnvType
             ? this.task.virEnvType
             : this.virEnvType,
-          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       }
@@ -847,6 +847,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.avatarPositionSubscription =
         this.geolocationService.avatarGeolocationSubscription.subscribe(
           (avatarPosition) => {
+            console.log("🚀 ~ initializeMap ~ avatarPosition:", avatarPosition)
             // Store waypoint every second
             if (this.currentSecond != new Date().getSeconds()) {
               this.currentSecond = new Date().getSeconds();
@@ -882,6 +883,53 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   );
                   this.heading = bearing;
                 }
+              }
+            }
+
+            // building envs only: Update floor/env. map based on height
+            if(this.virEnvType == "VirEnv_40"){
+              // Floor 0 / library
+              if( this.utilService.isAvatarInGroundFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floorsHeight["F0"] + 1)){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f0.png",
+                  false
+                );
+              } 
+              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floorsHeight["F1"])){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f1.png",
+                  false
+                );
+              }
+              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floorsHeight["F2"])){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f2.png",
+                  false
+                );
+              }
+              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floorsHeight["F3"])){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f3.png",
+                  false
+                );
+              }
+              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floorsHeight["F4"])){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f4.png",
+                  false
+                );
+              }
+              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floorsHeight["F5"])){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f5.png",
+                  false
+                );
+              }
+              else if(this.utilService.isAvatarInLastFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floorsHeight["F6"])){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f6.png",
+                  false
+                );
               }
             }
           }
@@ -1801,7 +1849,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.previousTaskAvatarHeading
             : null,
           virEnvType: this.task.virEnvType,
-          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       }, 1000);

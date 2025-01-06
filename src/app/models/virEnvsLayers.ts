@@ -346,6 +346,16 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.004837837838 / 2,	0.003383928571 / 2],
     bounds: VirEnv_40.bounds,
     zoom: 17,
-    defaultAvatarSpeed: 2,
+    defaultAvatarSpeed: 1,
+    defaultFloor: "F1",
+    floorsHeight:{
+      F0: 96.249,     // library
+      F1: 99.999,
+      F2: 103.749,
+      F3: 107.199,
+      F4: 110.649,
+      F5: 114.099,
+      F6: 117.549
+    }
   }
 };
