@@ -35,6 +35,10 @@ export class CreateTaskModalPage implements OnInit {
   @Input() isVirtualWorld: boolean;
   @Input() isVRMirrored: boolean;
   @Input() virEnvType: string;
+  
+  // VE building
+  public isVEBuilding = false;
+  @Input() selectedFloor;
 
   // Multi-player Mode
   @Input() numPlayers: Number;
@@ -211,6 +215,13 @@ export class CreateTaskModalPage implements OnInit {
       if (!this.task.settings.avatarSpeed) {
         this.task.settings.avatarSpeed =
           virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
+      }
+
+      // check wether selected VE is a building
+      this.isVEBuilding = this.checkVEBuilding();
+      // set default floor for new tasks only (not stored ones/when editing a task)
+      if(this.isVEBuilding && !this.selectedFloor){
+        this.selectedFloor = this.setInitialFloor();
       }
     }
   }
@@ -765,23 +776,67 @@ export class CreateTaskModalPage implements OnInit {
     //* inlclude vir. env. type in task data
     if (this.isVirtualWorld) {
       this.task.virEnvType = this.virEnvType;
-    console.log(
-        "🚀 ~ CreateTaskModalPage ~ dismissModal ~ this.virEnvType:",
-        this.virEnvType
-      );
+    }
+
+    //* inlclude is building properties in task data
+    if (this.isVEBuilding) {
+      this.task.isVEBuilding = this.isVEBuilding;
+      this.task.floor = this.selectedFloor;
     }
 
     /* multi-player */
     // set whether all palyers have same question and/or answer
     if (!this.isSingleMode) {
       // save coll method type
-    console.log(
-        "// this.selectedCollType.type: ",
-        this.selectedCollType.type
-      );
-
       this.task.collaborationType = this.selectedCollType.type;
 
+      // update answers of multiplayers based on collaboration type
+      this.updatePlayersAnswers();
+    }
+
+    this.modalController.dismiss({
+      dismissed: true,
+      data: {
+        ...this.task,
+        mapFeatures: this.mapFeatures,
+      },
+    });
+  }
+
+  async showPopover(ev: any, key: string) {
+    let text = this.translate.instant(key);
+
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      componentProps: { text },
+    });
+    return await popover.present();
+  }
+
+  // Set default avatar-speed when vir. env. is changed
+  onEnvChanged(){
+      this.task.settings.avatarSpeed =
+        virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
+      this.isVEBuilding = this.checkVEBuilding();
+      
+  }
+
+  checkVEBuilding(){
+    return virEnvLayers[this.virEnvType].isVEBuilding ?? false;
+  }
+
+  setInitialFloor(){
+    let selectedEnv = virEnvLayers[this.virEnvType];
+    let defaultFloor = selectedEnv.defaultFloor;
+    return selectedEnv.floors[defaultFloor].tag;
+  }
+
+  /**
+   *  This function updates answers of 2nd and 3rd player based on selected collaboration type 
+   */
+  updatePlayersAnswers(){
       // only for sequential and free choice
       if (this.selectedCollType.type == "freeChoice") {
         /* Question types */
@@ -934,32 +989,5 @@ export class CreateTaskModalPage implements OnInit {
           this.task.answer[2].type = this.task.answer[0].type;
         }
       }
-    }
-
-    this.modalController.dismiss({
-      dismissed: true,
-      data: {
-        ...this.task,
-        mapFeatures: this.mapFeatures,
-      },
-    });
-  }
-
-  async showPopover(ev: any, key: string) {
-    let text = this.translate.instant(key);
-
-    const popover = await this.popoverController.create({
-      component: PopoverComponent,
-      event: ev,
-      translucent: true,
-      componentProps: { text },
-    });
-    return await popover.present();
-  }
-
-  // Set default avatar-speed when vir. env. is changed
-  onEnvChanged(){
-      this.task.settings.avatarSpeed =
-        virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
   }
 }

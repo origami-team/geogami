@@ -358,6 +358,8 @@
         [isVirtualWorld]="isVirtualWorld"
         [isVRMirrored]="isVRMirrored"
         [virEnvType]="virEnvType"
+        [isVEBuilding]="isVEBuilding"
+        [selectedFloor]="selectedFloor"
       >
       </app-map>
     </div>
@@ -370,6 +372,8 @@
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding"
+      [(selectedFloor)]="selectedFloor"
       [numPlayers]="(!isSingleMode?numPlayers:1)"
       [isSingleMode]="isSingleMode"
       [collaborationType]=" isSingleMode? undefined :selectedCollType.type"

@@ -52,6 +52,10 @@ export class MapComponent
   @Input() isVRMirrored: boolean;
   @Input() virEnvType: string;
 
+  // VE building 
+  @Input() isVEBuilding: boolean;
+  @Input() selectedFloor: string;
+
   showDirectionMarker = false;
   directionMarkerPosition: any;
 
@@ -72,9 +76,7 @@ export class MapComponent
   ngOnDestroy(): void {
     this.map.remove();
   }
-  ngOnInit(): void {
-    // // console.log('// isSingleMode (map comp): ', this.isSingleMode)
-  }
+  ngOnInit(): void { }
 
   // Compare the input feature value before and after change task type
   // to keep flags on map
@@ -87,32 +89,24 @@ export class MapComponent
         changes.feature.currentValue == undefined &&
         changes.feature.previousValue != undefined
       ) {
-        // console.log("ngOnChanges (mapComponent) - if changes.answer");
         this.featureChange.emit(changes.feature.previousValue);
       }
+    } else if (
+      changes.selectedFloor &&
+      changes.selectedFloor.currentValue != undefined &&
+      changes.selectedFloor.previousValue != undefined
+    ) {
+      //* when floor is changed
+      this.selectedFloor = changes.selectedFloor.currentValue;
+      this.updateMapLayer(true);
     } else if (
       changes.virEnvType &&
       changes.virEnvType.currentValue != undefined &&
       changes.virEnvType.previousValue != undefined
     ) {
       //* when virEnvType is changed
-      console.log(
-        "changes (changes.virEnvType): ",
-        changes.virEnvType.currentValue
-      );
       this.virEnvType = changes.virEnvType.currentValue;
-
-      let newStyle = this.map.getStyle();
-      //* update layer image
-      newStyle.sources.overlay.url =
-        "assets/vir_envs_layers/" + this.virEnvType + ".png";
-      //* update layer dimensions
-      newStyle.sources.overlay.coordinates =
-        virEnvLayers[this.virEnvType].overlayCoords;
-      //* apply new style on map
-      this.map.setStyle(newStyle);
-      //* update map max bounds
-      this.map.setMaxBounds(virEnvLayers[this.virEnvType].bounds);
+      this.updateMapLayer();
     }
 
     /*}
@@ -125,7 +119,11 @@ export class MapComponent
   }
 
   ngAfterViewInit(): void {
-    this.initMap();
+    this.initMap().then(() => {
+      if (this.selectedFloor) {
+        this.updateMapLayer(true);
+      }
+    });
   }
 
   resetViewDirectionMarker() {
@@ -170,317 +168,323 @@ export class MapComponent
   };
 
   initMap() {
-    mapboxgl.accessToken = environment.mapboxAccessToken;
-    this.map = new mapboxgl.Map({
-      container: this.mapContainer.nativeElement,
-      /* style: (this.isVirtualWorld ?
-        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'), */
-      //* check if virenv has satellite layer, if yes assign it or assign main layer (used for vr material layers)
-      style: this.isVirtualWorld
-        ? environment.mapStyle +
-          (virEnvLayers[this.virEnvType].satellite
-            ? virEnvLayers[this.virEnvType].satellite
-            : this.virEnvType) +
-          ".json"
-        : environment.mapStyle + "realWorld.json",
-      center: this.isVirtualWorld
-        ? [0.005810510811 / 2, 0.006827038669 / 2]
-        : [8, 51.8],
-      zoom: this.isVirtualWorld ? 15.5 : 2,
-      // maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
-      maxBounds: this.isVirtualWorld
-        ? virEnvLayers[this.virEnvType].bounds
-        : null, // Sets bounds
-    });
-
-    /* Show satelitte control only with real world */
-    if (!this.isVirtualWorld) {
-      this.map.addControl(new SatControl());
-    }
-
-    this.map.addControl(new mapboxgl.NavigationControl());
-
-    this.map.on("click", (e) => {
-      // temp
-      // // console.log("allPlayersFeatures", this.allPlayersFeatures)
-
-      if (this.featureType == "point") {
-        this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
-        this.featureChange.emit(this.feature);
-        this._onChange(this.feature);
-
-        // Temporary show loc of selected flag
-      // console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
+    // note: The use of promise is to make sure checking building floor is only executed 
+    // when map is fully initialized, ohterwise it raises an error.
+    return new Promise((resolve) => {
+      mapboxgl.accessToken = environment.mapboxAccessToken;
+      this.map = new mapboxgl.Map({
+        container: this.mapContainer.nativeElement,
+        /* style: (this.isVirtualWorld ?
+          (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
+          environment.mapStyle + 'realWorld.json'), */
+        //* check if virenv has satellite layer, if yes assign it or assign main layer (used for vr material layers)
+        style: this.isVirtualWorld
+          ? environment.mapStyle +
+            (virEnvLayers[this.virEnvType].satellite
+              ? this.virEnvType+"_satellite"
+              : this.virEnvType) +
+            ".json"
+          : environment.mapStyle + "realWorld.json",
+        center: this.isVirtualWorld
+          ? [0.005810510811 / 2, 0.006827038669 / 2]
+          : [8, 51.8],
+        zoom: this.isVirtualWorld ? 15.5 : 2,
+        // maxBounds: (this.isVirtualWorld ? bounds : null) // Sets bounds as max
+        maxBounds: this.isVirtualWorld
+          ? virEnvLayers[this.virEnvType].bounds
+          : null, // Sets bounds
+      });
+  
+      /* Show satelitte control only with real world */
+      if (!this.isVirtualWorld) {
+        this.map.addControl(new SatControl());
       }
-
-      if (this.featureType == "direction") {
-        /* To add view direction marker only once */
-        if (!this.showDirectionMarker) {
-          this.directionMarkerPosition = this._toGeoJSONPoint(
-            e.lngLat.lng,
-            e.lngLat.lat
-          );
-          this.map.addSource("viewDirectionClick", {
-            type: "geojson",
-            data: this.directionMarkerPosition,
-          });
-          this.map.addLayer({
-            id: "viewDirectionClick",
-            source: "viewDirectionClick",
-            type: "symbol",
-            layout: {
-              "icon-image": "view-direction-task",
-              "icon-size": 0.65,
-              "icon-offset": [0, -8],
-              "icon-allow-overlap": true,
-            },
-          });
-          this.showDirectionMarker = true;
-
-          this.featureChange.emit({
-            bearing: 0,
-            position: this.directionMarkerPosition,
-          });
-        } else {
-          let clickDirection = this.helperService.bearing(
-            this.directionMarkerPosition.geometry.coordinates[1],
-            this.directionMarkerPosition.geometry.coordinates[0],
-            e.lngLat.lat,
-            e.lngLat.lng
-          );
-          this.map.setLayoutProperty(
-            "viewDirectionClick",
-            "icon-rotate",
-            clickDirection - this.map.getBearing()
-          );
-          while (clickDirection > 360) {
-            clickDirection = clickDirection - 360;
-          }
-          while (clickDirection < 0) {
-            clickDirection = clickDirection + 360;
-          }
-          this.featureChange.emit({
-            bearing: clickDirection,
-            position: this.directionMarkerPosition,
-          });
+  
+      this.map.addControl(new mapboxgl.NavigationControl());
+  
+      this.map.on("click", (e) => {
+        // temp
+        // // console.log("allPlayersFeatures", this.allPlayersFeatures)
+  
+        if (this.featureType == "point") {
+          this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
+          this.featureChange.emit(this.feature);
+          this._onChange(this.feature);
+  
+          // Temporary show loc of selected flag
+        // console.log("Flag ( lng: ", e.lngLat.lng, "lat: ", e.lngLat.lat, " )");
         }
-      }
-    });
-
-    this.map.on("load", () => {
-      this.map.resize();
-
-      // disable map rotation using right click + drag
-      this.map.dragRotate.disable();
-
-      // disable map rotation using touch rotation gesture
-      this.map.touchZoomRotate.disableRotation();
-
-      this.map.loadImage(
-        "/assets/icons/directionv2-richtung-settings.png",
-        (error, image) => {
-          if (error) throw error;
-
-          this.map.addImage("view-direction-task", image);
-
-          if (this.feature) {
-            if (this.featureType == "direction" && this.feature.position) {
-              this.map.flyTo({
-                center: this.feature.position.geometry.coordinates,
-                zoom: 13,
-                speed: 3,
-              });
-
-              this.map.addSource("viewDirectionClick", {
-                type: "geojson",
-                data: this.feature.position,
-              });
-              this.map.addLayer({
-                id: "viewDirectionClick",
-                source: "viewDirectionClick",
-                type: "symbol",
-                layout: {
-                  "icon-image": "view-direction-task",
-                  "icon-size": 0.65,
-                  "icon-offset": [0, -8],
-                  "icon-rotate": this.feature.bearing,
-                  "icon-allow-overlap": true,
-                },
-              });
-
-              this.directionMarkerPosition = this.feature.position;
-              this.showDirectionMarker = true;
+  
+        if (this.featureType == "direction") {
+          /* To add view direction marker only once */
+          if (!this.showDirectionMarker) {
+            this.directionMarkerPosition = this._toGeoJSONPoint(
+              e.lngLat.lng,
+              e.lngLat.lat
+            );
+            this.map.addSource("viewDirectionClick", {
+              type: "geojson",
+              data: this.directionMarkerPosition,
+            });
+            this.map.addLayer({
+              id: "viewDirectionClick",
+              source: "viewDirectionClick",
+              type: "symbol",
+              layout: {
+                "icon-image": "view-direction-task",
+                "icon-size": 0.65,
+                "icon-offset": [0, -8],
+                "icon-allow-overlap": true,
+              },
+            });
+            this.showDirectionMarker = true;
+  
+            this.featureChange.emit({
+              bearing: 0,
+              position: this.directionMarkerPosition,
+            });
+          } else {
+            let clickDirection = this.helperService.bearing(
+              this.directionMarkerPosition.geometry.coordinates[1],
+              this.directionMarkerPosition.geometry.coordinates[0],
+              e.lngLat.lat,
+              e.lngLat.lng
+            );
+            this.map.setLayoutProperty(
+              "viewDirectionClick",
+              "icon-rotate",
+              clickDirection - this.map.getBearing()
+            );
+            while (clickDirection > 360) {
+              clickDirection = clickDirection - 360;
             }
-            if (this.featureType == "point" && this.feature.geometry) {
-              this.map.flyTo({
-                center: this.feature.geometry.coordinates,
-                zoom: 13,
-                bearing: 0,
-                speed: 3,
-              });
+            while (clickDirection < 0) {
+              clickDirection = clickDirection + 360;
             }
-            if (
-              (this.featureType == "geometry" ||
-                this.featureType == "geometry-free") &&
-              this.feature.features
-            ) {
-              if (this.feature.features.length > 0) {
-                this.map.fitBounds(bbox(this.feature), {
-                  padding: 20,
+            this.featureChange.emit({
+              bearing: clickDirection,
+              position: this.directionMarkerPosition,
+            });
+          }
+        }
+      });
+  
+      this.map.on("load", () => {
+        this.map.resize();
+  
+        // disable map rotation using right click + drag
+        this.map.dragRotate.disable();
+  
+        // disable map rotation using touch rotation gesture
+        this.map.touchZoomRotate.disableRotation();
+  
+        this.map.loadImage(
+          "/assets/icons/directionv2-richtung-settings.png",
+          (error, image) => {
+            if (error) throw error;
+  
+            this.map.addImage("view-direction-task", image);
+  
+            if (this.feature) {
+              if (this.featureType == "direction" && this.feature.position) {
+                this.map.flyTo({
+                  center: this.feature.position.geometry.coordinates,
+                  zoom: 13,
+                  speed: 3,
+                });
+  
+                this.map.addSource("viewDirectionClick", {
+                  type: "geojson",
+                  data: this.feature.position,
+                });
+                this.map.addLayer({
+                  id: "viewDirectionClick",
+                  source: "viewDirectionClick",
+                  type: "symbol",
+                  layout: {
+                    "icon-image": "view-direction-task",
+                    "icon-size": 0.65,
+                    "icon-offset": [0, -8],
+                    "icon-rotate": this.feature.bearing,
+                    "icon-allow-overlap": true,
+                  },
+                });
+  
+                this.directionMarkerPosition = this.feature.position;
+                this.showDirectionMarker = true;
+              }
+              if (this.featureType == "point" && this.feature.geometry) {
+                this.map.flyTo({
+                  center: this.feature.geometry.coordinates,
+                  zoom: 13,
+                  bearing: 0,
                   speed: 3,
                 });
               }
-              // this.map.flyTo({
-              //   center: this.feature.geometry.coordinates,
-              //   zoom: 13,
-              //   bearing: 0,
-              //   speed: 3
-              // })
+              if (
+                (this.featureType == "geometry" ||
+                  this.featureType == "geometry-free") &&
+                this.feature.features
+              ) {
+                if (this.feature.features.length > 0) {
+                  this.map.fitBounds(bbox(this.feature), {
+                    padding: 20,
+                    speed: 3,
+                  });
+                }
+                // this.map.flyTo({
+                //   center: this.feature.geometry.coordinates,
+                //   zoom: 13,
+                //   bearing: 0,
+                //   speed: 3
+                // })
+              }
+            }
+          }
+        );
+  
+        // disable zoom to current position in VR world
+        if (!this.isVirtualWorld) {
+          Plugins.Geolocation.getCurrentPosition().then((position) => {
+            if (!this.feature) {
+              this.map.flyTo({
+                center: [position.coords.longitude, position.coords.latitude],
+                zoom: 13,
+                bearing:
+                  this.featureType == "direction"
+                    ? this.feature && this.feature.bearing
+                      ? this.feature.bearing
+                      : 0
+                    : 0,
+                speed: 3,
+              });
+            }
+  
+            this.map.loadImage("/assets/icons/position.png", (error, image) => {
+              if (error) throw error;
+  
+              this.map.addImage("geolocate", image);
+  
+              this.map.addSource("geolocate", {
+                type: "geojson",
+                data: {
+                  type: "Point",
+                  coordinates: [
+                    position.coords.longitude,
+                    position.coords.latitude,
+                  ],
+                },
+              });
+              this.map.addLayer({
+                id: "geolocate",
+                source: "geolocate",
+                type: "symbol",
+                layout: {
+                  "icon-image": "geolocate",
+                  "icon-size": 0.4,
+                  "icon-offset": [0, 0],
+                },
+              });
+            });
+          });
+        }
+  
+        if (this.feature != undefined && this.featureType == "point") {
+          this._onChange(this.feature);
+        }
+  
+        if (this.featureType == "geometry") {
+          if (!this.drawTheme) {
+            this.draw = new MapboxDraw({
+              displayControlsDefault: false,
+              controls: {
+                polygon: true,
+                trash: true,
+              },
+            });
+          }
+          if (this.drawTheme == "searchArea") {
+            this.draw = new MapboxDraw({
+              displayControlsDefault: false,
+              controls: {
+                polygon: true,
+                trash: true,
+              },
+              styles: searchArea,
+            });
+          }
+  
+          this.map.addControl(this.draw, "top-left");
+  
+          this.map.on("draw.create", (e) => {
+            this.feature = this.draw.getAll();
+            this.featureChange.emit(this.draw.getAll());
+          });
+  
+          this.map.on("draw.delete", (e) => {
+            this.feature = this.draw.getAll();
+            this.featureChange.emit(this.draw.getAll());
+          });
+  
+          this.map.on("draw.update", (e) => {
+            this.feature = this.draw.getAll();
+            this.featureChange.emit(this.draw.getAll());
+          });
+  
+          if (this.feature != undefined) {
+            if (this.feature.type == "FeatureCollection") {
+              this.feature.features.forEach((element) => {
+                element.properties = {
+                  ...element.properties,
+                };
+                this.draw.add(element);
+              });
             }
           }
         }
-      );
-
-      // disable zoom to current position in VR world
-      if (!this.isVirtualWorld) {
-        Plugins.Geolocation.getCurrentPosition().then((position) => {
-          if (!this.feature) {
-            this.map.flyTo({
-              center: [position.coords.longitude, position.coords.latitude],
-              zoom: 13,
-              bearing:
-                this.featureType == "direction"
-                  ? this.feature && this.feature.bearing
-                    ? this.feature.bearing
-                    : 0
-                  : 0,
-              speed: 3,
-            });
-          }
-
-          this.map.loadImage("/assets/icons/position.png", (error, image) => {
-            if (error) throw error;
-
-            this.map.addImage("geolocate", image);
-
-            this.map.addSource("geolocate", {
-              type: "geojson",
-              data: {
-                type: "Point",
-                coordinates: [
-                  position.coords.longitude,
-                  position.coords.latitude,
-                ],
-              },
-            });
-            this.map.addLayer({
-              id: "geolocate",
-              source: "geolocate",
-              type: "symbol",
-              layout: {
-                "icon-image": "geolocate",
-                "icon-size": 0.4,
-                "icon-offset": [0, 0],
-              },
-            });
-          });
-        });
-      }
-
-      if (this.feature != undefined && this.featureType == "point") {
-        this._onChange(this.feature);
-      }
-
-      if (this.featureType == "geometry") {
-        if (!this.drawTheme) {
+  
+        if (this.featureType == "geometry-free") {
           this.draw = new MapboxDraw({
             displayControlsDefault: false,
             controls: {
               polygon: true,
+              line_string: true,
+              point: true,
               trash: true,
             },
           });
-        }
-        if (this.drawTheme == "searchArea") {
-          this.draw = new MapboxDraw({
-            displayControlsDefault: false,
-            controls: {
-              polygon: true,
-              trash: true,
-            },
-            styles: searchArea,
+  
+          this.map.addControl(this.draw, "top-left");
+  
+          this.map.on("draw.create", (e) => {
+            this.feature = this.draw.getAll();
+            this.featureChange.emit(this.draw.getAll());
           });
-        }
-
-        this.map.addControl(this.draw, "top-left");
-
-        this.map.on("draw.create", (e) => {
-          this.feature = this.draw.getAll();
-          this.featureChange.emit(this.draw.getAll());
-        });
-
-        this.map.on("draw.delete", (e) => {
-          this.feature = this.draw.getAll();
-          this.featureChange.emit(this.draw.getAll());
-        });
-
-        this.map.on("draw.update", (e) => {
-          this.feature = this.draw.getAll();
-          this.featureChange.emit(this.draw.getAll());
-        });
-
-        if (this.feature != undefined) {
-          if (this.feature.type == "FeatureCollection") {
-            this.feature.features.forEach((element) => {
-              element.properties = {
-                ...element.properties,
-              };
-              this.draw.add(element);
-            });
+  
+          this.map.on("draw.delete", (e) => {
+            this.feature = this.draw.getAll();
+            this.featureChange.emit(this.draw.getAll());
+          });
+  
+          this.map.on("draw.update", (e) => {
+            this.feature = this.draw.getAll();
+            this.featureChange.emit(this.draw.getAll());
+          });
+  
+          if (this.feature != undefined) {
+            if (this.feature.type == "FeatureCollection") {
+              this.feature.features.forEach((element) => {
+                element.properties = {
+                  ...element.properties,
+                };
+                this.draw.add(element);
+              });
+            }
           }
         }
-      }
-
-      if (this.featureType == "geometry-free") {
-        this.draw = new MapboxDraw({
-          displayControlsDefault: false,
-          controls: {
-            polygon: true,
-            line_string: true,
-            point: true,
-            trash: true,
-          },
-        });
-
-        this.map.addControl(this.draw, "top-left");
-
-        this.map.on("draw.create", (e) => {
-          this.feature = this.draw.getAll();
-          this.featureChange.emit(this.draw.getAll());
-        });
-
-        this.map.on("draw.delete", (e) => {
-          this.feature = this.draw.getAll();
-          this.featureChange.emit(this.draw.getAll());
-        });
-
-        this.map.on("draw.update", (e) => {
-          this.feature = this.draw.getAll();
-          this.featureChange.emit(this.draw.getAll());
-        });
-
-        if (this.feature != undefined) {
-          if (this.feature.type == "FeatureCollection") {
-            this.feature.features.forEach((element) => {
-              element.properties = {
-                ...element.properties,
-              };
-              this.draw.add(element);
-            });
-          }
-        }
-      }
+        resolve(true);
+      });
+      
     });
   }
 
@@ -503,4 +507,22 @@ export class MapComponent
       },
     };
   };
+
+  updateMapLayer(isVEBuilding = false){
+    let newStyle = this.map.getStyle();
+      //* update layer image
+      if(isVEBuilding){
+        // in case the VE is a building change the floor
+        newStyle.sources.overlay.url = `assets/vir_envs_layers/${this.virEnvType}_${this.selectedFloor}.png`;
+      } else{
+        newStyle.sources.overlay.url = `assets/vir_envs_layers/${this.virEnvType}.png`;
+      }
+      //* update layer dimensions
+      newStyle.sources.overlay.coordinates =
+        virEnvLayers[this.virEnvType].overlayCoords;
+      //* apply new style on map
+      this.map.setStyle(newStyle);
+      //* update map max bounds
+      this.map.setMaxBounds(virEnvLayers[this.virEnvType].bounds);
+  }
 }
