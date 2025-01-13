@@ -440,6 +440,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   cJoindPlayersCount = 0;
   sTaskNo = 0;
 
+  // VE building
+  floorHeight: number;
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -1765,6 +1768,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* set avatar initial position */
     if (this.isVirtualWorld) {
+      if(this.task?.isVEBuilding){
+        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))]["height"]                
+      }
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
 
@@ -1847,10 +1853,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.task.virEnvType ===
                 this.game.tasks[this.taskIndex - 1].virEnvType
             ? this.previousTaskAvatarHeading
-            : null,
+            : virEnvLayers[this.virEnvType].initialRotation ?? null,  // to add default rotation for building envs
           virEnvType: this.task.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
+          initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:undefined
         });
       }, 1000);
 

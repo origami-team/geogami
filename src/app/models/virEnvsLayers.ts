@@ -342,7 +342,11 @@ export const virEnvLayers: Readonly<any> = {
   },
   VirEnv_40: {
     isVEBuilding: true,
-    initialPosition: VirEnv_40.initialPosition,
+    initialPosition: {
+      lng: 27.43 / 111000,
+      lat: 18.81 / 112000,
+    },
+    initialRotation: 180,  
     overlayCoords: VirEnv_40.overlayCoords,
     center: [0.004837837838 / 2,	0.003383928571 / 2],
     bounds: VirEnv_40.bounds,
