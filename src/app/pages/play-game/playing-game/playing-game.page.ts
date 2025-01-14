@@ -894,41 +894,47 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               // Floor 0 / library
               if( this.utilService.isAvatarInGroundFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[0].height + 1)){
                 this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f0.png",
+                  "assets/vir_envs_layers/VirEnv_40_f-1.png",
                   false
                 );
               } 
               else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[1].height)){
                 this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f1.png",
+                  "assets/vir_envs_layers/VirEnv_40_f0.png",
                   false
                 );
               }
               else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[2].height)){
                 this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f2.png",
+                  "assets/vir_envs_layers/VirEnv_40_f1.png",
                   false
                 );
               }
               else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[3].height)){
                 this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f3.png",
+                  "assets/vir_envs_layers/VirEnv_40_f2.png",
                   false
                 );
               }
               else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[4].height)){
                 this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f4.png",
+                  "assets/vir_envs_layers/VirEnv_40_f3.png",
                   false
                 );
               }
               else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[5].height)){
                 this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f5.png",
+                  "assets/vir_envs_layers/VirEnv_40_f4.png",
                   false
                 );
               }
               else if(this.utilService.isAvatarInLastFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[6].height)){
+                this.updateMapStyleOverlayLayer(
+                  "assets/vir_envs_layers/VirEnv_40_f5.png",
+                  false
+                );
+              }
+              else if(this.utilService.isAvatarInLastFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[7].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f6.png",
                   false
@@ -1041,6 +1047,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.startGame();
         }, 200);
       }
+      resolve(true);
     });
 
     /* temp */
@@ -1186,6 +1193,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     // To disable map interations
     this.enableDisableMapInteraction(false);
+    });
   }
 
   /* (V.E.): to load view dir. marker after changing style */
@@ -1769,7 +1777,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /* set avatar initial position */
     if (this.isVirtualWorld) {
       if(this.task?.isVEBuilding){
-        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))]["height"]                
+        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"]                
       }
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {

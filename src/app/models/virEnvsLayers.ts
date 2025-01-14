@@ -354,13 +354,14 @@ export const virEnvLayers: Readonly<any> = {
     defaultAvatarSpeed: 1,
     defaultFloor: 1,
     floors:[
-      {tag:"f0", name: "Library", height: 96.249},     // library
-      {tag:"f1", name: "Floor 1", height: 99.999},
-      {tag:"f2", name: "Floor 2", height: 103.749},
-      {tag:"f3",name: "Floor 3", height: 107.199},
-      {tag:"f4",name: "Floor 4", height: 110.649},
-      {tag:"f5",name: "Floor 5", height: 114.099},
-      {tag:"f6",name: "Floor 6", height: 117.549},
+      {tag:"f-1", name: "Library", height: 96.249},     // library
+      {tag:"f0", name: "Floor 0", height: 99.999},
+      {tag:"f1", name: "Floor 1", height: 103.749},
+      {tag:"f2",name: "Floor 2", height: 107.199},
+      {tag:"f3",name: "Floor 3", height: 110.649},
+      {tag:"f4",name: "Floor 4", height: 114.099},
+      {tag:"f5",name: "Floor 5", height: 117.549},
+      {tag:"f6",name: "Floor 6", height: 120.999},
     ]
   }
 };
