@@ -6,6 +6,13 @@
       {{ virEnvType }}
     </ion-label>
   </ion-chip>
+
+  <ion-chip *ngIf="isVirtualWorld && selectedFloor" color="medium" htmlFor="test">
+    <ion-label style="color: black">
+      {{ "General.floor"| translate }}_{{selectedFloor.substring(1)}}
+    </ion-label>
+  </ion-chip>
+  
   <!-- Show part of quesition text -->
   <ion-chip color="medium" htmlFor="test">
     <ion-label style="color: black">

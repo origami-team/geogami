@@ -8,7 +8,7 @@
     },
     "overlay": {
       "type": "image",
-      "url": "assets/vir_envs_layers/VirEnv_40.png",
+      "url": "assets/vir_envs_layers/VirEnv_40_f1.png",
 
       "coordinates": [
         [0, 0.000357142857142857],

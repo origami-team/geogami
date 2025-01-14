@@ -19,7 +19,8 @@
     "next": "Weiter",
     "delete": "Löschen",
     "edit": "Bearbeiten",
-    "question": "Frage"
+    "question": "Frage",
+    "floor": "Etage"
   },
   "Tasktypes": {
     "navigationTasks": "Navigationsaufgaben",

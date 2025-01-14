@@ -62,10 +62,11 @@
                 </ion-label>
               </ion-chip>
 
-              <!-- show extra info (env. type & question text) only with a specific width -->
+              <!-- show extra info (env. type & question text) only with a specific width. Also building floor -->
               <env-type-question-text
                 [isVirtualWorld]="isVirtualWorld"
                 [virEnvType]="task.virEnvType"
+                [selectedFloor]="task?.floor??null"
                 [questionText]='isSingleMode?task.question.text:task.question[0].text'
                 [taskCategory]="task.category"
               ></env-type-question-text>
