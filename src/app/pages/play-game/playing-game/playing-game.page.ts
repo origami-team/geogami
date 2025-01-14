@@ -629,7 +629,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             }
 
             /* Initialize map and subscribe location */
-            this.initializeMap();
+            this.initializeMap().then(() => {
+              if (this.game?.tasks[0]?.isVEBuilding ?? false) {
+                const task = this.game?.tasks[0];
+                this.utilService.updateMapLayer(this.map, task.virEnvType, task.floor);
+              }
+            });;
           },
           (err) => {
             // if game is not found due to wrong game id or game was deleted,
@@ -791,14 +796,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   initializeMap() {
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
-    // if (environment.production) {
-
-    // } else {
-    //   mapStyle = document.body.classList.contains("dark")
-    //     ? "mapbox://styles/mapbox/dark-v9"
-    //     : "mapbox://styles/mapbox/streets-v9"
-    // }
-
+    // note: The use of promise is to make sure checking building floor is only executed 
+    // when map is fully initialized, ohterwise it raises an error.
+    return new Promise((resolve) => {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: this.isVirtualWorld
@@ -1777,7 +1777,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     /* set avatar initial position */
     if (this.isVirtualWorld) {
       if(this.task?.isVEBuilding){
-        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"]                
+        // update floor height
+        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"] 
+        // update map layer
+        this.utilService.updateMapLayer(this.map, this.task.virEnvType, this.task.floor);
       }
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
@@ -1865,7 +1868,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvType: this.task.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
-          initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:undefined
+          initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1
         });
       }, 1000);
 

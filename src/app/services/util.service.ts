@@ -7,6 +7,9 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 import { BehaviorSubject } from "rxjs";
 import { PopoverComponent } from "src/app/popover/popover.component";
+import mapboxgl from "mapbox-gl";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
+
 
 @Injectable({
   providedIn: "root",
@@ -200,4 +203,17 @@ export class UtilService {
   isAvatarInLastFloor(h, floorHeight) {
     return h >= floorHeight - 1;
   }
+
+  updateMapLayer(map: mapboxgl.Map, virEnvType:string, selectedFloor: string){
+      let newStyle = map.getStyle();
+        //* update layer image based on floor no
+        newStyle.sources.overlay.url = `assets/vir_envs_layers/${virEnvType}_${selectedFloor}.png`;
+        //* update layer dimensions
+        newStyle.sources.overlay.coordinates =
+          virEnvLayers[virEnvType].overlayCoords;
+        //* apply new style on map
+        map.setStyle(newStyle);
+        //* update map max bounds
+        map.setMaxBounds(virEnvLayers[virEnvType].bounds);
+    }
 }
