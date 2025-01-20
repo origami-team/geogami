@@ -928,7 +928,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   false
                 );
               }
-              else if(this.utilService.isAvatarInLastFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[6].height)){
+              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[6].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f5.png",
                   false
