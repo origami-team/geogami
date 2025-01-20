@@ -24,7 +24,11 @@
     <h5>Choose a virtual world</h5>
     &nbsp;&nbsp;
 
-    <select [(ngModel)]="virEnvType" interface="popover" [disabled]="!isSingleMode">
+    <select
+      [(ngModel)]="virEnvType"
+      interface="popover"
+      [disabled]="!isSingleMode"
+    >
       <option
         *ngFor="let virEnvitem of virEnvTypesList; let i = index"
         [ngValue]="virEnvitem.layerName"
@@ -72,7 +76,9 @@
       {{ "CreateGame.setAvatarPosition" | translate }} 🧍‍♂️
       <ion-icon
         name="information-circle"
-        (click)="utilService.showPopover_i18n($event, 'CreateGame.setAvatarPosition')"
+        (click)="
+          utilService.showPopover_i18n($event, 'CreateGame.setAvatarPosition')
+        "
       >
       </ion-icon>
     </h5>
@@ -98,17 +104,28 @@
     <h5>{{ "CreateTasks.chooseFloor" | translate }}</h5>
     &nbsp;&nbsp;
 
-    <select [(ngModel)]="selectedFloor" (ngModelChange)="onFloorChanged()" interface="popover" [disabled]="!isSingleMode">
+    <select
+      [(ngModel)]="selectedFloor"
+      (ngModelChange)="onFloorChanged()"
+      interface="popover"
+      [disabled]="!isSingleMode"
+    >
       <option
         *ngFor="let floor of virEnvLayers[virEnvType].floors; let i = index"
-        [ngValue]=" floor.tag"
+        [ngValue]="floor.tag"
       >
-        {{i}}: {{ floor.name}}
+        {{ floor.name }}
       </option>
     </select>
   </ion-item>
   <div>
-    <app-map  [isVirtualWorld]="isVirtualWorld" [virEnvType]="virEnvType" [isVEBuilding]="isVEBuilding" [selectedFloor]="selectedFloor" [isSingleMode]="isSingleMode"></app-map>
+    <app-map
+      [isVirtualWorld]="isVirtualWorld"
+      [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding"
+      [selectedFloor]="selectedFloor"
+      [isSingleMode]="isSingleMode"
+    ></app-map>
   </div>
 
   <h5>{{ "CreateGame.photos" | translate }}</h5>

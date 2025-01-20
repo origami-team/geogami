@@ -12,10 +12,10 @@ import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal
 import { QuestionType, AnswerType } from "src/app/models/types";
 import { standardMapFeatures } from "src/app/models/standardMapFeatures";
 import { cloneDeep } from "lodash";
-import { TranslateService } from "@ngx-translate/core";
 import { VirEnvHeaders } from "src/app/models/virEnvsHeader";
 import { UtilService } from "src/app/services/util.service";
 import { virEnvLayers } from "src/app/models/virEnvsLayers";
+import { VEBuildingUtilService } from "src/app/services/ve-building-util.service";
 
 @Component({
   selector: "app-create-info-modal",
@@ -36,7 +36,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   // VE building
   public isVEBuilding = false;
   @Input() selectedFloor;
-  @Output() selectedFloorChange=new EventEmitter();
+  @Output() selectedFloorChange = new EventEmitter();
   //* get virual environment headers
   virEnvLayers = virEnvLayers;
 
@@ -50,8 +50,8 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   constructor(
     public modalController: ModalController,
     public popoverController: PopoverController,
-    private translate: TranslateService,
-    public utilService: UtilService
+    public utilService: UtilService,
+    private veBuildingUtilService: VEBuildingUtilService
   ) {}
 
   ngOnInit() {
@@ -89,10 +89,14 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
           virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
       }
       // check wether selected VE is a building
-      this.isVEBuilding = this.checkVEBuilding();
+      this.isVEBuilding = this.veBuildingUtilService.checkVEBuilding(
+        this.virEnvType
+      );
       // set default floor for new tasks only (not stored ones/when editing a task)
       if (this.isVEBuilding && !this.selectedFloor) {
-        this.selectedFloor = this.setInitialFloor();
+        this.selectedFloor = this.veBuildingUtilService.setInitialFloor(
+          this.virEnvType
+        );
       }
     }
   }
@@ -155,17 +159,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       this.task.question.initialAvatarPosition = undefined;
     }
   }
-
-  checkVEBuilding(){
-    return virEnvLayers[this.virEnvType].isVEBuilding ?? false;
-  }
-
-  setInitialFloor(){
-    let selectedEnv = virEnvLayers[this.virEnvType];
-    let defaultFloor = selectedEnv.defaultFloor;
-    return selectedEnv.floors[defaultFloor].tag;
-  }
-
+  
   onFloorChanged(){
     this.selectedFloorChange.emit(this.selectedFloor);
   }

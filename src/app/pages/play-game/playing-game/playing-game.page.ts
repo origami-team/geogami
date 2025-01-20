@@ -77,6 +77,7 @@ import { UtilService } from "src/app/services/util.service";
 
 import { Storage } from "@ionic/storage";
 import { virEnvLayers } from "src/app/models/virEnvsLayers";
+import { VEBuildingUtilService } from "src/app/services/ve-building-util.service";
 
 @Component({
   selector: "app-playing-game",
@@ -461,6 +462,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private socketService: SocketService,
     private translate: TranslateService,
     private utilService: UtilService,
+    private veBuildingUtilService: VEBuildingUtilService,
     private storage: Storage,
     private router: Router
   ) {
@@ -632,7 +634,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.initializeMap().then(() => {
               if (this.game?.tasks[0]?.isVEBuilding ?? false) {
                 const task = this.game?.tasks[0];
-                this.utilService.updateMapLayer(this.map, task.virEnvType, task.floor);
+                this.veBuildingUtilService.updateMapLayer(this.map, task.virEnvType, task.floor);
               }
             });;
           },
@@ -892,49 +894,49 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             // building envs only: Update floor/env. map based on height
             if(this.virEnvType == "VirEnv_40"){
               // Floor 0 / library
-              if( this.utilService.isAvatarInGroundFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[0].height + 1)){
+              if( this.veBuildingUtilService.isAvatarInGroundFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[0].height + 1)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f-1.png",
                   false
                 );
               } 
-              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[1].height)){
+              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[1].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f0.png",
                   false
                 );
               }
-              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[2].height)){
+              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[2].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f1.png",
                   false
                 );
               }
-              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[3].height)){
+              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[3].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f2.png",
                   false
                 );
               }
-              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[4].height)){
+              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[4].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f3.png",
                   false
                 );
               }
-              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[5].height)){
+              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[5].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f4.png",
                   false
                 );
               }
-              else if(this.utilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[6].height)){
+              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[6].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f5.png",
                   false
                 );
               }
-              else if(this.utilService.isAvatarInLastFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[7].height)){
+              else if(this.veBuildingUtilService.isAvatarInLastFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[7].height)){
                 this.updateMapStyleOverlayLayer(
                   "assets/vir_envs_layers/VirEnv_40_f6.png",
                   false
@@ -1780,7 +1782,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         // update floor height
         this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"] 
         // update map layer
-        this.utilService.updateMapLayer(this.map, this.task.virEnvType, this.task.floor);
+        this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, this.task.floor);
       }
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
