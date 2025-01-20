@@ -361,7 +361,7 @@ export const virEnvLayers: Readonly<any> = {
       {tag:"f3",name: "Floor 3", height: 110.649},
       {tag:"f4",name: "Floor 4", height: 114.099},
       {tag:"f5",name: "Floor 5", height: 117.549},
-      {tag:"f6",name: "Floor 6", height: 120.999},
+      // {tag:"f6",name: "Floor 6", height: 120.999},     // this floor was commented out as it's a small area and can't be udes
     ]
   }
 };
