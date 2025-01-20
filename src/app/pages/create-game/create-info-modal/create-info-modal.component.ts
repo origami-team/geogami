@@ -15,6 +15,7 @@ import { cloneDeep } from "lodash";
 import { TranslateService } from "@ngx-translate/core";
 import { VirEnvHeaders } from "src/app/models/virEnvsHeader";
 import { UtilService } from "src/app/services/util.service";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
 
 @Component({
   selector: "app-create-info-modal",
@@ -31,6 +32,13 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   @Input() virEnvType: string;
   initialAvatarPositionStatus = false;
   @Input() isSingleMode: boolean;
+
+  // VE building
+  public isVEBuilding = false;
+  @Input() selectedFloor;
+  @Output() selectedFloorChange=new EventEmitter();
+  //* get virual environment headers
+  virEnvLayers = virEnvLayers;
 
   //* get virual environment headers
   virEnvTypesList = VirEnvHeaders;
@@ -72,6 +80,20 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       this.task.question.initialAvatarPosition
     ) {
       this.initialAvatarPositionStatus = true;
+    }
+
+    // Set default avatar-speed and building floor of new tasks
+    if (this.isVirtualWorld) {
+      if (!this.task.settings.avatarSpeed) {
+        this.task.settings.avatarSpeed =
+          virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
+      }
+      // check wether selected VE is a building
+      this.isVEBuilding = this.checkVEBuilding();
+      // set default floor for new tasks only (not stored ones/when editing a task)
+      if (this.isVEBuilding && !this.selectedFloor) {
+        this.selectedFloor = this.setInitialFloor();
+      }
     }
   }
 
@@ -118,14 +140,33 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     if (this.isVirtualWorld) {
       this.task.virEnvType = this.virEnvType;
     }
+
+    //* inlclude is building properties in task data
+    if (this.isVEBuilding) {
+      this.task.isVEBuilding = this.isVEBuilding;
+      this.task.floor = this.selectedFloor;
+    }
   }
 
+  // TODO: Do we sill need it??
   initialAvatarPosToggleChange() {
     //* to remove object from db (when deleting initial position)
-    if (
-      this.task.question.initialAvatarPosition
-    ) {
+    if (this.task.question.initialAvatarPosition) {
       this.task.question.initialAvatarPosition = undefined;
     }
+  }
+
+  checkVEBuilding(){
+    return virEnvLayers[this.virEnvType].isVEBuilding ?? false;
+  }
+
+  setInitialFloor(){
+    let selectedEnv = virEnvLayers[this.virEnvType];
+    let defaultFloor = selectedEnv.defaultFloor;
+    return selectedEnv.floors[defaultFloor].tag;
+  }
+
+  onFloorChanged(){
+    this.selectedFloorChange.emit(this.selectedFloor);
   }
 }

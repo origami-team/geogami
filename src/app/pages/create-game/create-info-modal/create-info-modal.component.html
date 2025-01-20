@@ -67,7 +67,7 @@
   ></app-audio-recorder>
 
   <!-- set avatar initial position and direction -->
-  <ion-item class="ion-no-padding" *ngIf="isVirtualWorld">
+  <ion-item *ngIf="isVirtualWorld" lines="none" class="ion-no-padding">
     <h5>
       {{ "CreateGame.setAvatarPosition" | translate }} 🧍‍♂️
       <ion-icon
@@ -83,6 +83,7 @@
     ></ion-toggle>
   </ion-item>
   <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
+    <!-- Map view -->
     <app-map
       featureType="direction"
       [(feature)]="task.question.initialAvatarPosition"
@@ -90,6 +91,24 @@
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
     ></app-map>
+  </div>
+
+  <!-- (Vir. Env.): choose a floor -->
+  <ion-item *ngIf="isVEBuilding" lines="none" class="ion-no-padding">
+    <h5>{{ "CreateTasks.chooseFloor" | translate }}</h5>
+    &nbsp;&nbsp;
+
+    <select [(ngModel)]="selectedFloor" (ngModelChange)="onFloorChanged()" interface="popover" [disabled]="!isSingleMode">
+      <option
+        *ngFor="let floor of virEnvLayers[virEnvType].floors; let i = index"
+        [ngValue]=" floor.tag"
+      >
+        {{i}}: {{ floor.name}}
+      </option>
+    </select>
+  </ion-item>
+  <div>
+    <app-map  [isVirtualWorld]="isVirtualWorld" [virEnvType]="virEnvType" [isVEBuilding]="isVEBuilding" [selectedFloor]="selectedFloor" [isSingleMode]="isSingleMode"></app-map>
   </div>
 
   <h5>{{ "CreateGame.photos" | translate }}</h5>
