@@ -51,7 +51,7 @@ export class CreateTaskModalPage implements OnInit {
   showFeedback = true;
   showMultipleTries = true;
 
-  step = 5;
+  // step = 5;
 
   objectQuestionSelect: any[] = [];
   objectAnswerSelect: any[] = [];
@@ -176,7 +176,7 @@ export class CreateTaskModalPage implements OnInit {
         feedback: true,
         multipleTries: true,
         confirmation: this.task.category.includes("theme"),
-        accuracy: 10,
+        accuracy: 5,
         showMarker: true,
         keepMarker: false,
         keepDrawing: "current",
@@ -616,9 +616,10 @@ export class CreateTaskModalPage implements OnInit {
     }
   }
 
-  rangeChange() {
+  // Don't know the reason for adding this impl. but I commented it out as we need to show a correct accuracy value
+  /* rangeChange() {
     this.step = this.task.settings.accuracy <= 5 ? 1 : 5;
-  }
+  } */
 
   feedbackChange() {
     this.task.settings.multipleTries = this.task.settings.feedback;

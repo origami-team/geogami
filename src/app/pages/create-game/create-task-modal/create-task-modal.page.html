@@ -552,12 +552,10 @@
         [(ngModel)]="task.settings.accuracy"
         min="0"
         max="50"
-        [step]="step"
         snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'"
         ticks
         pin
-        (ngModelChange)="rangeChange()"
       >
         <ion-label slot="start">0m</ion-label>
         <ion-icon
