@@ -1835,7 +1835,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       //* if task has initial postion then send it. if not,
       //* if this isn't first task and same as previous type then send previous avatar position. if not,
       //* send default inital avatar position from `virEnvLayers`
-      //* if no virEnvType is found send deafult one
+      //* if no virEnvType is found send default one
       //* Note: setTimeout is important to resolve the issue of not showing vir. env. of last joined player in multi-player game
       setTimeout(() => {
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
@@ -1850,7 +1850,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             (
               this.taskIndex != 0 &&
               this.task.virEnvType ===
-                this.game.tasks[this.taskIndex - 1].virEnvType
+                this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
             ? [
               this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
               this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
@@ -1864,10 +1864,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.task.question.initialAvatarPosition.bearing
             : this.taskIndex != 0 &&
               this.task.virEnvType ===
-                this.game.tasks[this.taskIndex - 1].virEnvType
+                this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
             ? this.previousTaskAvatarHeading
             : virEnvLayers[this.virEnvType].initialRotation ?? null,  // to add default rotation for building envs
-          virEnvType: this.task.virEnvType,
+          virEnvType: this.task.virEnvType ?? this.game.virEnvType,     // in old games, vir. env. type is not included within each task.
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
           initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1
@@ -2227,7 +2227,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.feedbackControl.setTask(this.task);
 
     //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
-    if (this.isVirtualWorld) {
+    if (this.isVirtualWorld && !this.task?.isVEBuilding) {
       this.previousTaskAvatarLastKnownPosition = this.avatarLastKnownPosition;
       this.previousTaskAvatarHeading = this.compassHeading;
       this.avatarLastKnownPosition = undefined;
