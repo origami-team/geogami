@@ -6,6 +6,7 @@ import { virEnvLayers } from "src/app/models/virEnvsLayers";
   providedIn: "root",
 })
 export class VEBuildingUtilService {
+  currentFloor: string;
   constructor() {}
 
   /**
@@ -59,96 +60,104 @@ export class VEBuildingUtilService {
 
   updateMapViewBasedOnFloorHeight(virEnvType, avatarPosition_y, map) {
     // if (virEnvType == "VirEnv_40") {
-      // Floor 0 / library
-      if (
-        this.isAvatarInGroundFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[0].height + 1
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f-1.png",
-          map,
-          virEnvType
-        );
-      } else if (
-        this.isAvatarWithinFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[1].height
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f0.png",
-          map,
-          virEnvType
-        );
-      } else if (
-        this.isAvatarWithinFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[2].height
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f1.png",
-          map,
-          virEnvType
-        );
-      } else if (
-        this.isAvatarWithinFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[3].height
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f2.png",
-          map,
-          virEnvType
-        );
-      } else if (
-        this.isAvatarWithinFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[4].height
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f3.png",
-          map,
-          virEnvType
-        );
-      } else if (
-        this.isAvatarWithinFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[5].height
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f4.png",
-          map,
-          virEnvType
-        );
-      } else if (
-        this.isAvatarWithinFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[6].height
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f5.png",
-          map,
-          virEnvType
-        );
-      } else if (
-        this.isAvatarInLastFloor(
-          avatarPosition_y,
-          virEnvLayers[virEnvType].floors[7].height
-        )
-      ) {
-        this.updateMapStyleOverlayLayer(
-          "assets/vir_envs_layers/VirEnv_40_f6.png",
-          map,
-          virEnvType
-        );
-      }
+    // Floor 0 / library
+    if (
+      this.isAvatarInGroundFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[0].height + 1
+      )
+    ) {
+      this.currentFloor = "f-1";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f-1.png",
+        map,
+        virEnvType
+      );
+    } else if (
+      this.isAvatarWithinFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[1].height
+      )
+    ) {
+      this.currentFloor = "f0";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f0.png",
+        map,
+        virEnvType
+      );
+    } else if (
+      this.isAvatarWithinFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[2].height
+      )
+    ) {
+      this.currentFloor = "f1";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f1.png",
+        map,
+        virEnvType
+      );
+    } else if (
+      this.isAvatarWithinFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[3].height
+      )
+    ) {
+      this.currentFloor = "f2";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f2.png",
+        map,
+        virEnvType
+      );
+    } else if (
+      this.isAvatarWithinFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[4].height
+      )
+    ) {
+      this.currentFloor = "f3";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f3.png",
+        map,
+        virEnvType
+      );
+    } else if (
+      this.isAvatarWithinFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[5].height
+      )
+    ) {
+      this.currentFloor = "f4";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f4.png",
+        map,
+        virEnvType
+      );
+    } else if (
+      this.isAvatarWithinFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[6].height
+      )
+    ) {
+      this.currentFloor = "f5";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f5.png",
+        map,
+        virEnvType
+      );
+    } else if (
+      this.isAvatarInLastFloor(
+        avatarPosition_y,
+        virEnvLayers[virEnvType].floors[7].height
+      )
+    ) {
+      this.currentFloor = "f6";
+      this.updateMapStyleOverlayLayer(
+        "assets/vir_envs_layers/VirEnv_40_f6.png",
+        map,
+        virEnvType
+      );
+    }
     // }
   }
 
@@ -170,5 +179,9 @@ export class VEBuildingUtilService {
     //* update layer image
     newStyle.sources.overlay.url = styleOverlayUrlPath;
     map.setStyle(newStyle);
+  }
+
+  setCurrentFloor(val){
+    this.currentFloor = val;
   }
 }

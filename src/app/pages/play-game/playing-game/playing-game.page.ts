@@ -634,6 +634,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.initializeMap().then(() => {
               if (this.game?.tasks[0]?.isVEBuilding ?? false) {
                 const task = this.game?.tasks[0];
+                // Note: you may need to update the following line of code if user can select inital floor other than the one with where task is
+                this.veBuildingUtilService.setCurrentFloor(task.floor);
                 this.veBuildingUtilService.updateMapLayer(this.map, task.virEnvType, task.floor);
               }
             });;
@@ -1725,6 +1727,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // // console.log("Current task: ", this.task);
 
     this.trackerService.setTask(this.task);
+    // this.feedbackControl.setTask(this.task);
 
     this.trackerService.addEvent({
       type: "INIT_TASK",
@@ -1734,7 +1737,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     if (this.isVirtualWorld) {
       if(this.task?.isVEBuilding){
         // update floor height
-        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"] 
+        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"];
         // update map layer
         this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, this.task.floor);
       }
