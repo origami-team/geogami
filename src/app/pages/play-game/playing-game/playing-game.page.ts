@@ -892,57 +892,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             }
 
             // building envs only: Update floor/env. map based on height
-            if(this.virEnvType == "VirEnv_40"){
-              // Floor 0 / library
-              if( this.veBuildingUtilService.isAvatarInGroundFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[0].height + 1)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f-1.png",
-                  false
-                );
-              } 
-              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[1].height)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f0.png",
-                  false
-                );
-              }
-              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[2].height)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f1.png",
-                  false
-                );
-              }
-              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[3].height)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f2.png",
-                  false
-                );
-              }
-              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[4].height)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f3.png",
-                  false
-                );
-              }
-              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[5].height)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f4.png",
-                  false
-                );
-              }
-              else if(this.veBuildingUtilService.isAvatarWithinFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[6].height)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f5.png",
-                  false
-                );
-              }
-              else if(this.veBuildingUtilService.isAvatarInLastFloor(avatarPosition["y"], virEnvLayers[this.virEnvType].floors[7].height)){
-                this.updateMapStyleOverlayLayer(
-                  "assets/vir_envs_layers/VirEnv_40_f6.png",
-                  false
-                );
-              }
+            // Note: make sure to update the impl. when other buildings than ifgi is added
+            if (this.task?.isVEBuilding) {
+              this.veBuildingUtilService.updateMapViewBasedOnFloorHeight(this.virEnvType, avatarPosition["y"], this.map);
             }
+            
           }
         );
     }
