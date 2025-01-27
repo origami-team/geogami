@@ -50,7 +50,6 @@ export class CreateGameVirtualMenuPage implements OnInit {
 
   navigateCreateVRGame(virEnvType) {
     this.bundle.virEnvType = virEnvType;
-
     this.router.navigate(["create-game-list"], { state: this.bundle });
   }
 }

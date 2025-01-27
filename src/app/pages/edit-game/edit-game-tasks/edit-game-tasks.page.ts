@@ -28,6 +28,9 @@ export class EditGameTasksPage implements OnInit {
   isVRMirrored: boolean = false;
   virEnvType: string; // new to store vir env type
 
+  // VE building
+  isVEBuilding: boolean;
+
   // Multiplyar impl.
   isRealWorld: boolean = true;
   isSingleMode: boolean = true;
@@ -147,7 +150,8 @@ export class EditGameTasksPage implements OnInit {
     //* if task doesn't have a virEnvType send the default one
     virEnvType: string = task && task.virEnvType
       ? task.virEnvType
-      : this.virEnvType
+      : this.virEnvType,
+    selectedFloor = (task?.isVEBuilding?task.floor:undefined)
   ) {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -159,6 +163,7 @@ export class EditGameTasksPage implements OnInit {
         isVirtualWorld, // added to view VR world map instead of real map if true
         isVRMirrored,
         virEnvType,
+        selectedFloor,
         numPlayers,
         isSingleMode,
       },

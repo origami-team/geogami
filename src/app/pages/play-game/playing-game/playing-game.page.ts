@@ -77,6 +77,7 @@ import { UtilService } from "src/app/services/util.service";
 
 import { Storage } from "@ionic/storage";
 import { virEnvLayers } from "src/app/models/virEnvsLayers";
+import { VEBuildingUtilService } from "src/app/services/ve-building-util.service";
 
 @Component({
   selector: "app-playing-game",
@@ -440,6 +441,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   cJoindPlayersCount = 0;
   sTaskNo = 0;
 
+  // VE building
+  floorHeight: number;
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -458,6 +462,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     private socketService: SocketService,
     private translate: TranslateService,
     private utilService: UtilService,
+    private veBuildingUtilService: VEBuildingUtilService,
     private storage: Storage,
     private router: Router
   ) {
@@ -626,7 +631,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             }
 
             /* Initialize map and subscribe location */
-            this.initializeMap();
+            this.initializeMap().then(() => {
+              if (this.game?.tasks[0]?.isVEBuilding ?? false) {
+                const task = this.game?.tasks[0];
+                // Note: you may need to update the following line of code if user can select inital floor other than the one with where task is
+                this.veBuildingUtilService.setCurrentFloor(task.floor);
+                this.veBuildingUtilService.updateMapLayer(this.map, task.virEnvType, task.floor);
+              }
+            });;
           },
           (err) => {
             // if game is not found due to wrong game id or game was deleted,
@@ -723,7 +735,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvType: this.task.virEnvType
             ? this.task.virEnvType
             : this.virEnvType,
-          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       } else if(this.isSingleMode) {
@@ -747,7 +759,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           virEnvType: this.task.virEnvType
             ? this.task.virEnvType
             : this.virEnvType,
-          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+          avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
         });
       }
@@ -788,14 +800,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   initializeMap() {
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
-    // if (environment.production) {
-
-    // } else {
-    //   mapStyle = document.body.classList.contains("dark")
-    //     ? "mapbox://styles/mapbox/dark-v9"
-    //     : "mapbox://styles/mapbox/streets-v9"
-    // }
-
+    // note: The use of promise is to make sure checking building floor is only executed 
+    // when map is fully initialized, ohterwise it raises an error.
+    return new Promise((resolve) => {
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: this.isVirtualWorld
@@ -847,6 +854,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.avatarPositionSubscription =
         this.geolocationService.avatarGeolocationSubscription.subscribe(
           (avatarPosition) => {
+            console.log("🚀 ~ initializeMap ~ avatarPosition:", avatarPosition)
             // Store waypoint every second
             if (this.currentSecond != new Date().getSeconds()) {
               this.currentSecond = new Date().getSeconds();
@@ -884,6 +892,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                 }
               }
             }
+
+            // building envs only: Update floor/env. map based on height
+            // Note: make sure to update the impl. when other buildings than ifgi is added
+            if (this.task?.isVEBuilding) {
+              this.veBuildingUtilService.updateMapViewBasedOnFloorHeight(this.virEnvType, avatarPosition["y"], this.map);
+            }
+            
           }
         );
     }
@@ -990,6 +1005,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.startGame();
         }, 200);
       }
+      resolve(true);
     });
 
     /* temp */
@@ -1135,6 +1151,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     // To disable map interations
     this.enableDisableMapInteraction(false);
+    });
   }
 
   /* (V.E.): to load view dir. marker after changing style */
@@ -1710,6 +1727,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // // console.log("Current task: ", this.task);
 
     this.trackerService.setTask(this.task);
+    // this.feedbackControl.setTask(this.task);
 
     this.trackerService.addEvent({
       type: "INIT_TASK",
@@ -1717,6 +1735,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* set avatar initial position */
     if (this.isVirtualWorld) {
+      if(this.task?.isVEBuilding){
+        // update floor height
+        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"];
+        // update map layer
+        this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, this.task.floor);
+      }
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
 
@@ -1768,7 +1792,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       //* if task has initial postion then send it. if not,
       //* if this isn't first task and same as previous type then send previous avatar position. if not,
       //* send default inital avatar position from `virEnvLayers`
-      //* if no virEnvType is found send deafult one
+      //* if no virEnvType is found send default one
       //* Note: setTimeout is important to resolve the issue of not showing vir. env. of last joined player in multi-player game
       setTimeout(() => {
         this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
@@ -1783,7 +1807,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             (
               this.taskIndex != 0 &&
               this.task.virEnvType ===
-                this.game.tasks[this.taskIndex - 1].virEnvType
+                this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
             ? [
               this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
               this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
@@ -1797,12 +1821,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.task.question.initialAvatarPosition.bearing
             : this.taskIndex != 0 &&
               this.task.virEnvType ===
-                this.game.tasks[this.taskIndex - 1].virEnvType
+                this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
             ? this.previousTaskAvatarHeading
-            : null,
-          virEnvType: this.task.virEnvType,
-          avatarSpeed: this.task.settings.avatarSpeed ?? 6,
+            : virEnvLayers[this.virEnvType].initialRotation ?? null,  // to add default rotation for building envs
+          virEnvType: this.task.virEnvType ?? this.game.virEnvType,     // in old games, vir. env. type is not included within each task.
+          avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
+          initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1
         });
       }, 1000);
 
@@ -2159,7 +2184,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.feedbackControl.setTask(this.task);
 
     //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
-    if (this.isVirtualWorld) {
+    if (this.isVirtualWorld && !this.task?.isVEBuilding) {
       this.previousTaskAvatarLastKnownPosition = this.avatarLastKnownPosition;
       this.previousTaskAvatarHeading = this.compassHeading;
       this.avatarLastKnownPosition = undefined;

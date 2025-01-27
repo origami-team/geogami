@@ -7,6 +7,9 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 import { BehaviorSubject } from "rxjs";
 import { PopoverComponent } from "src/app/popover/popover.component";
+import mapboxgl from "mapbox-gl";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
+
 
 @Injectable({
   providedIn: "root",

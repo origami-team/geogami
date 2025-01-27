@@ -70,34 +70,36 @@ export class OrigamiGeolocationService {
   initGeofence(bbox: Feature<Polygon, MultiPolygon>) {
     return new Observable<boolean>((subscriber) => {
       let headingSubscription;
-      this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
-        // this.geolocationSubscription.subscribe((position) => {
-        const point = [position.coords.longitude, position.coords.latitude];
-        const inside = booleanPointInPolygon(point, bbox);
-        if (inside) {
-          this.lastPointInBbox.next(point);
-        } else {
-          if (this.lastPointInBbox.getValue() !== undefined) {
-            // reset the subscription each time we get a new position
-            if (headingSubscription) {
-              headingSubscription.unsubscribe();
-            }
-            const direction = this.helperService.bearing(
-              point[1],
-              point[0],
-              this.lastPointInBbox.getValue()[1],
-              this.lastPointInBbox.getValue()[0],
-            );
-            headingSubscription = this.orientationService.orientationSubscription.subscribe(compassHeading => {
-              const arrowDirection = 360 - (compassHeading - direction);
-              this.lastPointInBboxDirection.next(arrowDirection);
-            });
+      if(this.geolocationSubscription){
+        this.geolocationSubscription.pipe(filter(p => p.coords.accuracy <= 5)).subscribe((position) => {
+          // this.geolocationSubscription.subscribe((position) => {
+          const point = [position.coords.longitude, position.coords.latitude];
+          const inside = booleanPointInPolygon(point, bbox);
+          if (inside) {
+            this.lastPointInBbox.next(point);
           } else {
-            this.lastPointInBboxDirection.next(undefined);
+            if (this.lastPointInBbox.getValue() !== undefined) {
+              // reset the subscription each time we get a new position
+              if (headingSubscription) {
+                headingSubscription.unsubscribe();
+              }
+              const direction = this.helperService.bearing(
+                point[1],
+                point[0],
+                this.lastPointInBbox.getValue()[1],
+                this.lastPointInBbox.getValue()[0],
+              );
+              headingSubscription = this.orientationService.orientationSubscription.subscribe(compassHeading => {
+                const arrowDirection = 360 - (compassHeading - direction);
+                this.lastPointInBboxDirection.next(arrowDirection);
+              });
+            } else {
+              this.lastPointInBboxDirection.next(undefined);
+            }
           }
-        }
-        subscriber.next(inside);
-      });
+          subscriber.next(inside);
+        });
+      }
     });
   }
 

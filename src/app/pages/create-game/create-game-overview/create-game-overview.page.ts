@@ -54,7 +54,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
   geofence = false;
   landmarkControl: LandmarkControl;
 
-  // VR world
+  // VE world
   isVirtualWorld: boolean = false;
   isVRMirrored: boolean = false;
   virEnvType: string; // new to store vir env type
@@ -97,7 +97,6 @@ export class CreateGameOverviewPage implements AfterViewInit {
       this.isVirtualWorld = JSON.parse(params.bundle).isVRWorld;
       this.isVRMirrored = JSON.parse(params.bundle).isVRMirrored;
       this.virEnvType = JSON.parse(params.bundle).virEnvType;
-      //this.isRealWorld = JSON.parse(params.bundle).isRealWorld;
       this.isSingleMode = JSON.parse(params.bundle).isSingleMode;
       this.numPlayers = JSON.parse(params.bundle).numPlayers;
     });

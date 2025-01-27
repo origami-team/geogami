@@ -19,7 +19,8 @@
     "next": "Next",
     "delete": "Delete",
     "edit": "Edit",
-    "question": "Question"
+    "question": "Question",
+    "floor": "Floor"
   },
   "Tasktypes": {
     "navigationTasks": "Navigation tasks",
@@ -105,7 +106,8 @@
   "CreateTasks": {
     "combineTasks": "List of created tasks:",
     "information": "Information",
-    "chooseComponents": "Choose from the following components:"
+    "chooseComponents": "Choose from the following components:",
+    "chooseFloor":"Choose a floor"
   },
   "SaveGame": {
     "titleSaveGame": "Save your GeoGami",

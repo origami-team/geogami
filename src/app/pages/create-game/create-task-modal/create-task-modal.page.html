@@ -28,7 +28,7 @@
     &nbsp;&nbsp;
 
     <!-- TODO: remove disable after resolving reloading vir. env. using tablet -->
-    <select [(ngModel)]="virEnvType" interface="popover" [disabled]="!isSingleMode">
+    <select [(ngModel)]="virEnvType" (ngModelChange)="onEnvChanged()" interface="popover" [disabled]="!isSingleMode">
       <option
         *ngFor="let virEnvitem of virEnvTypesList; let i = index"
         [ngValue]="virEnvitem.layerName"
@@ -304,6 +304,8 @@
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding"
+      [selectedFloor]="selectedFloor"
       [numPlayers]="(!isSingleMode?numPlayers:1)"
       [isSingleMode]="isSingleMode"
       [collaborationType]=" isSingleMode? undefined :selectedCollType.type"
@@ -358,6 +360,8 @@
         [isVirtualWorld]="isVirtualWorld"
         [isVRMirrored]="isVRMirrored"
         [virEnvType]="virEnvType"
+        [isVEBuilding]="isVEBuilding"
+        [selectedFloor]="selectedFloor"
       >
       </app-map>
     </div>
@@ -370,6 +374,8 @@
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding"
+      [(selectedFloor)]="selectedFloor"
       [numPlayers]="(!isSingleMode?numPlayers:1)"
       [isSingleMode]="isSingleMode"
       [collaborationType]=" isSingleMode? undefined :selectedCollType.type"
@@ -546,12 +552,10 @@
         [(ngModel)]="task.settings.accuracy"
         min="0"
         max="50"
-        [step]="step"
         snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'"
         ticks
         pin
-        (ngModelChange)="rangeChange()"
       >
         <ion-label slot="start">0m</ion-label>
         <ion-icon

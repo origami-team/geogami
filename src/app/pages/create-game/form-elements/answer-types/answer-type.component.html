@@ -1,31 +1,66 @@
 <!-- ******************************* -->
 <!-- ****** Single-player mode ****** -->
 <div *ngIf="isSingleMode">
-
   <!-- Destination map view - Single-player mode -->
   <div *ngIf="answer.type == answerTypeEnum.POSITION">
     <h5>
       {{ "CreateGame.destination" | translate }}
-      <ion-icon name="information-circle" (click)="
-        showPopover($event,'Popover.flag')">
+      <ion-icon
+        name="information-circle"
+        (click)="showPopover($event, 'Popover.flag')"
+      >
       </ion-icon>
     </h5>
-    <app-map featureType="point" drawTheme="nav" [(feature)]="answer.position" [isVirtualWorld]="isVirtualWorld"
-      [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [isSingleMode]="isSingleMode"></app-map>
+
+    <!-- (Vir. Env.): choose a floor to view associated map -->
+    <ion-item *ngIf="isVEBuilding" lines="none" class="ion-no-padding">
+      <ion-label> {{ "CreateTasks.chooseFloor" | translate }} </ion-label>
+      &nbsp;&nbsp;
+      <select
+        [(ngModel)]="selectedFloor"
+        (ngModelChange)="onFloorChanged()"
+        interface="popover"
+        [disabled]="!isSingleMode"
+      >
+        <option
+          *ngFor="let floor of virEnvLayers[virEnvType].floors; let i = index"
+          [ngValue]="floor.tag"
+        >
+          {{ floor.name }}
+        </option>
+      </select>
+    </ion-item>
+    <!--  -->
+
+    <app-map
+      featureType="point"
+      drawTheme="nav"
+      [(feature)]="answer.position"
+      [isVirtualWorld]="isVirtualWorld"
+      [isVRMirrored]="isVRMirrored"
+      [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding"
+      [selectedFloor]="selectedFloor"
+      [isSingleMode]="isSingleMode"
+    ></app-map>
   </div>
 
   <!-- Mutiple choice (photo) - Single-player mode -->
   <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE">
     <h5>
       {{ "CreateGame.multipleChoice" | translate }}
-      <ion-icon name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.photoMC')">
+      <ion-icon
+        name="information-circle"
+        (click)="showPopover($event, 'Popover.photoMC')"
+      >
       </ion-icon>
     </h5>
-    <app-photo-upload-multiple-choice [(photos)]="answer.photos" [(hints)]="answer.hints" [taskType]="taskType"
-      [feedback]="settings.feedback && settings.multipleTries">
+    <app-photo-upload-multiple-choice
+      [(photos)]="answer.photos"
+      [(hints)]="answer.hints"
+      [taskType]="taskType"
+      [feedback]="settings.feedback && settings.multipleTries"
+    >
     </app-photo-upload-multiple-choice>
   </div>
 
@@ -33,38 +68,51 @@
   <div *ngIf="answer.type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
     <h5>
       {{ "CreateGame.multipleChoice" | translate }}
-      <ion-icon *ngIf="!settings.feedback" name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Popover.textMC'
-        )
-      ">
+      <ion-icon
+        *ngIf="!settings.feedback"
+        name="information-circle"
+        (click)="showPopover($event, 'Popover.textMC')"
+      >
       </ion-icon>
-      <ion-icon *ngIf="settings.feedback" name="information-circle" (click)="
-        showPopover(
-          $event,
-          'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.'
-        )
-      ">
+      <ion-icon
+        *ngIf="settings.feedback"
+        name="information-circle"
+        (click)="
+          showPopover(
+            $event,
+            'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.'
+          )
+        "
+      >
       </ion-icon>
     </h5>
-    <app-multiple-choice-text [(answers)]="answer.choices" [(hints)]="answer.hints"
-      [feedback]="settings.feedback && settings.multipleTries"></app-multiple-choice-text>
+    <app-multiple-choice-text
+      [(answers)]="answer.choices"
+      [(hints)]="answer.hints"
+      [feedback]="settings.feedback && settings.multipleTries"
+    ></app-multiple-choice-text>
   </div>
 
   <!-- Correct answer (number) - Single-player mode -->
   <div *ngIf="answer.type == answerTypeEnum.NUMBER">
     <h5>
       {{ "CreateGame.correctNumber" | translate }}
-      <ion-icon name="information-circle" (click)="
-        showPopover($event, 'Popover.number')">
+      <ion-icon
+        name="information-circle"
+        (click)="showPopover($event, 'Popover.number')"
+      >
       </ion-icon>
     </h5>
     <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
   </div>
 
   <!-- Feedback (by marking the direction on the map) - Single-player mode -->
-  <div *ngIf="answer.type == answerTypeEnum.MAP_DIRECTION || answer.type == answerTypeEnum.DIRECTION">
+  <div
+    *ngIf="
+      answer.type == answerTypeEnum.MAP_DIRECTION ||
+      answer.type == answerTypeEnum.DIRECTION
+    "
+  >
     <div *ngIf="settings.feedback && settings.multipleTries">
       <ion-text>
         <h5>Feedback</h5>
@@ -78,77 +126,114 @@
       <ion-textarea autoGrow [(ngModel)]="answer.hints[2]"></ion-textarea>
     </div>
   </div>
-
 </div>
 
 <!-- ******************************* -->
 <!-- ****** Multi-player mode ****** -->
 <div *ngIf="!isSingleMode">
-
   <!-- Destination map view - Multi-player mode -->
-  <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.POSITION">
+  <div
+    *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.POSITION"
+  >
     <ion-card class="multiPlayer-card">
       <ion-card-header>
         <h5>
           {{ "CreateGame.destination" | translate }}
-          <ion-icon name="information-circle" (click)="
-            showPopover($event,'Popover.flag')">
+          <ion-icon
+            name="information-circle"
+            (click)="showPopover($event, 'Popover.flag')"
+          >
           </ion-icon>
         </h5>
 
         <!-- Toggle to set differnt destinations -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
-          <ion-label>
-            All players have the same destination:
-          </ion-label>
-          <ion-toggle [(ngModel)]="answer[0].allHasSameDes">
-          </ion-toggle>
+        <ion-item
+          lines="none"
+          class="ion-no-padding"
+          *ngIf="collaborationType == 'freeChoice'"
+        >
+          <ion-label> All players have the same destination: </ion-label>
+          <ion-toggle [(ngModel)]="answer[0].allHasSameDes"> </ion-toggle>
         </ion-item>
-
       </ion-card-header>
       <ion-card-content>
-        <div *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHasSameDes) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+        <div
+          *ngFor="
+            let e of [].constructor(
+              (answer[0] && answer[0].allHasSameDes) ||
+                collaborationType == 'sequential'
+                ? 1
+                : numPlayers
+            );
+            let i = index
+          "
+        >
           <h5 *ngIf="collaborationType != 'sequential'">
-            Player ({{i+1}})
+            Player ({{ i + 1 }})
           </h5>
-          <app-map featureType="point" drawTheme="nav" [(feature)]="answer[i].position"
-            [isVirtualWorld]="isVirtualWorld" [isVRMirrored]="isVRMirrored" [virEnvType]="virEnvType" [allPlayersFeatures]="answer"></app-map>
+          <app-map
+            featureType="point"
+            drawTheme="nav"
+            [(feature)]="answer[i].position"
+            [isVirtualWorld]="isVirtualWorld"
+            [isVRMirrored]="isVRMirrored"
+            [virEnvType]="virEnvType"
+            [allPlayersFeatures]="answer"
+          ></app-map>
         </div>
       </ion-card-content>
     </ion-card>
   </div>
 
   <!-- Mutiple choice (photo) - theme->freeTasks->textAndPhoto->selectingPhoto - Multi-player mode -->
-  <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.MULTIPLE_CHOICE">
+  <div
+    *ngIf="
+      answer[0] != undefined && answer[0].type == answerTypeEnum.MULTIPLE_CHOICE
+    "
+  >
     <ion-card class="multiPlayer-card">
       <ion-card-header>
         <h5>
           {{ "CreateGame.multipleChoice" | translate }}
-          <ion-icon name="information-circle" (click)="
-            showPopover(
-              $event,
-              'Popover.photoMC')">
+          <ion-icon
+            name="information-circle"
+            (click)="showPopover($event, 'Popover.photoMC')"
+          >
           </ion-icon>
         </h5>
 
         <!-- Toggle to set differnt multiple choices (photo) -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
-          <ion-label>
-            All players have the same multiple choice:
-          </ion-label>
+        <ion-item
+          lines="none"
+          class="ion-no-padding"
+          *ngIf="collaborationType == 'freeChoice'"
+        >
+          <ion-label> All players have the same multiple choice: </ion-label>
           <ion-toggle [(ngModel)]="answer[0].allHaveSameMultiChoicePhoto">
           </ion-toggle>
         </ion-item>
-
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameMultiChoicePhoto) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+          *ngFor="
+            let e of [].constructor(
+              (answer[0] && answer[0].allHaveSameMultiChoicePhoto) ||
+                collaborationType == 'sequential'
+                ? 1
+                : numPlayers
+            );
+            let i = index
+          "
+        >
           <h5 *ngIf="collaborationType != 'sequential'">
-            Player ({{i+1}})
+            Player ({{ i + 1 }})
           </h5>
-          <app-photo-upload-multiple-choice [(photos)]="answer[i].photos" [(hints)]="answer[i].hints"
-            [taskType]="taskType" [feedback]="settings.feedback && settings.multipleTries">
+          <app-photo-upload-multiple-choice
+            [(photos)]="answer[i].photos"
+            [(hints)]="answer[i].hints"
+            [taskType]="taskType"
+            [feedback]="settings.feedback && settings.multipleTries"
+          >
           </app-photo-upload-multiple-choice>
         </div>
       </ion-card-content>
@@ -156,71 +241,111 @@
   </div>
 
   <!-- Mutiple choice (text) - theme->freeTasks->text->choosingTextAnswer - Multi-player mode -->
-  <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.MULTIPLE_CHOICE_TEXT">
+  <div
+    *ngIf="
+      answer[0] != undefined &&
+      answer[0].type == answerTypeEnum.MULTIPLE_CHOICE_TEXT
+    "
+  >
     <ion-card class="multiPlayer-card">
       <ion-card-header>
         <h5>
           {{ "CreateGame.multipleChoice" | translate }}
-          <ion-icon *ngIf="!settings.feedback" name="information-circle" (click)="
-            showPopover(
-              $event,
-              'Popover.textMC')">
+          <ion-icon
+            *ngIf="!settings.feedback"
+            name="information-circle"
+            (click)="showPopover($event, 'Popover.textMC')"
+          >
           </ion-icon>
-          <ion-icon *ngIf="settings.feedback" name="information-circle"
-            (click)="showPopover(
-          $event,'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.')">
+          <ion-icon
+            *ngIf="settings.feedback"
+            name="information-circle"
+            (click)="
+              showPopover(
+                $event,
+                'Schreibe die korrekte Lösung in das grüne Feld. Schreibe falsche Antwortmöglichkeiten in die roten Felder. Schreibe Feedback in die Felder unter die Antworten.'
+              )
+            "
+          >
           </ion-icon>
         </h5>
 
         <!-- Toggle to set differnt multiple choices (text) -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
-          <ion-label>
-            All players have the same multiple choice:
-          </ion-label>
+        <ion-item
+          lines="none"
+          class="ion-no-padding"
+          *ngIf="collaborationType == 'freeChoice'"
+        >
+          <ion-label> All players have the same multiple choice: </ion-label>
           <ion-toggle [(ngModel)]="answer[0].allHaveSameMultiChoiceText">
           </ion-toggle>
         </ion-item>
-
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameMultiChoiceText) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+          *ngFor="
+            let e of [].constructor(
+              (answer[0] && answer[0].allHaveSameMultiChoiceText) ||
+                collaborationType == 'sequential'
+                ? 1
+                : numPlayers
+            );
+            let i = index
+          "
+        >
           <h5 *ngIf="collaborationType != 'sequential'">
-            Player ({{i+1}})
+            Player ({{ i + 1 }})
           </h5>
-          <app-multiple-choice-text [(answers)]="answer[i].choices" [(hints)]="answer[i].hints"
-            [feedback]="settings.feedback && settings.multipleTries"></app-multiple-choice-text>
+          <app-multiple-choice-text
+            [(answers)]="answer[i].choices"
+            [(hints)]="answer[i].hints"
+            [feedback]="settings.feedback && settings.multipleTries"
+          ></app-multiple-choice-text>
         </div>
       </ion-card-content>
     </ion-card>
   </div>
 
   <!-- Correct answer (number) - theme->freeTasks->text->enteringNumber - Multi-player mode -->
-  <div *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.NUMBER">
+  <div
+    *ngIf="answer[0] != undefined && answer[0].type == answerTypeEnum.NUMBER"
+  >
     <ion-card class="multiPlayer-card">
       <ion-card-header>
         <h5>
           {{ "CreateGame.correctNumber" | translate }}
-          <ion-icon name="information-circle" (click)="
-            showPopover($event, 'Popover.number')">
+          <ion-icon
+            name="information-circle"
+            (click)="showPopover($event, 'Popover.number')"
+          >
           </ion-icon>
         </h5>
 
         <!-- Toggle to set differnt correct answers -->
-        <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
-          <ion-label>
-            All players have the same correct answer:
-          </ion-label>
+        <ion-item
+          lines="none"
+          class="ion-no-padding"
+          *ngIf="collaborationType == 'freeChoice'"
+        >
+          <ion-label> All players have the same correct answer: </ion-label>
           <ion-toggle [(ngModel)]="answer[0].allHaveSameCorrAnswer">
           </ion-toggle>
         </ion-item>
-
       </ion-card-header>
       <ion-card-content>
         <div
-          *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameCorrAnswer) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+          *ngFor="
+            let e of [].constructor(
+              (answer[0] && answer[0].allHaveSameCorrAnswer) ||
+                collaborationType == 'sequential'
+                ? 1
+                : numPlayers
+            );
+            let i = index
+          "
+        >
           <h5 *ngIf="collaborationType != 'sequential'">
-            Player ({{i+1}})
+            Player ({{ i + 1 }})
           </h5>
           <ion-input type="number" [(ngModel)]="answer[i].number"></ion-input>
         </div>
@@ -230,42 +355,63 @@
 
   <!-- Feedback - theme->directionDetermination->correspondTocurrentViewDirection->markingDirection - Multi-player mode -->
   <!-- DoDo : translate -->
-  <div *ngIf="answer[0].type == answerTypeEnum.MAP_DIRECTION || answer[0].type == answerTypeEnum.DIRECTION">
+  <div
+    *ngIf="
+      answer[0].type == answerTypeEnum.MAP_DIRECTION ||
+      answer[0].type == answerTypeEnum.DIRECTION
+    "
+  >
     <div *ngIf="settings.feedback && settings.multipleTries">
       <ion-card class="multiPlayer-card">
         <ion-card-header>
           <ion-text>
-            <h5>
-              Feedback
-            </h5>
+            <h5>Feedback</h5>
           </ion-text>
 
           <!-- Toggle to set differnt multiple choices (text) -->
-          <ion-item lines="none" class="ion-no-padding" *ngIf="collaborationType == 'freeChoice'">
-            <ion-label>
-              All players have the same feedback:
-            </ion-label>
+          <ion-item
+            lines="none"
+            class="ion-no-padding"
+            *ngIf="collaborationType == 'freeChoice'"
+          >
+            <ion-label> All players have the same feedback: </ion-label>
             <ion-toggle [(ngModel)]="answer[0].allHaveSameDirfeedback">
             </ion-toggle>
           </ion-item>
-
         </ion-card-header>
         <ion-card-content>
           <div
-            *ngFor="let e of [].constructor( ( (answer[0] && answer[0].allHaveSameDirfeedback) || collaborationType == 'sequential' ? 1 : numPlayers) ); let i = index">
+            *ngFor="
+              let e of [].constructor(
+                (answer[0] && answer[0].allHaveSameDirfeedback) ||
+                  collaborationType == 'sequential'
+                  ? 1
+                  : numPlayers
+              );
+              let i = index
+            "
+          >
             <h5 *ngIf="collaborationType != 'sequential'">
-              Player ({{i+1}})
+              Player ({{ i + 1 }})
             </h5>
             <ion-label>Abweichung &lt; 45°</ion-label>
-            <ion-textarea autoGrow [(ngModel)]="answer[i].hints[0]"></ion-textarea>
+            <ion-textarea
+              autoGrow
+              [(ngModel)]="answer[i].hints[0]"
+            ></ion-textarea>
             <ion-label>Abweichung &gt; 45° und &lt; 135°</ion-label>
-            <ion-textarea autoGrow [(ngModel)]="answer[i].hints[1]"></ion-textarea>
+            <ion-textarea
+              autoGrow
+              [(ngModel)]="answer[i].hints[1]"
+            ></ion-textarea>
             <ion-label>Abweichung &gt; 135°</ion-label>
-            <ion-textarea autoGrow [(ngModel)]="answer[i].hints[2]"></ion-textarea>
+            <ion-textarea
+              autoGrow
+              [(ngModel)]="answer[i].hints[2]"
+            ></ion-textarea>
           </div>
         </ion-card-content>
       </ion-card>
     </div>
   </div>
-
 </div>
