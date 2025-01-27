@@ -59,7 +59,8 @@ export class BarcodeScannerPage implements OnInit {
 
     //     this.utilService.setQRCodeValue(result.content);
 
-        // this.navCtrl.navigateForward(`play-game/game-detail?gameId=${result.content.slice(25)}&uId=${result.content.slice(0,24)}`);
+        // this.navCtrl.navigateForward(`play-game/game-detail?gameId=${result.content.slice(25)}`);
+      // }
     // }
   }
 

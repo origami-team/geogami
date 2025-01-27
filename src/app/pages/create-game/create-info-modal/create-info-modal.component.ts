@@ -12,9 +12,10 @@ import { MapFeaturesModalPage } from "./../map-features-modal/map-features-modal
 import { QuestionType, AnswerType } from "src/app/models/types";
 import { standardMapFeatures } from "src/app/models/standardMapFeatures";
 import { cloneDeep } from "lodash";
-import { TranslateService } from "@ngx-translate/core";
 import { VirEnvHeaders } from "src/app/models/virEnvsHeader";
 import { UtilService } from "src/app/services/util.service";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
+import { VEBuildingUtilService } from "src/app/services/ve-building-util.service";
 
 @Component({
   selector: "app-create-info-modal",
@@ -30,6 +31,14 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   @Input() isVRMirrored: boolean;
   @Input() virEnvType: string;
   initialAvatarPositionStatus = false;
+  @Input() isSingleMode: boolean;
+
+  // VE building
+  public isVEBuilding = false;
+  @Input() selectedFloor;
+  @Output() selectedFloorChange = new EventEmitter();
+  //* get virual environment headers
+  virEnvLayers = virEnvLayers;
 
   //* get virual environment headers
   virEnvTypesList = VirEnvHeaders;
@@ -41,8 +50,8 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   constructor(
     public modalController: ModalController,
     public popoverController: PopoverController,
-    private translate: TranslateService,
-    public utilService: UtilService
+    public utilService: UtilService,
+    private veBuildingUtilService: VEBuildingUtilService
   ) {}
 
   ngOnInit() {
@@ -71,6 +80,24 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       this.task.question.initialAvatarPosition
     ) {
       this.initialAvatarPositionStatus = true;
+    }
+
+    // Set default avatar-speed and building floor of new tasks
+    if (this.isVirtualWorld) {
+      if (!this.task.settings.avatarSpeed) {
+        this.task.settings.avatarSpeed =
+          virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
+      }
+      // check wether selected VE is a building
+      this.isVEBuilding = this.veBuildingUtilService.checkVEBuilding(
+        this.virEnvType
+      );
+      // set default floor for new tasks only (not stored ones/when editing a task)
+      if (this.isVEBuilding && !this.selectedFloor) {
+        this.selectedFloor = this.veBuildingUtilService.setInitialFloor(
+          this.virEnvType
+        );
+      }
     }
   }
 
@@ -117,14 +144,23 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     if (this.isVirtualWorld) {
       this.task.virEnvType = this.virEnvType;
     }
+
+    //* inlclude is building properties in task data
+    if (this.isVEBuilding) {
+      this.task.isVEBuilding = this.isVEBuilding;
+      this.task.floor = this.selectedFloor;
+    }
   }
 
+  // TODO: Do we sill need it??
   initialAvatarPosToggleChange() {
     //* to remove object from db (when deleting initial position)
-    if (
-      this.task.question.initialAvatarPosition
-    ) {
+    if (this.task.question.initialAvatarPosition) {
       this.task.question.initialAvatarPosition = undefined;
     }
+  }
+  
+  onFloorChanged(){
+    this.selectedFloorChange.emit(this.selectedFloor);
   }
 }

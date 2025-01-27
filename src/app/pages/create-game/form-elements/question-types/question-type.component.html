@@ -188,7 +188,7 @@
     ></app-map>
   </div>
 
-  <ion-item class="ion-no-padding" *ngIf="isVirtualWorld">
+  <ion-item class="ion-no-padding" lines="none" *ngIf="isVirtualWorld">
     <h5>
       Set avatar initial position and direction 🧍‍♂️
       <ion-icon
@@ -214,6 +214,8 @@
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding" 
+      [selectedFloor]="selectedFloor"
     ></app-map>
   </div>
 

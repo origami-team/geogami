@@ -19,7 +19,8 @@
     "next": "Weiter",
     "delete": "Löschen",
     "edit": "Bearbeiten",
-    "question": "Frage"
+    "question": "Frage",
+    "floor": "Etage"
   },
   "Tasktypes": {
     "navigationTasks": "Navigationsaufgaben",
@@ -105,7 +106,8 @@
   "CreateTasks": {
     "combineTasks": "Liste der erstellten Aufgaben:",
     "information": "Information",
-    "chooseComponents": "Wähle aus folgenden Bausteinen:"
+    "chooseComponents": "Wähle aus folgenden Bausteinen:",
+    "chooseFloor":"Wähle eine Etage"
   },
   "SaveGame": {
     "titleSaveGame": "Speichere dein GeoGami",
@@ -197,7 +199,10 @@
     "photoTask": "Foto zur Aufgabe",
     "correctAnswer": "Die korrekte Anwort:",
     "selectGameType":"Spieltyp auswählen",
-    "setAvatarPosition":"Anfangsposition und Richtung des Avatars festlegen"
+    "setAvatarPosition":"Anfangsposition und Richtung des Avatars festlegen",
+    "virEnvSettings": "Einstellungen der virtuellen Welt",
+    "avatarSpeed":"Avatar-Geschwindigkeit",
+    "showEnvSettings":"Umgebungseinstellungen anzeigen"
   },
   "EditGame": {
     "titleEditGame": "Bearbeite dein GeoGami",

@@ -9,6 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 export class EnvTypeQuestionTextComponent implements OnInit {
   @Input() isVirtualWorld: boolean;
   @Input() virEnvType: string;
+  @Input() selectedFloor: string;
   @Input() questionText: string;
   @Input() taskCategory: string;
 

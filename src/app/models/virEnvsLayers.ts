@@ -341,11 +341,27 @@ export const virEnvLayers: Readonly<any> = {
     zoom: 17,
   },
   VirEnv_40: {
-    initialPosition: VirEnv_40.initialPosition,
+    isVEBuilding: true,
+    initialPosition: {
+      lng: 27.43 / 111000,
+      lat: 18.81 / 112000,
+    },
+    initialRotation: 180,  
     overlayCoords: VirEnv_40.overlayCoords,
     center: [0.004837837838 / 2,	0.003383928571 / 2],
     bounds: VirEnv_40.bounds,
     zoom: 17,
+    defaultAvatarSpeed: 1,
+    defaultFloor: 1,
+    floors:[
+      {tag:"f-1", name: "Library", height: 96.249},     // library
+      {tag:"f0", name: "Floor 0", height: 99.999},
+      {tag:"f1", name: "Floor 1", height: 103.749},
+      {tag:"f2",name: "Floor 2", height: 107.199},
+      {tag:"f3",name: "Floor 3", height: 110.649},
+      {tag:"f4",name: "Floor 4", height: 114.099},
+      {tag:"f5",name: "Floor 5", height: 117.549},
+      {tag:"f6",name: "Floor 6", height: 120.999},     // this floor is only to show in mapview but can't be used for creating tasks.
+    ]
   }
-  // Vector3(276.5,97.8499832,283.299988)
 };

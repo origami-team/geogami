@@ -19,7 +19,8 @@
     "next": "Next",
     "delete": "Delete",
     "edit": "Edit",
-    "question": "Question"
+    "question": "Question",
+    "floor": "Floor"
   },
   "Tasktypes": {
     "navigationTasks": "Navigation tasks",
@@ -105,7 +106,8 @@
   "CreateTasks": {
     "combineTasks": "List of created tasks:",
     "information": "Information",
-    "chooseComponents": "Choose from the following components:"
+    "chooseComponents": "Choose from the following components:",
+    "chooseFloor":"Choose a floor"
   },
   "SaveGame": {
     "titleSaveGame": "Save your GeoGami",
@@ -197,7 +199,10 @@
     "photoTask": "Photo for the task",
     "correctAnswer": "The correct answer:",
     "selectGameType":"Select game type",
-    "setAvatarPosition":"Set avatar initial position and direction"
+    "setAvatarPosition":"Set avatar initial position and direction",
+    "virEnvSettings": "Virtual world settings",
+    "avatarSpeed":"Avatar speed",
+    "showEnvSettings":"Show environment settings"
   },
   "EditGame": {
     "titleEditGame": "Edit your GeoGami",

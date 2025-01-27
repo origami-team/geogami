@@ -24,7 +24,11 @@
     <h5>Choose a virtual world</h5>
     &nbsp;&nbsp;
 
-    <select [(ngModel)]="virEnvType" interface="popover">
+    <select
+      [(ngModel)]="virEnvType"
+      interface="popover"
+      [disabled]="!isSingleMode"
+    >
       <option
         *ngFor="let virEnvitem of virEnvTypesList; let i = index"
         [ngValue]="virEnvitem.layerName"
@@ -67,12 +71,14 @@
   ></app-audio-recorder>
 
   <!-- set avatar initial position and direction -->
-  <ion-item class="ion-no-padding" *ngIf="isVirtualWorld">
+  <ion-item *ngIf="isVirtualWorld" lines="none" class="ion-no-padding">
     <h5>
       {{ "CreateGame.setAvatarPosition" | translate }} 🧍‍♂️
       <ion-icon
         name="information-circle"
-        (click)="utilService.showPopover_i18n($event, 'CreateGame.setAvatarPosition')"
+        (click)="
+          utilService.showPopover_i18n($event, 'CreateGame.setAvatarPosition')
+        "
       >
       </ion-icon>
     </h5>
@@ -83,12 +89,42 @@
     ></ion-toggle>
   </ion-item>
   <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
+    <!-- Map view -->
     <app-map
       featureType="direction"
       [(feature)]="task.question.initialAvatarPosition"
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
+    ></app-map>
+  </div>
+
+  <!-- (Vir. Env.): choose a floor -->
+  <ion-item *ngIf="isVEBuilding" lines="none" class="ion-no-padding">
+    <h5>{{ "CreateTasks.chooseFloor" | translate }}</h5>
+    &nbsp;&nbsp;
+
+    <select
+      [(ngModel)]="selectedFloor"
+      (ngModelChange)="onFloorChanged()"
+      interface="popover"
+      [disabled]="!isSingleMode"
+    >
+      <option
+        *ngFor="let floor of virEnvLayers[virEnvType].floors; let i = index"
+        [ngValue]="floor.tag"
+      >
+        {{ floor.name }}
+      </option>
+    </select>
+  </ion-item>
+  <div>
+    <app-map
+      [isVirtualWorld]="isVirtualWorld"
+      [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding"
+      [selectedFloor]="selectedFloor"
+      [isSingleMode]="isSingleMode"
     ></app-map>
   </div>
 

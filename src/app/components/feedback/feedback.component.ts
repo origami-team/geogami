@@ -19,8 +19,8 @@ import bbox from "@turf/bbox";
 // VR world
 import { AvatarPosition } from "src/app/models/avatarPosition";
 import { Coords } from "src/app/models/coords";
-import { environment } from "src/environments/environment";
 import { TranslateService } from "@ngx-translate/core";
+import { VEBuildingUtilService } from "src/app/services/ve-building-util.service";
 
 enum FeedbackType {
   Correct,
@@ -78,7 +78,8 @@ export class FeedbackComponent {
     private orientationService: OrigamiOrientationService,
     private changeDetectorRef: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private veBuildingUtilService: VEBuildingUtilService
   ) {}
 
   init(
@@ -1098,7 +1099,15 @@ export class FeedbackComponent {
         : this.lastKnownPosition.coords.longitude
     );
     this.playingGamePage.targetDistance = targetDistance;
-    return targetDistance < PlayingGamePage.triggerTreshold;
+
+    // include buidling and non buidling envs
+    if (!this.task?.isVEBuilding) {
+      return targetDistance < PlayingGamePage.triggerTreshold;
+    } else {
+      return this.veBuildingUtilService.currentFloor === this.task.floor
+        ? targetDistance < PlayingGamePage.triggerTreshold
+        : false;
+    }
   }
 
   get staticShowSuccess() {
