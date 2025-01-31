@@ -1908,23 +1908,27 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           )
           .addTo(this.map);
 
-        const elDuplicate = document.createElement("div");
-        elDuplicate.className = "waypoint-marker-disabled";
+        // set duplicate for the swipe map
+        if(["sat-swipe","blank-swipe"].some(v => v === this.task.mapFeatures.material)){
+          const elDuplicate = document.createElement("div");
+          elDuplicate.className = "waypoint-marker-disabled";
+  
+          this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
+            anchor: "bottom",
+            offset: [15, 0],
+          }).setLngLat(
+            this.game.tasks[this.taskIndex - 1].answer.position.geometry
+              .coordinates
+          );
+  
+          this.layerControl.passMarkers({
+            waypointMarkerDuplicate: this.waypointMarkerDuplicate,
+          });
+        }
 
-        this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
-          anchor: "bottom",
-          offset: [15, 0],
-        }).setLngLat(
-          this.game.tasks[this.taskIndex - 1].answer.position.geometry
-            .coordinates
-        );
-
-        this.layerControl.passMarkers({
-          waypointMarkerDuplicate: this.waypointMarkerDuplicate,
-        });
       }
       this.waypointMarker.remove();
-      this.waypointMarkerDuplicate.remove();
+      this.waypointMarkerDuplicate?.remove();
       this.waypointMarker = null;
       this.waypointMarkerDuplicate = null;
     }
@@ -1956,18 +1960,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           .setLngLat(this.task.answer.position.geometry.coordinates)
           .addTo(this.map);
 
-        // create a duplicate for the swipe map
-        const elDuplicate = document.createElement("div");
-        elDuplicate.className = "waypoint-marker";
-
-        this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
-          anchor: "bottom",
-          offset: [15, 0],
-        }).setLngLat(this.task.answer.position.geometry.coordinates);
-
-        this.layerControl.passMarkers({
-          waypointMarker: this.waypointMarkerDuplicate,
-        });
+        if(["sat-swipe","blank-swipe"].some(v => v === this.task.mapFeatures.material)){
+          // create a duplicate for the swipe map
+          const elDuplicate = document.createElement("div");
+          elDuplicate.className = "waypoint-marker";
+  
+          this.waypointMarkerDuplicate = new mapboxgl.Marker(elDuplicate, {
+            anchor: "bottom",
+            offset: [15, 0],
+          }).setLngLat(this.task.answer.position.geometry.coordinates);
+  
+          this.layerControl.passMarkers({
+            waypointMarker: this.waypointMarkerDuplicate,
+          });
+        }
       }
     }
 
