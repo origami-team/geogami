@@ -896,9 +896,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             // building envs only: Update floor/env. map based on height
             // Note: make sure to update the impl. when other buildings than ifgi is added
             if (this.task?.isVEBuilding) {
+              let cFloor_old = this.veBuildingUtilService.getCurrentFloor();
               this.veBuildingUtilService.updateMapViewBasedOnFloorHeight(this.virEnvType, avatarPosition["y"], this.map);
+              // Check if floor changed, to hide/show flag based on avatar position
+              if (this.veBuildingUtilService.checkFloorChange(cFloor_old)) {
+                this.showHideFlagMarker();
+              }
             }
-            
           }
         );
     }
@@ -1908,7 +1912,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           )
           .addTo(this.map);
 
-        // set duplicate for the swipe map
+        // create a duplicate marker for the swipe map
         if(["sat-swipe","blank-swipe"].some(v => v === this.task.mapFeatures.material)){
           const elDuplicate = document.createElement("div");
           elDuplicate.className = "waypoint-marker-disabled";
@@ -1925,11 +1929,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             waypointMarkerDuplicate: this.waypointMarkerDuplicate,
           });
         }
-
       }
-      this.waypointMarker.remove();
+      this.removeTargetMarker();
       this.waypointMarkerDuplicate?.remove();
-      this.waypointMarker = null;
       this.waypointMarkerDuplicate = null;
     }
 
@@ -1950,18 +1952,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.task.answer.mode != TaskMode.NAV_ARROW
     ) {
       if (this.task.answer.position != null && this.task.settings.showMarker) {
-        const el = document.createElement("div");
-        el.className = "waypoint-marker";
-
-        this.waypointMarker = new mapboxgl.Marker(el, {
-          anchor: "bottom",
-          offset: [15, 0],
-        })
-          .setLngLat(this.task.answer.position.geometry.coordinates)
-          .addTo(this.map);
-
+        this.createTargetMarker();
+        // create a duplicate marker for the swipe map
         if(["sat-swipe","blank-swipe"].some(v => v === this.task.mapFeatures.material)){
-          // create a duplicate for the swipe map
           const elDuplicate = document.createElement("div");
           elDuplicate.className = "waypoint-marker";
   
@@ -2805,5 +2798,54 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.startGame();
       }
     });
+  }
+
+  /**
+   * create target marker (flag)
+   */
+  createTargetMarker() {
+    if(!this.waypointMarker){
+      const el = document.createElement("div");
+      el.className = "waypoint-marker";
+
+      this.waypointMarker = new mapboxgl.Marker(el, {
+        anchor: "bottom",
+        offset: [15, 0],
+      })
+        .setLngLat(this.task.answer.position.geometry.coordinates)
+        .addTo(this.map);
+    }
+  }
+
+  /**
+   * create target marker (flag)
+   */
+  removeTargetMarker() {
+    console.log("🚀 ~ removeTargetMarker ~ removeTargetMarker:")
+    if(this.waypointMarker){
+      this.waypointMarker.remove();
+      this.waypointMarker = null;
+    }
+  }
+
+  /**
+   * show/hide flag marker based on destination floor and avatar position
+   */
+  showHideFlagMarker() {
+    if (
+      this.task.answer.type == AnswerType.POSITION &&
+      this.task.answer.mode != TaskMode.NAV_ARROW
+    ) {
+      if (
+        this.task.answer.position != null &&
+        this.task.settings.showMarker
+      ) {
+        if(this.veBuildingUtilService.isAvatartInDestinationFloor(this.task.floor)){
+            this.createTargetMarker();                    
+        } else {
+          this.removeTargetMarker();
+        }
+      }
+    }
   }
 }

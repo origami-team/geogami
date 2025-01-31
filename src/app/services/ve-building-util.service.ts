@@ -184,4 +184,16 @@ export class VEBuildingUtilService {
   setCurrentFloor(val){
     this.currentFloor = val;
   }
+
+  getCurrentFloor(){
+    return this.currentFloor;
+  }
+
+  isAvatartInDestinationFloor(taskFloor){
+    return this.currentFloor === taskFloor;
+  }
+
+  checkFloorChange(floorNo_floor){
+    return this.currentFloor !== floorNo_floor;
+  } 
 }
