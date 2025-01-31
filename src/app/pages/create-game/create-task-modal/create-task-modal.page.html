@@ -391,22 +391,35 @@
       <h5>{{ "CreateGame.virEnvSettings" | translate }}</h5>
     </ion-text>
 
-    <!-- avatar speed -->
-    <ion-item lines="none">
+    <!-- Avatar speed -->
+    <ion-item lines="none" class="item-range">
       <ion-label> {{ "CreateGame.avatarSpeed" | translate }} </ion-label>
-      <select
+      <ion-range
         [(ngModel)]="task.settings.avatarSpeed"
-        interface="popover"
-        style="width: 50px"
+        min="1"
+        max="7"
+        snaps
+        [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+        ticks
+        pin
       >
-        <!-- speed can be adjusted to be more than five levels -->
-        <option
-          *ngFor="let e of [].constructor(7); let i = index"
-          [ngValue]="i+1"
+        <ion-label slot="start">1m</ion-label>
+        <ion-icon
+          slot="start"
+          size="small"
+          [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+          name="speedometer-outline"
         >
-          {{ i + 1 }}
-        </option>
-      </select>
+        </ion-icon>
+        <ion-icon
+          slot="end"
+          [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+          name="speedometer-outline"
+        ></ion-icon>
+        <ion-label slot="end">7m</ion-label>
+      </ion-range>
+
+
     </ion-item>
 
     <!-- show environment settings -->
@@ -536,9 +549,11 @@
       ></ion-toggle>
     </ion-item>
 
+    <!-- Accuracy to target -->
     <ion-item
       lines="none"
       *ngIf="task.type != 'theme-object' && task.type != 'theme-direction' && task.type != 'free'"
+      class="item-range"
     >
       <ion-label>
         {{ "CreateGame.accuracy" | translate }}
