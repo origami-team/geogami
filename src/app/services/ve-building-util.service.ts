@@ -174,7 +174,7 @@ export class VEBuildingUtilService {
     //* update zoom level of the env.
     map.setZoom(virEnvLayers[virEnvType].zoom);
     //* update map center
-    map.setCenter(virEnvLayers[virEnvType].center);
+    // map.setCenter(virEnvLayers[virEnvType].center);      // commented out to avoid changing the center of the map
 
     //* update layer image
     newStyle.sources.overlay.url = styleOverlayUrlPath;
@@ -184,4 +184,16 @@ export class VEBuildingUtilService {
   setCurrentFloor(val){
     this.currentFloor = val;
   }
+
+  getCurrentFloor(){
+    return this.currentFloor;
+  }
+
+  isAvatartInDestinationFloor(taskFloor){
+    return this.currentFloor === taskFloor;
+  }
+
+  checkFloorChange(floorNo_floor){
+    return this.currentFloor !== floorNo_floor;
+  } 
 }

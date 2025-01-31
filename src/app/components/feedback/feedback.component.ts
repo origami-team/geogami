@@ -1104,7 +1104,7 @@ export class FeedbackComponent {
     if (!this.task?.isVEBuilding) {
       return targetDistance < PlayingGamePage.triggerTreshold;
     } else {
-      return this.veBuildingUtilService.currentFloor === this.task.floor
+      return this.veBuildingUtilService.isAvatartInDestinationFloor(this.task.floor)
         ? targetDistance < PlayingGamePage.triggerTreshold
         : false;
     }
