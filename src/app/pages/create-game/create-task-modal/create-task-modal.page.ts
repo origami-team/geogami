@@ -39,6 +39,7 @@ export class CreateTaskModalPage implements OnInit {
   // VE building
   public isVEBuilding = false;
   @Input() selectedFloor;
+  initialFloorStatus = false;
 
   // Multi-player Mode
   @Input() numPlayers: Number;
@@ -125,6 +126,8 @@ export class CreateTaskModalPage implements OnInit {
 
   //* get virual environment headers
   virEnvTypesList = VirEnvHeaders;
+  //* Get virtual environment layers
+  virEnvLayers = virEnvLayers;
 
   constructor(
     public modalController: ModalController,

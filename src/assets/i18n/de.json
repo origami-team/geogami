@@ -107,7 +107,7 @@
     "combineTasks": "Liste der erstellten Aufgaben:",
     "information": "Information",
     "chooseComponents": "Wähle aus folgenden Bausteinen:",
-    "chooseFloor":"Wähle eine Etage"
+    "chooseFloor":"Wähle eine Aufgabenetage"
   },
   "SaveGame": {
     "titleSaveGame": "Speichere dein GeoGami",
