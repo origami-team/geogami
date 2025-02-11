@@ -1740,11 +1740,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     /* set avatar initial position */
     if (this.isVirtualWorld) {
-      if(this.task?.isVEBuilding){
+      if(this.task?.isVEBuilding && (this.taskIndex==0 || this.task?.initialFloor) ){
+        let initFloor = this.task.initialFloor?this.task?.initialFloor:this.task?.floor;
         // update floor height
-        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(this.task?.floor.substring(1))+1]["height"];
-        // update map layer
-        this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, this.task.floor);
+        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(initFloor.substring(1))+1]["height"];
+        // update map layer 
+        this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, initFloor);
       }
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
@@ -1799,44 +1800,45 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       //* send default inital avatar position from `virEnvLayers`
       //* if no virEnvType is found send default one
       //* Note: setTimeout is important to resolve the issue of not showing vir. env. of last joined player in multi-player game
-      setTimeout(() => {
-        this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-          initialPosition: this.task.question.initialAvatarPosition
-            ? [
-                this.task.question.initialAvatarPosition.position.geometry
-                  .coordinates[0] * 111000,
-                this.task.question.initialAvatarPosition.position.geometry
-                  .coordinates[1] * 112000,
+      if(!this.task?.isVEBuilding || this.taskIndex == 0 || (this.task?.isVEBuilding && this.task?.initialFloor)){
+        setTimeout(() => {
+          this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
+            initialPosition: this.task.question.initialAvatarPosition
+              ? [
+                  this.task.question.initialAvatarPosition.position.geometry
+                    .coordinates[0] * 111000,
+                  this.task.question.initialAvatarPosition.position.geometry
+                    .coordinates[1] * 112000,
+                ]
+              :
+              (
+                this.taskIndex != 0 &&
+                this.task.virEnvType ===
+                  this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
+              ? [
+                this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
+                this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
               ]
-            :
-            (
-              this.taskIndex != 0 &&
-              this.task.virEnvType ===
-                this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
-            ? [
-              this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
-              this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
-            ]
-            : [
-                virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
-                virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
-              ]
-            ),
-          initialRotation: this.task.question.initialAvatarPosition
-            ? this.task.question.initialAvatarPosition.bearing
-            : this.taskIndex != 0 &&
-              this.task.virEnvType ===
-                this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
-            ? this.previousTaskAvatarHeading
-            : virEnvLayers[this.virEnvType].initialRotation ?? null,  // to add default rotation for building envs
-          virEnvType: this.task.virEnvType ?? this.game.virEnvType,     // in old games, vir. env. type is not included within each task.
-          avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-          showEnvSettings: this.task.settings.showEnvSettings ?? true,
-          initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1
-        });
-      }, 1000);
+              : [
+                  virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
+                  virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
+                ]
+              ),
+            initialRotation: this.task.question.initialAvatarPosition
+              ? this.task.question.initialAvatarPosition.bearing
+              : this.taskIndex != 0 &&
+                this.task.virEnvType ===
+                  this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
+              ? this.previousTaskAvatarHeading
+              : virEnvLayers[this.virEnvType].initialRotation ?? null,  // to add default rotation for building envs
+            virEnvType: this.task.virEnvType ?? this.game.virEnvType,     // in old games, vir. env. type is not included within each task.
+            avatarSpeed: this.task.settings.avatarSpeed ?? 2,
+            showEnvSettings: this.task.settings.showEnvSettings ?? true,
+            initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1
+          });
+        }, 1000);
+      }
 
-      
     }
 
     if (this.task.settings?.accuracy) {
@@ -2805,6 +2807,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
    * create target marker (flag)
    */
   createTargetMarker() {
+    // Never draw marker if env. is a building and avatar is not in destination floor
+    let IsAvatarOnDestinationFloor = this.task?.initialFloor && this.task?.floor!=this.veBuildingUtilService.getCurrentFloor();
+    if((this.task?.floor || this.task?.initialFloor)  && (this.task?.floor!=this.veBuildingUtilService.getCurrentFloor()))
+      return;
+
     if(!this.waypointMarker){
       const el = document.createElement("div");
       el.className = "waypoint-marker";
