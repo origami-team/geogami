@@ -411,8 +411,12 @@
         interface="popover"
         [disabled]="!isSingleMode"
       >
+        <option *ngIf="initialFloor=='Select floor'" ngvalue="Select floor">
+          Select floor
+        </option>
+        <!-- slice was added to exclude sixth floor -->
         <option
-          *ngFor="let floor of virEnvLayers[virEnvType].floors; let i = index"
+          *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
           [ngValue]="floor.tag"
         >
           {{ floor.name }}

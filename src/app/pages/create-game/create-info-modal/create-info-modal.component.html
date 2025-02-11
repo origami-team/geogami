@@ -101,8 +101,7 @@
 
   <!-- (Vir. Env.): choose a floor -->
   <ion-item *ngIf="isVEBuilding" lines="none" class="ion-no-padding">
-    <h5>{{ "CreateTasks.chooseFloor" | translate }}</h5>
-    &nbsp;&nbsp;
+    <ion-label style="font-size: 18px; font-weight: 500;">{{ "CreateTasks.chooseTaskFloor" | translate }}</ion-label>
 
     <select
       [(ngModel)]="selectedFloor"
@@ -110,8 +109,9 @@
       interface="popover"
       [disabled]="!isSingleMode"
     >
+      <!-- slice was added to exclude sixth floor -->
       <option
-        *ngFor="let floor of virEnvLayers[virEnvType].floors; let i = index"
+        *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
         [ngValue]="floor.tag"
       >
         {{ floor.name }}
