@@ -397,15 +397,8 @@
 
     <!-- (Vir. Env.): choose initial floor when other than task floor -->
     <ion-item *ngIf="isVEBuilding" lines="none">
-      <ion-label> {{ "CreateTasks.chooseFloor" | translate }} </ion-label>
-
-      <ion-toggle [(ngModel)]="initialFloorStatus"></ion-toggle>
-      <br />
-    </ion-item>
-
-    <!-- select -->
-    <div *ngIf="initialFloorStatus"
-    >
+      <ion-label> {{ "CreateTasks.chooseInitialFloor" | translate }} </ion-label>
+      <!-- Select -->
       <select
         [(ngModel)]="initialFloor"
         interface="popover"
@@ -419,11 +412,11 @@
           *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
           [ngValue]="floor.tag"
         >
-          {{ floor.name }}
+          {{ floor.name }} {{floor.tag==selectedFloor?  '('+taskFloorText+')':'' }} 
         </option>
       </select>
-    </div>
-    <!--  -->
+      <br />
+    </ion-item>
 
     <!-- Avatar speed -->
     <ion-item lines="none" class="item-range">

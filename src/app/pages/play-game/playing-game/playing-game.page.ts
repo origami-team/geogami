@@ -634,9 +634,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             this.initializeMap().then(() => {
               if (this.game?.tasks[0]?.isVEBuilding ?? false) {
                 const task = this.game?.tasks[0];
-                // Note: you may need to update the following line of code if user can select inital floor other than the one with where task is
-                this.veBuildingUtilService.setCurrentFloor(task.floor);
-                this.veBuildingUtilService.updateMapLayer(this.map, task.virEnvType, task.floor);
+                // Update: check if task has initial floor and if it is different from the current floor
+                let initFloor = task?.initialFloor?task.initialFloor:task.floor;
+                this.veBuildingUtilService.setCurrentFloor(initFloor);
+                this.veBuildingUtilService.updateMapLayer(this.map, task.virEnvType, initFloor);
               }
             });;
           },

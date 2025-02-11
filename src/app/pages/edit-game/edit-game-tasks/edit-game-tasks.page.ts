@@ -151,7 +151,8 @@ export class EditGameTasksPage implements OnInit {
     virEnvType: string = task && task.virEnvType
       ? task.virEnvType
       : this.virEnvType,
-    selectedFloor = (task?.isVEBuilding?task.floor:undefined)
+    selectedFloor = (task?.isVEBuilding?task.floor:undefined),
+    initialFloor = (task?.isVEBuilding?task.initialFloor:"Select floor")
   ) {
     const modal: HTMLIonModalElement = await this.modalController.create({
       component:
@@ -164,6 +165,7 @@ export class EditGameTasksPage implements OnInit {
         isVRMirrored,
         virEnvType,
         selectedFloor,
+        initialFloor,
         numPlayers,
         isSingleMode,
       },
