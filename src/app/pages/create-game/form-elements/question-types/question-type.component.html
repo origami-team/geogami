@@ -208,14 +208,40 @@
 
   <!-- set avatar initial position and direction - Single-player -->
   <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
+    <!-- (Vir. Env.): choose initial floor when other than task floor -->
+    <ion-item *ngIf="isVEBuilding" lines="none">
+      <ion-label> {{ "CreateTasks.chooseInitialFloor" | translate }} </ion-label>
+      <!-- Select -->
+      <select
+        [(ngModel)]="initialFloor"
+        (ngModelChange)="onFloorChanged()"
+        interface="popover"
+        [disabled]="!isSingleMode"
+      >
+        <option *ngIf="initialFloor=='Select floor'" ngvalue="Select floor">
+          Select floor
+        </option>
+        <!-- slice was added to exclude sixth floor -->
+        <option
+          *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
+          [ngValue]="floor.tag"
+        >
+          {{ floor.name }} {{floor.tag==selectedFloor?  '('+taskFloorText+')':'' }} 
+        </option>
+      </select>
+      <br />
+    </ion-item>
+    
+    <!-- map view -->
     <app-map
+      *ngIf="initialFloor != 'Select floor'"
       featureType="direction"
       [(feature)]="question.initialAvatarPosition"
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
       [isVEBuilding]="isVEBuilding" 
-      [selectedFloor]="selectedFloor"
+      [initialFloor]="initialFloor"
     ></app-map>
   </div>
 

@@ -40,7 +40,6 @@ export class CreateTaskModalPage implements OnInit {
   public isVEBuilding = false;
   @Input() selectedFloor;  // task floor
   @Input()initialFloor;  // initial floor
-  initialFloorStatus = false; 
   taskFloorText = '';
   
   // initialFloor = "Select floor";

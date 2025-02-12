@@ -311,6 +311,7 @@
       [virEnvType]="virEnvType"
       [isVEBuilding]="isVEBuilding"
       [selectedFloor]="selectedFloor"
+      [(initialFloor)]="initialFloor"
       [numPlayers]="(!isSingleMode?numPlayers:1)"
       [isSingleMode]="isSingleMode"
       [collaborationType]=" isSingleMode? undefined :selectedCollType.type"
@@ -371,6 +372,8 @@
       </app-map>
     </div>
 
+    <ion-item-divider></ion-item-divider>
+
     <!-- Destination -->
     <answer-type
       [(answer)]="task.answer"
@@ -388,36 +391,15 @@
     </answer-type>
   </div>
 
+  <ion-item-divider></ion-item-divider>
+
   <!-- Vir. Env. settings -->
   <div *ngIf="isVirtualWorld && task.settings">
     <!-- section heading -->
     <ion-text>
       <h5>{{ "CreateGame.virEnvSettings" | translate }}</h5>
     </ion-text>
-
-    <!-- (Vir. Env.): choose initial floor when other than task floor -->
-    <ion-item *ngIf="isVEBuilding" lines="none">
-      <ion-label> {{ "CreateTasks.chooseInitialFloor" | translate }} </ion-label>
-      <!-- Select -->
-      <select
-        [(ngModel)]="initialFloor"
-        interface="popover"
-        [disabled]="!isSingleMode"
-      >
-        <option *ngIf="initialFloor=='Select floor'" ngvalue="Select floor">
-          Select floor
-        </option>
-        <!-- slice was added to exclude sixth floor -->
-        <option
-          *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
-          [ngValue]="floor.tag"
-        >
-          {{ floor.name }} {{floor.tag==selectedFloor?  '('+taskFloorText+')':'' }} 
-        </option>
-      </select>
-      <br />
-    </ion-item>
-
+    
     <!-- Avatar speed -->
     <ion-item lines="none" class="item-range">
       <ion-label> {{ "CreateGame.avatarSpeed" | translate }} </ion-label>
@@ -453,6 +435,8 @@
       <ion-toggle [(ngModel)]="task.settings.showEnvSettings"></ion-toggle>
     </ion-item>
   </div>
+
+  <ion-item-divider></ion-item-divider>
 
   <!-- Additional settings -->
   <div *ngIf="task.settings">
@@ -613,6 +597,8 @@
     </ion-item>
   </div>
 
+  <ion-item-divider></ion-item-divider>
+  
   <ion-item
     detail
     lines="none"

@@ -13,6 +13,7 @@ import { QuestionType, TaskMode } from "./../../../../models/types";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import { virEnvLayers } from "src/app/models/virEnvsLayers";
 
 @Component({
   selector: "question-type",
@@ -29,7 +30,11 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
   
   // VE building 
   @Input() isVEBuilding: boolean;
-  @Input() selectedFloor: string;
+  @Input() selectedFloor: string;  // task floor
+  @Input() initialFloor: string;  // initial floor
+  virEnvLayers = virEnvLayers;
+  taskFloorText = '';
+  @Output() initialFloorChange=new EventEmitter();
 
   // Multi-player Mode
   @Input() numPlayers: Number;
@@ -72,20 +77,22 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
     if (
       this.isVirtualWorld &&
       this.question &&
-      this.question.initialAvatarPosition
+      (this.question.initialAvatarPosition || this.initialFloor!="Select floor")
     ) {
     // console.log("----question: ", this.question);
       this.initialAvatarPositionStatus = true;
     }
+
+    // Translation
+    this.taskFloorText = this.translate.instant("CreateTasks.taskFloor");
   }
 
   initialAvatarPosToggleChange() {
     //* to remove object from db (when deleting initial position)
-    if (
-      !this.initialAvatarPositionStatus &&
-      this.question.initialAvatarPosition
-    ) {
+    if (!this.initialAvatarPositionStatus) {
       this.question.initialAvatarPosition = undefined;
+      this.initialFloor = "Select floor";
+      this.onFloorChanged()
     }
   }
 
@@ -99,5 +106,9 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
       componentProps: { text },
     });
     return await popover.present();
+  }
+
+  onFloorChanged(){
+    this.initialFloorChange.emit(this.initialFloor);
   }
 }

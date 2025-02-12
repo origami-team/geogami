@@ -109,7 +109,7 @@
     "chooseComponents": "Wähle aus folgenden Bausteinen:",
     "taskFloor":"Aufgabenetage",
     "chooseTaskFloor":"Wähle eine Aufgabenetage",
-    "chooseInitialFloor":"Wähle das Anfangsgeschoss (optional)"
+    "chooseInitialFloor":"Wähle das Anfangsgeschoss"
   },
   "SaveGame": {
     "titleSaveGame": "Speichere dein GeoGami",

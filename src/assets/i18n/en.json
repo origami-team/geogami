@@ -109,7 +109,7 @@
     "chooseComponents": "Choose from the following components:",
     "taskFloor":"Task floor",
     "chooseTaskFloor":"Choose task floor",
-    "chooseInitialFloor":"Choose initil floor (optional)"
+    "chooseInitialFloor":"Choose initil floor"
   },
   "SaveGame": {
     "titleSaveGame": "Save your GeoGami",
