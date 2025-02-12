@@ -557,7 +557,7 @@ export class FeedbackComponent {
         type = FeedbackType.Wrong;
       }
     } else {
-      if (this.task.category == "nav" && !this.task.settings.confirmation) {
+      if (this.task.category == "nav" && this.task.settings.confirmation) {
         type = FeedbackType.Success;
       } else {
         type = FeedbackType.Saved;

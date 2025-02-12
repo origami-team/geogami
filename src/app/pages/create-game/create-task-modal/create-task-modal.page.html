@@ -28,7 +28,12 @@
     &nbsp;&nbsp;
 
     <!-- TODO: remove disable after resolving reloading vir. env. using tablet -->
-    <select [(ngModel)]="virEnvType" (ngModelChange)="onEnvChanged()" interface="popover" [disabled]="!isSingleMode">
+    <select
+      [(ngModel)]="virEnvType"
+      (ngModelChange)="onEnvChanged()"
+      interface="popover"
+      [disabled]="!isSingleMode"
+    >
       <option
         *ngFor="let virEnvitem of virEnvTypesList; let i = index"
         [ngValue]="virEnvitem.layerName"
@@ -306,6 +311,7 @@
       [virEnvType]="virEnvType"
       [isVEBuilding]="isVEBuilding"
       [selectedFloor]="selectedFloor"
+      [(initialFloor)]="initialFloor"
       [numPlayers]="(!isSingleMode?numPlayers:1)"
       [isSingleMode]="isSingleMode"
       [collaborationType]=" isSingleMode? undefined :selectedCollType.type"
@@ -366,6 +372,8 @@
       </app-map>
     </div>
 
+    <ion-item-divider></ion-item-divider>
+
     <!-- Destination -->
     <answer-type
       [(answer)]="task.answer"
@@ -383,14 +391,15 @@
     </answer-type>
   </div>
 
+  <ion-item-divider></ion-item-divider>
+
   <!-- Vir. Env. settings -->
   <div *ngIf="isVirtualWorld && task.settings">
-
     <!-- section heading -->
     <ion-text>
       <h5>{{ "CreateGame.virEnvSettings" | translate }}</h5>
     </ion-text>
-
+    
     <!-- Avatar speed -->
     <ion-item lines="none" class="item-range">
       <ion-label> {{ "CreateGame.avatarSpeed" | translate }} </ion-label>
@@ -418,18 +427,16 @@
         ></ion-icon>
         <ion-label slot="end">7m</ion-label>
       </ion-range>
-
-
     </ion-item>
 
     <!-- show environment settings -->
     <ion-item lines="none">
       <ion-label> {{ "CreateGame.showEnvSettings" | translate }} </ion-label>
-      <ion-toggle
-        [(ngModel)]="task.settings.showEnvSettings"
-      ></ion-toggle>
+      <ion-toggle [(ngModel)]="task.settings.showEnvSettings"></ion-toggle>
     </ion-item>
   </div>
+
+  <ion-item-divider></ion-item-divider>
 
   <!-- Additional settings -->
   <div *ngIf="task.settings">
@@ -590,6 +597,8 @@
     </ion-item>
   </div>
 
+  <ion-item-divider></ion-item-divider>
+  
   <ion-item
     detail
     lines="none"

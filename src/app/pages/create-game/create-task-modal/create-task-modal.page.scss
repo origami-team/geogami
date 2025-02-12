@@ -54,6 +54,10 @@ ion-range::part(pin) {
   transition: transform 120ms ease, 120ms ease;
 }
 
+ion-range::part(.range-has-pin){
+  padding-top: 0;
+}
+
 .item-range{
   display: flex;
   flex-direction: column;
