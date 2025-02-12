@@ -64,11 +64,15 @@
     </p>
   </ion-text>
 
+  <ion-item-divider></ion-item-divider>
+
   <h5>{{ "CreateGame.audioMessage" | translate }}</h5>
 
   <app-audio-recorder
     [(audioSource)]="task.question.audio"
   ></app-audio-recorder>
+
+  <ion-item-divider></ion-item-divider>
 
   <!-- set avatar initial position and direction -->
   <ion-item *ngIf="isVirtualWorld" lines="none" class="ion-no-padding">
@@ -89,44 +93,44 @@
     ></ion-toggle>
   </ion-item>
   <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
+
+    <!-- (Vir. Env.): choose initial floor when other than task floor -->
+    <ion-item *ngIf="isVEBuilding" lines="none">
+      <ion-label> {{ "CreateTasks.chooseInitialFloor" | translate }} </ion-label>
+      <!-- Select -->
+      <select
+        [(ngModel)]="initialFloor"
+        interface="popover"
+        [disabled]="!isSingleMode"
+      >
+        <option *ngIf="initialFloor=='Select floor'" ngvalue="Select floor">
+          Select floor
+        </option>
+        <!-- slice was added to exclude sixth floor -->
+        <option
+          *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
+          [ngValue]="floor.tag"
+        >
+          {{ floor.name }}
+        </option>
+      </select>
+      <br />
+    </ion-item>
+
     <!-- Map view -->
     <app-map
+      *ngIf="initialFloor != 'Select floor'"
       featureType="direction"
       [(feature)]="task.question.initialAvatarPosition"
       [isVirtualWorld]="isVirtualWorld"
       [isVRMirrored]="isVRMirrored"
       [virEnvType]="virEnvType"
+      [initialFloor]="initialFloor"
     ></app-map>
   </div>
 
-  <!-- (Vir. Env.): choose a floor -->
-  <ion-item *ngIf="isVEBuilding" lines="none" class="ion-no-padding">
-    <ion-label style="font-size: 18px; font-weight: 500;">{{ "CreateTasks.chooseTaskFloor" | translate }}</ion-label>
+  <ion-item-divider></ion-item-divider>
 
-    <select
-      [(ngModel)]="selectedFloor"
-      (ngModelChange)="onFloorChanged()"
-      interface="popover"
-      [disabled]="!isSingleMode"
-    >
-      <!-- slice was added to exclude sixth floor -->
-      <option
-        *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
-        [ngValue]="floor.tag"
-      >
-        {{ floor.name }}
-      </option>
-    </select>
-  </ion-item>
-  <div>
-    <app-map
-      [isVirtualWorld]="isVirtualWorld"
-      [virEnvType]="virEnvType"
-      [isVEBuilding]="isVEBuilding"
-      [selectedFloor]="selectedFloor"
-      [isSingleMode]="isSingleMode"
-    ></app-map>
-  </div>
 
   <h5>{{ "CreateGame.photos" | translate }}</h5>
 
@@ -134,6 +138,8 @@
     theme="warning"
     [(photo)]="task.question.photo"
   ></app-photo-upload>
+
+  <ion-item-divider></ion-item-divider>
 
   <h5>{{ "CreateGame.addSettings" | translate }}</h5>
 

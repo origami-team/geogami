@@ -36,6 +36,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
   // VE building
   public isVEBuilding = false;
   @Input() selectedFloor;
+  @Input()initialFloor;  // initial floor
   @Output() selectedFloorChange = new EventEmitter();
   //* get virual environment headers
   virEnvLayers = virEnvLayers;
@@ -77,7 +78,7 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     if (
       this.isVirtualWorld &&
       this.task.question &&
-      this.task.question.initialAvatarPosition
+      (this.task.question.initialAvatarPosition || this.task.initialFloor)
     ) {
       this.initialAvatarPositionStatus = true;
     }
@@ -92,11 +93,17 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       this.isVEBuilding = this.veBuildingUtilService.checkVEBuilding(
         this.virEnvType
       );
+
       // set default floor for new tasks only (not stored ones/when editing a task)
-      if (this.isVEBuilding && !this.selectedFloor) {
-        this.selectedFloor = this.veBuildingUtilService.setInitialFloor(
-          this.virEnvType
-        );
+      if (this.isVEBuilding) {
+        // In case task floor is not set
+        if (!this.selectedFloor) {
+          this.selectedFloor = this.veBuildingUtilService.setInitialFloor(this.virEnvType);
+        }
+        // In case initial floor is not set
+        if (!this.initialFloor) {
+          this.initialFloor = "Select floor";
+        }
       }
     }
   }
@@ -149,18 +156,16 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     if (this.isVEBuilding) {
       this.task.isVEBuilding = this.isVEBuilding;
       this.task.floor = this.selectedFloor;
+      this.task.initialFloor = this.initialFloor!="Select floor"?this.initialFloor:undefined;
     }
   }
 
   // TODO: Do we sill need it??
   initialAvatarPosToggleChange() {
     //* to remove object from db (when deleting initial position)
-    if (this.task.question.initialAvatarPosition) {
+    if (!this.initialAvatarPositionStatus) {
       this.task.question.initialAvatarPosition = undefined;
+      this.task.initialFloor = this.initialFloor = "Select floor";
     }
-  }
-  
-  onFloorChanged(){
-    this.selectedFloorChange.emit(this.selectedFloor);
   }
 }

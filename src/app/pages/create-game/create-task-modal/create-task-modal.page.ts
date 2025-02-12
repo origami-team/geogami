@@ -225,6 +225,7 @@ export class CreateTaskModalPage implements OnInit {
 
       // check wether selected VE is a building
       this.isVEBuilding = this.checkVEBuilding();
+      
       // set default floor for new tasks only (not stored ones/when editing a task)
       if (this.isVEBuilding) {
         // In case task floor is not set

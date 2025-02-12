@@ -208,6 +208,7 @@
 
   <!-- set avatar initial position and direction - Single-player -->
   <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
+    
     <!-- (Vir. Env.): choose initial floor when other than task floor -->
     <ion-item *ngIf="isVEBuilding" lines="none">
       <ion-label> {{ "CreateTasks.chooseInitialFloor" | translate }} </ion-label>
