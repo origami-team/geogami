@@ -15,6 +15,7 @@ export interface Task {
   virEnvType: string;           //* to be used in having multiple vir. envs in a single game
   isVEBuilding: boolean;
   floor: string;
+  initialFloor: string;
 
 }
 

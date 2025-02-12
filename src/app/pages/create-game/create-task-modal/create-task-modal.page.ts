@@ -38,7 +38,11 @@ export class CreateTaskModalPage implements OnInit {
   
   // VE building
   public isVEBuilding = false;
-  @Input() selectedFloor;
+  @Input() selectedFloor;  // task floor
+  @Input()initialFloor;  // initial floor
+  taskFloorText = '';
+  
+  // initialFloor = "Select floor";
 
   // Multi-player Mode
   @Input() numPlayers: Number;
@@ -125,6 +129,8 @@ export class CreateTaskModalPage implements OnInit {
 
   //* get virual environment headers
   virEnvTypesList = VirEnvHeaders;
+  //* Get virtual environment layers
+  virEnvLayers = virEnvLayers;
 
   constructor(
     public modalController: ModalController,
@@ -219,11 +225,22 @@ export class CreateTaskModalPage implements OnInit {
 
       // check wether selected VE is a building
       this.isVEBuilding = this.checkVEBuilding();
+      
       // set default floor for new tasks only (not stored ones/when editing a task)
-      if(this.isVEBuilding && !this.selectedFloor){
-        this.selectedFloor = this.setInitialFloor();
+      if (this.isVEBuilding) {
+        // In case task floor is not set
+        if (!this.selectedFloor) {
+          this.selectedFloor = this.setInitialFloor();
+        }
+        // In case initial floor is not set
+        if (!this.initialFloor) {
+          this.initialFloor = "Select floor";
+        }
       }
     }
+
+    // Translation
+    this.taskFloorText = this.translate.instant("CreateTasks.taskFloor");
   }
 
   onThemeTaskTypeChange(taskType) {
@@ -779,10 +796,11 @@ export class CreateTaskModalPage implements OnInit {
       this.task.virEnvType = this.virEnvType;
     }
 
-    //* inlclude is building properties in task data
+    //* inlclude building properties in task data
     if (this.isVEBuilding) {
       this.task.isVEBuilding = this.isVEBuilding;
       this.task.floor = this.selectedFloor;
+      this.task.initialFloor = this.initialFloor!="Select floor"?this.initialFloor:undefined;
     }
 
     /* multi-player */

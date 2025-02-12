@@ -55,6 +55,7 @@ export class MapComponent
   // VE building 
   @Input() isVEBuilding: boolean;
   @Input() selectedFloor: string;
+  @Input() initialFloor: string;
 
   showDirectionMarker = false;
   directionMarkerPosition: any;
@@ -98,7 +99,15 @@ export class MapComponent
     ) {
       //* when floor is changed
       this.selectedFloor = changes.selectedFloor.currentValue;
-      this.updateMapLayer(true);
+      this.updateMapLayer(true, this.selectedFloor);
+    } else if (
+      changes.initialFloor &&
+      changes.initialFloor.currentValue != undefined &&
+      changes.initialFloor.previousValue != undefined
+    ) {
+      //* when initial floor is changed
+      this.initialFloor = changes.initialFloor.currentValue;
+      this.updateMapLayer(true, this.initialFloor);
     } else if (
       changes.virEnvType &&
       changes.virEnvType.currentValue != undefined &&
@@ -121,7 +130,10 @@ export class MapComponent
   ngAfterViewInit(): void {
     this.initMap().then(() => {
       if (this.selectedFloor) {
-        this.updateMapLayer(true);
+        this.updateMapLayer(true, this.selectedFloor);
+      }
+      if (this.initialFloor) {
+        this.updateMapLayer(true, this.initialFloor);
       }
     });
   }
@@ -508,12 +520,13 @@ export class MapComponent
     };
   };
 
-  updateMapLayer(isVEBuilding = false){
+  updateMapLayer(isVEBuilding = false, floor: string = "") {
+    console.log("🚀 ~ updateMapLayer ~ updateMapLayer:")
     let newStyle = this.map.getStyle();
       //* update layer image
       if(isVEBuilding){
         // in case the VE is a building change the floor
-        newStyle.sources.overlay.url = `assets/vir_envs_layers/${this.virEnvType}_${this.selectedFloor}.png`;
+        newStyle.sources.overlay.url = `assets/vir_envs_layers/${this.virEnvType}_${floor}.png`;
       } else{
         newStyle.sources.overlay.url = `assets/vir_envs_layers/${this.virEnvType}.png`;
       }

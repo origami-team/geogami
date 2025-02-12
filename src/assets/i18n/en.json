@@ -107,7 +107,9 @@
     "combineTasks": "List of created tasks:",
     "information": "Information",
     "chooseComponents": "Choose from the following components:",
-    "chooseFloor":"Choose a floor"
+    "taskFloor":"Task floor",
+    "chooseTaskFloor":"Choose task floor",
+    "chooseInitialFloor":"Choose initil floor"
   },
   "SaveGame": {
     "titleSaveGame": "Save your GeoGami",

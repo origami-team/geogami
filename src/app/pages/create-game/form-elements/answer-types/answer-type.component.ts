@@ -36,7 +36,7 @@ export class AnswerTypeComponent implements OnInit, OnChanges {
   // see: https://stackoverflow.com/questions/57707055/angular-changing-input-from-child-component-doesnt-notify-the-parent-that-i
   @Output() selectedFloorChange=new EventEmitter();
 
-  //* Get virtual environment headers
+  //* Get virtual environment layers
   virEnvLayers = virEnvLayers;
 
   // Multi-player Mode
