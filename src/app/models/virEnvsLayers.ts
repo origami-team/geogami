@@ -362,6 +362,7 @@ export const virEnvLayers: Readonly<any> = {
       {tag:"f4",name: "Floor 4", height: 114.099},
       {tag:"f5",name: "Floor 5", height: 117.549},
       {tag:"f6",name: "Floor 6", height: 120.999},     // this floor is only to show in mapview but can't be used for creating tasks.
-    ]
+    ],
+    floorStandardHeight: 3.40,
   }
 };

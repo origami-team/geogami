@@ -20,19 +20,18 @@ export class VEBuildingUtilService {
     return h >= min && h <= max;
   }
 
-  isAvatarWithinFloor(h, floorHeight) {
+  isAvatarWithinFloor(h, floorInitialHeight, floorStandardHeight) {
     return (
-      this.valueBetween(h, floorHeight - 1, floorHeight - 0.3) ||
-      this.valueBetween(h, floorHeight + 0.3, floorHeight + 1)
+      this.valueBetween(h, floorInitialHeight, floorInitialHeight + floorStandardHeight)
     );
   }
 
-  isAvatarInGroundFloor(h, max) {
-    return h <= max;
+  isAvatarInGroundFloor(h, floorHeight) {
+    return h <= floorHeight;
   }
 
   isAvatarInLastFloor(h, floorHeight) {
-    return h >= floorHeight - 1;
+    return h >= floorHeight;
   }
 
   updateMapLayer(map: mapboxgl.Map, virEnvType: string, selectedFloor: string) {
@@ -58,13 +57,14 @@ export class VEBuildingUtilService {
     return selectedEnv.floors[defaultFloor].tag;
   }
 
-  updateMapViewBasedOnFloorHeight(virEnvType, avatarPosition_y, map) {
+  updateMapViewBasedOnFloorHeight(virEnvType, avatarP_y, map) {
+    let virEnvLayersData = virEnvLayers[virEnvType];
     // if (virEnvType == "VirEnv_40") {
     // Floor 0 / library
     if (
       this.isAvatarInGroundFloor(
-        avatarPosition_y,
-        virEnvLayers[virEnvType].floors[0].height + 1
+        avatarP_y,
+        virEnvLayersData.floors[0].height
       )
     ) {
       this.currentFloor = "f-1";
@@ -75,8 +75,8 @@ export class VEBuildingUtilService {
       );
     } else if (
       this.isAvatarWithinFloor(
-        avatarPosition_y,
-        virEnvLayers[virEnvType].floors[1].height
+        avatarP_y,
+        virEnvLayersData.floors[1].height, virEnvLayersData.floorStandardHeight 
       )
     ) {
       this.currentFloor = "f0";
@@ -87,8 +87,8 @@ export class VEBuildingUtilService {
       );
     } else if (
       this.isAvatarWithinFloor(
-        avatarPosition_y,
-        virEnvLayers[virEnvType].floors[2].height
+        avatarP_y,
+        virEnvLayersData.floors[2].height, virEnvLayersData.floorStandardHeight 
       )
     ) {
       this.currentFloor = "f1";
@@ -99,8 +99,8 @@ export class VEBuildingUtilService {
       );
     } else if (
       this.isAvatarWithinFloor(
-        avatarPosition_y,
-        virEnvLayers[virEnvType].floors[3].height
+        avatarP_y,
+        virEnvLayersData.floors[3].height, virEnvLayersData.floorStandardHeight 
       )
     ) {
       this.currentFloor = "f2";
@@ -111,8 +111,8 @@ export class VEBuildingUtilService {
       );
     } else if (
       this.isAvatarWithinFloor(
-        avatarPosition_y,
-        virEnvLayers[virEnvType].floors[4].height
+        avatarP_y,
+        virEnvLayersData.floors[4].height, virEnvLayersData.floorStandardHeight 
       )
     ) {
       this.currentFloor = "f3";
@@ -123,8 +123,8 @@ export class VEBuildingUtilService {
       );
     } else if (
       this.isAvatarWithinFloor(
-        avatarPosition_y,
-        virEnvLayers[virEnvType].floors[5].height
+        avatarP_y,
+        virEnvLayersData.floors[5].height, virEnvLayersData.floorStandardHeight 
       )
     ) {
       this.currentFloor = "f4";
@@ -135,8 +135,8 @@ export class VEBuildingUtilService {
       );
     } else if (
       this.isAvatarWithinFloor(
-        avatarPosition_y,
-        virEnvLayers[virEnvType].floors[6].height
+        avatarP_y,
+        virEnvLayersData.floors[6].height, virEnvLayersData.floorStandardHeight 
       )
     ) {
       this.currentFloor = "f5";
@@ -147,7 +147,7 @@ export class VEBuildingUtilService {
       );
     } else if (
       this.isAvatarInLastFloor(
-        avatarPosition_y,
+        avatarP_y,
         virEnvLayers[virEnvType].floors[7].height
       )
     ) {
@@ -181,19 +181,19 @@ export class VEBuildingUtilService {
     map.setStyle(newStyle);
   }
 
-  setCurrentFloor(val){
+  setCurrentFloor(val) {
     this.currentFloor = val;
   }
 
-  getCurrentFloor(){
+  getCurrentFloor() {
     return this.currentFloor;
   }
 
-  isAvatartInDestinationFloor(taskFloor){
+  isAvatartInDestinationFloor(taskFloor) {
     return this.currentFloor === taskFloor;
   }
 
-  checkFloorChange(floorNo_floor){
+  checkFloorChange(floorNo_floor) {
     return this.currentFloor !== floorNo_floor;
-  } 
+  }
 }
