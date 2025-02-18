@@ -147,6 +147,26 @@
           </ion-icon>
         </h5>
 
+        <!-- (Vir. Env.): choose task floor to view associated map -->
+        <ion-item *ngIf="isVEBuilding" lines="none" class="ion-no-padding">
+          <ion-label> {{ "CreateTasks.chooseTaskFloor" | translate }} </ion-label>
+          &nbsp;&nbsp;
+          <select
+            [(ngModel)]="selectedFloor"
+            (ngModelChange)="onFloorChanged()"
+            interface="popover"
+          >
+            <!-- slice was added to exclude sixth floor -->
+            <option
+              *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
+              [ngValue]="floor.tag"
+            >
+              {{ floor.name }}
+            </option>
+          </select>
+        </ion-item>
+        <!--  -->
+
         <!-- Toggle to set differnt destinations -->
         <ion-item
           lines="none"
@@ -179,6 +199,8 @@
             [isVirtualWorld]="isVirtualWorld"
             [isVRMirrored]="isVRMirrored"
             [virEnvType]="virEnvType"
+            [isVEBuilding]="isVEBuilding"
+            [selectedFloor]="selectedFloor"
             [allPlayersFeatures]="answer"
           ></app-map>
         </div>
