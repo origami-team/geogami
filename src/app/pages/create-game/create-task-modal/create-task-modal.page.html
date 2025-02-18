@@ -340,6 +340,7 @@
         [isVRMirrored]="isVRMirrored"
         [virEnvType]="virEnvType"
       ></app-map>
+      <ion-item-divider></ion-item-divider>
     </div>
 
     <!-- Set location by tapping on the map -->
@@ -372,8 +373,6 @@
       </app-map>
     </div>
 
-    <ion-item-divider></ion-item-divider>
-
     <!-- Destination -->
     <answer-type
       [(answer)]="task.answer"
@@ -391,7 +390,6 @@
     </answer-type>
   </div>
 
-  <ion-item-divider></ion-item-divider>
 
   <!-- Vir. Env. settings -->
   <div *ngIf="isVirtualWorld && task.settings">
@@ -434,9 +432,9 @@
       <ion-label> {{ "CreateGame.showEnvSettings" | translate }} </ion-label>
       <ion-toggle [(ngModel)]="task.settings.showEnvSettings"></ion-toggle>
     </ion-item>
-  </div>
 
-  <ion-item-divider></ion-item-divider>
+    <ion-item-divider></ion-item-divider>
+  </div>
 
   <!-- Additional settings -->
   <div *ngIf="task.settings">
@@ -595,9 +593,9 @@
         <ion-label slot="end">50m</ion-label>
       </ion-range>
     </ion-item>
-  </div>
 
-  <ion-item-divider></ion-item-divider>
+    <ion-item-divider></ion-item-divider>
+  </div>
   
   <ion-item
     detail
