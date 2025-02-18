@@ -809,6 +809,69 @@
     </ion-card>
   </div>
 
+  <ion-card class="multiPlayer-card">
+    <ion-card-header>
+      <ion-item class="ion-no-padding" lines="none" *ngIf="isVirtualWorld">
+        <h5>
+          Set avatar initial position and direction 🧍‍♂️
+          <ion-icon
+            name="information-circle"
+            (click)="
+              showPopover($event, 'Set avatar initial position and direction')
+            "
+          >
+          </ion-icon>
+        </h5>
+        <ion-toggle
+          color="danger"
+          [(ngModel)]="initialAvatarPositionStatus"
+          (ngModelChange)="initialAvatarPosToggleChange()"
+        ></ion-toggle>
+      </ion-item>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- set avatar initial position and direction - Single-player -->
+  <div *ngIf="isVirtualWorld && initialAvatarPositionStatus">
+    
+    <!-- (Vir. Env.): choose initial floor when other than task floor -->
+    <ion-item *ngIf="isVEBuilding" lines="none">
+      <ion-label> {{ "CreateTasks.chooseInitialFloor" | translate }} </ion-label>
+      <!-- Select -->
+      <select
+        [(ngModel)]="initialFloor"
+        (ngModelChange)="onFloorChanged()"
+        interface="popover"
+      >
+        <option *ngIf="initialFloor=='Select floor'" ngvalue="Select floor">
+          Select floor
+        </option>
+        <!-- slice was added to exclude sixth floor -->
+        <option
+          *ngFor="let floor of virEnvLayers[virEnvType].floors.slice(0, -1); let i = index"
+          [ngValue]="floor.tag"
+        >
+          {{ floor.name }} {{floor.tag==selectedFloor?  '('+taskFloorText+')':'' }} 
+        </option>
+      </select>
+      <br />
+    </ion-item>
+    
+    <!-- map view -->
+    <app-map
+      *ngIf="initialFloor != 'Select floor'"
+      featureType="direction"
+      [(feature)]="question.initialAvatarPosition"
+      [isVirtualWorld]="isVirtualWorld"
+      [isVRMirrored]="isVRMirrored"
+      [virEnvType]="virEnvType"
+      [isVEBuilding]="isVEBuilding" 
+      [initialFloor]="initialFloor"
+    ></app-map>
+  </div>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Direction on the map - theme->directionDetermination->shownOnMap - Multi-player -->
   <div
     *ngIf="
