@@ -738,6 +738,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             : this.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
+          arrowDestination:
+                this.task.type == "nav-arrow"
+                  ? [
+                      this.task.answer.position.geometry.coordinates[0] *
+                        111000,
+                      this.task.answer.position.geometry.coordinates[1] *
+                        112000,
+                    ]
+                  : undefined,
         });
       } else if(this.isSingleMode) {
         //* if task doesn't have initial positoin send default value and if no virenvtype is found send deafult one
@@ -762,6 +771,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             : this.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
+          arrowDestination:
+                this.task.type == "nav-arrow"
+                  ? [
+                      this.task.answer.position.geometry.coordinates[0] *
+                        111000,
+                      this.task.answer.position.geometry.coordinates[1] *
+                        112000,
+                    ]
+                  : undefined,
         });
       }
     });
@@ -1800,7 +1818,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       //* send default inital avatar position from `virEnvLayers`
       //* if no virEnvType is found send default one
       //* Note: setTimeout is important to resolve the issue of not showing vir. env. of last joined player in multi-player game
-      if(!this.task?.isVEBuilding || this.taskIndex == 0 || (this.task?.isVEBuilding && this.task?.initialFloor)){
+      if(!this.task?.isVEBuilding || this.taskIndex == 0 || (this.task?.isVEBuilding && (this.task?.initialFloor || this.task.type == "nav-arrow"))){
         setTimeout(() => {
           this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
             initialPosition: this.task.question.initialAvatarPosition
@@ -1834,7 +1852,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             virEnvType: this.task.virEnvType ?? this.game.virEnvType,     // in old games, vir. env. type is not included within each task.
             avatarSpeed: this.task.settings.avatarSpeed ?? 2,
             showEnvSettings: this.task.settings.showEnvSettings ?? true,
-            initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1
+            initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1,
+            arrowDestination:
+                this.task.type == "nav-arrow"
+                  ? [
+                      this.task.answer.position.geometry.coordinates[0] *
+                        111000,
+                      this.task.answer.position.geometry.coordinates[1] *
+                        112000,
+                    ]
+                  : undefined,
           });
         }, 1000);
       }
