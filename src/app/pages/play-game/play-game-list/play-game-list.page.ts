@@ -97,8 +97,8 @@ export class PlayGameListPage implements OnInit {
 
   ionViewWillEnter() {
     /* in case user has joined room and pressed back button */
-    if (this.socketService.socket.ioSocket.connected) {
-      this.socketService.socket.disconnect();
+    if (this.socketService.socket.ioSocket.connected && !this.socketService.getChannelCode()) {
+      this.socketService.disconnectSocket();
     }
   }
 

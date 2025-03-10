@@ -715,8 +715,14 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if (this.isSingleMode) {
         this.socketService.socket.connect();
       }
+      
+      console.log("🚀 test 1 ~ connectSocketIO ~ if:")
+
+
       this.socketService.creatAndJoinNewRoom(
-        this.playersNames[0],   // always send user_name as room name
+        this.socketService.getChannelCode()
+          ? this.socketService.getChannelCode()
+          : this.playersNames[0], // Game-code might differ from player-name, as we might have vr-headset mode where we need to send randomly generated game-code
         task.virEnvType ? task.virEnvType : this.virEnvType,
         this.isSingleMode
       );

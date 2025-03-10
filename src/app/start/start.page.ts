@@ -9,6 +9,7 @@ import { AuthService } from "../services/auth-service.service";
 import { LanguageService } from "../services/language.service";
 import { GamesService } from "../services/games.service";
 import { UtilService } from "../services/util.service";
+import { SocketService } from "../services/socket.service";
 
 @Component({
   selector: "app-start",
@@ -47,7 +48,9 @@ export class StartPage implements OnInit {
     private languageService: LanguageService,
     private alertController: AlertController,
     private gamesService: GamesService,
-    public utilService: UtilService
+    public utilService: UtilService,
+    public socketService: SocketService,
+
   ) {}
 
   async ngOnInit() {
@@ -55,6 +58,15 @@ export class StartPage implements OnInit {
     /* if (!this.utilService.getIsOnlineValue()) {
       return;
     } */
+
+    // Check if URL has a parameter with name 'channelcode'
+    const urlParams = new URLSearchParams(window.location.search);
+    const channelCode = urlParams.get('channelCode');
+    if (channelCode) {
+      console.log('//- Channel code found:', channelCode);
+      // You can add additional logic here if needed
+      this.socketService.setChannelCode(channelCode);
+    }
 
     // get current app version
     Plugins.Device.getInfo().then((device) => (this.device = device));

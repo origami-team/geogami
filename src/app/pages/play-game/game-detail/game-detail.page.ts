@@ -245,7 +245,7 @@ export class GameDetailPage implements OnInit {
 
     /* check if user name is already existed before proceeding with starting the game */
     // ToDo: test if multiplayer player can have same names
-    if (this.isVirtualWorld) {
+    if (this.isVirtualWorld && !this.socketService.getChannelCode()) {
       // connect to socket.io
       this.socketService.socket.connect();
 
@@ -263,6 +263,7 @@ export class GameDetailPage implements OnInit {
           }
         });
     } else {
+      console.log("🚀 test 2~ startGame ~ else:")
       this.playGameReal();
     }
   }

@@ -7,6 +7,18 @@ import { Socket } from "ngx-socket-io";
 })
 export class SocketService {
   socket: Socket;
+  // channelCode is used when ve-app is opened in headset mode or using the ve-app directly (without url)
+  // it is used to join the channel with ve-app and send game details after being selected by user
+  private _channelCode: string; 
+
+  getChannelCode(): string {
+    return this._channelCode;
+  }
+
+  setChannelCode(value: string) {
+    console.log("🚀 ~ SocketService ~ setchannelCode ~ channelCode:")
+    this._channelCode = value;
+  }
 
   constructor(socket: Socket, public navCtrl: NavController) {
     this.socket = socket;
@@ -28,6 +40,7 @@ export class SocketService {
   }
 
   joinVERoom(gameCode: string) {
+    console.log("🚀 test ~ SocketService ~ joinVERoom ~ joinVERoom:")
     this.socket.emit("joinVEGame", {
       gameCode: gameCode,
     });
