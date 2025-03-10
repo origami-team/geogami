@@ -739,12 +739,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
           arrowDestination:
-                this.task.type == "nav-arrow"
+                this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
                       this.task.answer.position.geometry.coordinates[0] *
                         111000,
                       this.task.answer.position.geometry.coordinates[1] *
                         112000,
+                      virEnvLayers[this.virEnvType].floors[parseInt(this.task.floor.substring(1))+1]["height"],
                     ]
                   : undefined,
         });
@@ -772,12 +773,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
           showEnvSettings: this.task.settings.showEnvSettings ?? true,
           arrowDestination:
-                this.task.type == "nav-arrow"
+                this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
                       this.task.answer.position.geometry.coordinates[0] *
                         111000,
                       this.task.answer.position.geometry.coordinates[1] *
                         112000,
+                      virEnvLayers[this.virEnvType].floors[parseInt(this.task.floor.substring(1))+1]["height"],
                     ]
                   : undefined,
         });
@@ -1854,12 +1856,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             showEnvSettings: this.task.settings.showEnvSettings ?? true,
             initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1,
             arrowDestination:
-                this.task.type == "nav-arrow"
+                this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
                       this.task.answer.position.geometry.coordinates[0] *
                         111000,
                       this.task.answer.position.geometry.coordinates[1] *
                         112000,
+                        virEnvLayers[this.virEnvType].floors[parseInt(this.task.floor.substring(1))+1]["height"],
                     ]
                   : undefined,
           });
