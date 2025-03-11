@@ -1098,10 +1098,10 @@ export class FeedbackComponent {
         ? this.avatarLastKnownPosition.coords.longitude
         : this.lastKnownPosition.coords.longitude
     );
-    this.playingGamePage.targetDistance = targetDistance;
 
     // include buidling and non buidling envs
     if (!this.task?.isVEBuilding) {
+      this.playingGamePage.targetDistance = targetDistance; // This should prevent updating disance twice as in VE we are getting distance from VE app see `updateAvatarPosition` event in play
       return targetDistance < PlayingGamePage.triggerTreshold;
     } else {
       return this.veBuildingUtilService.isAvatartInDestinationFloor(this.task.floor)
