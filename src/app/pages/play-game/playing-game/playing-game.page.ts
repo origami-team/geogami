@@ -444,6 +444,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   // VE building
   floorHeight: number;
 
+  destCoords:any; // This is use in nav-arrow task to store destination coordinates, it comes from VE in virenv games
+  arrowNextPoint: any;
+
   constructor(
     private route: ActivatedRoute,
     public modalController: ModalController,
@@ -901,13 +904,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             if (this.task && !PlayingGamePage.showSuccess) {
               if (this.task.answer.type == AnswerType.POSITION) {
                 if (this.task.answer.mode == TaskMode.NAV_ARROW) {
-                  const destCoords =
-                    this.task.answer.position.geometry.coordinates;
+                  const destCoords = this.task.answer.position.geometry.coordinates;
+
+                  //TODO: To avoid error due to undefined arrowNextPoint. Can be updated to avoid this check
+                  if(!this.arrowNextPoint){
+                    this.arrowNextPoint = destCoords
+                  }
+
                   const bearing = this.helperService.bearing(
                     parseFloat(avatarPosition["z"]) / 111200,
                     parseFloat(avatarPosition["x"]) / 111000,
-                    destCoords[1],
-                    destCoords[0]
+                    this.task?.isVEBuilding ?this.arrowNextPoint[1]: destCoords[1],
+                    this.task?.isVEBuilding ?this.arrowNextPoint[0]: destCoords[0],
                   );
                   this.heading = bearing;
                 }
@@ -1758,6 +1766,15 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       type: "INIT_TASK",
     });
 
+    // Get flag next point and disance from VE app (only for nav-arrow tasks in VE games)
+    // TODO: check if it will work on all envs as well
+    if(this.task.type == "nav-arrow" && this.task?.isVEBuilding){
+      this.socketService.socket.on("set next arrow point and distance", (data) => {
+        this.targetDistance = parseFloat(data["distance"])
+        this.arrowNextPoint = [parseFloat(data["x"])/ 111000, parseFloat(data["z"])/ 112000];
+        });
+    }
+
     /* set avatar initial position */
     if (this.isVirtualWorld) {
       if(this.task?.isVEBuilding && (this.taskIndex==0 || this.task?.initialFloor) ){
@@ -2077,8 +2094,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     // VR world (calcualte initial distance to target in nav-arrow tasks)
     if (this.isVirtualWorld && this.task.answer.mode == TaskMode.NAV_ARROW) {
+      // TODO: only for nav-arrow tasks in VE use nearest point to target and check if nearset point is final destination 
       const waypoint = this.task.answer.position.geometry.coordinates;
-      this.targetDistance = this.calculateDistanceToTarget(waypoint);
+      // This should prevent updating disance twice as in VE we are getting distance from VE app see `updateAvatarPosition` event
+      if(!this.task?.isVEBuilding){
+        this.targetDistance = this.calculateDistanceToTarget(waypoint);
+      }
       this.UpdateInitialArrowDirection(); // To update iniatl arrow direction
     }
 
