@@ -1840,7 +1840,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if(!this.task?.isVEBuilding || this.taskIndex == 0 || (this.task?.isVEBuilding && (this.task?.initialFloor || this.task.type == "nav-arrow"))){
         setTimeout(() => {
           this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-            initialPosition: this.task.question.initialAvatarPosition
+            initialPosition: this.task.question?.initialAvatarPosition
               ? [
                   this.task.question.initialAvatarPosition.position.geometry
                     .coordinates[0] * 111000,
@@ -1861,7 +1861,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
                 ]
               ),
-            initialRotation: this.task.question.initialAvatarPosition
+            initialRotation: this.task.question?.initialAvatarPosition
               ? this.task.question.initialAvatarPosition.bearing
               : this.taskIndex != 0 &&
                 this.task.virEnvType ===
@@ -2237,7 +2237,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.feedbackControl.setTask(this.task);
 
     //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
-    if (this.isVirtualWorld && !this.task?.isVEBuilding) {
+    if (this.isVirtualWorld) {
       this.previousTaskAvatarLastKnownPosition = this.avatarLastKnownPosition;
       this.previousTaskAvatarHeading = this.compassHeading;
       this.avatarLastKnownPosition = undefined;
