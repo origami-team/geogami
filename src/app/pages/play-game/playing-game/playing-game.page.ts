@@ -1850,8 +1850,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               :
               (
                 this.taskIndex != 0 &&
-                this.task.virEnvType ===
-                  this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
+              (this.task.virEnvType ===
+                  this.game.tasks[this.taskIndex - 1].virEnvType || this.task?.isVEBuilding)
               ? [
                 this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
                 this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
