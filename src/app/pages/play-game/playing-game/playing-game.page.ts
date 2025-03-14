@@ -885,7 +885,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.trackerService.addWaypoint({});
             }
 
-            if (this.avatarLastKnownPosition === undefined) {
+            // after && to avoid error due to undefined avatarLastKnownPosition
+            if (this.avatarLastKnownPosition === undefined && this.avatarLastKnownPosition) {
               // Initial avatar's positoin to measure distance to target in nav-arrow tasks
               this.avatarLastKnownPosition = new AvatarPosition(
                 0,
@@ -906,16 +907,13 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                 if (this.task.answer.mode == TaskMode.NAV_ARROW) {
                   const destCoords = this.task.answer.position.geometry.coordinates;
 
-                  //TODO: To avoid error due to undefined arrowNextPoint. Can be updated to avoid this check
-                  if(!this.arrowNextPoint){
-                    this.arrowNextPoint = destCoords
-                  }
 
+                  //To avoid error due to undefined arrowNextPoint.
                   const bearing = this.helperService.bearing(
                     parseFloat(avatarPosition["z"]) / 111200,
                     parseFloat(avatarPosition["x"]) / 111000,
-                    this.task?.isVEBuilding ?this.arrowNextPoint[1]: destCoords[1],
-                    this.task?.isVEBuilding ?this.arrowNextPoint[0]: destCoords[0],
+                    this.arrowNextPoint ?this.arrowNextPoint[1]: destCoords[1],
+                    this.arrowNextPoint ?this.arrowNextPoint[0]: destCoords[0],
                   );
                   this.heading = bearing;
                 }
@@ -2100,7 +2098,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       if(!this.task?.isVEBuilding){
         this.targetDistance = this.calculateDistanceToTarget(waypoint);
       }
-      this.UpdateInitialArrowDirection(); // To update iniatl arrow direction
+
+      // To avoid undefined avatarLastKnownPosition error
+      if(this.avatarLastKnownPosition){
+        this.UpdateInitialArrowDirection(); // To update iniatl arrow direction
+      }
     }
 
     this.changeDetectorRef.detectChanges();
@@ -2237,7 +2239,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     this.feedbackControl.setTask(this.task);
 
     //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
-    if (this.isVirtualWorld) {
+    // change it only when avatarLastKnownPosition is not undefined
       this.previousTaskAvatarLastKnownPosition = this.avatarLastKnownPosition;
       this.previousTaskAvatarHeading = this.compassHeading;
       this.avatarLastKnownPosition = undefined;
