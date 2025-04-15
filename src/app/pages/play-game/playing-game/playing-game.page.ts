@@ -2240,6 +2240,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     //* To avoid using avataLastKnownPosition when changing game task while Vir App not working temporarily
     // change it only when avatarLastKnownPosition is not undefined
+    if (this.isVirtualWorld && this.avatarLastKnownPosition) {
       this.previousTaskAvatarLastKnownPosition = this.avatarLastKnownPosition;
       this.previousTaskAvatarHeading = this.compassHeading;
       this.avatarLastKnownPosition = undefined;
