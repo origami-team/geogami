@@ -129,11 +129,11 @@ export class MapComponent
 
   ngAfterViewInit(): void {
     this.initMap().then(() => {
-      if (this.selectedFloor) {
-        this.updateMapLayer(true, this.selectedFloor);
-      }
-      if (this.initialFloor) {
-        this.updateMapLayer(true, this.initialFloor);
+      if (this.isVEBuilding) {
+        this.updateMapLayer(
+          true,
+          this.selectedFloor?this.selectedFloor:this.initialFloor
+        );
       }
     });
   }
