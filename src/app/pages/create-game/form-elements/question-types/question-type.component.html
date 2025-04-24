@@ -1,5 +1,6 @@
 <!-- ****** Single-player mode ****** -->
 <div *ngIf="isSingleMode">
+
   <!-- Task instruction - NavToFlag & NavWithArrow & NavViaText - Single-player mode-->
   <div *ngIf="question.type != questionTypeEnum.NAV_INSTRUCTION_PHOTO">
     <h5>
@@ -23,6 +24,7 @@
         </ion-icon>
       </p>
     </ion-text>
+    <ion-item-divider></ion-item-divider>
   </div>
 
   <!-- Task instruction - NavViaPhoto - Single-player -->
@@ -74,6 +76,7 @@
       </ion-icon>
     </h5>
     <app-audio-recorder [(audioSource)]="question.audio"></app-audio-recorder>
+    <ion-item-divider></ion-item-divider>
   </div>
 
   <!-- Mark object - Single-player -->
@@ -235,7 +238,7 @@
     
     <!-- map view -->
     <app-map
-      *ngIf="initialFloor != 'Select floor'"
+      *ngIf="(isVEBuilding && initialFloor!='Select floor') || !isVEBuilding"
       featureType="direction"
       [(feature)]="question.initialAvatarPosition"
       [isVirtualWorld]="isVirtualWorld"

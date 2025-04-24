@@ -856,6 +856,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
             this.lastKnownPosition = position;
 
+            // TODO: use updateheading() function
             if (this.task && !PlayingGamePage.showSuccess) {
               if (this.task.answer.type == AnswerType.POSITION) {
                 if (this.task.answer.mode == TaskMode.NAV_ARROW) {
@@ -902,23 +903,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               );
             }
 
-            if (this.task && !PlayingGamePage.showSuccess) {
-              if (this.task.answer.type == AnswerType.POSITION) {
-                if (this.task.answer.mode == TaskMode.NAV_ARROW) {
-                  const destCoords = this.task.answer.position.geometry.coordinates;
-
-
-                  //To avoid error due to undefined arrowNextPoint.
-                  const bearing = this.helperService.bearing(
-                    parseFloat(avatarPosition["z"]) / 111200,
-                    parseFloat(avatarPosition["x"]) / 111000,
-                    this.arrowNextPoint ?this.arrowNextPoint[1]: destCoords[1],
-                    this.arrowNextPoint ?this.arrowNextPoint[0]: destCoords[0],
-                  );
-                  this.heading = bearing;
-                }
-              }
-            }
+            // update arrow heading
+            this.updateHeading();
+            
 
             // building envs only: Update floor/env. map based on height
             // Note: make sure to update the impl. when other buildings than ifgi is added
@@ -1183,6 +1170,24 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // To disable map interations
     this.enableDisableMapInteraction(false);
     });
+  }
+
+  updateHeading(lastKnownPosition = this.avatarLastKnownPosition) {
+    if (this.task && !PlayingGamePage.showSuccess) {
+      if (this.task.answer.type == AnswerType.POSITION) {
+        if (this.task.answer.mode == TaskMode.NAV_ARROW) {
+          const destCoords = this.task.answer.position.geometry.coordinates;
+          //To avoid error due to undefined arrowNextPoint.
+          const bearing = this.helperService.bearing(
+            lastKnownPosition.coords.latitude,
+            lastKnownPosition.coords.longitude,
+            this.arrowNextPoint ? this.arrowNextPoint[1] : destCoords[1],
+            this.arrowNextPoint ? this.arrowNextPoint[0] : destCoords[0]
+          );
+          this.heading = bearing;
+        }
+      }
+    }
   }
 
   /* (V.E.): to load view dir. marker after changing style */
@@ -1770,6 +1775,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.socketService.socket.on("set next arrow point and distance", (data) => {
         this.targetDistance = parseFloat(data["distance"])
         this.arrowNextPoint = [parseFloat(data["x"])/ 111000, parseFloat(data["z"])/ 112000];
+
+        if (this.previousTaskAvatarLastKnownPosition){
+          this.updateHeading(this.previousTaskAvatarLastKnownPosition); // To update arrow heading
+        }
         });
     }
 
@@ -2100,7 +2109,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       }
 
       // To avoid undefined avatarLastKnownPosition error
-      if(this.avatarLastKnownPosition){
+      if (this.avatarLastKnownPosition){
         this.UpdateInitialArrowDirection(); // To update iniatl arrow direction
       }
     }
