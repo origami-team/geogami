@@ -1776,8 +1776,11 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         this.targetDistance = parseFloat(data["distance"])
         this.arrowNextPoint = [parseFloat(data["x"])/ 111000, parseFloat(data["z"])/ 112000];
 
-        if (this.previousTaskAvatarLastKnownPosition){
-          this.updateHeading(this.previousTaskAvatarLastKnownPosition); // To update arrow heading
+        // Update arrow heading of first and other tasks
+        if (this.previousTaskAvatarLastKnownPosition && !this.avatarLastKnownPosition) {
+          this.updateHeading(this.previousTaskAvatarLastKnownPosition); // To update arrow heading for tasks except the first one
+        } else if(this.avatarLastKnownPosition){
+          this.updateHeading(); // To update arrow heading for first task
         }
         });
     }
