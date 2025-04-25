@@ -571,14 +571,14 @@
       </ion-label>
       <ion-range
         [(ngModel)]="task.settings.accuracy"
-        min="0"
+        min="1"
         max="50"
         snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'"
         ticks
         pin
       >
-        <ion-label slot="start">0m</ion-label>
+        <ion-label slot="start">1m</ion-label>
         <ion-icon
           slot="start"
           size="small"
