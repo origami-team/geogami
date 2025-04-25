@@ -144,7 +144,7 @@
                 (game.tasksCount >1 ?"GameList.tasks":"GameList.task") |
                 translate) : ""}}
               </ion-label>
-              <!-- <ion-icon *ngIf="['admin', 'contentAdmin'].includes(userRole)" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon> -->
+              <ion-icon slot="end" *ngIf="game.isCuratedGame" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
             </ion-item>
           </ion-card-header>
         </ion-card>
