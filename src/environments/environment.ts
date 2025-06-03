@@ -2,8 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 // const localhost="localhost"
-const localhostIP="00.00.00.000";
-const localWebGLPort="8080";
+
+// const localhostIP="192.168.8.88"; // Change this to your local IP address
+const localhostIP="localhost";      // Use localhost if `cross-origin` error ` arised
+const localWebGLPort="50940";
 
 export const environment = {
   production: false,

@@ -740,7 +740,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.task.virEnvType
             : this.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-          showEnvSettings: this.task.settings.showEnvSettings ?? true,
+          showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
           arrowDestination:
                 this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
@@ -1877,10 +1877,12 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                 this.task.virEnvType ===
                   this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
               ? this.previousTaskAvatarHeading
-              : virEnvLayers[this.virEnvType].initialRotation ?? null,  // to add default rotation for building envs
-            virEnvType: this.task.virEnvType ?? this.game.virEnvType,     // in old games, vir. env. type is not included within each task.
+              : virEnvLayers[this.virEnvType].initialRotation ?? null,        // to add default rotation for building envs
+            virEnvType: this.task.virEnvType ?? this.game.virEnvType,         // in old games, vir. env. type is not included within each task.
             avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-            showEnvSettings: this.task.settings.showEnvSettings ?? true,
+            showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
+            showPathVisualization: this.task.settings.showPathVisualization ?? undefined,      // if `ShowPathVisualization` is undefined never send it
+            mapSize: this.task.settings.mapSize ?? undefined,      // if `mapSize` is undefined never send it
             initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1,
             arrowDestination:
                 this.task.type == "nav-arrow" && this.task?.isVEBuilding

@@ -204,7 +204,8 @@
     "setAvatarPosition":"Set avatar initial position and direction",
     "virEnvSettings": "Virtual world settings",
     "avatarSpeed":"Avatar speed",
-    "showEnvSettings":"Show environment settings"
+    "showEnvSettings":"Show environment settings",
+    "showEnvPathVisualization":"Show path visualization "
   },
   "EditGame": {
     "titleEditGame": "Edit your GeoGami",

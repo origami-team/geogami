@@ -215,8 +215,9 @@ export class MapComponent
       this.map.addControl(new mapboxgl.NavigationControl());
   
       this.map.on("click", (e) => {
+        console.log("🚀 ~ this.map.on ~ e:", e.lngLat)
         // temp
-        // // console.log("allPlayersFeatures", this.allPlayersFeatures)
+        // console.log("allPlayersFeatures", this.allPlayersFeatures)
   
         if (this.featureType == "point") {
           this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);

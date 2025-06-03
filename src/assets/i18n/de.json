@@ -204,7 +204,8 @@
     "setAvatarPosition":"Anfangsposition und Richtung des Avatars festlegen",
     "virEnvSettings": "Einstellungen der virtuellen Welt",
     "avatarSpeed":"Avatar-Geschwindigkeit",
-    "showEnvSettings":"Umgebungseinstellungen anzeigen"
+    "showEnvSettings":"Umgebungseinstellungen anzeigen",
+    "showPathVisualization":"Pfadvisualisierung anzeigen"
   },
   "EditGame": {
     "titleEditGame": "Bearbeite dein GeoGami",
