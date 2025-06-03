@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
-  apiURL: "https://api.geogami.ifgi.de",
+  // apiURL: "https://api.geogami.ifgi.de",
+  apiURL: "https://postgres.geogami.ifgi.de",
   uiURL:"https://app.geogami.ifgi.de",
   webglURL: "https://ve.geogami.ifgi.de",
   mapboxAccessToken:
