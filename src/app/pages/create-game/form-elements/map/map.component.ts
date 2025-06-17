@@ -215,7 +215,6 @@ export class MapComponent
       this.map.addControl(new mapboxgl.NavigationControl());
   
       this.map.on("click", (e) => {
-        console.log("🚀 ~ this.map.on ~ e:", e.lngLat)
         // temp
         // console.log("allPlayersFeatures", this.allPlayersFeatures)
   

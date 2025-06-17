@@ -205,7 +205,7 @@
     "virEnvSettings": "Einstellungen der virtuellen Welt",
     "avatarSpeed":"Avatar-Geschwindigkeit",
     "showEnvSettings":"Umgebungseinstellungen anzeigen",
-    "showPathVisualization":"Pfadvisualisierung anzeigen"
+    "showEnvPathVisualization":"Pfadvisualisierung anzeigen"
   },
   "EditGame": {
     "titleEditGame": "Bearbeite dein GeoGami",
