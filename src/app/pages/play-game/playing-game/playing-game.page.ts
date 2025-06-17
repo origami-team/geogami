@@ -1859,13 +1859,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         setTimeout(() => {
           this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
             initialPosition: this.setAvatarInitialPosition(),
-            initialRotation: this.task.question?.initialAvatarPosition
-              ? this.task.question.initialAvatarPosition.bearing
-              : this.taskIndex != 0 &&
-                this.task.virEnvType ===
-                  this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
-              ? this.previousTaskAvatarHeading
-              : virEnvLayers[this.virEnvType].initialRotation ?? undefined,        // to add default rotation for building envs
+            initialRotation: this.setAvatarInitialRotation(),        
             virEnvType: this.task.virEnvType ?? this.game.virEnvType,         // in old games, vir. env. type is not included within each task.
             avatarSpeed: this.task.settings.avatarSpeed ?? 2,
             showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
@@ -2947,5 +2941,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     return initialPosition
+  }
+
+  setAvatarInitialRotation(){
+    if (this.task.question?.initialAvatarPosition) {
+      return this.task.question.initialAvatarPosition.bearing;
+    } else if (
+      this.taskIndex != 0 &&
+      this.task.virEnvType === this.game.tasks[this.taskIndex - 1].virEnvType &&
+      !this.task?.isVEBuilding
+    ) {
+      return this.previousTaskAvatarHeading;
+    } else {
+      return virEnvLayers[this.virEnvType].initialRotation ?? undefined;      // to add default rotation for building envs
+    }
   }
 }
