@@ -1793,13 +1793,19 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     // ToAnswer: can floor task be set without initialposition???
     if (this.isVirtualWorld) {
       // Note: (avatarLastKnownHeight) is to make solve the issue when user press next button bfore making any movement in the VE app
-      if(this.task?.isVEBuilding && (this.taskIndex==0 || this.task?.initialFloor || !this.avatarLastKnownHeight) ){
-        let initFloor = this.task.initialFloor ? this.task?.initialFloor : this.task?.floor;
-        // update floor height
-        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(initFloor.substring(1))+1]["height"];
-        // update map layer 
-        this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, initFloor);
+      if(this.task?.isVEBuilding){
+        if((this.taskIndex==0 || this.task?.initialFloor || !this.avatarLastKnownHeight) ){
+          let initFloor = this.task.initialFloor ? this.task?.initialFloor : this.task?.floor;
+          // update floor height
+          this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(initFloor.substring(1))+1]["height"];
+          // update map layer for buidong envs
+          this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, initFloor);
+        }
+      } else {
+        // for non-building virtual environments
+        this.floorHeight = 100;
       }
+      
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
 
@@ -1867,7 +1873,8 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             mapSize: this.task.settings.mapSize ?? undefined,      // if `mapSize` is undefined never send it
             // - if this's 1st task or an initial avatar position is set send floor height
             // - else if this is not the 1st task send preious task's floor height
-            initialAvatarHeight: (this.task.question?.initialAvatarPosition || this.taskIndex == 0 || !this.avatarLastKnownHeight) && this.task.isVEBuilding?this.floorHeight: this.avatarLastKnownHeight,
+            initialAvatarHeight: this.setAvatarInitialHeight(),
+
             arrowDestination:
                 this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
@@ -2954,6 +2961,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       return this.previousTaskAvatarHeading;
     } else {
       return virEnvLayers[this.virEnvType].initialRotation ?? undefined;      // to add default rotation for building envs
+    }
+  }
+
+  setAvatarInitialHeight(){ 
+    
+    // 1. if task 
+    // (a.) is the first one, or building with initial floor, or
+    // (b.) second and has different type than previous task, or 
+    // (c.) previous task has no last known position (maybe due to press next before recording any movement)
+    if(this.taskIndex == 0 || this.task?.initialFloor || (this.taskIndex != 0 && this.task.virEnvType != this.game.tasks[this.taskIndex - 1].virEnvType) || !this.avatarLastKnownHeight){
+      return this.floorHeight;
+    }
+    else {       // for old games and non-building envs
+      return this.avatarLastKnownHeight;
     }
   }
 }
