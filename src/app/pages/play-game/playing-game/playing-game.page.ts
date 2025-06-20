@@ -2435,6 +2435,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   calculateDistanceToTarget(waypoint): number {
+    // In case nav with arrow is first task or nerver moved in VE app
+    // consider default env avatar position as last known position
+    if (this.isVirtualWorld && !this.avatarLastKnownPosition) {
+      this.avatarLastKnownPosition = new AvatarPosition(
+        0,
+        new Coords(
+          virEnvLayers[this.virEnvType].initialPosition.lat,
+          virEnvLayers[this.virEnvType].initialPosition.lng
+        )
+      );
+    }
+
     return this.helperService.getDistanceFromLatLonInM(
       waypoint[1],
       waypoint[0],
