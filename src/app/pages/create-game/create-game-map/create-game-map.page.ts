@@ -67,6 +67,7 @@ export class CreateGameMapPage implements OnInit {
     });
 
     map.on('click', e => {
+
       if (this.addMarker) {
         // create a HTML element for each feature
         const el = document.createElement('div');

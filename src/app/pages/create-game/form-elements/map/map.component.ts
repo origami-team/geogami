@@ -216,7 +216,7 @@ export class MapComponent
   
       this.map.on("click", (e) => {
         // temp
-        // // console.log("allPlayersFeatures", this.allPlayersFeatures)
+        // console.log("allPlayersFeatures", this.allPlayersFeatures)
   
         if (this.featureType == "point") {
           this.feature = this._toGeoJSONPoint(e.lngLat.lng, e.lngLat.lat);
