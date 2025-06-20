@@ -434,6 +434,29 @@
       <ion-toggle [(ngModel)]="task.settings.showEnvSettings"></ion-toggle>
     </ion-item>
 
+    <!-- show path visalisation -->
+    <ion-item lines="none">
+      <ion-label> {{ "CreateGame.showEnvPathVisualization" | translate }} </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.showPathVisualization"></ion-toggle>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label
+        >Choose map zise
+      </ion-label>
+      <select interface="popover" [(ngModel)]="task.settings.mapSize">
+        <option ngValue="1">
+          small
+        </option>
+        <option ngValue="2">
+          medium
+        </option>
+        <option ngValue="3">
+          big
+        </option>
+      </select>
+    </ion-item>
+
     <ion-item-divider></ion-item-divider>
   </div>
 

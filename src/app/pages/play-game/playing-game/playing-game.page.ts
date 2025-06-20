@@ -141,6 +141,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   //* created for solving: https://github.com/origami-team/geogami-virtual-environment-dev/issues/59
   // To send avatar previous position and heading when moving to next env. with same type and  has no initial position
   previousTaskAvatarLastKnownPosition: AvatarPosition;
+  avatarLastKnownHeight: number;    // To keep height of avatar in VR world to use it in next tasks of same type. To resolve the issue of changing avatar height in VR world - 3d building envs
   previousTaskAvatarHeading: number;
 
   // degree for nav-arrow
@@ -740,7 +741,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.task.virEnvType
             : this.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-          showEnvSettings: this.task.settings.showEnvSettings ?? true,
+          showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
           arrowDestination:
                 this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
@@ -885,6 +886,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
               this.currentSecond = new Date().getSeconds();
               this.trackerService.addWaypoint({});
             }
+
+            // Stotr avatar height
+            this.avatarLastKnownHeight = avatarPosition["y"];
 
             // after && to avoid error due to undefined avatarLastKnownPosition
             if (this.avatarLastKnownPosition === undefined && this.avatarLastKnownPosition) {
@@ -1786,14 +1790,22 @@ export class PlayingGamePage implements OnInit, OnDestroy {
     }
 
     /* set avatar initial position */
+    // ToAnswer: can floor task be set without initialposition???
     if (this.isVirtualWorld) {
-      if(this.task?.isVEBuilding && (this.taskIndex==0 || this.task?.initialFloor) ){
-        let initFloor = this.task.initialFloor?this.task?.initialFloor:this.task?.floor;
-        // update floor height
-        this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(initFloor.substring(1))+1]["height"];
-        // update map layer 
-        this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, initFloor);
+      // Note: (avatarLastKnownHeight) is to make solve the issue when user press next button bfore making any movement in the VE app
+      if(this.task?.isVEBuilding){
+        if((this.taskIndex==0 || this.task?.initialFloor || !this.avatarLastKnownHeight) ){
+          let initFloor = this.task.initialFloor ? this.task?.initialFloor : this.task?.floor;
+          // update floor height
+          this.floorHeight = virEnvLayers[this.virEnvType].floors[parseInt(initFloor.substring(1))+1]["height"];
+          // update map layer for buidong envs
+          this.veBuildingUtilService.updateMapLayer(this.map, this.task.virEnvType, initFloor);
+        }
+      } else {
+        // for non-building virtual environments
+        this.floorHeight = 100;
       }
+      
       // console.log("🚀 ~ initTask ~ socketService:");
       // if (this.task.question.initialAvatarPosition != undefined || this.task.virEnvType != undefined) {
 
@@ -1841,47 +1853,20 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       }
 
-      //* send inital loc, dir and vir env type
-      //* if task has initial postion then send it. if not,
-      //* if this isn't first task and same as previous type then send previous avatar position. if not,
-      //* send default inital avatar position from `virEnvLayers`
-      //* if no virEnvType is found send default one
       //* Note: setTimeout is important to resolve the issue of not showing vir. env. of last joined player in multi-player game
-      if(!this.task?.isVEBuilding || this.taskIndex == 0 || (this.task?.isVEBuilding && (this.task?.initialFloor || this.task.type == "nav-arrow"))){
+      // send needed attributes to the VE app without condition
+      // Still need some test to check if it works for all tasks
         setTimeout(() => {
           this.socketService.socket.emit("deliverInitialAvatarPositionByGeoApp", {
-            initialPosition: this.task.question?.initialAvatarPosition
-              ? [
-                  this.task.question.initialAvatarPosition.position.geometry
-                    .coordinates[0] * 111000,
-                  this.task.question.initialAvatarPosition.position.geometry
-                    .coordinates[1] * 112000,
-                ]
-              :
-              (
-                this.taskIndex != 0 &&
-              (this.task.virEnvType ===
-                  this.game.tasks[this.taskIndex - 1].virEnvType || this.task?.isVEBuilding)
-              ? [
-                this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
-                this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
-              ]
-              : [
-                  virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
-                  virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
-                ]
-              ),
-            initialRotation: this.task.question?.initialAvatarPosition
-              ? this.task.question.initialAvatarPosition.bearing
-              : this.taskIndex != 0 &&
-                this.task.virEnvType ===
-                  this.game.tasks[this.taskIndex - 1].virEnvType && !this.task?.isVEBuilding
-              ? this.previousTaskAvatarHeading
-              : virEnvLayers[this.virEnvType].initialRotation ?? null,  // to add default rotation for building envs
-            virEnvType: this.task.virEnvType ?? this.game.virEnvType,     // in old games, vir. env. type is not included within each task.
+            initialPosition: this.setAvatarInitialPosition(),
+            initialRotation: this.setAvatarInitialRotation(),        
+            virEnvType: this.task.virEnvType ?? this.game.virEnvType,         // in old games, vir. env. type is not included within each task.
             avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-            showEnvSettings: this.task.settings.showEnvSettings ?? true,
-            initialAvatarHeight: this.task.isVEBuilding?this.floorHeight:-1,
+            showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
+            showPathVisualization: this.task.settings.showPathVisualization ?? undefined,      // if `ShowPathVisualization` is undefined never send it
+            mapSize: this.task.settings.mapSize ? parseInt(this.task.settings.mapSize) : undefined ,      // if `mapSize` is undefined never send it
+            initialAvatarHeight: this.setAvatarInitialHeight(),
+
             arrowDestination:
                 this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
@@ -1894,7 +1879,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   : undefined,
           });
         }, 1000);
-      }
 
     }
 
@@ -2439,6 +2423,18 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   calculateDistanceToTarget(waypoint): number {
+    // In case nav with arrow is first task or nerver moved in VE app
+    // consider default env avatar position as last known position
+    if (this.isVirtualWorld && !this.avatarLastKnownPosition) {
+      this.avatarLastKnownPosition = new AvatarPosition(
+        0,
+        new Coords(
+          virEnvLayers[this.virEnvType].initialPosition.lat,
+          virEnvLayers[this.virEnvType].initialPosition.lng
+        )
+      );
+    }
+
     return this.helperService.getDistanceFromLatLonInM(
       waypoint[1],
       waypoint[0],
@@ -2920,6 +2916,65 @@ export class PlayingGamePage implements OnInit, OnDestroy {
           this.removeTargetMarker();
         }
       }
+    }
+  }
+
+  setAvatarInitialPosition(){
+    let initialPosition: number[];
+    if (this.task.question?.initialAvatarPosition) {      
+      // 1. if task has an initial position
+      initialPosition = [
+        this.task.question.initialAvatarPosition.position.geometry.coordinates[0] * 111000,
+        this.task.question.initialAvatarPosition.position.geometry.coordinates[1] * 112000,
+      ];
+    } else if (     
+      // 2. if task 
+      // (a.) is the first one, or  
+      // (b.) second and has different type than previous task, or 
+      // (c.) previous task has no last known position (maybe due to press next before recording any movement)
+      this.taskIndex == 0 ||
+      (this.taskIndex != 0 && this.task.virEnvType != this.game.tasks[this.taskIndex - 1].virEnvType) || !this.previousTaskAvatarLastKnownPosition
+    ) {
+      initialPosition = [
+        virEnvLayers[this.virEnvType].initialPosition.lng * 111000,
+        virEnvLayers[this.virEnvType].initialPosition.lat * 112000,
+      ];
+    } else {     
+      // 3. if task has same type as previous task
+      initialPosition = [
+        this.previousTaskAvatarLastKnownPosition.coords.longitude * 111000,
+        this.previousTaskAvatarLastKnownPosition.coords.latitude * 112000,
+      ];
+    }
+
+    return initialPosition
+  }
+
+  setAvatarInitialRotation(){
+    if (this.task.question?.initialAvatarPosition) {
+      return this.task.question.initialAvatarPosition.bearing;
+    } else if (
+      this.taskIndex != 0 &&
+      this.task.virEnvType === this.game.tasks[this.taskIndex - 1].virEnvType &&
+      !this.task?.isVEBuilding
+    ) {
+      return this.previousTaskAvatarHeading;
+    } else {
+      return virEnvLayers[this.virEnvType].initialRotation ?? undefined;      // to add default rotation for building envs
+    }
+  }
+
+  setAvatarInitialHeight(){ 
+    
+    // 1. if task 
+    // (a.) is the first one, or building with initial floor, or
+    // (b.) second and has different type than previous task, or 
+    // (c.) previous task has no last known position (maybe due to press next before recording any movement)
+    if(this.taskIndex == 0 || this.task?.initialFloor || (this.taskIndex != 0 && this.task.virEnvType != this.game.tasks[this.taskIndex - 1].virEnvType) || !this.avatarLastKnownHeight){
+      return this.floorHeight;
+    }
+    else {       // for old games and non-building envs
+      return this.avatarLastKnownHeight;
     }
   }
 }
