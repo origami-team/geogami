@@ -216,11 +216,16 @@ export class CreateTaskModalPage implements OnInit {
     // this.onTaskSelected(this.task);
     this.onTaskSelected(cloneDeep(this.task));
 
-    // Set default avatar-speed of new tasks
+    // Set default avatar-speed  and map size of new tasks
     if (this.isVirtualWorld) {
       if (!this.task.settings.avatarSpeed) {
         this.task.settings.avatarSpeed =
           virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
+      }
+
+      // Set default map size if not set
+      if (!this.task.settings.mapSize) {
+        this.task.settings.mapSize = "2";
       }
 
       // check wether selected VE is a building

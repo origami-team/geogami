@@ -1853,13 +1853,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         }
       }
 
-      //* send inital loc, dir and vir env type
-      //* if task has initial postion then send it. if not,
-      //* if this isn't first task and same as previous type then send previous avatar position. if not,
-      //* send default inital avatar position from `virEnvLayers`
-      //* if no virEnvType is found send default one
       //* Note: setTimeout is important to resolve the issue of not showing vir. env. of last joined player in multi-player game
-      if(!this.task?.isVEBuilding || this.taskIndex == 0 || (this.task?.isVEBuilding && (this.task?.initialFloor || this.task.type == "nav-arrow"))){
       // send needed attributes to the VE app without condition
       // Still need some test to check if it works for all tasks
         setTimeout(() => {
@@ -1870,9 +1864,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             avatarSpeed: this.task.settings.avatarSpeed ?? 2,
             showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
             showPathVisualization: this.task.settings.showPathVisualization ?? undefined,      // if `ShowPathVisualization` is undefined never send it
-            mapSize: this.task.settings.mapSize ?? undefined,      // if `mapSize` is undefined never send it
-            // - if this's 1st task or an initial avatar position is set send floor height
-            // - else if this is not the 1st task send preious task's floor height
+            mapSize: this.task.settings.mapSize ? parseInt(this.task.settings.mapSize) : undefined ,      // if `mapSize` is undefined never send it
             initialAvatarHeight: this.setAvatarInitialHeight(),
 
             arrowDestination:
@@ -1887,10 +1879,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
                   : undefined,
           });
         }, 1000);
-      } else{
-        console.log("🚀 ~ test 2222 initTask ~ else:11111111111")
-        
-      }
 
     }
 

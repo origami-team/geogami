@@ -12,6 +12,6 @@ export interface Task {
         avatarSpeed: number,
         showEnvSettings: boolean,
         showPathVisualization: boolean,
-        mapSize: boolean,
+        mapSize: number,
     }
 }
