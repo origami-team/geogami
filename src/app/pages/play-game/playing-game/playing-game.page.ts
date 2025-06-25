@@ -741,7 +741,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.task.virEnvType
             : this.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-          showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
+          showEnvSettings: this.task.settings.showEnvSettings ?? false,      // if `showEnvSettings` is undefined use default value `true`
           arrowDestination:
                 this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
@@ -775,7 +775,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             ? this.task.virEnvType
             : this.virEnvType,
           avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-          showEnvSettings: this.task.settings.showEnvSettings ?? true,
+          showEnvSettings: this.task.settings.showEnvSettings ?? false,
           arrowDestination:
                 this.task.type == "nav-arrow" && this.task?.isVEBuilding
                   ? [
@@ -1862,7 +1862,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             initialRotation: this.setAvatarInitialRotation(),        
             virEnvType: this.task.virEnvType ?? this.game.virEnvType,         // in old games, vir. env. type is not included within each task.
             avatarSpeed: this.task.settings.avatarSpeed ?? 2,
-            showEnvSettings: this.task.settings.showEnvSettings ?? true,      // if `showEnvSettings` is undefined use default value `true`
+            showEnvSettings: this.task.settings.showEnvSettings ?? false,      // if `showEnvSettings` is undefined use default value `true`
             showPathVisualization: this.task.settings.showPathVisualization ?? undefined,      // if `ShowPathVisualization` is undefined never send it
             mapSize: this.task.settings.mapSize ? parseInt(this.task.settings.mapSize) : undefined ,      // if `mapSize` is undefined never send it
             initialAvatarHeight: this.setAvatarInitialHeight(),
