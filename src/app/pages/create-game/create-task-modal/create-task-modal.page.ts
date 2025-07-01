@@ -218,7 +218,8 @@ export class CreateTaskModalPage implements OnInit {
 
     // Set default avatar-speed  and map size of new tasks
     if (this.isVirtualWorld) {
-      if (!this.task.settings.avatarSpeed) {
+      // Set default avatar speed if not set
+      if (!this.task.settings.avatarSpeed && this.task.settings.avatarSpeed!= 0) {
         this.task.settings.avatarSpeed =
           virEnvLayers[this.virEnvType].defaultAvatarSpeed ?? 2;
       }
