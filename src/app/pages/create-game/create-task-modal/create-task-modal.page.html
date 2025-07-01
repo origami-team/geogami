@@ -404,7 +404,7 @@
       <ion-label> {{ "CreateGame.avatarSpeed" | translate }} </ion-label>
       <ion-range
         [(ngModel)]="task.settings.avatarSpeed"
-        min="1"
+        min="0"
         max="7"
         snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'"
