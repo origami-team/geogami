@@ -53,7 +53,7 @@
             <!-- Nav tasks -->
             <div
               *ngIf="task.category.includes('nav')"
-              (click)="presentTaskModal('nav', task)"
+              (click)="presentTaskModal('nav', task, i+1)"
             >
               <ion-chip color="primary">
                 <ion-label>
@@ -75,7 +75,7 @@
             <!-- Theme tasks -->
             <div
               *ngIf="task.category.includes('theme')"
-              (click)="presentTaskModal('theme', task)"
+              (click)="presentTaskModal('theme', task, i+1)"
             >
               <ion-chip color="secondary">
                 <ion-label>
@@ -97,7 +97,7 @@
             <!-- Info tasks -->
             <div
               *ngIf="task.category.includes('info')"
-              (click)="presentTaskModal('info', task)"
+              (click)="presentTaskModal('info', task, i+1)"
             >
               <ion-chip color="warning">
                 <ion-label>

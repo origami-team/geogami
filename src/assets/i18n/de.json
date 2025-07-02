@@ -204,6 +204,7 @@
     "setAvatarPosition":"Anfangsposition und Richtung des Avatars festlegen",
     "virEnvSettings": "Einstellungen der virtuellen Welt",
     "avatarSpeed":"Avatar-Geschwindigkeit",
+    "disableAvatarRotation":"Avatar-Rotation deaktivieren",
     "showEnvSettings":"Umgebungseinstellungen anzeigen",
     "showEnvPathVisualization":"Pfadvisualisierung anzeigen"
   },
@@ -308,7 +309,8 @@
     "directionMap": "Markiere die gesuchte Richtung auf der Karte. Wähle zunächst den Ort und dann die Blickrichtung. Die Markierung wird im Spiel angezeigt.",
     "photoDirection": "Wähle ein Foto, das die gesuchte Blickrichtung darstellt.",
     "showMappingView": "Wann soll die Kartierung des Spielers auf der Karte angezeigt werden?",
-    "showTrack": "Wann soll die Strecke des Spielers auf der Karte angezeigt werden?"
+    "showTrack": "Wann soll die Strecke des Spielers auf der Karte angezeigt werden?",
+    "avatarSpeedZero": "Bei Geschwindigkeit null bleibt der Avatar stehen."
   },
   "Feedback": {
     "correct": "Du hast die Aufgabe richtig gelöst!",

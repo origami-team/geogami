@@ -204,6 +204,7 @@
     "setAvatarPosition":"Set avatar initial position and direction",
     "virEnvSettings": "Virtual world settings",
     "avatarSpeed":"Avatar speed",
+    "disableAvatarRotation":"Disable avatar rotation",
     "showEnvSettings":"Show environment settings",
     "showEnvPathVisualization":"Show path visualization "
   },
@@ -308,7 +309,8 @@
     "directionMap": "Mark the direction to be searched on the map. First select the location and then the view direction. The marker will be displayed in the game.",
     "photoDirection": "Choose a photo that represents the view direction to be searched.",
     "showMappingView": "When should the player's mapping be displayed on the map?",
-    "showTrack": "When should the player's track be displayed on the map?"
+    "showTrack": "When should the player's track be displayed on the map?",
+    "avatarSpeedZero": "At zero speed, avatar will remain stationary."
   },
   "Feedback": {
     "correct": "You solved the task correctly!",
