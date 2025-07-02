@@ -8,10 +8,14 @@
     <ion-title *ngIf="type == 'nav'">
       <ion-icon name="navigate" color="primary"></ion-icon> {{
       "Tasktypes.navigationTasks" | translate }}
+      <!-- Show task No -->
+      <span *ngIf="taskNo"> ({{ ("General.task" | translate) + " " + taskNo}}) </span>
     </ion-title>
     <ion-title *ngIf="type == 'theme'">
       <ion-icon name="clipboard" color="secondary"></ion-icon> {{
       "Tasktypes.thematicTasks" | translate }}
+      <!-- Show task No -->
+      <span *ngIf="taskNo"> ({{ ("General.task" | translate) + " " + taskNo}}) </span>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button color="dark" (click)="dismissModal(null)">
@@ -401,10 +405,17 @@
     
     <!-- Avatar speed -->
     <ion-item lines="none" class="item-range">
-      <ion-label> {{ "CreateGame.avatarSpeed" | translate }} </ion-label>
+      <ion-label>
+        {{ "CreateGame.avatarSpeed" | translate }}
+        <ion-icon
+          name="information-circle"
+          (click)="showPopover($event, 'Popover.avatarSpeedZero')"
+        >
+        </ion-icon>
+      </ion-label>
       <ion-range
         [(ngModel)]="task.settings.avatarSpeed"
-        min="1"
+        min="0"
         max="7"
         snaps
         [color]="task.category == 'nav' ? 'primary' : 'secondary'"
@@ -428,6 +439,12 @@
       </ion-range>
     </ion-item>
 
+    <!-- Disable avatar rotation -->
+    <ion-item lines="none">
+      <ion-label> {{ "CreateGame.disableAvatarRotation" | translate }} </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.disableAvatarRotation"></ion-toggle>
+    </ion-item>
+
     <!-- show environment settings -->
     <ion-item lines="none">
       <ion-label> {{ "CreateGame.showEnvSettings" | translate }} </ion-label>
@@ -442,7 +459,7 @@
 
     <ion-item lines="none">
       <ion-label
-        >Choose map zise
+        >Choose map size
       </ion-label>
       <select interface="popover" [(ngModel)]="task.settings.mapSize">
         <option ngValue="1">
@@ -482,6 +499,7 @@
         (ngModelChange)="settingsChange($event)"
       ></ion-toggle>
     </ion-item>
+
     <ion-item
       lines="none"
       *ngIf="task.type == 'nav-text' || task.type == 'nav-photo'"
@@ -499,6 +517,7 @@
         (ngModelChange)="settingsChange()"
       ></ion-toggle>
     </ion-item>
+
     <ion-item lines="none" *ngIf="showFeedback">
       <ion-label>
         {{ "CreateGame.feedback" | translate }}
@@ -514,6 +533,7 @@
         (ngModelChange)="feedbackChange()"
       ></ion-toggle>
     </ion-item>
+
     <ion-item lines="none" *ngIf="showMultipleTries">
       <ion-label>
         {{ "CreateGame.severalTrials" | translate }}

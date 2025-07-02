@@ -133,6 +133,8 @@
                   {{ game.name }}
                 </h2>
               </ion-label>
+              <!-- Star for curated games -->
+              <ion-icon class="star-icon" slot="end" *ngIf="game.isCuratedGame" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
               <ion-label
                 slot="end"
                 *ngIf="(game.isMultiplayerGame && game.isMultiplayerGame == true) || game.tasksCount"
@@ -144,7 +146,6 @@
                 (game.tasksCount >1 ?"GameList.tasks":"GameList.task") |
                 translate) : ""}}
               </ion-label>
-              <ion-icon slot="end" *ngIf="game.isCuratedGame" name="star" [color]="game.isCuratedGame? 'warning' : ''"></ion-icon>
             </ion-item>
           </ion-card-header>
         </ion-card>

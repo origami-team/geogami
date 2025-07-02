@@ -143,6 +143,7 @@ export class EditGameTasksPage implements OnInit {
   async presentTaskModal(
     type: string = "nav",
     task: any = null,
+    taskNo: number = null,
     isVirtualWorld: boolean = this.isVirtualWorld,
     isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
@@ -161,6 +162,7 @@ export class EditGameTasksPage implements OnInit {
       componentProps: {
         type,
         task,
+        taskNo,
         isVirtualWorld, // added to view VR world map instead of real map if true
         isVRMirrored,
         virEnvType,

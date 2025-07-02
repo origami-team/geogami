@@ -63,3 +63,8 @@ ion-range::part(.range-has-pin){
   flex-direction: column;
   align-items: baseline;
 }
+
+// To overcome the issue of missing text of long ones
+ion-label{
+  min-width: fit-content;
+}

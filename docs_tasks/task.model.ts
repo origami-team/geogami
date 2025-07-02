@@ -10,6 +10,7 @@ export interface Task {
         confirmation: String,
         mapFeatures: any,
         avatarSpeed: number,
+        disableAvatarRotation: boolean,
         showEnvSettings: boolean,
         showPathVisualization: boolean,
         mapSize: number,
