@@ -96,6 +96,7 @@ export class CreateGameListPage implements OnInit {
   async presentTaskModal(
     type: string = "nav",
     task: any = null,
+    taskNo: number = null,
     isVirtualWorld: boolean = !this.isRealWorld,
     isVRMirrored: boolean = this.isVRMirrored,
     numPlayers: number = this.numPlayers,
@@ -114,6 +115,7 @@ export class CreateGameListPage implements OnInit {
       componentProps: {
         type,
         task,
+        taskNo,
         isVirtualWorld,
         isVRMirrored,
         virEnvType,

@@ -24,6 +24,7 @@ import { VEBuildingUtilService } from "src/app/services/ve-building-util.service
 })
 export class CreateInfoModalComponent implements OnInit, OnChanges {
   @Input() task: any;
+  @Input() taskNo: number;
   // @Input() question: any;
 
   // VR world

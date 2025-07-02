@@ -30,6 +30,7 @@ export class CreateTaskModalPage implements OnInit {
   @Input() gameName = "";
   @Input() type = "nav";
   @Input() task: any = {};
+  @Input() taskNo: number;
 
   // VR world
   @Input() isVirtualWorld: boolean;

@@ -8,10 +8,14 @@
     <ion-title *ngIf="type == 'nav'">
       <ion-icon name="navigate" color="primary"></ion-icon> {{
       "Tasktypes.navigationTasks" | translate }}
+      <!-- Show task No -->
+      <span *ngIf="taskNo"> ({{ ("General.task" | translate) + " " + taskNo}}) </span>
     </ion-title>
     <ion-title *ngIf="type == 'theme'">
       <ion-icon name="clipboard" color="secondary"></ion-icon> {{
       "Tasktypes.thematicTasks" | translate }}
+      <!-- Show task No -->
+      <span *ngIf="taskNo"> ({{ ("General.task" | translate) + " " + taskNo}}) </span>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button color="dark" (click)="dismissModal(null)">
