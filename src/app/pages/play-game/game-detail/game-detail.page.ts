@@ -544,7 +544,7 @@ export class GameDetailPage implements OnInit {
         // hide points layer
         this.map.setLayoutProperty("points", "visibility", "none");
 
-        // to fix the issue of smaller zise map after loading- **this is due to adding ngstyle on card container**
+        // to fix the issue of smaller size map after loading- **this is due to adding ngstyle on card container**
         this.map.resize();
       });
     });
