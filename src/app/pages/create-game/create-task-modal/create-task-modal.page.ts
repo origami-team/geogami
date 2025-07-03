@@ -227,7 +227,7 @@ export class CreateTaskModalPage implements OnInit {
 
       // Set default map size if not set
       if (!this.task.settings.mapSize) {
-        this.task.settings.mapSize = "2";
+        this.task.settings.mapSize = "3";
       }
 
       // check wether selected VE is a building
