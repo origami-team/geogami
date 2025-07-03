@@ -463,13 +463,19 @@
       </ion-label>
       <select interface="popover" [(ngModel)]="task.settings.mapSize">
         <option ngValue="1">
-          small
+          none
         </option>
         <option ngValue="2">
-          medium
+          small
         </option>
         <option ngValue="3">
+          medium
+        </option>
+        <option ngValue="4">
           big
+        </option>
+        <option ngValue="5">
+          full screen
         </option>
       </select>
     </ion-item>
