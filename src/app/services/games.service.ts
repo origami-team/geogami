@@ -18,6 +18,8 @@ export class GamesService {
     let headers = new HttpHeaders();
     const token = window.localStorage.getItem("bg_accesstoken");
     if (token) {
+      // The token is valid for one hour
+      // and is stored in localStorage after login
       headers = headers.append("Authorization", "Bearer " + token);
     }
     headers = headers.append("Content-Type", "application/json");
