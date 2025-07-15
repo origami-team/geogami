@@ -1867,7 +1867,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
             disableAvatarRotation: this.task.settings.disableAvatarRotation ?? false, 
             showEnvSettings: this.task.settings.showEnvSettings ?? false,      // if `showEnvSettings` is undefined use default value `true`
             showPathVisualization: this.task.settings.showPathVisualization ?? undefined,      // if `ShowPathVisualization` is undefined never send it
-            mapSize: this.task.settings.mapSize ? parseInt(this.task.settings.mapSize) : undefined ,      // if `mapSize` is undefined never send it
+            mapSize: this.task.settings.mapSize ? parseInt(this.task.settings.mapSize) : 3 ,      // if `mapSize` is undefined send default value `3`
             initialAvatarHeight: this.setAvatarInitialHeight(),
 
             arrowDestination:
