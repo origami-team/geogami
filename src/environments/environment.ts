@@ -12,6 +12,7 @@ export const environment = {
   apiURL: `http://${localhostIP}:3000`,
   uiURL:`http://${localhostIP}:8100`,
   webglURL: `http://${localhostIP}:${localWebGLPort}`,
+  dashboardURL: `https://dashboard.geogami.ifgi.de`,
   mapboxAccessToken:
     "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA",
   photoQuality: 10,

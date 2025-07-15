@@ -3,6 +3,7 @@ export const environment = {
   apiURL: "https://api.geogami.ifgi.de",
   uiURL:"https://app.geogami.ifgi.de",
   webglURL: "https://ve.geogami.ifgi.de",
+  dashboardURL: `https://dashboard.geogami.ifgi.de`,
   mapboxAccessToken:
     "pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA",
   photoQuality: 10,
