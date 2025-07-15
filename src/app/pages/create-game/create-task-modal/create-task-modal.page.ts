@@ -55,6 +55,7 @@ export class CreateTaskModalPage implements OnInit {
 
   showFeedback = true;
   showMultipleTries = true;
+  defaultTaskAccuracy = 3; // default accuracy for tasks
 
   // step = 5;
 
@@ -183,7 +184,7 @@ export class CreateTaskModalPage implements OnInit {
         feedback: true,
         multipleTries: true,
         confirmation: this.task.category.includes("theme"),
-        accuracy: 5,
+        accuracy: this.defaultTaskAccuracy,
         showMarker: true,
         keepMarker: false,
         keepDrawing: "current",
@@ -343,7 +344,7 @@ export class CreateTaskModalPage implements OnInit {
         feedback: true,
         multipleTries: true,
         confirmation: this.task.category.includes("theme"),
-        accuracy: 10,
+        accuracy: this.defaultTaskAccuracy,
         showMarker: true,
         keepMarker: false,
         keepDrawing: "current",

@@ -1,3 +1,4 @@
+// TODO: you might want to remove this file from the project if it is not needed anymore
 import { Component, OnInit, ElementRef } from "@angular/core";
 
 import { NavController } from "@ionic/angular";
