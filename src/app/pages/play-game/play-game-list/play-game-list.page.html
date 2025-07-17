@@ -127,10 +127,12 @@
               <ion-label>
                 <h2>
                   <ion-icon name="game-controller"></ion-icon
-                  ><span *ngIf="game.place"
-                    ><b>&nbsp;&nbsp;{{ game.place }}</b> -
+                  >
+                  
+                  <b> &nbsp; {{ game.name }}</b>
+                  <span *ngIf="game.place">
+                    - &nbsp;{{ game.place }}
                   </span>
-                  {{ game.name }}
                 </h2>
               </ion-label>
               <!-- Star for curated games -->
