@@ -290,37 +290,24 @@ export class GameDetailPage implements OnInit {
   playGameVE() {
     if (this.isSingleMode) {
       //*** for new impl. where we need to check whether game name is already used and close frame when game is done.
-      // ToDo: remove else, when webGL integration works fine
-      if (!this.useExternalVEApp_cbox) {
-        this.socketService.creatAndJoinNewRoom(
-          this.playerName,
-          this.virEnvType,
-          this.isSingleMode
-        );
+      this.socketService.creatAndJoinNewRoom(
+        this.playerName,
+        this.virEnvType,
+        this.isSingleMode
+      );
 
-        // Close frame and redirect to start-page when game is over.
-        this.socketService.closeFrame_listener();
+      // Close frame and redirect to start-page when game is over.
+      this.socketService.closeFrame_listener();
 
-        this.bundle = {
-          ...this.bundle,
-          date: new Date().getTime(), // you can delete it after fully testing webgl
-        };
+      this.bundle = {
+        ...this.bundle,
+        date: new Date().getTime(), // you can delete it after fully testing webgl
+      };
 
-        /* redirect player to WebGL-build - page */
-        this.navCtrl.navigateForward(
-          `playing-virenv/${JSON.stringify(this.bundle)}`
-        );
-      } else {
-        // if use external vir.env. is checked
-        this.bundle = {
-          ...this.bundle,
-          useExternalVEApp_cbox: this.useExternalVEApp_cbox, // you can delete it after fully testing webgl
-        };
-
-        this.navCtrl.navigateForward(
-          `play-game/playing-game/${JSON.stringify(this.bundle)}`
-        );
-      }
+      /* redirect player to WebGL-build - page */
+      this.navCtrl.navigateForward(
+        `playing-virenv/${JSON.stringify(this.bundle)}`
+      );
     } else {
       //Multi-player
       /* check whether game is full beofore join game */
@@ -374,7 +361,7 @@ export class GameDetailPage implements OnInit {
             3500
           );
         } else {
-          if (this.useExternalVEApp_cbox || !this.isVirtualWorld) {
+          if (!this.isVirtualWorld) {
             this.navCtrl.navigateForward(
               `play-game/playing-game/${JSON.stringify(bundle)}`
             );

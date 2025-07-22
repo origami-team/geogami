@@ -534,7 +534,6 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.sPlayerNo = JSON.parse(params.bundle).sPlayerNo;
       this.cJoindPlayersCount = JSON.parse(params.bundle).cJoindPlayersCount;
       this.sTaskNo = JSON.parse(params.bundle).sTaskNo;
-      this.useExternalVE_app = JSON.parse(params.bundle).useExternalVEApp_cbox;
     });
 
     this.game = null;
@@ -709,22 +708,16 @@ export class PlayingGamePage implements OnInit, OnDestroy {
      *   (with single (no webgl) & multiplayer -> here where user connect join a room )
      ***/
 
-    if (
-      this.isSingleMode &&
-      this.useExternalVE_app
-    ) {
-      this.socketService.joinVERoom(this.playersNames[0]);  // always send user_name as room name
-    } else {
-      // To Do: update it after testing integrated webGL frame
-      if (this.isSingleMode) {
-        this.socketService.socket.connect();
-      }
-      this.socketService.creatAndJoinNewRoom(
-        this.playersNames[0],   // always send user_name as room name
-        task.virEnvType ? task.virEnvType : this.virEnvType,
-        this.isSingleMode
-      );
+    // To Do: update it after testing integrated webGL frame
+    if (this.isSingleMode) {
+      this.socketService.socket.connect();
     }
+
+    this.socketService.creatAndJoinNewRoom(
+      this.playersNames[0], // always send user_name as room name
+      task.virEnvType ? task.virEnvType : this.virEnvType,
+      this.isSingleMode
+    );
 
     /* To update avatar initial position */
     this.socketService.socket.on("requestAvatarInitialPosition", () => {
