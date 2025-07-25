@@ -5,7 +5,7 @@
 
 // const localhostIP="192.168.8.88"; // Change this to your local IP address
 const localhostIP="localhost";      // Use localhost if `cross-origin` error ` arised
-const localWebGLPort="50940";
+const localWebGLPort="51281";
 
 export const environment = {
   production: false,
