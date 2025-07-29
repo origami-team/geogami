@@ -339,6 +339,9 @@ export class CreateTaskModalPage implements OnInit {
 
     this.task = newValue;
 
+    // Check if question text is empty and set it to the translation key - after changing task type
+    this.checkAndUpdateQuestionText();
+
     if (!this.task.settings || Object.keys(this.task.settings).length == 0) {
       this.task.settings = {
         feedback: true,
@@ -1016,5 +1019,20 @@ export class CreateTaskModalPage implements OnInit {
           this.task.answer[2].type = this.task.answer[0].type;
         }
       }
+  }
+
+  checkAndUpdateQuestionText() {
+    if (this.isSingleMode) {
+      if (!this.task.question.text?.trim()) {
+        this.task.question.text = this.translate.instant(this.task.question.key);
+      }
+    } else {
+      // multi-player mode
+      if (!this.task.question[0].text?.trim()) {
+        this.task.question.forEach((q: any) => {
+          q.text = this.translate.instant(q.key);
+        });
+      }
+    }
   }
 }

@@ -37,8 +37,8 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
   @Output() initialFloorChange=new EventEmitter();
 
   // Multi-player Mode
-  @Input() numPlayers: Number;
-  @Input() isSingleMode: Number;
+  @Input() numPlayers: number;
+  @Input() isSingleMode: number;
   @Input() collaborationType: any;
 
   @Output() questionChange: EventEmitter<any> = new EventEmitter<any>(true);
@@ -74,6 +74,9 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    // Check if question text is empty and set it to the translation key
+    this.checkAndUpdateQuestionText();
+
     if (
       this.isVirtualWorld &&
       this.question &&
@@ -110,5 +113,20 @@ export class QuestionTypeComponent implements OnInit, OnChanges {
 
   onFloorChanged(){
     this.initialFloorChange.emit(this.initialFloor);
+  }
+
+  checkAndUpdateQuestionText() {
+    if (this.isSingleMode) {
+      if (!this.question.text?.trim()) {
+        this.question.text = this.translate.instant(this.question.key);
+      }
+    } else {
+      // multi-player mode
+      if (!this.question[0].text?.trim()) {
+        this.question.forEach((q: any) => {
+          q.text = this.translate.instant(q.key);
+        });
+      }
+    }
   }
 }
