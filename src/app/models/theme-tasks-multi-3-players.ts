@@ -10,15 +10,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.TEXT,
-                text: 'Wo bist du jetzt? Tippe auf die Karte.'
+                key: 'QuestionText.whereAreYouNow',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Wo bist du jetzt? Tippe auf die Karte.'
+                key: 'QuestionText.whereAreYouNow',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Wo bist du jetzt? Tippe auf die Karte.'
+                key: 'QuestionText.whereAreYouNow',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answer: [
@@ -43,15 +46,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.MAP_FEATURE,
-                text: 'Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.',
+                key: 'QuestionText.findTheHouseChoosePhoto',
+            text: ''    // empty text will be replaced by the translation,
             },
             {
                 type: QuestionType.MAP_FEATURE,
-                text: 'Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.',
+                key: 'QuestionText.findTheHouseChoosePhoto',
+            text: ''    // empty text will be replaced by the translation,
             },
             {
                 type: QuestionType.MAP_FEATURE,
-                text: 'Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.',
+                key: 'QuestionText.findTheHouseChoosePhoto',
+            text: ''    // empty text will be replaced by the translation,
             }
         ],
         answer: [
@@ -75,15 +81,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.MAP_FEATURE,
-                text: 'Finde das markierte Haus in deiner Nähe. Mache ein Foto.',
+                key: 'QuestionText.findTheHouseTakePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_FEATURE,
-                text: 'Finde das markierte Haus in deiner Nähe. Mache ein Foto.',
+                key: 'QuestionText.findTheHouseTakePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_FEATURE,
-                text: 'Finde das markierte Haus in deiner Nähe. Mache ein Foto.',
+                key: 'QuestionText.findTheHouseTakePhoto',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answer: [
@@ -108,15 +117,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.MAP_FEATURE_PHOTO,
-                text: 'Suche dieses Haus in deiner Nähe. Finde es auf der Karte und tippe es an.',
+                key: 'QuestionText.lookForTheHouse',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_FEATURE_PHOTO,
-                text: 'Suche dieses Haus in deiner Nähe. Finde es auf der Karte und tippe es an.',
+                key: 'QuestionText.lookForTheHouse',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_FEATURE_PHOTO,
-                text: 'Suche dieses Haus in deiner Nähe. Finde es auf der Karte und tippe es an.',
+                key: 'QuestionText.lookForTheHouse',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answer: [
@@ -141,17 +153,20 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Finde es auf der Karte und tippe es an.',
+                key: 'QuestionText.lookForSThingTap',
+            text: '',    // empty text will be replaced by the translation,
                 mode: TaskMode.NO_FEATURE
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Finde es auf der Karte und tippe es an.',
+                key: 'QuestionText.lookForSThingTap',
+            text: '',    // empty text will be replaced by the translation,
                 mode: TaskMode.NO_FEATURE
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Finde es auf der Karte und tippe es an.',
+                key: 'QuestionText.lookForSThingTap',
+            text: '',    // empty text will be replaced by the translation,
                 mode: TaskMode.NO_FEATURE
             }
         ],
@@ -181,15 +196,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Wähle das passende Foto.'
+                key: 'QuestionText.lookForSThingChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Wähle das passende Foto.'
+                key: 'QuestionText.lookForSThingChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Wähle das passende Foto.'
+                key: 'QuestionText.lookForSThingChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answerType: 'multipleChoice',
@@ -215,15 +233,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Mache ein Foto.'
+                key: 'QuestionText.lookForSThingTakePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Mache ein Foto.'
+                key: 'QuestionText.lookForSThingTakePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Suche [...] in deiner Nähe. Mache ein Foto.'
+                key: 'QuestionText.lookForSThingTakePhoto',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answerType: 'photo',
@@ -249,15 +270,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.MAP_DIRECTION_MARKER,
-                text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst. Wähle das passende Foto.'
+                key: 'QuestionText.turnDirectionChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION_MARKER,
-                text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst. Wähle das passende Foto.'
+                key: 'QuestionText.turnDirectionChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION_MARKER,
-                text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst. Wähle das passende Foto.'
+                key: 'QuestionText.turnDirectionChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answerType: 'multipleChoice',
@@ -283,15 +307,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.MAP_DIRECTION_MARKER,
-                text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst.'
+                key: 'QuestionText.turnDirection',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION_MARKER,
-                text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst.'
+                key: 'QuestionText.turnDirection',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION_MARKER,
-                text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst.'
+                key: 'QuestionText.turnDirection',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answerType: 'direction',
@@ -317,15 +344,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.MAP_DIRECTION,
-                text: 'Drehe dich, bis die Pfeile in die gleiche Richtung zeigen.'
+                key: 'QuestionText.turnDirection',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION,
-                text: 'Drehe dich, bis die Pfeile in die gleiche Richtung zeigen.'
+                key: 'QuestionText.turnDirection',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION,
-                text: 'Drehe dich, bis die Pfeile in die gleiche Richtung zeigen.'
+                key: 'QuestionText.turnDirection',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answerType: 'direction',
@@ -354,15 +384,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.TEXT,
-                text: 'Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte.'
+                key: 'QuestionText.whereAreYouLooking',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte.'
+                key: 'QuestionText.whereAreYouLooking',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte.'
+                key: 'QuestionText.whereAreYouLooking',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answer: [
@@ -388,15 +421,18 @@ export const themetasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.MAP_DIRECTION_PHOTO,
-                text: 'Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte.'
+                key: 'QuestionText.turnDirectionPhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION_PHOTO,
-                text: 'Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte.'
+                key: 'QuestionText.turnDirectionPhoto',
+            text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.MAP_DIRECTION_PHOTO,
-                text: 'Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte.'
+                key: 'QuestionText.turnDirectionPhoto',
+            text: ''    // empty text will be replaced by the translation
             }
         ],
         answerType: 'mapDirection',
