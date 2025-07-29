@@ -10,15 +10,18 @@ export const navtasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.TEXT,
-                text: 'Gehe zur Fahne.'
+                key: 'QuestionText.goToFlag',
+                text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Gehe zur Fahne.'
+                key: 'QuestionText.goToFlag',
+                text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Gehe zur Fahne.'
+                key: 'QuestionText.goToFlag',
+                text: ''    // empty text will be replaced by the translation
             }
         ],
         answer: [
@@ -45,15 +48,18 @@ export const navtasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.TEXT,
-                text: 'Folge dem Pfeil bis zum Ziel.'
+                key: 'QuestionText.followTheArrow',
+                text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Folge dem Pfeil bis zum Ziel.'
+                key: 'QuestionText.followTheArrow',
+                text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.TEXT,
-                text: 'Folge dem Pfeil bis zum Ziel.'
+                key: 'QuestionText.followTheArrow',
+                text: ''    // empty text will be replaced by the translation
             }
         ],
         answer: [
@@ -118,15 +124,18 @@ export const navtasksMultiplayers3: ReadonlyArray<any> = [
         question: [
             {
                 type: QuestionType.NAV_INSTRUCTION_PHOTO,
-                text: 'Gehe zu dem Ort, den man auf dem Foto sieht.'
+                key: 'QuestionText.goToPlace',
+                text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.NAV_INSTRUCTION_PHOTO,
-                text: 'Gehe zu dem Ort, den man auf dem Foto sieht.'
+                key: 'QuestionText.goToPlace',
+                text: ''    // empty text will be replaced by the translation
             },
             {
                 type: QuestionType.NAV_INSTRUCTION_PHOTO,
-                text: 'Gehe zu dem Ort, den man auf dem Foto sieht.'
+                key: 'QuestionText.goToPlace',
+                text: ''    // empty text will be replaced by the translation
             }
         ],
         answer: [

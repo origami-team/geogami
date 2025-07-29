@@ -8,7 +8,8 @@ export const themetasks: ReadonlyArray<any> = [
         category: 'theme',
         question: {
             type: QuestionType.TEXT,
-            text: 'Wo bist du jetzt? Tippe auf die Karte.'
+            key: 'QuestionText.whereAreYouNow',
+            text: ''    // empty text will be replaced by the translation
         },
         answer: {
             type: AnswerType.MAP_POINT
@@ -23,7 +24,8 @@ export const themetasks: ReadonlyArray<any> = [
         category: 'theme',
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: 'Finde das markierte Haus in deiner Nähe. Wähle das passende Foto.',
+            key: 'QuestionText.findTheHouseChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
         },
         answer: {
             type: AnswerType.MULTIPLE_CHOICE
@@ -37,7 +39,8 @@ export const themetasks: ReadonlyArray<any> = [
         category: 'theme',
         question: {
             type: QuestionType.MAP_FEATURE,
-            text: 'Finde das markierte Haus in deiner Nähe. Mache ein Foto.',
+            key: 'QuestionText.findTheHouseTakePhoto',
+            text: ''    // empty text will be replaced by the translation
         },
         answer: {
             type: AnswerType.PHOTO
@@ -52,7 +55,8 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textPhoto',
         question: {
             type: QuestionType.MAP_FEATURE_PHOTO,
-            text: 'Suche dieses Haus in deiner Nähe. Finde es auf der Karte und tippe es an.',
+            key: 'QuestionText.lookForTheHouse',
+            text: ''    // empty text will be replaced by the translation
         },
         answer: {
             type: AnswerType.MAP_POINT
@@ -67,7 +71,8 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Suche [...] in deiner Nähe. Finde es auf der Karte und tippe es an.',
+            key: 'QuestionText.lookForSThingTap',
+            text: '',    // empty text will be replaced by the translation
             mode: TaskMode.NO_FEATURE
         },
         answerType: 'mapPoint',
@@ -85,7 +90,9 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Suche [...] in deiner Nähe. Wähle das passende Foto.'
+            key: 'QuestionText.lookForSThingChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
+
         },
         answerType: 'multipleChoice',
         answer: {
@@ -101,7 +108,8 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Suche [...] in deiner Nähe. Mache ein Foto.'
+            key: 'QuestionText.lookForSThingTakePhoto',
+            text: ''    // empty text will be replaced by the translation
         },
         answerType: 'photo',
         answer: {
@@ -118,7 +126,8 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textMapFeature',
         question: {
             type: QuestionType.MAP_DIRECTION_MARKER,
-            text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst. Wähle das passende Foto.'
+            key: 'QuestionText.turnDirectionChoosePhoto',
+            text: ''    // empty text will be replaced by the translation
         },
         answerType: 'multipleChoice',
         answer: {
@@ -134,7 +143,8 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textMapFeature',
         question: {
             type: QuestionType.MAP_DIRECTION_MARKER,
-            text: 'Drehe dich in die Blickrichtung, die du auf der Karte siehst.'
+            key: 'QuestionText.turnDirection',
+            text: ''    // empty text will be replaced by the translation
         },
         answerType: 'direction',
         answer: {
@@ -150,7 +160,9 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textOrientation',
         question: {
             type: QuestionType.MAP_DIRECTION,
-            text: 'Drehe dich, bis die Pfeile in die gleiche Richtung zeigen.'
+            // text: 'Drehe dich, bis die Pfeile in die gleiche Richtung zeigen.',
+            key: 'QuestionText.turnDirectionArrow',
+            text: ''    // empty text will be replaced by the translation
         },
         answerType: 'direction',
         answer: {
@@ -167,7 +179,8 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'text',
         question: {
             type: QuestionType.TEXT,
-            text: 'Wohin siehst du jetzt? Markiere deine Blickrichtung auf der Karte.'
+            key: 'QuestionText.whereAreYouLooking',
+            text: ''    // empty text will be replaced by the translation
         },
         answer: {
             type: AnswerType.MAP_DIRECTION,
@@ -183,7 +196,9 @@ export const themetasks: ReadonlyArray<any> = [
         questionType: 'textPhoto',
         question: {
             type: QuestionType.MAP_DIRECTION_PHOTO,
-            text: 'Drehe dich in die Richtung vom Foto. Markiere deine Blickrichtung auf der Karte.'
+            key: 'QuestionText.turnDirectionPhoto',
+            text: ''    // empty text will be replaced by the translation
+
         },
         answerType: 'mapDirection',
         answer: {
