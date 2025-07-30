@@ -344,7 +344,8 @@
         [isVRMirrored]="isVRMirrored"
         [virEnvType]="virEnvType"
       ></app-map>
-      <ion-item-divider></ion-item-divider>
+      
+      <ion-item-divider id="search-area-divider"></ion-item-divider>
     </div>
 
     <!-- Set location by tapping on the map -->
@@ -375,10 +376,11 @@
         [selectedFloor]="selectedFloor"
       >
       </app-map>
+
+      <ion-item-divider id="set-location-tapping-divider"></ion-item-divider>
     </div>
 
     <!-- Destination -->
-    <ion-item-divider></ion-item-divider>
     <answer-type
       [(answer)]="task.answer"
       [taskType]="task.category"

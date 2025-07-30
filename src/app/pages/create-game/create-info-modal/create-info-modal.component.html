@@ -129,10 +129,8 @@
       [virEnvType]="virEnvType"
       [initialFloor]="initialFloor"
     ></app-map>
+    <ion-item-divider id="set-avatar-initial-position-divider"></ion-item-divider>
   </div>
-
-  <ion-item-divider></ion-item-divider>
-
 
   <h5>{{ "CreateGame.photos" | translate }}</h5>
 
@@ -141,7 +139,7 @@
     [(photo)]="task.question.photo"
   ></app-photo-upload>
 
-  <ion-item-divider></ion-item-divider>
+  <ion-item-divider id="photo-upload-divider"></ion-item-divider>
 
   <h5>{{ "CreateGame.addSettings" | translate }}</h5>
 
