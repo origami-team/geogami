@@ -44,7 +44,7 @@
       [selectedFloor]="selectedFloor"
       [isSingleMode]="isSingleMode"
     ></app-map>
-    <ion-item-divider></ion-item-divider>
+    <ion-item-divider id="destination-map-view-divider"></ion-item-divider>
   </div>
 
   <!-- Mutiple choice (photo) - Single-player mode -->
@@ -64,6 +64,7 @@
       [feedback]="settings.feedback && settings.multipleTries"
     >
     </app-photo-upload-multiple-choice>
+    <ion-item-divider id="multiple-choice-photo-divider"></ion-item-divider>
   </div>
 
   <!-- Mutiple choice (text) - Single-player mode -->
@@ -93,6 +94,7 @@
       [(hints)]="answer.hints"
       [feedback]="settings.feedback && settings.multipleTries"
     ></app-multiple-choice-text>
+    <ion-item-divider id="multiple-choice-divider"></ion-item-divider>
   </div>
 
   <!-- Correct answer (number) - Single-player mode -->
@@ -106,6 +108,7 @@
       </ion-icon>
     </h5>
     <ion-input type="number" [(ngModel)]="answer.number"></ion-input>
+    <ion-item-divider id="correct-answer-divider"></ion-item-divider>
   </div>
 
   <!-- Feedback (by marking the direction on the map) - Single-player mode -->
@@ -127,6 +130,7 @@
       <ion-label>Abweichung &gt; 135°</ion-label>
       <ion-textarea autoGrow [(ngModel)]="answer.hints[2]"></ion-textarea>
     </div>
+    <ion-item-divider id="feedback-divider"></ion-item-divider>
   </div>
 </div>
 

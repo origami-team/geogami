@@ -9,9 +9,30 @@ export const mappings = [
   {
     text: "Fahne",
     tag: `<ion-text color="primary">Fahne<ion-chip color="primary">
-      <ion-icon name="flag"></ion-icon>
-    </ion-chip>
-  </ion-text>`,
+              <ion-icon name="flag"></ion-icon>
+            </ion-chip>
+          </ion-text>`,
+  },
+  {
+    text: "bandeira",
+    tag: `<ion-text color="primary">bandeira<ion-chip color="primary">
+              <ion-icon name="flag"></ion-icon>
+            </ion-chip>
+          </ion-text>`,
+  },
+  {
+    text: "drapeau",
+    tag: `<ion-text color="primary">drapeau<ion-chip color="primary">
+              <ion-icon name="flag"></ion-icon>
+            </ion-chip>
+          </ion-text>`,
+  },
+  {
+    text: "العلم",
+    tag: `<ion-text color="primary">العلم<ion-chip color="primary">
+              <ion-icon name="flag"></ion-icon>
+            </ion-chip>
+          </ion-text>`,
   },
   {
     text: "du bist hier",
