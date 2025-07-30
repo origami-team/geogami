@@ -141,9 +141,99 @@
 
   <ion-item-divider id="photo-upload-divider"></ion-item-divider>
 
-  <h5>{{ "CreateGame.addSettings" | translate }}</h5>
+    <!-- Vir. Env. settings -->
+  <div *ngIf="isVirtualWorld && task.settings">
+    <!-- section heading -->
+    <ion-text>
+      <h5>{{ "CreateGame.virEnvSettings" | translate }}</h5>
+    </ion-text>
+    
+    <!-- Avatar speed -->
+    <ion-item lines="none" class="item-range">
+      <ion-label>
+        {{ "CreateGame.avatarSpeed" | translate }}
+        <ion-icon
+          name="information-circle"
+          (click)="showPopover($event, 'Popover.avatarSpeedZero')"
+        >
+        </ion-icon>
+      </ion-label>
+      <ion-range
+        [(ngModel)]="task.settings.avatarSpeed"
+        min="0"
+        max="7"
+        snaps
+        [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+        ticks
+        pin
+      >
+        <ion-label slot="start">1m/s</ion-label>
+        <ion-icon
+          slot="start"
+          size="small"
+          [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+          name="speedometer-outline"
+        >
+        </ion-icon>
+        <ion-icon
+          slot="end"
+          [color]="task.category == 'nav' ? 'primary' : 'secondary'"
+          name="speedometer-outline"
+        ></ion-icon>
+        <ion-label slot="end">7m/s</ion-label>
+      </ion-range>
+    </ion-item>
 
-  <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
-    <ion-label> {{ "General.mapfeatures" | translate }} </ion-label>
-  </ion-item>
+    <!-- Disable avatar rotation -->
+    <ion-item lines="none">
+      <ion-label> {{ "CreateGame.disableAvatarRotation" | translate }} </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.disableAvatarRotation"></ion-toggle>
+    </ion-item>
+
+    <!-- show environment settings -->
+    <ion-item lines="none">
+      <ion-label> {{ "CreateGame.showEnvSettings" | translate }} </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.showEnvSettings"></ion-toggle>
+    </ion-item>
+
+    <!-- show path visalisation -->
+    <ion-item *ngIf="isVEBuilding" lines="none">
+      <ion-label> {{ "CreateGame.showEnvPathVisualization" | translate }} </ion-label>
+      <ion-toggle [(ngModel)]="task.settings.showPathVisualization"></ion-toggle>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label
+        >Choose map size
+      </ion-label>
+      <select interface="popover" [(ngModel)]="task.settings.mapSize">
+        <option ngValue="1">
+          none
+        </option>
+        <option ngValue="2">
+          small
+        </option>
+        <option ngValue="3">
+          medium
+        </option>
+        <option ngValue="4">
+          big
+        </option>
+        <option ngValue="5">
+          full screen
+        </option>
+      </select>
+    </ion-item>
+
+    <ion-item-divider></ion-item-divider>
+  </div>
+
+  <!-- Additional settings -->
+   <div>
+    <h5>{{ "CreateGame.addSettings" | translate }}</h5>
+    <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
+      <ion-label> {{ "General.mapfeatures" | translate }} </ion-label>
+    </ion-item>
+   </div>
+  
 </ion-content>
