@@ -832,7 +832,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
         ? virEnvLayers[this.virEnvType].center
         : [8, 51.8],
       zoom: this.isVirtualWorld ? virEnvLayers[this.virEnvType].zoom : 2,
-      maxZoom: this.isVirtualWorld ? 19.5 : 18,
+      maxZoom: this.isVirtualWorld ? 20 : 18,
       maxBounds: this.isVirtualWorld
         ? virEnvLayers[this.virEnvType].bounds
         : null, // Sets bounds
