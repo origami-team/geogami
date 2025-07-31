@@ -348,7 +348,7 @@ export const virEnvLayers: Readonly<any> = {
     },
     initialRotation: 180,  
     overlayCoords: VirEnv_40.overlayCoords,
-    center: [0.004837837838 / 2,	0.003383928571 / 2],
+    center: [0,	0],
     bounds: VirEnv_40.bounds,
     zoom: 17,
     defaultAvatarSpeed: 2,

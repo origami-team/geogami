@@ -153,7 +153,7 @@ export const VirEnv_40: Readonly<any> = {
   ],
   bounds: [
     //* Southwest coordinates (lng,lat)
-    [0 - 0.0002 , 0 - 0.0002 ],
+    [0 - 0.0002 , 0 - 0.00024 ],
     //* Northeast coordinates (lng,lat)
     [0 + 0.00055, 0 + 0.00055],
   ],
@@ -161,6 +161,4 @@ export const VirEnv_40: Readonly<any> = {
     lng: 31.01 / 111000,
     lat: 0.22 / 112000,
   },
-  zoomThreashold: 18.5,
-  zoomThreashold2: 18,
 };
