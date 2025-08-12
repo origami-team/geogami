@@ -340,7 +340,13 @@ export class CreateTaskModalPage implements OnInit {
     this.task = newValue;
 
     // Check if question text is empty and set it to the translation key - after changing task type
-    this.checkAndUpdateQuestionText();
+    // Note: excluding free tasks as they have no question text
+    if (
+      this.task.type != "free"
+    ) {
+      this.checkAndUpdateQuestionText();
+    }
+    
 
     if (!this.task.settings || Object.keys(this.task.settings).length == 0) {
       this.task.settings = {
