@@ -3,8 +3,8 @@
     "yes": "Oui",
     "no": "Non",
     "name": "Nom",
-    "mapfeatures": "Fonctionnalités de la carte",
-    "tasktype": "Type de tâche",
+    "mapfeatures": "Caractéristiques de la carte",
+    "tasktype": "Type de tâches",
     "tasktypes": "Types de tâches",
     "task": "Tâche",
     "tasks": "Tâches",
@@ -70,8 +70,8 @@
     "panningOn": "déplaçable",
     "autoCentered": "centré automatiquement",
     "static": "statique",
-    "automatic": "automatiquement",
-    "automaticOnDemand": "automatiquement à la demande",
+    "automatic": "automatique",
+    "automaticOnDemand": "automatique à la demande",
     "fixedToNorth": "fixé au nord",
     "standardMap": "carte standard",
     "mapChoice": "sélection de la carte",
@@ -112,7 +112,7 @@
     "chooseInitialFloor":"Choisissez l'étage initial"
   },
   "SaveGame": {
-    "titleSaveGame": "Enregistrez votre GeoGami",
+    "titleSaveGame": "Enregistrez votre jeu GeoGami",
     "gameNameExist": "Un jeu avec ce nom existe déjà !",
     "gameName": "Nom du jeu",
     "gameLocation": "Emplacement du jeu",
@@ -148,7 +148,7 @@
     "notNow": "Pas maintenant",
     "games": "Jeux",
     "scanCode":"Scanner le code",
-    "scanCode_desc":"Scannez le code QR du jeu fourni par l'instructeur."
+    "scanCode_desc":"Scannez le QR code du jeu fourni par l'instructeur."
   },
   "AnalyzeGame": {
     "title": "Analysez votre GeoGami",
@@ -156,17 +156,17 @@
     "download": "télécharger"
   },
   "CreateGame": {
-    "titleCreateGame": "Développez votre GeoGami",
+    "titleCreateGame": "Développez votre jeu GeoGami",
     "titleCreateGameMenu": "Sélectionnez l'environnement de jeu",
-    "realWorldDescription": "Développez un GeoGami pour jouer dehors.",
-    "virtualWorldDescription": "Développez un GeoGami pour un monde virtuel.",
-    "titleCreateGameVirtual": "Développez votre GeoGami virtuel",
+    "realWorldDescription": "Développez un jeu GeoGami pour jouer dehors.",
+    "virtualWorldDescription": "Développez un jeu GeoGami pour un monde virtuel.",
+    "titleCreateGameVirtual": "Développez votre jeu GeoGami virtuel",
     "titleCreateGameVirtualMenu": "Choisissez un monde virtuel",
-    "titleCreateGameList": "Créez un GeoGami",
-    "titleCreateGameVirtualList": "Créez un GeoGami virtuel",
+    "titleCreateGameList": "Créez un jeu GeoGami",
+    "titleCreateGameVirtualList": "Créez un jeu GeoGami virtuel",
     "create": "Créer",
     "createDescription": "Créez un nouveau jeu.",
-    "editDescription": "Modifiez un GeoGami existant.",
+    "editDescription": "Modifiez un jeu GeoGami existant.",
     "informationText": "Texte d'information",
     "markdownSupported": "Markdown pris en charge",
     "audioMessage": "Message audio",
@@ -209,7 +209,7 @@
     "showEnvPathVisualization":"Afficher la visualisation du chemin "
   },
   "EditGame": {
-    "titleEditGame": "Modifiez votre GeoGami",
+    "titleEditGame": "Modifiez votre jeu GeoGami",
     "titleEditGameTasks": "Modifier"
   },
   "Info": {
@@ -217,7 +217,7 @@
     "titleInfotext": "À propos de GeoGami",
     "infotext1": "GeoGami est une application pour créer et jouer à des jeux basés sur des cartes et est particulièrement adaptée à une utilisation dans les établissements d'enseignement. L'application est soutenue scientifiquement et conçue didactiquement par l'Institut de géoinformatique de l'Université de Münster.",
     "infotext2": "L'objectif de GeoGami est de favoriser les compétences de lecture de cartes de navigation. Les utilisateurs du jeu peuvent choisir entre des types de tâches appropriés et soutenir leurs joueurs en activant ou désactivant des fonctionnalités de la carte. GeoGami convient également à la création de jeux thématiques, de rallyes et d'excursions numériques.",
-    "infotext3": "Vous pouvez trouver plus d'informations sur notre",
+    "infotext3": "Vous pouvez trouver plus d'informations sur",
     "website": "notre site web"
   },
   "PlayGame": {
@@ -239,17 +239,17 @@
     "correctLocation": "Êtes-vous exactement au bon endroit ? Alors appuyez sur 'd'accord' !",
     "gameConnection": "Code de connexion",
     "pl_EnterCode": "Entrez le code de connexion",
-    "shareDataAgreement": "J'accepte que les données collectées puissent être traitées sous forme agrégée à des fins de recherche.",
+    "shareDataAgreement": "J'accepte que les données collectées puissent être uniquement traitées à des fins de recherche.",
     "allGames": "Tous",
     "myGames": "Mes jeux",
-    "curated": "Sélectionné",
+    "curated": "Sélectionnés",
     "emptyGamesList": "Vous n'avez pas encore créé de jeu !",
     "gameNotFound":"Le jeu n'a pas pu être trouvé.",
     "deleteGame": "Supprimer le jeu",
     "deleteGameMsg": "Êtes-vous sûr de vouloir supprimer ce jeu ?",
     "useExternalVEApp":"Utiliser l'application d'environnement virtuel externe (WinOS/MacOS)",
     "enterName":"Entrez votre nom",
-    "askPlayerToScanQRCode":"Demandez aux joueurs de scanner le code QR ci-dessous ou d'utiliser le lien du jeu pour rejoindre la partie."
+    "askPlayerToScanQRCode":"Demandez aux joueurs de scanner le QR code ci-dessous ou d'utiliser le lien du jeu pour rejoindre la partie."
   },
   "Showroom": {
     "titleShowroom": "Découvrez GeoGami",
@@ -289,7 +289,7 @@
     "markLocation": "Appuyez sur la carte pour définir un emplacement.",
     "confirmLocation": "Le joueur doit-il confirmer l'arrivée à la destination avec 'D'accord' ?",
     "showFlag": "Un drapeau de destination doit-il être affiché sur la carte ?",
-    "severalAttempts": "Le joueur peut-il essayer d'améliorer si la tâche n'a pas été résolue correctement ?",
+    "severalAttempts": "Le joueur peut-il réessayer si la tâche n'a pas été résolue correctement ?",
     "keepFlag": "Le drapeau de destination doit-il continuer à être affiché après la résolution de la tâche ?",
     "accuracy": "Réglez la précision sur >10m si l'emplacement marqué est proche de grands bâtiments ou de canopées denses, ou si vous souhaitez autoriser une zone plus grande comme solution correcte.",
     "flag": "Cette destination est indiquée dans le jeu par un drapeau sur la carte.",
@@ -308,7 +308,7 @@
     "destinationDirection": "Marquez la direction à rechercher sur la carte. Sélectionnez d'abord l'emplacement puis la direction de vue.",
     "directionMap": "Marquez la direction à rechercher sur la carte. Sélectionnez d'abord l'emplacement puis la direction de vue. Le marqueur sera affiché dans le jeu.",
     "photoDirection": "Choisissez une photo qui représente la direction de vue à rechercher.",
-    "showMappingView": "Quand la cartographie du joueur doit-elle être affichée sur la carte ?",
+    "showMappingView": "Quand le joueur doit-il voir la carte ?",
     "showTrack": "Quand la trace du joueur doit-elle être affichée sur la carte ?",
     "avatarSpeedZero": "À vitesse zéro, l'avatar restera immobile."
   },
@@ -341,15 +341,15 @@
     "followTheArrow": "Suivez la flèche jusqu'à la destination.",
     "goToPlace": "Allez à l'endroit montré sur la photo.",
     "whereAreYouNow": "Où êtes-vous maintenant ? Appuyez sur la carte.",
-    "findTheHouseChoosePhoto": "Trouvez la maison mise en évidence près de chez vous. Choisissez la photo appropriée.",
-    "findTheHouseTakePhoto": "Trouvez la maison mise en évidence près de chez vous. Prenez une photo.",
-    "lookForTheHouse": "Trouvez cette maison près de chez vous. Trouvez-la sur la carte et appuyez dessus.",
-    "lookForSThingTap": "Cherchez [...] près de chez vous. Trouvez-le sur la carte et appuyez dessus.",
-    "lookForSThingChoosePhoto": "Cherchez [...] près de chez vous. Choisissez la photo appropriée.",
-    "lookForSThingTakePhoto": "Cherchez [...] près de chez vous. Prenez une photo.",
+    "findTheHouseChoosePhoto": "Trouvez la maison mise en évidence près de vous. Choisissez la photo appropriée.",
+    "findTheHouseTakePhoto": "Trouvez la maison mise en évidence près de vous. Prenez une photo.",
+    "lookForTheHouse": "Trouvez cette maison près de vous. Trouvez-la sur la carte et appuyez dessus.",
+    "lookForSThingTap": "Cherchez [...] près de vous. Trouvez-le sur la carte et appuyez dessus.",
+    "lookForSThingChoosePhoto": "Cherchez [...] près de vous. Choisissez la photo appropriée.",
+    "lookForSThingTakePhoto": "Cherchez [...] près de vous. Prenez une photo.",
     "turnDirectionChoosePhoto": "Tournez dans la direction que vous voyez sur la carte. Choisissez la photo appropriée.",
     "turnDirection": "Tournez dans la direction que vous voyez sur la carte.",
-    "turnDirectionArrow": "Tournez dans la direction que vous voyez sur la carte.",
+    "turnDirectionArrow": "Tournez jusqu'à ce que la flèche pointe dans la même direction que vous voyez sur la carte.",
     "whereAreYouLooking": "Où regardez-vous maintenant ? Marquez votre direction de vue sur la carte.",
     "turnDirectionPhoto": "Tournez dans la direction de la photo. Marquez votre direction de vue sur la carte."
   },
@@ -371,10 +371,10 @@
     "byEnteringNumber": "... en entrant un nombre",
     "byMarkingDirectionOnMap": "... en marquant la direction sur la carte",
     "byEnteringText": "... en entrant du texte",
-    "byMapping": "... par cartographie"
+    "byMapping": "... en traçant sur la carte"
   },
   "DrawSetting": {
-    "keepMappingOption": "Garder la cartographie sur la carte",
+    "keepMappingOption": "Garder le tracé sur la carte",
     "onlyCurrentTask": "uniquement pour la tâche en cours",
     "alsoNextTask": "aussi pour la tâche suivante",
     "inEntireGame": "dans tout le jeu",
