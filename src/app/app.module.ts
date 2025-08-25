@@ -106,6 +106,7 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
     }),
     IonicModule.forRoot({
       backButtonText: "Zurück",
+      mode: 'md'
     }),
     AppRoutingModule,
     HttpClientModule,
