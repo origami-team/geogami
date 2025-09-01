@@ -348,8 +348,8 @@
     "lookForSThingChoosePhoto": "Search [...] near you. Choose the appropriate photo.",
     "lookForSThingTakePhoto": "Search [...] near you. Take a photo.",
     "turnDirectionChoosePhoto": "Turn to the direction you see on the map. Choose the appropriate photo.",
-    "turnDirection": "Turn the direction you see on the map.",
-    "turnDirectionArrow": "Turn in to the direction you see on the map.",
+    "turnDirection": "Turn in the direction you see on the map.",
+    "turnDirectionArrow": "Turn until the arrows point in the same direction.",
     "whereAreYouLooking": "Where are you looking now? Mark your viewing-direction on the map..",
     "turnDirectionPhoto": "Turn in the direction of the photo. Mark your viewing-direction on the map."
   },
