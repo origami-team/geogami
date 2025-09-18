@@ -875,7 +875,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       this.avatarPositionSubscription =
         this.geolocationService.avatarGeolocationSubscription.subscribe(
           (avatarPosition) => {
-            console.log("🚀 ~ initializeMap ~ avatarPosition:", avatarPosition)
+            // console.log("🚀 ~ initializeMap ~ avatarPosition:", avatarPosition)
             // Store waypoint every second
             if (this.currentSecond != new Date().getSeconds()) {
               this.currentSecond = new Date().getSeconds();
