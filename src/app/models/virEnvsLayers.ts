@@ -364,5 +364,25 @@ export const virEnvLayers: Readonly<any> = {
       {tag:"f6",name: "Floor 6", height: 120.999},     // this floor is only to show in mapview but can't be used for creating tasks.
     ],
     floorStandardHeight: 3.40,
+  },
+  VirEnv_41: {
+    initialPosition: {
+      lng: 224 / 111000,
+      lat: 74 / 112000,
+    },
+    overlayCoords: VirEnv_1.overlayCoords,
+    bounds: VirEnv_1.bounds,
+    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2],
+    zoom: 17,
+  },
+  VirEnv_42: {
+    initialPosition: {
+      lng: 224 / 111000,
+      lat: 74 / 112000,
+    },
+    overlayCoords: VirEnv_1.overlayCoords,
+    bounds: VirEnv_1.bounds,
+    center: [0.00001785714286 / 2 + 0.002, 0.002936936937 / 2],
+    zoom: 17,
   }
 };
