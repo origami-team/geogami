@@ -366,6 +366,7 @@ export class FeedbackComponent {
       }
     }
 
+    // To store photo url: either taken or uploaded (Y.Q.)
     if (this.task.answer.type == AnswerType.PHOTO) {
       if (photo == "") {
         const toast = await this.toastController.create({

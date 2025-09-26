@@ -2532,6 +2532,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
       body: formData,
     };
 
+    // Upload photo to server
     const postResponse = await fetch(
       `${environment.apiURL}/file/upload`,
       options
@@ -2544,7 +2545,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
 
     const postResponseText = await postResponse.json();
     const filename = postResponseText.filename;
-    this.photoURL = `${environment.apiURL}/file/image/${filename}`;
+    this.photo = `${environment.apiURL}/file/image/${filename}`;
     this.changeDetectorRef.detectChanges();
   }
 
