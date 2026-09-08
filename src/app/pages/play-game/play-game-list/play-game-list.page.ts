@@ -595,16 +595,36 @@ export class PlayGameListPage implements OnInit {
     this.segmentChanged(this.selectedSegment);
   }
 
+  // Sort key for the list: when a game was last edited. Falls back to
+  // createdAt, and then to the ObjectId, whose first 4 bytes encode the
+  // creation time — legacy games saved before schema timestamps have neither.
+  lastActivity(game): number {
+    const stamp = game.updatedAt || game.createdAt;
+    if (stamp) return new Date(stamp).getTime();
+    return typeof game._id === "string"
+      ? parseInt(game._id.substring(0, 8), 16) * 1000
+      : 0;
+  }
+
+  // Most recently updated games first. Sorting here (rather than relying on the
+  // server's order) also keeps published games and drafts, which arrive as two
+  // separate requests, interleaved correctly.
+  sortByLastActivity(games: any[]): any[] {
+    return games.sort((a, b) => this.lastActivity(b) - this.lastActivity(a));
+  }
+
   filterRealWorldGames() {
-    this.all_games_segment = this.games_res
-      .filter((game) => game.isVRWorld == false || game.isVRWorld == undefined)
-      .reverse();
+    this.all_games_segment = this.sortByLastActivity(
+      this.games_res.filter(
+        (game) => game.isVRWorld == false || game.isVRWorld == undefined
+      )
+    );
   }
 
   filterVirtualEnvGames() {
-    this.all_games_segment = this.games_res
-      .filter((game) => game.isVRWorld == true)
-      .reverse();
+    this.all_games_segment = this.sortByLastActivity(
+      this.games_res.filter((game) => game.isVRWorld == true)
+    );
   }
 
   /***  on game mode change ***/
@@ -612,17 +632,19 @@ export class PlayGameListPage implements OnInit {
     if (modeVal == "single") {
       this.isMutiplayerGame = undefined;
 
-      this.games_view = this.all_games_segment
-        .filter((game) => game.isMultiplayerGame == undefined)
-        .reverse();
+      this.games_view = this.sortByLastActivity(
+        this.all_games_segment.filter(
+          (game) => game.isMultiplayerGame == undefined
+        )
+      );
 
       // Filter data of selected segment
       this.segmentChanged(this.selectedSegment);
     } else {
       this.isMutiplayerGame = true;
-      this.games_view = this.all_games_segment
-        .filter((game) => game.isMultiplayerGame == true)
-        .reverse();
+      this.games_view = this.sortByLastActivity(
+        this.all_games_segment.filter((game) => game.isMultiplayerGame == true)
+      );
 
       // Filter data of selected segment
       this.segmentChanged(this.selectedSegment);
