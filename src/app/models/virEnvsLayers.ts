@@ -545,8 +545,8 @@ export const virEnvLayers: Readonly<any> = {
     center: [0.00198508411081081, 0.00237327009276786],
     zoom: 17,
   },
-  // VirEnv_56 and VirEnv_57 are VirEnv_52 and VirEnv_54 rotated 180 degrees about the terrain center.
-  // The image extent is centered on the terrain (within 1 m), so the overlay stays the same.
+  // VirEnv_56 to VirEnv_59 are VirEnv_52 to VirEnv_55 rotated 180 degrees about the terrain center,
+  // with other landmarks. The image extent is centered on the terrain (within 1 m), so the overlay stays the same.
   VirEnv_56: {
     name: "Grid map - rotated",
     initialPosition: {
@@ -559,7 +559,29 @@ export const virEnvLayers: Readonly<any> = {
     zoom: 17,
   },
   VirEnv_57: {
+    name: "Grid map no LOB - rotated",
+    initialPosition: {
+      lng: 260 / 111000,
+      lat: 270 / 112000,
+    },
+    overlayCoords: VirEnv_52.overlayCoords,
+    bounds: VirEnv_52.bounds,
+    center: [0.00198508411081081, 0.00237327009276786],
+    zoom: 17,
+  },
+  VirEnv_58: {
     name: "Curvy map - rotated",
+    initialPosition: {
+      lng: 260 / 111000,
+      lat: 270 / 112000,
+    },
+    overlayCoords: VirEnv_52.overlayCoords,
+    bounds: VirEnv_52.bounds,
+    center: [0.00198508411081081, 0.00237327009276786],
+    zoom: 17,
+  },
+  VirEnv_59: {
+    name: "Curvy map no LOB - rotated",
     initialPosition: {
       lng: 260 / 111000,
       lat: 270 / 112000,
