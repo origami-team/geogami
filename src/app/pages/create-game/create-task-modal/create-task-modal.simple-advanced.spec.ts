@@ -528,4 +528,50 @@ describe("CreateTaskModalPage — Simple and Advanced views", () => {
       expect(utilService.showValidationError).toHaveBeenCalledTimes(2);
     });
   });
+
+  describe("choosing a task type that has no default question text", () => {
+    const template = (list: ReadonlyArray<any>, type: string) => cloneDeep(list.find((t) => t.type === type)) as any;
+
+    it("navigation via text can be chosen: no error, an empty instruction for the author to write, and the usual default settings", () => {
+      open(template(navtasks, "nav-flag"));
+      const viaText = template(navtasks, "nav-text");
+      expect(viaText.question.key).toBeUndefined(); // that is why there is nothing to translate
+      expect(() => component.onTaskSelected(viaText)).not.toThrow();
+      expect(component.task.question.text).toBe("");
+      expect(component.task.settings.feedback).toBe(true);
+      expect(component.task.settings.accuracy).toBe(component.defaultTaskAccuracy);
+    });
+
+    it("types that have a default text still get it", () => {
+      open(template(navtasks, "nav-text"));
+      component.onTaskSelected(template(navtasks, "nav-flag"));
+      expect(component.task.question.text).toBe("QuestionText.goToFlag");
+      component.onTaskSelected(template(navtasks, "nav-arrow"));
+      expect(component.task.question.text).toBe("QuestionText.followTheArrow");
+    });
+
+    it("keeps a text the author has already written", () => {
+      open(template(navtasks, "nav-flag"));
+      const written = template(navtasks, "nav-flag");
+      written.question.text = "Go to the old oak.";
+      component.onTaskSelected(written);
+      expect(component.task.question.text).toBe("Go to the old oak.");
+    });
+
+    it("works the same in multiplayer: nothing to translate for navigation via text, defaults for the others", () => {
+      // Only the choice itself is under test, so the dialog is not rendered.
+      component = TestBed.createComponent(CreateTaskModalPage).componentInstance;
+      component.type = "nav";
+      component.isSingleMode = false;
+      component.numPlayers = 2;
+      component.task = template(navtasksMultiplayers2, "nav-flag");
+      const viaText = template(navtasksMultiplayers2, "nav-text");
+      expect(() => component.onTaskSelected(viaText)).not.toThrow();
+      expect((component.task.question as any[]).every((q) => q.text === "")).toBe(true);
+
+      const flag = template(navtasksMultiplayers2, "nav-flag");
+      component.onTaskSelected(flag);
+      expect((component.task.question as any[]).every((q) => typeof q.text === "string" && q.text.length > 0)).toBe(true);
+    });
+  });
 });

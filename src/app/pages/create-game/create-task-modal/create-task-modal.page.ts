@@ -1373,15 +1373,20 @@ export class CreateTaskModalPage implements OnInit {
     if (this.isPressOkOnlyTask()) {
       return;
     }
+    // Only questions that have a default text (a `key`) are filled in. Those without
+    // one (navigation via text) must carry an instruction the author writes, so their
+    // field stays empty — asking the translation service for "no key" throws.
     if (this.isSingleMode) {
-      if (!this.task.question.text?.trim()) {
+      if (!this.task.question.text?.trim() && this.task.question.key) {
         this.task.question.text = this.translate.instant(this.task.question.key);
       }
     } else {
       // multi-player mode
       if (!this.task.question[0].text?.trim()) {
         this.task.question.forEach((q: any) => {
-          q.text = this.translate.instant(q.key);
+          if (q.key) {
+            q.text = this.translate.instant(q.key);
+          }
         });
       }
     }
