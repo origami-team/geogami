@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import { Plugins, Capacitor, FilesystemDirectory } from "@capacitor/core";
+import { drawFooterLink } from "./pdf-footer-link";
 
 /** One game's QR page in the event PDF. */
 export interface EventQrGame {
@@ -195,12 +196,7 @@ function renderGameQrPage(
   doc.text(opts.scanCaption, pageW / 2, qrY + qrSize + 16, { align: "center" });
 
   // Footer link (manual fallback)
-  doc.setFontSize(8);
-  doc.setTextColor(170, 170, 170);
-  doc.text(game.link, pageW / 2, 288, {
-    align: "center",
-    maxWidth: pageW - 24,
-  });
+  drawFooterLink(doc, pageW, game.link);
 }
 
 /** Loads an image and resolves once it's ready (for embedding in the PDF). */
