@@ -1,0 +1,105 @@
+:host {
+  display: block;
+}
+
+.editor-mode {
+  margin-bottom: 12px;
+}
+
+// Sticky (dialogs): the host and its wrapper add no box of their own, so the bar sits
+// directly in the scrolling content and stays at the top of it for the whole scroll.
+// It spans the full width of the content (it cancels the padding of the page's
+// `ion-content` and puts it back inside), so nothing shows beside it while it is stuck.
+:host(.sticky) {
+  display: contents;
+
+  .editor-mode {
+    display: contents;
+  }
+
+  .editor-mode-bar {
+    --editor-mode-gutter: var(--ion-padding, 16px);
+    position: sticky;
+    // Sticky offsets count from the content box of the scroller, i.e. inside its padding.
+    top: calc(-1 * var(--editor-mode-gutter));
+    z-index: 10;
+    margin: calc(-1 * var(--editor-mode-gutter)) calc(-1 * var(--editor-mode-gutter)) 12px;
+    padding: 8px var(--editor-mode-gutter) 6px;
+    background: var(--ion-background-color, #fff);
+    border-bottom: 1px solid var(--ion-color-step-150, rgba(0, 0, 0, 0.13));
+  }
+
+  .editor-mode-notice {
+    margin-bottom: 12px;
+  }
+}
+
+// The switch and its information button share a row and stay on it, down to
+// narrow phone widths; the segment shrinks instead of wrapping.
+.editor-mode-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editor-mode-segment {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 360px;
+}
+
+// 44px: a comfortable touch target next to the segmented control.
+.editor-mode-info {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ion-color-primary);
+  font-size: 24px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: rgba(var(--ion-color-primary-rgb), 0.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ion-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.editor-mode-explanation {
+  margin: 8px 4px 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--ion-color-medium-shade, var(--ion-color-medium));
+}
+
+.editor-mode-notice {
+  margin: 8px 0 0;
+  // The light theme pairs the yellow "warning" colour with white text (about 1.5:1).
+  // Ionic sets the contrast colour with !important, so it needs !important to be replaced.
+  --ion-color-contrast: #000 !important;
+
+  ion-card-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+}
+
+.editor-mode-notice-text {
+  flex: 1 1 12rem;
+  min-width: 0;
+}

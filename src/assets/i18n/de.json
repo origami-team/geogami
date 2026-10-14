@@ -698,5 +698,302 @@
         }
       }
     }
+  },
+  "AppManagement": {
+    "cardTitle": "App-Verwaltung",
+    "cardDescription": "Nutzer, Editor-Ansichten und Protokoll verwalten",
+    "pageTitle": "App-Verwaltung",
+    "users": {
+      "title": "Nutzer",
+      "description": "Rollen und Berechtigungen verwalten"
+    },
+    "auditLog": {
+      "title": "Audit-Protokoll",
+      "description": "Änderungen an Konten, Rollen und Einstellungen sowie Sicherheitswarnungen"
+    },
+    "unread": "{{count}} ungelesen"
+  },
+  "EditorMode": {
+    "simple": "Einfach",
+    "advanced": "Erweitert",
+    "switchLabel": "Editor-Ansicht",
+    "infoButton": "Informationen zu Einfach und Erweitert",
+    "explanation": "„Einfach“ zeigt die wichtigsten Werkzeuge zum Erstellen von Spielen und Aufgaben. „Erweitert“ zeigt zusätzliche Optionen. Du kannst jederzeit wechseln, ohne dass deine Änderungen verloren gehen.",
+    "advancedOption": "Erweitert",
+    "noticeTask": "Diese Aufgabe verwendet erweiterte Einstellungen",
+    "noticeGame": "Dieses Spiel verwendet erweiterte Einstellungen",
+    "reviewSettings": "Einstellungen ansehen"
+  },
+  "EditorVisibility": {
+    "cardTitle": "Sichtbarkeit im Editor",
+    "cardDescription": "Festlegen, welche optionalen Elemente die Ansicht „Einfach“ zeigt",
+    "pageTitle": "Sichtbarkeit im Editor",
+    "intro": "Lege fest, welche optionalen Elemente die Ansicht „Einfach“ für alle zeigt, die Spiele oder Aufgaben erstellen. „Erweitert“ zeigt immer alles, was eine Person nutzen darf. Das Speichern wirkt sich auf die Editor-Ansichten aller Nutzenden aus; bestehende Spiele und Aufgaben werden nicht verändert. Wer gerade bearbeitet, behält die aktuelle Ansicht bis zur nächsten Bearbeitungssitzung.",
+    "loading": "Gespeicherte Konfiguration wird geladen …",
+    "loadFailed": "Die gespeicherte Konfiguration konnte nicht geladen werden. Daher kann vorerst nichts angezeigt oder gespeichert werden.",
+    "retry": "Erneut versuchen",
+    "lastSaved": "Version {{revision}}, gespeichert {{date}}",
+    "lastSavedBy": "von {{user}}",
+    "notSavedYet": "Es wurde noch nichts gespeichert. Es gelten die eingebauten Standardwerte.",
+    "catalogueMismatch": "Diese App und der Server führen nicht dieselben Elemente auf, deshalb ist das Speichern deaktiviert. Aktualisiere die App oder den Server, bis beide übereinstimmen.",
+    "conflictText": "Jemand anderes hat während deiner Bearbeitung gespeichert. Deine Änderungen sind noch da. Lade neu, um mit der neuesten gespeicherten Version weiterzumachen; deine Änderungen werden darauf erneut angewendet.",
+    "conflictToast": "Nicht gespeichert: Die Konfiguration wurde inzwischen von jemand anderem geändert.",
+    "reloadLatest": "Neueste Version laden",
+    "reloaded": "Neueste Version geladen. Bitte prüfe deine Änderungen und speichere erneut.",
+    "search": "Einstellungen durchsuchen",
+    "noResults": "Keine Einstellung passt zu deiner Suche.",
+    "both": "Einfach + Erweitert",
+    "advancedOnly": "Nur Erweitert",
+    "alwaysShown": "Immer sichtbar",
+    "changed": "Geändert",
+    "save": "Speichern",
+    "saved": "Gespeichert. Die neue Konfiguration gilt, sobald jemand die nächste Bearbeitungssitzung beginnt.",
+    "saveFailed": "Speichern nicht möglich. Deine Änderungen sind noch da – bitte versuche es erneut.",
+    "discard": "Änderungen verwerfen",
+    "restoreDefaults": "Standardwerte wiederherstellen",
+    "previewTitle": "Vorschau der Ansicht „Einfach“",
+    "previewCount": "Mit diesen Einstellungen zeigt „Einfach“ {{count}} Elemente.",
+    "previewShow": "Liste anzeigen",
+    "previewHide": "Liste ausblenden",
+    "screens": {
+      "gameSave": "Speicherseite",
+      "taskDialog": "Aufgabendialog",
+      "infoDialog": "Informationsdialog",
+      "mapFeaturesDialog": "Dialog Kartenfeatures",
+      "editor": "Editor"
+    }
+  },
+  "EditorFeatures": {
+    "groups": {
+      "game": "Spiel (Speicherseite)",
+      "navigation": "Navigationsaufgaben",
+      "thematic": "Themenaufgaben",
+      "information": "Informationsaufgaben",
+      "map": "Dialog Kartenfeatures",
+      "virtual": "Virtuelle Welten",
+      "shared": "Alle Aufgaben"
+    },
+    "items": {
+      "gameNameAndPlace": {
+        "label": "Spielname und Ort",
+        "description": "Name und Ort des Spiels auf der Speicherseite. Zum Speichern immer nötig."
+      },
+      "gameBoundary": {
+        "label": "Kartenausschnitt des Spiels (Begrenzung)",
+        "description": "Begrenzt das Spiel auf ein Kartengebiet: Einschalten, Umriss, ob Spielende ihn sehen, und die Warnung beim Verlassen."
+      },
+      "gameDisableDataConsent": {
+        "label": "Schalter für die Einwilligung zur Datenweitergabe",
+        "description": "Der Schalter „Einwilligung zur Datenweitergabe zum Spielen voraussetzen“ auf der Speicherseite. Ausgeblendet bleibt die aktuelle Einstellung jedes Spiels erhalten."
+      },
+      "gameNavigationPin": {
+        "label": "Navigations-PIN",
+        "description": "Optionale vierstellige PIN, mit der Spielende eine Aufgabe überspringen können."
+      },
+      "navigationTypeFlag": {
+        "label": "Navigation zur Zielfahne",
+        "description": "Die Standard-Navigationsaufgabe: Spielende laufen zu einer Fahne auf der Karte."
+      },
+      "navigationTypeArrow": {
+        "label": "Navigation mit Richtungspfeil",
+        "description": "Spielende folgen einem Richtungspfeil zum Ziel."
+      },
+      "navigationTypePhoto": {
+        "label": "Navigation mit Foto",
+        "description": "Spielende finden den Ort, der auf einem Foto zu sehen ist."
+      },
+      "navigationTypeText": {
+        "label": "Navigation mit Textanweisung",
+        "description": "Spielende folgen schriftlichen Anweisungen zum Ziel."
+      },
+      "navigationTypeExploration": {
+        "label": "Erkundungsaufgabe",
+        "description": "Spielende erkunden die Umgebung für eine festgelegte Zeit."
+      },
+      "navigationShowFlag": {
+        "label": "Fahne anzeigen",
+        "description": "Zeigt die Zielfahne auf der Karte (Navigation mit Text oder Foto)."
+      },
+      "navigationKeepFlag": {
+        "label": "Fahne auf der Karte behalten",
+        "description": "Lässt die Zielfahne nach der Ankunft auf der Karte stehen."
+      },
+      "navigationAccuracy": {
+        "label": "Ankunftsgenauigkeit",
+        "description": "Wie nah Spielende dem Ziel einer Navigationsaufgabe kommen müssen. Ausgeblendet bleibt die aktuelle Genauigkeit jeder Aufgabe erhalten (5 m bei neuen Aufgaben)."
+      },
+      "thematicTypeSelfLocation": {
+        "label": "Selbst-Lokalisation",
+        "description": "Spielende markieren, wo sie sind. Die Standard-Themenaufgabe, immer sichtbar."
+      },
+      "thematicTypeObject": {
+        "label": "Objekt-Lokalisation",
+        "description": "Spielende finden oder markieren ein Objekt auf der Karte."
+      },
+      "thematicTypeDirection": {
+        "label": "Richtungsbestimmung",
+        "description": "Spielende bestimmen eine Richtung."
+      },
+      "thematicTypeFree": {
+        "label": "Freie Aufgaben",
+        "description": "Offene Aufgaben mit eigenen Frage- und Antworttypen."
+      },
+      "freeQuestionMapMarking": {
+        "label": "Freie Aufgabe: Text und Kartenmarkierung",
+        "description": "Fragetyp für freie Aufgaben: eine Textfrage mit einer Markierung auf der Karte."
+      },
+      "freeQuestionPhoto": {
+        "label": "Freie Aufgabe: Text und Foto",
+        "description": "Fragetyp für freie Aufgaben: eine Textfrage mit einem Foto."
+      },
+      "freeAnswerDrawing": {
+        "label": "Freie Aufgabe: Antwort durch Kartierung",
+        "description": "Antworttyp für freie Aufgaben: Spielende zeichnen auf der Karte."
+      },
+      "directionQuestionArrow": {
+        "label": "Richtungsaufgabe: Richtung durch einen Pfeil",
+        "description": "Fragetyp für Richtungsaufgaben: Die Richtung wird mit einem Pfeil auf der Karte vorgegeben."
+      },
+      "directionQuestionPhoto": {
+        "label": "Richtungsaufgabe: Richtung mit einem Foto",
+        "description": "Fragetyp für Richtungsaufgaben: Die Richtung wird mit einem Foto angezeigt."
+      },
+      "thematicMultipleAttempts": {
+        "label": "Mehrere Versuche (Themenaufgaben)",
+        "description": "Erlaubt Spielenden bei Themenaufgaben einen neuen Versuch nach einer falschen Antwort. Ausgeblendet bleibt die aktuelle Einstellung jeder Aufgabe erhalten."
+      },
+      "thematicSearchArea": {
+        "label": "Suchgebiet",
+        "description": "Das optionale Suchgebiet auf der Karte für Selbst- und Objekt-Lokalisation."
+      },
+      "thematicMapFeatures": {
+        "label": "Kartenfeatures (Themenaufgaben)",
+        "description": "Der Eintrag „Kartenfeatures“ in den Dialogen der Themenaufgaben. Wird er in „Einfach“ gezeigt, folgt jedes Karten-Element darin weiterhin seiner eigenen Einstellung."
+      },
+      "informationContent": {
+        "label": "Inhalt der Information",
+        "description": "Text, Foto und Audio einer Informationsaufgabe. Zum Speichern nötig."
+      },
+      "informationMapFeatures": {
+        "label": "Kartenfeatures (Informationsaufgaben)",
+        "description": "Der Eintrag „Kartenfeatures“ in den Dialogen der Informationsaufgaben. Wird er in „Einfach“ gezeigt, folgt jedes Karten-Element darin weiterhin seiner eigenen Einstellung."
+      },
+      "mapZoom": {
+        "label": "Zoom",
+        "description": "Wie Spielende die Karte zoomen können."
+      },
+      "mapPan": {
+        "label": "Verschieben des Kartenbereichs",
+        "description": "Die Einstellung „Kartenbereich“: ob Spielende die Karte verschieben können oder sie sich automatisch zentriert."
+      },
+      "mapRotation": {
+        "label": "Kartenrotation",
+        "description": "Wie sich die Karte dreht."
+      },
+      "mapType": {
+        "label": "Kartentyp",
+        "description": "Welche Karte Spielende sehen, zum Beispiel Standard oder Satellit."
+      },
+      "mapSwitchLayer": {
+        "label": "Zur Satellitenebene wechseln",
+        "description": "Erlaubt Spielenden einer virtuellen Welt, die Karte auf die Satellitenansicht umzuschalten. Nur bei virtuellen Welten mit Satellitenebene."
+      },
+      "mapLocationMarker": {
+        "label": "Positionsmarker",
+        "description": "Zeigt die eigene Position der Spielenden auf der Karte."
+      },
+      "mapDirectionMarker": {
+        "label": "Blickrichtungsmarker",
+        "description": "Zeigt, in welche Richtung die Spielenden schauen."
+      },
+      "mapTrack": {
+        "label": "Trackaufzeichnung",
+        "description": "Zeigt während des Spiels die gelaufene Strecke auf der Karte, samt der Option, wie lange sie auf der Karte bleibt."
+      },
+      "mapStreetHighlight": {
+        "label": "Markierung des Straßenabschnitts bei Position",
+        "description": "Hebt den Straßenabschnitt an der Position der Spielenden hervor."
+      },
+      "mapLocationBuffer": {
+        "label": "Kartenausschnitt (Buffer) um Position",
+        "description": "Begrenzt die sichtbare Karte auf einen Kreis um die Spielenden, samt dem Durchmesser dieses Kreises."
+      },
+      "mapLandmarks": {
+        "label": "Hervorhebung von Landmarken",
+        "description": "Hebt Landmarken auf der Karte hervor, samt der Zeichnung der Landmarken."
+      },
+      "virtualEnvironmentChoice": {
+        "label": "Virtuelle Welt wählen",
+        "description": "Wählt die virtuelle Welt, in der die Aufgabe stattfindet."
+      },
+      "virtualTaskFloor": {
+        "label": "Aufgabenetage",
+        "description": "Die Etage, auf der eine Aufgabe in Gebäudewelten stattfindet. Für diese Welten nötig."
+      },
+      "virtualInitialPose": {
+        "label": "Startposition und Richtung des Avatars",
+        "description": "Legt fest, wo der Avatar startet und wohin er schaut, in Gebäuden samt Start-Etage. Ohne Angabe gilt der bisherige Standardstart."
+      },
+      "virtualAvatarSpeed": {
+        "label": "Avatar-Geschwindigkeit",
+        "description": "Wie schnell der Avatar läuft."
+      },
+      "virtualCameraClip": {
+        "label": "Clipping-Distanz der Kamera",
+        "description": "Begrenzt, wie weit die Kamera sieht."
+      },
+      "virtualDisableRotation": {
+        "label": "Avatar-Rotation deaktivieren",
+        "description": "Verhindert, dass sich der Avatar dreht."
+      },
+      "virtualEnvironmentSettings": {
+        "label": "Umgebungseinstellungen anzeigen",
+        "description": "Zeigt den Spielenden die Umgebungseinstellungen."
+      },
+      "virtualPathVisualization": {
+        "label": "Pfadvisualisierung anzeigen",
+        "description": "Zeigt den Pfad in Gebäudewelten."
+      },
+      "virtualMapSize": {
+        "label": "Kartengröße",
+        "description": "Wie groß die Karte in der virtuellen Welt angezeigt wird."
+      },
+      "virtualLandmarkSelection": {
+        "label": "Anzuzeigende Landmarken",
+        "description": "Legt fest, welche Landmarken der virtuellen Welt sichtbar sind."
+      },
+      "editorModeSwitch": {
+        "label": "Umschalter Einfach / Erweitert",
+        "description": "Der Umschalter selbst. Er steht allen zur Verfügung, die einen Editor öffnen können."
+      },
+      "taskInstruction": {
+        "label": "Aufgabenanweisung und Audionachricht",
+        "description": "Was Spielende tun sollen. Für jede Aufgabe nötig."
+      },
+      "taskDestination": {
+        "label": "Ziel und Referenz-Eingaben",
+        "description": "Eingaben, die der gewählte Aufgabentyp braucht, etwa das Ziel oder eine Referenzrichtung."
+      },
+      "taskExplorationSettings": {
+        "label": "Dauer und Timer der Erkundung",
+        "description": "Dauer und Timer einer Erkundungsaufgabe. Für diesen Aufgabentyp nötig."
+      },
+      "taskCollaborationMethod": {
+        "label": "Zusammenarbeit (Mehrspieler)",
+        "description": "Wie sich die Spielenden einer Mehrspieler-Aufgabe die Anweisungen teilen. Für Mehrspieler-Aufgaben nötig."
+      },
+      "taskConfirmation": {
+        "label": "Eingabebestätigung",
+        "description": "Bittet Spielende, ihre Eingabe zu bestätigen (Navigation zur Fahne oder per Text)."
+      },
+      "taskFeedback": {
+        "label": "Feedback",
+        "description": "Zeigt Spielenden eine Rückmeldung zu ihrer Antwort."
+      },
+      "taskAutoPlayAudio": {
+        "label": "Audio automatisch abspielen",
+        "description": "Spielt die Audionachricht einer Aufgabe automatisch ab. Auch bei Informationsaufgaben."
+      }
+    }
   }
 }

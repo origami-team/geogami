@@ -1,0 +1,50 @@
+<div class="editor-mode">
+  <!-- The switch and its explanation: this is the part that stays on screen when `sticky`. -->
+  <div class="editor-mode-bar">
+    <div class="editor-mode-row">
+      <ion-segment
+        class="editor-mode-segment"
+        [value]="mode"
+        [selectOnFocus]="true"
+        (ionChange)="onModeChange($event)"
+        [attr.aria-label]="'EditorMode.switchLabel' | translate"
+      >
+        <ion-segment-button value="simple">
+          <ion-label>{{ "EditorMode.simple" | translate }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="advanced">
+          <ion-label>{{ "EditorMode.advanced" | translate }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <!-- A native button on purpose: ion-button copies its aria-* attributes to an inner
+           button once, when it loads, so a later change of aria-expanded would never reach
+           assistive technology. -->
+      <button
+        type="button"
+        class="editor-mode-info"
+        [attr.aria-label]="'EditorMode.infoButton' | translate"
+        [attr.aria-expanded]="infoOpen"
+        [attr.aria-controls]="infoId"
+        (click)="toggleInfo()"
+      >
+        <ion-icon name="information-circle-outline" aria-hidden="true"></ion-icon>
+      </button>
+    </div>
+
+    <p class="editor-mode-explanation" *ngIf="infoOpen" [id]="infoId">
+      {{ "EditorMode.explanation" | translate }}
+    </p>
+  </div>
+
+  <ion-card class="editor-mode-notice" color="warning" *ngIf="showNotice" role="status">
+    <ion-card-content>
+      <strong class="editor-mode-notice-text">{{
+        (subject === "game" ? "EditorMode.noticeGame" : "EditorMode.noticeTask") | translate
+      }}</strong>
+      <ion-button size="small" fill="outline" color="dark" type="button" (click)="reviewSettings()">
+        {{ "EditorMode.reviewSettings" | translate }}
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</div>

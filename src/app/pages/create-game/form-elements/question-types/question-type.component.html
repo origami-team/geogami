@@ -191,6 +191,9 @@
     ></app-map>
   </div>
 
+  <!-- Avatar start pose: Advanced only by default. Hiding it only removes the controls
+       from the page; initialAvatarPositionStatus and question.initialAvatarPosition are untouched. -->
+  <ng-container *editorFeature="'virtual.initialPose'">
   <ion-item class="ion-no-padding" lines="none" *ngIf="isVirtualWorld">
     <h5>
       Set avatar initial position and direction 🧍‍♂️
@@ -248,6 +251,7 @@
       [initialFloor]="initialFloor"
     ></app-map>
   </div>
+  </ng-container>
 
   <!-- Direction on the map - theme->directionDetermination->shownOnMap - Single-player -->
   <div *ngIf="question.type == questionTypeEnum.MAP_DIRECTION_MARKER">
@@ -812,6 +816,7 @@
     </ion-card>
   </div>
 
+  <ng-container *editorFeature="'virtual.initialPose'">
   <ion-card class="multiPlayer-card">
     <ion-card-header>
       <ion-item class="ion-no-padding" lines="none" *ngIf="isVirtualWorld">
@@ -874,6 +879,7 @@
   </div>
     </ion-card-content>
   </ion-card>
+  </ng-container>
 
   <!-- Direction on the map - theme->directionDetermination->shownOnMap - Multi-player -->
   <div

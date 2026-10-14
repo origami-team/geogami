@@ -1,0 +1,166 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        [text]="'General.back_button' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "EditorVisibility.pageTitle" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Everything sits in one centred column instead of spanning the whole window. -->
+  <div class="page-column">
+    <!-- Loading -->
+    <div class="status" *ngIf="loading">
+      <ion-spinner name="dots"></ion-spinner>
+      <p>{{ "EditorVisibility.loading" | translate }}</p>
+    </div>
+
+    <!-- The saved policy could not be loaded: nothing is shown as if it were saved. -->
+    <ion-card color="danger" *ngIf="!loading && loadError" role="alert">
+      <ion-card-content>
+        <p>{{ "EditorVisibility.loadFailed" | translate }}</p>
+        <ion-button fill="outline" color="light" (click)="load()">
+          {{ "EditorVisibility.retry" | translate }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ng-container *ngIf="!loading && !loadError && saved">
+      <ion-card class="summary">
+        <ion-card-content>
+          <p class="intro">{{ "EditorVisibility.intro" | translate }}</p>
+          <p class="meta">
+            <ng-container *ngIf="saved.revision > 0; else notSaved">
+              {{ "EditorVisibility.lastSaved" | translate: { revision: saved.revision, date: (saved.updatedAt | date: "medium") } }}
+              <ng-container *ngIf="saved.updatedBy">
+                {{ "EditorVisibility.lastSavedBy" | translate: { user: saved.updatedBy } }}
+              </ng-container>
+            </ng-container>
+            <ng-template #notSaved>{{ "EditorVisibility.notSavedYet" | translate }}</ng-template>
+          </p>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- The app and the server list different controls -->
+      <ion-card class="notice" color="warning" *ngIf="catalogueMismatch" role="alert">
+        <ion-card-content>{{ "EditorVisibility.catalogueMismatch" | translate }}</ion-card-content>
+      </ion-card>
+
+      <!-- Someone else saved first: the draft is kept until the admin reloads -->
+      <ion-card class="notice" color="warning" *ngIf="conflict" role="alert">
+        <ion-card-content>
+          <p>{{ "EditorVisibility.conflictText" | translate }}</p>
+          <ion-button fill="outline" color="dark" (click)="reloadAfterConflict()">
+            {{ "EditorVisibility.reloadLatest" | translate }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-searchbar
+        class="search"
+        [(ngModel)]="query"
+        [placeholder]="'EditorVisibility.search' | translate"
+        [attr.aria-label]="'EditorVisibility.search' | translate"
+        debounce="0"
+      ></ion-searchbar>
+
+      <p class="empty" *ngIf="groups.length === 0">{{ "EditorVisibility.noResults" | translate }}</p>
+
+      <!-- One card per group of controls -->
+      <ion-card class="group" *ngFor="let group of groups; trackBy: trackById">
+        <h2 class="group-title">{{ group.labelKey | translate }}</h2>
+
+        <ul class="features">
+          <li class="feature" *ngFor="let feature of group.rows; trackBy: trackById">
+            <div class="feature-text">
+              <h3>
+                {{ feature.labelKey | translate }}
+                <ion-badge color="tertiary" class="changed" *ngIf="isChanged(feature)">
+                  {{ "EditorVisibility.changed" | translate }}
+                </ion-badge>
+              </h3>
+              <p class="description">{{ feature.descriptionKey | translate }}</p>
+              <p class="screens">
+                <ion-chip *ngFor="let screen of feature.screens" outline="true" color="medium">
+                  <ion-label>{{ "EditorVisibility.screens." + screen | translate }}</ion-label>
+                </ion-chip>
+              </p>
+            </div>
+
+            <select
+              *ngIf="feature.configurable; else alwaysShown"
+              class="classification"
+              [ngModel]="draft[feature.id]"
+              (ngModelChange)="setClassification(feature.id, $event)"
+              [attr.aria-label]="feature.labelKey | translate"
+            >
+              <option value="both">{{ "EditorVisibility.both" | translate }}</option>
+              <option value="advanced">{{ "EditorVisibility.advancedOnly" | translate }}</option>
+            </select>
+            <ng-template #alwaysShown>
+              <ion-chip class="always-shown" color="medium">
+                <ion-icon name="lock-closed-outline"></ion-icon>
+                <ion-label>{{ "EditorVisibility.alwaysShown" | translate }}</ion-label>
+              </ion-chip>
+            </ng-template>
+          </li>
+        </ul>
+      </ion-card>
+
+      <!-- What the Simple view will show under the current draft -->
+      <ion-card class="preview">
+        <ion-card-header>
+          <ion-card-title>{{ "EditorVisibility.previewTitle" | translate }}</ion-card-title>
+          <ion-card-subtitle>
+            {{ "EditorVisibility.previewCount" | translate: { count: previewCount } }}
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <!-- A native button so that aria-expanded stays in step (ion-button copies its aria-* once, at load). -->
+          <button
+            type="button"
+            class="link-button"
+            [attr.aria-expanded]="previewOpen"
+            aria-controls="editor-visibility-preview"
+            (click)="togglePreview()"
+          >
+            {{ (previewOpen ? "EditorVisibility.previewHide" : "EditorVisibility.previewShow") | translate }}
+          </button>
+          <div id="editor-visibility-preview" *ngIf="previewOpen">
+            <div class="preview-group" *ngFor="let group of preview; trackBy: trackById">
+              <strong>{{ group.labelKey | translate }}</strong>
+              <ul>
+                <li *ngFor="let feature of group.rows; trackBy: trackById">
+                  {{ feature.labelKey | translate }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="!loading && !loadError && saved">
+  <ion-toolbar>
+    <!-- Same column as the content, so the buttons line up with it. -->
+    <div class="page-column actions">
+      <ion-button fill="outline" size="small" (click)="restoreDefaults()" [disabled]="saving || isAtDefaults">
+        {{ "EditorVisibility.restoreDefaults" | translate }}
+      </ion-button>
+      <ion-button fill="outline" size="small" color="medium" (click)="discard()" [disabled]="saving || !dirty">
+        {{ "EditorVisibility.discard" | translate }}
+      </ion-button>
+      <ion-button size="small" (click)="save()" [disabled]="!canSave">
+        {{ "EditorVisibility.save" | translate }}
+        <ion-spinner name="dots" slot="end" *ngIf="saving"></ion-spinner>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

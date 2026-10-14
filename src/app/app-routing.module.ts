@@ -1,6 +1,8 @@
 import { NgModule } from "@angular/core";
 import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
-import { AuthGuard, ConfirmedOrGuestGuard } from "./services/auth-gard.service";
+import { AuthGuard, ConfirmedOrGuestGuard, RoleGuard } from "./services/auth-gard.service";
+import { EDITOR_VISIBILITY_MANAGER_ROLES } from "./models/editor-features";
+import { APP_MANAGEMENT_ROLES } from "./models/app-management";
 
 const routes: Routes = [
   {
@@ -201,6 +203,16 @@ const routes: Routes = [
       ).then((m) => m.CreateGameVirtualMenuPageModule),
   },
   {
+    // The administrators' hub: users, Simple/Advanced visibility, audit log.
+    path: "user/app-management",
+    loadChildren: () =>
+      import("./pages/user/app-management/app-management.module").then(
+        (m) => m.AppManagementPageModule
+      ),
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: APP_MANAGEMENT_ROLES },
+  },
+  {
     path: "user/user-management",
     loadChildren: () =>
       import("./pages/user/user-management/user-management.module").then(
@@ -215,6 +227,16 @@ const routes: Routes = [
         (m) => m.AuditLogPageModule
       ),
     canActivate: [AuthGuard],
+  },
+  {
+    // Simple/Advanced editor policy — admin only.
+    path: "user/editor-visibility",
+    loadChildren: () =>
+      import("./pages/user/editor-visibility/editor-visibility.module").then(
+        (m) => m.EditorVisibilityPageModule
+      ),
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: EDITOR_VISIBILITY_MANAGER_ROLES },
   },
   {
     path: "game-type-menu/:worldType",

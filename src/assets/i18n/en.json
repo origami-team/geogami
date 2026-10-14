@@ -698,5 +698,302 @@
         }
       }
     }
+  },
+  "AppManagement": {
+    "cardTitle": "App management",
+    "cardDescription": "Manage users, editor views and the audit log",
+    "pageTitle": "App management",
+    "users": {
+      "title": "Users",
+      "description": "Manage user roles and permissions"
+    },
+    "auditLog": {
+      "title": "Audit log",
+      "description": "Account, role and configuration changes and security alerts"
+    },
+    "unread": "{{count}} unread"
+  },
+  "EditorMode": {
+    "simple": "Simple",
+    "advanced": "Advanced",
+    "switchLabel": "Editor view",
+    "infoButton": "About Simple and Advanced",
+    "explanation": "Simple shows the essential tools for creating games and tasks. Advanced shows additional options. You can switch at any time without losing your changes.",
+    "advancedOption": "Advanced",
+    "noticeTask": "This task uses advanced settings",
+    "noticeGame": "This game uses advanced settings",
+    "reviewSettings": "Review settings"
+  },
+  "EditorVisibility": {
+    "cardTitle": "Editor visibility",
+    "cardDescription": "Choose which optional controls the Simple editor view shows",
+    "pageTitle": "Editor visibility",
+    "intro": "Choose which optional controls the Simple view shows to everyone who creates games or tasks. Advanced always shows everything a user is allowed to use. Saving affects all users’ authoring views; it does not change existing games or tasks. Someone who is editing right now keeps their current view until their next editing session.",
+    "loading": "Loading the saved configuration…",
+    "loadFailed": "The saved configuration could not be loaded, so nothing can be shown or saved for now.",
+    "retry": "Try again",
+    "lastSaved": "Revision {{revision}}, saved {{date}}",
+    "lastSavedBy": "by {{user}}",
+    "notSavedYet": "Nothing has been saved yet. The built-in defaults are in use.",
+    "catalogueMismatch": "This app and the server do not list the same controls, so saving is turned off. Update the app or the server until both match.",
+    "conflictText": "Someone else saved a change while you were editing. Your changes are still here. Reload to continue from the latest saved version; your changes are applied to it again.",
+    "conflictToast": "Not saved: someone else changed the configuration in the meantime.",
+    "reloadLatest": "Reload latest version",
+    "reloaded": "Reloaded the latest version. Please review your changes and save again.",
+    "search": "Search settings",
+    "noResults": "No settings match your search.",
+    "both": "Simple + Advanced",
+    "advancedOnly": "Advanced only",
+    "alwaysShown": "Always shown",
+    "changed": "Changed",
+    "save": "Save",
+    "saved": "Saved. The new configuration applies when someone starts their next editing session.",
+    "saveFailed": "Could not save. Your changes are still here — please try again.",
+    "discard": "Discard changes",
+    "restoreDefaults": "Restore defaults",
+    "previewTitle": "Preview of the Simple view",
+    "previewCount": "With these settings, Simple shows {{count}} controls.",
+    "previewShow": "Show list",
+    "previewHide": "Hide list",
+    "screens": {
+      "gameSave": "Save screen",
+      "taskDialog": "Task dialog",
+      "infoDialog": "Information dialog",
+      "mapFeaturesDialog": "Map features dialog",
+      "editor": "Editor"
+    }
+  },
+  "EditorFeatures": {
+    "groups": {
+      "game": "Game (save screen)",
+      "navigation": "Navigation tasks",
+      "thematic": "Thematic tasks",
+      "information": "Information tasks",
+      "map": "Map features dialog",
+      "virtual": "Virtual worlds",
+      "shared": "All tasks"
+    },
+    "items": {
+      "gameNameAndPlace": {
+        "label": "Game name and location",
+        "description": "Name and location of the game on the save screen. Always needed to save a game."
+      },
+      "gameBoundary": {
+        "label": "Map section of the game (boundary)",
+        "description": "Limits the game to a map area: switching it on, its outline, whether players see it, and the warning when players leave it."
+      },
+      "gameDisableDataConsent": {
+        "label": "Data sharing consent switch",
+        "description": "The switch “Require data sharing consent to play” on the save screen. Hiding it keeps each game’s current setting."
+      },
+      "gameNavigationPin": {
+        "label": "Navigation PIN",
+        "description": "Optional 4-digit PIN that lets players skip a task."
+      },
+      "navigationTypeFlag": {
+        "label": "Navigation to a flag",
+        "description": "The default navigation task: players walk to a flag on the map."
+      },
+      "navigationTypeArrow": {
+        "label": "Navigation with an arrow",
+        "description": "Players follow a direction arrow to the destination."
+      },
+      "navigationTypePhoto": {
+        "label": "Navigation with a photo",
+        "description": "Players find the place shown in a photo."
+      },
+      "navigationTypeText": {
+        "label": "Navigation with text instructions",
+        "description": "Players follow written instructions to the destination."
+      },
+      "navigationTypeExploration": {
+        "label": "Exploration task",
+        "description": "Players explore the surroundings for a set time."
+      },
+      "navigationShowFlag": {
+        "label": "Show flag",
+        "description": "Shows the destination flag on the map (navigation with text or a photo)."
+      },
+      "navigationKeepFlag": {
+        "label": "Keep the flag on the map",
+        "description": "Keeps the destination flag on the map after players arrive."
+      },
+      "navigationAccuracy": {
+        "label": "Arrival accuracy",
+        "description": "How close players must get to the destination of a navigation task. Hiding it keeps each task’s current accuracy (5 m for new tasks)."
+      },
+      "thematicTypeSelfLocation": {
+        "label": "Self-location task",
+        "description": "Players mark where they are. The default thematic task, always shown."
+      },
+      "thematicTypeObject": {
+        "label": "Object-location task",
+        "description": "Players find or mark an object on the map."
+      },
+      "thematicTypeDirection": {
+        "label": "Direction-determination task",
+        "description": "Players determine a direction."
+      },
+      "thematicTypeFree": {
+        "label": "Free tasks",
+        "description": "Open tasks with their own question and answer types."
+      },
+      "freeQuestionMapMarking": {
+        "label": "Free task: text and map marking",
+        "description": "Question type for free tasks: a text question with a marking on the map."
+      },
+      "freeQuestionPhoto": {
+        "label": "Free task: text and photo",
+        "description": "Question type for free tasks: a text question with a photo."
+      },
+      "freeAnswerDrawing": {
+        "label": "Free task: answer by drawing on the map",
+        "description": "Answer type for free tasks: players draw on the map."
+      },
+      "directionQuestionArrow": {
+        "label": "Direction task: direction shown by an arrow",
+        "description": "Question type for direction tasks: the direction is indicated by an arrow on the map."
+      },
+      "directionQuestionPhoto": {
+        "label": "Direction task: direction shown with a photo",
+        "description": "Question type for direction tasks: the direction is shown with a photo."
+      },
+      "thematicMultipleAttempts": {
+        "label": "Several trials (thematic tasks)",
+        "description": "Lets players try again after a wrong answer in thematic tasks. Hiding it keeps each task’s current setting."
+      },
+      "thematicSearchArea": {
+        "label": "Search area",
+        "description": "The optional search area on the map for self-location and object-location tasks."
+      },
+      "thematicMapFeatures": {
+        "label": "Map features (thematic tasks)",
+        "description": "The Map features entry in thematic task dialogs. If it is shown in Simple, each map control inside still follows its own setting."
+      },
+      "informationContent": {
+        "label": "Information content",
+        "description": "Text, photo and audio of an information task. Needed to save."
+      },
+      "informationMapFeatures": {
+        "label": "Map features (information tasks)",
+        "description": "The Map features entry in information task dialogs. If it is shown in Simple, each map control inside still follows its own setting."
+      },
+      "mapZoom": {
+        "label": "Zoom",
+        "description": "How players can zoom the map."
+      },
+      "mapPan": {
+        "label": "Map section movement",
+        "description": "The “Map section” setting: whether players can move the map or it centres automatically."
+      },
+      "mapRotation": {
+        "label": "Map rotation",
+        "description": "How the map rotates."
+      },
+      "mapType": {
+        "label": "Map type",
+        "description": "Which kind of map players see, for example standard or satellite."
+      },
+      "mapSwitchLayer": {
+        "label": "Switch to satellite layer",
+        "description": "Lets players of a virtual world switch the map to its satellite view. Only offered for virtual worlds that have a satellite layer."
+      },
+      "mapLocationMarker": {
+        "label": "Location marker",
+        "description": "Shows the player’s own position on the map."
+      },
+      "mapDirectionMarker": {
+        "label": "View direction marker",
+        "description": "Shows the direction the player is looking in."
+      },
+      "mapTrack": {
+        "label": "Track recording",
+        "description": "Shows the walked track on the map during the game, together with the option for how long it stays on the map."
+      },
+      "mapStreetHighlight": {
+        "label": "Highlight street section at location",
+        "description": "Highlights the street section at the player’s position."
+      },
+      "mapLocationBuffer": {
+        "label": "Map section (buffer) at location",
+        "description": "Limits the visible map to a circle around the player, together with the diameter of that circle."
+      },
+      "mapLandmarks": {
+        "label": "Highlighting of landmarks",
+        "description": "Highlights landmarks on the map, together with the landmark drawing."
+      },
+      "virtualEnvironmentChoice": {
+        "label": "Choose a virtual world",
+        "description": "Selects the virtual world a task takes place in."
+      },
+      "virtualTaskFloor": {
+        "label": "Task floor",
+        "description": "The floor a task takes place on in building worlds. Needed for those worlds."
+      },
+      "virtualInitialPose": {
+        "label": "Avatar start position and direction",
+        "description": "Sets where the avatar starts and which way it faces, including the start floor in buildings. Without it the existing default start is used."
+      },
+      "virtualAvatarSpeed": {
+        "label": "Avatar speed",
+        "description": "How fast the avatar walks."
+      },
+      "virtualCameraClip": {
+        "label": "Camera clipping distance",
+        "description": "Limits how far the camera sees."
+      },
+      "virtualDisableRotation": {
+        "label": "Disable avatar rotation",
+        "description": "Stops the avatar from turning."
+      },
+      "virtualEnvironmentSettings": {
+        "label": "Show environment settings",
+        "description": "Shows the environment settings to players."
+      },
+      "virtualPathVisualization": {
+        "label": "Show path visualization",
+        "description": "Shows the path in building worlds."
+      },
+      "virtualMapSize": {
+        "label": "Map size",
+        "description": "How large the map is shown in the virtual world."
+      },
+      "virtualLandmarkSelection": {
+        "label": "Landmarks to show",
+        "description": "Chooses which landmarks of the virtual world are visible."
+      },
+      "editorModeSwitch": {
+        "label": "Simple / Advanced switch",
+        "description": "The switch itself. It is always available to everyone who can open an editor."
+      },
+      "taskInstruction": {
+        "label": "Task instruction and audio message",
+        "description": "What players are asked to do. Needed for every task."
+      },
+      "taskDestination": {
+        "label": "Destination and reference inputs",
+        "description": "Inputs the selected task type needs, such as the destination or a reference direction."
+      },
+      "taskExplorationSettings": {
+        "label": "Exploration duration and timer",
+        "description": "Duration and timer of an exploration task. Needed for that task type."
+      },
+      "taskCollaborationMethod": {
+        "label": "Collaboration method (multiplayer)",
+        "description": "How the players of a multiplayer task share instructions. Needed for multiplayer tasks."
+      },
+      "taskConfirmation": {
+        "label": "Input confirmation",
+        "description": "Asks players to confirm their input (navigation to a flag or via text)."
+      },
+      "taskFeedback": {
+        "label": "Feedback",
+        "description": "Shows players feedback on their answer."
+      },
+      "taskAutoPlayAudio": {
+        "label": "Play audio automatically",
+        "description": "Plays a task’s audio message automatically. Also in information tasks."
+      }
+    }
   }
 }

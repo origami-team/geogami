@@ -10,6 +10,11 @@
 
 <ion-content>
   <div [className]="showUpload ? 'blur' : ''">
+    <!-- Simple / Advanced view -->
+    <div class="ion-padding-horizontal ion-padding-top">
+      <app-editor-mode-switch subject="game" [advancedInUse]="advancedInUse"></app-editor-mode-switch>
+    </div>
+
     <ion-card color="light" *ngIf="game">
       <ion-card-content>
         <ion-item color="light">
@@ -23,7 +28,9 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card color="light">
+    <!-- Game boundary (Advanced only by default). Hidden, not removed: the map and the
+         boundary it holds stay as they are. -->
+    <ion-card color="light" [hidden]="!ev.isVisible('game.boundary')">
       <ion-card-content>
         <div class="">
           <ion-item lines="none" color="light">
@@ -65,6 +72,7 @@
       </ion-card-content>
     </ion-card>
 
+    <ng-container *editorFeature="'game.disableDataConsent'">
     <ion-card color="light">
       <ion-card-content>
         <ion-item lines="none" color="light">
@@ -75,7 +83,9 @@
         </ion-item>
       </ion-card-content>
     </ion-card>
+    </ng-container>
 
+    <ng-container *editorFeature="'game.navigationPin'">
     <ion-card color="light" *ngIf="game">
       <ion-card-content>
         <ion-item color="light">
@@ -90,6 +100,7 @@
         </ion-item>
       </ion-card-content>
     </ion-card>
+    </ng-container>
 
     <ion-card color="light">
       <ion-card-content>

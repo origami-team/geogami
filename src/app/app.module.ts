@@ -36,6 +36,7 @@ import { TypeToTextPipe } from "./pipes/typeToText.pipe";
 import { LangTranslatePipe } from "./pipes/langTranslate";
 import { AudioRecorderComponent } from "./pages/create-game/form-elements/audio-recorder/audio-recorder.component";
 import { AudioPlayerModule } from "./components/audio-player/audio-player.module";
+import { EditorVisibilityModule } from "./components/editor-visibility/editor-visibility.module";
 
 import { MarkdownModule } from "ngx-markdown";
 import { TokenInterceptor } from "./services/token-intercepor.service";
@@ -92,6 +93,7 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
   ],
   imports: [
     AudioPlayerModule,
+    EditorVisibilityModule,
     EnvTypeQuestionTextModule,
     FormsModule,
     BrowserModule,

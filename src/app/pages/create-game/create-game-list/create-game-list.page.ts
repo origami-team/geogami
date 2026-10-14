@@ -22,6 +22,7 @@ import { PopoverComponent } from "src/app/popover/popover.component";
 import { TranslateService } from "@ngx-translate/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UtilService } from "src/app/services/util.service";
+import { EditorVisibilityService } from "src/app/services/editor-visibility.service";
 
 @Component({
   selector: "app-create-game-list",
@@ -60,6 +61,7 @@ export class CreateGameListPage implements OnInit {
     private route: ActivatedRoute,
     public utilService: UtilService,
     private router: Router,
+    private editorVisibility: EditorVisibilityService
   ) {
     // Get sent data (not visible on url)
     if (this.router.getCurrentNavigation().extras.state) {
@@ -79,6 +81,9 @@ export class CreateGameListPage implements OnInit {
   }
 
   async ngOnInit() {
+    // Entering the editor starts an authoring session: it works on one snapshot of
+    // the Simple/Advanced policy until the author is done (see EditorVisibilityService).
+    this.editorVisibility.startSession();
 
     this.gameFactory.getGame().then((game) => {
       // It could happen that game data is stored from edit game page

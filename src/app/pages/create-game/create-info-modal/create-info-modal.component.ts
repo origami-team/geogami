@@ -18,6 +18,8 @@ import { TranslateService } from "@ngx-translate/core";
 import { virEnvLayers } from "src/app/models/virEnvsLayers";
 import { VEBuildingUtilService } from "src/app/services/ve-building-util.service";
 import { CAMERA_FAR_CLIP_PLANE } from "src/app/models/virtual-world-settings";
+import { EditorVisibilityService } from "src/app/services/editor-visibility.service";
+import { detectTaskAdvancedUsage } from "src/app/helpers/editor-advanced-usage";
 
 @Component({
   selector: "app-create-info-modal",
@@ -60,7 +62,8 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
     public popoverController: PopoverController,
     public utilService: UtilService,
     private veBuildingUtilService: VEBuildingUtilService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public ev: EditorVisibilityService
   ) {}
 
   ngOnInit() {
@@ -233,5 +236,55 @@ export class CreateInfoModalComponent implements OnInit, OnChanges {
       this.isVEBuilding = this.veBuildingUtilService.checkVEBuilding(
         this.virEnvType
       );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Simple / Advanced view — presentation only. Hidden controls keep their values
+  // and are saved as they were; nothing here calls the handlers above.
+  // ---------------------------------------------------------------------------
+
+  // The virtual-environment section shows while at least one of its controls does.
+  get showVirtualSettings(): boolean {
+    return (
+      !!this.isVirtualWorld &&
+      !!this.task.settings &&
+      (this.ev.anyVisible([
+        "virtual.avatarSpeed",
+        "virtual.cameraClip",
+        "virtual.disableRotation",
+        "virtual.environmentSettings",
+        "virtual.mapSize",
+      ]) ||
+        (this.isVEBuilding && this.ev.isVisible("virtual.pathVisualization")) ||
+        (!!this.virEnvLayers[this.virEnvType]?.objectsList &&
+          this.ev.isVisible("virtual.landmarkSelection")))
+    );
+  }
+
+  get showAdditionalSettings(): boolean {
+    return this.ev.anyVisible(["task.autoPlayAudio", "information.mapFeatures"]);
+  }
+
+  // Settings of this task that only Advanced shows (for the "uses advanced
+  // settings" notice). The list object is reused while its content is unchanged.
+  private lastAdvancedInUse: string[] = [];
+  get advancedInUse(): string[] {
+    if (this.ev.mode === "advanced") {
+      return [];
+    }
+    const next = detectTaskAdvancedUsage(
+      {
+        task: this.task,
+        mapFeatures: this.task && this.task.mapFeatures,
+        isVirtualWorld: this.isVirtualWorld,
+        virEnvType: this.virEnvType,
+        initialFloor: this.initialFloor,
+      },
+      (featureId) => this.ev.isHiddenInSimple(featureId)
+    );
+    if (next.join("|") !== this.lastAdvancedInUse.join("|")) {
+      this.lastAdvancedInUse = next;
+    }
+    return this.lastAdvancedInUse;
   }
 }

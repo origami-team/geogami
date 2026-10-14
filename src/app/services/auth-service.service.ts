@@ -82,6 +82,15 @@ export class AuthService {
     return this.isAdmin || this.isContentAdmin || this.isScholar || this.isUser;
   }
 
+  // True when the signed-in user holds at least one of the given roles. Unlike the
+  // getters above (which only look at the first role), this checks every role —
+  // the server does the same, and a user can hold several.
+  hasAnyRole(roles: ReadonlyArray<string>): boolean {
+    const user: any = this.getUserValue();
+    const own: string[] = user && Array.isArray(user.roles) ? user.roles : [];
+    return own.some((role) => roles.indexOf(role) !== -1);
+  }
+
   getLoginPageOpen() {
     return this.loginPageOpen$.asObservable();
   }

@@ -91,6 +91,7 @@ export class AuditLogPage implements OnInit {
       "account.password.reset": "Password reset",
       "account.email.change": "Email change requested",
       "user.role.change": "Role changed",
+      "editorVisibility.update": "Editor visibility changed",
       "security.rateLimit": "Rate limit reached",
     };
     return map[action] || action;
@@ -106,6 +107,10 @@ export class AuditLogPage implements OnInit {
     }
     if (entry.action === "account.email.change") {
       return `${m.from || "?"} → ${m.to || "?"}`;
+    }
+    if (entry.action === "editorVisibility.update") {
+      const changes = Array.isArray(m.changes) ? m.changes : [];
+      return changes.map((c: any) => `${c.id}: ${c.from} → ${c.to}`).join(", ");
     }
     if (entry.action === "security.rateLimit") {
       return `${m.endpoint || "?"}${

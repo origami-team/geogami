@@ -12,6 +12,7 @@ import { Task } from "src/app/models/task";
 import { UtilService } from "src/app/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { AuthService } from "src/app/services/auth-service.service";
+import { EditorVisibilityService } from "src/app/services/editor-visibility.service";
 
 @Component({
   selector: "app-edit-game-tasks", // edit-game-tasks
@@ -57,7 +58,8 @@ export class EditGameTasksPage implements OnInit {
     private platform: Platform, //* used in html,
     private alertController: AlertController,
     public translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private editorVisibility: EditorVisibilityService
   ) {}
 
   // Only the owner or an admin/contentAdmin may delete a game. Co-authors
@@ -76,6 +78,10 @@ export class EditGameTasksPage implements OnInit {
   }
 
   ngOnInit() {
+    // Entering the editor starts an authoring session: it works on one snapshot of
+    // the Simple/Advanced policy until the author is done (see EditorVisibilityService).
+    this.editorVisibility.startSession();
+
     // Get selected env. and game type
     this.route.params.subscribe((params) => {
       this.isRealWorld = JSON.parse(params.bundle).isRealWorld;

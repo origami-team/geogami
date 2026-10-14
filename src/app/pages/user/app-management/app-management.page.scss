@@ -1,0 +1,39 @@
+// A light page background (it follows the theme), so the white card stands out.
+ion-content {
+  --background: var(--ion-color-light, #f4f5f8);
+}
+
+// One centred column with space on both sides, instead of the whole width of the window.
+.page-column {
+  max-width: 760px;
+  margin: 0 auto;
+
+  ion-card {
+    margin: 0 0 16px;
+  }
+}
+
+.tile {
+  --min-height: 72px;
+  // A rule between the tools, none under the last one (the card has its own edge).
+  --border-width: 0 0 1px 0;
+  --border-color: var(--ion-color-step-150, rgba(0, 0, 0, 0.1));
+
+  &:last-of-type {
+    --border-width: 0;
+  }
+
+  h2 {
+    margin: 0 0 2px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ion-text-color, var(--ion-color-dark, #222428));
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--ion-color-medium-shade, var(--ion-color-medium));
+  }
+}

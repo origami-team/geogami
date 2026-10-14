@@ -698,5 +698,302 @@
         }
       }
     }
+  },
+  "AppManagement": {
+    "cardTitle": "Gestão da aplicação",
+    "cardDescription": "Gerir utilizadores, vistas do editor e registo de auditoria",
+    "pageTitle": "Gestão da aplicação",
+    "users": {
+      "title": "Utilizadores",
+      "description": "Gerir funções e permissões dos utilizadores"
+    },
+    "auditLog": {
+      "title": "Registo de auditoria",
+      "description": "Alterações a contas, funções e configuração, e alertas de segurança"
+    },
+    "unread": "{{count}} por ler"
+  },
+  "EditorMode": {
+    "simple": "Simples",
+    "advanced": "Avançado",
+    "switchLabel": "Vista do editor",
+    "infoButton": "Sobre Simples e Avançado",
+    "explanation": "O modo Simples mostra as ferramentas essenciais para criar jogos e tarefas. O modo Avançado mostra opções adicionais. Pode alternar a qualquer momento sem perder as suas alterações.",
+    "advancedOption": "Avançado",
+    "noticeTask": "Esta tarefa utiliza definições avançadas",
+    "noticeGame": "Este jogo utiliza definições avançadas",
+    "reviewSettings": "Rever definições"
+  },
+  "EditorVisibility": {
+    "cardTitle": "Visibilidade no editor",
+    "cardDescription": "Escolha que controlos opcionais a vista Simples mostra",
+    "pageTitle": "Visibilidade no editor",
+    "intro": "Escolha que controlos opcionais a vista Simples mostra a todos os que criam jogos ou tarefas. A vista Avançado mostra sempre tudo o que um utilizador pode usar. Guardar afeta as vistas de criação de todos os utilizadores; não altera jogos nem tarefas existentes. Quem estiver a editar neste momento mantém a vista atual até à sua próxima sessão de edição.",
+    "loading": "A carregar a configuração guardada…",
+    "loadFailed": "Não foi possível carregar a configuração guardada, por isso não é possível mostrar nem guardar nada por agora.",
+    "retry": "Tentar novamente",
+    "lastSaved": "Revisão {{revision}}, guardada em {{date}}",
+    "lastSavedBy": "por {{user}}",
+    "notSavedYet": "Ainda nada foi guardado. Estão em uso os valores predefinidos.",
+    "catalogueMismatch": "Esta aplicação e o servidor não listam os mesmos controlos, pelo que a gravação está desativada. Atualize a aplicação ou o servidor até ambos coincidirem.",
+    "conflictText": "Outra pessoa guardou uma alteração enquanto editava. As suas alterações continuam aqui. Recarregue para continuar a partir da versão guardada mais recente; as suas alterações serão aplicadas de novo.",
+    "conflictToast": "Não guardado: outra pessoa alterou entretanto a configuração.",
+    "reloadLatest": "Recarregar a versão mais recente",
+    "reloaded": "Versão mais recente carregada. Reveja as suas alterações e guarde novamente.",
+    "search": "Pesquisar definições",
+    "noResults": "Nenhuma definição corresponde à sua pesquisa.",
+    "both": "Simples + Avançado",
+    "advancedOnly": "Apenas Avançado",
+    "alwaysShown": "Sempre visível",
+    "changed": "Alterado",
+    "save": "Guardar",
+    "saved": "Guardado. A nova configuração aplica-se quando alguém iniciar a sua próxima sessão de edição.",
+    "saveFailed": "Não foi possível guardar. As suas alterações continuam aqui — tente novamente.",
+    "discard": "Descartar alterações",
+    "restoreDefaults": "Repor valores predefinidos",
+    "previewTitle": "Pré-visualização da vista Simples",
+    "previewCount": "Com estas definições, a vista Simples mostra {{count}} controlos.",
+    "previewShow": "Mostrar lista",
+    "previewHide": "Ocultar lista",
+    "screens": {
+      "gameSave": "Ecrã de gravação",
+      "taskDialog": "Diálogo da tarefa",
+      "infoDialog": "Diálogo de informação",
+      "mapFeaturesDialog": "Diálogo de elementos do mapa",
+      "editor": "Editor"
+    }
+  },
+  "EditorFeatures": {
+    "groups": {
+      "game": "Jogo (ecrã de gravação)",
+      "navigation": "Tarefas de navegação",
+      "thematic": "Tarefas temáticas",
+      "information": "Tarefas de informação",
+      "map": "Diálogo de elementos do mapa",
+      "virtual": "Mundos virtuais",
+      "shared": "Todas as tarefas"
+    },
+    "items": {
+      "gameNameAndPlace": {
+        "label": "Nome e local do jogo",
+        "description": "Nome e local do jogo no ecrã de gravação. Sempre necessários para guardar."
+      },
+      "gameBoundary": {
+        "label": "Secção do mapa do jogo (limite)",
+        "description": "Limita o jogo a uma área do mapa: ativação, contorno, se os jogadores o veem e o aviso ao sair dela."
+      },
+      "gameDisableDataConsent": {
+        "label": "Opção de consentimento de partilha de dados",
+        "description": "A opção «Exigir o consentimento de partilha de dados para jogar» no ecrã de gravação. Ao ocultá-la, mantém-se a definição atual de cada jogo."
+      },
+      "gameNavigationPin": {
+        "label": "PIN de navegação",
+        "description": "PIN opcional de 4 dígitos que permite aos jogadores saltar uma tarefa."
+      },
+      "navigationTypeFlag": {
+        "label": "Navegação até à bandeira",
+        "description": "A tarefa de navegação predefinida: os jogadores caminham até uma bandeira no mapa."
+      },
+      "navigationTypeArrow": {
+        "label": "Navegação com seta direcional",
+        "description": "Os jogadores seguem uma seta direcional até ao destino."
+      },
+      "navigationTypePhoto": {
+        "label": "Navegação com foto",
+        "description": "Os jogadores encontram o local mostrado numa foto."
+      },
+      "navigationTypeText": {
+        "label": "Navegação com instrução textual",
+        "description": "Os jogadores seguem instruções escritas até ao destino."
+      },
+      "navigationTypeExploration": {
+        "label": "Tarefa de exploração",
+        "description": "Os jogadores exploram os arredores durante um tempo definido."
+      },
+      "navigationShowFlag": {
+        "label": "Mostrar bandeira",
+        "description": "Mostra a bandeira de destino no mapa (navegação com texto ou foto)."
+      },
+      "navigationKeepFlag": {
+        "label": "Manter bandeira no mapa",
+        "description": "Mantém a bandeira de destino no mapa depois de os jogadores chegarem."
+      },
+      "navigationAccuracy": {
+        "label": "Precisão de chegada",
+        "description": "A que distância do destino de uma tarefa de navegação os jogadores têm de chegar. Ao ocultá-la, mantém-se a precisão atual de cada tarefa (5 m nas tarefas novas)."
+      },
+      "thematicTypeSelfLocation": {
+        "label": "Auto-localização",
+        "description": "Os jogadores marcam onde estão. A tarefa temática predefinida, sempre visível."
+      },
+      "thematicTypeObject": {
+        "label": "Localização de objeto",
+        "description": "Os jogadores encontram ou marcam um objeto no mapa."
+      },
+      "thematicTypeDirection": {
+        "label": "Determinação da direção",
+        "description": "Os jogadores determinam uma direção."
+      },
+      "thematicTypeFree": {
+        "label": "Tarefas livres",
+        "description": "Tarefas abertas com os seus próprios tipos de pergunta e de resposta."
+      },
+      "freeQuestionMapMarking": {
+        "label": "Tarefa livre: texto e marcação no mapa",
+        "description": "Tipo de pergunta das tarefas livres: uma pergunta de texto com uma marcação no mapa."
+      },
+      "freeQuestionPhoto": {
+        "label": "Tarefa livre: texto e foto",
+        "description": "Tipo de pergunta das tarefas livres: uma pergunta de texto com uma foto."
+      },
+      "freeAnswerDrawing": {
+        "label": "Tarefa livre: resposta ao desenhar no mapa",
+        "description": "Tipo de resposta das tarefas livres: os jogadores desenham no mapa."
+      },
+      "directionQuestionArrow": {
+        "label": "Tarefa de direção: direção indicada por uma seta",
+        "description": "Tipo de pergunta das tarefas de direção: a direção é indicada por uma seta no mapa."
+      },
+      "directionQuestionPhoto": {
+        "label": "Tarefa de direção: direção mostrada com uma foto",
+        "description": "Tipo de pergunta das tarefas de direção: a direção é mostrada com uma foto."
+      },
+      "thematicMultipleAttempts": {
+        "label": "Várias tentativas (tarefas temáticas)",
+        "description": "Permite aos jogadores tentar de novo após uma resposta errada nas tarefas temáticas. Ao ocultá-la, mantém-se a definição atual de cada tarefa."
+      },
+      "thematicSearchArea": {
+        "label": "Área de pesquisa",
+        "description": "A área de pesquisa opcional no mapa para as tarefas de auto-localização e de localização de objeto."
+      },
+      "thematicMapFeatures": {
+        "label": "Elementos do mapa (tarefas temáticas)",
+        "description": "A entrada «Elementos do mapa» nos diálogos das tarefas temáticas. Se for mostrada em Simples, cada controlo do mapa no seu interior continua a seguir a sua própria definição."
+      },
+      "informationContent": {
+        "label": "Conteúdo da informação",
+        "description": "Texto, foto e áudio de uma tarefa de informação. Necessário para guardar."
+      },
+      "informationMapFeatures": {
+        "label": "Elementos do mapa (tarefas de informação)",
+        "description": "A entrada «Elementos do mapa» nos diálogos das tarefas de informação. Se for mostrada em Simples, cada controlo do mapa no seu interior continua a seguir a sua própria definição."
+      },
+      "mapZoom": {
+        "label": "Zoom",
+        "description": "Como os jogadores podem ampliar o mapa."
+      },
+      "mapPan": {
+        "label": "Movimento da secção do mapa",
+        "description": "A definição «Secção do mapa»: se os jogadores podem mover o mapa ou se este se centra automaticamente."
+      },
+      "mapRotation": {
+        "label": "Rotação do mapa",
+        "description": "Como o mapa roda."
+      },
+      "mapType": {
+        "label": "Tipo de mapa",
+        "description": "Que tipo de mapa os jogadores veem, por exemplo padrão ou satélite."
+      },
+      "mapSwitchLayer": {
+        "label": "Mudar para a camada de satélite",
+        "description": "Permite aos jogadores de um mundo virtual mudar o mapa para a vista de satélite. Só disponível em mundos virtuais com camada de satélite."
+      },
+      "mapLocationMarker": {
+        "label": "Marcador de posição",
+        "description": "Mostra a posição do próprio jogador no mapa."
+      },
+      "mapDirectionMarker": {
+        "label": "Marcador de direção de visão",
+        "description": "Mostra a direção para onde o jogador está a olhar."
+      },
+      "mapTrack": {
+        "label": "Registo do percurso",
+        "description": "Mostra o percurso feito no mapa durante o jogo, com a opção de por quanto tempo permanece no mapa."
+      },
+      "mapStreetHighlight": {
+        "label": "Realce do troço de rua na posição",
+        "description": "Realça o troço de rua na posição do jogador."
+      },
+      "mapLocationBuffer": {
+        "label": "Área do mapa (zona envolvente) em redor da posição",
+        "description": "Limita o mapa visível a um círculo em redor do jogador, com o diâmetro desse círculo."
+      },
+      "mapLandmarks": {
+        "label": "Realce de pontos de referência",
+        "description": "Realça pontos de referência no mapa, com o desenho dos pontos de referência."
+      },
+      "virtualEnvironmentChoice": {
+        "label": "Escolher um mundo virtual",
+        "description": "Seleciona o mundo virtual em que a tarefa decorre."
+      },
+      "virtualTaskFloor": {
+        "label": "Piso da tarefa",
+        "description": "O piso em que a tarefa decorre nos mundos de edifícios. Necessário para esses mundos."
+      },
+      "virtualInitialPose": {
+        "label": "Posição e direção inicial do avatar",
+        "description": "Define onde o avatar começa e para onde está virado, incluindo o piso inicial em edifícios. Sem isto, usa-se o início predefinido existente."
+      },
+      "virtualAvatarSpeed": {
+        "label": "Velocidade do avatar",
+        "description": "A velocidade a que o avatar caminha."
+      },
+      "virtualCameraClip": {
+        "label": "Distância de recorte da câmara",
+        "description": "Limita a distância a que a câmara vê."
+      },
+      "virtualDisableRotation": {
+        "label": "Desativar rotação do avatar",
+        "description": "Impede o avatar de rodar."
+      },
+      "virtualEnvironmentSettings": {
+        "label": "Mostrar definições do ambiente",
+        "description": "Mostra as definições do ambiente aos jogadores."
+      },
+      "virtualPathVisualization": {
+        "label": "Mostrar visualização do caminho",
+        "description": "Mostra o caminho nos mundos de edifícios."
+      },
+      "virtualMapSize": {
+        "label": "Tamanho do mapa",
+        "description": "O tamanho com que o mapa é mostrado no mundo virtual."
+      },
+      "virtualLandmarkSelection": {
+        "label": "Pontos de referência a mostrar",
+        "description": "Escolhe que pontos de referência do mundo virtual ficam visíveis."
+      },
+      "editorModeSwitch": {
+        "label": "Seletor Simples / Avançado",
+        "description": "O próprio seletor. Está sempre disponível para todos os que podem abrir um editor."
+      },
+      "taskInstruction": {
+        "label": "Instrução da tarefa e mensagem de áudio",
+        "description": "O que os jogadores têm de fazer. Necessária em todas as tarefas."
+      },
+      "taskDestination": {
+        "label": "Destino e dados de referência",
+        "description": "Dados de que o tipo de tarefa escolhido precisa, como o destino ou uma direção de referência."
+      },
+      "taskExplorationSettings": {
+        "label": "Duração e temporizador da exploração",
+        "description": "Duração e temporizador de uma tarefa de exploração. Necessários para esse tipo de tarefa."
+      },
+      "taskCollaborationMethod": {
+        "label": "Método de colaboração (multijogador)",
+        "description": "Como os jogadores de uma tarefa multijogador partilham as instruções. Necessário nas tarefas multijogador."
+      },
+      "taskConfirmation": {
+        "label": "Confirmação de entrada",
+        "description": "Pede aos jogadores que confirmem a sua entrada (navegação até à bandeira ou por texto)."
+      },
+      "taskFeedback": {
+        "label": "Feedback",
+        "description": "Mostra aos jogadores feedback sobre a resposta."
+      },
+      "taskAutoPlayAudio": {
+        "label": "Reproduzir áudio automaticamente",
+        "description": "Reproduz automaticamente a mensagem de áudio de uma tarefa. Também nas tarefas de informação."
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ import {
   OnChanges,
   ChangeDetectorRef,
   AfterViewInit,
+  OnDestroy,
   Input,
 } from "@angular/core";
 import { ModalController, PopoverController } from "@ionic/angular";
@@ -21,13 +22,16 @@ import { standardMapFeatures } from "../../../models/standardMapFeatures";
 import { TranslateService } from "@ngx-translate/core";
 import { PopoverComponent } from "src/app/popover/popover.component";
 import { virEnvLayers } from "src/app/models/virEnvsLayers";
+import { Subscription } from "rxjs";
+import { EditorVisibilityService } from "src/app/services/editor-visibility.service";
+import { detectMapFeaturesAdvancedUsage } from "src/app/helpers/editor-advanced-usage";
 
 @Component({
   selector: "app-map-features-modal",
   templateUrl: "./map-features-modal.page.html",
   styleUrls: ["./map-features-modal.page.scss"],
 })
-export class MapFeaturesModalPage implements OnInit, AfterViewInit {
+export class MapFeaturesModalPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("map") mapContainer;
 
   private draw: MapboxDraw;
@@ -43,11 +47,19 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
   // to show (switch map layer to satellite) feature only for map material vir. envs
   virEnvLayers_data = virEnvLayers;
 
+  // True once the drawing widget has loaded the stored landmarks. Until then (the
+  // map is still loading, or it was created while Simple hid it) the widget does
+  // not know them yet, so saving must not take its — still empty — contents.
+  private landmarksReady = false;
+  private landmarksShown = false;
+  private visibilitySubscription: Subscription;
+
   constructor(
     public modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef,
     private translate: TranslateService,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    public ev: EditorVisibilityService
   ) { }
 
   ngOnInit() {
@@ -372,11 +384,29 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
           });
         }
       }
+      this.landmarksReady = true;
+    });
+
+    // The landmark map may be created while Simple hides it. When it is shown
+    // (switching to Advanced), give it its size back.
+    this.landmarksShown = this.ev.isVisible("map.landmarks");
+    this.visibilitySubscription = this.ev.changes$.subscribe(() => {
+      const shown = this.ev.isVisible("map.landmarks");
+      if (shown && !this.landmarksShown) {
+        setTimeout(() => this.map.resize());
+      }
+      this.landmarksShown = shown;
     });
   }
 
   ngAfterViewInit() {
     this.map.resize();
+  }
+
+  ngOnDestroy() {
+    if (this.visibilitySubscription) {
+      this.visibilitySubscription.unsubscribe();
+    }
   }
 
   onZoomChange() {
@@ -400,9 +430,20 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
       dismissed: true,
       data: {
         ...this.features,
-        landmarkFeatures: this.draw.getAll(),
+        landmarkFeatures: this.landmarkFeaturesToSave(),
       },
     });
+  }
+
+  // The drawing widget is the source of truth only once it has loaded the stored
+  // landmarks. Before that, the stored landmarks are kept as they are rather than
+  // replaced by an empty drawing (an empty collection is what the widget returns
+  // for "no landmarks", so the result has the same shape either way).
+  private landmarkFeaturesToSave() {
+    if (this.landmarksReady) {
+      return this.draw.getAll();
+    }
+    return this.features.landmarkFeatures || { type: "FeatureCollection", features: [] };
   }
 
   async showPopover(ev: any, key: string) {
@@ -415,5 +456,57 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit {
       componentProps: { text },
     });
     return await popover.present();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Simple / Advanced view — presentation only. Hidden controls keep their values
+  // and are saved as they were.
+  // ---------------------------------------------------------------------------
+
+  // The satellite switch exists only for virtual environments that have a
+  // satellite layer; it is not part of the Advanced-only set.
+  get showSwitchLayer(): boolean {
+    const environment = this.virEnvLayers_data[this.virEnvType];
+    return (
+      !!this.isVirtualWorld &&
+      !!environment &&
+      !!environment.satellite &&
+      this.ev.isVisible("map.switchLayer")
+    );
+  }
+
+  // A heading shows while at least one control under it does.
+  get showMapSettingsHeading(): boolean {
+    return (
+      this.ev.anyVisible(["map.zoom", "map.pan", "map.rotation", "map.type"]) ||
+      this.showSwitchLayer
+    );
+  }
+
+  get showMarkerSettingsHeading(): boolean {
+    return this.ev.anyVisible([
+      "map.locationMarker",
+      "map.directionMarker",
+      "map.track",
+      "map.streetHighlight",
+      "map.locationBuffer",
+      "map.landmarks",
+    ]);
+  }
+
+  // Settings in this dialog that only Advanced shows (for the "uses advanced
+  // settings" notice). The list object is reused while its content is unchanged.
+  private lastAdvancedInUse: string[] = [];
+  get advancedInUse(): string[] {
+    if (this.ev.mode === "advanced") {
+      return [];
+    }
+    const next = detectMapFeaturesAdvancedUsage(this.features, (featureId) =>
+      this.ev.isHiddenInSimple(featureId)
+    );
+    if (next.join("|") !== this.lastAdvancedInUse.join("|")) {
+      this.lastAdvancedInUse = next;
+    }
+    return this.lastAdvancedInUse;
   }
 }

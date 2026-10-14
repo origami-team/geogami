@@ -49,3 +49,9 @@ ion-item {
   margin-left: -80px;
 
 }
+
+// Unread audit entries on the App management card.
+.unread-badge {
+  margin-inline-start: 8px;
+  vertical-align: middle;
+}

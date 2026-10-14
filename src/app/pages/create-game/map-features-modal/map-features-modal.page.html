@@ -18,12 +18,16 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Simple / Advanced view -->
+  <app-editor-mode-switch sticky [advancedInUse]="advancedInUse"></app-editor-mode-switch>
+
   <ion-list>
-    <h5>{{ "Mapfeatures.mapSettings" | translate }}</h5>
+    <h5 *ngIf="showMapSettingsHeading">{{ "Mapfeatures.mapSettings" | translate }}</h5>
     <!-- <ion-item>
       <ion-label>Zoom</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.zoombar"></ion-toggle>
     </ion-item> -->
+    <ng-container *editorFeature="'map.zoom'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.zoom" | translate }}</ion-label>
       <select
@@ -37,6 +41,8 @@
         <option value="false">{{ "Mapfeatures.off" | translate }}</option>
       </select>
     </ion-item>
+    </ng-container>
+    <ng-container *editorFeature="'map.pan'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.mapSection" | translate }}</ion-label>
       <select [(ngModel)]="features.pan" interface="popover">
@@ -50,6 +56,8 @@
         <option value="static">{{ "Mapfeatures.static" | translate }}</option>
       </select>
     </ion-item>
+    </ng-container>
+    <ng-container *editorFeature="'map.rotation'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.mapRotation" | translate }}</ion-label>
       <select [(ngModel)]="features.rotation" interface="popover">
@@ -63,6 +71,8 @@
         </option>
       </select>
     </ion-item>
+    </ng-container>
+    <ng-container *editorFeature="'map.type'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.mapType" | translate }}</ion-label>
       <select [(ngModel)]="features.material" interface="popover">
@@ -95,9 +105,10 @@
         </option>
       </select>
     </ion-item>
+    </ng-container>
     <!-- switch map layer to satellite (only for Vir.Env. map material tasks) -->
     <ion-item
-      *ngIf="isVirtualWorld && virEnvLayers_data[this.virEnvType] && virEnvLayers_data[this.virEnvType].satellite"
+      *ngIf="showSwitchLayer"
     >
       <ion-label>{{ "Mapfeatures.switchLayer" | translate }}</ion-label>
       <select [(ngModel)]="features.switchLayer" interface="popover">
@@ -106,7 +117,8 @@
       </select>
     </ion-item>
 
-    <h5>{{ "Mapfeatures.markerSettings" | translate }}</h5>
+    <h5 *ngIf="showMarkerSettingsHeading">{{ "Mapfeatures.markerSettings" | translate }}</h5>
+    <ng-container *editorFeature="'map.locationMarker'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.locationMarker" | translate }}</ion-label>
       <select [(ngModel)]="features.position" interface="popover">
@@ -116,6 +128,8 @@
         <option value="start">{{ "Mapfeatures.init" | translate }}</option>
       </select>
     </ion-item>
+    </ng-container>
+    <ng-container *editorFeature="'map.directionMarker'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.directionMarker" | translate }}</ion-label>
       <select [(ngModel)]="features.direction" interface="popover">
@@ -125,7 +139,10 @@
         <option value="start">{{ "Mapfeatures.init" | translate }}</option>
       </select>
     </ion-item>
+    </ng-container>
 
+    <!-- Track recording and its "keep track" option belong together -->
+    <ng-container *editorFeature="'map.track'">
     <ion-item style="--border-style: none">
       <ion-label>{{ "Mapfeatures.track" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.track"></ion-toggle>
@@ -152,7 +169,9 @@
         </option>
       </select>
     </ion-item>
+    </ng-container>
 
+    <ng-container *editorFeature="'map.streetHighlight'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.streetMarker" | translate }}</ion-label>
       <ion-toggle
@@ -160,7 +179,10 @@
         [(ngModel)]="features.streetSection"
       ></ion-toggle>
     </ion-item>
+    </ng-container>
 
+    <!-- The buffer switch and its diameter belong together -->
+    <ng-container *editorFeature="'map.locationBuffer'">
     <ion-item style="--border-style: none">
       <ion-label>{{ "Mapfeatures.buffer" | translate }}</ion-label>
       <ion-toggle
@@ -188,15 +210,21 @@
         <ion-label slot="end">100m</ion-label>
       </ion-range>
     </ion-item>
+    </ng-container>
 
+    <ng-container *editorFeature="'map.landmarks'">
     <ion-item>
       <ion-label>{{ "Mapfeatures.landmarks" | translate }}</ion-label>
       <ion-toggle color="danger" [(ngModel)]="features.landmarks"></ion-toggle>
     </ion-item>
+    </ng-container>
     <!-- <ion-item [style.visibility]="!features.landmarks ? 'hidden' : 'visible'" lines="none"> -->
+    <!-- The landmark map stays mounted (its drawing widget is part of this dialog) and is
+         only hidden while Simple hides the landmark controls. -->
     <div
       #map
       class="map"
+      [hidden]="!ev.isVisible('map.landmarks')"
       [style.visibility]="!features.landmarks ? 'hidden' : 'visible'"
     ></div>
     <!-- </ion-item> -->
