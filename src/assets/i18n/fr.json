@@ -698,5 +698,302 @@
         }
       }
     }
+  },
+  "AppManagement": {
+    "cardTitle": "Gestion de l'application",
+    "cardDescription": "Gérer les utilisateurs, les vues de l'éditeur et le journal d'audit",
+    "pageTitle": "Gestion de l'application",
+    "users": {
+      "title": "Utilisateurs",
+      "description": "Gérer les rôles et les autorisations"
+    },
+    "auditLog": {
+      "title": "Journal d'audit",
+      "description": "Modifications des comptes, des rôles et de la configuration, et alertes de sécurité"
+    },
+    "unread": "{{count}} non lus"
+  },
+  "EditorMode": {
+    "simple": "Simple",
+    "advanced": "Avancé",
+    "switchLabel": "Vue de l'éditeur",
+    "infoButton": "À propos de Simple et Avancé",
+    "explanation": "« Simple » affiche les outils essentiels pour créer des jeux et des tâches. « Avancé » affiche des options supplémentaires. Vous pouvez changer à tout moment sans perdre vos modifications.",
+    "advancedOption": "Avancé",
+    "noticeTask": "Cette tâche utilise des paramètres avancés",
+    "noticeGame": "Ce jeu utilise des paramètres avancés",
+    "reviewSettings": "Examiner les paramètres"
+  },
+  "EditorVisibility": {
+    "cardTitle": "Visibilité dans l'éditeur",
+    "cardDescription": "Choisir les éléments facultatifs affichés dans la vue Simple",
+    "pageTitle": "Visibilité dans l'éditeur",
+    "intro": "Choisissez quels éléments facultatifs la vue Simple affiche pour toutes les personnes qui créent des jeux ou des tâches. La vue Avancé affiche toujours tout ce qu'un utilisateur est autorisé à utiliser. L'enregistrement modifie les vues de création de tous les utilisateurs ; il ne modifie pas les jeux ni les tâches existants. Une personne qui modifie en ce moment garde sa vue actuelle jusqu'à sa prochaine session de modification.",
+    "loading": "Chargement de la configuration enregistrée…",
+    "loadFailed": "La configuration enregistrée n'a pas pu être chargée ; rien ne peut donc être affiché ni enregistré pour le moment.",
+    "retry": "Réessayer",
+    "lastSaved": "Révision {{revision}}, enregistrée le {{date}}",
+    "lastSavedBy": "par {{user}}",
+    "notSavedYet": "Rien n'a encore été enregistré. Les valeurs par défaut intégrées sont utilisées.",
+    "catalogueMismatch": "Cette application et le serveur ne listent pas les mêmes éléments, l'enregistrement est donc désactivé. Mettez à jour l'application ou le serveur jusqu'à ce qu'ils correspondent.",
+    "conflictText": "Quelqu'un d'autre a enregistré une modification pendant que vous modifiiez. Vos modifications sont toujours là. Rechargez pour repartir de la dernière version enregistrée ; vos modifications y seront appliquées à nouveau.",
+    "conflictToast": "Non enregistré : quelqu'un d'autre a modifié la configuration entre-temps.",
+    "reloadLatest": "Recharger la dernière version",
+    "reloaded": "Dernière version rechargée. Vérifiez vos modifications puis enregistrez à nouveau.",
+    "search": "Rechercher des paramètres",
+    "noResults": "Aucun paramètre ne correspond à votre recherche.",
+    "both": "Simple + Avancé",
+    "advancedOnly": "Avancé uniquement",
+    "alwaysShown": "Toujours affiché",
+    "changed": "Modifié",
+    "save": "Enregistrer",
+    "saved": "Enregistré. La nouvelle configuration s'applique dès que quelqu'un commence sa prochaine session de modification.",
+    "saveFailed": "Enregistrement impossible. Vos modifications sont toujours là — réessayez.",
+    "discard": "Annuler les modifications",
+    "restoreDefaults": "Rétablir les valeurs par défaut",
+    "previewTitle": "Aperçu de la vue Simple",
+    "previewCount": "Avec ces paramètres, la vue Simple affiche {{count}} éléments.",
+    "previewShow": "Afficher la liste",
+    "previewHide": "Masquer la liste",
+    "screens": {
+      "gameSave": "Écran d'enregistrement",
+      "taskDialog": "Boîte de dialogue de la tâche",
+      "infoDialog": "Boîte de dialogue d'information",
+      "mapFeaturesDialog": "Boîte de dialogue des caractéristiques de la carte",
+      "editor": "Éditeur"
+    }
+  },
+  "EditorFeatures": {
+    "groups": {
+      "game": "Jeu (écran d'enregistrement)",
+      "navigation": "Tâches de navigation",
+      "thematic": "Tâches thématiques",
+      "information": "Tâches d'information",
+      "map": "Boîte de dialogue des caractéristiques de la carte",
+      "virtual": "Mondes virtuels",
+      "shared": "Toutes les tâches"
+    },
+    "items": {
+      "gameNameAndPlace": {
+        "label": "Nom et lieu du jeu",
+        "description": "Nom et lieu du jeu sur l'écran d'enregistrement. Toujours nécessaires pour enregistrer."
+      },
+      "gameBoundary": {
+        "label": "Section de la carte du jeu (limite)",
+        "description": "Limite le jeu à une zone de la carte : activation, contour, visibilité pour les joueurs et avertissement à la sortie de la zone."
+      },
+      "gameDisableDataConsent": {
+        "label": "Option de consentement au partage des données",
+        "description": "L'option « Exiger le consentement au partage des données pour jouer » sur l'écran d'enregistrement. La masquer conserve le réglage actuel de chaque jeu."
+      },
+      "gameNavigationPin": {
+        "label": "PIN de navigation",
+        "description": "PIN facultatif à 4 chiffres qui permet aux joueurs de passer une tâche."
+      },
+      "navigationTypeFlag": {
+        "label": "Navigation vers un drapeau",
+        "description": "La tâche de navigation par défaut : les joueurs marchent jusqu'à un drapeau sur la carte."
+      },
+      "navigationTypeArrow": {
+        "label": "Navigation avec flèche",
+        "description": "Les joueurs suivent une flèche de direction jusqu'à la destination."
+      },
+      "navigationTypePhoto": {
+        "label": "Navigation par photo",
+        "description": "Les joueurs trouvent le lieu montré sur une photo."
+      },
+      "navigationTypeText": {
+        "label": "Navigation par texte",
+        "description": "Les joueurs suivent des instructions écrites jusqu'à la destination."
+      },
+      "navigationTypeExploration": {
+        "label": "Tâche d'exploration",
+        "description": "Les joueurs explorent les environs pendant une durée définie."
+      },
+      "navigationShowFlag": {
+        "label": "Afficher le drapeau",
+        "description": "Affiche le drapeau de destination sur la carte (navigation par texte ou par photo)."
+      },
+      "navigationKeepFlag": {
+        "label": "Garder le drapeau sur la carte",
+        "description": "Garde le drapeau de destination sur la carte après l'arrivée des joueurs."
+      },
+      "navigationAccuracy": {
+        "label": "Précision d'arrivée",
+        "description": "À quelle distance de la destination d'une tâche de navigation les joueurs doivent arriver. La masquer conserve la précision actuelle de chaque tâche (5 m pour les nouvelles tâches)."
+      },
+      "thematicTypeSelfLocation": {
+        "label": "Tâche d'auto-localisation",
+        "description": "Les joueurs indiquent où ils se trouvent. La tâche thématique par défaut, toujours affichée."
+      },
+      "thematicTypeObject": {
+        "label": "Tâche de localisation d'objet",
+        "description": "Les joueurs trouvent ou marquent un objet sur la carte."
+      },
+      "thematicTypeDirection": {
+        "label": "Tâche de détermination de direction",
+        "description": "Les joueurs déterminent une direction."
+      },
+      "thematicTypeFree": {
+        "label": "Tâches libres",
+        "description": "Tâches ouvertes avec leurs propres types de questions et de réponses."
+      },
+      "freeQuestionMapMarking": {
+        "label": "Tâche libre : texte et marquage sur la carte",
+        "description": "Type de question des tâches libres : une question textuelle avec un marquage sur la carte."
+      },
+      "freeQuestionPhoto": {
+        "label": "Tâche libre : texte et photo",
+        "description": "Type de question des tâches libres : une question textuelle avec une photo."
+      },
+      "freeAnswerDrawing": {
+        "label": "Tâche libre : réponse en traçant sur la carte",
+        "description": "Type de réponse des tâches libres : les joueurs tracent sur la carte."
+      },
+      "directionQuestionArrow": {
+        "label": "Tâche de direction : direction indiquée par une flèche",
+        "description": "Type de question des tâches de direction : la direction est indiquée par une flèche sur la carte."
+      },
+      "directionQuestionPhoto": {
+        "label": "Tâche de direction : direction montrée par une photo",
+        "description": "Type de question des tâches de direction : la direction est montrée avec une photo."
+      },
+      "thematicMultipleAttempts": {
+        "label": "Plusieurs essais (tâches thématiques)",
+        "description": "Permet aux joueurs de réessayer après une mauvaise réponse dans les tâches thématiques. La masquer conserve le réglage actuel de chaque tâche."
+      },
+      "thematicSearchArea": {
+        "label": "Zone de recherche",
+        "description": "La zone de recherche facultative sur la carte pour les tâches d'auto-localisation et de localisation d'objet."
+      },
+      "thematicMapFeatures": {
+        "label": "Caractéristiques de la carte (tâches thématiques)",
+        "description": "L'entrée « Caractéristiques de la carte » dans les boîtes de dialogue des tâches thématiques. Si elle est affichée en mode Simple, chaque contrôle de carte qu'elle contient suit toujours son propre réglage."
+      },
+      "informationContent": {
+        "label": "Contenu de l'information",
+        "description": "Texte, photo et audio d'une tâche d'information. Nécessaire pour enregistrer."
+      },
+      "informationMapFeatures": {
+        "label": "Caractéristiques de la carte (tâches d'information)",
+        "description": "L'entrée « Caractéristiques de la carte » dans les boîtes de dialogue des tâches d'information. Si elle est affichée en mode Simple, chaque contrôle de carte qu'elle contient suit toujours son propre réglage."
+      },
+      "mapZoom": {
+        "label": "Zoom",
+        "description": "La manière dont les joueurs peuvent zoomer sur la carte."
+      },
+      "mapPan": {
+        "label": "Déplacement de la section de la carte",
+        "description": "Le réglage « Section de la carte » : les joueurs peuvent déplacer la carte ou elle se centre automatiquement."
+      },
+      "mapRotation": {
+        "label": "Rotation de la carte",
+        "description": "La manière dont la carte pivote."
+      },
+      "mapType": {
+        "label": "Type de carte",
+        "description": "Le type de carte que voient les joueurs, par exemple standard ou satellite."
+      },
+      "mapSwitchLayer": {
+        "label": "Passer à la couche satellite",
+        "description": "Permet aux joueurs d'un monde virtuel de basculer la carte en vue satellite. Proposé uniquement pour les mondes virtuels dotés d'une couche satellite."
+      },
+      "mapLocationMarker": {
+        "label": "Marqueur de localisation",
+        "description": "Affiche la position du joueur sur la carte."
+      },
+      "mapDirectionMarker": {
+        "label": "Marqueur de direction de vue",
+        "description": "Affiche la direction dans laquelle le joueur regarde."
+      },
+      "mapTrack": {
+        "label": "Enregistrement de la trace",
+        "description": "Affiche la trace parcourue sur la carte pendant le jeu, avec l'option de durée pendant laquelle elle reste sur la carte."
+      },
+      "mapStreetHighlight": {
+        "label": "Mise en évidence de la section de rue à l'emplacement",
+        "description": "Met en évidence la section de rue à la position du joueur."
+      },
+      "mapLocationBuffer": {
+        "label": "Section de la carte (zone tampon) à l'emplacement",
+        "description": "Limite la carte visible à un cercle autour du joueur, avec le diamètre de ce cercle."
+      },
+      "mapLandmarks": {
+        "label": "Mise en évidence des points de repère",
+        "description": "Met en évidence les points de repère sur la carte, avec leur tracé."
+      },
+      "virtualEnvironmentChoice": {
+        "label": "Choisir un monde virtuel",
+        "description": "Sélectionne le monde virtuel dans lequel se déroule la tâche."
+      },
+      "virtualTaskFloor": {
+        "label": "Étage de la tâche",
+        "description": "L'étage où se déroule la tâche dans les mondes de bâtiments. Nécessaire pour ces mondes."
+      },
+      "virtualInitialPose": {
+        "label": "Position et direction de départ de l'avatar",
+        "description": "Définit où l'avatar commence et dans quelle direction il regarde, y compris l'étage de départ dans les bâtiments. Sans cela, le départ par défaut existant est utilisé."
+      },
+      "virtualAvatarSpeed": {
+        "label": "Vitesse de l'avatar",
+        "description": "La vitesse de marche de l'avatar."
+      },
+      "virtualCameraClip": {
+        "label": "Distance de coupure de la caméra",
+        "description": "Limite la distance à laquelle la caméra voit."
+      },
+      "virtualDisableRotation": {
+        "label": "Désactiver la rotation de l'avatar",
+        "description": "Empêche l'avatar de tourner."
+      },
+      "virtualEnvironmentSettings": {
+        "label": "Afficher les paramètres de l'environnement",
+        "description": "Affiche les paramètres de l'environnement aux joueurs."
+      },
+      "virtualPathVisualization": {
+        "label": "Afficher la visualisation du chemin",
+        "description": "Affiche le chemin dans les mondes de bâtiments."
+      },
+      "virtualMapSize": {
+        "label": "Taille de la carte",
+        "description": "La taille d'affichage de la carte dans le monde virtuel."
+      },
+      "virtualLandmarkSelection": {
+        "label": "Points de repère à afficher",
+        "description": "Choisit quels points de repère du monde virtuel sont visibles."
+      },
+      "editorModeSwitch": {
+        "label": "Sélecteur Simple / Avancé",
+        "description": "Le sélecteur lui-même. Il est toujours disponible pour toute personne pouvant ouvrir un éditeur."
+      },
+      "taskInstruction": {
+        "label": "Consigne de la tâche et message audio",
+        "description": "Ce que les joueurs doivent faire. Nécessaire pour chaque tâche."
+      },
+      "taskDestination": {
+        "label": "Destination et données de référence",
+        "description": "Données dont le type de tâche choisi a besoin, comme la destination ou une direction de référence."
+      },
+      "taskExplorationSettings": {
+        "label": "Durée et minuteur de l'exploration",
+        "description": "Durée et minuteur d'une tâche d'exploration. Nécessaires pour ce type de tâche."
+      },
+      "taskCollaborationMethod": {
+        "label": "Mode de collaboration (multijoueur)",
+        "description": "La manière dont les joueurs d'une tâche multijoueur se partagent les consignes. Nécessaire pour les tâches multijoueurs."
+      },
+      "taskConfirmation": {
+        "label": "Confirmation de saisie",
+        "description": "Demande aux joueurs de confirmer leur saisie (navigation vers un drapeau ou par texte)."
+      },
+      "taskFeedback": {
+        "label": "Retour",
+        "description": "Montre aux joueurs un retour sur leur réponse."
+      },
+      "taskAutoPlayAudio": {
+        "label": "Lire l'audio automatiquement",
+        "description": "Lit automatiquement le message audio d'une tâche. Aussi dans les tâches d'information."
+      }
+    }
   }
 }

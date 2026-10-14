@@ -698,5 +698,302 @@
         }
       }
     }
+  },
+  "AppManagement": {
+    "cardTitle": "Gestione dell'app",
+    "cardDescription": "Gestisci utenti, viste dell'editor e registro di controllo",
+    "pageTitle": "Gestione dell'app",
+    "users": {
+      "title": "Utenti",
+      "description": "Gestisci ruoli e autorizzazioni degli utenti"
+    },
+    "auditLog": {
+      "title": "Registro di controllo",
+      "description": "Modifiche ad account, ruoli e configurazione e avvisi di sicurezza"
+    },
+    "unread": "{{count}} non letti"
+  },
+  "EditorMode": {
+    "simple": "Semplice",
+    "advanced": "Avanzato",
+    "switchLabel": "Vista dell'editor",
+    "infoButton": "Informazioni su Semplice e Avanzato",
+    "explanation": "«Semplice» mostra gli strumenti essenziali per creare giochi e compiti. «Avanzato» mostra opzioni aggiuntive. Puoi passare dall'una all'altra in qualsiasi momento senza perdere le modifiche.",
+    "advancedOption": "Avanzato",
+    "noticeTask": "Questo compito usa impostazioni avanzate",
+    "noticeGame": "Questo gioco usa impostazioni avanzate",
+    "reviewSettings": "Controlla le impostazioni"
+  },
+  "EditorVisibility": {
+    "cardTitle": "Visibilità nell'editor",
+    "cardDescription": "Scegli quali elementi facoltativi mostra la vista Semplice",
+    "pageTitle": "Visibilità nell'editor",
+    "intro": "Scegli quali elementi facoltativi la vista Semplice mostra a chi crea giochi o compiti. La vista Avanzato mostra sempre tutto ciò che un utente può usare. Il salvataggio influisce sulle viste di creazione di tutti gli utenti; non modifica i giochi e i compiti esistenti. Chi sta modificando in questo momento mantiene la vista attuale fino alla prossima sessione di modifica.",
+    "loading": "Caricamento della configurazione salvata…",
+    "loadFailed": "Impossibile caricare la configurazione salvata, quindi per ora non si può mostrare né salvare nulla.",
+    "retry": "Riprova",
+    "lastSaved": "Revisione {{revision}}, salvata il {{date}}",
+    "lastSavedBy": "da {{user}}",
+    "notSavedYet": "Non è ancora stato salvato nulla. Sono in uso i valori predefiniti integrati.",
+    "catalogueMismatch": "Questa app e il server non elencano gli stessi elementi, quindi il salvataggio è disattivato. Aggiorna l'app o il server finché non coincidono.",
+    "conflictText": "Qualcun altro ha salvato una modifica mentre stavi modificando. Le tue modifiche sono ancora qui. Ricarica per continuare dall'ultima versione salvata; le tue modifiche verranno applicate di nuovo.",
+    "conflictToast": "Non salvato: nel frattempo qualcun altro ha modificato la configurazione.",
+    "reloadLatest": "Ricarica l'ultima versione",
+    "reloaded": "Ultima versione caricata. Controlla le tue modifiche e salva di nuovo.",
+    "search": "Cerca impostazioni",
+    "noResults": "Nessuna impostazione corrisponde alla ricerca.",
+    "both": "Semplice + Avanzato",
+    "advancedOnly": "Solo Avanzato",
+    "alwaysShown": "Sempre visibile",
+    "changed": "Modificato",
+    "save": "Salva",
+    "saved": "Salvato. La nuova configurazione si applica quando qualcuno inizia la prossima sessione di modifica.",
+    "saveFailed": "Impossibile salvare. Le tue modifiche sono ancora qui — riprova.",
+    "discard": "Annulla le modifiche",
+    "restoreDefaults": "Ripristina i valori predefiniti",
+    "previewTitle": "Anteprima della vista Semplice",
+    "previewCount": "Con queste impostazioni, la vista Semplice mostra {{count}} elementi.",
+    "previewShow": "Mostra elenco",
+    "previewHide": "Nascondi elenco",
+    "screens": {
+      "gameSave": "Schermata di salvataggio",
+      "taskDialog": "Finestra del compito",
+      "infoDialog": "Finestra delle informazioni",
+      "mapFeaturesDialog": "Finestra delle funzioni della mappa",
+      "editor": "Editor"
+    }
+  },
+  "EditorFeatures": {
+    "groups": {
+      "game": "Gioco (schermata di salvataggio)",
+      "navigation": "Compiti di navigazione",
+      "thematic": "Compiti tematici",
+      "information": "Compiti informativi",
+      "map": "Finestra delle funzioni della mappa",
+      "virtual": "Mondi virtuali",
+      "shared": "Tutti i compiti"
+    },
+    "items": {
+      "gameNameAndPlace": {
+        "label": "Nome e luogo del gioco",
+        "description": "Nome e luogo del gioco nella schermata di salvataggio. Sempre necessari per salvare."
+      },
+      "gameBoundary": {
+        "label": "Sezione della mappa del gioco (confine)",
+        "description": "Limita il gioco a un'area della mappa: attivazione, contorno, visibilità per i giocatori e avviso all'uscita dall'area."
+      },
+      "gameDisableDataConsent": {
+        "label": "Interruttore del consenso alla condivisione dei dati",
+        "description": "L'interruttore «Richiedi il consenso alla condivisione dei dati per giocare» nella schermata di salvataggio. Nasconderlo mantiene l'impostazione attuale di ogni gioco."
+      },
+      "gameNavigationPin": {
+        "label": "PIN di navigazione",
+        "description": "PIN facoltativo di 4 cifre che consente ai giocatori di saltare un compito."
+      },
+      "navigationTypeFlag": {
+        "label": "Navigazione verso la bandierina",
+        "description": "Il compito di navigazione predefinito: i giocatori camminano fino a una bandierina sulla mappa."
+      },
+      "navigationTypeArrow": {
+        "label": "Navigazione con freccia",
+        "description": "I giocatori seguono una freccia direzionale fino alla destinazione."
+      },
+      "navigationTypePhoto": {
+        "label": "Navigazione con foto",
+        "description": "I giocatori trovano il luogo mostrato in una foto."
+      },
+      "navigationTypeText": {
+        "label": "Navigazione con istruzioni testuali",
+        "description": "I giocatori seguono istruzioni scritte fino alla destinazione."
+      },
+      "navigationTypeExploration": {
+        "label": "Compito di esplorazione",
+        "description": "I giocatori esplorano i dintorni per un tempo stabilito."
+      },
+      "navigationShowFlag": {
+        "label": "Mostra bandierina",
+        "description": "Mostra la bandierina di destinazione sulla mappa (navigazione con testo o foto)."
+      },
+      "navigationKeepFlag": {
+        "label": "Mantieni la bandierina sulla mappa",
+        "description": "Mantiene la bandierina di destinazione sulla mappa dopo l'arrivo dei giocatori."
+      },
+      "navigationAccuracy": {
+        "label": "Precisione di arrivo",
+        "description": "Quanto vicino alla destinazione di un compito di navigazione devono arrivare i giocatori. Nasconderla mantiene la precisione attuale di ogni compito (5 m per i nuovi compiti)."
+      },
+      "thematicTypeSelfLocation": {
+        "label": "Autolocalizzazione",
+        "description": "I giocatori segnano dove si trovano. Il compito tematico predefinito, sempre visibile."
+      },
+      "thematicTypeObject": {
+        "label": "Localizzazione di oggetti",
+        "description": "I giocatori trovano o segnano un oggetto sulla mappa."
+      },
+      "thematicTypeDirection": {
+        "label": "Determinazione della direzione",
+        "description": "I giocatori determinano una direzione."
+      },
+      "thematicTypeFree": {
+        "label": "Compiti liberi",
+        "description": "Compiti aperti con propri tipi di domanda e di risposta."
+      },
+      "freeQuestionMapMarking": {
+        "label": "Compito libero: testo e marcatura sulla mappa",
+        "description": "Tipo di domanda dei compiti liberi: una domanda testuale con una marcatura sulla mappa."
+      },
+      "freeQuestionPhoto": {
+        "label": "Compito libero: testo e foto",
+        "description": "Tipo di domanda dei compiti liberi: una domanda testuale con una foto."
+      },
+      "freeAnswerDrawing": {
+        "label": "Compito libero: risposta disegnando sulla mappa",
+        "description": "Tipo di risposta dei compiti liberi: i giocatori disegnano sulla mappa."
+      },
+      "directionQuestionArrow": {
+        "label": "Compito di direzione: direzione indicata da una freccia",
+        "description": "Tipo di domanda dei compiti di direzione: la direzione è indicata da una freccia sulla mappa."
+      },
+      "directionQuestionPhoto": {
+        "label": "Compito di direzione: direzione mostrata in una foto",
+        "description": "Tipo di domanda dei compiti di direzione: la direzione è mostrata in una foto."
+      },
+      "thematicMultipleAttempts": {
+        "label": "Più tentativi (compiti tematici)",
+        "description": "Consente ai giocatori di riprovare dopo una risposta sbagliata nei compiti tematici. Nasconderlo mantiene l'impostazione attuale di ogni compito."
+      },
+      "thematicSearchArea": {
+        "label": "Area di ricerca",
+        "description": "L'area di ricerca facoltativa sulla mappa per i compiti di autolocalizzazione e di localizzazione di oggetti."
+      },
+      "thematicMapFeatures": {
+        "label": "Funzioni della mappa (compiti tematici)",
+        "description": "La voce «Funzioni della mappa» nelle finestre dei compiti tematici. Se è mostrata in Semplice, ogni controllo della mappa al suo interno segue comunque la propria impostazione."
+      },
+      "informationContent": {
+        "label": "Contenuto dell'informazione",
+        "description": "Testo, foto e audio di un compito informativo. Necessario per salvare."
+      },
+      "informationMapFeatures": {
+        "label": "Funzioni della mappa (compiti informativi)",
+        "description": "La voce «Funzioni della mappa» nelle finestre dei compiti informativi. Se è mostrata in Semplice, ogni controllo della mappa al suo interno segue comunque la propria impostazione."
+      },
+      "mapZoom": {
+        "label": "Zoom",
+        "description": "Come i giocatori possono ingrandire la mappa."
+      },
+      "mapPan": {
+        "label": "Spostamento della sezione della mappa",
+        "description": "L'impostazione «Sezione della mappa»: i giocatori possono spostare la mappa oppure questa si centra automaticamente."
+      },
+      "mapRotation": {
+        "label": "Rotazione della mappa",
+        "description": "Come ruota la mappa."
+      },
+      "mapType": {
+        "label": "Tipo di mappa",
+        "description": "Quale tipo di mappa vedono i giocatori, ad esempio standard o satellitare."
+      },
+      "mapSwitchLayer": {
+        "label": "Passa al livello satellitare",
+        "description": "Consente ai giocatori di un mondo virtuale di passare la mappa alla vista satellitare. Disponibile solo per i mondi virtuali con un livello satellitare."
+      },
+      "mapLocationMarker": {
+        "label": "Indicatore di posizione",
+        "description": "Mostra sulla mappa la posizione del giocatore."
+      },
+      "mapDirectionMarker": {
+        "label": "Indicatore della direzione dello sguardo",
+        "description": "Mostra la direzione in cui guarda il giocatore."
+      },
+      "mapTrack": {
+        "label": "Registrazione della traccia",
+        "description": "Mostra sulla mappa il percorso compiuto durante il gioco, con l'opzione per quanto tempo resta sulla mappa."
+      },
+      "mapStreetHighlight": {
+        "label": "Evidenziazione del tratto di strada in cui ci si trova",
+        "description": "Evidenzia il tratto di strada nella posizione del giocatore."
+      },
+      "mapLocationBuffer": {
+        "label": "Sezione della mappa (buffer) attorno alla posizione",
+        "description": "Limita la mappa visibile a un cerchio attorno al giocatore, con il diametro di quel cerchio."
+      },
+      "mapLandmarks": {
+        "label": "Evidenziazione dei punti di riferimento",
+        "description": "Evidenzia i punti di riferimento sulla mappa, con il relativo disegno."
+      },
+      "virtualEnvironmentChoice": {
+        "label": "Scegli un mondo virtuale",
+        "description": "Seleziona il mondo virtuale in cui si svolge il compito."
+      },
+      "virtualTaskFloor": {
+        "label": "Piano del compito",
+        "description": "Il piano in cui si svolge il compito nei mondi con edifici. Necessario per quei mondi."
+      },
+      "virtualInitialPose": {
+        "label": "Posizione e direzione iniziali dell'avatar",
+        "description": "Imposta dove parte l'avatar e in che direzione guarda, compreso il piano di partenza negli edifici. Senza questa impostazione si usa la partenza predefinita esistente."
+      },
+      "virtualAvatarSpeed": {
+        "label": "Velocità dell'avatar",
+        "description": "Quanto velocemente cammina l'avatar."
+      },
+      "virtualCameraClip": {
+        "label": "Distanza di visualizzazione della telecamera",
+        "description": "Limita fino a che distanza vede la telecamera."
+      },
+      "virtualDisableRotation": {
+        "label": "Disattiva la rotazione dell'avatar",
+        "description": "Impedisce all'avatar di girarsi."
+      },
+      "virtualEnvironmentSettings": {
+        "label": "Mostra le impostazioni dell'ambiente",
+        "description": "Mostra ai giocatori le impostazioni dell'ambiente."
+      },
+      "virtualPathVisualization": {
+        "label": "Mostra la visualizzazione del percorso",
+        "description": "Mostra il percorso nei mondi con edifici."
+      },
+      "virtualMapSize": {
+        "label": "Dimensione della mappa",
+        "description": "Quanto è grande la mappa mostrata nel mondo virtuale."
+      },
+      "virtualLandmarkSelection": {
+        "label": "Punti di riferimento da mostrare",
+        "description": "Sceglie quali punti di riferimento del mondo virtuale sono visibili."
+      },
+      "editorModeSwitch": {
+        "label": "Selettore Semplice / Avanzato",
+        "description": "Il selettore stesso. È sempre disponibile per chiunque possa aprire un editor."
+      },
+      "taskInstruction": {
+        "label": "Istruzione del compito e messaggio audio",
+        "description": "Che cosa devono fare i giocatori. Necessaria per ogni compito."
+      },
+      "taskDestination": {
+        "label": "Destinazione e dati di riferimento",
+        "description": "Dati di cui ha bisogno il tipo di compito scelto, come la destinazione o una direzione di riferimento."
+      },
+      "taskExplorationSettings": {
+        "label": "Durata e timer dell'esplorazione",
+        "description": "Durata e timer di un compito di esplorazione. Necessari per quel tipo di compito."
+      },
+      "taskCollaborationMethod": {
+        "label": "Metodo di collaborazione (multigiocatore)",
+        "description": "Come i giocatori di un compito multigiocatore si condividono le istruzioni. Necessario per i compiti multigiocatore."
+      },
+      "taskConfirmation": {
+        "label": "Conferma dell'input",
+        "description": "Chiede ai giocatori di confermare il loro input (navigazione verso la bandierina o con testo)."
+      },
+      "taskFeedback": {
+        "label": "Feedback",
+        "description": "Mostra ai giocatori un feedback sulla loro risposta."
+      },
+      "taskAutoPlayAudio": {
+        "label": "Riproduci l'audio automaticamente",
+        "description": "Riproduce automaticamente il messaggio audio di un compito. Anche nei compiti informativi."
+      }
+    }
   }
 }

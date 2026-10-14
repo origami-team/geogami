@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        color="dark"
+        defaultHref="/"
+        [text]="'General.back_button' | translate"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "AppManagement.pageTitle" | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- One centred column, like the other management pages. -->
+  <div class="page-column">
+    <ion-card>
+      <ion-list lines="none">
+        <ion-item
+          *ngFor="let tile of tiles; trackBy: trackById"
+          class="tile"
+          [id]="'app-management-' + tile.id"
+          button
+          detail
+          (click)="open(tile)"
+        >
+          <ion-icon [name]="tile.icon" slot="start" color="primary" aria-hidden="true"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <h2>{{ tile.titleKey | translate }}</h2>
+            <p>{{ tile.descriptionKey | translate }}</p>
+          </ion-label>
+          <ion-badge
+            *ngIf="tile.id === 'audit-log' && auditUnread > 0"
+            slot="end"
+            [color]="auditAlerts > 0 ? 'danger' : 'primary'"
+            [attr.aria-label]="'AppManagement.unread' | translate: { count: auditUnread }"
+          >{{ auditUnread }}</ion-badge>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+</ion-content>

@@ -2,6 +2,7 @@ import {
   Component,
   ViewChild,
   AfterViewInit,
+  OnDestroy,
   ChangeDetectorRef,
 } from "@angular/core";
 
@@ -32,13 +33,16 @@ import { TranslateService } from "@ngx-translate/core";
 // For getting user role
 import { AuthService } from "../../../services/auth-service.service";
 import { UtilService } from "src/app/services/util.service";
+import { Subscription } from "rxjs";
+import { EditorVisibilityService } from "src/app/services/editor-visibility.service";
+import { detectGameAdvancedUsage } from "src/app/helpers/editor-advanced-usage";
 
 @Component({
   selector: "app-create-game-overview",
   templateUrl: "./create-game-overview.page.html",
   styleUrls: ["./create-game-overview.page.scss"],
 })
-export class CreateGameOverviewPage implements AfterViewInit {
+export class CreateGameOverviewPage implements AfterViewInit, OnDestroy {
   @ViewChild("boundingMap") mapContainer;
 
   public game: Game;
@@ -47,6 +51,13 @@ export class CreateGameOverviewPage implements AfterViewInit {
   showUpload = false;
   map: mapboxgl.Map;
   draw: MapboxDraw;
+
+  // True once the boundary map has loaded the stored boundary into the drawing
+  // widget. Until then the widget is empty, so saving must not read it (see
+  // currentBoundary()).
+  private boundaryReady = false;
+  private boundaryShown = false;
+  private visibilitySubscription: Subscription;
 
   mapSection = false;
   mapSectionVisible = true;
@@ -78,7 +89,8 @@ export class CreateGameOverviewPage implements AfterViewInit {
     private route: ActivatedRoute,
     private translate: TranslateService,
     private authService: AuthService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    public ev: EditorVisibilityService
   ) {
     this.lottieConfig = {
       path: "assets/lottie/astronaut.json",
@@ -89,6 +101,19 @@ export class CreateGameOverviewPage implements AfterViewInit {
   }
 
   ngOnInit() {
+    // Join the authoring session of the task list (or start one when this page is opened directly).
+    this.ev.startSession(false);
+
+    // The boundary map may have been created while Simple hid it; when it is shown, give it its size back.
+    this.boundaryShown = this.ev.isVisible("game.boundary");
+    this.visibilitySubscription = this.ev.changes$.subscribe(() => {
+      const shown = this.ev.isVisible("game.boundary");
+      if (shown && !this.boundaryShown && this.map) {
+        setTimeout(() => this.map.resize());
+      }
+      this.boundaryShown = shown;
+    });
+
     // VR world
     // to add game attribute that distinguish VR games from real ones
     this.route.params.subscribe((params) => {
@@ -120,7 +145,14 @@ export class CreateGameOverviewPage implements AfterViewInit {
       });
   }
 
+  ngOnDestroy() {
+    if (this.visibilitySubscription) {
+      this.visibilitySubscription.unsubscribe();
+    }
+  }
+
   initMap() {
+    this.boundaryReady = false;
     mapboxgl.accessToken = environment.mapboxAccessToken;
 
     // Set bounds of VR world
@@ -322,6 +354,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
           });
         }
       }
+      this.boundaryReady = true;
 
       let bounds = new mapboxgl.LngLatBounds();
 
@@ -481,7 +514,7 @@ export class CreateGameOverviewPage implements AfterViewInit {
     // // console.log("///Game to be uploaded: ", this.game);
     this.gameFactory.addGameInformation({
       ...this.game,
-      bbox: this.mapSection ? this.draw.getAll() : null,
+      bbox: this.mapSection ? this.currentBoundary() : null,
       mapSectionVisible: this.mapSectionVisible,
       geofence: this.geofence,
       place: this.game.place,
@@ -517,6 +550,34 @@ export class CreateGameOverviewPage implements AfterViewInit {
           this.translate.instant("SaveGame.gameNameExist")
         );
       });
+  }
+
+  // The boundary to save. The drawing widget is the source of truth once it has
+  // loaded the stored boundary; before that (its map is still loading, or was
+  // created while Simple hid it) it is empty, and saving must not replace the
+  // stored boundary with that emptiness — nor crash because there is no widget yet.
+  private currentBoundary() {
+    if (this.draw && this.boundaryReady) {
+      return this.draw.getAll();
+    }
+    return this.game.bbox || { type: "FeatureCollection", features: [] };
+  }
+
+  // Settings of this game that only Advanced shows (for the "uses advanced
+  // settings" notice). The list object is reused while its content is unchanged.
+  private lastAdvancedInUse: string[] = [];
+  get advancedInUse(): string[] {
+    if (this.ev.mode === "advanced") {
+      return [];
+    }
+    const next = detectGameAdvancedUsage(
+      { hasBoundary: this.mapSection, disableShareData: this.disableShareData },
+      (featureId) => this.ev.isHiddenInSimple(featureId)
+    );
+    if (next.join("|") !== this.lastAdvancedInUse.join("|")) {
+      this.lastAdvancedInUse = next;
+    }
+    return this.lastAdvancedInUse;
   }
 
   navigateHome() {

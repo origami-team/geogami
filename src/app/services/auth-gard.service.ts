@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 import { AuthService } from './auth-service.service';
 
 const VERIFY_EMAIL_PATH = 'user/verify-email';
@@ -35,6 +43,34 @@ export class AuthGuard implements CanActivate {
       this.router.navigate(['user/login'], { replaceUrl: true });
       return false;
     }
+  }
+}
+
+// For routes that only some roles may open (set `data: { roles: [...] }` on the
+// route). Use it after AuthGuard, which handles signed-out and unconfirmed users.
+// It checks every role of the user, not just the first one, and sends everyone
+// else to the start page. The server enforces the same roles on the API.
+@Injectable({
+  providedIn: 'root',
+})
+export class RoleGuard implements CanActivate {
+  constructor(private authService: AuthService, private router: Router) {}
+
+  canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> {
+    const roles: string[] = (route.data && route.data.roles) || [];
+    const decide = (): boolean | UrlTree =>
+      this.authService.hasAnyRole(roles) ? true : this.router.parseUrl('/');
+
+    // After a page reload the session is restored asynchronously; wait for that
+    // instead of treating the not-yet-loaded user as "not allowed".
+    if (this.authService.getRefreshTokenInProgressValue()) {
+      return this.authService.getRefreshTokenInProgress().pipe(
+        filter((inProgress) => !inProgress),
+        take(1),
+        map(decide)
+      );
+    }
+    return decide();
   }
 }
 

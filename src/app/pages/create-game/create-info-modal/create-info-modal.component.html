@@ -21,6 +21,9 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Simple / Advanced view -->
+  <app-editor-mode-switch sticky [advancedInUse]="advancedInUse"></app-editor-mode-switch>
+
   <!-- (Vir. Env.): enable teacher to choose a vir. env. -->
   <ion-item *ngIf="isVirtualWorld" class="ion-no-padding">
     <h5>{{ ("CreateGame.titleCreateGameVirtualMenu" | translate) }}</h5>
@@ -77,7 +80,8 @@
 
   <ion-item-divider></ion-item-divider>
 
-  <!-- set avatar initial position and direction -->
+  <!-- set avatar initial position and direction (Advanced only by default) -->
+  <ng-container *editorFeature="'virtual.initialPose'">
   <ion-item *ngIf="isVirtualWorld" lines="none" class="ion-no-padding">
     <h5>
       {{ "CreateGame.setAvatarPosition" | translate }} 🧍‍♂️
@@ -133,6 +137,7 @@
     ></app-map>
     <ion-item-divider id="set-avatar-initial-position-divider"></ion-item-divider>
   </div>
+  </ng-container>
 
   <h5>{{ "CreateGame.photos" | translate }}</h5>
 
@@ -144,13 +149,14 @@
   <ion-item-divider id="photo-upload-divider"></ion-item-divider>
 
     <!-- Vir. Env. settings -->
-  <div *ngIf="isVirtualWorld && task.settings">
+  <div *ngIf="showVirtualSettings">
     <!-- section heading -->
     <ion-text>
       <h5>{{ "CreateGame.virEnvSettings" | translate }}</h5>
     </ion-text>
     
     <!-- Avatar speed -->
+    <ng-container *editorFeature="'virtual.avatarSpeed'">
     <ion-item lines="none" class="item-range">
       <!-- .range-stack is load-bearing, not decorative: ion-item's shadow
            .item-native is `display: flex` with no `flex-direction: inherit`,
@@ -193,8 +199,10 @@
     
       </div>
     </ion-item>
+    </ng-container>
 
     <!-- Custom camera far clipping distance: off leaves the setting unset, so the camera keeps its default -->
+    <ng-container *editorFeature="'virtual.cameraClip'">
     <ion-item lines="none">
       <ion-label>{{ "CreateGame.customCameraFarClipPlane" | translate }}</ion-label>
       <ion-toggle
@@ -239,25 +247,33 @@
         <ion-note>{{ "CreateGame.cameraFarClipPlaneHint" | translate: { distance: cameraFarClipPlane.default } }}</ion-note>
       </p>
     </ng-container>
+    </ng-container>
 
     <!-- Disable avatar rotation -->
+    <ng-container *editorFeature="'virtual.disableRotation'">
     <ion-item lines="none">
       <ion-label> {{ "CreateGame.disableAvatarRotation" | translate }} </ion-label>
       <ion-toggle [(ngModel)]="task.settings.disableAvatarRotation"></ion-toggle>
     </ion-item>
+    </ng-container>
 
     <!-- show environment settings -->
+    <ng-container *editorFeature="'virtual.environmentSettings'">
     <ion-item lines="none">
       <ion-label> {{ "CreateGame.showEnvSettings" | translate }} </ion-label>
       <ion-toggle [(ngModel)]="task.settings.showEnvSettings"></ion-toggle>
     </ion-item>
+    </ng-container>
 
     <!-- show path visalisation -->
+    <ng-container *editorFeature="'virtual.pathVisualization'">
     <ion-item *ngIf="isVEBuilding" lines="none">
       <ion-label> {{ "CreateGame.showEnvPathVisualization" | translate }} </ion-label>
       <ion-toggle [(ngModel)]="task.settings.showPathVisualization"></ion-toggle>
     </ion-item>
+    </ng-container>
 
+    <ng-container *editorFeature="'virtual.mapSize'">
     <ion-item lines="none">
       <ion-label
         >Choose map size
@@ -280,8 +296,10 @@
         </option>
       </select>
     </ion-item>
+    </ng-container>
 
     <!-- Select objects to show in virtual world (all selected = all visible) -->
+    <ng-container *editorFeature="'virtual.landmarkSelection'">
     <ion-item *ngIf="virEnvLayers[this.virEnvType].objectsList" lines="none">
       <ion-label>Select landmarks to show</ion-label>
       <ion-select
@@ -299,13 +317,15 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    </ng-container>
 
     <ion-item-divider></ion-item-divider>
   </div>
 
   <!-- Additional settings -->
-   <div>
+   <div *ngIf="showAdditionalSettings">
     <h5>{{ "CreateGame.addSettings" | translate }}</h5>
+    <ng-container *editorFeature="'task.autoPlayAudio'">
     <ion-item lines="none">
       <ion-label>
         {{ "CreateGame.autoPlayAudio" | translate }}
@@ -316,9 +336,12 @@
         [disabled]="!task.question?.audio"
       ></ion-toggle>
     </ion-item>
+    </ng-container>
+    <ng-container *editorFeature="'information.mapFeatures'">
     <ion-item detail lines="none" (click)="presentMapFeaturesModal()">
       <ion-label> {{ "General.mapfeatures" | translate }} </ion-label>
     </ion-item>
+    </ng-container>
    </div>
   
 </ion-content>

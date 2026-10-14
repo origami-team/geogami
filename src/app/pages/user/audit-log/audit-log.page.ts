@@ -86,11 +86,16 @@ export class AuditLogPage implements OnInit {
   actionLabel(action: string): string {
     const map: { [k: string]: string } = {
       "account.delete.self": "Account deleted (by owner)",
+      "account.create.self": "Account created (self-registration)",
+      "account.create.admin": "Account created (by admin)",
       "account.delete.admin": "Account deleted (by admin)",
       "account.password.change": "Password changed",
       "account.password.reset": "Password reset",
       "account.email.change": "Email change requested",
       "user.role.change": "Role changed",
+      "editorVisibility.update": "Editor visibility changed",
+      "game.create": "Game created",
+      "game.update": "Game edited",
       "security.rateLimit": "Rate limit reached",
     };
     return map[action] || action;
@@ -106,6 +111,22 @@ export class AuditLogPage implements OnInit {
     }
     if (entry.action === "account.email.change") {
       return `${m.from || "?"} → ${m.to || "?"}`;
+    }
+    if (entry.action === "editorVisibility.update") {
+      const changes = Array.isArray(m.changes) ? m.changes : [];
+      return changes.map((c: any) => `${c.id}: ${c.from} → ${c.to}`).join(", ");
+    }
+    if (entry.action === "account.create.admin") {
+      const roles = Array.isArray(m.roles) ? m.roles.join(", ") : "";
+      return roles ? `role: ${roles}` : "";
+    }
+    if (entry.action === "game.create") {
+      const tasks = typeof m.tasks === "number" ? ` · ${m.tasks} ${m.tasks === 1 ? "task" : "tasks"}` : "";
+      return `${m.name || "?"}${tasks}`;
+    }
+    if (entry.action === "game.update") {
+      const fields = Array.isArray(m.changedFields) ? m.changedFields.join(", ") : "";
+      return `${m.name || "?"}${fields ? " · changed: " + fields : ""}`;
     }
     if (entry.action === "security.rateLimit") {
       return `${m.endpoint || "?"}${

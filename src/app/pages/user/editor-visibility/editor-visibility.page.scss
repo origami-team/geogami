@@ -1,0 +1,195 @@
+// A light page background (it follows the theme), so the white cards stand out.
+ion-content {
+  --background: var(--ion-color-light, #f4f5f8);
+}
+
+// One centred column with space on both sides, instead of the whole width of the window.
+// On a phone the column simply is the screen (minus the padding of the content).
+.page-column {
+  max-width: 760px;
+  margin: 0 auto;
+
+  ion-card {
+    margin: 0 0 16px;
+  }
+}
+
+.status,
+.empty {
+  text-align: center;
+  color: var(--ion-color-medium);
+  margin-top: 32px;
+}
+
+// The light theme pairs the yellow "warning" colour with white text (about 1.5:1).
+// Ionic sets the contrast colour with !important, so it needs !important to be replaced.
+.notice {
+  --ion-color-contrast: #000 !important;
+}
+
+ion-card p {
+  margin: 0 0 8px;
+}
+
+.summary {
+  .intro {
+    margin: 0 0 8px;
+    line-height: 1.45;
+    color: var(--ion-text-color, var(--ion-color-dark, #222428));
+  }
+
+  .meta {
+    margin: 0;
+    font-size: 0.85em;
+    color: var(--ion-color-medium-shade, var(--ion-color-medium));
+  }
+}
+
+.search {
+  padding: 0 0 16px;
+}
+
+// ── One card per group ──────────────────────────────────────────────────────
+
+.group-title {
+  margin: 0;
+  padding: 14px 16px 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ion-text-color, var(--ion-color-dark, #222428));
+  border-bottom: 1px solid var(--ion-color-step-150, rgba(0, 0, 0, 0.1));
+}
+
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// The text takes the space; the control stays at the end of the row, and drops below the
+// text when the row gets too narrow for both (phones).
+.feature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 12px 16px;
+
+  & + .feature {
+    border-top: 1px solid var(--ion-color-step-150, rgba(0, 0, 0, 0.1));
+  }
+}
+
+.feature-text {
+  flex: 1 1 260px;
+  min-width: 0;
+
+  h3 {
+    margin: 0 0 2px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ion-text-color, var(--ion-color-dark, #222428));
+  }
+
+  .description {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--ion-color-medium-shade, var(--ion-color-medium));
+  }
+}
+
+.changed {
+  margin-inline-start: 6px;
+  vertical-align: middle;
+  font-size: 10px;
+}
+
+.feature-text .screens {
+  margin: 6px 0 0;
+  line-height: 1;
+
+  ion-chip {
+    margin: 2px 4px 2px 0;
+    height: 22px;
+    font-size: 0.7rem;
+  }
+}
+
+.classification {
+  flex: 0 0 auto;
+  min-width: 11rem;
+  min-height: 40px;
+  padding: 6px 8px;
+  border: 1px solid var(--ion-color-step-300, #b3b3b3);
+  border-radius: 8px;
+  background: var(--ion-item-background, var(--ion-background-color, #fff));
+  color: var(--ion-text-color, var(--ion-color-dark, #222428));
+  font: inherit;
+
+  &:focus-visible {
+    outline: 2px solid var(--ion-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.always-shown {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+// ── Preview of the Simple view ───────────────────────────────────────────────
+
+.link-button {
+  margin: 0 0 4px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ion-color-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--ion-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.preview-group {
+  margin-top: 8px;
+
+  ul {
+    margin: 4px 0 0;
+    padding-inline-start: 20px;
+  }
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+
+ion-footer ion-toolbar {
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+// Three buttons fit on one line of a phone when they are a little tighter.
+@media (max-width: 480px) {
+  .actions ion-button {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    font-size: 12px;
+    letter-spacing: 0;
+  }
+
+  .classification {
+    flex: 1 1 100%;
+  }
+}

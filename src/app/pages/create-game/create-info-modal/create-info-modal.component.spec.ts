@@ -9,7 +9,7 @@ describe('CreateInfoModalComponent', () => {
     modalController = { dismiss: jasmine.createSpy('dismiss') };
     component = new CreateInfoModalComponent(
       modalController, null, null,
-      { checkVEBuilding: () => false } as any, null
+      { checkVEBuilding: () => false } as any, null, null
     );
     component.isVirtualWorld = true;
     component.virEnvType = 'VirEnv_25';

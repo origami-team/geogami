@@ -23,6 +23,13 @@ import { virEnvLayers } from "src/app/models/virEnvsLayers";
 import { VEBuildingUtilService } from "src/app/services/ve-building-util.service";
 import { UtilService } from "src/app/services/util.service";
 import { CAMERA_FAR_CLIP_PLANE } from "src/app/models/virtual-world-settings";
+import { EditorVisibilityService } from "src/app/services/editor-visibility.service";
+import { OptionSpec } from "src/app/helpers/editor-visibility";
+import { editorOptionFeatureId } from "src/app/models/editor-features";
+import {
+  DEFAULT_TASK_ACCURACY,
+  detectTaskAdvancedUsage,
+} from "src/app/helpers/editor-advanced-usage";
 
 @Component({
   selector: "app-create-task-modal",
@@ -62,7 +69,7 @@ export class CreateTaskModalPage implements OnInit {
 
   showFeedback = true;
   showMultipleTries = false;
-  defaultTaskAccuracy = 5; // default accuracy for tasks
+  defaultTaskAccuracy = DEFAULT_TASK_ACCURACY; // default accuracy for tasks
 
   // step = 5;
 
@@ -153,7 +160,8 @@ export class CreateTaskModalPage implements OnInit {
     public popoverController: PopoverController,
     private translate: TranslateService,
     private veBuildingUtilService: VEBuildingUtilService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    public ev: EditorVisibilityService
   ) {}
 
   // Answer types that render a fill-in input the player must complete before confirming.
@@ -1377,5 +1385,187 @@ export class CreateTaskModalPage implements OnInit {
         });
       }
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Simple / Advanced view
+  //
+  // Everything below only decides what the template shows. It never changes the
+  // task, and none of the handlers above (onTaskSelected, onThemeTaskTypeChange,
+  // the question/answer change handlers, settingsChange, …) is called from here:
+  // switching the view — or the policy hiding an option — must not re-initialise
+  // anything. A hidden control keeps its value and is saved exactly as it was.
+  // ---------------------------------------------------------------------------
+
+  private get currentQuestionType(): string | undefined {
+    const question = Array.isArray(this.task?.question)
+      ? this.task.question[0]
+      : this.task?.question;
+    return question?.type;
+  }
+
+  private get currentAnswerType(): string | undefined {
+    const answer = Array.isArray(this.task?.answer) ? this.task.answer[0] : this.task?.answer;
+    return answer?.type;
+  }
+
+  // The option that represents the current value is always kept, so a selector
+  // never shows (or silently picks) a different value than the task holds.
+  private readonly navTypeOptions: OptionSpec<any> = {
+    featureOf: (t) => editorOptionFeatureId("taskType", "nav", t.type),
+    isCurrent: (t) => !!this.task && t.type === this.task.type,
+  };
+  private readonly themeTypeOptions: OptionSpec<any> = {
+    featureOf: (t) => editorOptionFeatureId("taskType", "theme", t.type),
+    isCurrent: (t) => !!this.selectedThemeTaskType && t.type === this.selectedThemeTaskType.type,
+  };
+  private readonly questionOptions: OptionSpec<any> = {
+    featureOf: (o) => editorOptionFeatureId("question", this.task && this.task.type, o.type),
+    isCurrent: (o) => o.type === this.currentQuestionType,
+  };
+  private readonly answerOptions: OptionSpec<any> = {
+    featureOf: (o) => editorOptionFeatureId("answer", this.task && this.task.type, o.type),
+    isCurrent: (o) => o.type === this.currentAnswerType,
+  };
+
+  // Offered options. The source lists (tasks, taskTypes, objectQuestionSelect,
+  // objectAnswerSelect) are left intact; these are filtered copies.
+  get visibleTasks(): any[] {
+    return this.ev.filterOptions(this.tasks, this.navTypeOptions);
+  }
+  get visibleTaskTypes(): any[] {
+    return this.ev.filterOptions(this.taskTypes, this.themeTypeOptions);
+  }
+  get visibleQuestionOptions(): any[] {
+    return this.ev.filterOptions(this.objectQuestionSelect, this.questionOptions);
+  }
+  get visibleAnswerOptions(): any[] {
+    return this.ev.filterOptions(this.objectAnswerSelect, this.answerOptions);
+  }
+
+  /** " (Advanced)" for an option that is only offered because it is the current value. */
+  advancedTag(kind: "navType" | "themeType" | "question" | "answer", option: any): string {
+    const specs = {
+      navType: this.navTypeOptions,
+      themeType: this.themeTypeOptions,
+      question: this.questionOptions,
+      answer: this.answerOptions,
+    };
+    return this.ev.isAdvancedOption(option, specs[kind])
+      ? ` (${this.translate.instant("EditorMode.advancedOption")})`
+      : "";
+  }
+
+  // Controls under "Additional settings". Each getter is the control's existing
+  // condition plus the view filter, kept here so the heading can follow them.
+  get showConfirmationToggle(): boolean {
+    return (
+      (this.task.type == "nav-flag" || this.task.type == "nav-text") &&
+      this.ev.isVisible("task.confirmation")
+    );
+  }
+  get showFlagToggle(): boolean {
+    return (
+      (this.task.type == "nav-text" || this.task.type == "nav-photo") &&
+      this.ev.isVisible("navigation.showFlag")
+    );
+  }
+  get showFeedbackToggle(): boolean {
+    return this.showFeedback && this.ev.isVisible("task.feedback");
+  }
+  get showAutoPlayAudioToggle(): boolean {
+    return this.ev.isVisible("task.autoPlayAudio");
+  }
+  get showMultipleTriesToggle(): boolean {
+    // "Multiple attempts" is Advanced only for thematic tasks; the navigation
+    // tasks that offer it keep it.
+    return (
+      this.showMultipleTries &&
+      (this.task.category != "theme" || this.ev.isVisible("thematic.multipleAttempts"))
+    );
+  }
+  get showKeepFlagToggle(): boolean {
+    return (
+      this.task.category == "nav" &&
+      !!this.task.settings.showMarker &&
+      this.task.type != "nav-arrow" &&
+      this.ev.isVisible("navigation.keepFlag")
+    );
+  }
+  // The drawing options belong to the selected answer type, so they follow it.
+  get showDrawSettings(): boolean {
+    return this.task.answer.type === "DRAW";
+  }
+  get showAccuracySlider(): boolean {
+    const t = this.task;
+    const applies =
+      t.type != "theme-object" &&
+      t.type != "theme-direction" &&
+      t.type != "free" &&
+      t.type != "nav-exploration";
+    // Arrival accuracy is Advanced only for navigation tasks; the self-location
+    // task keeps its own accuracy control.
+    return applies && (t.category != "nav" || this.ev.isVisible("navigation.accuracy"));
+  }
+  get showAdditionalSettings(): boolean {
+    return (
+      !!this.task.settings &&
+      (this.showConfirmationToggle ||
+        this.showFlagToggle ||
+        this.showFeedbackToggle ||
+        this.showAutoPlayAudioToggle ||
+        this.showMultipleTriesToggle ||
+        this.showKeepFlagToggle ||
+        this.showDrawSettings ||
+        this.showAccuracySlider)
+    );
+  }
+
+  // The virtual-environment section shows while at least one of its controls does.
+  get showVirtualSettings(): boolean {
+    return (
+      !!this.isVirtualWorld &&
+      !!this.task.settings &&
+      (this.ev.anyVisible([
+        "virtual.avatarSpeed",
+        "virtual.cameraClip",
+        "virtual.disableRotation",
+        "virtual.environmentSettings",
+        "virtual.mapSize",
+      ]) ||
+        (this.isVEBuilding && this.ev.isVisible("virtual.pathVisualization")) ||
+        (!!this.virEnvLayers[this.virEnvType]?.objectsList &&
+          this.ev.isVisible("virtual.landmarkSelection")))
+    );
+  }
+
+  get showMapFeaturesEntry(): boolean {
+    return (
+      this.task.type != "nav-arrow" &&
+      (this.task.category != "theme" || this.ev.isVisible("thematic.mapFeatures"))
+    );
+  }
+
+  // Settings of this task that only Advanced shows (for the "uses advanced
+  // settings" notice). The list object is reused while its content is unchanged.
+  private lastAdvancedInUse: string[] = [];
+  get advancedInUse(): string[] {
+    if (this.ev.mode === "advanced") {
+      return [];
+    }
+    const next = detectTaskAdvancedUsage(
+      {
+        task: this.task,
+        mapFeatures: this.mapFeatures,
+        isVirtualWorld: this.isVirtualWorld,
+        virEnvType: this.virEnvType,
+        initialFloor: this.initialFloor,
+      },
+      (featureId) => this.ev.isHiddenInSimple(featureId)
+    );
+    if (next.join("|") !== this.lastAdvancedInUse.join("|")) {
+      this.lastAdvancedInUse = next;
+    }
+    return this.lastAdvancedInUse;
   }
 }

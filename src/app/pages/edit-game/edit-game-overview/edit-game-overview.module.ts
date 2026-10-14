@@ -10,6 +10,7 @@ import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
 
 import { TranslateModule } from '@ngx-translate/core';
+import { EditorVisibilityModule } from 'src/app/components/editor-visibility/editor-visibility.module';
 
 
 // Note we need a separate function as it's required
@@ -32,7 +33,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     LottieModule.forRoot({ player: playerFactory }),
-    TranslateModule
+    TranslateModule,
+    EditorVisibilityModule
   ],
   declarations: [EditGameOverviewPage]
 })

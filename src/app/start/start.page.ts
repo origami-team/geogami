@@ -9,6 +9,7 @@ import { AuthService } from "../services/auth-service.service";
 import { LanguageService } from "../services/language.service";
 import { GamesService } from "../services/games.service";
 import { UtilService } from "../services/util.service";
+import { APP_MANAGEMENT_ROLES, auditUnreadFrom } from "../models/app-management";
 
 @Component({
   selector: "app-start",
@@ -85,6 +86,8 @@ export class StartPage implements OnInit {
       if (event != null) {
         this.userRole = event["roles"][0];
       }
+      // The unread number follows the user: session recovery, login and logout.
+      this.loadAuditUnread();
     });
   }
 
@@ -140,8 +143,41 @@ export class StartPage implements OnInit {
     this.navCtrl.navigateForward("analyze/dashboard");
   }
 
-  navigateUserManagement() {
-    this.navCtrl.navigateForward("user/user-management");
+  // Administrators get the App management hub (users, editor visibility, audit log);
+  // checked against every role of the user.
+  get canOpenAppManagement(): boolean {
+    return this.authService.hasAnyRole(APP_MANAGEMENT_ROLES);
+  }
+
+  navigateAppManagement() {
+    this.navCtrl.navigateForward("user/app-management");
+  }
+
+  // Unread audit entries, shown as a number on the App management card (administrators only).
+  auditUnread = 0;
+  auditAlerts = 0;
+
+  // Runs every time the start page is shown, so the number is current after reading the log.
+  ionViewWillEnter() {
+    this.loadAuditUnread();
+  }
+
+  loadAuditUnread() {
+    if (!this.canOpenAppManagement) {
+      this.auditUnread = 0;
+      this.auditAlerts = 0;
+      return;
+    }
+    this.authService
+      .getAuditUnreadCount()
+      .then((res: any) => {
+        const unread = auditUnreadFrom(res);
+        this.auditUnread = unread.count;
+        this.auditAlerts = unread.alerts;
+      })
+      .catch(() => {
+        /* the number is best-effort */
+      });
   }
 
   login() {

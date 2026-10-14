@@ -109,21 +109,29 @@
     </ion-card-content>
   </ion-card>
 
-  <!--  -->
+  <!-- Administrators: users, Simple/Advanced editor views and the audit log in one hub;
+       the number is the unread audit entries -->
   <ion-card
-    *ngIf="(user | async)?.username && ['admin'].includes( (user | async)?.roles[0] )"
-    id="user_management"
-    (click)="navigateUserManagement()"
+    *ngIf="(user | async)?.username && canOpenAppManagement"
+    id="app_management"
+    (click)="navigateAppManagement()"
     color="secondary"
   >
     <ion-card-header>
       <ion-card-title>
-        <ion-icon name="people-outline"></ion-icon> User Management
+        <ion-icon name="settings-outline"></ion-icon> {{ "AppManagement.cardTitle" | translate }}
+        <ion-badge
+          *ngIf="auditUnread > 0"
+          class="unread-badge"
+          [color]="auditAlerts > 0 ? 'danger' : 'light'"
+          [attr.aria-label]="'AppManagement.unread' | translate: { count: auditUnread }"
+        >{{ auditUnread }}</ion-badge>
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content> Manage user roles and permissions </ion-card-content>
+    <ion-card-content>
+      {{ "AppManagement.cardDescription" | translate }}
+    </ion-card-content>
   </ion-card>
-  <!--  -->
 
   <ion-card (click)="login()" *ngIf="!(user | async)?.username">
     <ion-card-header>
