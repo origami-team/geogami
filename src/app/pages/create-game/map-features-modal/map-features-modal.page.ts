@@ -62,6 +62,17 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit, OnDestroy {
     public ev: EditorVisibilityService
   ) { }
 
+  /**
+   * The style of the landmark map: the chosen virtual environment's, or the real-world
+   * style. (Real-world tasks have no `virEnvType`, which used to request
+   * `.../undefined.json`, so the map never loaded.)
+   */
+  mapStyleUrl(): string {
+    return this.isVirtualWorld
+      ? environment.mapStyle + this.virEnvType + ".json"
+      : environment.mapStyle + "realWorld.json";
+  }
+
   ngOnInit() {
     if (this.features == undefined) {
       this.features = cloneDeep(standardMapFeatures);
@@ -86,10 +97,7 @@ export class MapFeaturesModalPage implements OnInit, AfterViewInit, OnDestroy {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
-      /* style: (this.isVirtualWorld ?
-        (this.isVRMirrored ? environment.mapStyle + 'virtualEnv_2.json' : environment.mapStyle + 'virtualEnv_1.json') :
-        environment.mapStyle + 'realWorld.json'), */
-      style: environment.mapStyle + this.virEnvType+".json",
+      style: this.mapStyleUrl(),
       center: this.isVirtualWorld
         ? [0.005810510811 / 2, 0.006827038669 / 2]
         : [8, 51.8],

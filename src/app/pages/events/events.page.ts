@@ -141,12 +141,15 @@ export class EventsPage implements OnInit {
     try {
       const qrGames: EventQrGame[] = [];
       for (const game of games) {
+        // iName is display-only and the longest param, so it goes last: if a
+        // pasted/wrapped link is ever cut short, only the name is lost — never
+        // the event tag.
         const link =
           `${environment.uiURL}/play-game/game-detail` +
           `?gameId=${game._id}` +
           `&uId=${ownerId}` +
-          `&iName=${encodeURIComponent(ownerName)}` +
-          `&eventId=${event._id}`;
+          `&eventId=${event._id}` +
+          `&iName=${encodeURIComponent(ownerName)}`;
         // High resolution so the printed QR stays crisp.
         const qrDataUrl = await QRCode.toDataURL(link, {
           width: 600,

@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import { Plugins, Capacitor, FilesystemDirectory } from "@capacitor/core";
+import { drawFooterLink } from "./pdf-footer-link";
 
 export interface ClassQrPdfOptions {
   /** The QR image as a data URL (e.g. from the rendered <ngx-qrcode> img). */
@@ -85,12 +86,7 @@ export async function downloadClassQrPdf(
   doc.text(opts.scanCaption, pageW / 2, qrY + qrSize + 18, { align: "center" });
 
   // Footer link (manual fallback)
-  doc.setFontSize(8);
-  doc.setTextColor(170, 170, 170);
-  doc.text(opts.link, pageW / 2, 288, {
-    align: "center",
-    maxWidth: pageW - 24,
-  });
+  drawFooterLink(doc, pageW, opts.link);
 
   const safeName = gameName.replace(/[^a-z0-9]+/gi, "_");
   const fileName = `GeoGami-${safeName}.pdf`;
