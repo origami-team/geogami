@@ -34,6 +34,26 @@ Playwright is pinned to 1.49.1 because newer releases need Node 20. Bump it when
 Pages that need navigation state from the previous page (create-game-list, create-game-overview, …)
 bounce back on a direct visit by design, so they can only be reached through the UI flow.
 
+## Not covered: live sockets (manual check per upgrade step)
+
+The tests block socket.io, so multiplayer and the virtual environment (VE) are only covered as far as
+"the page loads". `ngx-socket-io` 3.x talks to the server's socket.io 2.x and to the Unity VE client;
+upgrade those three together, never the wrapper alone.
+
+After each upgrade step, on the Netlify deploy preview (it uses the real API), in private windows so no
+old service worker answers, with test accounts:
+
+1. **Multiplayer, real world** — signed in as scholar/admin, open a multiplayer game, copy the game link;
+   join it from a second browser (or phone) as player 2. Both see each other join; play one task each;
+   finish. Check the game appears under *Evaluate* with both players' tracks.
+2. **Multiplayer, rejoin** — reload player 2's tab mid-game; it rejoins the same room.
+3. **Virtual environment, single player** — open a VE game, enter a name, Start; the VE opens and
+   connects (avatar moves, the map panel follows), finish one task.
+4. **Virtual environment, multiplayer** — as 1., but with a VE game.
+
+Note anything off in the PR. An automated version (local `geogami-server` with a throwaway database and
+two browser sessions) is planned before the Angular 16 step.
+
 ## How the mock works
 
 `fixtures.ts` intercepts everything:
