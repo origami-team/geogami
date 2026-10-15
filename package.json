@@ -11,6 +11,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "test:e2e": "cd tests-e2e && npx playwright test",
+    "verify": "bash tests-e2e/verify.sh",
     "build-browser": "ionic cordova platform add browser && ng run app:ionic-cordova-build:production --platform=browser"
   },
   "postinstall": "jetifier",
