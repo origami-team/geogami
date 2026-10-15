@@ -24,7 +24,6 @@
     "@angular/common": "^12.2.16",
     "@angular/core": "^12.2.16",
     "@angular/forms": "^12.2.16",
-    "@angular/http": "^8.0.0-beta.10",
     "@angular/material": "12.2.13",
     "@angular/platform-browser": "^12.2.16",
     "@angular/platform-browser-dynamic": "^12.2.16",
@@ -78,9 +77,7 @@
     "ngx-markdown": "^10.1.1",
     "ngx-socket-io": "^3.3.1",
     "osmtogeojson": "^3.0.0-beta.4",
-    "pwa": "^1.9.4",
     "rxjs": "~6.5.5",
-    "rxjs-compat": "^6.6.7",
     "source-map": "^0.8.0-beta.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
