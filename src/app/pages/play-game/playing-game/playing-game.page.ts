@@ -2397,6 +2397,10 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   nextTask() {
+    //* The game is over: the task panel and nav buttons stay on screen behind
+    //* the success card, and feedback timers may still fire. Running the
+    //* end-of-game step again would upload the same play a second time.
+    if (PlayingGamePage.showSuccess) return;
     this.stopExplorationTimer();
     // Keep track on map impl.
     // Check if the previous task has track feature and check
@@ -2542,6 +2546,9 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   }
 
   previousTask() {
+    //* Going back from the finished state would let the next "next" finish
+    //* (and upload) the game again.
+    if (PlayingGamePage.showSuccess) return;
     if (this.taskIndex > 0) {
       this.stopExplorationTimer();
       this.taskIndex--;

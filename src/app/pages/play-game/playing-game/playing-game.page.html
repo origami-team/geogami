@@ -8,10 +8,10 @@
     <!-- to show player name on top view -->
     <ion-title *ngIf="game">{{ game.name }} ({{playersNames[0]}})</ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="taskIndex>0" color="dark" [disabled]="showExplorationTimeOver" (click)="confirmNavWithPin('previous')">
+      <ion-button *ngIf="taskIndex>0" color="dark" [disabled]="showExplorationTimeOver || staticShowSuccess" (click)="confirmNavWithPin('previous')">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
-      <ion-button color="dark" [disabled]="showExplorationTimeOver" (click)="confirmNavWithPin('next')">
+      <ion-button color="dark" [disabled]="showExplorationTimeOver || staticShowSuccess" (click)="confirmNavWithPin('next')">
         <ion-icon name="arrow-forward"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -199,12 +199,12 @@
           <app-audio-player *ngIf="task.question.audio != undefined" [audioSource]="task.question.audio"
             [autoPlay]="task.settings?.autoPlayAudio">
           </app-audio-player>
-          <ion-button slot="end" class="confirm" [disabled]="uploading"
+          <ion-button slot="end" class="confirm" [disabled]="uploading || staticShowSuccess"
             [color]="task.category.includes('nav') ? 'primary' : 'secondary'" (click)="onOkClicked()"
             *ngIf="task.settings?.confirmation && !task?.category?.includes('info')">{{ "General.OK" | translate }}
           </ion-button>
 
-          <ion-button class="confirm" color="warning" (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">
+          <ion-button class="confirm" color="warning" [disabled]="staticShowSuccess" (click)="onOkClicked()" *ngIf="task?.category?.includes('info')">
             {{ "General.OK" | translate }}
           </ion-button>
 
