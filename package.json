@@ -126,5 +126,8 @@
     "fs": false,
     "path": false,
     "os": false
+  },
+  "resolutions": {
+    "node-releases": "2.0.44"
   }
 }
