@@ -31,6 +31,7 @@ const SIGNED_IN_ONLY = [
   "/user/audit-log",
   "/user/app-management",
   "/user/editor-visibility",
+  "/user/app-version",
   "/events",
 ];
 

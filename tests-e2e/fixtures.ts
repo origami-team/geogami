@@ -149,6 +149,7 @@ export function ignoreKnownErrors(errors: string[], known: RegExp) {
 function defaults(api: MockApi) {
   api.on("GET", "/appversion/current", { version: "1.0.3" });
   api.on("GET", "/appversion/github-latest", { tag_name: "v1.0.3" });
+  api.on("GET", "/appversion", { revision: 0, enabled: false, ios: false, android: false, version: "1.0.3", major: false, build: "", updatedAt: null, updatedBy: null });
   api.on("GET", "/editor-visibility", { revision: 1, features: {}, updatedAt: null, updatedBy: null });
   // list endpoints under /game wrap their rows as { message, content }; /user/* return bare arrays
   api.on("GET", /^\/game\/all\/?$/, list([]));
