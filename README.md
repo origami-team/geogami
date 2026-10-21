@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.5384903"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5384903.svg" alt="DOI"/></a>
-  <img src="https://img.shields.io/badge/Angular-12-DD0031?logo=angular" alt="Angular 12"/>
+  <img src="https://img.shields.io/badge/Angular-14-DD0031?logo=angular" alt="Angular 14"/>
   <img src="https://img.shields.io/badge/Ionic-6-3880FF?logo=ionic" alt="Ionic 6"/>
   <img src="https://img.shields.io/badge/Capacitor-iOS%20%7C%20Android-119EFF?logo=ionic" alt="Capacitor"/>
 </p>
@@ -33,6 +33,8 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 - [Getting started](#getting-started)
 - [Configuration](#configuration)
 - [Available scripts](#available-scripts)
+- [Testing](#testing)
+- [Upgrade status and known caveats](#upgrade-status-and-known-caveats)
 - [Project structure](#project-structure)
 - [Building for mobile (iOS / Android)](#building-for-mobile-ios--android)
 - [Internationalisation](#internationalisation)
@@ -48,9 +50,9 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 
 | Area | Technology |
 |---|---|
-| Framework | Angular 12, Ionic 6 |
-| Native shell | Capacitor 3 (iOS, Android) |
-| Maps | Leaflet, Mapbox GL |
+| Framework | Angular 14, Ionic 6 |
+| Native shell | Capacitor 2 (iOS, Android) |
+| Maps | Mapbox GL JS |
 | State / forms | Reactive forms, RxJS |
 | UI components | Angular Material, Ionic Components |
 | i18n | `@ngx-translate/core` |
@@ -58,9 +60,11 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 
 ## Prerequisites
 
-- **Node.js** 14.x – 16.x (Angular 12 isn't compatible with newer Node versions)
-- **npm** 6+ or **yarn** 1.x
-- **Ionic CLI**: `npm i -g @ionic/cli`
+- **Node.js** — the version in [`.nvmrc`](.nvmrc) (use `nvm use`). It is also the version Netlify builds the web app with, so
+  check your changes with it. Angular 14 supports Node 14.15+ and 16.10+.
+- **yarn 1.x** — use `yarn`, **not `npm install`**. `yarn.lock` is the only committed lockfile (Netlify installs from it);
+  `npm install` creates a second, conflicting one.
+- **Ionic CLI** (only for `ionic serve` and the Capacitor commands): `npm i -g @ionic/cli`
 - For mobile builds:
   - iOS: macOS, Xcode 14+, CocoaPods
   - Android: Android Studio with SDK 33+
@@ -70,8 +74,9 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 ```bash
 git clone <repo-url>
 cd geogami-ui
-npm install
-ionic serve         # opens http://localhost:8100
+nvm use
+yarn install --frozen-lockfile
+ionic serve         # http://localhost:8100   (or: yarn start -> http://localhost:4200)
 ```
 
 The dev server proxies API calls to the URL configured in `src/environments/environment.ts`.
@@ -104,13 +109,47 @@ export const environment = {
 
 | Command | Purpose |
 |---|---|
-| `npm start` / `ionic serve` | Run dev server with live reload |
-| `npm run build` | Build the web bundle into `www/` |
-| `npm run build-browser` | Production browser build |
-| `npm test` | Run Karma unit tests |
-| `npm run lint` | TSLint check |
+| `yarn start` / `ionic serve` | Run dev server with live reload (`yarn start` on port 4200, `ionic serve` on 8100) |
+| `yarn build` | Build the web bundle into `www/` (add `--configuration production` for the production build) |
+| `yarn test` | Run the Karma unit tests (watch mode) |
+| `yarn test:e2e` | Run the Playwright browser tests against the production build in `www/` |
+| `yarn verify` | Production build + unit tests + browser tests in one go — run it before pushing |
 | `ionic capacitor sync ios` | Copy `www/` into the iOS Xcode project |
 | `ionic capacitor sync android` | Copy `www/` into the Android Studio project |
+
+There is no lint script: Angular 13 removed the TSLint builder and the project has not moved to ESLint yet.
+The old Cordova targets (`build-browser`) were removed; native apps are built with Capacitor.
+
+## Testing
+
+`yarn verify` runs, in this order:
+
+1. the production build, on the Node version from `.nvmrc`;
+2. the Karma unit tests (services, auth/interceptor/guards, models, editor-mode logic);
+3. the Playwright browser tests in [`tests-e2e/`](tests-e2e/README.md): every page loads, login, playing a game, what is uploaded
+   as a track, and screenshot baselines. The API is mocked, so nothing touches production.
+
+Not covered automatically: live multiplayer and the virtual environment (sockets), and native iOS/Android behaviour
+(GPS, camera, voice recorder, QR scanner, file sharing). After each framework upgrade step, run the manual checklist in
+[`tests-e2e/README.md`](tests-e2e/README.md#not-covered-live-sockets-manual-check-per-upgrade-step) on the Netlify deploy
+preview and on a real device.
+
+## Upgrade status and known caveats
+
+The app is being upgraded one Angular major at a time (currently **14**; target is the newest Angular the native
+apps can support), with Capacitor last. Each step is verified with `yarn verify` and a Netlify deploy preview.
+
+Known mismatches that are deliberately left for now:
+
+| Library | Mismatch | Why it stays, and the plan |
+|---|---|---|
+| `ngx-socket-io` 3.4 | declares Angular 12 | No release for newer Angular uses `socket.io-client` 2.x, which the web/native app and the API (socket.io 2.5) currently use. Newer wrapper versions need `socket.io-client` 4 and RxJS 7, and a v4 client cannot talk to a v2 server. Order: upgrade the server to socket.io 4 with `allowEIO3: true` (so already-installed apps keep working), then move the wrapper. Must be done before Angular 16, which drops the compatibility compiler (`ngcc`) this library relies on. The Unity virtual environment uses a separate Socket.IO v4 client library; check how it behaves against the upgraded server before deploying it. |
+| `ngx-markdown` 10 | declares Angular 10 | Renders the task text on the playing page. Upgrade to the release matching the Angular version (it brings `marked` 4) after a test pins the current rendering. Also needed before Angular 16. |
+| `@ngx-translate/*`, `ngx-lottie` | declare `tslib` 1.x | Harmless: the app uses `tslib` 2, which is backward compatible. |
+| Capacitor 2.5, `@ionic-native` 5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
+
+`package.json` pins `node-releases` to 2.0.44 through `resolutions`, because newer versions require Node 18 and Netlify
+builds on the `.nvmrc` version. Remove the pin when `.nvmrc` moves to Node 18 (Angular 15).
 
 ### Browser storage lifetime
 
@@ -175,7 +214,7 @@ Multiplayer games are unchanged — they keep their existing room-based QR (limi
 ## Contributing
 
 - Branch from `dev` (PRs target `master`), open a PR, and reference an issue when applicable.
-- Please run `npm run lint` and the unit tests before pushing.
+- Please run `yarn verify` before pushing (there is no lint step at the moment).
 - Bug reports and feature requests: <https://github.com/geogami-team/geogami/issues>.
 
 ---

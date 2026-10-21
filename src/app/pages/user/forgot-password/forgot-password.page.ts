@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth-service.service';
-import { Validators, FormBuilder } from '@angular/forms';
+import { Validators, UntypedFormBuilder } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 
 @Component({
@@ -14,7 +14,7 @@ export class ForgotPasswordPage implements OnInit {
   register;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     public navCtrl: NavController
   ) {}

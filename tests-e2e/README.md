@@ -37,8 +37,9 @@ bounce back on a direct visit by design, so they can only be reached through the
 ## Not covered: live sockets (manual check per upgrade step)
 
 The tests block socket.io, so multiplayer and the virtual environment (VE) are only covered as far as
-"the page loads". `ngx-socket-io` 3.x talks to the server's socket.io 2.x and to the Unity VE client;
-upgrade those three together, never the wrapper alone.
+"the page loads". `ngx-socket-io` 3.x (socket.io-client 2) talks to the server's socket.io 2.5; no newer wrapper
+release speaks that protocol, so the wrapper and the server have to be upgraded together (server first, with
+`allowEIO3`), and the Unity VE — which ships its own Socket.IO v4 client library — has to be re-checked then.
 
 After each upgrade step, on the Netlify deploy preview (it uses the real API), in private windows so no
 old service worker answers, with test accounts:
