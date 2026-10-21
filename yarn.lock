@@ -1641,20 +1641,6 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/splash-screen@^5.36.0":
-  version "5.36.0"
-  resolved "https://registry.npmjs.org/@ionic-native/splash-screen/-/splash-screen-5.36.0.tgz"
-  integrity sha512-BfNknY1rrGE8JRnCdKfL5wz8yFLhpPU5FRr8/LA3L+EncvPvcb9LGidePoeH3gVLMkolm2DI2a/rCelNrJ1Sxw==
-  dependencies:
-    "@types/cordova" latest
-
-"@ionic-native/status-bar@^5.36.0":
-  version "5.36.0"
-  resolved "https://registry.npmjs.org/@ionic-native/status-bar/-/status-bar-5.36.0.tgz"
-  integrity sha512-OXC1z+4Iba4lo1dc2+0h4Gvpud3z0XQmEbw0ny9UflCuSkLqBxvmiNRU7CRQwPnT1KaGVXkaSokdwxO8H9IlNg==
-  dependencies:
-    "@types/cordova" latest
-
 "@ionic/angular-toolkit@^6.1.0":
   version "6.1.0"
   resolved "https://registry.npmjs.org/@ionic/angular-toolkit/-/angular-toolkit-6.1.0.tgz"
@@ -8346,11 +8332,6 @@ netmask@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npmjs.org/netmask/-/netmask-2.0.2.tgz"
   integrity sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==
-
-ngx-json-viewer@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/ngx-json-viewer/-/ngx-json-viewer-2.4.0.tgz"
-  integrity sha512-26QmLp+0ds90aFug3KbSIwqtmQgCcJYFNNNcmcZHgPRj75nhKzbo4ceKxkhWmY5auKZClVO0HTZSs5bBhgb1Bw==
 
 ngx-lottie@^5.4.0:
   version "5.4.0"
