@@ -144,9 +144,12 @@ Known mismatches that are deliberately left for now:
 | Library | Mismatch | Why it stays, and the plan |
 |---|---|---|
 | `ngx-socket-io` 3.4 | declares Angular 12 | No release for newer Angular uses `socket.io-client` 2.x, which the web/native app and the API (socket.io 2.5) currently use. Newer wrapper versions need `socket.io-client` 4 and RxJS 7, and a v4 client cannot talk to a v2 server. Order: upgrade the server to socket.io 4 with `allowEIO3: true` (so already-installed apps keep working), then move the wrapper. Must be done before Angular 16, which drops the compatibility compiler (`ngcc`) this library relies on. The Unity virtual environment uses a separate Socket.IO v4 client library; check how it behaves against the upgraded server before deploying it. |
-| `ngx-markdown` 10 | declares Angular 10 | Renders the task text on the playing page. Upgrade to the release matching the Angular version (it brings `marked` 4) after a test pins the current rendering. Also needed before Angular 16. |
 | `@ngx-translate/*`, `ngx-lottie` | declare `tslib` 1.x | Harmless: the app uses `tslib` 2, which is backward compatible. |
 | Capacitor 2.5, `@ionic-native` 5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
+
+Task texts written by game authors are rendered with a small own pipe (`src/app/pipes/markdown.pipe.ts`: `marked` plus Angular's
+HTML sanitizer) instead of `ngx-markdown`, whose newer releases pull in `mermaid`, KaTeX, Prism and about 65 more packages
+the app never used. `marked` stays on 4.x until the Node 18 move.
 
 `package.json` pins `node-releases` to 2.0.44 through `resolutions`, because newer versions require Node 18 and Netlify
 builds on the `.nvmrc` version. Remove the pin when `.nvmrc` moves to Node 18 (Angular 15).

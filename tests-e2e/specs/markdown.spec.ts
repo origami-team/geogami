@@ -63,6 +63,19 @@ test.describe("task text rendering on the playing page", () => {
     await expect(t.locator("ion-chip, ion-icon")).toHaveCount(0);
   });
 
+  test("a text that is indented as a whole is a paragraph, not a code block", async ({ page, api }) => {
+    const t = await showTaskText(page, api, "    Walk to the church\n    then turn left");
+    await expect(t.locator("pre, code")).toHaveCount(0);
+    await expect(t.locator("p")).toHaveCount(1);
+    await expect(t).toContainText("Walk to the church");
+  });
+
+  test("an indented list is still a list", async ({ page, api }) => {
+    const t = await showTaskText(page, api, "    - item a\n    - item b");
+    await expect(t.locator("ul > li")).toHaveText(["item a", "item b"]);
+    await expect(t.locator("pre")).toHaveCount(0);
+  });
+
   test("shows special characters as typed", async ({ page, api }) => {
     const t = await showTaskText(page, api, "5 > 3 && 2 < 4 \"quoted\" it's");
     await expect(t).toHaveText("5 > 3 && 2 < 4 \"quoted\" it's");

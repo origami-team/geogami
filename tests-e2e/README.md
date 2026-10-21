@@ -28,6 +28,7 @@ Playwright is pinned to 1.49.1 because newer releases need Node 20. Bump it when
 | `routes.spec.ts` | every lazy-loaded page that can be opened directly renders without errors (signed out and signed in); guarded pages redirect signed-out visitors to the login page |
 | `auth.spec.ts` | login through the form (trimmed username, tokens stored, errors shown, unconfirmed email), session restore, rejected refresh token |
 | `play.spec.ts` | game list → detail → name + consent box → Start (the bundle handed to the playing page is checked) → playing with GPS and map → finishing with and without consent (what is uploaded to `POST /track`); consent-required games |
+| `markdown.spec.ts` | the task text on the playing page: markdown is rendered, the flag chip is added, and scripts, event handlers, `javascript:` links and `<ion-*>` tags typed by an author are stripped |
 | `visual.spec.ts` | screenshot baselines of the main pages, desktop and mobile |
 | `guards.spec.ts` | the harness itself: a missing local asset is reported, blocked external hosts are not |
 

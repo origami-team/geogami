@@ -38,7 +38,6 @@ import { AudioRecorderComponent } from "./pages/create-game/form-elements/audio-
 import { AudioPlayerModule } from "./components/audio-player/audio-player.module";
 import { EditorVisibilityModule } from "./components/editor-visibility/editor-visibility.module";
 
-import { MarkdownModule } from "ngx-markdown";
 import { TokenInterceptor } from "./services/token-intercepor.service";
 import { HelperService } from "./services/helper.service";
 
@@ -111,7 +110,6 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
         IonicStorageModule.forRoot({
             driverOrder: ["localstorage", "indexeddb"],
         }),
-        MarkdownModule.forRoot(),
         BrowserAnimationsModule,
         NgxQRCodeModule,
         // FormControl
