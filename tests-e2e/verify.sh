@@ -35,10 +35,6 @@ fi
 
 use_node "$APP_NODE"
 export NODE_OPTIONS="${NODE_OPTIONS:-} --max-old-space-size=6144"
-# Only needed when the app is built on Node >= 17 (no nvm); Node 16 rejects the flag.
-if node -e 'process.exit(Number(process.versions.node.split(".")[0]) >= 17 ? 0 : 1)'; then
-  export NODE_OPTIONS="$NODE_OPTIONS --openssl-legacy-provider"
-fi
 
 echo "==> 1/3 production build"
 npx ng build --configuration production

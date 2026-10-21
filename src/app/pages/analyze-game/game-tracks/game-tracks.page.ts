@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
+import { MatLegacyPaginator as MatPaginator } from "@angular/material/legacy-paginator";
 import { MatSort } from "@angular/material/sort";
 import { ActivatedRoute } from "@angular/router";
 import {
@@ -12,7 +12,7 @@ import { AuthService } from "src/app/services/auth-service.service";
 import { TrackerService } from "src/app/services/tracker.service";
 import { Capacitor } from "@capacitor/core";
 
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from "@angular/material/legacy-dialog";
 import { downloadTrackDialog } from "./download-track-dialog";
 import { GameTracksVisualizationPage } from "../game-tracks-visualization/game-tracks-visualization.page";
 

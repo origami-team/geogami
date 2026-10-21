@@ -1,0 +1,19 @@
+// Angular Material 15 only ships prebuilt themes for its new (MDC based)
+// components. This app still uses the legacy components
+// (@angular/material/legacy-*: table, paginator, form-field, input, select,
+// button, dialog), which need the legacy theme. It reproduces the indigo-pink
+// prebuilt theme that Material 14 shipped.
+// Remove it together with the legacy components when they are migrated.
+@use '@angular/material' as mat;
+
+@include mat.legacy-core();
+
+$app-primary: mat.define-palette(mat.$indigo-palette);
+$app-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$app-theme: mat.define-light-theme((
+  color: (primary: $app-primary, accent: $app-accent),
+  typography: mat.define-legacy-typography-config(),
+  density: 0,
+));
+
+@include mat.all-legacy-component-themes($app-theme);

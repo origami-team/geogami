@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.5384903"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5384903.svg" alt="DOI"/></a>
-  <img src="https://img.shields.io/badge/Angular-14-DD0031?logo=angular" alt="Angular 14"/>
+  <img src="https://img.shields.io/badge/Angular-15-DD0031?logo=angular" alt="Angular 15"/>
   <img src="https://img.shields.io/badge/Ionic-6-3880FF?logo=ionic" alt="Ionic 6"/>
   <img src="https://img.shields.io/badge/Capacitor-iOS%20%7C%20Android-119EFF?logo=ionic" alt="Capacitor"/>
 </p>
@@ -50,7 +50,7 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 
 | Area | Technology |
 |---|---|
-| Framework | Angular 14, Ionic 6 |
+| Framework | Angular 15, Ionic 6 |
 | Native shell | Capacitor 2 (iOS, Android) |
 | Maps | Mapbox GL JS |
 | State / forms | Reactive forms, RxJS |
@@ -61,7 +61,7 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 ## Prerequisites
 
 - **Node.js** — the version in [`.nvmrc`](.nvmrc) (use `nvm use`). It is also the version Netlify builds the web app with, so
-  check your changes with it. Angular 14 supports Node 14.15+ and 16.10+.
+  check your changes with it. Angular 15 needs Node 18.10 or newer (16.13+ also works).
 - **yarn 1.x** — use `yarn`, **not `npm install`**. `yarn.lock` is the only committed lockfile (Netlify installs from it);
   `npm install` creates a second, conflicting one.
 - **Ionic CLI** (only for `ionic serve` and the Capacitor commands): `npm i -g @ionic/cli`
@@ -136,7 +136,7 @@ preview and on a real device.
 
 ## Upgrade status and known caveats
 
-The app is being upgraded one Angular major at a time (currently **14**; target is the newest Angular the native
+The app is being upgraded one Angular major at a time (currently **15**; target is the newest Angular the native
 apps can support), with Capacitor last. Each step is verified with `yarn verify` and a Netlify deploy preview.
 
 Known mismatches that are deliberately left for now:
@@ -145,14 +145,17 @@ Known mismatches that are deliberately left for now:
 |---|---|---|
 | `ngx-socket-io` 3.4 | declares Angular 12 | No release for newer Angular uses `socket.io-client` 2.x, which the web/native app and the API (socket.io 2.5) currently use. Newer wrapper versions need `socket.io-client` 4 and RxJS 7, and a v4 client cannot talk to a v2 server. Order: upgrade the server to socket.io 4 with `allowEIO3: true` (so already-installed apps keep working), then move the wrapper. Must be done before Angular 16, which drops the compatibility compiler (`ngcc`) this library relies on. The Unity virtual environment uses a separate Socket.IO v4 client library; check how it behaves against the upgraded server before deploying it. |
 | `@ngx-translate/*`, `ngx-lottie` | declare `tslib` 1.x | Harmless: the app uses `tslib` 2, which is backward compatible. |
+| Angular Material 15 *legacy* components | `table`, `paginator`, `form-field`, `input`, `select`, `button` and `dialog` are imported from `@angular/material/legacy-*` (4 files: `material.module.ts`, `user-management`, `game-tracks`, `download-track-dialog`) | Angular 15 moved Material to new MDC components and kept the old ones as `legacy-*`, which keep the exact old look. Material 15 ships no prebuilt legacy theme, so `src/theme/material-legacy.scss` recreates the indigo-pink one. **Angular Material 17 removes the legacy components**, so these four files must move to the new components before the Angular 17 step; the screenshots in `tests-e2e/specs/material.spec.ts-snapshots` will show the visual changes to review. |
 | Capacitor 2.5, `@ionic-native` 5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
 
 Task texts written by game authors are rendered with a small own pipe (`src/app/pipes/markdown.pipe.ts`: `marked` plus Angular's
 HTML sanitizer) instead of `ngx-markdown`, whose newer releases pull in `mermaid`, KaTeX, Prism and about 65 more packages
-the app never used. `marked` stays on 4.x until the Node 18 move.
+the app never used. `marked` is on 4.x; newer majors change output details, so move it deliberately with the markdown tests as the check.
 
-`package.json` pins `node-releases` to 2.0.44 through `resolutions`, because newer versions require Node 18 and Netlify
-builds on the `.nvmrc` version. Remove the pin when `.nvmrc` moves to Node 18 (Angular 15).
+`package.json` has one `resolutions` entry: it makes the Angular builder use `browserslist` 4.21.10. Angular CLI 15 pins
+4.21.5, which yarn pairs with a 2026 `caniuse-lite` it cannot read (`Unknown version … of edge`, the build fails). The
+combination 4.21.10 uses is the one the project has always built with, so the browser targets are unchanged. Try removing the
+entry when updating the CLI past 15.
 
 ### Browser storage lifetime
 
