@@ -48,7 +48,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 // import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { Network } from "@ionic-native/network/ngx";
 
-import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -111,7 +110,6 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
             driverOrder: ["localstorage", "indexeddb"],
         }),
         BrowserAnimationsModule,
-        NgxQRCodeModule,
         // FormControl
     ],
     providers: [

@@ -9,7 +9,7 @@ import { GameDetailPage } from './game-detail.page';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { QrCodeModule } from 'src/app/components/qr-code/qr-code.module';
 
 
 const routes: Routes = [
@@ -26,7 +26,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     TranslateModule,
-    NgxQRCodeModule
+    QrCodeModule
   ],
   declarations: [GameDetailPage]
 })

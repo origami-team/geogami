@@ -3034,14 +3034,6 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@techiediaries/ngx-qrcode@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.npmjs.org/@techiediaries/ngx-qrcode/-/ngx-qrcode-9.1.0.tgz"
-  integrity sha512-pjDt+eBjxDds7Iz47VhoSUlv4NiPuSWyMo44GiC7ZLoozBoAo6ga6bW7XS6F89omiWVMJ7Gphh5XI2SAcpfzAg==
-  dependencies:
-    qrcode "^1.4.4"
-    tslib "^1.10.0"
-
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz"
@@ -9330,7 +9322,7 @@ qjobs@^1.2.0:
   resolved "https://registry.npmjs.org/qjobs/-/qjobs-1.2.0.tgz"
   integrity sha512-8YOJEHtxpySA3fFDyCRxA+UUV+fA+rTWnuWvylOK/NCjhY+b4ocCtmu8TtsWb+mYeU+GCHf/S66KZF/AsteKHg==
 
-qrcode@^1.4.4, qrcode@^1.5.4:
+qrcode@^1.5.4:
   version "1.5.4"
   resolved "https://registry.npmjs.org/qrcode/-/qrcode-1.5.4.tgz"
   integrity sha512-1ca71Zgiu6ORjHqFBDpnSMTR2ReToX4l1Au1VFLyVeBTFavzQnv5JxMFr3ukHVKpSrSA2MCk0lNJSykjUfz7Zg==

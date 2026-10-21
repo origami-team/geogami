@@ -7,6 +7,9 @@
     "test:update-snapshots": "playwright test --update-snapshots"
   },
   "devDependencies": {
-    "@playwright/test": "1.49.1"
+    "@playwright/test": "1.49.1",
+    "jsqr": "1.4.0",
+    "pngjs": "7.0.0",
+    "qrcode": "1.5.4"
   }
 }

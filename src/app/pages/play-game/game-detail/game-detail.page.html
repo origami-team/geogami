@@ -125,13 +125,12 @@
 
         <!-- ToDo: put it back -->
         <div style="width: 100%; text-align: center">
-          <ngx-qrcode
-            [elementType]="qrElementType"
+          <app-qr-code
             [value]="teacherCode"
             cssClass="qr-code"
             [errorCorrectionLevel]="qrErrorCorrectionLevelLow"
           >
-          </ngx-qrcode>
+          </app-qr-code>
         </div>
 
         <!-- copy game link - source: https://codepen.io/dcode-software/pen/eYMYXrK -->
@@ -268,14 +267,13 @@
         </p>
 
         <div class="qr-wrapper">
-          <ngx-qrcode
-            [elementType]="qrElementType"
+          <app-qr-code
             [value]="classQrLink"
             cssClass="class-qr-code"
             [width]="600"
             [errorCorrectionLevel]="qrErrorCorrectionLevel"
           >
-          </ngx-qrcode>
+          </app-qr-code>
         </div>
 
         <p>{{ 'PlayGame.classQrHint' | translate }}</p>

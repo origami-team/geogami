@@ -3,7 +3,7 @@ import { Plugins, Capacitor, FilesystemDirectory } from "@capacitor/core";
 import { drawFooterLink } from "./pdf-footer-link";
 
 export interface ClassQrPdfOptions {
-  /** The QR image as a data URL (e.g. from the rendered <ngx-qrcode> img). */
+  /** The QR image as a data URL (e.g. from the rendered <app-qr-code> img). */
   qrDataUrl: string;
   gameName: string;
   instructorLabel: string;
