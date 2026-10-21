@@ -144,9 +144,10 @@ Known mismatches that are deliberately left for now:
 | Library | Mismatch | Why it stays, and the plan |
 |---|---|---|
 | `ngx-socket-io` 3.4 | declares Angular 12 | No release for newer Angular uses `socket.io-client` 2.x, which the web/native app and the API (socket.io 2.5) currently use. Newer wrapper versions need `socket.io-client` 4 and RxJS 7, and a v4 client cannot talk to a v2 server. Order: upgrade the server to socket.io 4 with `allowEIO3: true` (so already-installed apps keep working), then move the wrapper. Must be done before Angular 16, which drops the compatibility compiler (`ngcc`) this library relies on. The Unity virtual environment uses a separate Socket.IO v4 client library; check how it behaves against the upgraded server before deploying it. |
-| `@ngx-translate/*` | declare `tslib` 1.x | Harmless: the app uses `tslib` 2, which is backward compatible. |
 | Angular Material 15 *legacy* components | `table`, `paginator`, `form-field`, `input`, `select`, `button` and `dialog` are imported from `@angular/material/legacy-*` (4 files: `material.module.ts`, `user-management`, `game-tracks`, `download-track-dialog`) | Angular 15 moved Material to new MDC components and kept the old ones as `legacy-*`, which keep the exact old look. Material 15 ships no prebuilt legacy theme, so `src/theme/material-legacy.scss` recreates the indigo-pink one. **Angular Material 17 removes the legacy components**, so these four files must move to the new components before the Angular 17 step; the screenshots in `tests-e2e/specs/material.spec.ts-snapshots` will show the visual changes to review. |
 | Capacitor 2.5, `@ionic-native` 5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
+
+`@ngx-translate/core` (14.0.0) and `http-loader` (7.0.0) are pinned to the last releases that support Angular 15 and 16 together; newer ones need Angular 16 or later. `tests-e2e/specs/language.spec.ts` covers language selection end to end.
 
 Task texts written by game authors are rendered with a small own pipe (`src/app/pipes/markdown.pipe.ts`: `marked` plus Angular's
 HTML sanitizer) instead of `ngx-markdown`, whose newer releases pull in `mermaid`, KaTeX, Prism and about 65 more packages
