@@ -59,7 +59,7 @@ import { OrigamiGeolocationService } from "./../../../services/origami-geolocati
 import { AnswerType, TaskMode, QuestionType } from "src/app/models/types";
 import { cloneDeep } from "lodash";
 import { standardMapFeatures } from "../../../models/standardMapFeatures";
-import { AnimationOptions } from "ngx-lottie";
+import { LottieOptions } from "src/app/components/lottie/lottie.directive";
 import bbox from "@turf/bbox";
 import buffer from "@turf/buffer";
 import { Task } from "src/app/models/task";
@@ -170,7 +170,7 @@ export class PlayingGamePage implements OnInit, OnDestroy {
   targetDistance = 0;
   directionBearing = 0;
   indicatedDirection = 0;
-  public lottieConfig: AnimationOptions;
+  public lottieConfig: LottieOptions;
 
   lastPointInBboxDirection: number = undefined;
 

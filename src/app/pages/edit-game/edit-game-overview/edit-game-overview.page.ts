@@ -17,7 +17,7 @@ import { GameFactoryService } from "../../../services/game-factory.service";
 import { PopoverComponent } from "../../../popover/popover.component";
 import { GamesService } from "src/app/services/games.service";
 
-import { AnimationOptions } from "ngx-lottie";
+import { LottieOptions } from "src/app/components/lottie/lottie.directive";
 
 import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
@@ -45,7 +45,7 @@ export class EditGameOverviewPage implements AfterViewInit, OnDestroy {
   @ViewChild("boundingMap") mapContainer;
 
   public game: Game;
-  public lottieConfig: AnimationOptions;
+  public lottieConfig: LottieOptions;
   showSuccess = false;
   showUpload = false;
   map: mapboxgl.Map;

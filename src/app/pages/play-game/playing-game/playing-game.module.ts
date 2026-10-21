@@ -10,19 +10,12 @@ import { KeywordPipe } from 'src/app/pipes/keyword.pipe';
 import { MarkdownPipe } from 'src/app/pipes/markdown.pipe';
 import { ShufflePipe } from 'src/app/pipes/shuffle.pipe';
 
-import { LottieModule } from 'ngx-lottie';
-import player from 'lottie-web';
+import { LottieDirectiveModule } from 'src/app/components/lottie/lottie.module';
 import { FeedbackComponent } from 'src/app/components/feedback/feedback.component';
 import { AudioPlayerModule } from 'src/app/components/audio-player/audio-player.module';
 
 
 import { TranslateModule } from '@ngx-translate/core';
-
-// Note we need a separate function as it's required
-// by the AOT compiler.
-export function playerFactory() {
-  return player;
-}
 
 const routes: Routes = [
   {
@@ -38,7 +31,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LottieModule.forRoot({ player: playerFactory }),
+    LottieDirectiveModule,
     TranslateModule
   ],
   declarations: [PlayingGamePage, KeywordPipe, MarkdownPipe, ShufflePipe, FeedbackComponent],
