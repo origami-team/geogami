@@ -22,9 +22,11 @@ import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/c
 import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
 import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
 
-import { DeviceOrientation } from "@ionic-native/device-orientation/ngx";
+import { DeviceOrientation } from "@awesome-cordova-plugins/device-orientation/ngx";
 
-import { IonicStorageModule } from "@ionic/storage";
+import { IonicStorageModule, Storage } from "@ionic/storage-angular";
+import { Drivers } from "@ionic/storage";
+import { initializeStorage } from "./services/storage-init";
 import { QuestionTypeComponent } from "./pages/create-game/form-elements/question-types/question-type.component";
 import { AnswerTypeComponent } from "./pages/create-game/form-elements/answer-types/answer-type.component";
 import { MapComponent } from "./pages/create-game/form-elements/map/map.component";
@@ -38,7 +40,6 @@ import { AudioRecorderComponent } from "./pages/create-game/form-elements/audio-
 import { AudioPlayerModule } from "./components/audio-player/audio-player.module";
 import { EditorVisibilityModule } from "./components/editor-visibility/editor-visibility.module";
 
-import { MarkdownModule } from "ngx-markdown";
 import { TokenInterceptor } from "./services/token-intercepor.service";
 import { HelperService } from "./services/helper.service";
 
@@ -46,10 +47,8 @@ import { HelperService } from "./services/helper.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 // import {FormControl} from '@angular/forms';
 
-// import { Network } from '@awesome-cordova-plugins/network/ngx';
-import { Network } from "@ionic-native/network/ngx";
+import { Network } from "@awesome-cordova-plugins/network/ngx";
 
-import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -59,81 +58,81 @@ export function createTranslateLoader(http: HttpClient) {
 /* VR world
  * Using sockit.IO for receiving data from VR App
  */
-import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
+import { SOCKET_CONFIG, SocketConfig } from "./services/socket-client";
 import { EnvTypeQuestionTextModule } from "./components/env-type-question-text/env-type-question-text.module";
 
-const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // openstack server
+const config: SocketConfig = { url: environment.apiURL, options: {} }; // openstack server
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PopoverComponent,
-    CreateTaskModalPage,
-    MapFeaturesModalPage,
-    CreateModuleModalPage,
-    CreateInfoModalComponent,
-    MapComponent,
-    PhotoUploadMultipleChoiceComponent,
-    PhotoUploadComponent,
-    MultipleChoiceTextComponent,
-    AudioRecorderComponent,
-    QuestionTypeComponent,
-    AnswerTypeComponent,
-    TypeToTextPipe,
-    LangTranslatePipe,
-    // PopupComponent,
-  ],
-  exports: [],
-  entryComponents: [
-    PopoverComponent,
-    CreateTaskModalPage,
-    MapFeaturesModalPage,
-    CreateModuleModalPage,
-    CreateInfoModalComponent,
-  ],
-  imports: [
-    AudioPlayerModule,
-    EditorVisibilityModule,
-    EnvTypeQuestionTextModule,
-    FormsModule,
-    BrowserModule,
-    HttpClientModule,
-    SocketIoModule.forRoot(config),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient],
-      },
-    }),
-    IonicModule.forRoot({
-      backButtonText: "Zurück",
-      mode: 'md'
-    }),
-    AppRoutingModule,
-    HttpClientModule,
-    ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: environment.production,
-    }),
-    IonicStorageModule.forRoot({
-      driverOrder: ["localstorage", "indexeddb"],
-    }),
-    MarkdownModule.forRoot(),
-    BrowserAnimationsModule,
-    NgxQRCodeModule,
-    // FormControl
-  ],
-  providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    DeviceOrientation,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true,
-    },
-    HelperService,
-    Network,
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        PopoverComponent,
+        CreateTaskModalPage,
+        MapFeaturesModalPage,
+        CreateModuleModalPage,
+        CreateInfoModalComponent,
+        MapComponent,
+        PhotoUploadMultipleChoiceComponent,
+        PhotoUploadComponent,
+        MultipleChoiceTextComponent,
+        AudioRecorderComponent,
+        QuestionTypeComponent,
+        AnswerTypeComponent,
+        TypeToTextPipe,
+        LangTranslatePipe,
+        // PopupComponent,
+    ],
+    exports: [],
+    imports: [
+        AudioPlayerModule,
+        EditorVisibilityModule,
+        EnvTypeQuestionTextModule,
+        FormsModule,
+        BrowserModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient],
+            },
+        }),
+        IonicModule.forRoot({
+            backButtonText: "Zurück",
+            mode: 'md'
+        }),
+        AppRoutingModule,
+        HttpClientModule,
+        ServiceWorkerModule.register("ngsw-worker.js", {
+            enabled: environment.production,
+        }),
+        IonicStorageModule.forRoot({
+            // same order as before: localStorage first (that is where people's saved choices already are)
+            driverOrder: [Drivers.LocalStorage, Drivers.IndexedDB],
+        }),
+        BrowserAnimationsModule,
+        // FormControl
+    ],
+    providers: [
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        DeviceOrientation,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptor,
+            multi: true,
+        },
+        HelperService,
+        Network,
+        // the API's Socket.IO endpoint (the connection itself is made when something first needs it)
+        { provide: SOCKET_CONFIG, useValue: config },
+        // open the browser storage before the app starts (see storage-init.ts)
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeStorage,
+            deps: [Storage],
+            multi: true,
+        },
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

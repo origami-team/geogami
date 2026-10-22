@@ -10,7 +10,7 @@ import { HelperService } from './helper.service';
 import { OrigamiOrientationService } from './origami-orientation.service';
 
 // VR world, SockitIO
-import { Socket } from 'ngx-socket-io';
+import { Socket } from './socket-client';
 
 @Injectable({
   providedIn: 'root'

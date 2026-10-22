@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.5384903"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5384903.svg" alt="DOI"/></a>
-  <img src="https://img.shields.io/badge/Angular-12-DD0031?logo=angular" alt="Angular 12"/>
+  <img src="https://img.shields.io/badge/Angular-16-DD0031?logo=angular" alt="Angular 16"/>
   <img src="https://img.shields.io/badge/Ionic-6-3880FF?logo=ionic" alt="Ionic 6"/>
   <img src="https://img.shields.io/badge/Capacitor-iOS%20%7C%20Android-119EFF?logo=ionic" alt="Capacitor"/>
 </p>
@@ -33,6 +33,8 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 - [Getting started](#getting-started)
 - [Configuration](#configuration)
 - [Available scripts](#available-scripts)
+- [Testing](#testing)
+- [Upgrade status and known caveats](#upgrade-status-and-known-caveats)
 - [Project structure](#project-structure)
 - [Building for mobile (iOS / Android)](#building-for-mobile-ios--android)
 - [Internationalisation](#internationalisation)
@@ -48,9 +50,9 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 
 | Area | Technology |
 |---|---|
-| Framework | Angular 12, Ionic 6 |
-| Native shell | Capacitor 3 (iOS, Android) |
-| Maps | Leaflet, Mapbox GL |
+| Framework | Angular 16, Ionic 6 |
+| Native shell | Capacitor 2 (iOS, Android) |
+| Maps | Mapbox GL JS |
 | State / forms | Reactive forms, RxJS |
 | UI components | Angular Material, Ionic Components |
 | i18n | `@ngx-translate/core` |
@@ -58,9 +60,11 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 
 ## Prerequisites
 
-- **Node.js** 14.x – 16.x (Angular 12 isn't compatible with newer Node versions)
-- **npm** 6+ or **yarn** 1.x
-- **Ionic CLI**: `npm i -g @ionic/cli`
+- **Node.js** — the version in [`.nvmrc`](.nvmrc) (use `nvm use`). It is also the version Netlify builds the web app with, so
+  check your changes with it. Angular 16 needs Node 18.10 or newer (16.14+ also works).
+- **yarn 1.x** — use `yarn`, **not `npm install`**. `yarn.lock` is the only committed lockfile (Netlify installs from it);
+  `npm install` creates a second, conflicting one.
+- **Ionic CLI** (only for `ionic serve` and the Capacitor commands): `npm i -g @ionic/cli`
 - For mobile builds:
   - iOS: macOS, Xcode 14+, CocoaPods
   - Android: Android Studio with SDK 33+
@@ -70,8 +74,9 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 ```bash
 git clone <repo-url>
 cd geogami-ui
-npm install
-ionic serve         # opens http://localhost:8100
+nvm use
+yarn install --frozen-lockfile
+ionic serve         # http://localhost:8100   (or: yarn start -> http://localhost:4200)
 ```
 
 The dev server proxies API calls to the URL configured in `src/environments/environment.ts`.
@@ -104,13 +109,61 @@ export const environment = {
 
 | Command | Purpose |
 |---|---|
-| `npm start` / `ionic serve` | Run dev server with live reload |
-| `npm run build` | Build the web bundle into `www/` |
-| `npm run build-browser` | Production browser build |
-| `npm test` | Run Karma unit tests |
-| `npm run lint` | TSLint check |
+| `yarn start` / `ionic serve` | Run dev server with live reload (`yarn start` on port 4200, `ionic serve` on 8100) |
+| `yarn build` | Build the web bundle into `www/` (add `--configuration production` for the production build) |
+| `yarn test` | Run the Karma unit tests (watch mode) |
+| `yarn test:e2e` | Run the Playwright browser tests against the production build in `www/` |
+| `yarn verify` | Production build + unit tests + browser tests in one go — run it before pushing |
 | `ionic capacitor sync ios` | Copy `www/` into the iOS Xcode project |
 | `ionic capacitor sync android` | Copy `www/` into the Android Studio project |
+
+There is no lint script: Angular 13 removed the TSLint builder and the project has not moved to ESLint yet.
+The old Cordova targets (`build-browser`) were removed; native apps are built with Capacitor.
+
+## Testing
+
+`yarn verify` runs, in this order:
+
+1. the production build, on the Node version from `.nvmrc`;
+2. the Karma unit tests (services, auth/interceptor/guards, models, editor-mode logic);
+3. the Playwright browser tests in [`tests-e2e/`](tests-e2e/README.md): every page loads, login, playing a game, what is uploaded
+   as a track, and screenshot baselines. The API is mocked, so nothing touches production.
+
+Not covered automatically: live multiplayer and the virtual environment (sockets), and native iOS/Android behaviour
+(GPS, compass, offline detection, camera, voice recorder, QR scanner, file sharing). After each framework upgrade step, run
+the manual checklists in [`tests-e2e/README.md`](tests-e2e/README.md#sockets-what-is-automated-what-is-still-checked-by-hand)
+on the Netlify deploy preview and on a real device.
+
+## Upgrade status and known caveats
+
+The app is being upgraded one Angular major at a time (currently **16**; target is the newest Angular the native
+apps can support), with Capacitor last. Each step is verified with `yarn verify` and a Netlify deploy preview.
+
+Known mismatches that are deliberately left for now:
+
+| Library | Mismatch | Why it stays, and the plan |
+|---|---|---|
+| Capacitor 2.5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
+
+The app talks to the API over Socket.IO 2.x with its own small client (`src/app/services/socket-client.ts`, on `socket.io-client` 2.5) instead of `ngx-socket-io`, which was never compiled for newer Angular versions. The protocol is unchanged, so the API, the Unity virtual environment and the apps already in the stores are not affected. Moving to Socket.IO 4 is a separate project: the server first (with `allowEIO3`), then the client; the dependency alerts for `socket.io-parser`, `engine.io-client` and `ws` belong to protocol 2 and go away with that move.
+
+The Angular Material components (tables, paginator, form fields, selects, dialog; only the user-management and game-tracks pages use them) are the current MDC-based ones; the old `legacy-*` components were migrated away before Angular 17, which removes them. The theme is `src/theme/material.scss`: Material's indigo-pink theme written out as SCSS so the table can be set to compact density (48px rows). Two choices to know when touching these pages: the form fields keep Material's default density (below it the floating labels disappear) and use `subscriptSizing="dynamic"` with an explicit margin below them; and `src/global.scss` raises the height of select panels, because the 48px options of the six-role filter would otherwise scroll. Both tables sit in a `.table-scroll` container (sideways scrolling only; the paginator stays outside): `ion-content` does not scroll sideways and the table is about 870px wide, so on a 412px phone the Role column starts at 564px and the Action buttons ended up out of reach. `tests-e2e/specs/material.spec.ts` covers both pages with screenshots.
+
+The compass and the connection status use the Cordova plugins `cordova-plugin-device-orientation` and `cordova-plugin-network-information` through `@awesome-cordova-plugins` 9.7.0 (`core`, `device-orientation`, `network`), the maintained continuation of `@ionic-native` with the same API. Only the wrapper library changed; the Cordova plugins in the native projects are the same. `src/app/services/native-plugins.spec.ts` and `origami-orientation.service.spec.ts` run the real wrappers against a fake native plugin, `tests-e2e/specs/network.spec.ts` covers the offline/online messages; a real device is still needed to see the sensors ([checklist](tests-e2e/README.md#native-plugins-compass-and-connection-status-check-on-a-device)).
+
+`@ngx-translate/core` (14.0.0) and `http-loader` (7.0.0) are pinned: they work with Angular 13 to 16, and newer releases are an optional later bump. `tests-e2e/specs/language.spec.ts` covers language selection end to end.
+
+Task texts written by game authors are rendered with a small own pipe (`src/app/pipes/markdown.pipe.ts`: `marked` plus Angular's
+HTML sanitizer) instead of `ngx-markdown`, whose newer releases pull in `mermaid`, KaTeX, Prism and about 65 more packages
+the app never used. The Lottie animations use a small own directive (`src/app/components/lottie`) on `lottie-web` instead of `ngx-lottie`, whose newer releases add `@scarf/scarf`, an install-time analytics script. `marked` is on 4.x; newer majors change output details, so move it deliberately with the markdown tests as the check.
+
+`package.json` has one `resolutions` entry, `caniuse-lite` 1.0.30001519. The Angular builder and Babel each load their own
+`browserslist`; with today's browser data they disagree about browser versions (`Unknown version … of edge`, the build fails).
+One pinned copy of the data makes them agree, and it also keeps the browsers the app is compiled for exactly as they have always
+been: Chrome/Edge 114–115, Firefox 102–116, Safari and iOS 15–16.5 (the same 30 entries the Angular 15 build used). A newer
+`caniuse-lite` would raise that list without any code change, so move it on purpose: remove the entry, print the list with
+`node -e "console.log(require('@angular-devkit/build-angular/src/utils/supported-browsers').getSupportedBrowsers(process.cwd(), console).join(', '))"`
+and decide which iOS and Android versions the apps may drop.
 
 ### Browser storage lifetime
 
@@ -119,6 +172,11 @@ Unfinished tracks (`savedTracksData`) and draft games (`game`) now live only in
 but disappear when the app is closed or reloaded. At startup, the two old Ionic
 storage keys are discarded; authentication tokens and language preferences are
 not cleared. Games/tracks already uploaded to the server are unchanged.
+
+The language choice is the only thing kept in the browser storage (`@ionic/storage-angular` 4, keys
+`_ionicstorage/_ionickv/<key>` in localStorage, IndexedDB as fallback; the driver order must stay localStorage first, because that is
+where existing users' choices are). Ionic Storage 4 has to be opened before use, so `APP_INITIALIZER` calls `create()` once at start
+(`src/app/services/storage-init.ts`); a storage that cannot be opened never stops the app.
 
 The companion Unity project's **GeoGami WebGL template** manages its own asset
 cache: entries expire 24 hours after download, and least-recently-used entries
@@ -175,7 +233,7 @@ Multiplayer games are unchanged — they keep their existing room-based QR (limi
 ## Contributing
 
 - Branch from `dev` (PRs target `master`), open a PR, and reference an issue when applicable.
-- Please run `npm run lint` and the unit tests before pushing.
+- Please run `yarn verify` before pushing (there is no lint step at the moment).
 - Bug reports and feature requests: <https://github.com/geogami-team/geogami/issues>.
 
 ---

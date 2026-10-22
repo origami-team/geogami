@@ -41,8 +41,14 @@
   table {
     width: 100%;
   }
+
+  /* sideways scrolling inside the card: the table needs ~870px, a phone has ~410px */
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   
-  .mat-form-field {
+  .mat-mdc-form-field {
     font-size: 14px;
     width: 100%;
   }
@@ -52,12 +58,12 @@
   } */
 
    /* alternate row colours */
-  .mat-row:nth-child(even){
+  .mat-mdc-row:nth-child(even){
     background-color: #ecebeb;
   }
 
-  /* change header row colour */
-  .mat-header-cell {
+  /* change header row colour (on the row: Material makes the cells inherit it) */
+  .mat-mdc-header-row {
     background: #d0def8;
   }
 
@@ -79,6 +85,7 @@
     align-items: flex-end;
     gap: 0.75rem;
     width: 100%;
+    margin-bottom: 1rem; // the fields no longer reserve room for hints/errors below them
 
     .filter-search {
       flex: 1 1 auto;

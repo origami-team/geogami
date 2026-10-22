@@ -6,18 +6,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { EditGameOverviewPage } from './edit-game-overview.page';
-import { LottieModule } from 'ngx-lottie';
-import player from 'lottie-web';
+import { LottieDirectiveModule } from 'src/app/components/lottie/lottie.module';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { EditorVisibilityModule } from 'src/app/components/editor-visibility/editor-visibility.module';
 
-
-// Note we need a separate function as it's required
-// by the AOT compiler.
-export function playerFactory() {
-  return player;
-}
 
 const routes: Routes = [
   {
@@ -32,7 +25,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LottieModule.forRoot({ player: playerFactory }),
+    LottieDirectiveModule,
     TranslateModule,
     EditorVisibilityModule
   ],

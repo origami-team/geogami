@@ -7,8 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { AnalyzeGameListPage } from './analyze-game-list.page';
 
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
-
 import { TranslateModule } from '@ngx-translate/core';
 
 
@@ -25,7 +23,6 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    NgxJsonViewerModule,
     TranslateModule
   ],
   declarations: [AnalyzeGameListPage]

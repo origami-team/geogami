@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular';
 import { Plugins, StatusBarStyle } from '@capacitor/core';
 import { AuthService } from './services/auth-service.service';
 import { LanguageService } from './services/language.service';
-import { Network } from '@ionic-native/network/ngx';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { UtilService } from './services/util.service';
 import { environment } from 'src/environments/environment';
 import { ConsoleToggleServiceService } from './services/console-toggle.service';

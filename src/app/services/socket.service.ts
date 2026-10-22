@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NavController } from "@ionic/angular";
-import { Socket } from "ngx-socket-io";
+import { Socket } from "./socket-client";
 
 /* Posted to the top window by the GeoGami app inside the WebGL frame (VE map panel) when the player presses done */
 export const VE_CLOSE_FRAME_MESSAGE = "geogami:closeVEFrame";

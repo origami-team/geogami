@@ -12,10 +12,7 @@ import { GameSessionService } from "src/app/services/game-session.service";
 import { environment } from "src/environments/environment";
 import mapboxgl from "mapbox-gl";
 import { virEnvLayers } from "src/app/models/virEnvsLayers";
-import {
-  NgxQrcodeElementTypes,
-  NgxQrcodeErrorCorrectionLevels,
-} from "@techiediaries/ngx-qrcode";
+import { QRCodeErrorCorrectionLevel } from "qrcode";
 import { Plugins } from "@capacitor/core";
 import { downloadClassQrPdf } from "src/app/helpers/class-qr-pdf";
 
@@ -88,11 +85,10 @@ export class GameDetailPage implements OnInit {
   instructorName: string = "";
   // Event id from an event QR/link; tags the resulting track with the event.
   eventId: string;
-  // Bound to <ngx-qrcode> via the library's enums (avoids raw-string type errors).
-  qrElementType = NgxQrcodeElementTypes.IMG;
-  qrErrorCorrectionLevel = NgxQrcodeErrorCorrectionLevels.MEDIUM;
+  // Error correction levels of the QR codes (see <app-qr-code>).
+  qrErrorCorrectionLevel: QRCodeErrorCorrectionLevel = "M";
   // Low level kept for the existing multiplayer teacher-code QR (unchanged).
-  qrErrorCorrectionLevelLow = NgxQrcodeErrorCorrectionLevels.LOW;
+  qrErrorCorrectionLevelLow: QRCodeErrorCorrectionLevel = "L";
 
   constructor(
     public navCtrl: NavController,

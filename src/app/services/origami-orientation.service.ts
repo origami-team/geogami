@@ -6,10 +6,10 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   DeviceOrientation,
   DeviceOrientationCompassHeading
-} from '@ionic-native/device-orientation/ngx';
+} from '@awesome-cordova-plugins/device-orientation/ngx';
 
 // VR world, SockitIO
-import { Socket } from 'ngx-socket-io';
+import { Socket } from './socket-client';
 
 @Injectable({
   providedIn: 'root'

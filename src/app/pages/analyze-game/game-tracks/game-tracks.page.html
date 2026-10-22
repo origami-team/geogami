@@ -17,7 +17,7 @@
   <!-- list title -->
   <h3 class="list-title">List of game tracks</h3>
 
-  <mat-form-field appearance="standard">
+  <mat-form-field subscriptSizing="dynamic">
     <mat-label>Filter</mat-label>
     <input
       matInput
@@ -28,6 +28,9 @@
   </mat-form-field>
 
   <div class="mat-elevation-z8">
+    <!-- ion-content does not scroll sideways: on a narrow phone the table gets its own scroll area
+         (the paginator below stays in place). -->
+    <div class="table-scroll">
     <table mat-table [dataSource]="dataSource" matSort>
       <!-- Position Column -->
       <ng-container matColumnDef="#">
@@ -82,12 +85,13 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
       <!-- Row shown when there is no matching data. -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">
+      <tr class="mat-mdc-row mdc-data-table__row" *matNoDataRow>
+        <td class="mat-mdc-cell mdc-data-table__cell" colspan="4">
           No data matching the filter "{{input.value}}"
         </td>
       </tr>
     </table>
+    </div>
 
     <!-- Paginator -->
     <mat-paginator

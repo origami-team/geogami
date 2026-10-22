@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import mapboxgl from 'mapbox-gl';
+import { environment } from 'src/environments/environment';
 import MapboxCompare from 'mapbox-gl-compare';
 
 import { MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher';
@@ -11,7 +12,7 @@ import { OsmService } from './../../../services/osm.service';
 
 import osmtogeojson from 'osmtogeojson';
 
-import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+import { DeviceOrientation, DeviceOrientationCompassHeading } from '@awesome-cordova-plugins/device-orientation/ngx';
 
 @Component({
   selector: 'app-map-showroom',
@@ -126,7 +127,7 @@ export class MapShowroomPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZmVsaXhhZXRlbSIsImEiOiI2MmE4YmQ4YjIzOTI2YjY3ZWFmNzUwOTU5NzliOTAxOCJ9.nshlehFGmK_6YmZarM2SHA';
+    mapboxgl.accessToken = environment.mapboxAccessToken;
 
 
     this.map = new mapboxgl.Map({

@@ -45,6 +45,16 @@ describe('GameSessionService', () => {
     ]);
   });
 
+  it('does not block startup if the storage is not open (Ionic Storage 4 then throws instead of rejecting)', async () => {
+    spyOn(console, 'warn');
+    persistentStorage.remove.and.callFake(() => {
+      throw new Error('Database not created. Must call create() first');
+    });
+    await service.discardLegacyProgress();
+    expect(persistentStorage.remove).toHaveBeenCalledTimes(2); // both keys were still attempted
+    expect(console.warn).toHaveBeenCalledTimes(2);
+  });
+
   it('does not block startup if legacy storage cleanup fails', async () => {
     spyOn(console, 'warn');
     persistentStorage.remove.and.callFake(() => Promise.reject(new Error('Denied')));
