@@ -68,6 +68,9 @@
   </div>
 
   <div class="mat-elevation-z8">
+    <!-- The table is wider than a phone and ion-content does not scroll sideways, so it gets its own scroll area
+         (the paginator below stays in place). -->
+    <div class="table-scroll">
     <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- Select checkbox Column -->
@@ -199,6 +202,7 @@
         <td class="mat-mdc-cell mdc-data-table__cell" colspan="8">No data matching the filter "{{input.value}}"</td>
       </tr>
     </table>
+    </div>
 
     <mat-paginator [pageSizeOptions]="[10, 15, 35, 100]" showFirstLastButtons aria-label="Select page of users"></mat-paginator>
   </div>

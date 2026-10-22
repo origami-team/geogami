@@ -11,6 +11,38 @@ async function typeInto(input: any, text: string) {
   await input.pressSequentially(text);
 }
 
+// Scrolls sideways the way a person does: a swipe on a phone, a drag/wheel gesture on a desktop. Scrolling by
+// script (scrollIntoView, which Playwright's own click auto-scroll uses) also works in containers a person
+// cannot scroll, so it would hide exactly the problem tested here: controls beyond the screen edge.
+async function scrollSideways(page: any, row: any, toRight: boolean) {
+  const box = await row.boundingBox();
+  const touch = await page.evaluate(() => matchMedia("(pointer: coarse)").matches);
+  const client = await page.context().newCDPSession(page);
+  await client.send("Input.synthesizeScrollGesture", {
+    x: Math.round(page.viewportSize().width / 2),
+    y: Math.round(box.y + box.height / 2),
+    xDistance: toRight ? -250 : 250, // the content moves against the finger
+    yDistance: 0,
+    speed: 900,
+    gestureSourceType: touch ? "touch" : "mouse",
+  });
+  await client.detach();
+}
+
+/** Brings the element fully inside the screen by sideways scrolling of the given row only; false if that fails. */
+async function reachBySideways(page: any, target: any, row: any, toRight: boolean) {
+  const width = page.viewportSize().width;
+  const inside = async () => {
+    const b = await target.boundingBox();
+    return !!b && b.x >= 0 && b.x + b.width <= width + 0.5;
+  };
+  for (let i = 0; i < 8 && !(await inside()); i++) {
+    await scrollSideways(page, row, toRight);
+    await page.waitForTimeout(200);
+  }
+  return inside();
+}
+
 const USERS = [
   { _id: "u1", username: "alice", email: "alice@example.org", createdAt: "2026-01-05T09:00:00.000Z", roles: ["admin"], emailIsConfirmed: true },
   { _id: "u2", username: "bob", email: "bob@example.org", createdAt: "2026-02-11T09:00:00.000Z", roles: ["scholar"], emailIsConfirmed: true },
@@ -42,6 +74,55 @@ test.describe("user management table", () => {
     await expect(page.locator("tr[mat-row]")).toHaveCount(0);
     await expect(page.getByText('No data matching the filter "zzz"')).toBeVisible();
     await expect(page).toHaveScreenshot("user-management-no-match.png");
+  });
+
+  test("a narrow screen can scroll sideways to the Role and Action columns, and their controls work", async ({ page }) => {
+    const row = page.locator("tr[mat-row]").first();
+    const roleHeader = page.locator("th[mat-header-cell]", { hasText: "Role" });
+    const select = row.locator("ion-select");
+    const deleteButton = row.locator("ion-button[title='Delete user']"); // the right-most control of the table
+
+    // to the Role column and to the last Action button by swiping, not by script
+    expect(await reachBySideways(page, roleHeader, row, true)).toBe(true);
+    expect(await reachBySideways(page, select, row, true)).toBe(true);
+    expect(await reachBySideways(page, deleteButton, row, true)).toBe(true);
+
+    // a tap on that spot hits the button: nothing clips or covers it
+    const hit = await deleteButton.evaluate((el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      return !!top && (el === top || el.contains(top));
+    });
+    expect(hit).toBe(true);
+
+    // and back: the role of that user can be changed from a phone
+    expect(await reachBySideways(page, select, row, false)).toBe(true);
+    const save = row.locator("ion-button[title='Save role change']");
+    await expect(save).toHaveAttribute("aria-disabled", "true"); // nothing to save yet
+    await select.click();
+    await page.locator("ion-select-popover ion-item", { has: page.locator("ion-label", { hasText: /^\s*scholar\s*$/ }) }).click();
+    await expect(save).not.toHaveAttribute("aria-disabled", "true"); // the change can be saved now
+  });
+
+  test("the sideways scroll area does not get in the way of scrolling the page up and down", async ({ page }) => {
+    await page.setViewportSize({ width: 412, height: 420 }); // shorter than the page
+    const pageScroll = () => page.locator("ion-content").evaluate(async (el: any) => (await el.getScrollElement()).scrollTop);
+    expect(await pageScroll()).toBe(0);
+
+    const box = (await page.locator("tr[mat-row]").nth(1).boundingBox())!;
+    const touch = await page.evaluate(() => matchMedia("(pointer: coarse)").matches);
+    const client = await page.context().newCDPSession(page);
+    await client.send("Input.synthesizeScrollGesture", {
+      x: Math.round(page.viewportSize()!.width / 2),
+      y: Math.round(box.y + box.height / 2), // the gesture starts on the table
+      xDistance: 0,
+      yDistance: -150, // finger moves up: the page scrolls down
+      speed: 900,
+      gestureSourceType: touch ? "touch" : "mouse",
+    });
+    await client.detach();
+
+    await expect.poll(pageScroll).toBeGreaterThan(0);
   });
 
   test("the role dropdown opens its options and filters the table", async ({ page }) => {
@@ -88,6 +169,19 @@ test.describe("game tracks table", () => {
     await expect(page.locator("tr[mat-row]")).toHaveCount(0);
     await expect(page.getByText('No data matching the filter "zzz"')).toBeVisible();
     await expect(page).toHaveScreenshot("game-tracks-no-match.png");
+  });
+
+  test("on a very small phone the Action column can still be reached by scrolling sideways", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    const row = page.locator("tr[mat-row]").first();
+    const download = row.locator("ion-button");
+    expect(await reachBySideways(page, download, row, true)).toBe(true);
+    const hit = await download.evaluate((el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      return !!top && (el === top || el.contains(top));
+    });
+    expect(hit).toBe(true);
   });
 
   test("download asks for confirmation in a dialog", async ({ page, api }) => {

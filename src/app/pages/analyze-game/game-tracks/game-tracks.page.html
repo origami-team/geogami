@@ -28,6 +28,9 @@
   </mat-form-field>
 
   <div class="mat-elevation-z8">
+    <!-- ion-content does not scroll sideways: on a narrow phone the table gets its own scroll area
+         (the paginator below stays in place). -->
+    <div class="table-scroll">
     <table mat-table [dataSource]="dataSource" matSort>
       <!-- Position Column -->
       <ng-container matColumnDef="#">
@@ -88,6 +91,7 @@
         </td>
       </tr>
     </table>
+    </div>
 
     <!-- Paginator -->
     <mat-paginator

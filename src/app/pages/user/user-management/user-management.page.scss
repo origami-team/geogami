@@ -41,6 +41,12 @@
   table {
     width: 100%;
   }
+
+  /* sideways scrolling inside the card: the table needs ~870px, a phone has ~410px */
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   
   .mat-mdc-form-field {
     font-size: 14px;
