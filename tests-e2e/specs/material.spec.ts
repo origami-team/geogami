@@ -40,12 +40,17 @@ test.describe("user management table", () => {
     await expect(page.locator("tr[mat-row]")).toContainText("bob@example.org");
     await typeInto(page.locator("input[matInput]").first(), "zzz");
     await expect(page.locator("tr[mat-row]")).toHaveCount(0);
+    await expect(page.getByText('No data matching the filter "zzz"')).toBeVisible();
+    await expect(page).toHaveScreenshot("user-management-no-match.png");
   });
 
   test("the role dropdown opens its options and filters the table", async ({ page }) => {
     await page.locator("mat-select").first().click();
     await expect(page.locator("mat-option").first()).toBeVisible();
     await expect(page.locator("mat-option", { hasText: /^\s*admin\s*$/ })).toHaveCount(1);
+    // all six roles fit in the panel without scrolling (a panel that scrolls hides the last option)
+    const panel = page.locator(".mat-mdc-select-panel");
+    await expect.poll(() => panel.evaluate((e) => e.scrollHeight <= e.clientHeight + 1)).toBe(true);
     await expect(page).toHaveScreenshot("user-management-role-options.png");
     await page.locator("mat-option", { hasText: /^\s*admin\s*$/ }).click();
     await expect(page.locator("tr[mat-row]")).toHaveCount(1);
@@ -82,6 +87,7 @@ test.describe("game tracks table", () => {
     await typeInto(page.locator("input[matInput]"), "zzz");
     await expect(page.locator("tr[mat-row]")).toHaveCount(0);
     await expect(page.getByText('No data matching the filter "zzz"')).toBeVisible();
+    await expect(page).toHaveScreenshot("game-tracks-no-match.png");
   });
 
   test("download asks for confirmation in a dialog", async ({ page, api }) => {

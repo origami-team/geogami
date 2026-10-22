@@ -36,7 +36,7 @@ Playwright is pinned to 1.49.1 because newer releases need Node 20. Bump it when
 | `qr.spec.ts` | the class QR and the multiplayer join code on the game detail page: the image is decoded (like a phone camera would) and must contain the right link, match the `qrcode` library pixel for pixel, sit in the element the styles and the PDF export expect, and the PDF hand-out downloads |
 | `lottie.spec.ts` | the three Lottie animations (finished-game star, saving astronaut on create and edit): rendered, actually animating, and stopped once the page is left |
 | `shuffle.spec.ts` | multiple-choice answers on the playing page: every answer once, random order per visit (the right answer is not always first), and a stable order while the task is on screen |
-| `material.spec.ts` | the pages that use Angular Material: user-management and game-tracks tables, paginator, filters, role dropdown and the download dialog, with screenshots (baselines taken on the Angular 14 build, so they show any visual change of the Material upgrade) |
+| `material.spec.ts` | the pages that use Angular Material: user-management and game-tracks tables, paginator, filters (including the empty "no data matching" state), role dropdown (all six roles fit the panel without scrolling) and the download dialog, with screenshots (baselines are the MDC-based components on Angular 16; before the Angular 17 step they showed the legacy components) |
 | `visual.spec.ts` | screenshot baselines of the main pages, desktop and mobile |
 | `guards.spec.ts` | the harness itself: a missing local asset is reported, blocked external hosts are not |
 

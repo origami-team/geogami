@@ -134,3 +134,10 @@ ion-range::part(pin) {
     text-overflow: ellipsis;
   }
 }
+
+/* Angular Material select panels cap their height at 256px. Their options are 48px high, so the six
+   roles of the user-management filter (304px) would end with a half-hidden, scrolling last option.
+   The more specific selector is needed: the panel's own stylesheet is added after this one. */
+.cdk-overlay-pane .mat-mdc-select-panel {
+  max-height: 320px;
+}

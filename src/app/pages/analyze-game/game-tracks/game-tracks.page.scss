@@ -8,9 +8,10 @@ table {
   width: 100%;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   font-size: 14px;
   width: 100%;
+  margin-bottom: 1rem; // the field no longer reserves room for hints/errors below it
 }
 
 // for phone (hide id column)

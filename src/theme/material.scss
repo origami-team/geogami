@@ -1,0 +1,22 @@
+// Theme of the Angular Material components (table, paginator, form-field, input, select,
+// button, dialog). It is the indigo-pink theme Material ships prebuilt, written out as
+// SCSS so the density can be set: the admin pages (user management, game tracks) were
+// built with the compact legacy components, and the default density of the table would
+// make them noticeably taller.
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$app-primary: mat.define-palette(mat.$indigo-palette);
+$app-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$app-theme: mat.define-light-theme((
+  color: (primary: $app-primary, accent: $app-accent),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+@include mat.all-component-themes($app-theme);
+
+// compact table: 48px rows (default 52px). Not applied to the form fields: below the default
+// density their floating labels ("Role", "Verified", the search hint) are no longer shown.
+@include mat.table-density(-1);

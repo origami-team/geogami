@@ -37,7 +37,7 @@
               "src/manifest.json"
             ],
             "styles": [
-              "src/theme/material-legacy.scss",
+              "src/theme/material.scss",
               {
                 "input": "src/theme/variables.scss"
               },
@@ -124,7 +124,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/theme/material-legacy.scss"
+              "src/theme/material.scss"
             ],
             "scripts": [],
             "assets": [

@@ -4,8 +4,8 @@ import { AlertController, ModalController, ToastController } from "@ionic/angula
 import { UserDetailsModalComponent } from "./user-details-modal/user-details-modal.component";
 import { TranslateService } from "@ngx-translate/core";
 import { AuthService } from "src/app/services/auth-service.service";
-import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
-import { MatLegacyPaginator as MatPaginator } from "@angular/material/legacy-paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 
 @Component({
