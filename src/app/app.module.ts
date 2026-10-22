@@ -59,10 +59,10 @@ export function createTranslateLoader(http: HttpClient) {
 /* VR world
  * Using sockit.IO for receiving data from VR App
  */
-import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
+import { SOCKET_CONFIG, SocketConfig } from "./services/socket-client";
 import { EnvTypeQuestionTextModule } from "./components/env-type-question-text/env-type-question-text.module";
 
-const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // openstack server
+const config: SocketConfig = { url: environment.apiURL, options: {} }; // openstack server
 
 @NgModule({
     declarations: [
@@ -91,7 +91,6 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
         FormsModule,
         BrowserModule,
         HttpClientModule,
-        SocketIoModule.forRoot(config),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -125,6 +124,8 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
         },
         HelperService,
         Network,
+        // the API's Socket.IO endpoint (the connection itself is made when something first needs it)
+        { provide: SOCKET_CONFIG, useValue: config },
         // open the browser storage before the app starts (see storage-init.ts)
         {
             provide: APP_INITIALIZER,

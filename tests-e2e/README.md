@@ -30,6 +30,7 @@ Playwright is pinned to 1.49.1 because newer releases need Node 20. Bump it when
 | `play.spec.ts` | game list → detail → name + consent box → Start (the bundle handed to the playing page is checked) → playing with GPS and map → finishing with and without consent (what is uploaded to `POST /track`); consent-required games |
 | `markdown.spec.ts` | the task text on the playing page: markdown is rendered, the flag chip is added, and scripts, event handlers, `javascript:` links and `<ion-*>` tags typed by an author are stripped |
 | `language.spec.ts` | language handling: the start language follows the browser (and falls back to German), switching in the picker for all six languages (texts come from the real `assets/i18n/*.json`), the choice survives reload and a second tab, people with an already-saved choice (old storage format) keep it, the language saved on an account (login, `pt_BR`-style values, registration, profile), texts with parameters, and right-to-left Arabic with screenshots |
+| `socket.spec.ts` | the virtual-environment flow over Socket.IO against a real 2.5 test server: no connection until needed, name check and joining the room, a taken name, the VE (played by a second socket sending `joinVEGame { playerName }` like Unity) closing the game, reconnect and re-join, and a second game in the same session without a reload (old room left, name free again, one registration per game, no duplicate re-join after a reconnect) |
 | `storage.spec.ts` | the browser storage (`@ionic/storage`): the two legacy game keys are removed at start while the language choice and other keys stay, and a localStorage that cannot be written does not break or spam the app (the choice then just lasts for the session) |
 | `qr.spec.ts` | the class QR and the multiplayer join code on the game detail page: the image is decoded (like a phone camera would) and must contain the right link, match the `qrcode` library pixel for pixel, sit in the element the styles and the PDF export expect, and the PDF hand-out downloads |
 | `lottie.spec.ts` | the three Lottie animations (finished-game star, saving astronaut on create and edit): rendered, actually animating, and stopped once the page is left |
@@ -41,15 +42,21 @@ Playwright is pinned to 1.49.1 because newer releases need Node 20. Bump it when
 Pages that need navigation state from the previous page (create-game-list, create-game-overview, …)
 bounce back on a direct visit by design, so they can only be reached through the UI flow.
 
-## Not covered: live sockets (manual check per upgrade step)
+## Sockets: what is automated, what is still checked by hand
 
-The tests block socket.io, so multiplayer and the virtual environment (VE) are only covered as far as
-"the page loads". `ngx-socket-io` 3.x (socket.io-client 2) talks to the server's socket.io 2.5; no newer wrapper
-release speaks that protocol, so the wrapper and the server have to be upgraded together (server first, with
-`allowEIO3`), and the Unity VE — which ships its own Socket.IO v4 client library — has to be re-checked then.
+Sockets are blocked in every test **except** those that ask for the `socketServer` fixture: that starts a real
+Socket.IO **2.5** server (`socket-server.ts`, the versions the API runs), answers the virtual-environment (VE) events
+the way the API does (`newGame`, `joinVEGame`, `checkRoomNameExistance_v2`, `closeVEGame`), and routes the page's
+socket traffic to it. `specs/socket.spec.ts` uses it to run the real browser bundle through: no connection until a
+page needs one, the player-name check with its acknowledgement, joining the room, a name that is taken, the VE closing
+the game, and the automatic reconnect that joins the room again. The app joins its room with `newGame { gameCode }`,
+the Unity side with `joinVEGame { playerName }` — the same payloads as the API, so a test that sends the wrong one
+fails. A second test plays two games one after the other **without reloading**, which is what exercises the
+cleanup (leaving the room, removing the listeners) and the reuse of the connection.
 
-After each upgrade step, on the Netlify deploy preview (it uses the real API), in private windows so no
-old service worker answers, with test accounts:
+Still checked by hand after each upgrade step, on the Netlify deploy preview (it uses the real API), in private
+windows so no old service worker answers, with test accounts — these need the real API and, for 3 and 4, the
+Unity build:
 
 1. **Multiplayer, real world** — signed in as scholar/admin, open a multiplayer game, copy the game link;
    join it from a second browser (or phone) as player 2. Both see each other join; play one task each;
@@ -59,8 +66,10 @@ old service worker answers, with test accounts:
    connects (avatar moves, the map panel follows), finish one task.
 4. **Virtual environment, multiplayer** — as 1., but with a VE game.
 
-Note anything off in the PR. An automated version (local `geogami-server` with a throwaway database and
-two browser sessions) is planned before the Angular 16 step.
+The app's socket client (`src/app/services/socket-client.ts`) stays on `socket.io-client` 2.5 on purpose: that is the
+protocol of the API, of the apps already in the stores and of this test server. Moving to Socket.IO 4 is a separate,
+coordinated change (server first, with `allowEIO3`); the Unity VE ships its own Socket.IO v4 client library, which
+has to be re-checked then.
 
 ## How the mock works
 

@@ -1,4 +1,5 @@
 import { test as base, expect, Page, Route } from "@playwright/test";
+import { TestSocketServer } from "./socket-server";
 
 // The production build talks to this origin (src/environments/environment.prod.ts).
 export const API = "https://api.geogami.uni-muenster.de";
@@ -25,6 +26,8 @@ export class MockApi {
   readonly unmocked: string[] = [];
   /** URLs the tests aborted on purpose; only their load failures may be ignored. */
   readonly blocked = new Set<string>();
+  /** When set (by the `socketServer` fixture), socket.io traffic goes to this local server instead of being blocked. */
+  socketBackend?: string;
 
   on(method: string, path: string | RegExp, reply: Reply, status = 200) {
     // later registrations win, so a test can override a default
@@ -36,6 +39,20 @@ export class MockApi {
     return this.calls.filter((c) => c.method === method.toUpperCase() && matches(path, c.path));
   }
 
+  /** Hands a socket.io request (polling transport) to the local test server and returns its answer to the page. */
+  private async proxySocket(route: Route, url: URL) {
+    try {
+      const response = await route.fetch({ url: this.socketBackend + url.pathname + url.search, timeout: 0 });
+      const origin = route.request().headers()["origin"] || "*";
+      await route.fulfill({
+        response,
+        headers: { ...response.headers(), "access-control-allow-origin": origin, "access-control-allow-credentials": "true" },
+      });
+    } catch {
+      // the page went away while a long-poll was still open: nothing left to answer
+    }
+  }
+
   async handle(route: Route) {
     const request = route.request();
     const url = new URL(request.url());
@@ -43,8 +60,9 @@ export class MockApi {
       return route.fulfill({ status: 204, headers: CORS });
     }
     if (url.pathname.startsWith("/socket.io")) {
+      if (this.socketBackend) return this.proxySocket(route, url);
       this.blocked.add(request.url());
-      return route.abort("blockedbyclient"); // live tracking is out of scope for the smoke tests
+      return route.abort("blockedbyclient"); // without a test server the sockets stay blocked
     }
     let body: any = undefined;
     try {
@@ -79,6 +97,8 @@ const isLocal = (url: string) => /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?\//
 export interface Fixtures {
   api: MockApi;
   consoleErrors: string[];
+  /** A real Socket.IO 2.x server for this test; the page's socket traffic is routed to it (otherwise sockets are blocked). */
+  socketServer: TestSocketServer;
 }
 
 export const test = base.extend<Fixtures>({
@@ -98,6 +118,15 @@ export const test = base.extend<Fixtures>({
     },
     { auto: true },
   ],
+
+  socketServer: async ({ page, api }, use) => {
+    const server = await TestSocketServer.start();
+    api.socketBackend = server.url;
+    // keep the polling transport: refuse the upgrade to a WebSocket, the client then stays on polling
+    await page.routeWebSocket(/\/socket\.io\//, (ws) => ws.close());
+    await use(server);
+    await server.close();
+  },
 
   consoleErrors: [
     async ({ page, api }, use) => {

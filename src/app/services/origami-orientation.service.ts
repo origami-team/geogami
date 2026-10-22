@@ -9,7 +9,7 @@ import {
 } from '@ionic-native/device-orientation/ngx';
 
 // VR world, SockitIO
-import { Socket } from 'ngx-socket-io';
+import { Socket } from './socket-client';
 
 @Injectable({
   providedIn: 'root'
