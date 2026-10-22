@@ -16,17 +16,17 @@
   "postinstall": "jetifier",
   "private": true,
   "dependencies": {
-    "@angular-devkit/core": "^15.2.11",
-    "@angular/animations": "^15.2.10",
-    "@angular/cdk": "^15.2.9",
-    "@angular/common": "^15.2.10",
-    "@angular/core": "^15.2.10",
-    "@angular/forms": "^15.2.10",
-    "@angular/material": "15.2.9",
-    "@angular/platform-browser": "^15.2.10",
-    "@angular/platform-browser-dynamic": "^15.2.10",
-    "@angular/router": "^15.2.10",
-    "@angular/service-worker": "^15.2.10",
+    "@angular-devkit/core": "^16.2.16",
+    "@angular/animations": "^16.2.12",
+    "@angular/cdk": "^16.2.14",
+    "@angular/common": "^16.2.12",
+    "@angular/core": "^16.2.12",
+    "@angular/forms": "^16.2.12",
+    "@angular/material": "16.2.14",
+    "@angular/platform-browser": "^16.2.12",
+    "@angular/platform-browser-dynamic": "^16.2.12",
+    "@angular/router": "^16.2.12",
+    "@angular/service-worker": "^16.2.12",
     "@awesome-cordova-plugins/core": "9.7.0",
     "@awesome-cordova-plugins/device-orientation": "9.7.0",
     "@awesome-cordova-plugins/network": "9.7.0",
@@ -74,16 +74,16 @@
     "socket.io-client": "2.5.0",
     "source-map": "^0.8.0-beta.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.13.3"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^0.1502.11",
-    "@angular-devkit/build-angular": "^15.2.11",
-    "@angular-devkit/schematics": "^15.2.11",
-    "@angular/cli": "^15.2.11",
-    "@angular/compiler": "^15.2.10",
-    "@angular/compiler-cli": "^15.2.10",
-    "@angular/language-service": "^15.2.10",
+    "@angular-devkit/architect": "^0.1602.16",
+    "@angular-devkit/build-angular": "^16.2.16",
+    "@angular-devkit/schematics": "^16.2.16",
+    "@angular/cli": "^16.2.16",
+    "@angular/compiler": "^16.2.12",
+    "@angular/compiler-cli": "^16.2.12",
+    "@angular/language-service": "^16.2.12",
     "@capacitor/cli": "~2.0.1",
     "@ionic/angular-toolkit": "^6.1.0",
     "@ionic/cli": "^6.20.8",
@@ -127,6 +127,6 @@
     "os": false
   },
   "resolutions": {
-    "@angular-devkit/build-angular/browserslist": "4.21.10"
+    "caniuse-lite": "1.0.30001519"
   }
 }

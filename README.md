@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://doi.org/10.5281/zenodo.5384903"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5384903.svg" alt="DOI"/></a>
-  <img src="https://img.shields.io/badge/Angular-15-DD0031?logo=angular" alt="Angular 15"/>
+  <img src="https://img.shields.io/badge/Angular-16-DD0031?logo=angular" alt="Angular 16"/>
   <img src="https://img.shields.io/badge/Ionic-6-3880FF?logo=ionic" alt="Ionic 6"/>
   <img src="https://img.shields.io/badge/Capacitor-iOS%20%7C%20Android-119EFF?logo=ionic" alt="Capacitor"/>
 </p>
@@ -50,7 +50,7 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 
 | Area | Technology |
 |---|---|
-| Framework | Angular 15, Ionic 6 |
+| Framework | Angular 16, Ionic 6 |
 | Native shell | Capacitor 2 (iOS, Android) |
 | Maps | Mapbox GL JS |
 | State / forms | Reactive forms, RxJS |
@@ -61,7 +61,7 @@ This repository contains the **front-end client** — an Angular + Ionic applica
 ## Prerequisites
 
 - **Node.js** — the version in [`.nvmrc`](.nvmrc) (use `nvm use`). It is also the version Netlify builds the web app with, so
-  check your changes with it. Angular 15 needs Node 18.10 or newer (16.13+ also works).
+  check your changes with it. Angular 16 needs Node 18.10 or newer (16.14+ also works).
 - **yarn 1.x** — use `yarn`, **not `npm install`**. `yarn.lock` is the only committed lockfile (Netlify installs from it);
   `npm install` creates a second, conflicting one.
 - **Ionic CLI** (only for `ionic serve` and the Capacitor commands): `npm i -g @ionic/cli`
@@ -136,30 +136,33 @@ on the Netlify deploy preview and on a real device.
 
 ## Upgrade status and known caveats
 
-The app is being upgraded one Angular major at a time (currently **15**; target is the newest Angular the native
+The app is being upgraded one Angular major at a time (currently **16**; target is the newest Angular the native
 apps can support), with Capacitor last. Each step is verified with `yarn verify` and a Netlify deploy preview.
 
 Known mismatches that are deliberately left for now:
 
 | Library | Mismatch | Why it stays, and the plan |
 |---|---|---|
-| Angular Material 15 *legacy* components | `table`, `paginator`, `form-field`, `input`, `select`, `button` and `dialog` are imported from `@angular/material/legacy-*` (4 files: `material.module.ts`, `user-management`, `game-tracks`, `download-track-dialog`) | Angular 15 moved Material to new MDC components and kept the old ones as `legacy-*`, which keep the exact old look. Material 15 ships no prebuilt legacy theme, so `src/theme/material-legacy.scss` recreates the indigo-pink one. **Angular Material 17 removes the legacy components**, so these four files must move to the new components before the Angular 17 step; the screenshots in `tests-e2e/specs/material.spec.ts-snapshots` will show the visual changes to review. |
+| Angular Material 16 *legacy* components | `table`, `paginator`, `form-field`, `input`, `select`, `button` and `dialog` are imported from `@angular/material/legacy-*` (4 files: `material.module.ts`, `user-management`, `game-tracks`, `download-track-dialog`) | Angular 15 moved Material to new MDC components and kept the old ones as `legacy-*` (still there in 16), which keep the exact old look. Material 15 and 16 ship no prebuilt legacy theme, so `src/theme/material-legacy.scss` recreates the indigo-pink one. **Angular Material 17 removes the legacy components**, so these four files must move to the new components before the Angular 17 step; the screenshots in `tests-e2e/specs/material.spec.ts-snapshots` will show the visual changes to review. |
 | Capacitor 2.5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
 
 The app talks to the API over Socket.IO 2.x with its own small client (`src/app/services/socket-client.ts`, on `socket.io-client` 2.5) instead of `ngx-socket-io`, which was never compiled for newer Angular versions. The protocol is unchanged, so the API, the Unity virtual environment and the apps already in the stores are not affected. Moving to Socket.IO 4 is a separate project: the server first (with `allowEIO3`), then the client; the dependency alerts for `socket.io-parser`, `engine.io-client` and `ws` belong to protocol 2 and go away with that move.
 
 The compass and the connection status use the Cordova plugins `cordova-plugin-device-orientation` and `cordova-plugin-network-information` through `@awesome-cordova-plugins` 9.7.0 (`core`, `device-orientation`, `network`), the maintained continuation of `@ionic-native` with the same API. Only the wrapper library changed; the Cordova plugins in the native projects are the same. `src/app/services/native-plugins.spec.ts` and `origami-orientation.service.spec.ts` run the real wrappers against a fake native plugin, `tests-e2e/specs/network.spec.ts` covers the offline/online messages; a real device is still needed to see the sensors ([checklist](tests-e2e/README.md#native-plugins-compass-and-connection-status-check-on-a-device)).
 
-`@ngx-translate/core` (14.0.0) and `http-loader` (7.0.0) are pinned to the last releases that support Angular 15 and 16 together; newer ones need Angular 16 or later. `tests-e2e/specs/language.spec.ts` covers language selection end to end.
+`@ngx-translate/core` (14.0.0) and `http-loader` (7.0.0) are pinned: they work with Angular 13 to 16, and newer releases are an optional later bump. `tests-e2e/specs/language.spec.ts` covers language selection end to end.
 
 Task texts written by game authors are rendered with a small own pipe (`src/app/pipes/markdown.pipe.ts`: `marked` plus Angular's
 HTML sanitizer) instead of `ngx-markdown`, whose newer releases pull in `mermaid`, KaTeX, Prism and about 65 more packages
 the app never used. The Lottie animations use a small own directive (`src/app/components/lottie`) on `lottie-web` instead of `ngx-lottie`, whose newer releases add `@scarf/scarf`, an install-time analytics script. `marked` is on 4.x; newer majors change output details, so move it deliberately with the markdown tests as the check.
 
-`package.json` has one `resolutions` entry: it makes the Angular builder use `browserslist` 4.21.10. Angular CLI 15 pins
-4.21.5, which yarn pairs with a 2026 `caniuse-lite` it cannot read (`Unknown version … of edge`, the build fails). The
-combination 4.21.10 uses is the one the project has always built with, so the browser targets are unchanged. Try removing the
-entry when updating the CLI past 15.
+`package.json` has one `resolutions` entry, `caniuse-lite` 1.0.30001519. The Angular builder and Babel each load their own
+`browserslist`; with today's browser data they disagree about browser versions (`Unknown version … of edge`, the build fails).
+One pinned copy of the data makes them agree, and it also keeps the browsers the app is compiled for exactly as they have always
+been: Chrome/Edge 114–115, Firefox 102–116, Safari and iOS 15–16.5 (the same 30 entries the Angular 15 build used). A newer
+`caniuse-lite` would raise that list without any code change, so move it on purpose: remove the entry, print the list with
+`node -e "console.log(require('@angular-devkit/build-angular/src/utils/supported-browsers').getSupportedBrowsers(process.cwd(), console).join(', '))"`
+and decide which iOS and Android versions the apps may drop.
 
 ### Browser storage lifetime
 

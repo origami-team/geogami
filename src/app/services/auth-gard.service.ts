@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { AuthService } from './auth-service.service';
@@ -15,7 +9,7 @@ const VERIFY_EMAIL_PATH = 'user/verify-email';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   //* a guard to decide if a route can be activated https://angular.io/api/router/CanActivate
@@ -53,7 +47,7 @@ export class AuthGuard implements CanActivate {
 @Injectable({
   providedIn: 'root',
 })
-export class RoleGuard implements CanActivate {
+export class RoleGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> {
@@ -84,7 +78,7 @@ export class RoleGuard implements CanActivate {
 @Injectable({
   providedIn: 'root',
 })
-export class ConfirmedOrGuestGuard implements CanActivate {
+export class ConfirmedOrGuestGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(_route, state: RouterStateSnapshot) {
