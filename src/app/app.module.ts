@@ -22,7 +22,7 @@ import { CreateModuleModalPage } from "./pages/create-game/create-module-modal/c
 import { MapFeaturesModalPage } from "./pages/create-game/map-features-modal/map-features-modal.page";
 import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/create-info-modal.component";
 
-import { DeviceOrientation } from "@ionic-native/device-orientation/ngx";
+import { DeviceOrientation } from "@awesome-cordova-plugins/device-orientation/ngx";
 
 import { IonicStorageModule, Storage } from "@ionic/storage-angular";
 import { Drivers } from "@ionic/storage";
@@ -47,8 +47,7 @@ import { HelperService } from "./services/helper.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 // import {FormControl} from '@angular/forms';
 
-// import { Network } from '@awesome-cordova-plugins/network/ngx';
-import { Network } from "@ionic-native/network/ngx";
+import { Network } from "@awesome-cordova-plugins/network/ngx";
 
 
 // AoT requires an exported function for factories

@@ -130,9 +130,9 @@ The old Cordova targets (`build-browser`) were removed; native apps are built wi
    as a track, and screenshot baselines. The API is mocked, so nothing touches production.
 
 Not covered automatically: live multiplayer and the virtual environment (sockets), and native iOS/Android behaviour
-(GPS, camera, voice recorder, QR scanner, file sharing). After each framework upgrade step, run the manual checklist in
-[`tests-e2e/README.md`](tests-e2e/README.md#not-covered-live-sockets-manual-check-per-upgrade-step) on the Netlify deploy
-preview and on a real device.
+(GPS, compass, offline detection, camera, voice recorder, QR scanner, file sharing). After each framework upgrade step, run
+the manual checklists in [`tests-e2e/README.md`](tests-e2e/README.md#sockets-what-is-automated-what-is-still-checked-by-hand)
+on the Netlify deploy preview and on a real device.
 
 ## Upgrade status and known caveats
 
@@ -144,9 +144,11 @@ Known mismatches that are deliberately left for now:
 | Library | Mismatch | Why it stays, and the plan |
 |---|---|---|
 | Angular Material 15 *legacy* components | `table`, `paginator`, `form-field`, `input`, `select`, `button` and `dialog` are imported from `@angular/material/legacy-*` (4 files: `material.module.ts`, `user-management`, `game-tracks`, `download-track-dialog`) | Angular 15 moved Material to new MDC components and kept the old ones as `legacy-*`, which keep the exact old look. Material 15 ships no prebuilt legacy theme, so `src/theme/material-legacy.scss` recreates the indigo-pink one. **Angular Material 17 removes the legacy components**, so these four files must move to the new components before the Angular 17 step; the screenshots in `tests-e2e/specs/material.spec.ts-snapshots` will show the visual changes to review. |
-| Capacitor 2.5, `@ionic-native` 5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
+| Capacitor 2.5 | old native layer | Handled in the last step (Capacitor 3+), together with the manual device checks. |
 
 The app talks to the API over Socket.IO 2.x with its own small client (`src/app/services/socket-client.ts`, on `socket.io-client` 2.5) instead of `ngx-socket-io`, which was never compiled for newer Angular versions. The protocol is unchanged, so the API, the Unity virtual environment and the apps already in the stores are not affected. Moving to Socket.IO 4 is a separate project: the server first (with `allowEIO3`), then the client; the dependency alerts for `socket.io-parser`, `engine.io-client` and `ws` belong to protocol 2 and go away with that move.
+
+The compass and the connection status use the Cordova plugins `cordova-plugin-device-orientation` and `cordova-plugin-network-information` through `@awesome-cordova-plugins` 9.7.0 (`core`, `device-orientation`, `network`), the maintained continuation of `@ionic-native` with the same API. Only the wrapper library changed; the Cordova plugins in the native projects are the same. `src/app/services/native-plugins.spec.ts` and `origami-orientation.service.spec.ts` run the real wrappers against a fake native plugin, `tests-e2e/specs/network.spec.ts` covers the offline/online messages; a real device is still needed to see the sensors ([checklist](tests-e2e/README.md#native-plugins-compass-and-connection-status-check-on-a-device)).
 
 `@ngx-translate/core` (14.0.0) and `http-loader` (7.0.0) are pinned to the last releases that support Angular 15 and 16 together; newer ones need Angular 16 or later. `tests-e2e/specs/language.spec.ts` covers language selection end to end.
 

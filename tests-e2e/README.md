@@ -31,6 +31,7 @@ Playwright is pinned to 1.49.1 because newer releases need Node 20. Bump it when
 | `markdown.spec.ts` | the task text on the playing page: markdown is rendered, the flag chip is added, and scripts, event handlers, `javascript:` links and `<ion-*>` tags typed by an author are stripped |
 | `language.spec.ts` | language handling: the start language follows the browser (and falls back to German), switching in the picker for all six languages (texts come from the real `assets/i18n/*.json`), the choice survives reload and a second tab, people with an already-saved choice (old storage format) keep it, the language saved on an account (login, `pt_BR`-style values, registration, profile), texts with parameters, and right-to-left Arabic with screenshots |
 | `socket.spec.ts` | the virtual-environment flow over Socket.IO against a real 2.5 test server: no connection until needed, name check and joining the room, a taken name, the VE (played by a second socket sending `joinVEGame { playerName }` like Unity) closing the game, reconnect and re-join, and a second game in the same session without a reload (old room left, name free again, one registration per game, no duplicate re-join after a reconnect) |
+| `network.spec.ts` | the connection messages of the native network plugin, driven by the `offline` / `online` events it fires on the document: a "No connection" toast that stays until dismissed, "Back online" for 3 s and the first toast removed, the game list warning while offline and not once back online, several rounds |
 | `storage.spec.ts` | the browser storage (`@ionic/storage`): the two legacy game keys are removed at start while the language choice and other keys stay, and a localStorage that cannot be written does not break or spam the app (the choice then just lasts for the session) |
 | `qr.spec.ts` | the class QR and the multiplayer join code on the game detail page: the image is decoded (like a phone camera would) and must contain the right link, match the `qrcode` library pixel for pixel, sit in the element the styles and the PDF export expect, and the PDF hand-out downloads |
 | `lottie.spec.ts` | the three Lottie animations (finished-game star, saving astronaut on create and edit): rendered, actually animating, and stopped once the page is left |
@@ -70,6 +71,22 @@ The app's socket client (`src/app/services/socket-client.ts`) stays on `socket.i
 protocol of the API, of the apps already in the stores and of this test server. Moving to Socket.IO 4 is a separate,
 coordinated change (server first, with `allowEIO3`); the Unity VE ships its own Socket.IO v4 client library, which
 has to be re-checked then.
+
+## Native plugins (compass and connection status): check on a device
+
+The compass (`cordova-plugin-device-orientation`) and the connection status (`cordova-plugin-network-information`) are
+reached through `@awesome-cordova-plugins`. What can run without a phone is automated: the unit specs
+`native-plugins.spec.ts` (the real wrapper classes against a fake native plugin: argument order, readings, errors, what
+unsubscribing does) and `origami-orientation.service.spec.ts` (watch options per platform, one native watch, throttling),
+and `specs/network.spec.ts` here (the toasts and the offline warning). The sensors themselves need a device, after any change
+of the wrapper library or of the Cordova plugins, on an Android phone and an iPhone/iPad (installed app, not the browser):
+
+1. **Compass** — start a real-world game; the direction arrow follows when you turn on the spot. Finish the game, start a
+   second one without closing the app: the arrow still moves. Send the app to the background for a minute and bring it back:
+   still moves. Open the map showroom: the heading is shown there too.
+2. **Network** — in a game or on the start page switch on airplane mode: a "No connection" toast with a *Dismiss* button
+   appears. Switch it off: the toast disappears and "Back online" shows for a moment. Also start the app once while in
+   airplane mode and compare with the release in the store: it should behave the same (this change only swaps the wrapper).
 
 ## How the mock works
 
