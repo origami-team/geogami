@@ -24,7 +24,9 @@ import { CreateInfoModalComponent } from "./pages/create-game/create-info-modal/
 
 import { DeviceOrientation } from "@ionic-native/device-orientation/ngx";
 
-import { IonicStorageModule } from "@ionic/storage";
+import { IonicStorageModule, Storage } from "@ionic/storage-angular";
+import { Drivers } from "@ionic/storage";
+import { initializeStorage } from "./services/storage-init";
 import { QuestionTypeComponent } from "./pages/create-game/form-elements/question-types/question-type.component";
 import { AnswerTypeComponent } from "./pages/create-game/form-elements/answer-types/answer-type.component";
 import { MapComponent } from "./pages/create-game/form-elements/map/map.component";
@@ -107,7 +109,8 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
             enabled: environment.production,
         }),
         IonicStorageModule.forRoot({
-            driverOrder: ["localstorage", "indexeddb"],
+            // same order as before: localStorage first (that is where people's saved choices already are)
+            driverOrder: [Drivers.LocalStorage, Drivers.IndexedDB],
         }),
         BrowserAnimationsModule,
         // FormControl
@@ -122,6 +125,13 @@ const config: SocketIoConfig = { url: environment.apiURL, options: {} }; // open
         },
         HelperService,
         Network,
+        // open the browser storage before the app starts (see storage-init.ts)
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeStorage,
+            deps: [Storage],
+            multi: true,
+        },
     ],
     bootstrap: [AppComponent]
 })

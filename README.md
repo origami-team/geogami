@@ -166,6 +166,11 @@ but disappear when the app is closed or reloaded. At startup, the two old Ionic
 storage keys are discarded; authentication tokens and language preferences are
 not cleared. Games/tracks already uploaded to the server are unchanged.
 
+The language choice is the only thing kept in the browser storage (`@ionic/storage-angular` 4, keys
+`_ionicstorage/_ionickv/<key>` in localStorage, IndexedDB as fallback; the driver order must stay localStorage first, because that is
+where existing users' choices are). Ionic Storage 4 has to be opened before use, so `APP_INITIALIZER` calls `create()` once at start
+(`src/app/services/storage-init.ts`); a storage that cannot be opened never stops the app.
+
 The companion Unity project's **GeoGami WebGL template** manages its own asset
 cache: entries expire 24 hours after download, and least-recently-used entries
 are evicted above 512 MiB. The UI cannot clear the WebGL origin's storage (a

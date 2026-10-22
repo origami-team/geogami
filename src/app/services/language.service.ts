@@ -1,6 +1,6 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 
 const LNG_KEY = 'SELECTED_LANGUAGE';
 const lngs = ['de', 'en', 'it', 'pt', 'fr', 'ar'];
@@ -13,26 +13,34 @@ export class LanguageService {
 
   constructor(private translate: TranslateService, private storage: Storage) { }
 
-  setInitialAppLangauge() {
+  async setInitialAppLangauge() {
     // 1. check if lang have been stored
     // 2. check if device default lang can be fetched and it's one of the supported language
     // 3. use german as a default lang
-    this.storage.get(LNG_KEY).then(val => {
-      if (val) {
-        this.setLanguage(val);
+    let saved: string = null;
+    try {
+      saved = await this.storage.get(LNG_KEY);
+    } catch (error) {
+      // the browser storage could not be opened (or read): carry on as if nothing was saved
+      console.warn('Could not read the saved language:', error);
+    }
+    if (saved && this.isSupported(saved)) {
+      this.setLanguage(saved);
+    } else {
+      const browserLanguage = (this.translate.getBrowserCultureLang() || '')
+        .toLowerCase()
+        .slice(0, 2);
+      if (lngs.includes(browserLanguage)) {
+        this.translate.setDefaultLang(browserLanguage);
+        this.setLanguage(browserLanguage);
       } else {
-        const browserLanguage = (this.translate.getBrowserCultureLang() || '')
-          .toLowerCase()
-          .slice(0, 2);
-        if (lngs.includes(browserLanguage)) {
-          this.translate.setDefaultLang(browserLanguage);
-          this.setLanguage(browserLanguage);
-        } else {
-          this.setLanguage('de') // german is the default lang if browser lang is not supported
-        }
+        this.setLanguage('de') // german is the default lang if browser lang is not supported
       }
-      //this.storage.clear()
-    });
+    }
+  }
+
+  private isSupported(lng: string): boolean {
+    return lngs.includes((lng || '').toLowerCase().slice(0, 2));
   }
 
   getLangauges() {
@@ -55,7 +63,19 @@ export class LanguageService {
     this.translate.use(normalizedLanguage);
     this.selected = normalizedLanguage;
     this.applyDocumentLocale(normalizedLanguage);
-    this.storage.set(LNG_KEY, normalizedLanguage)
+    this.remember(normalizedLanguage);
+  }
+
+  // Saving is best effort: a full or unavailable browser storage must not break switching the
+  // language (the choice then just lasts for this session).
+  private remember(lng: string) {
+    try {
+      Promise.resolve(this.storage.set(LNG_KEY, lng)).catch((error) =>
+        console.warn('Could not save the language:', error)
+      );
+    } catch (error) {
+      console.warn('Could not save the language:', error);
+    }
   }
 
   private applyDocumentLocale(lng: string) {

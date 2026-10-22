@@ -82,6 +82,45 @@ describe("LanguageService", () => {
     });
   });
 
+  describe("when the storage cannot be used", () => {
+    beforeEach(() => spyOn(console, "warn"));
+
+    const failing = (how: "reject" | "throw") => () => {
+      if (how === "throw") {
+        throw new Error("Database not created. Must call create() first");
+      }
+      return Promise.reject(new Error("Denied"));
+    };
+
+    for (const how of ["reject", "throw"] as const) {
+      it(`starts from the browser language when reading fails (${how === "throw" ? "storage not open: throws" : "rejected"})`, async () => {
+        (service as any).storage.get = failing(how);
+        browserCulture = "fr-FR";
+        await service.setInitialAppLangauge();
+        expect(used).toEqual(["fr"]);
+        expect(service.selected).toBe("fr");
+      });
+
+      it(`still switches the language when saving fails (${how === "throw" ? "storage not open: throws" : "rejected"})`, async () => {
+        (service as any).storage.set = failing(how);
+        service.setLanguage("it");
+        await settle();
+        expect(used).toEqual(["it"]);
+        expect(service.selected).toBe("it");
+        expect(document.documentElement.lang).toBe("it");
+      });
+    }
+  });
+
+  describe("a saved value the app does not support", () => {
+    it("is treated as if nothing was saved", async () => {
+      createService("xx");
+      browserCulture = "pt-BR";
+      await service.setInitialAppLangauge();
+      expect(used).toEqual(["pt"]);
+    });
+  });
+
   describe("setLanguage", () => {
     it("switches the translations, remembers the choice and sets the page language", () => {
       service.setLanguage("fr");

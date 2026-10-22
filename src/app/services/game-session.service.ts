@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 
 type GameSessionKey = 'game' | 'savedTracksData';
 
@@ -12,11 +12,14 @@ export class GameSessionService {
 
   // Discard progress written by older versions. Do not clear preferences/tokens.
   async discardLegacyProgress(): Promise<void> {
-    await Promise.all(['game', 'savedTracksData'].map(key =>
-      this.persistentStorage.remove(key).catch(error => {
+    await Promise.all(['game', 'savedTracksData'].map(async key => {
+      try {
+        await this.persistentStorage.remove(key);
+      } catch (error) {
+        // a storage that is not open throws instead of returning a rejected promise: catch both
         console.warn('Could not discard legacy game progress:', key, error);
-      })
-    ));
+      }
+    }));
   }
 
   async get<T = any>(key: GameSessionKey): Promise<T> {
